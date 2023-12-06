@@ -1,0 +1,3 @@
+files:
+  - source: frontend/src/**/*.tsx
+    translation: frontend/messages/%two_letters_code%.json
