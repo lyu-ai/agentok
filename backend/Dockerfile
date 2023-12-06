@@ -12,6 +12,7 @@ RUN apk add --no-cache \
     linux-headers \
     libffi-dev \
     libc-dev
+RUN pip install gunicorn
 
 # Copy only the requirements.txt first to leverage Docker cache
 COPY requirements.txt /app/
