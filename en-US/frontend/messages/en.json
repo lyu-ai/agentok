@@ -1,42 +1,51 @@
-'use client';
+import { FaGithub } from 'react-icons/fa';
+import './globals.css';
+import { Inter } from 'next/font/google';
+const inter = Inter({ subsets: ['latin'] });
+import { notFound } from 'next/navigation';
+import { NextIntlClientProvider, useLocale } from 'next-intl';
+import { PropsWithChildren } from 'react';
 
-import { ReactFlowProvider } from 'reactflow';
-import Flow from '../components/Flow';
-import { Tooltip } from 'react-tooltip';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-const Page = ({ params }: { params: { id: string[] } }) => {
-
-  if (Array.isArray(params.id) && params.id.length > 1) {
-    return <div>Invalid param: {params.id}</div>;
+export default async function RootLayout({
+  children,
+  params,
+}: PropsWithChildren<{
+  params: { locale: string };
+}>) {
+  const locale = useLocale();
+  // Show a 404 error if the user requests an unknown locale
+  if (params.locale !== locale) {
+    notFound();
   }
-
+  let messages;
+  try {
+    messages = (await import(`@/../messages/${locale}.json`)).default;
+  } catch (error) {
+    notFound();
+  }
   return (
-    <div className="flex-1 w-full overflow-y-auto">
+    <html data-theme="night" suppressHydrationWarning lang={locale}>
       <title>Flowgen</title>
-      <ReactFlowProvider>
-        <Flow flowId={params.id?.[0]} />
-      </ReactFlowProvider>
-      <ToastContainer
-          position="bottom-right"
-          theme="colored"
-          hideProgressBar
-        />
-        <Tooltip
-          id="default-tooltip"
-          className="bg-base-100 text-base-content"
-          place="bottom"
-        />
-        <Tooltip
-          id="html-tooltip"
-          classNameArrow="html-tooltip-arrow bg-gray-700 border-r border-b border-gray-500"
-          className="!bg-gray-600 !border !border-gray-500 !text-gray-200 !px-2 !py-1"
-          style={{ maxWidth: '300px', zIndex: 9999 }}
-          clickable
-        />
-    </div>
-  );
-};
+      <body className={inter.className} suppressHydrationWarning>
+        <div className="flex flex-col h-screen w-full items-center text-base-content">
+          <div className="flex w-full items-center justify-between h-12 p-2">
+            <a href="/" className="flex gap-2 items-end">
+              <img
+                alt="logo"
+                src="/logo-full-white.png"
+                className="h-8 object-contain aspect-w-1 aspect-h-1"
+              />
+            </a>
+            <a href="https://github.com/tiwater/flowgen" target="_blank">
+              <FaGithub className="h-6 w-6" />
+            </a>
+          </div>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </div>
 
-export default Page;
+      </body>
+    </html>
+  );
+}
