@@ -22,7 +22,7 @@ export default function RootLayout({
             <a href="/" className="flex gap-2 items-end">
               <img
                 alt="logo"
-                src="/logo-full.png"
+                src="/logo-full-white.png"
                 className="h-8 object-contain aspect-w-1 aspect-h-1"
               />
             </a>
