@@ -1,20 +1,23 @@
 <img src="./frontend/public/logo-full.png" width="320" />
 
-# Flowgen
+# Flowgen - Autogen Visualized
 
-## What is Flowgen
+[![Railway](https://img.shields.io/badge/Railway-Flowgen-blue.svg)](https://railway.app/project/ce1fca93-8fa5-4537-b647-20e1636102c3)
+[![GitHub star chart](https://img.shields.io/github/stars/tiwater/flowgen?style=social)](https://star-history.com/#tiwater/flowgen)
+[![GitHub fork](https://img.shields.io/github/forks/tiwater/flowgen?style=social)](https://github.com/tiwater/flowgen/fork)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-Flowgen is a visual tool built on [Autogen](https://microsoft.github.io/autogen/) from Microsoft Research.
+## 🤖 What is Flowgen
 
-Comparing to LangChain, Autogen provides a more clear and convenient framework of building multi-agent apps in a visual and rapid way.
+Flowgen is a tool built for [Autogen](https://microsoft.github.io/autogen/), a great agent framework from Microsoft Research.
 
-Flowgen is designed as a complementary tool to Autogen, engineered to enhance the efficiency of building and maintaining multi-agent applications. Its primary objective is to lower the barrier for developers.
+Autogen streamlines the process of creating multi-agent applications with its clear and user-friendly approach. Flowgen takes this accessibility a step further by offering visual tools that simplify the building and management of agent workflows with Autogen.
 
-## Quickstart
+## 💡 Quickstart
 
-The easiest way to experiment Flowgen is visit [online](https://flowpen.app). It deploys automatically on [Railway.app](https://railway.app) when there is a new commit to main branch.
+To quickly explore what Flowgen has to offer, simply visit it [online](https://flowgen.app). Each new commit to the main branch triggers an automatic deployment on [Railway.app](https://railway.app), ensuring you experience the latest version of the service.
 
-## Run on Local
+## 🐳 Run on Local (with Docker)
 
 The project contains Frontend (Built with Next.js) and Backend service (Built with Flask in Python), and have been fully dockerized.
 
@@ -36,48 +39,50 @@ docker run -d -p 2855:2855 flowgen-ui
 
 (The default port number 2855 is the address of our first office.)
 
-When deploying online or run on local, please pay attention to these environment variables：`PORT`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Both of the frontend and backend services depend on Supabase for data persistence.
+When deploying online or running locally, ensure you configure the following environment variables: `PORT`, `NEXT_PUBLIC_SUPABASE_URL`, and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Both the frontend and backend services rely on Supabase for data storage and require these variables to be set for proper operation.
 
-You can get the Supabase URL and Anon Key from [Supabase](https://supabase.io/). The default port is 2855. You can also download and deploy your own Supabase instance, which is out of the scope of this document.
+To obtain the necessary Supabase URL and Anon Key, visit [Supabase Dashboard](https://supabase.com/dashboard/projects). By default, the service runs on port 2855. While you have the option to download and set up your own instance of Supabase, detailed guidance for such a deployment falls beyond the scope of this document.
 
-## Run on Local (Without Docker)
-
-If you want to participate in the development of this project, or run from source code, you can run the frontend and backend services separately:
-
-### Frontend
-
-```bash
-pnpm i
-pnpm dev
-```
-
-Then access it on http://localhost:2855.
-
-All in all, the frontend is a simple Next.js project, so you can of course also use `npm` or `yarn` as you like.
-
-### Backend
-
-The backend is based on Flask framework, so you can run it with Python:
-
-```bash
-pip install -r requirements.txt
-python3 -m api.index
-```
-
-Then access it on http://localhost:5004 with API tools like Postman. (Here I should provide a Swagger API doc, maybe later.)
-
-## Deployment
-
-So far, Railway.app should be the best way to deploy Flowgen. You can deploy it with one click:
+## 🚀 Deployment
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/NCoZBC?referralCode=5I-BUc)
 
-Also, please take care of the Supabase related environment variables mentioned above.
+Railway.app supports the deployment of applications in Dockers. By clicking the "Deploy on Railway" button, you'll streamline the setup and deployment of your application on Railway platform:
 
-## Contributing
+1. Click the "Deploy on Railway" button to start the process on Railway.app.
+2. Log in to Railway and set the following environment variables:
+   - `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase Project URL.
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anon/public key.
+3. Confirm the settings and deploy.
+4. After deployment, visit the provided URL to access your deployed application.
+
+## 🛠️ Run on Local (Without Docker)
+
+If you're interested in contributing to the development of this project or wish to run it from the source code, you have the option to run the frontend and backend services independently. Here's how you can do that: 
+
+1. **Frontend Service:**
+   - Navigate to the frontend service directory.
+   - Install the necessary dependencies using the appropriate package manager command (e.g., `pnpm install` or `yarn`).
+   - Before starting the service, make sure the `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` environment variables are set accordingly in file `.env.development`.
+   - Run the frontend service using the start-up script provided (e.g., `pnpm dev` or `yarn dev`).
+
+2. **Backend Service:**
+   - Switch to the backend service directory.
+   - Install all required dependencies: `pip install -r requirements.txt`.
+   - Confirm that the environment variables for Supabase (`NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`) are correctly set in `.env` as well.
+   - Launch the backend service using command `python3 -m api.index`.
+
+Once you've started both the frontend and backend services by following the steps previously outlined, you can access the application by opening your web browser and navigating to:
+
+* Frontend: http://localhost:2855
+* Backend: http://localhost:5004 (Here I should provide a Swagger API doc, maybe later.)
+
+If your services are started successfully and running on the expected ports, you should see the user interface or receive responses from the backend via this URL.
+
+## 👨‍💻 Contributing
 
 We welcome all contributions. Please read our [Contributing Guide](./CONTRIBUTING.md) first.
 
-## License
+## 📝 License
 
 The project is licensed under [Apache 2.0 with additional terms and conditions](./LICENSE.md).
