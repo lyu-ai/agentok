@@ -81,7 +81,14 @@ If your services are started successfully and running on the expected ports, you
 
 ## 👨‍💻 Contributing
 
-We welcome all contributions. Please read our [Contributing Guide](./CONTRIBUTING.md) first.
+This project welcomes contributions and suggestions. Please read our [Contributing Guide](./CONTRIBUTING.md) first.
+
+If you are new to GitHub [here](https://help.github.com/categories/collaborating-with-issues-and-pull-requests/) is a detailed help source on getting involved with development on GitHub.
+
+## Contributors Wall
+<a href="https://github.com/tiwater/flowgen/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=tiwater/flowgen" />
+</a>
 
 ## 📝 License
 
