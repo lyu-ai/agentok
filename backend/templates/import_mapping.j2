@@ -1,0 +1,25 @@
+{% macro get_imports(nodes) %}
+    {%- set import_lines = [] -%}
+    {%- do import_lines.append('from autogen import AssistantAgent') -%}
+    {%- set import_dict = {
+        'UserProxyAgent': 'from autogen import UserProxyAgent',
+        'AssistantAgent': 'from autogen import AssistantAgent',
+        'GroupChat': 'from autogen import GroupChat\nfrom autogen import GroupChatManager',
+        'GPTAssistantAgent': 'from autogen.agentchat.contrib.gpt_assistant_agent import GPTAssistantAgent',
+        'MultimodalConversableAgent': 'from autogen.agentchat.contrib.multimodal_conversable_agent import MultimodalConversableAgent',
+        'RetrieveAssistantAgent': 'from autogen.agentchat.contrib.retrieve_assistant_agent import RetrieveAssistantAgent\nimport chromadb',
+        'RetrieveUserProxyAgent': 'from autogen.agentchat.contrib.retrieve_user_proxy_agent import RetrieveUserProxyAgent',
+    } -%}
+    {%- for node in nodes -%}
+        {% set cls = node['data'].get('class') %}
+        {%- if cls and cls in import_dict and import_dict[cls] not in import_lines -%}
+            {% do import_lines.append(import_dict[cls]) %}
+        {%- endif -%}
+    {%- endfor %}
+import autogen
+import argparse
+from termcolor import colored
+
+{{ import_lines|unique|join('\n') }}
+
+{% endmacro %}

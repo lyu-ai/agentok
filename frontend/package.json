@@ -1,0 +1,52 @@
+{
+  "name": "penless-demo",
+  "description": "Penless Lab - Demos and Experiements",
+  "version": "0.5.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 2855",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@codemirror/lang-python": "^6.1.3",
+    "@headlessui-float/react": "^0.12.0",
+    "@headlessui/react": "^1.7.17",
+    "@supabase/ssr": "latest",
+    "@supabase/supabase-js": "latest",
+    "@types/node": "20.4.5",
+    "@types/react": "18.2.17",
+    "@types/react-dom": "18.2.7",
+    "@uiw/codemirror-theme-vscode": "^4.21.21",
+    "@uiw/react-codemirror": "^4.21.21",
+    "autoprefixer": "10.4.14",
+    "clsx": "^2.0.0",
+    "daisyui": "^4.4.14",
+    "eslint": "8.46.0",
+    "eslint-config-next": "13.4.12",
+    "js-tiktoken": "^1.0.8",
+    "lowlight": "^3.1.0",
+    "next": "14.0.3",
+    "pdf2json": "^3.0.5",
+    "postcss": "8.4.27",
+    "python-shell": "^5.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
+    "react-icons": "^4.12.0",
+    "react-markdown": "^8.0.7",
+    "react-syntax-highlighter": "^15.5.0",
+    "react-toastify": "^9.1.3",
+    "react-tooltip": "^5.24.0",
+    "reactflow": "^11.10.1",
+    "remark-breaks": "^4.0.0",
+    "remark-gfm": "^3.0.1",
+    "tailwindcss": "3.3.3",
+    "typescript": "5.1.6"
+  },
+  "devDependencies": {
+    "@types/react-resizable": "^3.0.7",
+    "@types/react-syntax-highlighter": "^15.5.10"
+  }
+}

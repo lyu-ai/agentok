@@ -1,0 +1,8 @@
+# register the functions
+user_proxy.register_function(
+    function_map={
+      {%- for func in functions %}
+      "{{func.name}}": __func_{{func.name}},
+      {%- endfor %}
+    }
+)

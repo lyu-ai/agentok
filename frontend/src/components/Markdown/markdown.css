@@ -1,0 +1,35 @@
+.markdown {
+  line-height: 1.5;
+}
+
+.markdown p,
+li {
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}
+
+.markdown ul {
+  list-style-type: disc;
+  margin-left: 1.5em;
+}
+
+.markdown ol {
+  list-style-type: decimal;
+  margin-left: 1.5em;
+}
+
+.markdown h1 {
+  @apply text-2xl font-bold py-2;
+}
+
+.markdown h2 {
+  @apply text-xl font-bold;
+}
+
+.markdown h3 {
+  @apply text-base font-bold;
+}
+
+.markdown img {
+  @apply rounded;
+}

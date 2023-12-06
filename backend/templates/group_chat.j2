@@ -1,0 +1,12 @@
+# group_chat.j2
+{% macro generate_group_chat(group_chat_node, grouped_nodes) %}
+    groupchat_{{ group_chat_node['id'] }} = GroupChat(agents=[
+        {%- for node in grouped_nodes %}
+        node_{{ node['id'] }}{% if not loop.last %},{% endif %}
+        {%- endfor %}
+        ],
+        messages=[],
+        max_round={{ group_chat_node['max_round'] }}
+    )
+    node_{{ group_chat_node['id'] }} = GroupChatManager(groupchat=groupchat_{{ group_chat_node['id'] }}, llm_config=llm_config)
+{% endmacro %}

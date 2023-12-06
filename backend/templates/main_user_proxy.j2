@@ -1,0 +1,23 @@
+# user_proxy.j2
+{% macro generate_main_user_proxy(node) %}
+{%- set class_name = node['data']['class'] %}
+{%- set name = node['data']['name'] %}
+{%- set other_props = node['data'].get('other_properties', {}) %}
+user_proxy = {{ class_name }}(
+    name="{{ name }}",
+    {%- if node['data'].get('human_input_mode') %}
+    human_input_mode="""{{ node['data']['human_input_mode'] }}""",
+    {%- endif %}
+    is_termination_msg=lambda x: x.get("content", "") and x.get("content", "").rstrip().endswith("TERMINATE"),
+    {%- if node['data'].get('max_consecutive_auto_reply') %}
+    max_consecutive_auto_reply={{ node['data']['max_consecutive_auto_reply'] }},
+    {%- endif %}
+    {%- if node['data'].get('enable_code_execution', False) %}
+    code_execution_config={
+      {%- if node['data'].get('work_dir', False) %}
+      "work_dir": "{{ node['data']['work_dir'] }}",
+      {%- endif %}
+    },
+    {%- endif %}
+)
+{% endmacro %}

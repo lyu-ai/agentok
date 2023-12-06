@@ -1,0 +1,12 @@
+# Parse command line arguments
+parser = argparse.ArgumentParser(description='Start a chat with agents.')
+parser.add_argument('message', type=str, help='The message to send to agent.')
+args = parser.parse_args()
+
+# Ask the question with an image
+
+# start the conversation
+user_proxy.initiate_chat(
+    node_{{ first_converser['id'] }},
+    message=args.message,
+)

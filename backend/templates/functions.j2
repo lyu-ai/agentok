@@ -1,0 +1,7 @@
+# Function template content generator
+{% for function in functions %}
+def __func_{{ function.name }}({% for param in function.parameters %}{{ param.name }}{% if not loop.last %},{% endif %}{% endfor %}):
+{%- for line in function.code.split('\n') %}
+    {{ line }}
+{%- endfor %}
+{% endfor %}
