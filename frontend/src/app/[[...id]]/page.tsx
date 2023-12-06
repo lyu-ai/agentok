@@ -12,7 +12,7 @@ const Page = ({ params }: { params: { id: string[] } }) => {
     <div className="flex-1 w-full overflow-y-auto">
       <title>Flowgen | Penless Lab</title>
       <ReactFlowProvider>
-        <Flow flowId={params.id[0]} />
+        <Flow flowId={params.id?.[0]} />
       </ReactFlowProvider>
     </div>
   );
