@@ -9,6 +9,7 @@ import { RiRobot2Fill } from 'react-icons/ri';
 import { getNodeLabel, setNodeData } from '../../utils/flow';
 import EditableText from '@/components/EditableText';
 import EditButton from '@/components/EditButton';
+import { useTranslations } from 'next-intl';
 
 function AssistantNode({ id, data, selected, ...props }: any) {
   const [editingName, setEditingName] = useState(false);
@@ -26,6 +27,8 @@ function AssistantNode({ id, data, selected, ...props }: any) {
       setEditingName(false);
     }
   }, [selected]);
+
+  const t = useTranslations('AssistantNode');
 
   return (
     <div
@@ -63,7 +66,7 @@ function AssistantNode({ id, data, selected, ...props }: any) {
         </div>
         <div className="divider my-0" />
         <div className="flex items-center justify-between text-base-content/60 gap-2">
-          <div className="font-bold text-base-content/80">系统消息</div>
+          <div className="font-bold text-base-content/80">{t('system_message')}</div>
           <div className="form-control"></div>
           <label className="flex items-center cursor-pointer label gap-2">
             <span className="label-text">启用</span>

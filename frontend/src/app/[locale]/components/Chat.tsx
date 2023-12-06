@@ -17,8 +17,8 @@ import Markdown from '@/components/Markdown';
 import { genId } from '@/utils/id';
 import { createClient } from '@/utils/supabase/client';
 import { Tooltip } from 'react-tooltip';
-import { stripMatch } from '../utils/re';
-import { ThinkTag } from '../utils/chat';
+import { stripMatch } from '@/utils/re';
+import { ThinkTag } from '@/utils/chat';
 import { PiChatsCircleFill } from 'react-icons/pi';
 
 const supabase = createClient();

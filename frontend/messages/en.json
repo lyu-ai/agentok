@@ -1,0 +1,9 @@
+{
+  "Index": {
+    "title": "Hello world!"
+  },
+  "AssistantNode": {
+    "title": "Assistant Agent",
+    "system_message": "System Message"
+  }
+}
