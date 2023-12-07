@@ -1,106 +1,55 @@
-import PopupDialog from '@/components/PopupDialog';
+import React, { useEffect } from 'react';
+import { GoInfo } from 'react-icons/go';
+import Markdown from '@/components/Markdown';
+import { createRoot } from 'react-dom/client';
 import clsx from 'clsx';
-import { TbFunction } from 'react-icons/tb';
-import { setNodeData } from '../../utils/flow';
-import { useReactFlow } from 'reactflow';
-import { useEffect, useState } from 'react';
-import FunctionDetail from './Detail';
-import FunctionBlock from './Block';
-import { genId } from '@/utils/id';
-import { MdOutlineAdd } from 'react-icons/md';
-import { Tooltip } from 'react-tooltip';
-import { useTranslations } from 'next-intl';
 
-const FunctionConfig = ({ nodeId, data, className, ...props }: any) => {
-  const t = useTranslations('function.Config');
-  const [selectedFunction, setSelectedFunction] = useState(-1);
-  const instance = useReactFlow();
+const Tip = ({ content, icon, className, classNameContent, ...props }: any) => {
+  const [htmlContent, setHtmlContent] = React.useState('');
   useEffect(() => {
-    if (data.functions?.length) setSelectedFunction(0);
-  }, [data.functions]);
-  const onAdd = () => {
-    setNodeData(instance, nodeId, {
-      functions: [
-        {
-          id: 'function-' + genId(),
-          name: 'hello',
-          description: 'Print hello world message.',
-          code: '',
-          parameters: [
-            {
-              id: 'param-' + genId(),
-              name: 'message',
-              type: 'string',
-              description: 'The message to be printed.',
-            },
-          ],
-        },
-        ...(data.functions || []),
-      ],
-    });
-    setSelectedFunction(0); // select the new added function
+    let isMounted = true; // Guard to prevent setting state if the component is unmounted
+    if (typeof content === 'string') {
+      renderToString(
+        <Markdown className={classNameContent}>{content}</Markdown>
+      ).then(html => {
+        if (isMounted) setHtmlContent(html);
+      });
+    } else {
+      renderToString(content).then(html => {
+        if (isMounted) setHtmlContent(html);
+      });
+    }
+
+    return () => {
+      isMounted = false; // Component cleanup
+    };
+  }, [content, classNameContent]);
+
+  // Discussion: https://github.com/vercel/next.js/discussions/58533
+  const renderToString = async (element: React.ReactElement) => {
+    const container = document.createElement('div');
+    const root = createRoot(container);
+    root.render(element);
+
+    await new Promise(resolve => setTimeout(resolve, 100)); // wait for the rendering to complete
+
+    const html = container.innerHTML;
+    root.unmount();
+
+    return html;
   };
-  const onDelete = (func: any) => {
-    const updatedFunctions = data.functions?.filter(
-      (f: any) => f.id !== func.id
-    );
-    setNodeData(instance, nodeId, { functions: updatedFunctions });
-    if (selectedFunction > updatedFunctions.length - 1)
-      setSelectedFunction(selectedFunction - 1); // either select the last one or -1
-  };
+
   return (
-    <PopupDialog
-      title={
-        <div className="flex items-center gap-2">
-          <TbFunction className="w-7 h-7" />
-          <span className="text-md font-bold">{t('title')}</span>
-        </div>
-      }
-      className={clsx(
-        'flex flex-col w-full h-full bg-gray-800/80 backgrop-blur-md border border-gray-700 shadow-box-lg shadow-gray-700',
-        className
-      )}
-      classNameTitle="border-b border-base-content/10"
-      classNameBody="flex flex-grow w-full h-full"
+    <div
+      data-tooltip-id="html-tooltip"
+      data-tooltip-html={htmlContent || '<span>waiting...<span>'}
+      data-tooltip-place="top"
+      className={clsx(className, 'cursor-pointer')}
       {...props}
     >
-      <div className="flex flex-col gap-2 h-full">
-        <div className="flex flex-col gap-2 h-full border-r p-2 border-base-content/10 w-64">
-          <button className="btn btn-primary" onClick={onAdd}>
-            <MdOutlineAdd className="w-5 h-5" />
-            <span>{t('new-function')}</span>
-          </button>
-          <div className="flex flex-col gap-2 h-full overflow-y-auto">
-            {data.functions?.map((func: any, index: any) => (
-              <FunctionBlock
-                selected={selectedFunction === index}
-                func={func}
-                key={index}
-                onDelete={() => onDelete(func)}
-                onClick={() => setSelectedFunction(index)}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="flex flex-col gap-2 flex-grow h-full overflow-y-auto">
-        {selectedFunction === -1 ? (
-          <div className="flex flex-col w-full h-full items-center justify-center flex-grow text-base-content/50">
-            <div className="flex flex-col items-center gap-3 max-w-2xl text-center">
-              <TbFunction className="w-16 h-16" />
-              {t('function-prompt')}
-            </div>
-          </div>
-        ) : (
-          <FunctionDetail
-            nodeId={nodeId}
-            func={data.functions?.[selectedFunction]}
-          />
-        )}
-      </div>
-      <Tooltip id="func-tooltip" place="bottom" />
-    </PopupDialog>
+      {icon ?? <GoInfo className="w-4 h-4" />}
+    </div>
   );
 };
 
-export default FunctionConfig;
+export default Tip;
