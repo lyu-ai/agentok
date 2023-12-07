@@ -9,6 +9,8 @@
 
 ## 🤖 What is FlowGen
 
+![flow-1](./website/public/screenshot-flow-1.jpeg)
+
 FlowGen is a tool built for [AutoGen](https://microsoft.github.io/autogen/), a great agent framework from Microsoft Research.
 
 AutoGen streamlines the process of creating multi-agent applications with its clear and user-friendly approach. FlowGen takes this accessibility a step further by offering visual tools that simplify the building and management of agent workflows with AutoGen.
