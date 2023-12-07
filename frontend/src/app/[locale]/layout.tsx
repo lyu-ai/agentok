@@ -3,7 +3,7 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 import { notFound } from 'next/navigation';
-import { NextIntlClientProvider, useLocale } from 'next-intl';
+import { NextIntlClientProvider } from 'next-intl';
 import { PropsWithChildren } from 'react';
 
 export default async function RootLayout({
@@ -12,19 +12,14 @@ export default async function RootLayout({
 }: PropsWithChildren<{
   params: { locale: string };
 }>) {
-  const locale = useLocale();
-  // Show a 404 error if the user requests an unknown locale
-  if (params.locale !== locale) {
-    notFound();
-  }
   let messages;
   try {
-    messages = (await import(`@/../messages/${locale}.json`)).default;
+    messages = (await import(`@/../messages/${params.locale}.json`)).default;
   } catch (error) {
     notFound();
   }
   return (
-    <html data-theme="night" suppressHydrationWarning lang={locale}>
+    <html data-theme="night" suppressHydrationWarning lang={params.locale}>
       <title>FlowGen</title>
       <body className={inter.className} suppressHydrationWarning>
         <div className="flex flex-col h-screen w-full items-center text-base-content">
@@ -40,7 +35,7 @@ export default async function RootLayout({
               <FaGithub className="h-6 w-6" />
             </a>
           </div>
-          <NextIntlClientProvider locale={locale} messages={messages}>
+          <NextIntlClientProvider locale={params.locale} messages={messages}>
             {children}
           </NextIntlClientProvider>
         </div>
