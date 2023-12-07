@@ -3,6 +3,7 @@ import { GoImage } from 'react-icons/go';
 import { useState } from 'react';
 import clsx from 'clsx';
 import ImagePanel from './ImagePanel';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
 const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
@@ -55,8 +56,10 @@ const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
           onClick={() => setShowImagePanel(!showImagePanel)}
         >
           {image ? (
-            <img
+            <Image
               src={image}
+              width={32}
+              height={32}
               alt="image"
               className="object-cover aspect-w-1 aspect-h-1 w-8 h-8 rounded"
             />

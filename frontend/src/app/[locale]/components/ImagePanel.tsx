@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { GoImage, GoTrash } from 'react-icons/go';
 
 type ImagePanelProps = {
@@ -20,7 +21,7 @@ const ImagePanel = (props: ImagePanelProps) => {
   const t = useTranslations('component.ImagePanel');
   useEffect(() => {
     props.onSelectImage(url);
-  }, [url]);
+  }, [props, url]);
   return (
     <div
       className={clsx('relative flex flex-col py-1 w-full h-full rounded-t-md')}
@@ -33,7 +34,7 @@ const ImagePanel = (props: ImagePanelProps) => {
       >
         {url ? (
           <div className="h-full aspect-w-1 aspect-h-1 overflow-hidden">
-            <img src={url} alt="image" className="object-cover w-full h-full" />
+            <Image src={url} alt="image" width={512} height={512} className="object-cover w-full h-full" />
             <button
               className="btn btn-xs btn-ghost text-red-300 hover:text-red-500 btn-square absolute top-1 right-1"
               onClick={() => setUrl('')}
@@ -52,7 +53,9 @@ const ImagePanel = (props: ImagePanelProps) => {
                   onClick={() => setUrl(image)}
                   className="rounded border border-transparent hover:border-primary hover:bg-primary overflow-hidden bg-base-content/30"
                 >
-                  <img
+                  <Image
+                    width={40}
+                    height={40}
                     src={image}
                     alt="image"
                     className="h-10 w-10 object-cover "

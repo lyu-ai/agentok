@@ -17,7 +17,7 @@ const EditableText = ({
 
   useEffect(() => setIsEditing(editing), [editing]);
   useEffect(() => setInputValue(text), [text]);
-  useEffect(() => onModeChange && onModeChange(isEditing), [isEditing]);
+  useEffect(() => onModeChange && onModeChange(isEditing), [onModeChange, isEditing]);
 
   const onKeyDown = (e: any) => {
     if (e.key === 'Enter' || e.key === 'Escape') {

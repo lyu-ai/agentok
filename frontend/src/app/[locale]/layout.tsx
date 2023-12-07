@@ -5,8 +5,9 @@ const inter = Inter({ subsets: ['latin'] });
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { PropsWithChildren } from 'react';
-import { RiAppsLine, RiChatSmile2Line, RiRobot2Line } from 'react-icons/ri';
+import { RiAppsLine, RiRobot2Line } from 'react-icons/ri';
 import Link from 'next/link';
+import Image from 'next/image';
 import { PiChatsCircleFill } from 'react-icons/pi';
 
 export default async function RootLayout({
@@ -29,7 +30,9 @@ export default async function RootLayout({
           <div className="navbar flex w-full items-center justify-between h-12 p-2">
             <div className="navbar-start">
               <a href="/" className="flex gap-2 items-end">
-                <img
+                <Image
+                  width={128}
+                  height={32}
                   alt="logo"
                   src="/logo-full-white.png"
                   className="h-8 object-contain aspect-w-1 aspect-h-1"

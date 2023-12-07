@@ -23,7 +23,7 @@ const Tip = ({ content, icon, className, classNameContent, ...props }: any) => {
     return () => {
       isMounted = false; // Component cleanup
     };
-  }, [content]);
+  }, [content, classNameContent]);
 
   // Discussion: https://github.com/vercel/next.js/discussions/58533
   const renderToString = async (element: React.ReactElement) => {

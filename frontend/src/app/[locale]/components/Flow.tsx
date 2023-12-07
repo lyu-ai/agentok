@@ -78,7 +78,7 @@ const Flow = ({ flowId }: any) => {
         console.warn('Failed loading flow:', e.statusText);
       })
       .finally(() => setLoading(false));
-  }, [flowId]);
+  }, [flowId, fitView]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -146,7 +146,7 @@ const Flow = ({ flowId }: any) => {
       );
     },
     // Specify dependencies for useCallback
-    [screenToFlowPosition, nodes, setNodes, flowParent]
+    [screenToFlowPosition, setNodes, flowParent]
   );
 
   const onConnect = (params: any) => {
