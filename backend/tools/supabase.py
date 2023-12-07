@@ -84,9 +84,8 @@ def get_flows(max_retries=3, delay=1):
   while attempt < max_retries:
     try:
         records = supabase.table('flows').select('*').neq('name', '').execute()
-        print('get_flows', records.data)
+        print('get_flows', len(records.data))
         transformed_data = [{"id": record["name"], "flow": record.get("flow", {})} for record in records.data]
-        print('transformed_data', transformed_data)
         return transformed_data
 
     except Exception as e:
