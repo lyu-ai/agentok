@@ -66,7 +66,7 @@ const FunctionConfig = ({ nodeId, data, className, ...props }: any) => {
     >
       <div className="flex flex-col gap-2 h-full">
         <div className="flex flex-col gap-2 h-full border-r p-2 border-base-content/10 w-64">
-          <button className="btn btn-secondary" onClick={onAdd}>
+          <button className="btn btn-primary" onClick={onAdd}>
             <MdOutlineAdd className="w-5 h-5" />
             <span>{t('new-function')}</span>
           </button>

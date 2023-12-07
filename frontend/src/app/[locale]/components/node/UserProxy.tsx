@@ -26,7 +26,7 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
       )}
     >
       <div className="flex flex-col w-full gap-2 text-sm">
-        <div className="w-full flex items-center justify-between gap-2 text-secondary">
+        <div className="w-full flex items-center justify-between gap-2 text-primary">
           <div className="flex items-center gap-2 ">
             <RiChatSmile2Fill className="w-5 h-5" />
             <div className="text-sm font-bold">{getNodeLabel(data.label, tNodeMeta)}</div>
@@ -118,12 +118,12 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
       <Handle
         type="target"
         position={Position.Left}
-        className="w-16 !bg-secondary"
+        className="w-16 !bg-primary"
       />
       <Handle
         type="source"
         position={Position.Right}
-        className="w-16 !bg-secondary"
+        className="w-16 !bg-primary"
       />
       <UserConfig
         show={showOptions}

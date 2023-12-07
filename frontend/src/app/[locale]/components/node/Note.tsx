@@ -36,7 +36,7 @@ function Note({ id, data, selected, ...props }: any) {
   const instance = useReactFlow();
   const [editing, setEditing] = useState(false);
   const [content, setContent] = useState(data.content);
-  const t = useTranslations('node.Config');
+  const t = useTranslations('node.Note');
   const tNodeMeta = useTranslations('meta.node');
 
   useEffect(() => setContent(data.content), [data.content]);

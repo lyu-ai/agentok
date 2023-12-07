@@ -51,7 +51,7 @@ const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
       </div>
       <div className="flex flex-row w-full items-center gap-2">
         <button
-          className="ml-1 text-secondary/80 hover:text-secondary w-8 h-8 flex-shrink-0"
+          className="ml-1 text-primary/80 hover:text-primary w-8 h-8 flex-shrink-0"
           onClick={() => setShowImagePanel(!showImagePanel)}
         >
           {image ? (
@@ -72,7 +72,7 @@ const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
           onChange={(e: any) => setMessage(e.target.value)}
         />
         <button
-          className="btn btn-sm bg-secondary/80 border-secondary/60 hover:bg-secondary hover:border-secondary/80 rounded-md"
+          className="btn btn-sm bg-primary/80 border-primary/60 hover:bg-primary hover:border-primary/80 rounded-md"
           onClick={onSend}
         >
           <HiPaperAirplane className="w-5 h-5" />

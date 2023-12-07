@@ -12,7 +12,7 @@ const GroupChatManager = ({ id, selected, data }: any) => {
   return (
     <div
       className={clsx(
-        'p-2 rounded-md border text-secondary min-w-[160px] backdrop-blur-sm',
+        'p-2 rounded-md border text-primary min-w-[160px] backdrop-blur-sm',
         selected
           ? 'shadow-box shadow-sky-500 bg-sky-600/90 border-sky-500'
           : 'border-sky-600 bg-sky-700/90'
@@ -24,7 +24,7 @@ const GroupChatManager = ({ id, selected, data }: any) => {
         className="bg-sky-600/90 border-sky-500"
       />
       <div className="flex flex-col w-full gap-2 text-sm">
-        <div className="flex items-center gap-2 text-secondary">
+        <div className="flex items-center gap-2 text-primary">
           <FaUserGroup className="w-5 h-5" />
           <div className="text-sm font-bold">{getNodeLabel(data.label, tNodeMeta)}</div>
         </div>
@@ -56,12 +56,12 @@ const GroupChatManager = ({ id, selected, data }: any) => {
       <Handle
         type="target"
         position={Position.Left}
-        className="w-16 !bg-secondary"
+        className="w-16 !bg-primary"
       />
       <Handle
         type="source"
         position={Position.Right}
-        className="w-16 !bg-secondary"
+        className="w-16 !bg-primary"
       />
     </div>
   );

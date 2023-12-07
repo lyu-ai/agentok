@@ -50,7 +50,7 @@ const ImagePanel = (props: ImagePanelProps) => {
                 <button
                   key={index}
                   onClick={() => setUrl(image)}
-                  className="rounded border border-transparent hover:border-secondary hover:bg-secondary overflow-hidden bg-base-content/30"
+                  className="rounded border border-transparent hover:border-primary hover:bg-primary overflow-hidden bg-base-content/30"
                 >
                   <img
                     src={image}

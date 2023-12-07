@@ -235,7 +235,7 @@ const Chat = ({ data, standalone }: any) => {
           const messageClass =
             message.type === 'assistant'
               ? 'bg-base-content/20 text-white'
-              : 'bg-secondary/70 text-white';
+              : 'bg-primary/70 text-white';
           const alignRight = message.type === 'user';
           const AvatarIcon =
             message.type === 'assistant' ? RiRobot2Fill : GoPersonFill;
@@ -300,7 +300,7 @@ const Chat = ({ data, standalone }: any) => {
       </div>
       <div className="relative p-1">
         <ChatInput
-          className="flex items-center p-1 w-full bg-base-100/70 border border-secondary rounded-lg shadow-lg"
+          className="flex items-center p-1 w-full bg-base-100/70 border border-primary rounded-lg shadow-lg"
           onSend={onSend}
         />
         {thinking && (

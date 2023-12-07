@@ -22,7 +22,7 @@ export default async function RootLayout({
     notFound();
   }
   return (
-    <html data-theme="night" suppressHydrationWarning lang={params.locale}>
+    <html data-theme="dim" suppressHydrationWarning lang={params.locale}>
       <title>FlowGen</title>
       <body className={inter.className} suppressHydrationWarning>
         <div className="flex flex-col h-screen w-full items-center text-base-content">

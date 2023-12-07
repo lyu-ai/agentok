@@ -29,7 +29,7 @@ input-sm[type="number"] {
   background-color: transparent;
 }
 
-[data-theme='night'] .react-flow__controls-button {
+[data-theme='dim'] .react-flow__controls-button {
   @apply bg-gray-800 hover:bg-gray-700 text-base-content border-gray-800 shadow;
 }
 
@@ -37,7 +37,7 @@ input-sm[type="number"] {
   @apply bg-base-100 hover:bg-base-200 text-base-content border-gray-700;
 }
 
-[data-theme='night'] .react-flow__panel {
+[data-theme='dim'] .react-flow__panel {
   @apply flex flex-row;
 }
 

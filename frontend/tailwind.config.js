@@ -37,7 +37,7 @@ module.exports = {
   plugins: [require('daisyui')],
   daisyui: {
     logs: false, // disable daisyui version message
-    themes: ['night', 'winter'],
-    darkTheme: 'night',
+    themes: ['dim', 'winter'],
+    darkTheme: 'dim',
   },
 };

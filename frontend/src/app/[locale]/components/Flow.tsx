@@ -226,7 +226,7 @@ const Flow = ({ flowId }: any) => {
   } else if (loading) {
     return (
       <div className="relative flex w-full h-full items-center justify-center">
-        <div className="loading loading-bars loading-secondary"></div>
+        <div className="loading loading-bars loading-primary"></div>
       </div>
     );
   }
@@ -268,7 +268,7 @@ const Flow = ({ flowId }: any) => {
       </ReactFlow>
       <div className="absolute flex items-center gap-2 right-2 top-2">
         <button
-          className="btn btn-sm btn-square btn-ghost hover:text-secondary"
+          className="btn btn-sm btn-square btn-ghost hover:text-primary"
           onClick={onSave}
           data-tooltip-id="default-tooltip"
           data-tooltip-content={t('save-flow')}

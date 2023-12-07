@@ -50,7 +50,7 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
         <Popover.Button
           className={clsx(
             className,
-            'btn btn-sm btn-secondary hover:shadow-box shadow-indigo-300 btn-circle ring-none outline-none'
+            'btn btn-sm btn-primary hover:shadow-box shadow-indigo-300 btn-circle ring-none outline-none'
           )}
           {...props}
         >

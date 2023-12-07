@@ -50,7 +50,7 @@ const FunctionEditor = ({ nodeId, func, ...props }: any) => {
             <button
               className={clsx(
                 'btn btn-outline rounded',
-                func?.code ? 'btn-xs p-1' : 'btn-secondary btn-sm p-2'
+                func?.code ? 'btn-xs p-1' : 'btn-primary btn-sm p-2'
               )}
               data-tooltip-id="func-tooltip"
               data-tooltip-content={t('generate-code-tooltip')}

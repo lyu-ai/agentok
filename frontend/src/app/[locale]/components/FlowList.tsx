@@ -12,7 +12,7 @@ export const FlowEmpty = () => {
       <div className="flex flex-col gap-2 items-center text-base-content/60">
         <BsInboxes className="w-12 h-12" />
         <div className="mt-2 text-sm">{t('flow-empty')}</div>
-        {/* <div className="btn btn-sm btn-secondary" onClick={onReset}>
+        {/* <div className="btn btn-sm btn-primary" onClick={onReset}>
           {t('new-flow')}
         </div> */}
       </div>
@@ -96,7 +96,7 @@ const FlowList = ({ action }: any) => {
               className="group relative flex flex-col pb-6 bg-base-content/10 rounded-md p-3 gap-3 hover:bg-base-content/20 cursor-pointer"
               href={`/${action ?? 'flow'}/${flowData.id}`}
             >
-              <div className="flex items-center gap-2 group-hover:text-secondary">
+              <div className="flex items-center gap-2 group-hover:text-primary">
                 <GrFlows className="w-6 h-6" />
                 <h2 className="font-bold">{flowData.id}</h2>
               </div>
