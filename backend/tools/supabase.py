@@ -100,7 +100,6 @@ def get_flow(id, max_retries=3, delay=1):
   while attempt < max_retries:
     try:
         records = supabase.table('flows').select('*').eq('name', id).execute()
-        print('get_flow', records.data)
         if len(records.data) > 0:
           return {"id": records.data[0]["name"], "flow": records.data[0].get("flow", {})}
         else:
