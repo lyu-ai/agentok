@@ -33,6 +33,7 @@ nh3==0.2.14
 numpy==1.26.2
 openai
 packaging==23.2
+Pillow
 pkginfo==1.9.6
 postgrest==0.13.0
 pyautogen==0.2.1
