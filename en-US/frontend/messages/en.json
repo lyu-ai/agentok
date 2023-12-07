@@ -1,35 +1,34 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { ToastContainer } from 'react-toastify';
-import { Tooltip } from 'react-tooltip';
-import 'react-toastify/dist/ReactToastify.css';
+import { useEffect, useState } from 'react';
+import Chat from '../../components/Chat';
 
-const HomePage = () => {
-  const router = useRouter();
-
+const Page = ({ params: { id } }: any) => {
+  const [data, setData] = useState<any>({});
   useEffect(() => {
-    router.replace('/gallery/');
-  }, [router]);
-
+    fetch(`/api/flows/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(resp => resp.json())
+      .then(json => {
+        setData(json);
+        console.log(json);
+      });
+  }, [id]);
   return (
-    <>
-      <ToastContainer position="bottom-right" theme="colored" hideProgressBar />
-      <Tooltip
-        id="default-tooltip"
-        className="bg-base-100 text-base-content"
-        place="bottom"
-      />
-      <Tooltip
-        id="html-tooltip"
-        classNameArrow="html-tooltip-arrow bg-gray-700 border-r border-b border-gray-500"
-        className="!bg-gray-600 !border !border-gray-500 !text-gray-200 !px-2 !py-1"
-        style={{ maxWidth: '300px', zIndex: 9999 }}
-        clickable
-      />
-    </>
-  ); // or a loading indicator if preferred
+    <div
+      className="flex w-full h-full items-center justify-center bg-no-repeat bg-center bg-[url('/logo-bg.svg')]"
+      style={{ backgroundSize: '160px' }}
+    >
+      <title>Chat | FlowGen</title>
+      <div className="m-1 flex w-full shadow-box shadow-gray-600 rounded-xl backdrop-blur-md bg-gray-700/80 text-base-content border border-gray-600 max-w-[1200px] h-[90vh]">
+        <Chat data={{ id, flow: data }} standalone />
+      </div>
+    </div>
+  );
 };
 
-export default HomePage;
+export default Page;
