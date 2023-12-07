@@ -1,79 +1,115 @@
+import { Popover } from '@headlessui/react';
+import { Float } from '@headlessui-float/react';
 import clsx from 'clsx';
+import { getNodeLabel, nodeMetas } from '../utils/flow';
+import { GoPlus } from 'react-icons/go';
 import { useTranslations } from 'next-intl';
-import { useState, useEffect } from 'react';
-import { GoImage, GoTrash } from 'react-icons/go';
 
-type ImagePanelProps = {
-  onSelectImage: (url: string) => void;
-  className?: string;
-};
+const DRAGGING_NODE_NAME = '__dragging-node';
 
-const sampleImages = [
-  'https://th.bing.com/th/id/OIP.29Mi2kJmcHHyQVGe_0NG7QHaEo?pid=ImgDet&rs=1',
-  'https://th.bing.com/th/id/R.422068ce8af4e15b0634fe2540adea7a?rik=y4OcXBE%2fqutDOw&pid=ImgRaw&r=0',
-  'https://fftai.github.io/concepts/static/about_gr1.png',
-  'https://assets.csn.chat/flowgen/duck.jpg',
-];
+const NodeButton = ({ className, onAddNode, ...props }: any) => {
+  const tNodeMeta = useTranslations('meta.node');
+  const onDragStart = (
+    event: React.DragEvent<any>,
+    data: { type: string; name: string; label: string; class: string; }
+  ) => {
+    let dragImage = event.currentTarget.cloneNode(true);
+    dragImage.classList.add(
+      'absolute',
+      'bg-gray-700/90',
+      'shadow-box',
+      'shadow-gray-600',
+      'backdrop-blur-sm',
+      DRAGGING_NODE_NAME
+    );
+    document.body.appendChild(dragImage);
+    // Offset the drag image to the position of the original element, otherwise will be shown at the cursor position
+    const offsetX =
+      event.clientX - event.currentTarget.getBoundingClientRect().left;
+    const offsetY =
+      event.clientY - event.currentTarget.getBoundingClientRect().top;
+    event.dataTransfer.setDragImage(dragImage, offsetX, offsetY);
+    event.dataTransfer.setData(
+      'json',
+      JSON.stringify({ ...data, offsetX, offsetY })
+    );
+  };
 
-const ImagePanel = (props: ImagePanelProps) => {
-  const [url, setUrl] = useState('');
-  const t = useTranslations('component.ImagePanel');
-  useEffect(() => {
-    props.onSelectImage(url);
-  }, [url]);
   return (
-    <div
-      className={clsx('relative flex flex-col py-1 w-full h-full rounded-t-md')}
-    >
-      <div
-        className={clsx(
-          'flex flex-col items-center justify-center w-full h-full border-base-content/20 gap-2 text-base-content/40',
-          props.className
-        )}
+    <Popover>
+      <Float
+        placement="bottom"
+        offset={5}
+        enter="transition ease-out duration-300"
+        enterFrom="transform scale-0 opacity-0"
+        enterTo="transform scale-100 opacity-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform scale-100 opacity-100"
+        leaveTo="transform scale-0 opacity-0"
       >
-        {url ? (
-          <div className="h-full aspect-w-1 aspect-h-1 overflow-hidden">
-            <img src={url} alt="image" className="object-cover w-full h-full" />
-            <button
-              className="btn btn-xs btn-ghost text-red-300 hover:text-red-500 btn-square absolute top-1 right-1"
-              onClick={() => setUrl('')}
-            >
-              <GoTrash className="w-4 h-4" />
-            </button>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-2 justify-center items-center w-full h-full">
-            <GoImage className="w-12 h-12 mx-auto" />
-            <div className="text-sm font-bold">{t('preview')}</div>
-            <div className="flex items-center gap-2">
-              {sampleImages.map((image, index) => (
-                <button
-                  key={index}
-                  onClick={() => setUrl(image)}
-                  className="rounded border border-transparent hover:border-primary hover:bg-primary overflow-hidden bg-base-content/30"
-                >
-                  <img
-                    src={image}
-                    alt="image"
-                    className="h-10 w-10 object-cover "
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="absolute inset-x-0 bottom-1">
-        <input
-          type="text"
-          value={url}
-          onChange={e => setUrl(e.target.value)}
-          className="input input-xs input-bordered rounded-sm w-full bg-base-100/40"
-          placeholder={t('image-url-placeholder')}
-        />
-      </div>
-    </div>
+        <Popover.Button
+          className={clsx(
+            className,
+            'btn btn-sm btn-primary hover:shadow-box shadow-indigo-300 btn-circle ring-none outline-none'
+          )}
+          {...props}
+        >
+          <GoPlus className="w-6 h-6" />
+        </Popover.Button>
+        <Popover.Panel
+          id="agent-list"
+          className="origin-top-left absolute shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 overflow-auto max-h-[80vh]"
+        >
+          {nodeMetas.map(
+            ({
+              id,
+              name,
+              label,
+              type,
+              class: _class,
+              icon: Icon,
+            }) => (
+              <Popover.Button
+                as="a"
+                draggable
+                onDragStart={event =>
+                  onDragStart(event, {
+                    type,
+                    name,
+                    label,
+                    class: _class,
+                  })
+                }
+                onDragEnd={() => {
+                  const dragImage = document.querySelector(
+                    `.${DRAGGING_NODE_NAME}`
+                  );
+                  if (dragImage) {
+                    document.body.removeChild(dragImage);
+                  }
+                }}
+                key={id}
+                onClick={() =>
+                  onAddNode(type, { name, class: _class, type })
+                }
+                className="group min-w-64 flex p-2 items-center rounded-lg hover:bg-base-content/10 cursor-pointer"
+              >
+                <Icon className="flex-shrink-0 w-6 h-6 mx-1 group-hover:text-white" />
+                <div className="ml-3 flex flex-col gap-1">
+                  <div className="text-sm font-bold group-hover:text-white">
+                    {getNodeLabel(label, tNodeMeta) ?? label}
+                  </div>
+                  <div className="text-xs text-base-content/40 group-hover:text-white/80">
+                    {getNodeLabel(label + '-description', tNodeMeta) ?? label + '-description'}
+                  </div>
+                </div>
+              </Popover.Button>
+            )
+          )}
+        </Popover.Panel>
+      </Float>
+    </Popover>
   );
 };
 
-export default ImagePanel;
+export default NodeButton;
