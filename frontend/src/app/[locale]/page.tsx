@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { ToastContainer } from 'react-toastify';
 import { Tooltip } from 'react-tooltip';
 import 'react-toastify/dist/ReactToastify.css';

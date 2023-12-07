@@ -72,13 +72,12 @@ const Flow = ({ flowId }: any) => {
         console.log('Loading flow:', json);
         setNodes(json?.flow?.nodes ?? []);
         setEdges(json?.flow?.edges ?? []);
-        fitView({ maxZoom: 1 });
       })
       .catch(e => {
         console.warn('Failed loading flow:', e.statusText);
       })
       .finally(() => setLoading(false));
-  }, [flowId, fitView]);
+  }, [flowId]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes(nds => applyNodeChanges(changes, nds)),

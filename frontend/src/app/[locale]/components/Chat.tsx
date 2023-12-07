@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   GoAlert,
   GoCheckCircle,
@@ -31,7 +31,7 @@ const Chat = ({ data, standalone }: any) => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const t = useTranslations('component.Chat');
 
-  const fetchMessages = () =>
+  const fetchMessages = useCallback(() =>
     fetch(`/api/flows/${data.id}/messages`, {
       method: 'GET',
       headers: {
@@ -41,7 +41,7 @@ const Chat = ({ data, standalone }: any) => {
       .then(resp => resp.json())
       .then(json => {
         setMessages(json ? json : []);
-      });
+      }), [setMessages, data.id]);
 
   useEffect(() => {
     fetchMessages().finally(() => setLoading(false));
@@ -71,6 +71,7 @@ const Chat = ({ data, standalone }: any) => {
     return () => {
       supabase.removeChannel(subscription);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // This is to make sure that the scroll is at the bottom when the messages are updated, such as when
