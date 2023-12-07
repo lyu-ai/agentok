@@ -3,8 +3,10 @@ import { GoGear } from 'react-icons/go';
 import clsx from 'clsx';
 import { useReactFlow } from 'reactflow';
 import { setNodeData } from '../../utils/flow';
+import { useTranslations } from 'next-intl';
 
 const RetrieveConfig = ({ data, setRetrieveOption, ...props }: any) => {
+  const t = useTranslations('option.UserConfig');
   return (
     <div
       className={`text-sm transition-all ease-in-out ${
@@ -17,17 +19,17 @@ const RetrieveConfig = ({ data, setRetrieveOption, ...props }: any) => {
         }
       >
         <div className="flex items-center gap-2">
-          <span>任务类型</span>
+          <span>{t('task')}</span>
           <select
             className="select select-bordered select-sm w-24"
             value={data.retrieve_config?.task ?? 'code'}
             onChange={e => setRetrieveOption('task', e.target.value)}
           >
-            <option value="code">代码</option>
+            <option value="code">{t('task-code')}</option>
           </select>
         </div>
         <div className="flex items-center gap-2">
-          <span>分块尺寸</span>
+          <span>{t('chunk-token-size')}</span>
           <input
             type="number"
             className="input input-sm input-bordered w-24"
@@ -38,7 +40,7 @@ const RetrieveConfig = ({ data, setRetrieveOption, ...props }: any) => {
           />
         </div>
         <div className="flex items-center gap-2">
-          <span className="shrink-0">文档路径</span>
+          <span className="shrink-0">{t('docs-path')}</span>
           <input
             type="text"
             className="input input-sm input-bordered w-full"
@@ -49,14 +51,14 @@ const RetrieveConfig = ({ data, setRetrieveOption, ...props }: any) => {
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
-            className="checkbox checkbox-xs"
+            className="checkbox checkbox-xs rounded"
             checked={data.retrieve_config?.get_or_create ?? false}
             onChange={e => setRetrieveOption('get_or_create', e.target.checked)}
           />
-          <span>不存在则自动创建</span>
+          <span>{t('get-or-create')}</span>
         </label>
         <div className="flex items-center gap-2">
-          <span>存储引擎</span>
+          <span>{t('client')}</span>
           <select
             className="select select-bordered select-sm w-24"
             value={data.retrieve_config?.client ?? 'code'}
@@ -73,6 +75,7 @@ const RetrieveConfig = ({ data, setRetrieveOption, ...props }: any) => {
 };
 
 const CodeExecutionConfig = ({ data, setExecutionOption, ...props }: any) => {
+  const t = useTranslations('option.UserConfig');
   return (
     <div
       className={`text-sm transition-all ease-in-out ${
@@ -85,7 +88,7 @@ const CodeExecutionConfig = ({ data, setExecutionOption, ...props }: any) => {
         }
       >
         <div className="flex items-center gap-2">
-          <span className="shrink-0">代码路径</span>
+          <span className="shrink-0">{t('work-dir')}</span>
           <input
             type="text"
             className="input input-sm input-bordered w-full"
@@ -94,7 +97,7 @@ const CodeExecutionConfig = ({ data, setExecutionOption, ...props }: any) => {
           />
         </div>
         <div className="flex items-center gap-2">
-          <span>附带消息条数</span>
+          <span>{t('last-n-messages')}</span>
           <input
             type="number"
             className="input input-sm input-bordered w-24"
@@ -111,7 +114,7 @@ const CodeExecutionConfig = ({ data, setExecutionOption, ...props }: any) => {
             checked={data.retrieve_config?.use_docker}
             onChange={e => setExecutionOption('use_docker', e.target.value)}
           />
-          <span>使用 Docker</span>
+          <span>{t('use-docker')}</span>
         </label>
       </div>
     </div>
@@ -120,6 +123,8 @@ const CodeExecutionConfig = ({ data, setExecutionOption, ...props }: any) => {
 
 const UserConfig = ({ nodeId, data, className, ...props }: any) => {
   const instance = useReactFlow();
+  const t = useTranslations('option.UserConfig');
+
   const onEnableRetrieve = (checked: boolean) => {
     if (checked) {
       setNodeData(instance, nodeId, {
@@ -168,8 +173,8 @@ const UserConfig = ({ nodeId, data, className, ...props }: any) => {
     <PopupDialog
       title={
         <div className="flex items-center gap-2">
-          <GoGear className="w-6 h-6" />
-          <span className="text-md font-bold">更多选项</span>
+          <GoGear className="w-5 h-5" />
+          <span className="text-md font-bold">{t('title')}</span>
         </div>
       }
       className={clsx(
@@ -182,27 +187,27 @@ const UserConfig = ({ nodeId, data, className, ...props }: any) => {
     >
       <label className="flex items-center justify-start cursor-pointer label gap-2">
         <input
-          checked={data.retrieve_config !== undefined}
-          onChange={e => onEnableRetrieve(e.target.checked)}
-          type="checkbox"
-          className="checkbox checkbox-sm"
-        />
-        <span className="font-bold">启用知识库（RAG）</span>
-      </label>
-      <RetrieveConfig data={data} setRetrieveOption={setRetrieveOption} />
-      <label className="flex items-center justify-start cursor-pointer label gap-2">
-        <input
           checked={data.code_execution_config !== undefined}
           onChange={e => onEnableCodeExecution(e.target.checked)}
           type="checkbox"
-          className="checkbox checkbox-sm"
+          className="checkbox checkbox-sm rounded"
         />
-        <span className="font-bold">代码执行</span>
+        <span className="font-bold">{t('code-execution')}</span>
       </label>
       <CodeExecutionConfig
         data={data}
         setExecutionOption={setExecutionOption}
       />
+      <label className="flex items-center justify-start cursor-pointer label gap-2">
+        <input
+          checked={data.retrieve_config !== undefined}
+          onChange={e => onEnableRetrieve(e.target.checked)}
+          type="checkbox"
+          className="checkbox checkbox-sm rounded"
+        />
+        <span className="font-bold">{t('support-retrieve')}</span>
+      </label>
+      <RetrieveConfig data={data} setRetrieveOption={setRetrieveOption} />
     </PopupDialog>
   );
 };

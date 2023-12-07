@@ -5,7 +5,6 @@ import {
   GoMegaphone,
   GoPencil,
   GoPersonFill,
-  GoShare,
   GoShareAndroid,
 } from 'react-icons/go';
 import { RiRobot2Fill, RiRobot2Line } from 'react-icons/ri';
@@ -16,10 +15,10 @@ import ChatInput from './ChatInput';
 import Markdown from '@/components/Markdown';
 import { genId } from '@/utils/id';
 import { createClient } from '@/utils/supabase/client';
-import { Tooltip } from 'react-tooltip';
 import { stripMatch } from '@/utils/re';
 import { ThinkTag } from '@/utils/chat';
 import { PiChatsCircleFill } from 'react-icons/pi';
+import { useTranslations } from 'next-intl';
 
 const supabase = createClient();
 
@@ -30,6 +29,7 @@ const Chat = ({ data, standalone }: any) => {
   const [cleaning, setCleaning] = useState(false);
   const isFirstRender = useRef(true);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const t = useTranslations('component.Chat');
 
   const fetchMessages = () =>
     fetch(`/api/flows/${data.id}/messages`, {
@@ -137,7 +137,7 @@ const Chat = ({ data, standalone }: any) => {
       {
         id: genId(),
         type: 'assistant',
-        content: '正在努力思考...',
+        content: t('thinking'),
       },
     ];
   }
@@ -148,13 +148,13 @@ const Chat = ({ data, standalone }: any) => {
       <div className="flex items-center justify-between w-full px-2 py-1">
         <div className="flex items-center gap-2 text-sm font-bold">
           <PiChatsCircleFill className="w-5 h-5" />
-          <span>和智能体交谈 {data?.id ? '- ' + data.id : ''}</span>
+          <span>{t("start-chat") + (data?.id ? ' - ' + data.id : '')}</span>
         </div>
         <div className="flex items-center gap-2">
           <button
             className="btn btn-sm btn-ghost btn-square"
             data-tooltip-id="chat-tooltip"
-            data-tooltip-content="重新加载聊天记录"
+            data-tooltip-content={t("reload-history")}
             onClick={onReload}
           >
             <RxReload className="w-4 h-4" />
@@ -162,7 +162,7 @@ const Chat = ({ data, standalone }: any) => {
           <button
             className="btn btn-sm btn-ghost btn-square"
             data-tooltip-id="chat-tooltip"
-            data-tooltip-content="清理聊天记录"
+            data-tooltip-content={t('clean-history')}
             onClick={onClean}
           >
             {cleaning ? (
@@ -175,8 +175,8 @@ const Chat = ({ data, standalone }: any) => {
             <a
               className="btn btn-sm btn-ghost btn-square"
               data-tooltip-id="chat-tooltip"
-              data-tooltip-content="分享聊天"
-              href={`/flowgen/chat/${data.id}`}
+              data-tooltip-content={t('share')}
+              href={`/chat/${data.id}`}
               target="_blank"
             >
               <GoShareAndroid className="w-4 h-4" />
@@ -186,9 +186,8 @@ const Chat = ({ data, standalone }: any) => {
             <a
               className="btn btn-sm btn-ghost btn-square"
               data-tooltip-id="chat-tooltip"
-              data-tooltip-content="跳转到编辑界面"
-              href={`/flowgen`}
-              target="_blank"
+              data-tooltip-content={t('go-to-editor')}
+              href={`/flow/${data.id}`}
             >
               <GoPencil className="w-4 h-4" />
             </a>
@@ -213,9 +212,9 @@ const Chat = ({ data, standalone }: any) => {
                 data-tooltip-content={resultText}
                 data-tooltip-place="top"
               >
-                <div className={`flex items-center gap-1 ${resultClass}`}>
+                <div className={`flex items-center gap-1 cursor-pointer ${resultClass}`}>
                   <ResultIcon className="w-4 h-4" />
-                  <span>思考结束</span>
+                  <span>{t('thinking-end')}</span>
                 </div>
               </div>
             );
@@ -225,9 +224,9 @@ const Chat = ({ data, standalone }: any) => {
                 key={message.id}
                 className="divider my-2 text-sm text-base-content/30"
               >
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 cursor-pointer">
                   <RiRobot2Line className="w-4 h-4" />
-                  <span>开始思考</span>
+                  <span>{t('thinking-begin')}</span>
                 </div>
               </div>
             );
@@ -295,7 +294,7 @@ const Chat = ({ data, standalone }: any) => {
         {loading && (
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <div className="loading loading-bars loading-sm" />
-            <span className="mt-2 text-sm">{'加载消息...'}</span>
+            <span className="mt-2 text-sm">{t('message-loading')}</span>
           </div>
         )}
       </div>
@@ -308,12 +307,11 @@ const Chat = ({ data, standalone }: any) => {
           <div className="absolute inset-1 rounded-md backdrop-blur-sm bg-gray-700/70">
             <div className="flex w-full h-full items-center justify-center gap-2 text-gray-300">
               <div className="loading loading-infinity loading-sm" />
-              <span className="text-sm">思考中...</span>
+              <span className="text-sm">{t("thinking")}</span>
             </div>
           </div>
         )}
       </div>
-      <Tooltip id="chat-tooltip" place="bottom" />
     </div>
   );
 };

@@ -3,8 +3,10 @@ import { setNodeData } from '../../utils/flow';
 import { genId } from '@/utils/id';
 import { GoTrash, GoX } from 'react-icons/go';
 import { MdOutlineAdd } from 'react-icons/md';
+import { useTranslations } from 'next-intl';
 
 const FunctionParams = ({ nodeId, func, ...props }: any) => {
+  const t = useTranslations('function.Params');
   const instance = useReactFlow();
   const node = instance.getNode(nodeId);
   const onDeleteParam = (param: any) => {
@@ -64,23 +66,23 @@ const FunctionParams = ({ nodeId, func, ...props }: any) => {
   return (
     <div className="flex flex-col gap-2 overflow-x-auto p-2 border border-base-content/20 rounded">
       <div className="flex items-center justify-between">
-        <div className="font-bold">参数</div>
+        <div className="font-bold">{t('title')}</div>
         <button
           className="btn btn-sm btn-outline btn-ghost rounded"
           onClick={onAddParam}
         >
           <MdOutlineAdd className="w-4 h-4" />
-          <span>添加参数</span>
+          <span>{t('param-add')}</span>
         </button>
       </div>
       <table className="table table-xs border-transparent">
         <thead>
           <tr className="flex items-center w-full">
-            <th className="w-8 px-0">必需</th>
-            <th className="w-28 px-1">参数名称</th>
-            <th className="w-24 px-1">类型</th>
-            <th className="flex-grow px-1">描述</th>
-            <th className="w-12 px-1 text-right">操作</th>
+            <th className="w-16 px-0">{t('param-required')}</th>
+            <th className="w-28 px-1">{t('param-name')}</th>
+            <th className="w-24 px-1">{t('param-type')}</th>
+            <th className="flex-grow px-1">{t('param-description')}</th>
+            <th className="w-12 px-1 text-right">{t('param-actions')}</th>
           </tr>
         </thead>
         <tbody>
@@ -89,7 +91,7 @@ const FunctionParams = ({ nodeId, func, ...props }: any) => {
               key={index}
               className="group flex items-center w-full hover:bg-gray-700"
             >
-              <td className="w-8 flex items-center px-1">
+              <td className="w-16 flex items-center px-1">
                 <input
                   type="checkbox"
                   checked={param.required}

@@ -8,11 +8,14 @@ import { BiCollapseVertical, BiExpandVertical } from 'react-icons/bi';
 import Tip from '../Tip';
 import FunctionConfig from '../function/Config';
 import { TbMathFunction } from 'react-icons/tb';
+import { useTranslations } from 'next-intl';
 
 function Config({ id, data, selected }: any) {
   const [collapsed, setCollapsed] = useState(true);
   const [showFunctionConfig, setShowFunctionConfig] = useState(false);
   const instance = useReactFlow();
+  const t = useTranslations('node.Config');
+  const tNodeMeta = useTranslations('meta.node');
 
   return (
     <div
@@ -28,7 +31,7 @@ function Config({ id, data, selected }: any) {
           className="cursor-pointer"
           onClick={() => setCollapsed(c => !c)}
           data-tooltip-id="default-tooltip"
-          data-tooltip-content={collapsed ? '展开' : '收起'}
+          data-tooltip-content={collapsed ? t('expand') : t('collapse')}
         >
           {collapsed ? (
             <BiExpandVertical className="w-4 h-4" />
@@ -41,7 +44,9 @@ function Config({ id, data, selected }: any) {
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <LuSettings2 className="w-5 h-5" />
-            <div className="text-sm font-bold">{getNodeLabel(data.class)}</div>
+            <div className="text-sm font-bold">
+              {getNodeLabel(data.label, tNodeMeta)}
+            </div>
           </div>
           {collapsed && <div>{data.flow_id}</div>}
         </div>
@@ -53,10 +58,10 @@ function Config({ id, data, selected }: any) {
         >
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <div className="font-bold text-base-content/80">流程名称</div>
-              <Tip
-                content={`流程名称用于代码生成，因此需要遵循以下规则：\n* 保证流程名称的合法性，只使用字母、数字、减号和下划线。\n* 保证流程名称的含义清晰，如**Critics**而不是**Node1**`}
-              />
+              <div className="font-bold text-base-content/80">
+                {t('flow-name')}
+              </div>
+              <Tip content={t('flow-name-tooltip')} />
             </div>
             <input
               className="nodrag input input-sm input-bordered w-32 bg-transparent rounded"
@@ -66,7 +71,9 @@ function Config({ id, data, selected }: any) {
               }
             />
           </div>
-          <div className="font-bold text-base-content/80">流程描述</div>
+          <div className="font-bold text-base-content/80">
+            {t('flow-description')}
+          </div>
           <textarea
             rows={2}
             className="nodrag textarea textarea-sm textarea-bordered w-full bg-transparent rounded resize-none"
@@ -77,8 +84,8 @@ function Config({ id, data, selected }: any) {
           />
         </div>
         <div className="divider my-0" />
-        <div className="font-bold text-base-content/80">过滤条件</div>
-        <div className="text-xs text-base-content/60">
+        <div className="font-bold text-base-content/80">{t('filter-dict')}</div>
+        <div className="text-sm text-base-content/60">
           <input
             className="input input-sm input-bordered w-full bg-transparent rounded"
             value={data.filter_dict ?? ''}
@@ -87,13 +94,13 @@ function Config({ id, data, selected }: any) {
             }
           />
         </div>
-        <div className="divider my-1">模型设置</div>
+        <div className="divider my-1">{t('model-config')}</div>
         <div className="flex items-center justify-between text-sm text-base-content/60 w-full">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-base-content/80">创造性</span>
-            <Tip
-              content={`**温度**参数用于控制生成文本的多样性。\n值越大，生成的内容创造性越强，但是越容易出现不合理的文本。`}
-            />
+            <span className="font-bold text-base-content/80">
+              {t('temperature')}
+            </span>
+            <Tip content={t('temperature-tooltip')} />
           </div>
           <div className="ml-2 font-bold">{data.temperature}</div>
         </div>
@@ -112,28 +119,25 @@ function Config({ id, data, selected }: any) {
             className="range nodrag range-xs w-full"
           />
         </div>
-        <div className="font-bold text-base-content/80">消息长度</div>
-        <div className="text-xs text-base-content/60">
+        <div className="flex items-center justify-between text-sm text-base-content/60">
+        <div className="font-bold text-base-content/80">{t('max-tokens')}</div>
           <input
             type="number"
-            className="input input-sm input-bordered w-full bg-transparent rounded"
+            className="input input-sm input-bordered w-24 bg-transparent rounded"
             value={data.max_tokens ?? 1024}
             onChange={e => {
               setNodeData(instance, id, { max_tokens: e.target.valueAsNumber });
             }}
           />
         </div>
-        <div className="flex items-center justify-between text-base-content/60 gap-2">
-          <div className="font-bold text-base-content/80">自定义函数</div>
-          <div className="form-control">
-            <button
-              className="btn btn-xs btn-outline rounded"
-              onClick={() => setShowFunctionConfig(c => !c)}
-            >
-              <TbMathFunction className="w-4 h-4" />
-              <span>设置</span>
-            </button>
-          </div>
+        <div className="flex items-center justify-end w-full text-base-content/60 gap-2">
+          <button
+            className="w-full btn btn-sm btn-outline rounded"
+            onClick={() => setShowFunctionConfig(c => !c)}
+          >
+            <TbMathFunction className="w-4 h-4" />
+            <span>{t('function')}</span>
+          </button>
         </div>
       </div>
       <FunctionConfig

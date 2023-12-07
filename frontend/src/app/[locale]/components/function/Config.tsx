@@ -9,8 +9,10 @@ import FunctionBlock from './Block';
 import { genId } from '@/utils/id';
 import { MdOutlineAdd } from 'react-icons/md';
 import { Tooltip } from 'react-tooltip';
+import { useTranslations } from 'next-intl';
 
 const FunctionConfig = ({ nodeId, data, className, ...props }: any) => {
+  const t = useTranslations('function.Config');
   const [selectedFunction, setSelectedFunction] = useState(-1);
   const instance = useReactFlow();
   useEffect(() => {
@@ -51,7 +53,7 @@ const FunctionConfig = ({ nodeId, data, className, ...props }: any) => {
       title={
         <div className="flex items-center gap-2">
           <TbFunction className="w-7 h-7" />
-          <span className="text-md font-bold">自定义函数</span>
+          <span className="text-md font-bold">{t('title')}</span>
         </div>
       }
       className={clsx(
@@ -66,7 +68,7 @@ const FunctionConfig = ({ nodeId, data, className, ...props }: any) => {
         <div className="flex flex-col gap-2 h-full border-r p-2 border-base-content/10 w-64">
           <button className="btn btn-secondary" onClick={onAdd}>
             <MdOutlineAdd className="w-5 h-5" />
-            <span>添加函数</span>
+            <span>{t('new-function')}</span>
           </button>
           <div className="flex flex-col gap-2 h-full overflow-y-auto">
             {data.functions?.map((func: any, index: any) => (
@@ -84,7 +86,10 @@ const FunctionConfig = ({ nodeId, data, className, ...props }: any) => {
       <div className="flex flex-col gap-2 flex-grow h-full overflow-y-auto">
         {selectedFunction === -1 ? (
           <div className="flex flex-col w-full h-full items-center justify-center flex-grow text-base-content/50">
-            请选择一个函数
+            <div className="flex flex-col items-center gap-3 max-w-2xl text-center">
+              <TbFunction className="w-16 h-16" />
+              {t('function-prompt')}
+            </div>
           </div>
         ) : (
           <FunctionDetail

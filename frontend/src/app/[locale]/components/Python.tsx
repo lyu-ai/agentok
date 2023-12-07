@@ -4,6 +4,7 @@ import CopyButton from '@/components/CopyButton';
 import ViewToggle from './ViewToggle';
 import { useState, useEffect } from 'react';
 import { GoAlertFill } from 'react-icons/go';
+import { useTranslations } from 'next-intl';
 
 const Python = ({ data, setMode }: any) => {
   const [loading, setLoading] = useState(true);
@@ -12,6 +13,8 @@ const Python = ({ data, setMode }: any) => {
     python?: string;
     message?: string;
   }>({ code: 0, python: '', message: '' });
+  const t = useTranslations('page.Python');
+
   useEffect(() => {
     fetch('/api/codegen', {
       method: 'POST',
@@ -36,9 +39,7 @@ const Python = ({ data, setMode }: any) => {
     return (
       <div className="relative flex flex-col w-full h-full items-center justify-center gap-2">
         <div className="loading loading-infinity"></div>
-        <div className="text-sm text-base-content/60">
-          正在生成 Python 代码...
-        </div>
+        <div className="text-sm text-base-content/60">{t('generating')}</div>
       </div>
     );
   }
@@ -49,7 +50,7 @@ const Python = ({ data, setMode }: any) => {
         <div className="flex w-full h-full items-center justify-center">
           <div className="flex flex-col items-center text-sm bg-red-600/30 text-red-600 rounded-md border border-red-600 gap-2 p-4">
             <GoAlertFill className="w-8 h-8" />
-            <span className="font-bold">生成 Python 代码失败</span>
+            <span className="font-bold">{t('generate-fail')}</span>
             <span>{result.message}</span>
           </div>
         </div>

@@ -3,11 +3,14 @@ import { GoImage } from 'react-icons/go';
 import { useState } from 'react';
 import clsx from 'clsx';
 import ImagePanel from './ImagePanel';
+import { useTranslations } from 'next-intl';
 
 const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
   const [showImagePanel, setShowImagePanel] = useState(false);
   const [image, setImage] = useState('');
   const [message, setMessage] = useState('');
+  const t = useTranslations('component.ChatInput');
+
   const onSend = async () => {
     setShowImagePanel(false);
     if (_onSend) {
@@ -63,7 +66,7 @@ const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
         </button>
         <input
           className="w-full bg-transparent rounded-md"
-          placeholder="请输入问题"
+          placeholder={t('enter-message')}
           value={message}
           onKeyDown={onKeyDown}
           onChange={(e: any) => setMessage(e.target.value)}

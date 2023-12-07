@@ -8,12 +8,14 @@ import EditButton from '@/components/EditButton';
 import EditableText from '@/components/EditableText';
 import UserConfig from '../option/UserConfig';
 import { GoGear } from 'react-icons/go';
+import { useTranslations } from 'next-intl';
 
 const UserProxyAgent = ({ id, selected, data }: any) => {
   const [editingName, setEditingName] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const instance = useReactFlow();
-
+  const t = useTranslations('node.UserProxy');
+  const tNodeMeta = useTranslations('meta.node');
   return (
     <div
       className={clsx(
@@ -27,7 +29,7 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
         <div className="w-full flex items-center justify-between gap-2 text-secondary">
           <div className="flex items-center gap-2 ">
             <RiChatSmile2Fill className="w-5 h-5" />
-            <div className="text-sm font-bold">{getNodeLabel(data.class)}</div>
+            <div className="text-sm font-bold">{getNodeLabel(data.label, tNodeMeta)}</div>
           </div>
           <EditableText
             text={data.name}
@@ -48,7 +50,7 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
           <div
             className="cursor-pointer hover:text-white"
             onClick={() => setShowOptions(show => !show)}
-            data-tooltip-content={'更多设置'}
+            data-tooltip-content={t('options')}
             data-tooltip-id="default-tooltip"
             data-tooltip-place="top"
           >
@@ -57,22 +59,22 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
           <EditButton
             editing={editingName}
             setEditing={setEditingName}
-            defaultLabel={'编辑节点变量名'}
-            editingLabel="结束编辑"
+            defaultLabel={t('name-edit-tooltip')}
+            editingLabel={t('name-edit-done-tooltip')}
           />
         </Toolbar>
         <div className="py-1">
-          组装完成后，点击右上角
-          <span className="border-2 border-green-800 text-green-700 rounded-md mx-1 p-1 font-bold">
-            开始聊天
+          {t('start-chat-tooltip')}
+          <span className="border border-base-content/50 text-base-content/50 rounded mx-1 p-1 font-bold">
+            {t('start-chat')}
           </span>
         </div>
         <div className="divider my-0" />
-        <div className="font-bold text-base-content/80">系统消息</div>
+        <div className="font-bold text-base-content/80">{t('system-message')}</div>
         <div className="text-xs text-base-content/60">
           <textarea
             value={data.system_message ?? ''}
-            placeholder="输入指令"
+            placeholder={t('system-message-placeholder')}
             className="nodrag textarea textarea-bordered textarea-sm w-full p-1 bg-transparent rounded resize-none"
             rows={2}
             onChange={e => {
@@ -81,7 +83,7 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
           />
         </div>
         <div className="flex items-center justify-between text-base-content/60 gap-2">
-          <div className="font-bold text-base-content/80">介入模式</div>
+          <div className="font-bold text-base-content/80">{t('human-input-mode')}</div>
           <select
             className="select select-bordered select-sm bg-transparent rounded"
             value={data.human_input_mode ?? 'NEVER'}
@@ -89,13 +91,13 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
               setNodeData(instance, id, { human_input_mode: e.target.value });
             }}
           >
-            <option value={'NEVER'}>从不参与(NEVER)</option>
-            <option value={'ALWAYS'}>总是参与(ALWAYS)</option>
-            <option value={'TERMINATE'}>终止(TERMINATE)</option>
+            <option value={'NEVER'}>{t('input-mode-never')}</option>
+            <option value={'ALWAYS'}>{t('input-mode-always')}</option>
+            <option value={'TERMINATE'}>{t('input-mode-terminate')}</option>
           </select>
         </div>
         <div className="flex items-center text-sm justify-between gap-2">
-          <div className="font-bold text-base-content/80">最大重试次数</div>
+          <div className="font-bold text-base-content/80">{t('max-consecutive-auto-reply')}</div>
           <input
             type="number"
             className="nodrag input input-bordered input-sm w-24 bg-transparent rounded"
@@ -107,6 +109,10 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
             }}
           />
         </div>
+        <button className="btn btn-outline btn-sm flex items-center gap-2 rounded" onClick={()=> setShowOptions(o => !o)}>
+          <GoGear className="w-4 h-4" />
+          <span>{t('options')}</span>
+        </button>
       </div>
 
       <Handle

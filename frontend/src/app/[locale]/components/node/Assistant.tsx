@@ -11,7 +11,7 @@ import EditableText from '@/components/EditableText';
 import EditButton from '@/components/EditButton';
 import { useTranslations } from 'next-intl';
 
-function AssistantNode({ id, data, selected, ...props }: any) {
+function AssistantNode({ id, data, selected }: any) {
   const [editingName, setEditingName] = useState(false);
   const instance = useReactFlow();
   const iconDict: Record<string, IconType> = {
@@ -28,7 +28,8 @@ function AssistantNode({ id, data, selected, ...props }: any) {
     }
   }, [selected]);
 
-  const t = useTranslations('AssistantNode');
+  const t = useTranslations('node.Assistant');
+  const tNodeMeta = useTranslations('meta.node');
 
   return (
     <div
@@ -43,15 +44,15 @@ function AssistantNode({ id, data, selected, ...props }: any) {
         <EditButton
           editing={editingName}
           setEditing={setEditingName}
-          defaultLabel={'编辑节点变量名'}
-          editingLabel="结束编辑"
+          defaultLabel={t('name-edit-tooltip')}
+          editingLabel={t('name-edit-done-tooltip')}
         />
       </Toolbar>
       <div className="flex flex-col w-full gap-2 text-sm">
         <div className="w-full flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <NodeIcon className="w-5 h-5" />
-            <div className="text-sm font-bold">{getNodeLabel(data.class)}</div>
+            <div className="text-sm font-bold">{getNodeLabel(data.label, tNodeMeta)}</div>
           </div>
           <EditableText
             text={data.name}
@@ -61,15 +62,15 @@ function AssistantNode({ id, data, selected, ...props }: any) {
             }}
             onModeChange={(editing: any) => setEditingName(editing)}
             editing={editingName}
-            className="text-xs text-base-content/80 text-right"
+            className="text-sm text-base-content/80 text-right"
           />
         </div>
         <div className="divider my-0" />
         <div className="flex items-center justify-between text-base-content/60 gap-2">
-          <div className="font-bold text-base-content/80">{t('system_message')}</div>
+          <div className="font-bold text-base-content/80">{t('system-message')}</div>
           <div className="form-control"></div>
           <label className="flex items-center cursor-pointer label gap-2">
-            <span className="label-text">启用</span>
+            <span className="label-text">{t('enable-system-message')}</span>
             <input
               id="enable_system_message"
               type="checkbox"
@@ -85,7 +86,7 @@ function AssistantNode({ id, data, selected, ...props }: any) {
         </div>
         <div
           className={clsx(
-            'text-xs text-base-content/60 transition-all ease-in-out',
+            'text-sm text-base-content/60 transition-all ease-in-out',
             !data.enable_system_message
               ? 'collapsing-height'
               : 'expanding-height'
@@ -96,16 +97,16 @@ function AssistantNode({ id, data, selected, ...props }: any) {
             onChange={e => {
               setNodeData(instance, id, { system_message: e.target.value });
             }}
-            placeholder="系统消息"
+            placeholder={t('system-message-placeholder')}
             className="nodrag textarea textarea-bordered w-full p-1 bg-transparent rounded"
             rows={2}
           />
         </div>
         <div className="flex items-center justify-between text-base-content/60 gap-2">
-          <div className="font-bold text-base-content/80">指令</div>
+          <div className="font-bold text-base-content/80">{t('instructions')}</div>
           <div className="form-control">
             <label className="flex items-center cursor-pointer label gap-2">
-              <span className="label-text">应用缺省值</span>
+              <span className="label-text">{t('instructions-use-defaults')}</span>
               <input
                 id="default_instructions"
                 type="checkbox"
@@ -123,7 +124,7 @@ function AssistantNode({ id, data, selected, ...props }: any) {
 
         <div
           className={clsx(
-            'text-xs text-base-content/60 transition-all',
+            'text-sm text-base-content/60 transition-all',
             data.default_instructions ? 'collapsing-height' : 'expanding-height'
           )}
         >
@@ -132,16 +133,16 @@ function AssistantNode({ id, data, selected, ...props }: any) {
             onChange={e => {
               setNodeData(instance, id, { instructions: e.target.value });
             }}
-            placeholder="输入指令"
+            placeholder={t('instructions-placeholder')}
             className="nodrag textarea textarea-bordered w-full p-1 bg-transparent rounded resize-none"
             rows={2}
           />
         </div>
-        <div className="font-bold text-base-content/80">最大重试次数</div>
-        <div className="text-xs text-base-content/60">
+        <div className="flex items-center justify-between text-sm text-base-content/60">
+        <div className="font-bold text-base-content/80">{t('max-consecutive-auto-reply')}</div>
           <input
             type="number"
-            className="input input-sm input-bordered w-full bg-transparent rounded"
+            className="input input-sm input-bordered w-14 bg-transparent px-0 rounded"
             value={data.max_consecutive_auto_reply ?? 0}
             onChange={e => {
               setNodeData(instance, id, {

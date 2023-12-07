@@ -1,9 +1,0 @@
-{
-  "Index": {
-    "title": "Hello world!"
-  },
-  "AssistantNode": {
-    "title": "Assistant Agent",
-    "system_message": "系统消息"
-  }
-}

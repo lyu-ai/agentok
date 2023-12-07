@@ -7,12 +7,7 @@ import Markdown from '@/components/Markdown';
 import { getNodeLabel, setNodeData } from '../../utils/flow';
 import { FaNoteSticky } from 'react-icons/fa6';
 import CopyButton from '@/components/CopyButton';
-import { GoChevronDown } from 'react-icons/go';
-
-const controlStyle = {
-  background: 'transparent',
-  border: 'none',
-};
+import { useTranslations } from 'next-intl';
 
 const ResizeIcon = () => {
   return (
@@ -41,6 +36,8 @@ function Note({ id, data, selected, ...props }: any) {
   const instance = useReactFlow();
   const [editing, setEditing] = useState(false);
   const [content, setContent] = useState(data.content);
+  const t = useTranslations('node.Config');
+  const tNodeMeta = useTranslations('meta.node');
 
   useEffect(() => setContent(data.content), [data.content]);
 
@@ -58,7 +55,7 @@ function Note({ id, data, selected, ...props }: any) {
         selected={selected}
         className="bg-lime-700/70 border-lime-600"
       >
-        <CopyButton content={content} className="hover:text-white" minimal />
+        <CopyButton content={content} place='top' className="hover:text-white" minimal />
       </Toolbar>
       <div className="relative flex flex-col w-full h-full gap-2 text-sm">
         <div className="flex items-center gap-2 justify-between">
@@ -66,7 +63,7 @@ function Note({ id, data, selected, ...props }: any) {
             <div className="flex justify-center items-center">
               <FaNoteSticky className="w-5 h-5" />
             </div>
-            <div className="text-sm font-bold">{getNodeLabel(data.class)}</div>
+            <div className="text-sm font-bold">{getNodeLabel(data.label, tNodeMeta)}</div>
           </div>
           {editing ? (
             <div className="flex items-center gap-2">
@@ -100,14 +97,14 @@ function Note({ id, data, selected, ...props }: any) {
             <textarea
               value={content}
               onChange={e => setContent(e.target.value)}
-              placeholder="输入指令"
+              placeholder={t('note-placeholder')}
               className="nodrag textarea w-full h-full p-1 bg-base-content/20 rounded resize-none"
               rows={6}
             />
           )}
           {!editing && (
             <Markdown className="nodrag">
-              {data.content ?? '（无文档内容）'}
+              {data.content ?? t('note-blank')}
             </Markdown>
           )}
         </div>

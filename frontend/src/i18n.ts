@@ -2,7 +2,7 @@ import { getRequestConfig } from 'next-intl/server';
 import { IntlErrorCode } from 'next-intl';
 
 export default getRequestConfig(async ({ locale }) => ({
-  messages: (await import(`../messages/${locale}.json`)).default,
+  messages: (await import(`./messages/${locale}.json`)).default,
   timeZone: 'Europe/Vienna',
   onError(error) {
     if (error.code === IntlErrorCode.MISSING_MESSAGE) {

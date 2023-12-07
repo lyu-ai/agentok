@@ -1,0 +1,179 @@
+{
+  "function": {
+    "Config": {
+      "title": "Functions",
+      "new-function": "New Function",
+      "function-prompt": "Functions enable you to expand an Agent's skills. Select an existing function from the list on the left, or click 'New Function' to create a custom function.",
+      "reset": "Reset",
+      "reset-confirm": "Are you sure to reset all settings to default?"
+    },
+    "Editor": {
+      "title": "Function Editor",
+      "generate-code": "Generate Code",
+      "generate-code-tooltip": "Auto-generate code with AI",
+      "run-test": "Run Test"
+    },
+    "Params": {
+      "title": "Parameters",
+      "param-required": "Required",
+      "param-name": "Name",
+      "param-type": "Type",
+      "param-description": "Description",
+      "param-actions": "Actions",
+      "param-add": "Add Parameter"
+    }
+  },
+  "node": {
+    "Assistant": {
+      "name-edit-tooltip": "Edit node name (as variables)",
+      "name-edit-done-tooltip": "Finish editing node name",
+      "system-message": "System Message",
+      "system-message-placeholder": "Enter system message here",
+      "enable-system-message": "Enable",
+      "instructions": "Instructions",
+      "instructions-use-defaults": "Use defaults",
+      "instructions-placeholder": "Enter instructions here",
+      "max-consecutive-auto-reply": "Max Auto-Replies"
+    },
+    "Config": {
+      "flow-name": "Flow Name",
+      "flow-name-tooltip": "The process name is used for code generation, so you need to follow the rules below:\n* Ensure the legality of the process name, using only letters, numbers, hyphens, and underscores.\n* Ensure the clarity of the process name, such as **Critics** instead of **Node1**.",
+      "flow-description": "Flow Description",
+      "expand": "Expand",
+      "collapse": "Collapse",
+      "filter-dict": "Filter Dictionary",
+      "model-config": "LLM Config",
+      "temperature": "Temperature",
+      "temperature-tooltip": "The higher the temperature, the more random the generated text will be. 0 means deterministic.",
+      "max-tokens": "Max Tokens",
+      "function": "Build Functions"
+    },
+    "GroupChat": {
+      "max-round": "Max Round",
+      "involve-user": "Involve User"
+    },
+    "UserProxy": {
+      "name-edit-tooltip": "Edit node name (as variables)",
+      "name-edit-done-tooltip": "Finish editing node name",
+      "system-message": "System Message",
+      "system-message-placeholder": "Enter system message here",
+      "start-chat": "Start Chat",
+      "start-chat-tooltip": "After build the flow, click",
+      "options": "More Options",
+      "human-input-mode": "Input Mode",
+      "input-mode-never": "Never",
+      "input-mode-always": "Always",
+      "input-mode-terminate": "Terminate",
+      "max-consecutive-auto-reply": "Max Auto-Replies"
+    },
+    "Note": {
+      "note-placeholder": "Start to write about current agent flow",
+      "note-blank": "(Note is blank)"
+    },
+    "Toolbar": {
+      "delete-node-tooltip": "Delete node"
+    }
+  },
+  "component": {
+    "Chat": {
+      "thinking": "I am thinking hard ...",
+      "thinking-begin": "Begin Thinking",
+      "thinking-end": "End of Thinking",
+      "start-chat": "Start Chat",
+      "reload-history": "Reload chat history",
+      "clean-history": "Clean chat history",
+      "share": "Share this chat",
+      "go-to-editor": "Go to Flow Editor",
+      "message-loading": "Loading chat history ..."
+    },
+    "ChatButton": {
+      "start-chat": "Start Chat",
+      "start-chat-tooltip": "Save flow and Start Chat",
+      "flows-tooltip": "View existing flows"
+    },
+    "ChatInput": {
+      "enter-message": "Enter message to start chat ..."
+    },
+    "Flow": {
+      "reset-default-tooltip": "Reset to default",
+      "save-flow": "Upload to Cloud",
+      "save-success": "Successfully saved flow"
+    },
+    "FlowList": {
+      "delete-flow": "Delete flow ",
+      "default-description": "This flow has {node_count} node(s) and {edge_count} edge(s).",
+      "flow-empty": "No flow here yet. You can start from a sample flow.",
+      "create-flow": "Start Build from Sample Flow",
+      "start-chat": "Start Chat"
+    },
+    "ImagePanel": {
+      "preview": "Image Preview",
+      "image-url-placeholder": "Please enter the image URL to send with message"
+    },
+    "ViewToggle": {
+      "back-to-editor": "Back to Flow Editor"
+    },
+    "CopyButton": {
+      "copy": "Copy",
+      "copied": "Copied"
+    }
+  },
+  "option": {
+    "UserConfig": {
+      "title": "More Options",
+      "support-retrieve": "Support Retrieve",
+      "code-execution": "Code Execution",
+      "work-dir": "Location",
+      "last-n-messages": "Last (n) Messages",
+      "use-docker": "Use Docker",
+      "task": "Task",
+      "task-code": "Code",
+      "chunk-token-size": "Chunk Token Size",
+      "docs-path": "Docs Path",
+      "get-or-create": "Get or Create",
+      "client": "Client"
+    }
+  },
+  "page": {
+    "Python": {
+      "generating": "Generating Python code ...",
+      "generate-fail": "Failed to generate Python code"
+    },
+    "Chat": {
+      "select-flow": "Select a flow to start chat",
+      "coming-soon": "Coming Soon ... You can chat in Flow Editor for now."
+    },
+    "Flow": {
+      "start-from-example": "Build Flow based on a Sample"
+    },
+    "Gallery": {
+      "warning-title": "Warning",
+      "warning-content": "The flows here are visible and editable to all users. Please do not upload sensitive information.",
+      "select-flow": "Select a flow to edit or Start Chat"
+    }
+  },
+  "meta": {
+    "node": {
+      "config": "Config",
+      "config-description": "Configure the node",
+      "assistant": "Assistant",
+      "assistant-description": "General-purpose Assistant",
+      "gpt-assistant": "GPT Assistant",
+      "gpt-assistant-description": "Enpowered by GPT Assistant API",
+      "user-proxy": "User Proxy",
+      "user-proxy-description": "Represent the user talks to Agents",
+      "multimodel-assistant": "Multimodel Assistant",
+      "multimodel-assistant-description": "Assistant can See",
+      "llava": "LLaVA",
+      "llava-description": "Assistant sees with LLaVA",
+      "note": "Note",
+      "note-description": "Place to write documents",
+      "groupchat": "Group Chat",
+      "groupchat-description": "Group agents for collaboration",
+      "retrieve-assistant": "Assistant (RAG)",
+      "retrieve-assistant-description": "Assistant supports RAG",
+      "retrieve-user-proxy": "User Proxy (RAG)",
+      "retrieve-user-proxy-description": "User Proxy supports RAG"
+    }
+  }
+}

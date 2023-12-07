@@ -6,8 +6,10 @@ import { python } from '@codemirror/lang-python';
 import { vscodeDark as theme } from '@uiw/codemirror-theme-vscode';
 import { RiRobot2Line } from 'react-icons/ri';
 import clsx from 'clsx';
+import { useTranslations } from 'next-intl';
 
 const FunctionEditor = ({ nodeId, func, ...props }: any) => {
+  const t = useTranslations('function.Editor');
   const instance = useReactFlow();
   const node = instance?.getNode(nodeId);
   const onUpdateCode = (code: string) => {
@@ -51,10 +53,10 @@ const FunctionEditor = ({ nodeId, func, ...props }: any) => {
                 func?.code ? 'btn-xs p-1' : 'btn-secondary btn-sm p-2'
               )}
               data-tooltip-id="func-tooltip"
-              data-tooltip-content={'帮您写代码，将覆盖现有内容'}
+              data-tooltip-content={t('generate-code-tooltip')}
             >
               <RiRobot2Line className="w-4 h-4" />
-              <span>生成代码</span>
+              <span>{t('generate-code')}</span>
             </button>
           </div>
         </div>
@@ -62,7 +64,7 @@ const FunctionEditor = ({ nodeId, func, ...props }: any) => {
       <div className="flex items-center">
         <button className="btn btn-sm btn-outline rounded btn-disabled">
           <VscDebugAlt className="w-4 h-4" />
-          <span>运行测试</span>
+          <span>{t('run-test')}</span>
         </button>
       </div>
     </div>

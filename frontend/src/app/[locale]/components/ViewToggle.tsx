@@ -1,6 +1,7 @@
 import { TbBrandPython } from 'react-icons/tb';
 import { PiBracketsCurly } from 'react-icons/pi';
 import { RiArrowGoBackLine } from 'react-icons/ri';
+import { useTranslations } from 'next-intl';
 
 type modeType = 'flow' | 'json' | 'python';
 
@@ -11,6 +12,7 @@ const ViewToggle = ({
   mode: modeType;
   setMode: (mode: modeType) => void;
 }) => {
+  const t = useTranslations('component.ViewToggle');
   const ModeIcon =
     mode === 'flow'
       ? RiArrowGoBackLine
@@ -18,7 +20,7 @@ const ViewToggle = ({
       ? PiBracketsCurly
       : TbBrandPython;
   const tip =
-    mode === 'flow' ? '回到可视化环境' : mode === 'json' ? 'JSON' : 'Python';
+    mode === 'flow' ? t('back-to-editor') : mode === 'json' ? 'JSON' : 'Python';
 
   return (
     <div

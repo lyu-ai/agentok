@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
 import { GoImage, GoTrash } from 'react-icons/go';
 
@@ -16,6 +17,7 @@ const sampleImages = [
 
 const ImagePanel = (props: ImagePanelProps) => {
   const [url, setUrl] = useState('');
+  const t = useTranslations('component.ImagePanel');
   useEffect(() => {
     props.onSelectImage(url);
   }, [url]);
@@ -42,7 +44,7 @@ const ImagePanel = (props: ImagePanelProps) => {
         ) : (
           <div className="flex flex-col gap-2 justify-center items-center w-full h-full">
             <GoImage className="w-12 h-12 mx-auto" />
-            <div className="text-sm font-bold">图片预览</div>
+            <div className="text-sm font-bold">{t('preview')}</div>
             <div className="flex items-center gap-2">
               {sampleImages.map((image, index) => (
                 <button
@@ -67,7 +69,7 @@ const ImagePanel = (props: ImagePanelProps) => {
           value={url}
           onChange={e => setUrl(e.target.value)}
           className="input input-xs input-bordered rounded-sm w-full bg-base-100/40"
-          placeholder="请在此输入你想随消息发送的图片 URL"
+          placeholder={t('image-url-placeholder')}
         />
       </div>
     </div>

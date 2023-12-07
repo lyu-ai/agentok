@@ -7,6 +7,14 @@
   outline: 2px solid transparent;
 }
 
+input-sm[type="number"] {
+  padding-right: 0!important;
+}
+
+.skeleton {
+  @apply bg-base-content/10;
+}
+
 ::-webkit-scrollbar {
   background-color: transparent;
   width: 4px;

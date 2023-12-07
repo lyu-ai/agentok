@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import Chat from './Chat';
 import { RiChatSmile2Fill, RiChatSmile2Line, RiAppsLine } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
-import FlowPicker from './FlowPicker';
+import { useTranslations } from 'next-intl';
 
 const ChatButton = ({ className, data, onLoad, onReset }: any) => {
   const [flowData, setFlowData] = useState<any>(data);
@@ -12,6 +12,7 @@ const ChatButton = ({ className, data, onLoad, onReset }: any) => {
     null
   );
   const [uploading, setUploading] = useState(false);
+  const t = useTranslations('component.ChatButton');
 
   useEffect(() => setFlowData(data), [data]);
 
@@ -27,26 +28,6 @@ const ChatButton = ({ className, data, onLoad, onReset }: any) => {
       .then(() => setActivePanel('default'))
       .finally(() => setUploading(false));
   };
-  const onClickMore = (e: any) => {
-    // e.stopPropagation();
-    setActivePanel('more');
-  };
-
-  const onChat = (data: any) => {
-    setFlowData(data);
-    setActivePanel('default');
-  };
-
-  const renderPanel = () => {
-    switch (activePanel) {
-      case 'default':
-        return <Chat data={flowData} />;
-      case 'more':
-        return <FlowPicker onLoad={onLoad} onChat={onChat} onReset={onReset} />;
-      default:
-        return null; // or some default content
-    }
-  };
 
   return (
     <Popover>
@@ -61,15 +42,14 @@ const ChatButton = ({ className, data, onLoad, onReset }: any) => {
         leaveTo="transform scale-0 opacity-0"
       >
         <Popover.Button>
-          <div className="join">
             <div
               className={clsx(
                 className,
-                'join-item btn btn-sm bg-green-800 border-green-700 hover:bg-green-700 hover:border-green-600 rounded-md ring-none outline-none flex items-center gap-2'
+                'btn btn-sm bg-green-800 border-green-700 hover:bg-green-700 hover:border-green-600 rounded-md ring-none outline-none flex items-center gap-2'
               )}
               onClick={onClickDefault}
               data-tooltip-id="default-tooltip"
-              data-tooltip-content="保存数据并开始聊天"
+              data-tooltip-content={t('start-chat-tooltip')}
             >
               {uploading ? (
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
@@ -79,20 +59,11 @@ const ChatButton = ({ className, data, onLoad, onReset }: any) => {
                   <RiChatSmile2Fill className="w-5 h-5" />
                 </div>
               )}
-              <span>开始聊天</span>
+              <span>{t('start-chat')}</span>
             </div>
-            <div
-              className="join-item btn btn-sm btn-square bg-green-800 border-green-700 hover:bg-green-700 hover:border-green-600"
-              onClick={onClickMore}
-              data-tooltip-id="default-tooltip"
-              data-tooltip-content="查看现有流程"
-            >
-              <RiAppsLine className="w-4 h-4" />
-            </div>
-          </div>
         </Popover.Button>
         <Popover.Panel className="origin-top-right shadow-box-lg shadow-gray-600 rounded-xl backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 w-[480px] h-[80vh] max-h-[80vh]">
-          {renderPanel()}
+        <Chat data={flowData} />
         </Popover.Panel>
       </Float>
     </Popover>

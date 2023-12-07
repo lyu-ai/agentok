@@ -3,9 +3,12 @@ import { Handle, Position, useReactFlow } from 'reactflow';
 import { getNodeLabel, setNodeData } from '../../utils/flow';
 import { FaUserGroup } from 'react-icons/fa6';
 import Toolbar from './Toolbar';
+import { useTranslations } from 'next-intl';
 
 const GroupChatManager = ({ id, selected, data }: any) => {
   const instance = useReactFlow();
+  const t = useTranslations('node.GroupChat');
+  const tNodeMeta = useTranslations('meta.node');
   return (
     <div
       className={clsx(
@@ -23,11 +26,11 @@ const GroupChatManager = ({ id, selected, data }: any) => {
       <div className="flex flex-col w-full gap-2 text-sm">
         <div className="flex items-center gap-2 text-secondary">
           <FaUserGroup className="w-5 h-5" />
-          <div className="text-sm font-bold">{getNodeLabel(data.class)}</div>
+          <div className="text-sm font-bold">{getNodeLabel(data.label, tNodeMeta)}</div>
         </div>
         <div className="divider my-0" />
         <div className="flex items-center justify-between text-base-content/60 gap-2">
-          <div className="font-bold text-base-content/80">最大轮次</div>
+          <div className="font-bold text-base-content/80">{t('max-round')}</div>
           <input
             type="number"
             className="input input-sm input-bordered w-20 bg-transparent rounded"
@@ -38,7 +41,7 @@ const GroupChatManager = ({ id, selected, data }: any) => {
           />
         </div>
         <div className="flex items-center justify-between cursor-pointer label gap-2 px-0">
-          <span className="label-text">用户参与</span>
+          <span className="label-text">{t('involve-user')}</span>
           <input
             id="involve_user"
             type="checkbox"

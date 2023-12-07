@@ -1,5 +1,6 @@
 import ReactFlow, {
   Node,
+  Edge,
   Background,
   Controls,
   applyNodeChanges,
@@ -30,15 +31,17 @@ import ChatButton from './ChatButton';
 import { toast } from 'react-toastify';
 import { GoUpload } from 'react-icons/go';
 import clsx from 'clsx';
+import { useTranslations } from 'next-intl';
 
 const Flow = ({ flowId }: any) => {
   const [mode, setMode] = useState<'flow' | 'json' | 'python'>('flow');
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges] = useState(initialEdges);
+  const [nodes, setNodes] = useState<Node[]>(initialNodes);
+  const [edges, setEdges] = useState<Edge[]>(initialEdges);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const flowParent = useRef<HTMLDivElement>(null);
   const { fitView, screenToFlowPosition } = useReactFlow();
+  const t = useTranslations('component.Flow');
 
   // Suppress error code 002
   // https://github.com/xyflow/xyflow/issues/3243
@@ -54,11 +57,17 @@ const Flow = ({ flowId }: any) => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(flowId ? `/api/flows/${flowId}` : `/api/flows`)
+    const url =
+      flowId?.[0] && flowId[0] !== '__lucky_draw__'
+        ? `/api/flows/${flowId}`
+        : `/api/flows`;
+    fetch(url)
       .then(data => data.json())
       .then(json => {
         if (Array.isArray(json)) {
-          json = json[0]; // only need the first element
+          const luckyDrawNumber = Math.floor(Math.random() * json.length);
+          console.log('Lucky number:', luckyDrawNumber);
+          json = json[luckyDrawNumber]; // do a lucky pick
         }
         console.log('Loading flow:', json);
         setNodes(json?.flow?.nodes ?? []);
@@ -69,7 +78,7 @@ const Flow = ({ flowId }: any) => {
         console.warn('Failed loading flow:', e.statusText);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [flowId]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -131,7 +140,10 @@ const Flow = ({ flowId }: any) => {
       };
 
       // Add the new node to the list of nodes in state
-      setNodes(nds => nds.concat(newNode));
+      // And clean the previous selections
+      setNodes(nds =>
+        nds.map(nd => ({ ...nd, selected: false } as Node)).concat(newNode)
+      );
     },
     // Specify dependencies for useCallback
     [screenToFlowPosition, nodes, setNodes, flowParent]
@@ -189,7 +201,7 @@ const Flow = ({ flowId }: any) => {
       .then(resp => resp.json())
       .then(json => {
         console.log('Flow saved:', json);
-        toast.success('保存成功: ' + getFlowName(nodes), {
+        toast.success(t('save-success') + getFlowName(nodes), {
           position: 'bottom-right',
         });
       })
@@ -259,7 +271,7 @@ const Flow = ({ flowId }: any) => {
           className="btn btn-sm btn-square btn-ghost hover:text-secondary"
           onClick={onSave}
           data-tooltip-id="default-tooltip"
-          data-tooltip-content="保存至云端"
+          data-tooltip-content={t('save-flow')}
         >
           <GoUpload
             className={clsx('w-4 h-4', { 'animate-spin': uploading })}
@@ -271,7 +283,7 @@ const Flow = ({ flowId }: any) => {
           className="hover:text-orange-500 btn btn-sm btn-square btn-ghost"
           onClick={onReset}
           data-tooltip-id="default-tooltip"
-          data-tooltip-content="恢复缺省节点"
+          data-tooltip-content={t('reset-default-tooltip')}
         >
           <IoSkullOutline className="w-4 h-4" />
         </button>

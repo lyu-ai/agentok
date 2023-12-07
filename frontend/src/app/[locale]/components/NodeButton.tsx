@@ -1,15 +1,17 @@
 import { Popover } from '@headlessui/react';
 import { Float } from '@headlessui-float/react';
 import clsx from 'clsx';
-import { nodeMetas } from '../utils/flow';
+import { getNodeLabel, nodeMetas } from '../utils/flow';
 import { GoPlus } from 'react-icons/go';
+import { useTranslations } from 'next-intl';
 
 const DRAGGING_NODE_NAME = '__dragging-node';
 
 const NodeButton = ({ className, onAddNode, ...props }: any) => {
+  const tNodeMeta = useTranslations('meta.node');
   const onDragStart = (
     event: React.DragEvent<any>,
-    data: { type: string; name: string; class: string; description: string }
+    data: { type: string; name: string; label: string; class: string; }
   ) => {
     let dragImage = event.currentTarget.cloneNode(true);
     dragImage.classList.add(
@@ -65,7 +67,6 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
               label,
               type,
               class: _class,
-              description,
               icon: Icon,
             }) => (
               <Popover.Button
@@ -75,7 +76,7 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
                   onDragStart(event, {
                     type,
                     name,
-                    description,
+                    label,
                     class: _class,
                   })
                 }
@@ -89,17 +90,17 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
                 }}
                 key={id}
                 onClick={() =>
-                  onAddNode(type, { name, class: _class, type, description })
+                  onAddNode(type, { name, class: _class, type })
                 }
-                className="group min-w-64 flex p-3 items-center rounded-lg hover:bg-base-content/10 cursor-pointer"
+                className="group min-w-64 flex p-2 items-center rounded-lg hover:bg-base-content/10 cursor-pointer"
               >
-                <Icon className="flex-shrink-0 w-6 h-6 mx-1 group-hover:text-secondary" />
+                <Icon className="flex-shrink-0 w-6 h-6 mx-1 group-hover:text-white" />
                 <div className="ml-3 flex flex-col gap-1">
-                  <div className="text-sm font-bold group-hover:text-secondary">
-                    {label}
+                  <div className="text-sm font-bold group-hover:text-white">
+                    {getNodeLabel(label, tNodeMeta) ?? label}
                   </div>
-                  <div className="text-xs text-base-content/40 group-hover:text-secondary/80">
-                    {description}
+                  <div className="text-xs text-base-content/40 group-hover:text-white/80">
+                    {getNodeLabel(label + '-description', tNodeMeta) ?? label + '-description'}
                   </div>
                 </div>
               </Popover.Button>

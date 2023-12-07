@@ -18,102 +18,98 @@ export const nodeTypes = {
   note: Note,
 };
 
+// Fields of Node Meta:
+// - name: To be used as variable name in generated code
+// - label: Shown on UI, the value is the key for i18n
+// - type: 'assistant' | 'user' | 'group', indicates the classes for code generation
+// - class: The class to be choosen during code generation
+// - (description): UI will look for value of label + '-description', for example 'assistant-description'
 export const nodeMetas = [
   {
     id: 'assistant',
     icon: RiRobot2Line,
     name: 'Assistant',
-    label: '智能助理',
+    label: 'assistant',
     type: 'assistant',
     class: 'AssistantAgent',
-    description: '可用于一般的对话场景',
   },
   {
     id: 'gpt_assistant',
     icon: SiOpenai,
     name: 'GPTAssistant',
-    label: 'GPT 智能助理',
+    label: 'gpt-assistant',
     type: 'assistant',
     class: 'GPTAssistantAgent',
-    description: '支持 GPT Assistant API',
   },
   {
     id: 'multimodal',
     icon: FaEye,
     name: 'MultimodalAssistant',
-    label: '多模态智能助理',
+    label: 'multimodel-assistant',
     type: 'assistant',
     class: 'MultimodalConversableAgent',
-    description: '多模态大模型，支持视觉识别',
   },
   {
     id: 'llava',
     icon: FaMeta,
     name: 'LLaVA',
-    label: 'LLaVA',
+    label: 'llava',
     type: 'assistant',
     class: 'LLaVAAgent',
-    description: '开源多模态大模型',
   },
   {
     id: 'groupchat',
     icon: FaUserGroup,
     type: 'groupchat',
     name: 'GroupChat',
-    label: '群聊',
+    label: 'groupchat',
     class: 'GroupChat',
-    description: '多人对话',
   },
   {
     id: 'note',
     icon: FaRegNoteSticky,
     name: 'Note',
-    label: '笔记',
+    label: 'note',
     type: 'note',
     class: 'Note',
-    description: '笔记，增加细节描述',
   },
   {
     id: 'config',
     icon: LuSettings2,
     name: 'Config',
-    label: '设置',
+    label: 'config',
     type: 'config',
     class: 'Config',
-    description: '全局配置项',
   },
   {
     id: 'user_proxy',
     icon: RiChatSmile2Line,
     name: 'UserProxy',
-    label: '用户代理',
+    label: 'user-proxy',
     type: 'user',
     class: 'UserProxyAgent',
-    description: '用户代理，全局唯一',
   },
   {
-    id: 'rag_assistant',
+    id: 'retrieve_assistant',
     icon: RiRobot2Line,
-    name: 'RAGAssistant',
-    label: 'RAG 助理',
+    name: 'RetrieveAssistant',
+    label: 'retrieve-assistant',
     type: 'assistant',
     class: 'RetrieveAssistantAgent',
-    description: 'RAG 助理',
   },
   {
-    id: 'rag_user_proxy',
+    id: 'retrieve_user_proxy',
     icon: RiChatSmile2Line,
-    name: 'RAGUserProxy',
-    label: 'RAG 用户代理',
+    name: 'RetrieveUserProxy',
+    label: 'retrieve-user-proxy',
     type: 'user',
     class: 'RetrieveUserProxyAgent',
-    description: 'RAG 用户代理，全局唯一',
   },
 ];
 
-export const getNodeLabel = (_class: string) => {
-  const nodeMeta = nodeMetas.find(meta => meta.class === _class);
-  return nodeMeta?.label || _class;
+export const getNodeLabel = (label: string, tNodeMeta: any) => {
+  // t() function is hook-based, so here the caller from component should pass in the function
+  return tNodeMeta && label ? tNodeMeta(label) : label;
 };
 
 // ---------------------
