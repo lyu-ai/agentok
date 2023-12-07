@@ -1,165 +1,154 @@
 import clsx from 'clsx';
-import React, { memo, useEffect, useState } from 'react';
-import { FaEye } from 'react-icons/fa6';
-import { Handle, Position, useReactFlow } from 'reactflow';
-import { IconType } from 'react-icons';
-import Toolbar from './Toolbar';
-import { SiOpenai } from 'react-icons/si';
-import { RiRobot2Fill } from 'react-icons/ri';
+import React, { memo, useState } from 'react';
+import { LuSettings2 } from 'react-icons/lu';
+import { useReactFlow } from 'reactflow';
 import { getNodeLabel, setNodeData } from '../../utils/flow';
-import EditableText from '@/components/EditableText';
-import EditButton from '@/components/EditButton';
+import Toolbar from './Toolbar';
+import { BiCollapseVertical, BiExpandVertical } from 'react-icons/bi';
+import Tip from '../Tip';
+import FunctionConfig from '../function/Config';
+import { TbMathFunction } from 'react-icons/tb';
 import { useTranslations } from 'next-intl';
 
-function AssistantNode({ id, data, selected }: any) {
-  const [editingName, setEditingName] = useState(false);
+function Config({ id, data, selected }: any) {
+  const [collapsed, setCollapsed] = useState(true);
+  const [showFunctionConfig, setShowFunctionConfig] = useState(false);
   const instance = useReactFlow();
-  const iconDict: Record<string, IconType> = {
-    GPTAssistantAgent: SiOpenai,
-    AssistantAgent: RiRobot2Fill,
-    RetrieveAssistantAgent: RiRobot2Fill,
-    MultimodalConversableAgent: FaEye,
-  };
-
-  const NodeIcon = iconDict[data.class || 'AssistantAgent'];
-  useEffect(() => {
-    if (!selected) {
-      setEditingName(false);
-    }
-  }, [selected]);
-
-  const t = useTranslations('node.Assistant');
+  const t = useTranslations('node.Config');
   const tNodeMeta = useTranslations('meta.node');
 
   return (
     <div
       className={clsx(
-        'p-2 rounded-md border min-w-[240px] backdrop-blur-sm',
+        'p-2 rounded-md border text-base-content/90 min-w-[240px] backdrop-blur-sm',
         selected
           ? 'shadow-box shadow-gray-500 bg-gray-600/90 border-gray-500'
           : 'border-gray-600 bg-gray-700/90'
       )}
     >
-      <Toolbar nodeId={id} selected={selected}>
-        <EditButton
-          editing={editingName}
-          setEditing={setEditingName}
-          defaultLabel={t('name-edit-tooltip')}
-          editingLabel={t('name-edit-done-tooltip')}
-        />
+      <Toolbar nodeId={id} selected={selected} hideDelete>
+        <div
+          className="cursor-pointer"
+          onClick={() => setCollapsed(c => !c)}
+          data-tooltip-id="default-tooltip"
+          data-tooltip-content={collapsed ? t('expand') : t('collapse')}
+        >
+          {collapsed ? (
+            <BiExpandVertical className="w-4 h-4" />
+          ) : (
+            <BiCollapseVertical className="w-4 h-4" />
+          )}
+        </div>
       </Toolbar>
       <div className="flex flex-col w-full gap-2 text-sm">
-        <div className="w-full flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <NodeIcon className="w-5 h-5" />
-            <div className="text-sm font-bold">{getNodeLabel(data.label, tNodeMeta)}</div>
+            <LuSettings2 className="w-5 h-5" />
+            <div className="text-sm font-bold">
+              {getNodeLabel(data.label, tNodeMeta)}
+            </div>
           </div>
-          <EditableText
-            text={data.name}
-            onChange={(name: any) => {
-              setEditingName(false);
-              setNodeData(instance, id, { name: name });
-            }}
-            onModeChange={(editing: any) => setEditingName(editing)}
-            editing={editingName}
-            className="text-sm text-base-content/80 text-right"
+          {collapsed && <div>{data.flow_id}</div>}
+        </div>
+        <div
+          className={clsx(
+            'flex flex-col gap-2 transition-all ease-in-out delay-0',
+            collapsed ? 'collapsing-height' : 'expanding-height'
+          )}
+        >
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <div className="font-bold text-base-content/80">
+                {t('flow-name')}
+              </div>
+              <Tip content={t('flow-name-tooltip')} />
+            </div>
+            <input
+              className="nodrag input input-sm input-bordered w-32 bg-transparent rounded"
+              value={data.flow_id ?? ''}
+              onChange={e =>
+                setNodeData(instance, id, { flow_id: e.target.value })
+              }
+            />
+          </div>
+          <div className="font-bold text-base-content/80">
+            {t('flow-description')}
+          </div>
+          <textarea
+            rows={2}
+            className="nodrag textarea textarea-sm textarea-bordered w-full bg-transparent rounded resize-none"
+            value={data.flow_description ?? ''}
+            onChange={e =>
+              setNodeData(instance, id, { flow_description: e.target.value })
+            }
           />
         </div>
         <div className="divider my-0" />
-        <div className="flex items-center justify-between text-base-content/60 gap-2">
-          <div className="font-bold text-base-content/80">{t('system-message')}</div>
-          <div className="form-control"></div>
-          <label className="flex items-center cursor-pointer label gap-2">
-            <span className="label-text">{t('enable-system-message')}</span>
-            <input
-              id="enable_system_message"
-              type="checkbox"
-              className="checkbox checkbox-xs bg-transparent rounded"
-              checked={data.enable_system_message ?? false}
-              onChange={e => {
-                setNodeData(instance, id, {
-                  enable_system_message: e.target.checked,
-                });
-              }}
-            />
-          </label>
-        </div>
-        <div
-          className={clsx(
-            'text-sm text-base-content/60 transition-all ease-in-out',
-            !data.enable_system_message
-              ? 'collapsing-height'
-              : 'expanding-height'
-          )}
-        >
-          <textarea
-            value={data.system_message ?? ''}
-            onChange={e => {
-              setNodeData(instance, id, { system_message: e.target.value });
-            }}
-            placeholder={t('system-message-placeholder')}
-            className="nodrag textarea textarea-bordered w-full p-1 bg-transparent rounded"
-            rows={2}
+        <div className="font-bold text-base-content/80">{t('filter-dict')}</div>
+        <div className="text-sm text-base-content/60">
+          <input
+            className="input input-sm input-bordered w-full bg-transparent rounded"
+            value={data.filter_dict ?? ''}
+            onChange={e =>
+              setNodeData(instance, id, { filter_dict: e.target.value })
+            }
           />
         </div>
-        <div className="flex items-center justify-between text-base-content/60 gap-2">
-          <div className="font-bold text-base-content/80">{t('instructions')}</div>
-          <div className="form-control">
-            <label className="flex items-center cursor-pointer label gap-2">
-              <span className="label-text">{t('instructions-use-defaults')}</span>
-              <input
-                id="default_instructions"
-                type="checkbox"
-                className="checkbox checkbox-xs bg-transparent rounded"
-                checked={data.default_instructions ?? false}
-                onChange={e => {
-                  setNodeData(instance, id, {
-                    default_instructions: e.target.checked,
-                  });
-                }}
-              />
-            </label>
+        <div className="divider my-1">{t('model-config')}</div>
+        <div className="flex items-center justify-between text-sm text-base-content/60 w-full">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-base-content/80">
+              {t('temperature')}
+            </span>
+            <Tip content={t('temperature-tooltip')} />
           </div>
+          <div className="ml-2 font-bold">{data.temperature}</div>
         </div>
-
-        <div
-          className={clsx(
-            'text-sm text-base-content/60 transition-all',
-            data.default_instructions ? 'collapsing-height' : 'expanding-height'
-          )}
-        >
-          <textarea
-            value={data.instructions ?? ''}
+        <div className="flex items-center justify-between text-sm text-base-content/60 w-full">
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.1"
+            value={data.temperature ?? 0}
             onChange={e => {
-              setNodeData(instance, id, { instructions: e.target.value });
+              setNodeData(instance, id, {
+                temperature: e.target.valueAsNumber,
+              });
             }}
-            placeholder={t('instructions-placeholder')}
-            className="nodrag textarea textarea-bordered w-full p-1 bg-transparent rounded resize-none"
-            rows={2}
+            className="range nodrag range-xs w-full"
           />
         </div>
         <div className="flex items-center justify-between text-sm text-base-content/60">
-        <div className="font-bold text-base-content/80">{t('max-consecutive-auto-reply')}</div>
+        <div className="font-bold text-base-content/80">{t('max-tokens')}</div>
           <input
             type="number"
-            className="input input-sm input-bordered w-14 bg-transparent px-0 rounded"
-            value={data.max_consecutive_auto_reply ?? 0}
+            className="input input-sm input-bordered w-24 bg-transparent rounded"
+            value={data.max_tokens ?? 1024}
             onChange={e => {
-              setNodeData(instance, id, {
-                max_consecutive_auto_reply: e.target.valueAsNumber,
-              });
+              setNodeData(instance, id, { max_tokens: e.target.valueAsNumber });
             }}
           />
         </div>
+        <div className="flex items-center justify-end w-full text-base-content/60 gap-2">
+          <button
+            className="w-full btn btn-sm btn-outline rounded"
+            onClick={() => setShowFunctionConfig(c => !c)}
+          >
+            <TbMathFunction className="w-4 h-4" />
+            <span>{t('function')}</span>
+          </button>
+        </div>
       </div>
-
-      <Handle
-        type="source"
-        position={Position.Right}
-        className="w-16 !bg-green-600"
+      <FunctionConfig
+        show={showFunctionConfig}
+        nodeId={id}
+        data={data}
+        onClose={() => setShowFunctionConfig(false)}
+        className="min-w-[80vw] w-[80vw] max-w-[90vw] min-h-[80vh] max-h-[90vh]"
       />
     </div>
   );
 }
 
-export default memo(AssistantNode);
+export default Config;
