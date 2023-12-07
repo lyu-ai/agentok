@@ -144,7 +144,7 @@ const Chat = ({ data, standalone }: any) => {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <title>Flowgen Chat</title>
+      <title>FlowGen Chat</title>
       <div className="flex items-center justify-between w-full px-2 py-1">
         <div className="flex items-center gap-2 text-sm font-bold">
           <PiChatsCircleFill className="w-5 h-5" />

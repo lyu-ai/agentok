@@ -1,4 +1,4 @@
-## pengen - Penless + Autogen
+## pengen - Penless + AutoGen
 
 ## 运行
 

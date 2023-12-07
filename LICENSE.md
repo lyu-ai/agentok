@@ -2,19 +2,19 @@
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
 
-Flowgen is governed by the Apache License 2.0, with additional terms and conditions outlined below:
+FlowGen is governed by the Apache License 2.0, with additional terms and conditions outlined below:
 
-Flowgen can be used for commercial purposes for "backend-as-a-service" for your applications or as a development platform for enterprises. However, under specific conditions, you must reach out to the project's administrators to secure a commercial license:
+FlowGen can be used for commercial purposes for "backend-as-a-service" for your applications or as a development platform for enterprises. However, under specific conditions, you must reach out to the project's administrators to secure a commercial license:
 
-a. Multi-tenant SaaS service: Unless you have explicit written authorization from Flowgen, you may not utilize the Flowgen source code to operate a multi-tenant SaaS service that closely resembles the Flowgen cloud-based services.
-b. Logo and copyright information: While using Flowgen in commercial application, you are prohibited from removing or altering the LOGO or copyright information displayed in the Flowgen console and UI.
+a. Multi-tenant SaaS service: Unless you have explicit written authorization from FlowGen, you may not utilize the FlowGen source code to operate a multi-tenant SaaS service that closely resembles the FlowGen cloud-based services.
+b. Logo and copyright information: While using FlowGen in commercial application, you are prohibited from removing or altering the LOGO or copyright information displayed in the FlowGen console and UI.
 
 For inquiries regarding licensing matters, please contact hi@tiwater.com via email.
 
 Contributors are required to consent to the following terms related to their contributed code:
 
 a. The project maintainers have the authority to modify the open-source agreement to be more stringent or lenient.
-b. Contributed code can be used for commercial purposes, including Flowgen's cloud-based services.
+b. Contributed code can be used for commercial purposes, including FlowGen's cloud-based services.
 
 All other rights and restrictions are in accordance with the Apache License 2.0.
 

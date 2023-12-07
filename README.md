@@ -1,21 +1,21 @@
 <img src="./frontend/public/logo-full.png" width="320" />
 
-# Flowgen - Autogen Visualized
+# FlowGen - AutoGen Visualized
 
-[![Railway](https://img.shields.io/badge/Railway-Flowgen-blue.svg)](https://railway.app/project/ce1fca93-8fa5-4537-b647-20e1636102c3)
+[![Railway](https://img.shields.io/badge/Railway-FlowGen-blue.svg)](https://railway.app/project/ce1fca93-8fa5-4537-b647-20e1636102c3)
 [![GitHub star chart](https://img.shields.io/github/stars/tiwater/flowgen?style=social)](https://star-history.com/#tiwater/flowgen)
 [![GitHub fork](https://img.shields.io/github/forks/tiwater/flowgen?style=social)](https://github.com/tiwater/flowgen/fork)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-## 🤖 What is Flowgen
+## 🤖 What is FlowGen
 
-Flowgen is a tool built for [Autogen](https://microsoft.github.io/autogen/), a great agent framework from Microsoft Research.
+FlowGen is a tool built for [AutoGen](https://microsoft.github.io/autogen/), a great agent framework from Microsoft Research.
 
-Autogen streamlines the process of creating multi-agent applications with its clear and user-friendly approach. Flowgen takes this accessibility a step further by offering visual tools that simplify the building and management of agent workflows with Autogen.
+AutoGen streamlines the process of creating multi-agent applications with its clear and user-friendly approach. FlowGen takes this accessibility a step further by offering visual tools that simplify the building and management of agent workflows with AutoGen.
 
 ## 💡 Quickstart
 
-To quickly explore what Flowgen has to offer, simply visit it [online](https://flowgen.app). Each new commit to the main branch triggers an automatic deployment on [Railway.app](https://railway.app), ensuring you experience the latest version of the service.
+To quickly explore what FlowGen has to offer, simply visit it [online](https://flowgen.app). Each new commit to the main branch triggers an automatic deployment on [Railway.app](https://railway.app), ensuring you experience the latest version of the service.
 
 ## 🐳 Run on Local (with Docker)
 

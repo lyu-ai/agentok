@@ -14,7 +14,7 @@ const Page = ({ params }: { params: { id: string[] } }) => {
 
   return (
     <div className="flex-1 w-full overflow-y-auto">
-      <title>Flowgen</title>
+      <title>FlowGen</title>
       <ReactFlowProvider>
         <Flow flowId={params.id?.[0]} />
       </ReactFlowProvider>
