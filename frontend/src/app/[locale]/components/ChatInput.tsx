@@ -56,10 +56,8 @@ const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
           onClick={() => setShowImagePanel(!showImagePanel)}
         >
           {image ? (
-            <Image
+            <img
               src={image}
-              width={32}
-              height={32}
               alt="image"
               className="object-cover aspect-w-1 aspect-h-1 w-8 h-8 rounded"
             />

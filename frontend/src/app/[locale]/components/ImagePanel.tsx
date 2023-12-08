@@ -1,7 +1,8 @@
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
-import { GoImage, GoTrash } from 'react-icons/go';
+import { GoImage, GoX } from 'react-icons/go';
+import { MdOutlineCleaningServices } from 'react-icons/md';
 
 type ImagePanelProps = {
   onSelectImage: (url: string) => void;
@@ -35,10 +36,10 @@ const ImagePanel = (props: ImagePanelProps) => {
           <div className="h-full aspect-w-1 aspect-h-1 overflow-hidden">
             <img src={url} alt="image" className="object-cover w-full h-full" />
             <button
-              className="btn btn-xs btn-ghost text-red-300 hover:text-red-500 btn-square absolute top-1 right-1"
+              className="btn btn-xs btn-primary btn-square absolute top-1 right-1"
               onClick={() => setUrl('')}
             >
-              <GoTrash className="w-4 h-4" />
+              <MdOutlineCleaningServices className="w-4 h-4" />
             </button>
           </div>
         ) : (
