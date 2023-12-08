@@ -1,70 +1,86 @@
-'use client';
-
-import Link from 'next/link';
-import Image from 'next/image';
+import { HiPaperAirplane } from 'react-icons/hi2';
+import { GoImage } from 'react-icons/go';
+import { useState } from 'react';
 import clsx from 'clsx';
-import { RiAppsLine, RiRobot2Line } from 'react-icons/ri';
-import { FaGithub } from 'react-icons/fa';
-import { PiChatsCircleFill } from 'react-icons/pi';
-import { usePathname } from 'next/navigation';
+import ImagePanel from './ImagePanel';
+import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
-const NAV_MENU_ITEMS = [
-  {
-    id: 'flow',
-    label: 'Build',
-    icon: RiRobot2Line,
-    href: '/flow',
-  },
-  {
-    id: 'chat',
-    label: 'Chat',
-    icon: PiChatsCircleFill,
-    href: '/chat',
-  },
-  {
-    id: 'gallery',
-    label: 'Gallery',
-    icon: RiAppsLine,
-    href: '/gallery',
-  },
-];
+const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
+  const [showImagePanel, setShowImagePanel] = useState(false);
+  const [image, setImage] = useState('');
+  const [message, setMessage] = useState('');
+  const t = useTranslations('component.ChatInput');
 
-const Navbar = () => {
-  const pathname = usePathname();
+  const onSend = async () => {
+    setShowImagePanel(false);
+    if (_onSend) {
+      const success = await _onSend(
+        image ? `${message} <img ${image}>` : message
+      );
+      if (success) {
+        setMessage(''); // clear input only when sent successfully
+      }
+    }
+  };
+  const onKeyDown = (event: any) => {
+    // event.nativeEvent.isComposing === true when the user is typing in a CJK IME.
+    if (
+      event.key === 'Enter' &&
+      !event.shiftKey &&
+      !event.nativeEvent.isComposing
+    ) {
+      event.preventDefault();
+      onSend();
+    }
+  };
+  const panelTransitionStyle =
+    'transition-[max-height] duration-300 ease-in-out overflow-hidden';
   return (
-    <div className="navbar flex w-full items-center justify-between px-2">
-      <div className="navbar-start">
-        <a href="/" className="flex gap-2 items-end">
-          <Image
-            width={128}
-            height={32}
-            alt="logo"
-            src="/logo-full-white.png"
-            className="h-8 object-contain aspect-w-1 aspect-h-1"
-          />
-        </a>
+    <div className={clsx(className, 'flex flex-col')} {...props}>
+      <div
+        className={clsx(
+          'w-full h-48 border-base-content/20 rounded-t-md',
+          panelTransitionStyle,
+          {
+            'max-h-0': !showImagePanel, // When image panel is hidden
+            'max-h-48': showImagePanel, // When image panel is shown, adjust '48' accordingly
+          }
+        )}
+      >
+        <ImagePanel onSelectImage={setImage} />
       </div>
-      <div className="navbar-center gap-6">
-        {NAV_MENU_ITEMS.map(item => (
-          <Link
-            key={item.id}
-            href={item.href}
-            className={clsx('flex items-center gap-2 hover:text-white', {
-              'text-primary': pathname?.includes(item.href),
-            })}
-          >
-            <item.icon className="h-5 w-5" />
-            {item.label}
-          </Link>
-        ))}
-      </div>
-      <div className="navbar-end">
-        <a href="https://github.com/tiwater/flowgen" target="_blank">
-          <FaGithub className="h-5 w-5" />
-        </a>
+      <div className="flex flex-row w-full items-center gap-2">
+        <button
+          className="ml-1 text-primary/80 hover:text-primary w-8 h-8 flex-shrink-0"
+          onClick={() => setShowImagePanel(!showImagePanel)}
+        >
+          {image ? (
+            <img
+              src={image}
+              alt="image"
+              className="object-cover aspect-w-1 aspect-h-1 w-8 h-8 rounded"
+            />
+          ) : (
+            <GoImage className="w-6 h-6" />
+          )}
+        </button>
+        <input
+          className="w-full bg-transparent rounded-md"
+          placeholder={t('enter-message')}
+          value={message}
+          onKeyDown={onKeyDown}
+          onChange={(e: any) => setMessage(e.target.value)}
+        />
+        <button
+          className="btn btn-sm bg-primary/80 border-primary/60 hover:bg-primary hover:border-primary/80 rounded-md"
+          onClick={onSend}
+        >
+          <HiPaperAirplane className="w-5 h-5" />
+        </button>
       </div>
     </div>
   );
 };
 
-export default Navbar;
+export default ChatInput;
