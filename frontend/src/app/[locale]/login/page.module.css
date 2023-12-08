@@ -1,0 +1,23 @@
+.container-redshadow {
+  min-width: 300px;
+  box-shadow: -2px 1px 69px 5px rgb(202, 37, 37);
+  border-radius: 1rem;
+}
+
+.container-greenshadow {
+  min-width: 300px;
+  box-shadow: -2px 1px 69px 5px rgb(65, 163, 35);
+  border-radius: 1rem;
+}
+
+.container-blueshadow {
+  min-width: 300px;
+  box-shadow: -2px 1px 69px 5px rgb(8, 107, 177);
+  border-radius: 1rem;
+}
+
+.container-orangeshadow {
+  min-width: 300px;
+  box-shadow: -2px 1px 69px 5px rgb(235, 115, 29);
+  border-radius: 1rem;
+}

@@ -35,8 +35,8 @@ const NavMenu = () => {
         <Link
           key={item.id}
           href={item.href}
-          className={clsx('flex items-center gap-2 hover:text-white', {
-            'text-primary': pathname?.includes(item.href),
+          className={clsx('flex items-center rounded-md py-2 px-4 gap-2 hover:text-white hover:bg-primary-content/10', {
+            'text-primary bg-primary-content/20': pathname?.includes(item.href),
           })}
         >
           <item.icon className="h-5 w-5" />
