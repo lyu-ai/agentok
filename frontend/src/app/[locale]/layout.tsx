@@ -4,7 +4,7 @@ const inter = Inter({ subsets: ['latin'] });
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { PropsWithChildren } from 'react';
-import Navbar from '@/components/Navbar';
+import Navbar from './components/nav/Navbar';
 
 export default async function RootLayout({
   children,

@@ -1,0 +1,40 @@
+'use client';
+import { createClient } from '@/utils/supabase/client';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+const AuthButton = () => {
+  const [user, setUser] = useState<any>(null);
+  const supabase = createClient();
+  const router = useRouter();
+  useEffect(() => {
+    supabase.auth.getUser().then(res => {
+      setUser(res.data.user);
+    });
+  }, []);
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    router.replace('/login');
+  };
+
+  return user ? (
+    <div className="ml-4 flex items-center gap-4">
+      Hey, {user.email}!
+      <button className="btn btn-sm btn-outline rounded" onClick={signOut}>
+        Logout
+      </button>
+    </div>
+  ) : (
+    <Link
+      href="/login"
+      className="ml-4 btn btn-sm btn-primary btn-outline rounded"
+    >
+      Login
+    </Link>
+  );
+};
+
+export default AuthButton;

@@ -1,11 +1,10 @@
-<img src="./frontend/public/logo-full.png" width="320" />
+---
+id: getting-started
+title: 'Getting Started'
+slug: /getting-started
+---
 
-# FlowGen - AutoGen Visualized
-
-[![Railway](https://img.shields.io/badge/Railway-FlowGen-blue.svg)](https://railway.app/project/ce1fca93-8fa5-4537-b647-20e1636102c3)
-[![GitHub star chart](https://img.shields.io/github/stars/tiwater/flowgen?style=social)](https://star-history.com/#tiwater/flowgen)
-[![GitHub fork](https://img.shields.io/github/forks/tiwater/flowgen?style=social)](https://github.com/tiwater/flowgen/fork)
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+# Getting Started
 
 ## 🤖 What is FlowGen
 
@@ -81,19 +80,3 @@ Once you've started both the frontend and backend services by following the step
 - Backend: http://localhost:5004 (Here I should provide a Swagger API doc, maybe later.)
 
 If your services are started successfully and running on the expected ports, you should see the user interface or receive responses from the backend via this URL.
-
-## 👨‍💻 Contributing
-
-This project welcomes contributions and suggestions. Please read our [Contributing Guide](./CONTRIBUTING.md) first.
-
-If you are new to GitHub [here](https://help.github.com/categories/collaborating-with-issues-and-pull-requests/) is a detailed help source on getting involved with development on GitHub.
-
-## Contributors Wall
-
-<a href="https://github.com/tiwater/flowgen/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=tiwater/flowgen" />
-</a>
-
-## 📝 License
-
-The project is licensed under [Apache 2.0 with additional terms and conditions](./LICENSE.md).
