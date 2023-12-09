@@ -40,6 +40,9 @@ const Login = ({
   const signInWithOAuth = async (provider: any) => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
+      options: {
+        redirectTo: `${location.origin}/api/auth/callback`,
+      },
     });
 
     console.log(provider, data, error);
@@ -50,7 +53,7 @@ const Login = ({
       email,
       password,
       options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
+        emailRedirectTo: `${location.origin}/api/auth/callback`,
       },
     });
 

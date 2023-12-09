@@ -42,7 +42,7 @@ const UserPanel = ({ user }: { user: any }) => {
     <div className="flex flex-col items-center w-full p-4 gap-3 text-sm">
       <UserImage
         user={user}
-        className="w-16 h-16 p-2 rounded-full bg-primary-content/50 text-primary overflow-hidden"
+        className="w-16 h-16 rounded-full bg-primary-content/50 text-primary overflow-hidden"
       />
       <span className="text-lg font-bold">
         {user.user_metadata?.name ?? '(No Name)'}
