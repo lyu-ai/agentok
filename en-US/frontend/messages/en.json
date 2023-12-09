@@ -1,73 +1,86 @@
-import { Float } from '@headlessui-float/react';
-import { Popover } from '@headlessui/react';
+import { HiPaperAirplane } from 'react-icons/hi2';
+import { GoImage } from 'react-icons/go';
+import { useState } from 'react';
 import clsx from 'clsx';
-import Chat from './Chat';
-import { RiChatSmile2Fill, RiChatSmile2Line, RiAppsLine } from 'react-icons/ri';
-import { useEffect, useState } from 'react';
+import ImagePanel from './ImagePanel';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
-const ChatButton = ({ className, data, onLoad, onReset }: any) => {
-  const [flowData, setFlowData] = useState<any>(data);
-  const [activePanel, setActivePanel] = useState<'default' | 'more' | null>(
-    null
-  );
-  const [uploading, setUploading] = useState(false);
-  const t = useTranslations('component.ChatButton');
+const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
+  const [showImagePanel, setShowImagePanel] = useState(false);
+  const [image, setImage] = useState('');
+  const [message, setMessage] = useState('');
+  const t = useTranslations('component.ChatInput');
 
-  useEffect(() => setFlowData(data), [data]);
-
-  const onClickDefault = async () => {
-    setUploading(true);
-    await fetch('/api/flows', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(() => setActivePanel('default'))
-      .finally(() => setUploading(false));
+  const onSend = async () => {
+    setShowImagePanel(false);
+    if (_onSend) {
+      const success = await _onSend(
+        image ? `${message} <img ${image}>` : message
+      );
+      if (success) {
+        setMessage(''); // clear input only when sent successfully
+      }
+    }
   };
-
+  const onKeyDown = (event: any) => {
+    // event.nativeEvent.isComposing === true when the user is typing in a CJK IME.
+    if (
+      event.key === 'Enter' &&
+      !event.shiftKey &&
+      !event.nativeEvent.isComposing
+    ) {
+      event.preventDefault();
+      onSend();
+    }
+  };
+  const panelTransitionStyle =
+    'transition-[max-height] duration-300 ease-in-out overflow-hidden';
   return (
-    <Popover>
-      <Float
-        placement="bottom-end"
-        offset={2}
-        enter="transition ease-out duration-300"
-        enterFrom="transform origin-top-right scale-0 opacity-0"
-        enterTo="transform origin-top-right scale-100 opacity-100"
-        leave="transition ease-in duration-150"
-        leaveFrom="transform scale-100 opacity-100"
-        leaveTo="transform scale-0 opacity-0"
+    <div className={clsx(className, 'flex flex-col')} {...props}>
+      <div
+        className={clsx(
+          'w-full h-48 border-base-content/20 rounded-t-md',
+          panelTransitionStyle,
+          {
+            'max-h-0': !showImagePanel, // When image panel is hidden
+            'max-h-48': showImagePanel, // When image panel is shown, adjust '48' accordingly
+          }
+        )}
       >
-        <Popover.Button>
-            <div
-              className={clsx(
-                className,
-                'btn btn-sm bg-green-800 border-green-700 hover:bg-green-700 hover:border-green-600 rounded-md ring-none outline-none flex items-center gap-2'
-              )}
-              onClick={onClickDefault}
-              data-tooltip-id="default-tooltip"
-              data-tooltip-content={t('start-chat-tooltip')}
-            >
-              {uploading ? (
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-              ) : (
-                <div className="relative">
-                  <RiChatSmile2Line className="absolute left-0 animate-ping w-5 h-5" />
-                  <RiChatSmile2Fill className="w-5 h-5" />
-                </div>
-              )}
-              <span>{t('start-chat')}</span>
-            </div>
-        </Popover.Button>
-        <Popover.Panel className="origin-top-right shadow-box-lg shadow-gray-600 rounded-xl backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 w-[480px] h-[80vh] max-h-[80vh]">
-        <Chat data={flowData} />
-        </Popover.Panel>
-      </Float>
-    </Popover>
+        <ImagePanel onSelectImage={setImage} />
+      </div>
+      <div className="flex flex-row w-full items-center gap-2">
+        <button
+          className="ml-1 text-primary/80 hover:text-primary w-8 h-8 flex-shrink-0"
+          onClick={() => setShowImagePanel(!showImagePanel)}
+        >
+          {image ? (
+            <img
+              src={image}
+              alt="image"
+              className="object-cover aspect-w-1 aspect-h-1 w-8 h-8 rounded"
+            />
+          ) : (
+            <GoImage className="w-6 h-6" />
+          )}
+        </button>
+        <input
+          className="w-full bg-transparent rounded-md"
+          placeholder={t('enter-message')}
+          value={message}
+          onKeyDown={onKeyDown}
+          onChange={(e: any) => setMessage(e.target.value)}
+        />
+        <button
+          className="btn btn-sm bg-primary/80 border-primary/60 hover:bg-primary hover:border-primary/80 rounded-md"
+          onClick={onSend}
+        >
+          <HiPaperAirplane className="w-5 h-5" />
+        </button>
+      </div>
+    </div>
   );
 };
 
-export default ChatButton;
+export default ChatInput;
