@@ -19,7 +19,7 @@ const Login = ({
 
   const signIn = async (asGuest?: boolean) => {
     const { error } = await supabase.auth.signInWithPassword({
-      email: asGuest ? 'guest@flowgen.app' : email,
+      email: asGuest ? 'guest@flowgen.dev' : email,
       password: asGuest ? 'guest' : password,
     });
 
@@ -91,7 +91,7 @@ const Login = ({
             name="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            placeholder="guest@flowgen.app"
+            placeholder="guest@flowgen.dev"
             required
           />
           <label className="text-md" htmlFor="password">

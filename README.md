@@ -17,7 +17,7 @@ AutoGen streamlines the process of creating multi-agent applications with its cl
 
 ## 💡 Quickstart
 
-To quickly explore what FlowGen has to offer, simply visit it [online](https://flowgen.app). Each new commit to the main branch triggers an automatic deployment on [Railway.app](https://railway.app), ensuring you experience the latest version of the service.
+To quickly explore what FlowGen has to offer, simply visit it [online](https://flowgen.dev). Each new commit to the main branch triggers an automatic deployment on [Railway.app](https://railway.app), ensuring you experience the latest version of the service.
 
 ## 🐳 Run on Local (with Docker)
 

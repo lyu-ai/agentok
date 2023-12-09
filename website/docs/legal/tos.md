@@ -10,7 +10,7 @@ slug: /tos
 
 ## Introduction
 
-Welcome to FlowGen ("us", "we", or "our"). Our website, accessible at [https://flowgen.app](https://flowgen.app), provides an enhanced suite of visual tools designed to complement AutoGen, the advanced agent framework from Microsoft Research.
+Welcome to FlowGen ("us", "we", or "our"). Our website, accessible at [https://flowgen.dev](https://flowgen.dev), provides an enhanced suite of visual tools designed to complement AutoGen, the advanced agent framework from Microsoft Research.
 
 FlowGen builds on AutoGen's streamlined approach for creating multi-agent applications by offering an intuitive visual interface that simplifies the construction and administration of these complex agent workflows, making the power of AutoGen more accessible than ever.
 
