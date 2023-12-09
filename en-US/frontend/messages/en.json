@@ -1,56 +1,47 @@
-import Image from 'next/image';
-import { FaGithub } from 'react-icons/fa';
+'use client';
+import { createClient } from '@supabase/supabase-js';
+import { Database } from '@/utils/supabase/database.types';
+import { Auth } from '@supabase/auth-ui-react';
+import { ThemeSupa } from '@supabase/auth-ui-shared';
 
-import AuthButton from './AuthButton';
-import Containers from './Containers';
-import Menu from './Menu';
-import { createClient } from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+const Page = () => {
+  console.log(
+    'process.env.NEXT_PUBLIC_SUPABASE_URL:',
+    process.env.NEXT_PUBLIC_SUPABASE_URL
+  );
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+  );
 
-const Navbar = () => {
-  const cookieStore = cookies();
-  const canInitSupabaseClient = () => {
-    // This function is just for the interactive tutorial.
-    // Feel free to remove it once you have Supabase connected.
-    try {
-      createClient(cookieStore);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  };
-
-  const isSupabaseConnected = canInitSupabaseClient();
   return (
-    <div className="z-50 navbar flex w-full items-center justify-between px-2">
-      <div className="navbar-start">
-        <a href="/" className="flex gap-2 items-end">
-          <Image
-            priority
-            width={128}
-            height={32}
-            alt="logo"
-            src="/logo-full-white.png"
-            className="h-8 object-contain aspect-w-1 aspect-h-1"
-          />
-        </a>
-      </div>
-      <div className="navbar-center gap-2">
-        <Menu />
-      </div>
-      <div className="navbar-end flex items-center gap-2">
-        <a
-          href="https://github.com/tiwater/flowgen"
-          target="_blank"
-          className="text-base-content/80 hover:text-base-content"
-        >
-          <FaGithub className="h-5 w-5" />
-        </a>
-        {isSupabaseConnected && <AuthButton />}
-      </div>
-      <Containers />
+    <div className="flex w-full h-full items-center justify-center">
+      <Auth
+        supabaseClient={supabase}
+        appearance={{
+          theme: ThemeSupa,
+          style: {
+            button: {
+              borderRadius: '5px',
+            },
+            container: {
+              minWidth: '320px',
+            },
+          },
+          variables: {
+            default: {
+              colors: {
+                brand: 'oklch(var(--p))',
+              },
+            },
+          },
+        }}
+        providers={['google', 'twitter', 'github']}
+        socialLayout={'horizontal'}
+        theme={'dark'}
+      />
     </div>
   );
 };
 
-export default Navbar;
+export default Page;
