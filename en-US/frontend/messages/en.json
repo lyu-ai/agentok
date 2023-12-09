@@ -1,77 +1,37 @@
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus as style } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import CopyButton from '@/components/CopyButton';
-import ViewToggle from './ViewToggle';
-import { useState, useEffect } from 'react';
-import { GoAlertFill } from 'react-icons/go';
+import { TbBrandPython } from 'react-icons/tb';
+import { PiBracketsCurly } from 'react-icons/pi';
+import { RiArrowGoBackLine } from 'react-icons/ri';
 import { useTranslations } from 'next-intl';
 
-const Python = ({ data, setMode }: any) => {
-  const [loading, setLoading] = useState(true);
-  const [result, setResult] = useState<{
-    code: number;
-    python?: string;
-    message?: string;
-  }>({ code: 0, python: '', message: '' });
-  const t = useTranslations('page.Python');
+type modeType = 'flow' | 'json' | 'python';
 
-  useEffect(() => {
-    fetch('/api/codegen', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(resp => resp.json())
-      .then(json => {
-        if (json.error) {
-          setResult({ code: 400, message: json.error });
-          return;
-        } else {
-          setResult({ code: 200, python: json.code });
-        }
-      })
-      .finally(() => setLoading(false));
-  }, [data]);
-
-  if (loading) {
-    return (
-      <div className="relative flex flex-col w-full h-full items-center justify-center gap-2">
-        <div className="loading loading-infinity"></div>
-        <div className="text-sm text-base-content/60">{t('generating')}</div>
-      </div>
-    );
-  }
+const ViewToggle = ({
+  mode,
+  setMode,
+}: {
+  mode: modeType;
+  setMode: (mode: modeType) => void;
+}) => {
+  const t = useTranslations('component.ViewToggle');
+  const ModeIcon =
+    mode === 'flow'
+      ? RiArrowGoBackLine
+      : mode === 'json'
+      ? PiBracketsCurly
+      : TbBrandPython;
+  const tip =
+    mode === 'flow' ? t('back-to-editor') : mode === 'json' ? 'JSON' : 'Python';
 
   return (
-    <div className="w-full h-full pb-2">
-      {result.code !== 200 || !result.python ? (
-        <div className="flex w-full h-full items-center justify-center">
-          <div className="flex flex-col items-center text-sm bg-red-600/30 text-red-600 rounded-md border border-red-600 gap-2 p-4">
-            <GoAlertFill className="w-8 h-8" />
-            <span className="font-bold">{t('generate-fail')}</span>
-            <span>{result.message}</span>
-          </div>
-        </div>
-      ) : (
-        <SyntaxHighlighter
-          language="python"
-          style={style}
-          showLineNumbers
-          showInlineLineNumbers
-          className="h-full text-xs text-base-content"
-        >
-          {result.python}
-        </SyntaxHighlighter>
-      )}
-      <div className="absolute flex items-center gap-1 right-2 top-2">
-        <ViewToggle mode={'flow'} setMode={setMode} />
-        <ViewToggle mode={'json'} setMode={setMode} />{' '}
-        <CopyButton content={result.python ?? result.message ?? ''} />
-      </div>
+    <div
+      className="btn btn-square btn-ghost btn-sm"
+      onClick={() => setMode(mode)}
+      data-tooltip-id="default-tooltip"
+      data-tooltip-content={tip}
+    >
+      <ModeIcon className="w-4 h-4" />
     </div>
   );
 };
 
-export default Python;
+export default ViewToggle;
