@@ -36,13 +36,6 @@ const Navbar = () => {
       </div>
       <div className="navbar-center gap-2">
         <NavMenu />
-        <a
-          href="https://github.com/tiwater/flowgen"
-          target="_blank"
-          className="text-base-content/80 hover:text-base-content"
-        >
-          <FaGithub className="h-5 w-5" />
-        </a>
       </div>
       <div className="navbar-end flex items-center gap-2">
         {isSupabaseConnected && <AuthButton />}

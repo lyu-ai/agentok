@@ -5,7 +5,7 @@ import { Popover } from '@headlessui/react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { FaUserNinja } from 'react-icons/fa6';
+import { FaGithub, FaUserNinja } from 'react-icons/fa6';
 import { MdLogout } from 'react-icons/md';
 
 const UserImage = ({ user, className }: any) => {
@@ -14,7 +14,7 @@ const UserImage = ({ user, className }: any) => {
       <div
         className={
           className ??
-          'w-10 h-10 rounded-full bg-primary-content/50 overflow-hidden'
+          'w-10 h-10 rounded-full text-primary bg-primary-content/50 text-primary/50 hover:text-primary overflow-hidden'
         }
       >
         {user.user_metadata?.avatar_url ? (
@@ -24,7 +24,7 @@ const UserImage = ({ user, className }: any) => {
             className="w-full h-full object-cover rounded-full"
           />
         ) : (
-          <FaUserNinja className="w-full h-full p-2 text-primary" />
+          <FaUserNinja className="w-full h-full p-2" />
         )}
       </div>
     </div>
@@ -42,7 +42,7 @@ const UserPanel = ({ user }: { user: any }) => {
     <div className="flex flex-col items-center w-full p-4 gap-3 text-sm">
       <UserImage
         user={user}
-        className="w-16 h-16 p-2 rounded-full bg-primary-content/50 overflow-hidden"
+        className="w-16 h-16 p-2 rounded-full bg-primary-content/50 text-primary overflow-hidden"
       />
       <span className="text-lg font-bold">
         {user.user_metadata?.name ?? '(No Name)'}
@@ -59,13 +59,14 @@ const UserPanel = ({ user }: { user: any }) => {
         <a
           href={'https://github.com/tiwater/flowgen/issues/new'}
           target="_blank"
-          className="w-32 join-item btn btn-ghost border border-base-content/50 hover:border-base-content rounded-full"
+          className="w-40 join-item btn btn-ghost border border-base-content/50 hover:border-base-content rounded-full"
         >
+          <FaGithub className="h-5 w-5" />
           Report Issues
         </a>
         <button
           onClick={signOut}
-          className="w-32 join-item btn btn-ghost border border-base-content/50 hover:border-base-content rounded-full"
+          className="w-40 join-item btn btn-ghost border border-base-content/50 hover:border-base-content rounded-full"
         >
           <MdLogout className="w-5 h-5" />
           Sign Out
@@ -99,7 +100,7 @@ const UserAvatar = ({ user }: any) => {
       <Float
         placement="bottom-end"
         offset={2}
-        enter="transition ease-out duration-300"
+        enter="transition ease-out duration-150"
         enterFrom="transform origin-top-right scale-0 opacity-0"
         enterTo="transform origin-top-right scale-100 opacity-100"
         leave="transition ease-in duration-150"
