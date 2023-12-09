@@ -2,8 +2,7 @@ import Image from 'next/image';
 import { FaGithub } from 'react-icons/fa';
 
 import AuthButton from './AuthButton';
-import Containers from './Containers';
-import Menu from './Menu';
+import NavMenu from './NavMenu';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 
@@ -36,9 +35,7 @@ const Navbar = () => {
         </a>
       </div>
       <div className="navbar-center gap-2">
-        <Menu />
-      </div>
-      <div className="navbar-end flex items-center gap-2">
+        <NavMenu />
         <a
           href="https://github.com/tiwater/flowgen"
           target="_blank"
@@ -46,9 +43,10 @@ const Navbar = () => {
         >
           <FaGithub className="h-5 w-5" />
         </a>
+      </div>
+      <div className="navbar-end flex items-center gap-2">
         {isSupabaseConnected && <AuthButton />}
       </div>
-      <Containers />
     </div>
   );
 };

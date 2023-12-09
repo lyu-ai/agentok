@@ -32,6 +32,8 @@ export async function middleware(req: NextRequest) {
     error,
   } = await supabase.auth.getSession();
 
+  // console.log('session', session);
+
   if (error) {
     // Handle the error according to your application's needs
     console.error('Supabase auth error:', error.message);
@@ -39,15 +41,15 @@ export async function middleware(req: NextRequest) {
 
   // `session` is `null`, redirect to login page
   if (!session) {
+    console.log('session null');
     const url = req.nextUrl.clone();
-    console.log('url.pathname', url.pathname);
     // Define the public paths that don't require authentication
     const publicPaths = ['/login']; // Add publicly accessible paths here
     // Check if the current request path is not a public path
     if (!publicPaths.includes(url.pathname)) {
       // Redirect the user to the login page with a return URL
       url.pathname = '/login';
-      url.searchParams.set('redirectedFrom', req.nextUrl.pathname);
+      url.searchParams.set('redirectUrl', req.nextUrl.pathname);
       return NextResponse.redirect(url);
     }
   }

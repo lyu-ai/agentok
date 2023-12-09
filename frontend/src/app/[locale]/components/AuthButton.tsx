@@ -1,0 +1,152 @@
+'use client';
+import { createClient } from '@/utils/supabase/client';
+import { Float } from '@headlessui-float/react';
+import { Popover } from '@headlessui/react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { FaUserNinja } from 'react-icons/fa6';
+import { MdLogout } from 'react-icons/md';
+
+const UserImage = ({ user, className }: any) => {
+  return (
+    <div className="avatar">
+      <div
+        className={
+          className ??
+          'w-10 h-10 rounded-full bg-primary-content/50 overflow-hidden'
+        }
+      >
+        {user.user_metadata?.avatar_url ? (
+          <img
+            alt="avatar"
+            src={user.user_metadata?.avatar_url}
+            className="w-full h-full object-cover rounded-full"
+          />
+        ) : (
+          <FaUserNinja className="w-full h-full p-2 text-primary" />
+        )}
+      </div>
+    </div>
+  );
+};
+
+const UserPanel = ({ user }: { user: any }) => {
+  const router = useRouter();
+  const signOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.replace('/login');
+  };
+  return (
+    <div className="flex flex-col items-center w-full p-4 gap-3 text-sm">
+      <UserImage
+        user={user}
+        className="w-16 h-16 p-2 rounded-full bg-primary-content/50 overflow-hidden"
+      />
+      <span className="text-lg font-bold">
+        {user.user_metadata?.name ?? '(No Name)'}
+      </span>
+      <span className="">
+        {user.email}
+        {user.email_confirmed_at ? (
+          <span className="text-green-500"> (verified)</span>
+        ) : (
+          <span className="text-red-500"> (unverified)</span>
+        )}
+      </span>
+      <div className="join my-2">
+        <a
+          href={'https://github.com/tiwater/flowgen/issues/new'}
+          target="_blank"
+          className="w-32 join-item btn btn-ghost border border-base-content/50 hover:border-base-content rounded-full"
+        >
+          Report Issues
+        </a>
+        <button
+          onClick={signOut}
+          className="w-32 join-item btn btn-ghost border border-base-content/50 hover:border-base-content rounded-full"
+        >
+          <MdLogout className="w-5 h-5" />
+          Sign Out
+        </button>
+      </div>
+      <div className="flex items-center justify-center text-xs w-full gap-2 mt-4">
+        <Link
+          href="https://docs.flowgen.dev/docs/privacy"
+          target="_blank"
+          className="link"
+        >
+          Privacy Policy
+        </Link>
+        <span className="">•</span>
+        <Link
+          href="https://docs.flowgen.dev/docs/tos"
+          target="_blank"
+          className="link"
+        >
+          Terms of Service
+        </Link>
+      </div>
+    </div>
+  );
+};
+
+const UserAvatar = ({ user }: any) => {
+  console.log('user', user);
+  return (
+    <Popover>
+      <Float
+        placement="bottom-end"
+        offset={2}
+        enter="transition ease-out duration-300"
+        enterFrom="transform origin-top-right scale-0 opacity-0"
+        enterTo="transform origin-top-right scale-100 opacity-100"
+        leave="transition ease-in duration-150"
+        leaveFrom="transform scale-100 opacity-100"
+        leaveTo="transform scale-0 opacity-0"
+      >
+        <Popover.Button className="flex my-auto">
+          <div className="avatar">
+            <UserImage user={user} />
+          </div>
+        </Popover.Button>
+        <Popover.Panel className="origin-top-right shadow-box-lg shadow-gray-600 rounded-xl backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 max-h-[80vh]">
+          <UserPanel user={user} />
+        </Popover.Panel>
+      </Float>
+    </Popover>
+  );
+};
+
+const AuthButton = () => {
+  const [user, setUser] = useState<any>(null);
+  const supabase = createClient();
+  const pathname = usePathname();
+  useEffect(() => {
+    supabase.auth.getUser().then(res => {
+      setUser(res.data?.user);
+    });
+    // Set up a subscription to auth changes
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
+  }, []);
+
+  if (pathname.includes('/login')) {
+    return null; // don't show auth button on login page
+  }
+
+  return user ? (
+    <UserAvatar user={user} />
+  ) : (
+    <Link
+      href="/login"
+      className="ml-4 btn btn-sm btn-primary btn-outline rounded"
+    >
+      Login / Sign Up
+    </Link>
+  );
+};
+
+export default AuthButton;

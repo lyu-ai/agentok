@@ -4,7 +4,7 @@ const inter = Inter({ subsets: ['latin'] });
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { PropsWithChildren } from 'react';
-import Navbar from './components/nav/Navbar';
+import Navbar from './components/Navbar';
 
 export default async function RootLayout({
   children,
@@ -12,7 +12,6 @@ export default async function RootLayout({
 }: PropsWithChildren<{
   params: { locale: string };
 }>) {
-  
   let messages;
   try {
     messages = (await import(`@/messages/${params.locale}.json`)).default;
