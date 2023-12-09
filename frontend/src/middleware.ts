@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import createIntlMiddleware from 'next-intl/middleware';
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
-import { Database } from './utils/supabase/database.types';
-import { redirect } from 'next/dist/server/api-utils';
+import { createClient } from '@/utils/supabase/middleware';
 
 // Create a middleware for internationalization
 const intlMiddleware = createIntlMiddleware({
@@ -26,7 +24,7 @@ export async function middleware(req: NextRequest) {
   }
 
   // Process the Supabase auth middleware logic
-  const supabase = createMiddlewareClient<Database>({ req, res });
+  const { supabase } = createClient(req);
 
   // Get the session and if it sets any cookies or headers, apply those to the response
   const {

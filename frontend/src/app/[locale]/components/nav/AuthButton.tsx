@@ -1,13 +1,12 @@
 'use client';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@/utils/supabase/client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Database } from '@/utils/supabase/database.types';
 import { useEffect, useState } from 'react';
 
 const AuthButton = () => {
   const [user, setUser] = useState<any>(null);
-  const supabase = createClientComponentClient<Database>();
+  const supabase = createClient();
   const router = useRouter();
   useEffect(() => {
     supabase.auth.getUser().then(res => {
@@ -24,12 +23,15 @@ const AuthButton = () => {
   return user ? (
     <div className="ml-4 flex items-center gap-4">
       Hey, {user.email}!
-      <button className="btn btn-sm btn-outline" onClick={signOut}>
+      <button className="btn btn-sm btn-outline rounded" onClick={signOut}>
         Logout
       </button>
     </div>
   ) : (
-    <Link href="/login" className="ml-4 btn btn-sm btn-primary btn-outline">
+    <Link
+      href="/login"
+      className="ml-4 btn btn-sm btn-primary btn-outline rounded"
+    >
       Login
     </Link>
   );
