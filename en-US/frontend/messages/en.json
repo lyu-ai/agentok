@@ -1,47 +1,27 @@
 'use client';
-import { createClient } from '@supabase/supabase-js';
-import { Database } from '@/utils/supabase/database.types';
-import { Auth } from '@supabase/auth-ui-react';
-import { ThemeSupa } from '@supabase/auth-ui-shared';
 
-const Page = () => {
-  console.log(
-    'process.env.NEXT_PUBLIC_SUPABASE_URL:',
-    process.env.NEXT_PUBLIC_SUPABASE_URL
-  );
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
-  );
+import { ToastContainer } from 'react-toastify';
+import { Tooltip } from 'react-tooltip';
+import 'react-toastify/dist/ReactToastify.css';
 
+const Containers = () => {
   return (
-    <div className="flex w-full h-full items-center justify-center">
-      <Auth
-        supabaseClient={supabase}
-        appearance={{
-          theme: ThemeSupa,
-          style: {
-            button: {
-              borderRadius: '5px',
-            },
-            container: {
-              minWidth: '320px',
-            },
-          },
-          variables: {
-            default: {
-              colors: {
-                brand: 'oklch(var(--p))',
-              },
-            },
-          },
-        }}
-        providers={['google', 'twitter', 'github']}
-        socialLayout={'horizontal'}
-        theme={'dark'}
+    <>
+      <ToastContainer position="bottom-right" theme="colored" hideProgressBar />
+      <Tooltip
+        id="default-tooltip"
+        className="bg-base-100 text-base-content"
+        place="bottom"
       />
-    </div>
+      <Tooltip
+        id="html-tooltip"
+        classNameArrow="html-tooltip-arrow bg-gray-700 border-r border-b border-gray-500"
+        className="!bg-gray-600 !border !border-gray-500 !text-gray-200 !px-2 !py-1"
+        style={{ maxWidth: '300px', zIndex: 9999 }}
+        clickable
+      />
+    </>
   );
 };
 
-export default Page;
+export default Containers;
