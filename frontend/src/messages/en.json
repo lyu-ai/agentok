@@ -116,6 +116,9 @@
     "CopyButton": {
       "copy": "Copy",
       "copied": "Copied"
+    },
+    "ThemeSwitcher": {
+      "theme-tooltip": "Switch Light/Dark Mode"
     }
   },
   "option": {

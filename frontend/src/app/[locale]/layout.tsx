@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { PropsWithChildren } from 'react';
 import Navbar from './components/Navbar';
+import Providers from './providers';
 
 export default async function RootLayout({
   children,
@@ -23,9 +24,11 @@ export default async function RootLayout({
       <title>FlowGen</title>
       <body className={inter.className} suppressHydrationWarning>
         <div className="flex flex-col h-screen w-full items-center text-base-content">
-          <Navbar />
           <NextIntlClientProvider locale={params.locale} messages={messages}>
-            {children}
+            <Providers>
+              <Navbar />
+              {children}
+            </Providers>
           </NextIntlClientProvider>
         </div>
       </body>

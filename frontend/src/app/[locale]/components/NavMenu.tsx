@@ -40,11 +40,9 @@ const NavMenu = () => {
           key={item.id}
           href={item.href}
           className={clsx(
-            'flex items-center rounded-md py-2 px-4 gap-2 hover:text-white hover:bg-primary-content/10',
+            'flex items-center rounded-md py-2 px-4 gap-2 hover:text-primary/80 hover:bg-primary/5',
             {
-              'text-primary bg-primary-content/20': pathname?.includes(
-                item.href
-              ),
+              'text-primary bg-primary/10': pathname?.includes(item.href),
             }
           )}
         >

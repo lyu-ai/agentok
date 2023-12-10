@@ -129,6 +129,9 @@
       "docs-path": "文档路径",
       "get-or-create": "获取或创建",
       "client": "客户端"
+    },
+    "ThemeSwitcher": {
+      "theme-tooltip": "切换浅色/深色模式"
     }
   },
   "page": {
@@ -150,7 +153,7 @@
       "edit-flow": "编辑流程 ",
       "flow-empty": "这里还没有流程。您可以从示例流程开始。",
       "create-flow": "从 Flow 示例开始构建",
-      "start-chat":"开始对话"
+      "start-chat": "开始对话"
     }
   },
   "meta": {
