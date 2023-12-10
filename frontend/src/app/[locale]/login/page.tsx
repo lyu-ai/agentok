@@ -38,18 +38,13 @@ const Login = ({
   };
 
   const signInWithOAuth = async (provider: any) => {
-    console.log(
-      'redirect to:',
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback`
-    );
+    console.log('redirect to:', `${window.location.origin}/api/auth/callback`);
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo: `${window.location.origin}/api/auth/callback`,
       },
     });
-
-    console.log(provider, data, error);
   };
 
   const signUp = async () => {
@@ -60,8 +55,6 @@ const Login = ({
         emailRedirectTo: `${window.location.origin}/api/auth/callback`,
       },
     });
-
-    console.log('data:', data, error);
 
     if (error) {
       setError(error.message);

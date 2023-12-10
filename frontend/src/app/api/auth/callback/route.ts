@@ -7,14 +7,15 @@ export async function GET(request: Request) {
   const code = searchParams.get('code');
   // if "next" is in param, use it as the redirect URL
   const next = searchParams.get('next') ?? '/';
+  const baseUrl = process.env.BASE_URL; // Use the BASE_URL from your environment variables
 
   if (code) {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      console.log('/api/auth/callback redirecting to', `${origin}${next}`);
-      return NextResponse.redirect(`${origin}${next}`);
+      console.log('/api/auth/callback redirecting to', `${baseUrl}${next}`);
+      return NextResponse.redirect(`${baseUrl}${next}`);
     }
   }
 
