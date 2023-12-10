@@ -11,7 +11,7 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
   const tNodeMeta = useTranslations('meta.node');
   const onDragStart = (
     event: React.DragEvent<any>,
-    data: { type: string; name: string; label: string; class: string; }
+    data: { type: string; name: string; label: string; class: string }
   ) => {
     let dragImage = event.currentTarget.cloneNode(true);
     dragImage.classList.add(
@@ -48,10 +48,7 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
         leaveTo="transform scale-0 opacity-0"
       >
         <Popover.Button
-          className={clsx(
-            className,
-            'btn btn-sm btn-primary hover:shadow-box shadow-indigo-300 btn-circle ring-none outline-none'
-          )}
+          className={clsx(className, 'btn btn-sm btn-primary btn-circle')}
           {...props}
         >
           <GoPlus className="w-6 h-6" />
@@ -61,14 +58,7 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
           className="origin-top-left absolute shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 overflow-auto max-h-[80vh]"
         >
           {nodeMetas.map(
-            ({
-              id,
-              name,
-              label,
-              type,
-              class: _class,
-              icon: Icon,
-            }) => (
+            ({ id, name, label, type, class: _class, icon: Icon }) => (
               <Popover.Button
                 as="a"
                 draggable
@@ -89,9 +79,7 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
                   }
                 }}
                 key={id}
-                onClick={() =>
-                  onAddNode(type, { name, class: _class, type })
-                }
+                onClick={() => onAddNode(type, { name, class: _class, type })}
                 className="group min-w-64 flex p-2 items-center rounded-lg hover:bg-base-content/10 cursor-pointer"
               >
                 <Icon className="flex-shrink-0 w-6 h-6 mx-1 group-hover:text-white" />
@@ -100,7 +88,8 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
                     {getNodeLabel(label, tNodeMeta) ?? label}
                   </div>
                   <div className="text-xs text-base-content/40 group-hover:text-white/80">
-                    {getNodeLabel(label + '-description', tNodeMeta) ?? label + '-description'}
+                    {getNodeLabel(label + '-description', tNodeMeta) ??
+                      label + '-description'}
                   </div>
                 </div>
               </Popover.Button>

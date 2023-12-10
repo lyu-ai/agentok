@@ -47,29 +47,28 @@ def upsert_flow(flow, max_retries=3, delay=1):
     attempt = 0
     while attempt < max_retries:
         try:
-            records = supabase.table('flows').select('id').eq('name', flow.get('id')).execute()
+            records = supabase.table('flows').select('id').eq('name', flow.get('name')).execute()
             if len(records.data) > 0:
               response = supabase.table('flows').update({
                   "id": records.data[0].get('id'),
-                  "name": flow.get('id', gen_id()), 
+                  "name": flow.get('name', gen_id()), 
                   'flow': flow.get('flow', ''), 
               }).eq('id', records.data[0].get('id')).execute()
             else:
               response = supabase.table('flows').insert({
-                  "name": flow.get('id', gen_id()), 
+                  "name": flow.get('name', gen_id()), 
                   'flow': flow.get('flow', ''), 
               }).execute()
-            print('response', response)
-            data = response.data if hasattr(response, "data") else None
+            records = response.data if hasattr(response, "data") and response.data is not None else []
             error = response.error if hasattr(response, "error") else None
 
             if error:  # Assuming a successful insert will have a count > 0
                 raise ValueError(f"Failed to insert flow: {error}")
 
-            if not data:
+            if len(records) == 0:
                 raise ValueError("No rows inserted; potential write failure.")
 
-            return data
+            return records[0]
 
         except Exception as e:
             print(f"Attempt {attempt + 1} failed with error: {e}")
@@ -83,11 +82,9 @@ def get_flows(max_retries=3, delay=1):
   attempt = 0
   while attempt < max_retries:
     try:
-        records = supabase.table('flows').select('*').neq('name', '').execute()
+        records = supabase.table('flows').select('*').neq('id', 0).execute()
         print('get_flows', len(records.data))
-        transformed_data = [{"id": record["name"], "flow": record.get("flow", {})} for record in records.data]
-        return transformed_data
-
+        return records.data
     except Exception as e:
         print(f"Failed to get flows: {e}")
         time.sleep(delay)
@@ -99,12 +96,12 @@ def get_flow(id, max_retries=3, delay=1):
   attempt = 0
   while attempt < max_retries:
     try:
-        records = supabase.table('flows').select('*').eq('name', id).execute()
+        records = supabase.table('flows').select('*').eq('id', id).execute()
         if len(records.data) > 0:
-          return {"id": records.data[0]["name"], "flow": records.data[0].get("flow", {})}
+          print('get_flow', len(records.data))
+          return records.data[0]
         else:
           return None
-
     except Exception as e:
         print(f"Failed to get flow: {e}")
         time.sleep(delay)
@@ -116,7 +113,7 @@ def delete_flow(id, max_retries=3, delay=1):
   attempt = 0
   while attempt < max_retries:
     try:
-        records = supabase.table('flows').delete().eq('name', id).execute()
+        records = supabase.table('flows').delete().eq('id', id).execute()
         print('delete_flow', records.data)
         return records.data
 

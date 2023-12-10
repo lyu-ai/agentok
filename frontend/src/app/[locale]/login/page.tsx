@@ -91,7 +91,7 @@ const Login = ({
             Email
           </label>
           <input
-            className="input input-bordered rounded px-4 py-2 bg-inherit border mb-2"
+            className="input input-bordered rounded py-2 bg-primary/20 mb-2"
             name="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -102,7 +102,7 @@ const Login = ({
             Password
           </label>
           <input
-            className="input input-bordered rounded px-4 py-2 bg-inherit border mb-2"
+            className="input input-bordered rounded py-2 bg-primary/20 mb-2"
             type="password"
             name="password"
             value={password}

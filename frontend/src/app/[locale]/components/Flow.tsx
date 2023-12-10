@@ -32,15 +32,15 @@ import { toast } from 'react-toastify';
 import { GoUpload } from 'react-icons/go';
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
+import { useFlow } from '@/hooks';
 
 const Flow = ({ flowId }: any) => {
+  const { flow, saveFlow, isSaving, isLoading, isError } = useFlow(flowId);
   const [mode, setMode] = useState<'flow' | 'json' | 'python'>('flow');
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
-  const [loading, setLoading] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const flowParent = useRef<HTMLDivElement>(null);
-  const { fitView, screenToFlowPosition } = useReactFlow();
+  const { fitView, screenToFlowPosition, toObject } = useReactFlow();
   const t = useTranslations('component.Flow');
 
   // Suppress error code 002
@@ -56,28 +56,11 @@ const Flow = ({ flowId }: any) => {
   }
 
   useEffect(() => {
-    setLoading(true);
-    const url =
-      flowId?.[0] && flowId[0] !== '__lucky_draw__'
-        ? `/api/flows/${flowId}`
-        : `/api/flows`;
-    fetch(url)
-      .then(data => data.json())
-      .then(json => {
-        if (Array.isArray(json)) {
-          const luckyDrawNumber = Math.floor(Math.random() * json.length);
-          console.log('Lucky number:', luckyDrawNumber);
-          json = json[luckyDrawNumber]; // do a lucky pick
-        }
-        console.log('Loading flow:', json);
-        setNodes(json?.flow?.nodes ?? []);
-        setEdges(json?.flow?.edges ?? []);
-      })
-      .catch(e => {
-        console.warn('Failed loading flow:', e.statusText);
-      })
-      .finally(() => setLoading(false));
-  }, [flowId]);
+    if (!flow?.flow) return;
+    setNodes(flow?.flow?.nodes ?? []);
+    setEdges(flow?.flow?.edges ?? []);
+    fitView({ maxZoom: 1 });
+  }, [flow?.id]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -182,32 +165,12 @@ const Flow = ({ flowId }: any) => {
     fitView({ maxZoom: 1 });
   };
 
-  const onLoad = (data: any) => {
-    setNodes(data.flow?.nodes ?? []);
-    setEdges(data.flow?.edges ?? []);
-    fitView({ maxZoom: 1 });
-  };
-
   const onSave = () => {
-    setUploading(true);
-    fetch('/api/flows', {
-      method: 'POST',
-      body: JSON.stringify({
-        id: getFlowName(nodes),
-        flow: { nodes, edges },
-      }),
-    })
-      .then(resp => resp.json())
-      .then(json => {
-        console.log('Flow saved:', json);
-        toast.success(t('save-success') + getFlowName(nodes), {
-          position: 'bottom-right',
-        });
-      })
-      .catch(e => {
-        console.warn('Failed saving flow:', e.statusText);
-      })
-      .finally(() => setUploading(false));
+    if (!flow?.id) {
+      toast.error(t('flow-not-found'));
+      return;
+    }
+    saveFlow({ id: flow.id, name: flow?.name ?? genId(), flow: toObject() });
   };
 
   if (mode === 'python') {
@@ -222,13 +185,25 @@ const Flow = ({ flowId }: any) => {
         <Json data={{ nodes, edges }} setMode={setMode} />
       </div>
     );
-  } else if (loading) {
+  } else if (isLoading) {
     return (
       <div className="relative flex w-full h-full items-center justify-center">
         <div className="loading loading-bars loading-primary"></div>
       </div>
     );
   }
+
+  if (isError) {
+    return (
+      <div className="relative flex w-full h-full items-center justify-center">
+        <p className="text-red-500">
+          {t('flow-load-failed')} {flowId}
+        </p>
+      </div>
+    );
+  }
+
+  if (!flow?.flow) return null;
 
   return (
     <div className="relative w-full h-full overflow-hidden" ref={flowParent}>
@@ -272,9 +247,7 @@ const Flow = ({ flowId }: any) => {
           data-tooltip-id="default-tooltip"
           data-tooltip-content={t('save-flow')}
         >
-          <GoUpload
-            className={clsx('w-4 h-4', { 'animate-spin': uploading })}
-          />
+          <GoUpload className={clsx('w-4 h-4', { 'animate-spin': isSaving })} />
         </button>
         <ViewToggle mode={'python'} setMode={setMode} />
         <ViewToggle mode={'json'} setMode={setMode} />
@@ -286,11 +259,7 @@ const Flow = ({ flowId }: any) => {
         >
           <IoSkullOutline className="w-4 h-4" />
         </button>
-        <ChatButton
-          data={{ id: getFlowName(nodes), flow: { nodes, edges } }}
-          onLoad={onLoad}
-          onReset={onReset}
-        />
+        <ChatButton flow={flow} />
       </div>
       <NodeButton onAddNode={onAddNode} className="absolute left-2 top-2" />
     </div>

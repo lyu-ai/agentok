@@ -41,7 +41,6 @@ export async function middleware(req: NextRequest) {
 
   // `session` is `null`, redirect to login page
   if (!session) {
-    console.log('session null');
     const url = req.nextUrl.clone();
     // Define the public paths that don't require authentication
     const publicPaths = ['/login']; // Add publicly accessible paths here

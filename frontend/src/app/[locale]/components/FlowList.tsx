@@ -1,9 +1,10 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
 import { BsInboxes } from 'react-icons/bs';
-import { GoTrash  } from 'react-icons/go';
+import { GoTrash } from 'react-icons/go';
 import { GrFlows } from 'react-icons/gr';
+import { useFlow, useFlows } from '@/hooks';
+import clsx from 'clsx';
 
 export const FlowEmpty = () => {
   const t = useTranslations('component.FlowList');
@@ -42,78 +43,74 @@ export const FlowLoading = () => {
   );
 };
 
+const FlowBlock = ({ action, flow }: any) => {
+  const t = useTranslations('component.FlowList');
+  const { deleteFlow, isDeleting } = useFlows();
+  const config = flow.flow.nodes.find((node: any) => node.type === 'config');
+  let flowDescription = '';
+  if (config?.data?.flow_description) {
+    flowDescription = config.data.flow_description;
+  } else {
+    flowDescription = t('default-description', {
+      node_count: flow.flow.nodes.length,
+      edge_count: flow.flow?.edges?.length ?? 0,
+    });
+  }
+  const onDelete = (e: any) => {
+    deleteFlow(flow.id);
+    e.stopPropagation();
+    e.preventDefault();
+  };
+  return (
+    <Link
+      key={flow.id}
+      className="group relative flex flex-col pb-6 bg-base-content/10 rounded-md p-3 gap-3 hover:bg-base-content/20 cursor-pointer"
+      href={`/${action ?? 'flow'}/${flow.id}`}
+    >
+      <div className="flex items-center gap-2 group-hover:text-primary">
+        <GrFlows className="w-6 h-6" />
+        <h2 className="font-bold">{flow.name}</h2>
+      </div>
+      <div className="flex flex-col h-full justify-between gap-2">
+        <div className="text-left text-sm">{flowDescription}</div>
+        <div className="flex items-center justify-between bottom-2">
+          <div className="text-xs text-base-content/60">
+            {new Date(flow.created_at).toLocaleString()}
+          </div>
+        </div>
+      </div>
+      <div className="hidden group-hover:block absolute bottom-1 right-1 text-xs text-base-content/60">
+        <div
+          className="btn btn-sm btn-ghost btn-square text-red-500/60 hover:text-red-500"
+          data-tooltip-id="default-tooltip"
+          data-tooltip-content={t('delete-flow') + flow.name}
+          onClick={onDelete}
+        >
+          <GoTrash
+            className={clsx('w-4 h-4', { 'loading loading-sm': isDeleting })}
+          />
+        </div>
+      </div>
+    </Link>
+  );
+};
+
 const FlowList = ({ action }: any) => {
-  const [loading, setLoading] = useState(true);
-  const [flows, setFlows] = useState<any[]>([]);
+  const { flows, isLoading, isError } = useFlows();
   const t = useTranslations('component.FlowList');
 
-  useEffect(() => {
-    setLoading(true);
-    fetch('/api/flows')
-      .then(resp => resp.json())
-      .then(json => {
-        setFlows(json);
-      })
-      .catch(e => {
-        console.warn('Failed loading flow:', e.statusText);
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  const onDelete = async (e: any, flowData: any) => {
-    e.stopPropagation();
-    const res = await fetch(`/api/flows/${flowData.id}`, {
-      method: 'DELETE',
-    });
-    if (res.ok) {
-      setFlows(flows.filter(flow => flow.id !== flowData.id));
-    }
-  };
-
-  if (loading) return <FlowLoading />;
-
+  if (isError) {
+    console.warn('Failed to load flow');
+  }
+  if (isLoading) return <FlowLoading />;
   if (flows.length === 0) return <FlowEmpty />;
 
   return (
     <div className="flex flex-col gap-2">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-2">
-        {flows.map((flowData: any) => {
-          const config = flowData.flow.nodes.find(
-            (node: any) => node.type === 'config'
-          );
-          let flowDescription = '';
-          if (config?.data?.flow_description) {
-            flowDescription = config.data.flow_description;
-          } else {
-            flowDescription = t('default-description', {
-              node_count: flowData.flow.nodes.length,
-              edge_count: flowData.flow?.edges?.length ?? 0,
-            });
-          }
-          return (
-            <Link
-              key={flowData.id}
-              className="group relative flex flex-col pb-6 bg-base-content/10 rounded-md p-3 gap-3 hover:bg-base-content/20 cursor-pointer"
-              href={`/${action ?? 'flow'}/${flowData.id}`}
-            >
-              <div className="flex items-center gap-2 group-hover:text-primary">
-                <GrFlows className="w-6 h-6" />
-                <h2 className="font-bold">{flowData.id}</h2>
-              </div>
-              <div className="text-left text-sm">{flowDescription}</div>
-              <div className="hidden group-hover:block absolute bottom-1 right-1 text-xs text-base-content/60">
-                <div
-                  className="btn btn-sm btn-ghost btn-square text-red-500/60 hover:text-red-500"
-                  data-tooltip-id="default-tooltip"
-                  data-tooltip-content={t('delete-flow') + flowData.id}
-                  onClick={e => onDelete(e, flowData)}
-                >
-                  <GoTrash className="w-4 h-4" />
-                </div>
-              </div>
-            </Link>
-          );
-        })}
+        {flows.map((flow: any) => (
+          <FlowBlock key={flow.id} action={action} flow={flow} />
+        ))}
       </div>
     </div>
   );
