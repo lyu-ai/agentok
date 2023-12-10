@@ -24,7 +24,7 @@ const Navbar = () => {
       <div className="navbar-start">
         <NavLogo />
       </div>
-      <div className="navbar-center gap-2">
+      <div className="navbar-center gap-1">
         <NavMenu />
       </div>
       <div className="navbar-end flex items-center gap-2">

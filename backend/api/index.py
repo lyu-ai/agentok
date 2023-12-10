@@ -143,10 +143,10 @@ def api_get_flows():
 @app.route('/api/flows', methods=['POST'])
 def api_upload_flow():
     data = request.json
-    print('uploading flow', data)
     try:
-      flow_name = data.get('id')
+      flow_name = data.get('name')
       flow = data.get('flow')
+      print('uploading flow', flow)
 
       upsert_flow(data)
 

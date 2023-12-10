@@ -25,6 +25,8 @@ def flow2py(flow: Data) -> str:
       not any(edge['source'] == node['id'] for edge in flow['edges'])),
       None
   )
+  if not user_proxy:
+    raise Exception('No user proxy node found')
   first_converser = next(
       (node for node in flow['nodes']
       if any(edge['source'] == node['id'] and
@@ -53,7 +55,7 @@ def flow2py(flow: Data) -> str:
   return code
 
 if __name__ == '__main__':
-  flow_name = 'function'
+  flow_name = 'gptassistant'
   data_dir = './data/'
   generated_dir = './generated/'
 

@@ -97,7 +97,8 @@
     "Flow": {
       "reset-default-tooltip": "Reset to default",
       "save-flow": "Upload to Cloud",
-      "save-success": "Successfully saved flow"
+      "save-success": "Successfully saved flow",
+      "flow-load-failed": "Failed to load flow"
     },
     "FlowList": {
       "delete-flow": "Delete flow ",

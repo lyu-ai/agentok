@@ -13,7 +13,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       <title>Flow | FlowGen</title>
       {params.id ? (
         <ReactFlowProvider>
-          <Flow flowId={params.id} />
+          <Flow flowId={params.id?.[0]} />
         </ReactFlowProvider>
       ) : (
         <div className="flex w-full h-full items-center justify-center">

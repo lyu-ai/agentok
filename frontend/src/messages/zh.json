@@ -97,7 +97,8 @@
     "Flow": {
       "reset-default-tooltip": "重置为默认值",
       "save-flow": "上传到云端",
-      "save-success": "成功保存流程"
+      "save-success": "成功保存流程",
+      "flow-load-failed": "加载流程失败"
     },
     "FlowList": {
       "delete-flow": "删除流程 ",

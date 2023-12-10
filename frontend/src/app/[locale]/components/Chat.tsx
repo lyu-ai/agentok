@@ -22,7 +22,7 @@ import { useTranslations } from 'next-intl';
 
 const supabase = createClient();
 
-const Chat = ({ data, standalone }: any) => {
+const Chat = ({ flow, standalone }: any) => {
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [thinking, setThinking] = useState(false);
@@ -31,19 +31,23 @@ const Chat = ({ data, standalone }: any) => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const t = useTranslations('component.Chat');
 
-  const fetchMessages = useCallback(() =>
-    fetch(`/api/flows/${data.id}/messages`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(resp => resp.json())
-      .then(json => {
-        setMessages(json ? json : []);
-      }), [setMessages, data.id]);
+  const fetchMessages = useCallback(
+    () =>
+      fetch(`/api/flows/${flow.id}/messages`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(resp => resp.json())
+        .then(json => {
+          setMessages(json ? json : []);
+        }),
+    [setMessages, flow?.id]
+  );
 
   useEffect(() => {
+    if (!flow) return;
     fetchMessages().finally(() => setLoading(false));
     const subscription = supabase
       .channel('flowgen')
@@ -88,7 +92,7 @@ const Chat = ({ data, standalone }: any) => {
 
   const onClean = () => {
     setCleaning(true);
-    fetch(`/api/flows/${data.id}/messages`, {
+    fetch(`/api/flows/${flow.id}/messages`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -110,11 +114,11 @@ const Chat = ({ data, standalone }: any) => {
     const newMessage = {
       type: 'user',
       id: genId(),
-      session: data?.id,
+      session: flow?.id,
       content: message,
     };
     setMessages(msgs => [...msgs, newMessage]);
-    const res = await fetch(`/api/flows/${data.id}/messages`, {
+    const res = await fetch(`/api/flows/${flow.id}/messages`, {
       method: 'POST',
       body: JSON.stringify(newMessage),
       headers: {
@@ -143,19 +147,23 @@ const Chat = ({ data, standalone }: any) => {
     ];
   }
 
+  if (!flow?.flow) {
+    return null;
+  }
+
   return (
     <div className="flex flex-col w-full h-full">
       <title>FlowGen Chat</title>
       <div className="flex items-center justify-between w-full px-2 py-1">
         <div className="flex items-center gap-2 text-sm font-bold">
           <PiChatsCircleFill className="w-5 h-5" />
-          <span>{t("start-chat") + (data?.id ? ' - ' + data.id : '')}</span>
+          <span>{t('start-chat') + (flow?.name ? ' - ' + flow.name : '')}</span>
         </div>
         <div className="flex items-center gap-2">
           <button
             className="btn btn-sm btn-ghost btn-square"
             data-tooltip-id="chat-tooltip"
-            data-tooltip-content={t("reload-history")}
+            data-tooltip-content={t('reload-history')}
             onClick={onReload}
           >
             <RxReload className="w-4 h-4" />
@@ -177,7 +185,7 @@ const Chat = ({ data, standalone }: any) => {
               className="btn btn-sm btn-ghost btn-square"
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('share')}
-              href={`/chat/${data.id}`}
+              href={`/chat/${flow.id}`}
               target="_blank"
             >
               <GoShareAndroid className="w-4 h-4" />
@@ -188,7 +196,7 @@ const Chat = ({ data, standalone }: any) => {
               className="btn btn-sm btn-ghost btn-square"
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('go-to-editor')}
-              href={`/flow/${data.id}`}
+              href={`/flow/${flow.id}`}
             >
               <GoPencil className="w-4 h-4" />
             </a>
@@ -213,7 +221,9 @@ const Chat = ({ data, standalone }: any) => {
                 data-tooltip-content={resultText}
                 data-tooltip-place="top"
               >
-                <div className={`flex items-center gap-1 cursor-pointer ${resultClass}`}>
+                <div
+                  className={`flex items-center gap-1 cursor-pointer ${resultClass}`}
+                >
                   <ResultIcon className="w-4 h-4" />
                   <span>{t('thinking-end')}</span>
                 </div>
@@ -308,7 +318,7 @@ const Chat = ({ data, standalone }: any) => {
           <div className="absolute inset-1 rounded-md backdrop-blur-sm bg-gray-700/70">
             <div className="flex w-full h-full items-center justify-center gap-2 text-gray-300">
               <div className="loading loading-infinity loading-sm" />
-              <span className="text-sm">{t("thinking")}</span>
+              <span className="text-sm">{t('thinking')}</span>
             </div>
           </div>
         )}
