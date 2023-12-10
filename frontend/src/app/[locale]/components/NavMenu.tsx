@@ -13,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const NAV_MENU_ITEMS = [
   {
     id: 'flow',
-    label: 'Build',
+    label: 'Flow',
     icon: RiRobot2Line,
     href: '/flow',
   },
