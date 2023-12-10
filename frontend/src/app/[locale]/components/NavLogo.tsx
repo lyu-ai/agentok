@@ -14,7 +14,7 @@ const Logo = () => {
     }
   }, [theme]);
   return (
-    <a href="/" className="flex gap-2 items-end">
+    <a href="/" className="flex shrink-0 gap-2 items-end">
       <Image
         priority
         width={128}
