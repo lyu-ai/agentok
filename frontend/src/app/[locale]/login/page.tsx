@@ -45,7 +45,7 @@ const Login = ({
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback`,
+        redirectTo: `${window.location.origin}/api/auth/callback`,
       },
     });
 
@@ -57,7 +57,7 @@ const Login = ({
       email,
       password,
       options: {
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback`,
+        emailRedirectTo: `${window.location.origin}/api/auth/callback`,
       },
     });
 
