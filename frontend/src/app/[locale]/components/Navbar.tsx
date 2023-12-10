@@ -41,7 +41,7 @@ const Navbar = () => {
         <NavMenu />
       </div>
       <div className="navbar-end flex items-center gap-2">
-        <ThemeSwitcher />
+        {/* <ThemeSwitcher /> */}
         {isSupabaseConnected && <AuthButton />}
       </div>
     </div>
