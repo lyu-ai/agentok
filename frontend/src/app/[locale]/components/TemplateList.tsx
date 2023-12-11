@@ -97,12 +97,16 @@ const TemplateBlock = ({ flow }: any) => {
     e.stopPropagation();
     e.preventDefault();
   };
+  const randomImage = ['api', 'knowledge', 'rag', 'flow'][
+    Math.floor(Math.random() * 4)
+  ];
   return (
     <div className="card w-80 bg-base-content/10 border border-base-content/10 hover:border-primary">
       <figure>
         <img
-          src={'https://docs.flowgen.dev/img/knowledge-2.png'}
+          src={`https://docs.flowgen.dev/img/${randomImage}-2.png`}
           alt={flow.name}
+          className="rounded-t-md h-48 w-full object-cover"
         />
       </figure>
       <div className="card-body p-4">

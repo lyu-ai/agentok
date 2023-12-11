@@ -2,14 +2,12 @@
 
 # FlowGen - AutoGen Visualized
 
-[![Railway](https://img.shields.io/badge/Railway-FlowGen-blue.svg)](https://railway.app/project/ce1fca93-8fa5-4537-b647-20e1636102c3)
-[![GitHub star chart](https://img.shields.io/github/stars/tiwater/flowgen?style=social)](https://star-history.com/#tiwater/flowgen)
-[![GitHub fork](https://img.shields.io/github/forks/tiwater/flowgen?style=social)](https://github.com/tiwater/flowgen/fork)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-
-## 🤖 What is FlowGen
+[![GitHub star chart](https://img.shields.io/github/stars/tiwater/flowgen?style=social)](https://star-history.com/#tiwater/flowgen)
 
 ![flow-1](./img/screenshot-flow-1.jpeg)
+
+## 🤖 What is FlowGen
 
 FlowGen is a tool built for [AutoGen](https://microsoft.github.io/autogen/), a great agent framework from Microsoft Research.
 
@@ -57,6 +55,8 @@ Railway.app supports the deployment of applications in Dockers. By clicking the 
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anon/public key.
 3. Confirm the settings and deploy.
 4. After deployment, visit the provided URL to access your deployed application.
+
+[![Made with Supabase](https://supabase.com/badge-made-with-supabase-dark.svg)](https://supabase.com)
 
 ## 🛠️ Run on Local (Without Docker)
 
