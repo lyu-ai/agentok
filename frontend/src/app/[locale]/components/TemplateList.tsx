@@ -1,17 +1,15 @@
 import { useTranslations } from 'next-intl';
 import { BsInboxes } from 'react-icons/bs';
 import { GoRepoForked, GoTrash } from 'react-icons/go';
-import { FcOrgUnit } from 'react-icons/fc';
-import { useFlows, usePublicFlows } from '@/hooks';
+import { useFlows, useTemplates } from '@/hooks';
 import clsx from 'clsx';
 import { createClient } from '@/utils/supabase/client';
 import { RiChatSmile2Line } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 
-export const FlowEmpty = () => {
-  const t = useTranslations('component.PublicFlowList');
+export const TemplateEmpty = () => {
+  const t = useTranslations('component.TemplateList');
   return (
     <div className="flex items-center justify-center w-full h-full">
       <div className="flex flex-col gap-2 items-center text-base-content/60">
@@ -47,11 +45,11 @@ export const FlowLoading = () => {
   );
 };
 
-const FlowBlock = ({ flow }: any) => {
+const TemplateBlock = ({ flow }: any) => {
   const [isOwned, setIsOwned] = useState(false);
   const supabase = createClient();
-  const t = useTranslations('component.PublicFlowList');
-  const { deleteFlow, isDeleting } = usePublicFlows();
+  const t = useTranslations('component.TemplateList');
+  const { deleteTemplate, isDeleting } = useTemplates();
   const { forkFlow, isForking } = useFlows();
   const router = useRouter();
   const config = flow.flow.nodes.find((node: any) => node.type === 'config');
@@ -82,9 +80,9 @@ const FlowBlock = ({ flow }: any) => {
       });
   }, []);
   const onDelete = (e: any) => {
-    deleteFlow(flow.id);
     e.stopPropagation();
     e.preventDefault();
+    deleteTemplate(flow.id);
   };
   const onFork = async (e: any) => {
     e.stopPropagation();
@@ -100,53 +98,50 @@ const FlowBlock = ({ flow }: any) => {
     e.preventDefault();
   };
   return (
-    <div className="group relative flex flex-col bg-base-content/10 rounded-md p-3 gap-3">
-      <Image
-        src={'https://docs.flowgen.dev/img/api.png'}
-        alt={flow.name}
-        width={300}
-        height={200}
-        className="w-full object-cover"
-      />
-      <div className="flex items-center gap-2 group-hover:text-primary">
-        <FcOrgUnit className="w-12 h-12" />
-        <h2 className="font-bold">{flow.name}</h2>
-      </div>
-      <div className="divider my-0" />
-      <div className="flex flex-col h-full justify-between gap-2">
-        <div className="text-left text-sm">{flowDescription}</div>
-        <div className="flex items-center justify-between bottom-2">
-          <div className="text-xs text-base-content/60">
-            {new Date(flow.created_at).toLocaleString()}
-          </div>
+    <div className="card w-80 bg-base-content/10 border border-base-content/10 hover:border-primary">
+      <figure>
+        <img
+          src={'https://docs.flowgen.dev/img/knowledge-2.png'}
+          alt={flow.name}
+        />
+      </figure>
+      <div className="card-body p-4">
+        <h2 className="card-title">{flow.name}</h2>
+        <div className="text-xs text-base-content/60">
+          {new Date(flow.created_at).toLocaleString()}
         </div>
-      </div>
-      <div className="flex w-full justify-end gap-1 text-xs text-base-content/60">
-        <button className="btn btn-sm btn-outline" onClick={onChat}>
-          <RiChatSmile2Line
-            className={clsx('w-4 h-4', { 'loading loading-xs': isDeleting })}
-          />
-          Chat
-        </button>
-        <button className="btn btn-sm btn-outline" onClick={onFork}>
-          <GoRepoForked
-            className={clsx('w-4 h-4', { 'loading loading-xs': isForking })}
-          />
-          Fork
-        </button>
-        {isOwned && (
-          <button
-            className="btn btn-sm btn-outline"
-            data-tooltip-id="default-tooltip"
-            data-tooltip-content={t('unpublish-flow') + ' ' + flow.name}
-            onClick={onDelete}
-          >
-            <GoTrash
+        <div className="text-left text-sm h-16 break-all line-clamp-2">
+          {flowDescription}
+        </div>
+        <div className="card-actions justify-end gap-1 text-xs text-base-content/60">
+          <button className="btn btn-sm btn-outline" onClick={onChat}>
+            <RiChatSmile2Line
               className={clsx('w-4 h-4', { 'loading loading-xs': isDeleting })}
             />
-            Delete
+            Chat
           </button>
-        )}
+          <button className="btn btn-sm btn-outline" onClick={onFork}>
+            <GoRepoForked
+              className={clsx('w-4 h-4', { 'loading loading-xs': isForking })}
+            />
+            Fork
+          </button>
+          {isOwned && (
+            <button
+              className="btn btn-sm btn-outline text-red-300 hover:text-red-500"
+              data-tooltip-id="default-tooltip"
+              data-tooltip-content={t('unpublish-template') + ' ' + flow.name}
+              onClick={onDelete}
+            >
+              <GoTrash
+                className={clsx('w-4 h-4', {
+                  'loading loading-xs': isDeleting,
+                })}
+              />
+              Delete
+            </button>
+          )}
+        </div>
       </div>
       {/* <div className="hidden group-hover:block absolute bottom-1 right-1 text-xs text-base-content/60">
         <div
@@ -164,25 +159,23 @@ const FlowBlock = ({ flow }: any) => {
   );
 };
 
-const PublicFlowList = ({ action }: any) => {
-  const { flows, isLoading, isError } = usePublicFlows();
-  const t = useTranslations('component.PublicFlowList');
+const TemplateList = ({ action }: any) => {
+  const { flows, isLoading, isError } = useTemplates();
+  const t = useTranslations('component.TemplateList');
 
   if (isError) {
     console.warn('Failed to load flow');
   }
   if (isLoading) return <FlowLoading />;
-  if (flows.length === 0) return <FlowEmpty />;
+  if (!flows || flows.length === 0) return <TemplateEmpty />;
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-2">
-        {flows.map((flow: any) => (
-          <FlowBlock key={flow.id} flow={flow} />
-        ))}
-      </div>
+    <div className="flex flex-wrap gap-2">
+      {flows.map((flow: any) => (
+        <TemplateBlock key={flow.id} flow={flow} />
+      ))}
     </div>
   );
 };
 
-export default PublicFlowList;
+export default TemplateList;

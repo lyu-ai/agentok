@@ -6,7 +6,7 @@ export async function GET(
 ) {
   const token = request.headers.get('Authorization');
   const res = await fetch(
-    `${process.env.FLOWGEN_SERVER_URL}/api/public-flows/${params.id}`,
+    `${process.env.FLOWGEN_SERVER_URL}/api/templates/${params.id}`,
     {
       method: 'GET',
       headers: {
@@ -17,7 +17,7 @@ export async function GET(
   );
   if (!res.ok) {
     console.error(
-      `Failed DELETE /public-flows/${params.id}:`,
+      `Failed DELETE /templates/${params.id}:`,
       res.status,
       res.statusText
     );
@@ -33,7 +33,7 @@ export async function DELETE(
 ) {
   const token = request.headers.get('Authorization');
   const res = await fetch(
-    `${process.env.FLOWGEN_SERVER_URL}/api/public-flows/${params.id}`,
+    `${process.env.FLOWGEN_SERVER_URL}/api/templates/${params.id}`,
     {
       method: 'DELETE',
       headers: {
@@ -44,7 +44,7 @@ export async function DELETE(
   );
   if (!res.ok) {
     console.error(
-      `Failed DELETE /public-flows/${params.id}:`,
+      `Failed DELETE /templates/${params.id}:`,
       res.status,
       res.statusText
     );

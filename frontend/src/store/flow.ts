@@ -24,8 +24,8 @@ interface FlowState {
   deleteFlow: (id: string) => void;
   getFlowById: (id: string) => Flow | undefined;
   // Public flows (do not support update operation)
-  setPublicFlows: (flows: PublicFlow[]) => void;
-  deletePublicFlow: (id: string) => void;
+  setTemplates: (flows: PublicFlow[]) => void;
+  deleteTemplate: (id: string) => void;
   getPublicFlowById: (id: string) => PublicFlow | undefined;
 }
 
@@ -64,8 +64,8 @@ const useFlowStore = create<FlowState>((set, get) => ({
   },
   // Public flows
   publicFlows: [],
-  setPublicFlows: publicFlows => set({ publicFlows }),
-  deletePublicFlow: id =>
+  setTemplates: publicFlows => set({ publicFlows }),
+  deleteTemplate: id =>
     set(state => {
       const numericId = Number(id);
       console.log('Deleting public flow with id:', numericId);

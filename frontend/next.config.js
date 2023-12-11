@@ -3,6 +3,16 @@ const withNextIntl = require('next-intl/plugin')();
 const nextConfig = {
   output: 'standalone', // for Docker build
   reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'docs.flowgen.dev',
+        port: '',
+        pathname: '/img/**',
+      },
+    ],
+  },
 };
 
 module.exports = withNextIntl(nextConfig);

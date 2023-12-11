@@ -102,10 +102,12 @@
     },
     "FlowList": {
       "delete-flow": "删除工作流 ",
-      "default-description": "此工作流有 {node_count} 个节点和 {edge_count} 条边。"
+      "default-description": "此工作流有 {node_count} 个节点和 {edge_count} 条边。",
+      "flow-empty": "尚无工作流，你可以从样例开始创建一个新的工作流。"
     },
-    "PublicFlowList": {
-      "unpublish-flow": "取消该工作流的发布"
+    "TemplateList": {
+      "template-empty": "尚无公开的工作流模版，你可以将一个工作流发布为模版。",
+      "unpublish-template": "取消发布该模版"
     },
     "ImagePanel": {
       "preview": "图片预览",

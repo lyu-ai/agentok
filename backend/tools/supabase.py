@@ -94,11 +94,11 @@ def get_flows(token, max_retries=3, delay=1):
   # If the loop completes without returning, all retries have failed
   raise Exception("All attempts to get flows have failed.")
 
-def get_public_flows(max_retries=3, delay=1):
+def get_templates(max_retries=3, delay=1):
   attempt = 0
   while attempt < max_retries:
     try:
-        records = supabase.table('public_flows').select('*').neq('id', 0).execute()
+        records = supabase.table('templates').select('*').neq('id', 0).execute()
         print('get_public_flows', len(records.data))
         return records.data
     except Exception as e:
@@ -108,7 +108,7 @@ def get_public_flows(max_retries=3, delay=1):
   # If the loop completes without returning, all retries have failed
   raise Exception("All attempts to get public flows have failed.")
 
-def public_flow(token, flow, max_retries=3, delay=1):
+def publish_template(token, flow, max_retries=3, delay=1):
   attempt = 0
   data = supabase.auth.get_user(token)
   if not data:
@@ -118,11 +118,30 @@ def public_flow(token, flow, max_retries=3, delay=1):
     try:
         flow.pop('id', None)  # Removes 'id' without error if it's not present
         flow['user_id'] = user.id
-        records = supabase.table('public_flows').insert(flow).execute()
+        records = supabase.table('templates').insert(flow).execute()
         print('published flow', len(records.data))
         return records.data
     except Exception as e:
         print(f"Failed to publish flow: {e}")
+        time.sleep(delay)
+        attempt += 1  # Increment and try again after a short delay
+  # If the loop completes without returning, all retries have failed
+  raise Exception("All attempts to publish flow have failed.")
+
+
+def unpublish_template(token, id, max_retries=3, delay=1):
+  attempt = 0
+  data = supabase.auth.get_user(token)
+  if not data:
+    raise Exception("User not authenticated")
+  user = data.user
+  while attempt < max_retries:
+    try:
+        records = supabase.table('templates').delete().eq('id', id).eq('user_id', user.id).execute()
+        print('unpublished flow', len(records.data))
+        return records.data
+    except Exception as e:
+        print(f"Failed to unpublish flow: {e}")
         time.sleep(delay)
         attempt += 1  # Increment and try again after a short delay
   # If the loop completes without returning, all retries have failed
