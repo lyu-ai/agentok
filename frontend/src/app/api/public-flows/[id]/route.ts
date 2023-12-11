@@ -11,7 +11,7 @@ export async function GET(
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: token,
+        Authorization: token ?? '',
       },
     }
   );
@@ -38,7 +38,7 @@ export async function DELETE(
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: token,
+        Authorization: token ?? '',
       },
     }
   );
