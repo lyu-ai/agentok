@@ -6,7 +6,9 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat build-base git
 # Python is required by node-gyp, which is required by supabase package
 RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
-RUN python3 -m ensurepip
+RUN apk add --update --no-cache python3 \
+    && ln -sf python3 /usr/bin/python \
+    && python3 -O - https://bootstrap.pypa.io/get-pip.py | python3
 RUN pip3 install --no-cache --upgrade pip setuptools
 
 # Set the working directory inside the container to /app
