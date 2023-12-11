@@ -65,6 +65,7 @@ If you're interested in contributing to the development of this project or wish 
 1. **Frontend Service:**
 
    - Navigate to the frontend service directory.
+   - Rename `.env.sample` to `.env.local` and set the value of variables correctly.
    - Install the necessary dependencies using the appropriate package manager command (e.g., `pnpm install` or `yarn`).
    - Before starting the service, make sure the `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` environment variables are set accordingly in file `.env.development`.
    - Run the frontend service using the start-up script provided (e.g., `pnpm dev` or `yarn dev`).

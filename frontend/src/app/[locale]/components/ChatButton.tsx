@@ -8,10 +8,10 @@ import { useFlow } from '@/hooks';
 
 const ChatButton = ({ className, flow }: any) => {
   const t = useTranslations('component.ChatButton');
-  const { saveFlow, isSaving } = useFlow(flow.id);
+  const { updateFlow, isUpdating } = useFlow(flow.id);
 
   const onClick = async () => {
-    saveFlow(flow);
+    updateFlow(flow);
   };
 
   return (
@@ -36,7 +36,7 @@ const ChatButton = ({ className, flow }: any) => {
             data-tooltip-id="default-tooltip"
             data-tooltip-content={t('start-chat-tooltip')}
           >
-            {isSaving ? (
+            {isUpdating ? (
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
             ) : (
               <div className="relative">

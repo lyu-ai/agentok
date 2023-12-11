@@ -107,11 +107,15 @@
       "create-flow": "Start Build from Sample Flow",
       "start-chat": "Start Chat"
     },
+    "PublicFlowList": {
+      "unpublish-flow": "Unpublish this flow"
+    },
     "ImagePanel": {
       "preview": "Image Preview",
       "image-url-placeholder": "Please enter the image URL to send with message"
     },
     "ViewToggle": {
+      "back-to-main": "Back to Flow List",
       "back-to-editor": "Back to Flow Editor"
     },
     "CopyButton": {
@@ -148,6 +152,8 @@
       "coming-soon": "Coming Soon ... You can chat in Flow Editor for now."
     },
     "Flow": {
+      "select-flow": "Select a flow to edit",
+      "new-flow": "New Flow",
       "start-from-example": "Build Flow based on a Sample"
     },
     "Gallery": {

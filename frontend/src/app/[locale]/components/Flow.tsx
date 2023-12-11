@@ -14,34 +14,30 @@ import ReactFlow, {
   ConnectionLineType,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import {
-  nodeTypes,
-  initialEdges,
-  initialNodes,
-  getFlowName,
-} from '../utils/flow';
+import { nodeTypes, initialEdges, initialNodes } from '../utils/flow';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import ViewToggle from './ViewToggle';
 import NodeButton from './NodeButton';
 import Python from './Python';
 import Json from './Json';
 import { genId } from '@/utils/id';
-import { IoSkullOutline } from 'react-icons/io5';
 import ChatButton from './ChatButton';
 import { toast } from 'react-toastify';
 import { GoUpload } from 'react-icons/go';
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useFlow } from '@/hooks';
+import { useRouter } from 'next/navigation';
 
 const Flow = ({ flowId }: any) => {
-  const { flow, saveFlow, isSaving, isLoading, isError } = useFlow(flowId);
-  const [mode, setMode] = useState<'flow' | 'json' | 'python'>('flow');
+  const { flow, updateFlow, isUpdating, isLoading, isError } = useFlow(flowId);
+  const [mode, setMode] = useState<'main' | 'flow' | 'json' | 'python'>('flow');
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
   const flowParent = useRef<HTMLDivElement>(null);
   const { fitView, screenToFlowPosition, toObject } = useReactFlow();
   const t = useTranslations('component.Flow');
+  const router = useRouter();
 
   // Suppress error code 002
   // https://github.com/xyflow/xyflow/issues/3243
@@ -60,7 +56,7 @@ const Flow = ({ flowId }: any) => {
     setNodes(flow?.flow?.nodes ?? []);
     setEdges(flow?.flow?.edges ?? []);
     fitView({ maxZoom: 1 });
-  }, [flow?.id]);
+  }, [flow, fitView]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -170,7 +166,7 @@ const Flow = ({ flowId }: any) => {
       toast.error(t('flow-not-found'));
       return;
     }
-    saveFlow({ id: flow.id, name: flow?.name ?? genId(), flow: toObject() });
+    updateFlow({ id: flow.id, name: flow?.name ?? genId(), flow: toObject() });
   };
 
   if (mode === 'python') {
@@ -241,23 +237,18 @@ const Flow = ({ flowId }: any) => {
         />
       </ReactFlow>
       <div className="absolute flex items-center gap-2 right-2 top-2">
+        <ViewToggle mode={'main'} setMode={() => router.push('/flow')} />
+        <ViewToggle mode={'python'} setMode={setMode} />
+        <ViewToggle mode={'json'} setMode={setMode} />
         <button
           className="btn btn-sm btn-square btn-ghost hover:text-primary"
           onClick={onSave}
           data-tooltip-id="default-tooltip"
           data-tooltip-content={t('save-flow')}
         >
-          <GoUpload className={clsx('w-4 h-4', { 'animate-spin': isSaving })} />
-        </button>
-        <ViewToggle mode={'python'} setMode={setMode} />
-        <ViewToggle mode={'json'} setMode={setMode} />
-        <button
-          className="hover:text-orange-500 btn btn-sm btn-square btn-ghost"
-          onClick={onReset}
-          data-tooltip-id="default-tooltip"
-          data-tooltip-content={t('reset-default-tooltip')}
-        >
-          <IoSkullOutline className="w-4 h-4" />
+          <GoUpload
+            className={clsx('w-4 h-4', { 'animate-spin': isUpdating })}
+          />
         </button>
         <ChatButton flow={flow} />
       </div>
