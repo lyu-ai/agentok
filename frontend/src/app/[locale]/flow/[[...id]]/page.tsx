@@ -15,6 +15,12 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { createFlow, isCreating } = useFlows();
   const router = useRouter();
 
+  useEffect(() => {
+    if (params.id?.[0] === 'new') {
+      createFlow().then(flow => flow && router.replace(`/flow/${flow.id}`));
+    }
+  }, []);
+
   if (params.id === undefined) {
     return (
       <div className="flex flex-col w-full h-full p-2">
@@ -29,12 +35,6 @@ const Page = ({ params }: { params: { id: string } }) => {
       </div>
     );
   }
-
-  useEffect(() => {
-    if (params.id?.[0] === 'new') {
-      createFlow().then(flow => flow && router.replace(`/flow/${flow.id}`));
-    }
-  }, []);
 
   if (params.id?.[0] === 'new') {
     return (
