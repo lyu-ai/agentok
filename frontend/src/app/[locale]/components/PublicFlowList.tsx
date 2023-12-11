@@ -8,6 +8,7 @@ import { createClient } from '@/utils/supabase/client';
 import { RiChatSmile2Line } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export const FlowEmpty = () => {
   const t = useTranslations('component.PublicFlowList');
@@ -100,6 +101,13 @@ const FlowBlock = ({ flow }: any) => {
   };
   return (
     <div className="group relative flex flex-col bg-base-content/10 rounded-md p-3 gap-3">
+      <Image
+        src={'https://docs.flowgen.dev/img/api.png'}
+        alt={flow.name}
+        width={300}
+        height={200}
+        className="w-full object-cover"
+      />
       <div className="flex items-center gap-2 group-hover:text-primary">
         <FcOrgUnit className="w-12 h-12" />
         <h2 className="font-bold">{flow.name}</h2>
