@@ -103,7 +103,7 @@ const FlowList = ({ action }: any) => {
     console.warn('Failed to load flow');
   }
   if (isLoading) return <FlowLoading />;
-  if (flows.length === 0) return <FlowEmpty />;
+  if (!flows || flows.length === 0) return <FlowEmpty />;
 
   return (
     <div className="flex flex-col gap-2">

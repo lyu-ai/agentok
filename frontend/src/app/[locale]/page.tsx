@@ -7,7 +7,7 @@ const HomePage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace('/gallery/');
+    router.replace('/flow');
   }, [router]);
 
   return null; // or a loading indicator if preferred

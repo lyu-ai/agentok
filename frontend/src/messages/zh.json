@@ -36,9 +36,9 @@
       "max-consecutive-auto-reply": "最大自动回复次数"
     },
     "Config": {
-      "flow-name": "流程名称",
-      "flow-name-tooltip": "流程名称用于代码生成，因此您需要遵循以下规则：\n* 仅使用字母、数字、连字符和下划线确保流程名称的合法性。\n* 确保流程名称的清晰性，例如使用 **Critics** 而不是 **Node1**。",
-      "flow-description": "流程描述",
+      "flow-name": "工作流名称",
+      "flow-name-tooltip": "工作流名称用于代码生成，因此您需要遵循以下规则：\n* 仅使用字母、数字、连字符和下划线确保工作流名称的合法性。\n* 确保工作流名称的清晰性，例如使用 **Critics** 而不是 **Node1**。",
+      "flow-description": "工作流描述",
       "expand": "展开",
       "collapse": "折叠",
       "filter-dict": "过滤字典",
@@ -58,7 +58,7 @@
       "system-message": "系统消息",
       "system-message-placeholder": "在此处输入系统消息",
       "start-chat": "开始聊天",
-      "start-chat-tooltip": "构建流程后，点击",
+      "start-chat-tooltip": "构建工作流后，点击",
       "options": "更多选项",
       "human-input-mode": "输入模式",
       "input-mode-never": "从不",
@@ -67,7 +67,7 @@
       "max-consecutive-auto-reply": "最大自动回复次数"
     },
     "Note": {
-      "note-placeholder": "开始编写有关当前代理流程的文档",
+      "note-placeholder": "开始编写有关当前代理工作流的文档",
       "note-blank": "(备注为空)"
     },
     "Toolbar": {
@@ -83,13 +83,13 @@
       "reload-history": "重新加载聊天记录",
       "clean-history": "清除聊天记录",
       "share": "分享此聊天",
-      "go-to-editor": "转到流程编辑器",
+      "go-to-editor": "转到工作流编辑器",
       "message-loading": "正在加载聊天记录..."
     },
     "ChatButton": {
       "start-chat": "开始聊天",
-      "start-chat-tooltip": "保存流程并开始聊天",
-      "flows-tooltip": "查看现有流程"
+      "start-chat-tooltip": "保存工作流并开始聊天",
+      "flows-tooltip": "查看现有工作流"
     },
     "ChatInput": {
       "enter-message": "输入消息开始聊天..."
@@ -97,19 +97,23 @@
     "Flow": {
       "reset-default-tooltip": "重置为默认值",
       "save-flow": "上传到云端",
-      "save-success": "成功保存流程",
-      "flow-load-failed": "加载流程失败"
+      "save-success": "成功保存工作流",
+      "flow-load-failed": "加载工作流失败"
     },
     "FlowList": {
-      "delete-flow": "删除流程 ",
-      "default-description": "此流程有 {node_count} 个节点和 {edge_count} 条边。"
+      "delete-flow": "删除工作流 ",
+      "default-description": "此工作流有 {node_count} 个节点和 {edge_count} 条边。"
+    },
+    "PublicFlowList": {
+      "unpublish-flow": "取消该工作流的发布"
     },
     "ImagePanel": {
       "preview": "图片预览",
       "image-url-placeholder": "请输入要发送的图片 URL"
     },
     "ViewToggle": {
-      "back-to-editor": "返回流程编辑器"
+      "back-to-main": "回到工作流首页",
+      "back-to-editor": "回到工作流编辑器"
     },
     "CopyButton": {
       "copy": "拷贝",
@@ -141,20 +145,17 @@
       "generate-fail": "生成 Python 代码失败"
     },
     "Chat": {
-      "select-flow": "选择一个流程开始对话",
+      "select-flow": "选择一个工作流开始对话",
       "coming-soon": "还在开发中... 当前可以在编辑器中体验对话。"
     },
     "Flow": {
+      "select-flow": "选择一个工作流进行编辑",
+      "new-flow": "新建工作流",
       "start-from-example": "从一个示例开始构建"
     },
     "Gallery": {
-      "warning-title": "警告",
-      "warning-content": "这里的流程对所有用户可见且可编辑。请勿上传敏感信息。",
-      "select-flow": "选择一个流程进行编辑或者开始对话",
-      "edit-flow": "编辑流程 ",
-      "flow-empty": "这里还没有流程。您可以从示例流程开始。",
-      "create-flow": "从 Flow 示例开始构建",
-      "start-chat": "开始对话"
+      "select-flow": "选择一个工作流进行编辑或者开始对话",
+      "refresh": "刷新"
     }
   },
   "meta": {

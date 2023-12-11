@@ -7,10 +7,11 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import sys
 import os
+import tempfile
 from dotenv import load_dotenv
 
 from tools.codegen import flow2py
-from tools.supabase import add_message, delete_flow, get_flow, get_flows, upsert_flow
+from tools.supabase import add_message, delete_flow, get_flow, get_flows, get_public_flows, upsert_flow
 load_dotenv()  # This will load all environment variables from .env
 
 from tools.parser import parse_output
@@ -124,31 +125,42 @@ def api_send_message():
       # Return an error response
       return jsonify({"error": str(e)}), 400
 
-data_dir = './data/'
-generated_dir = './generated/'
+temp_dir = tempfile.mkdtemp()
+data_dir = os.path.join(temp_dir, 'data')
+generated_dir = os.path.join(temp_dir, 'generated')
+
+os.makedirs(data_dir, exist_ok=True)
+os.makedirs(generated_dir, exist_ok=True)
 
 @app.route('/api/flows', methods=['GET'])
 def api_get_flows():
-    flows = get_flows()
-    # for filename in os.listdir(data_dir):
-    #     if filename.endswith('.json'):
-    #         file_path = os.path.join(data_dir, filename)
-    #         # Extract the file name without the '.json' extension for the id
-    #         flow_id = os.path.splitext(filename)[0]
-    #         with open(file_path, 'r') as file:
-    #             flow_content = json.load(file)
-    #             flows.append({'id': flow_id, 'flow': flow_content})
+    if (request.headers.get('Authorization') is None):
+      return jsonify({"error": "Unauthorized"}), 401
+    token = request.headers.get('Authorization').split(' ')[1]
+    if not token:
+      return jsonify({"error": "Unauthorized"}), 401
+    flows = get_flows(token)
+    return jsonify(flows)
+
+@app.route('/api/public-flows', methods=['GET'])
+def api_get_public_flows():
+    flows = get_public_flows()
     return jsonify(flows)
 
 @app.route('/api/flows', methods=['POST'])
 def api_upload_flow():
     data = request.json
+    if (request.headers.get('Authorization') is None):
+      return jsonify({"error": "Unauthorized"}), 401
+    token = request.headers.get('Authorization').split(' ')[1]
+    if not token:
+      return jsonify({"error": "Unauthorized"}), 401
     try:
       flow_name = data.get('name')
       flow = data.get('flow')
       print('uploading flow', flow)
 
-      upsert_flow(data)
+      upserted_flow = upsert_flow(token, data)
 
       if not os.path.exists(data_dir):
           os.makedirs(data_dir)
@@ -165,7 +177,7 @@ def api_upload_flow():
         generated_code = flow2py(flow)
         file.write(generated_code)
 
-      return jsonify({"message": "Flow uploaded successfully"}), 200
+      return jsonify(upserted_flow), 200
     except Exception as e:
       # Log the error here
       print("Failed upload flow: ", e)
@@ -176,7 +188,12 @@ def api_upload_flow():
 def api_get_flow(id):
     try:
         print(f"getting flow {id}")
-        flow = get_flow(id)
+        if (request.headers.get('Authorization') is None):
+          return jsonify({"error": "Unauthorized (no header)"}), 401
+        token = request.headers.get('Authorization').split(' ')[1]
+        if not token:
+          return jsonify({"error": "Unauthorized (invalid header)"}), 401
+        flow = get_flow(token, id)
         if flow:
           return jsonify(flow), 200
         else:
@@ -236,4 +253,4 @@ def api_codegen():
 if __name__ == '__main__':
     # This disables the Flask reloader so updating ./data and ./generated will not restart the server
     # The side effect is that we need to manually restart the server when we update the code
-    app.run(debug=True, use_reloader=False, host='localhost', port=5004)
+    app.run(debug=True, use_reloader=True, host='localhost', port=5004)
