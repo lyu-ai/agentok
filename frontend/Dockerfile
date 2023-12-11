@@ -6,16 +6,20 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat build-base git
 # Python is required by node-gyp, which is required by supabase package
 RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
-RUN apk add --update --no-cache python3 \
-    && ln -sf python3 /usr/bin/python \
-    && python3 -O - https://bootstrap.pypa.io/get-pip.py | python3
-RUN pip3 install --no-cache --upgrade pip setuptools
+# Add this line to install pip using apk instead of ensurepip
+RUN apk add py3-pip
+RUN apk add --no-cache py3-setuptools
 
 # Set the working directory inside the container to /app
 WORKDIR /app
 
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN yarn global add pnpm && pnpm i --frozen-lockfile;
+RUN \
+  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  elif [ -f package-lock.json ]; then npm ci; \
+  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -23,7 +27,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN pnpm build
+RUN yarn build
 
 # Production image, copy all the files and run next
 FROM base AS runner
