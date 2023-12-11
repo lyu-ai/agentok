@@ -157,9 +157,8 @@
       "start-from-example": "Build Flow based on a Sample"
     },
     "Gallery": {
-      "warning-title": "Warning",
-      "warning-content": "The flows here are visible and editable to all users. Please do not upload sensitive information.",
-      "select-flow": "Select a flow to edit or Start Chat"
+      "select-flow": "Select a flow to edit or Start Chat",
+      "refresh": "Refresh"
     }
   },
   "meta": {

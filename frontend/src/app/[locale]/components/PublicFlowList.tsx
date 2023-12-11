@@ -27,7 +27,7 @@ export const FlowEmpty = () => {
 export const FlowLoading = () => {
   return (
     <div className="flex flex-col w-full h-full p-2">
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-2">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-2">
         {[...Array(5)].map((_, i) => (
           <div
             key={i}
@@ -46,7 +46,7 @@ export const FlowLoading = () => {
   );
 };
 
-const FlowBlock = ({ action, flow }: any) => {
+const FlowBlock = ({ flow }: any) => {
   const [isOwned, setIsOwned] = useState(false);
   const supabase = createClient();
   const t = useTranslations('component.PublicFlowList');
@@ -158,7 +158,7 @@ const FlowBlock = ({ action, flow }: any) => {
 
 const PublicFlowList = ({ action }: any) => {
   const { flows, isLoading, isError } = usePublicFlows();
-  const t = useTranslations('component.FlowList');
+  const t = useTranslations('component.PublicFlowList');
 
   if (isError) {
     console.warn('Failed to load flow');
@@ -170,7 +170,7 @@ const PublicFlowList = ({ action }: any) => {
     <div className="flex flex-col gap-2">
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-2">
         {flows.map((flow: any) => (
-          <FlowBlock key={flow.id} action={action} flow={flow} />
+          <FlowBlock key={flow.id} flow={flow} />
         ))}
       </div>
     </div>

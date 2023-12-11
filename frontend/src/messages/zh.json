@@ -154,13 +154,8 @@
       "start-from-example": "从一个示例开始构建"
     },
     "Gallery": {
-      "warning-title": "警告",
-      "warning-content": "这里的工作流对所有用户可见且可编辑。请勿上传敏感信息。",
       "select-flow": "选择一个工作流进行编辑或者开始对话",
-      "edit-flow": "编辑工作流 ",
-      "flow-empty": "这里还没有工作流。您可以从示例工作流开始。",
-      "create-flow": "从 Flow 示例开始构建",
-      "start-chat": "开始对话"
+      "refresh": "刷新"
     }
   },
   "meta": {
