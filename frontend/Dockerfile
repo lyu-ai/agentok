@@ -15,12 +15,7 @@ RUN pip3 install --no-cache --upgrade pip setuptools
 WORKDIR /app
 
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile && yarn add sharp; \
-  elif [ -f package-lock.json ]; then npm ci && npm install sharp; \
-  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile && pnpm add sharp; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+RUN yarn global add pnpm && pnpm i --frozen-lockfile;
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -28,7 +23,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN yarn build
+RUN pnpm build
 
 # Production image, copy all the files and run next
 FROM base AS runner
