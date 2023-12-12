@@ -178,3 +178,57 @@ def delete_flow(id, max_retries=3, delay=1):
         attempt += 1  # Increment and try again after a short delay
   # If the loop completes without returning, all retries have failed
   raise Exception("All attempts to delete flow have failed.")
+
+def upsert_chat(token, chat, max_retries=3, delay=1):
+    attempt = 0
+    data = supabase.auth.get_user(token)
+    if not data:
+      raise Exception("User not authenticated")
+    user = data.user
+    while attempt < max_retries:
+        try:
+            chat_id = chat.get('id', None)
+            if not chat_id: # New chat does not contain id
+              chat['user_id'] = user.id
+              response = supabase.table('chats').insert(chat).execute()
+              if len(response.data) == 0:
+                  raise ValueError("No rows inserted; potential write failure.")
+              return response.data[0]
+            else: # Try to update existing record
+              response = supabase.table('chats').select('id').eq('id', chat_id).eq('user_id', user.id).execute()
+              if len(response.data) > 0:
+                response = supabase.table('chats').update(chat).eq('id', chat_id).execute()
+                records = response.data if hasattr(response, "data") and response.data is not None else []
+                error = response.error if hasattr(response, "error") else None
+
+                if error:  # Assuming a successful insert will have a count > 0
+                    raise ValueError(f"Failed to insert chat: {error}")
+                return records[0]
+              else:
+                raise Exception(f"Chat not found ${chat_id} for user ${user.id}")
+
+        except Exception as e:
+            print(f"Attempt {attempt + 1} failed with error: {e}")
+            time.sleep(delay)
+            attempt += 1  # Increment and try again after a short delay
+
+    # If the loop completes without returning, all retries have failed
+    raise Exception("All attempts to add chat have failed.")
+
+def get_chats(token, source_type=None, max_retries=3, delay=1):
+  attempt = 0
+  data = supabase.auth.get_user(token)
+  if not data:
+    raise Exception("User not authenticated")
+  user = data.user
+  while attempt < max_retries:
+    try:
+        records = supabase.table('chats').select('*').eq('user_id', user.id).execute()
+        print('get_chats', len(records.data))
+        return records.data
+    except Exception as e:
+        print(f"Failed to get chats: {e}")
+        time.sleep(delay)
+        attempt += 1  # Increment and try again after a short delay
+  # If the loop completes without returning, all retries have failed
+  raise Exception("All attempts to get chats have failed.")

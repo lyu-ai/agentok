@@ -2,7 +2,6 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { BsInboxes } from 'react-icons/bs';
 import { GoPencil, GoShareAndroid, GoTrash } from 'react-icons/go';
-import { GrFlows } from 'react-icons/gr';
 import { useFlows, useTemplates } from '@/hooks';
 import clsx from 'clsx';
 import { useState } from 'react';
@@ -28,7 +27,7 @@ export const FlowEmpty = () => {
 
 export const FlowLoading = () => {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap justify-center gap-2">
       {[...Array(3)].map((_, i) => (
         <div
           key={i}
@@ -144,22 +143,20 @@ const FlowBlock = ({ action: Action, flow }: any) => {
   return (
     <div
       key={flow.id}
-      className="card group relative flex flex-col w-80 bg-base-content/10 gap-3 border border-base-content/10 hover:border-primary"
+      className="card group relative flex flex-col w-80 bg-base-content/10 hover:bg-primary/10 gap-3 border border-base-content/10 hover:border-primary overflow-hidden"
     >
-      <div className="card-title flex items-center bg-primary/5 group-hover:bg-primary/10 rounded-t-md gap-2 group-hover:text-primary p-4">
-        <RiRobot2Line className="w-6 h-6" />
-        <h2 className="font-bold">{flow.name}</h2>
+      <div className="card-title flex items-center bg-primary/5 group-hover:bg-primary/30 rounded-t-xl gap-4 group-hover:text-primary p-4">
+        <RiRobot2Line className="w-8 h-8" />
+        <div className="flex flex-col gap-2">
+          <h2 className="text-lg font-bold">{flow.name}</h2>
+          <div className="text-xs text-base-content/60">
+            {new Date(flow.created_at).toLocaleString()}
+          </div>
+        </div>
       </div>
       <div className="card-body p-4">
-        <div className="flex flex-col h-full justify-between gap-2">
-          <div className="flex items-center justify-between bottom-2">
-            <div className="text-xs text-base-content/60">
-              {new Date(flow.created_at).toLocaleString()}
-            </div>
-          </div>
-          <div className="h-16 text-left text-sm break-all line-clamp-3">
-            {flowDescription}
-          </div>
+        <div className="h-16 text-left text-sm break-all line-clamp-3">
+          {flowDescription}
         </div>
         <div className="flex justify-end text-xs gap-2 text-base-content/60">
           {Action ? (

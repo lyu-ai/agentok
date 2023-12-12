@@ -3,7 +3,7 @@ import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 
 const FLOWGEN_SERVER_URL =
-  process.env.FLOWGEN_SERVER_URL || 'https://flowgen.lyu.ai';
+  process.env.FLOWGEN_SERVER_URL || 'https://localhost:5004';
 
 export async function GET(
   request: NextRequest,

@@ -1,12 +1,13 @@
 import { useTranslations } from 'next-intl';
 import { BsInboxes } from 'react-icons/bs';
 import { GoRepoForked, GoTrash } from 'react-icons/go';
-import { useFlows, useTemplates } from '@/hooks';
+import { useChats, useFlows, useTemplates } from '@/hooks';
 import clsx from 'clsx';
 import { createClient } from '@/utils/supabase/client';
 import { RiChatSmile2Line } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 export const TemplateEmpty = () => {
   const t = useTranslations('component.TemplateList');
@@ -52,6 +53,7 @@ const TemplateBlock = ({ template }: any) => {
   const t = useTranslations('component.TemplateList');
   const { deleteTemplate, isDeleting } = useTemplates();
   const { forkFlow, isForking } = useFlows();
+  const { createChat, isCreating } = useChats();
   const router = useRouter();
   const config = template.flow?.nodes?.find(
     (node: any) => node.type === 'config'
@@ -97,9 +99,16 @@ const TemplateBlock = ({ template }: any) => {
     }
   };
   const onChat = (e: any) => {
-    // TODO: Create new chat session and redirect to chat page
-    e.stopPropagation();
-    e.preventDefault();
+    createChat(template.id, 'template')
+      .then(chat => {
+        if (chat) {
+          router.push(`/chat/${chat.id}`);
+        }
+      })
+      .catch(e => {
+        console.log(e);
+        toast.error(`Failed to create chat: ${e}`);
+      });
   };
   const randomImage = ['api', 'knowledge', 'rag', 'flow'][
     Number(template.id) % 4
@@ -131,7 +140,11 @@ const TemplateBlock = ({ template }: any) => {
             data-tooltip-id="default-tooltip"
             data-tooltip-content={t('start-chat-tooltip')}
           >
-            <RiChatSmile2Line className={clsx('w-3 h-3')} />
+            {isCreating ? (
+              <div className="loading loading-xs" />
+            ) : (
+              <RiChatSmile2Line className={clsx('w-3 h-3')} />
+            )}
             Chat
           </button>
           <button

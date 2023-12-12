@@ -11,7 +11,7 @@ import tempfile
 from dotenv import load_dotenv
 
 from tools.codegen import flow2py
-from tools.supabase import add_message, delete_flow, get_flow, get_flows, get_templates, publish_template, unpublish_template, upsert_flow
+from tools.supabase import add_message, delete_flow, get_chats, get_flow, get_flows, get_templates, publish_template, unpublish_template, upsert_chat, upsert_flow
 load_dotenv()  # This will load all environment variables from .env
 
 from tools.parser import parse_output
@@ -21,18 +21,6 @@ sys.path.append(os.path.abspath('..'))
 
 app = Flask(__name__)
 CORS(app)
-
-
-# This is the endpoint that will be called by the chatbot
-# Sample Request:
-# {
-#   "message": "Hello, World!",
-#   "flow": "sample1"
-# }
-@app.route('/api/chats', methods=['POST'])
-def api_add_chat():
-    data = request.json
-    print(data)
 
 from mock.messages import mock_data
 
@@ -259,6 +247,31 @@ def api_delete_flow(id):
             "error": "An unexpected error occurred.",
             "error_id": str(error_id)
         }), 500
+
+@app.route('/api/chats', methods=['GET'])
+def api_get_chats():
+    if (request.headers.get('Authorization') is None):
+      return jsonify({"error": "Unauthorized"}), 401
+    token = request.headers.get('Authorization').split(' ')[1]
+    if not token:
+      return jsonify({"error": "Unauthorized"}), 401
+
+    # Get the optional source_type query parameter
+    source_type = request.args.get('source_type', None)  # Default to None if not provided
+
+    chats = get_chats(token, source_type=source_type)
+    return jsonify(chats)
+
+@app.route('/api/chats', methods=['POST'])
+def api_add_chat():
+    if (request.headers.get('Authorization') is None):
+      return jsonify({"error": "Unauthorized"}), 401
+    token = request.headers.get('Authorization').split(' ')[1]
+    if not token:
+      return jsonify({"error": "Unauthorized"}), 401
+    data = request.json
+    chat = upsert_chat(token, data)
+    return jsonify(chat)
 
 @app.route('/api/codegen', methods=['POST'])
 def api_codegen():

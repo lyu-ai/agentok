@@ -84,12 +84,21 @@
       "clean-history": "Clean chat history",
       "share": "Share this chat",
       "go-to-editor": "Go to Flow Editor",
-      "message-loading": "Loading chat history ..."
+      "message-loading": "Loading chat history ...",
+      "message-empty": "No chat history yet. Start chat now!"
+    },
+    "ChatList": {
+      "select-chat": "Select a chat to start"
     },
     "ChatButton": {
       "start-chat": "Start Chat",
       "start-chat-tooltip": "Save flow and Start Chat",
       "flows-tooltip": "View existing flows"
+    },
+    "ChatListButton": {
+      "new-chat": "New Chat",
+      "new-chat-tooltip": "Create a new chat",
+      "from-template-tooltip": "Create a new chat from template"
     },
     "ChatInput": {
       "enter-message": "Enter message to start chat ..."
@@ -164,7 +173,10 @@
     },
     "Chat": {
       "chat-tagline": "Start Chat with FlowGen",
-      "select-flow": "Select a flow to start chat"
+      "start-chat": "Start Chat",
+      "chat-sessions": "Sessions",
+      "default-chat-title": "Chat with {source_name}",
+      "select-chat": "Select a session to continue, or start a new one from Flow or Template."
     },
     "Flow": {
       "flow-tagline": "Build Multi-Agent Apps with FlowGen",

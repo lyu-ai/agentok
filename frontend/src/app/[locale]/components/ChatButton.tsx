@@ -4,11 +4,18 @@ import clsx from 'clsx';
 import Chat from './Chat';
 import { RiChatSmile2Fill, RiChatSmile2Line, RiAppsLine } from 'react-icons/ri';
 import { useTranslations } from 'next-intl';
-import { useFlow } from '@/hooks';
+import { useChats, useFlow } from '@/hooks';
+import { Chat as ChatType } from '@/store/chat';
+import { useEffect, useState } from 'react';
 
 const ChatButton = ({ className, flow }: any) => {
+  const [chat, setChat] = useState<ChatType | undefined>();
   const t = useTranslations('component.ChatButton');
   const { updateFlow, isUpdating } = useFlow(flow.id);
+  const { createChat, isCreating } = useChats();
+  useEffect(() => {
+    createChat(flow.id, 'flow').then(chat => setChat(chat));
+  }, []);
 
   const onClick = async () => {
     updateFlow(flow);
@@ -48,7 +55,11 @@ const ChatButton = ({ className, flow }: any) => {
           </div>
         </Popover.Button>
         <Popover.Panel className="origin-top-right shadow-box-lg shadow-gray-600 rounded-xl backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 w-[480px] h-[80vh] max-h-[80vh]">
-          <Chat flow={flow} />
+          {isCreating || !chat ? (
+            <div className="loading loading-sm" />
+          ) : (
+            <Chat chatId={chat.id} />
+          )}
         </Popover.Panel>
       </Float>
     </Popover>
