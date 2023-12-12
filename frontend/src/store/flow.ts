@@ -6,27 +6,13 @@ export interface Flow {
   flow: any; // Complicated JSON object
 }
 
-export interface PublicFlow {
-  id: number;
-  name: string;
-  description: string;
-  flow: any; // Complicated JSON object
-  owner: string;
-  tags: string;
-}
-
 interface FlowState {
   flows: Flow[];
-  publicFlows: PublicFlow[];
   // User flows
   setFlows: (flows: Flow[]) => void;
   updateFlow: (id: string, flow: Flow) => void;
   deleteFlow: (id: string) => void;
   getFlowById: (id: string) => Flow | undefined;
-  // Public flows (do not support update operation)
-  setTemplates: (flows: PublicFlow[]) => void;
-  deleteTemplate: (id: string) => void;
-  getPublicFlowById: (id: string) => PublicFlow | undefined;
 }
 
 const useFlowStore = create<FlowState>((set, get) => ({
@@ -61,25 +47,6 @@ const useFlowStore = create<FlowState>((set, get) => ({
     return isNaN(numericId)
       ? undefined
       : get().flows.find(flow => flow.id === numericId);
-  },
-  // Public flows
-  publicFlows: [],
-  setTemplates: publicFlows => set({ publicFlows }),
-  deleteTemplate: id =>
-    set(state => {
-      const numericId = Number(id);
-      console.log('Deleting public flow with id:', numericId);
-      return {
-        flows: isNaN(numericId)
-          ? state.publicFlows
-          : state.publicFlows.filter(flow => flow.id !== numericId),
-      };
-    }),
-  getPublicFlowById: id => {
-    const numericId = Number(id);
-    return isNaN(numericId)
-      ? undefined
-      : get().publicFlows.find(flow => flow.id === numericId);
   },
 }));
 

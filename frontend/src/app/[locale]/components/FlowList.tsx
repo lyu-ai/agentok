@@ -1,10 +1,15 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { BsInboxes } from 'react-icons/bs';
-import { GoTrash } from 'react-icons/go';
+import { GoPencil, GoShareAndroid, GoTrash } from 'react-icons/go';
 import { GrFlows } from 'react-icons/gr';
-import { useFlow, useFlows } from '@/hooks';
+import { useFlows, useTemplates } from '@/hooks';
 import clsx from 'clsx';
+import { useState } from 'react';
+import PopupDialog from '@/components/PopupDialog';
+import { toast } from 'react-toastify';
+import { Template } from '@/store/template';
+import { RiRobot2Line } from 'react-icons/ri';
 
 export const FlowEmpty = () => {
   const t = useTranslations('component.FlowList');
@@ -23,29 +28,103 @@ export const FlowEmpty = () => {
 
 export const FlowLoading = () => {
   return (
-    <div className="flex flex-col w-full h-full p-2">
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-2">
-        {[...Array(5)].map((_, i) => (
-          <div
-            key={i}
-            className="group relative flex flex-col bg-base-content/10 rounded-md p-3 gap-3"
-          >
-            <div className="flex items-center gap-2">
-              <div className="skeleton w-6 h-6 rounded-full shrink-0" />
-              <div className="skeleton h-4 w-1/2" />
-            </div>
-            <div className="skeleton h-3 w-full" />
-            <div className="skeleton h-3 w-1/2" />
+    <div className="flex flex-wrap gap-2">
+      {[...Array(3)].map((_, i) => (
+        <div
+          key={i}
+          className="group relative  w-80 h-48 flex flex-col bg-base-content/10 rounded-md p-3 gap-3"
+        >
+          <div className="flex items-center gap-2">
+            <div className="skeleton w-6 h-6 rounded-full shrink-0" />
+            <div className="skeleton h-4 w-1/2" />
           </div>
-        ))}
-      </div>
+          <div className="skeleton h-3 w-full" />
+          <div className="skeleton h-3 w-1/2" />
+        </div>
+      ))}
     </div>
+  );
+};
+
+const PublishTemplateDialog = ({ className, flow, ...props }: any) => {
+  const t = useTranslations('component.FlowList');
+  const { publishTemplate, isPublishing } = useTemplates();
+  const [name, setName] = useState(flow.name);
+  const getInitialDescription = (flow: any) => {
+    const config = flow.flow.nodes.find((node: any) => node.type === 'config');
+    let flowDescription = '';
+    if (config?.data?.flow_description) {
+      flowDescription = config.data.flow_description;
+    } else {
+      flowDescription = t('default-description', {
+        node_count: flow.flow.nodes.length,
+        edge_count: flow.flow?.edges?.length ?? 0,
+      });
+    }
+    return flowDescription;
+  };
+  const [description, setDescription] = useState(getInitialDescription(flow));
+
+  const onPublish = async () => {
+    const result = await publishTemplate({
+      name,
+      description,
+      flow,
+    } as Template);
+    if (result) {
+      toast.success(t('publish-flow-success', { flow_name: name }));
+    } else {
+      toast.error(t('publish-flow-failed', { flow_name: name }));
+    }
+    props.onClose();
+  };
+
+  return (
+    <PopupDialog
+      title={
+        <div className="flex items-center gap-2">
+          <GoShareAndroid className="w-7 h-7" />
+          <span className="text-md font-bold">{t('publish-flow-title')}</span>
+        </div>
+      }
+      className={clsx(
+        'flex flex-col h-full w-96 bg-gray-800/80 backgrop-blur-md border border-gray-700 shadow-box-lg shadow-gray-700',
+        className
+      )}
+      classNameTitle="border-b border-base-content/10"
+      classNameBody="flex flex-grow h-full p-4"
+      {...props}
+    >
+      <div className="flex flex-col gap-2 flex-grow h-full overflow-y-auto">
+        <span className="py-4">{t('publish-flow-tip')}</span>
+        <span className="text-base-content/50">{t('publish-flow-name')}</span>
+        <input
+          value={name}
+          onChange={e => setName(e.target.value)}
+          className="input input-bordered"
+        />
+        <span className="text-base-content/50">
+          {t('publish-flow-description')}
+        </span>
+        <textarea
+          value={description}
+          rows={3}
+          onChange={e => setDescription(e.target.value)}
+          className="textarea textarea-bordered"
+        />
+        <button className="btn btn-primary" onClick={onPublish}>
+          {isPublishing && <div className="loading loading-sm" />}
+          {t('publish-flow')}
+        </button>
+      </div>
+    </PopupDialog>
   );
 };
 
 const FlowBlock = ({ action, flow }: any) => {
   const t = useTranslations('component.FlowList');
   const { deleteFlow, isDeleting } = useFlows();
+  const [showPublishModal, setShowPublishModal] = useState(false);
   const config = flow.flow.nodes.find((node: any) => node.type === 'config');
   let flowDescription = '';
   if (config?.data?.flow_description) {
@@ -56,42 +135,69 @@ const FlowBlock = ({ action, flow }: any) => {
       edge_count: flow.flow?.edges?.length ?? 0,
     });
   }
-  const onDelete = (e: any) => {
-    deleteFlow(flow.id);
+  const onDelete = async (e: any) => {
     e.stopPropagation();
     e.preventDefault();
+    await deleteFlow(flow.id);
   };
+
   return (
-    <Link
+    <div
       key={flow.id}
-      className="group relative flex flex-col pb-6 bg-base-content/10 rounded-md p-3 gap-3 hover:bg-base-content/20 cursor-pointer"
-      href={`/${action ?? 'flow'}/${flow.id}`}
+      className="card group relative flex flex-col w-80 bg-base-content/10 gap-3 border border-base-content/10 hover:border-primary"
     >
-      <div className="flex items-center gap-2 group-hover:text-primary">
-        <GrFlows className="w-6 h-6" />
+      <div className="card-title flex items-center bg-primary/5 group-hover:bg-primary/10 rounded-t-md gap-2 group-hover:text-primary p-4">
+        <RiRobot2Line className="w-6 h-6" />
         <h2 className="font-bold">{flow.name}</h2>
       </div>
-      <div className="flex flex-col h-full justify-between gap-2">
-        <div className="text-left text-sm">{flowDescription}</div>
-        <div className="flex items-center justify-between bottom-2">
-          <div className="text-xs text-base-content/60">
-            {new Date(flow.created_at).toLocaleString()}
+      <div className="card-body p-4">
+        <div className="flex flex-col h-full justify-between gap-2">
+          <div className="flex items-center justify-between bottom-2">
+            <div className="text-xs text-base-content/60">
+              {new Date(flow.created_at).toLocaleString()}
+            </div>
+          </div>
+          <div className="h-16 text-left text-sm break-all line-clamp-3">
+            {flowDescription}
           </div>
         </div>
-      </div>
-      <div className="hidden group-hover:block absolute bottom-1 right-1 text-xs text-base-content/60">
-        <div
-          className="btn btn-sm btn-ghost btn-square text-red-500/60 hover:text-red-500"
-          data-tooltip-id="default-tooltip"
-          data-tooltip-content={t('delete-flow') + flow.name}
-          onClick={onDelete}
-        >
-          <GoTrash
-            className={clsx('w-4 h-4', { 'loading loading-sm': isDeleting })}
-          />
+        <div className="flex justify-end text-xs gap-2 text-base-content/60">
+          <Link
+            className="btn btn-sm btn-square btn-ghost group-hover:text-primary"
+            data-tooltip-id="default-tooltip"
+            data-tooltip-content={t('edit-flow')}
+            href={`/flow/${flow.id}`}
+          >
+            <GoPencil className={clsx('w-4 h-4')} />
+          </Link>
+          <button
+            className="btn btn-sm btn-square btn-ghost group-hover:text-primary"
+            data-tooltip-id="default-tooltip"
+            data-tooltip-content={t('publish-flow') + flow.name}
+            onClick={() => setShowPublishModal(!showPublishModal)}
+          >
+            <GoShareAndroid className={clsx('w-4 h-4')} />
+          </button>
+          <button
+            className="btn btn-sm btn-square btn-ghost group-hover:text-red-500"
+            data-tooltip-id="default-tooltip"
+            data-tooltip-content={t('delete-flow') + flow.name}
+            onClick={onDelete}
+          >
+            <GoTrash
+              className={clsx('w-4 h-4', { 'loading loading-sm': isDeleting })}
+            />
+          </button>
         </div>
       </div>
-    </Link>
+      {showPublishModal && (
+        <PublishTemplateDialog
+          show={showPublishModal}
+          onClose={() => setShowPublishModal(false)}
+          flow={flow}
+        />
+      )}
+    </div>
   );
 };
 
@@ -106,12 +212,10 @@ const FlowList = ({ action }: any) => {
   if (!flows || flows.length === 0) return <FlowEmpty />;
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-2">
-        {flows.map((flow: any) => (
-          <FlowBlock key={flow.id} action={action} flow={flow} />
-        ))}
-      </div>
+    <div className="flex flex-wrap justify-center gap-4 p-2">
+      {flows.map((flow: any) => (
+        <FlowBlock key={flow.id} action={action} flow={flow} />
+      ))}
     </div>
   );
 };

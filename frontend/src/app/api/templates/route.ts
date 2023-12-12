@@ -19,3 +19,22 @@ export async function GET(request: NextRequest) {
   const data = await res.json();
   return new Response(JSON.stringify(data));
 }
+
+export async function POST(request: NextRequest) {
+  const token = request.headers.get('Authorization');
+  const template = await request.json();
+  const res = await fetch(`${FLOWGEN_SERVER_URL}/api/templates`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token ?? '',
+    },
+    body: JSON.stringify(template),
+  });
+  if (!res.ok) {
+    console.error(`Failed POST /templates:`, res.status, res.statusText);
+    return new Response(res.statusText, { status: res.status });
+  }
+  const data = await res.json();
+  return new Response(JSON.stringify(data));
+}

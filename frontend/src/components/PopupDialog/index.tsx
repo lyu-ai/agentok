@@ -41,7 +41,7 @@ const PopupDialog = ({
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
             className={clsx(
-              'relative z-10 bg-base-100 text-base-content dark:bg-gray-800/80 rounded-md w-full',
+              'relative z-10 bg-base-100 text-base-content dark:bg-gray-800/80 rounded-md',
               className
             )}
           >

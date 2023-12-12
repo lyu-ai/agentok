@@ -14,54 +14,57 @@ export const TemplateEmpty = () => {
     <div className="flex items-center justify-center w-full h-full">
       <div className="flex flex-col gap-2 items-center text-base-content/60">
         <BsInboxes className="w-12 h-12" />
-        <div className="mt-2 text-sm">{t('flow-empty')}</div>
+        <div className="mt-2 text-sm">{t('template-empty')}</div>
         {/* <div className="btn btn-sm btn-primary" onClick={onReset}>
-          {t('new-flow')}
+          {t('new-template')}
         </div> */}
       </div>
     </div>
   );
 };
 
-export const FlowLoading = () => {
+export const TemplateLoading = () => {
   return (
-    <div className="flex flex-col w-full h-full p-2">
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-2">
-        {[...Array(5)].map((_, i) => (
-          <div
-            key={i}
-            className="group relative flex flex-col bg-base-content/10 rounded-md p-3 gap-3"
-          >
-            <div className="flex items-center gap-2">
-              <div className="skeleton w-6 h-6 rounded-full shrink-0" />
+    <div className="flex w-full flex-wrap justify-center gap-4">
+      {[...Array(3)].map((_, i) => (
+        <div
+          key={i}
+          className="card w-80 h-96 flex flex-col bg-base-content/10 overflow-hidden gap-3"
+        >
+          <div className="skeleton w-full h-48 rounded-none shrink-0" />
+          <div className="card-body">
+            <div className="flex items-center gap-2 p-3 ">
+              <div className="skeleton w-6 h-6 rounded-full shrink-0 " />
               <div className="skeleton h-4 w-1/2" />
             </div>
-            <div className="skeleton h-3 w-full" />
-            <div className="skeleton h-3 w-1/2" />
+            <div className="skeleton h-3 w-full p-3 " />
+            <div className="skeleton h-3 w-1/2 p-3 " />
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 };
 
-const TemplateBlock = ({ flow }: any) => {
+const TemplateBlock = ({ template }: any) => {
   const [isOwned, setIsOwned] = useState(false);
   const supabase = createClient();
   const t = useTranslations('component.TemplateList');
   const { deleteTemplate, isDeleting } = useTemplates();
   const { forkFlow, isForking } = useFlows();
   const router = useRouter();
-  const config = flow.flow.nodes.find((node: any) => node.type === 'config');
-  let flowDescription = '';
-  if (flow.description) {
-    flowDescription = flow.description;
+  const config = template.flow?.nodes?.find(
+    (node: any) => node.type === 'config'
+  );
+  let templateDescription = '';
+  if (template.description) {
+    templateDescription = template.description;
   } else if (config?.data?.flow_description) {
-    flowDescription = config.data.flow_description;
+    templateDescription = config.data.flow_description;
   } else {
-    flowDescription = t('default-description', {
-      node_count: flow.flow.nodes.length,
-      edge_count: flow.flow?.edges?.length ?? 0,
+    templateDescription = t('default-description', {
+      node_count: template.flow.nodes.length,
+      edge_count: template.flow?.edges?.length ?? 0,
     });
   }
   useEffect(() => {
@@ -72,7 +75,8 @@ const TemplateBlock = ({ flow }: any) => {
           console.log(error);
           return;
         }
-        const ownedByCurrentUser = flow.user_id === data.identities[0]?.user_id;
+        const ownedByCurrentUser =
+          template.user_id === data.identities[0]?.user_id;
         setIsOwned(ownedByCurrentUser);
       })
       .catch(e => {
@@ -82,14 +86,14 @@ const TemplateBlock = ({ flow }: any) => {
   const onDelete = (e: any) => {
     e.stopPropagation();
     e.preventDefault();
-    deleteTemplate(flow.id);
+    deleteTemplate(template.id);
   };
   const onFork = async (e: any) => {
     e.stopPropagation();
     e.preventDefault();
-    const newFlow = await forkFlow(flow);
-    if (newFlow) {
-      router.push(`/flow/${newFlow.id}`);
+    const forkedFlow = await forkFlow(template);
+    if (forkedFlow) {
+      router.push(`/flow/${forkedFlow.id}`);
     }
   };
   const onChat = (e: any) => {
@@ -98,85 +102,93 @@ const TemplateBlock = ({ flow }: any) => {
     e.preventDefault();
   };
   const randomImage = ['api', 'knowledge', 'rag', 'flow'][
-    Math.floor(Math.random() * 4)
+    Number(template.id) % 4
   ];
   return (
-    <div className="card w-80 bg-base-content/10 border border-base-content/10 hover:border-primary">
+    <div className="group card w-80 bg-base-content/10 border border-base-content/10 hover:border-primary">
       <figure>
         <img
-          src={`https://docs.flowgen.dev/img/${randomImage}-2.png`}
-          alt={flow.name}
+          src={
+            template.thumbnail ??
+            `https://docs.flowgen.dev/img/${randomImage}-2.png`
+          }
+          alt={template.name}
           className="rounded-t-md h-48 w-full object-cover"
         />
       </figure>
       <div className="card-body p-4">
-        <h2 className="card-title">{flow.name}</h2>
+        <h2 className="card-title">{template.name}</h2>
         <div className="text-xs text-base-content/60">
-          {new Date(flow.created_at).toLocaleString()}
+          {new Date(template.created_at).toLocaleString()}
         </div>
         <div className="text-left text-sm h-16 break-all line-clamp-2">
-          {flowDescription}
+          {templateDescription}
         </div>
         <div className="card-actions justify-end gap-1 text-xs text-base-content/60">
-          <button className="btn btn-sm btn-outline" onClick={onChat}>
-            <RiChatSmile2Line
-              className={clsx('w-4 h-4', { 'loading loading-xs': isDeleting })}
-            />
+          <button
+            className="btn btn-xs btn-outline rounded group-hover:btn-primary"
+            onClick={onChat}
+            data-tooltip-id="default-tooltip"
+            data-tooltip-content={t('start-chat-tooltip')}
+          >
+            <RiChatSmile2Line className={clsx('w-3 h-3')} />
             Chat
           </button>
-          <button className="btn btn-sm btn-outline" onClick={onFork}>
+          <button
+            className="btn btn-xs btn-outline rounded group-hover:btn-primary"
+            onClick={onFork}
+            data-tooltip-id="default-tooltip"
+            data-tooltip-content={t('fork-tooltip')}
+          >
             <GoRepoForked
-              className={clsx('w-4 h-4', { 'loading loading-xs': isForking })}
+              className={clsx('w-3 h-3', { 'loading loading-xs': isForking })}
             />
-            Fork
+            {t('fork')}
           </button>
           {isOwned && (
             <button
-              className="btn btn-sm btn-outline text-red-300 hover:text-red-500"
+              className="btn btn-xs btn-outline rounded text-red-300 hover:text-red-500"
               data-tooltip-id="default-tooltip"
-              data-tooltip-content={t('unpublish-template') + ' ' + flow.name}
+              data-tooltip-content={t('unpublish-tooltip')}
               onClick={onDelete}
             >
               <GoTrash
-                className={clsx('w-4 h-4', {
+                className={clsx('w-3 h-3', {
                   'loading loading-xs': isDeleting,
                 })}
               />
-              Delete
+              {t('unpublish')}
             </button>
           )}
         </div>
       </div>
-      {/* <div className="hidden group-hover:block absolute bottom-1 right-1 text-xs text-base-content/60">
-        <div
-          className="btn btn-sm btn-ghost btn-square text-red-500/60 hover:text-red-500"
-          data-tooltip-id="default-tooltip"
-          data-tooltip-content={t('delete-flow') + flow.name}
-          onClick={onDelete}
-        >
-          <GoTrash
-            className={clsx('w-4 h-4', { 'loading loading-sm': isDeleting })}
-          />
-        </div>
-      </div> */}
     </div>
   );
 };
 
-const TemplateList = ({ action }: any) => {
-  const { flows, isLoading, isError } = useTemplates();
+const TemplateList = ({ maxCount }: any) => {
+  const { templates, isLoading, isError } = useTemplates();
   const t = useTranslations('component.TemplateList');
 
   if (isError) {
-    console.warn('Failed to load flow');
+    console.warn('Failed to load template');
   }
-  if (isLoading) return <FlowLoading />;
-  if (!flows || flows.length === 0) return <TemplateEmpty />;
+  if (isLoading) return <TemplateLoading />;
+  if (!templates || templates.length === 0) return <TemplateEmpty />;
+  if (maxCount) {
+    return (
+      <div className="flex flex-wrap justify-center gap-2 p-2">
+        {templates.slice(0, maxCount).map((template: any) => (
+          <TemplateBlock key={template.id} template={template} />
+        ))}
+      </div>
+    );
+  }
 
   return (
-    <div className="flex flex-wrap gap-2">
-      {flows.map((flow: any) => (
-        <TemplateBlock key={flow.id} flow={flow} />
+    <div className="flex flex-wrap justify-center gap-4 p-2">
+      {templates.map((template: any) => (
+        <TemplateBlock key={template.id} template={template} />
       ))}
     </div>
   );

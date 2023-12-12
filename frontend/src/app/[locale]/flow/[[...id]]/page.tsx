@@ -2,17 +2,18 @@
 
 import { ReactFlowProvider } from 'reactflow';
 import Flow from '../../components/Flow';
-import { BsInboxes } from 'react-icons/bs';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import FlowList from '../../components/FlowList';
 import { useEffect } from 'react';
 import { useFlows } from '@/hooks';
 import { useRouter } from 'next/navigation';
+import TemplateList from '../../components/TemplateList';
+import { RiRobot2Fill } from 'react-icons/ri';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const t = useTranslations('page.Flow');
-  const { createFlow, isCreating } = useFlows();
+  const { createFlow } = useFlows();
   const router = useRouter();
 
   useEffect(() => {
@@ -23,15 +24,33 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   if (params.id === undefined) {
     return (
-      <div className="flex flex-col w-full h-full p-2">
-        <div className="flex items-center justify-between w-full gap-2 text-sm font-bold">
-          <span>{t('select-flow')}</span>
-          <button className="btn btn-sm btn-primary">
-            <Link href="/flow/new">{t('new-flow')}</Link>
-          </button>
+      <div className="flex flex-col w-full h-full gap-3 p-2">
+        <div className="flex flex-col items-center justify-between w-full gap-6 px-4 py-8 text-sm font-bold">
+          <span className="text-4xl font-bold">{t('flow-tagline')}</span>
+          <Link
+            href="/flow/new"
+            className="btn btn-primary btn-lg px-6 flex gap-2 items-center py-2"
+          >
+            <RiRobot2Fill className="w-8 h-8" />
+            {t('new-flow')}
+          </Link>
         </div>
-        <div className="divider" />
-        <FlowList />
+        <div className="divider">{t('your-flows')}</div>
+        <div className="flex justify-center">
+          <FlowList />
+        </div>
+        <div className="divider">{t('start-from-template')}</div>
+        <div className="flex justify-center">
+          <TemplateList maxCount={3} />
+        </div>
+        <div className="flex w-full justify-center items-center py-8">
+          <Link
+            href="/gallery"
+            className="link text-lg link-primary link-hover"
+          >
+            {t('more-templates')}
+          </Link>
+        </div>
       </div>
     );
   }
@@ -39,16 +58,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   if (params.id?.[0] === 'new') {
     return (
       <div className="flex items-center justify-center w-full h-full">
-        {isCreating ? (
-          <div className="loading loading-primary loading-bars" />
-        ) : (
-          <div className="flex flex-col gap-2 items-center text-base-content/60">
-            <BsInboxes className="w-12 h-12" />
-            <div className="btn btn-sm btn-primary">
-              <Link href="/flow/new">{t('new-flow')}</Link>
-            </div>
-          </div>
-        )}
+        <div className="loading loading-bars loading-primary" />
       </div>
     );
   }

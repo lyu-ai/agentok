@@ -71,9 +71,11 @@ If you're interested in contributing to the development of this project or wish 
    - Run the frontend service using the start-up script provided (e.g., `pnpm dev` or `yarn dev`).
 
 2. **Backend Service:**
-   - Switch to the backend service directory.
+   - Switch to the backend service directory `cd backend`.
+   - Create virtual environment: `python3 -m venv venv`.
+   - Activate virtual environment: `source venv/bin/activate`.
    - Install all required dependencies: `pip install -r requirements.txt`.
-   - Confirm that the environment variables for Supabase (`NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`) are correctly set in `.env` as well.
+   - Confirm environment variables (`NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`) are correctly set in `.env`.
    - Launch the backend service using command `python3 -m api.index`.
 
 Once you've started both the frontend and backend services by following the steps previously outlined, you can access the application by opening your web browser and navigating to:

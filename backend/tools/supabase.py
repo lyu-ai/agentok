@@ -99,16 +99,16 @@ def get_templates(max_retries=3, delay=1):
   while attempt < max_retries:
     try:
         records = supabase.table('templates').select('*').neq('id', 0).execute()
-        print('get_public_flows', len(records.data))
+        print('get_public_templates', len(records.data))
         return records.data
     except Exception as e:
-        print(f"Failed to get public flows: {e}")
+        print(f"Failed to get public templates: {e}")
         time.sleep(delay)
         attempt += 1  # Increment and try again after a short delay
   # If the loop completes without returning, all retries have failed
-  raise Exception("All attempts to get public flows have failed.")
+  raise Exception("All attempts to get public templates have failed.")
 
-def publish_template(token, flow, max_retries=3, delay=1):
+def publish_template(token, template, max_retries=3, delay=1):
   attempt = 0
   data = supabase.auth.get_user(token)
   if not data:
@@ -116,17 +116,17 @@ def publish_template(token, flow, max_retries=3, delay=1):
   user = data.user
   while attempt < max_retries:
     try:
-        flow.pop('id', None)  # Removes 'id' without error if it's not present
-        flow['user_id'] = user.id
-        records = supabase.table('templates').insert(flow).execute()
-        print('published flow', len(records.data))
+        template.pop('id', None)  # Removes 'id' without error if it's not present
+        template['user_id'] = user.id
+        records = supabase.table('templates').insert(template).execute()
+        print('published template', len(records.data))
         return records.data
     except Exception as e:
-        print(f"Failed to publish flow: {e}")
+        print(f"Failed to publish template: {e}")
         time.sleep(delay)
         attempt += 1  # Increment and try again after a short delay
   # If the loop completes without returning, all retries have failed
-  raise Exception("All attempts to publish flow have failed.")
+  raise Exception("All attempts to publish template have failed.")
 
 
 def unpublish_template(token, id, max_retries=3, delay=1):

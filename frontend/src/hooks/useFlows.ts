@@ -1,5 +1,6 @@
 import useSWR from 'swr';
-import useFlowStore, { Flow, PublicFlow } from '@/store/flow';
+import useFlowStore, { Flow } from '@/store/flow';
+import { Template } from '@/store/template';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import {
@@ -110,14 +111,14 @@ export function useFlows() {
 
   const [isForking, setIsForking] = useState(false);
   const handleForkFlow = async (
-    publicFlow: PublicFlow
+    template: Template
   ): Promise<Flow | undefined> => {
     setIsForking(true);
     try {
       const supabase = createClient();
       const session = await supabase.auth.getSession();
 
-      const { id, description, ...newFlow } = publicFlow;
+      const { id, description, ...newFlow } = template;
       const response = await fetch(`/api/flows`, {
         method: 'POST',
         headers: {

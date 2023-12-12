@@ -103,11 +103,26 @@
     "FlowList": {
       "delete-flow": "删除工作流 ",
       "default-description": "此工作流有 {node_count} 个节点和 {edge_count} 条边。",
-      "flow-empty": "尚无工作流，你可以从样例开始创建一个新的工作流。"
+      "flow-empty": "尚无工作流，你可以从样例开始创建一个新的工作流。",
+      "create-flow": "从模板开始构建",
+      "edit-flow": "编辑工作流",
+      "publish-flow": "立即发布",
+      "publish-flow-success": "成功发布工作流 {flow_name} 。",
+      "publish-flow-failed": "未能发布工作流 {flow_name}",
+      "publish-flow-title": "发布工作流",
+      "publish-flow-name": "名称",
+      "publish-flow-description": "描述",
+      "publish-flow-tip": "将此工作流发布到 FlowGen 社区。您随时可以取消发布。"
     },
     "TemplateList": {
       "template-empty": "尚无公开的工作流模版，你可以将一个工作流发布为模版。",
-      "unpublish-template": "取消发布该模版"
+      "unpublish-template": "取消发布该模版",
+      "start-chat": "聊天",
+      "start-chat-tooltip": "基于这个模板聊天",
+      "fork": "派生",
+      "fork-tooltip": "从这个模板派生一个工作流",
+      "unpublish": "移除",
+      "unpublish-tooltip": "移除这个你之前发布的模板"
     },
     "ImagePanel": {
       "preview": "图片预览",
@@ -152,11 +167,15 @@
     },
     "Flow": {
       "select-flow": "选择一个工作流进行编辑",
-      "new-flow": "新建工作流",
-      "start-from-example": "从一个示例开始构建"
+      "new-flow": "开始构建",
+      "creating-flow": "创建工作流...",
+      "your-flows": "你的工作流",
+      "start-from-template": "从一个模板开始",
+      "more-templates": "更多模版"
     },
     "Gallery": {
-      "select-flow": "选择一个工作流进行编辑或者开始对话",
+      "select-template-title": "工作流模版",
+      "select-flow": "选择一个模版进行编辑或者开始对话",
       "refresh": "刷新"
     }
   },

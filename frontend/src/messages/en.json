@@ -101,15 +101,29 @@
       "flow-load-failed": "Failed to load flow"
     },
     "FlowList": {
-      "delete-flow": "Delete flow ",
+      "delete-flow": "Delete ",
       "default-description": "This flow has {node_count} node(s) and {edge_count} edge(s).",
       "flow-empty": "No flow here yet. You can start from a sample flow.",
-      "create-flow": "Start Build from Sample Flow",
-      "start-chat": "Start Chat"
+      "create-flow": "Start Build from Templates",
+      "edit-flow": "Edit Flow",
+      "start-chat": "Start Chat",
+      "publish-flow": "Publish Now",
+      "publish-flow-success": "Successfully published flow {flow_name}",
+      "publish-flow-failed": "Failed to publish flow {flow_name}",
+      "publish-flow-title": "Publish Flow",
+      "publish-flow-name": "Name",
+      "publish-flow-description": "Description",
+      "publish-flow-tip": "Publish this flow to the FlowGen community. You can unpublish at any time."
     },
     "TemplateList": {
       "template-empty": "No template here yet. You can publish your flow.",
-      "unpublish-template": "Unpublish this template"
+      "unpublish-template": "Unpublish this template",
+      "start-chat": "Chat",
+      "start-chat-tooltip": "Chat with this template",
+      "fork": "Fork",
+      "fork-tooltip": "Fork this template as your own flow",
+      "unpublish": "Delete",
+      "unpublish-tooltip": "Delete this template you published earlier"
     },
     "ImagePanel": {
       "preview": "Image Preview",
@@ -153,13 +167,16 @@
       "coming-soon": "Coming Soon ... You can chat in Flow Editor for now."
     },
     "Flow": {
-      "select-flow": "Select a flow to edit",
-      "new-flow": "New Flow",
-      "start-from-example": "Build Flow based on a Sample"
+      "flow-tagline": "Build Multi-Agent Apps with FlowGen",
+      "new-flow": "Start to Build",
+      "creating-flow": "Creating Flow ...",
+      "your-flows": "Your Flows",
+      "start-from-template": "Start from Template",
+      "more-templates": "Explore More Templates"
     },
     "Gallery": {
-      "select-flow-title": "FlowGen Templates",
-      "select-flow": "Check out the wonderful templates shared by the FlowGen community. ",
+      "select-template-title": "Awesome Templates",
+      "select-flow": "Check out the wonderful work from FlowGen community.",
       "refresh": "Refresh"
     }
   },
