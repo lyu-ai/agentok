@@ -6,7 +6,7 @@ import { PiChatsCircleFill } from 'react-icons/pi';
 import { RiRobot2Line, RiAppsLine } from 'react-icons/ri';
 import { usePathname } from 'next/navigation';
 
-const NAV_MENU_ITEMS = [
+export const NAV_MENU_ITEMS = [
   {
     id: 'flow',
     label: 'Flow',

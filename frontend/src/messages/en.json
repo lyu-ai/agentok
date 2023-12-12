@@ -163,8 +163,8 @@
       "generate-fail": "Failed to generate Python code"
     },
     "Chat": {
-      "select-flow": "Select a flow to start chat",
-      "coming-soon": "Coming Soon ... You can chat in Flow Editor for now."
+      "chat-tagline": "Start Chat with FlowGen",
+      "select-flow": "Select a flow to start chat"
     },
     "Flow": {
       "flow-tagline": "Build Multi-Agent Apps with FlowGen",

@@ -162,6 +162,7 @@
       "generate-fail": "生成 Python 代码失败"
     },
     "Chat": {
+      "chat-tagline": "开始和 FlowGen 交谈",
       "select-flow": "选择一个工作流开始对话",
       "coming-soon": "还在开发中... 当前可以在编辑器中体验对话。"
     },

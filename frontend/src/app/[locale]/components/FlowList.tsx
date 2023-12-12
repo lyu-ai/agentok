@@ -121,7 +121,7 @@ const PublishTemplateDialog = ({ className, flow, ...props }: any) => {
   );
 };
 
-const FlowBlock = ({ action, flow }: any) => {
+const FlowBlock = ({ action: Action, flow }: any) => {
   const t = useTranslations('component.FlowList');
   const { deleteFlow, isDeleting } = useFlows();
   const [showPublishModal, setShowPublishModal] = useState(false);
@@ -162,32 +162,40 @@ const FlowBlock = ({ action, flow }: any) => {
           </div>
         </div>
         <div className="flex justify-end text-xs gap-2 text-base-content/60">
-          <Link
-            className="btn btn-sm btn-square btn-ghost group-hover:text-primary"
-            data-tooltip-id="default-tooltip"
-            data-tooltip-content={t('edit-flow')}
-            href={`/flow/${flow.id}`}
-          >
-            <GoPencil className={clsx('w-4 h-4')} />
-          </Link>
-          <button
-            className="btn btn-sm btn-square btn-ghost group-hover:text-primary"
-            data-tooltip-id="default-tooltip"
-            data-tooltip-content={t('publish-flow') + flow.name}
-            onClick={() => setShowPublishModal(!showPublishModal)}
-          >
-            <GoShareAndroid className={clsx('w-4 h-4')} />
-          </button>
-          <button
-            className="btn btn-sm btn-square btn-ghost group-hover:text-red-500"
-            data-tooltip-id="default-tooltip"
-            data-tooltip-content={t('delete-flow') + flow.name}
-            onClick={onDelete}
-          >
-            <GoTrash
-              className={clsx('w-4 h-4', { 'loading loading-sm': isDeleting })}
-            />
-          </button>
+          {Action ? (
+            <Action flow={flow} />
+          ) : (
+            <>
+              <Link
+                className="btn btn-sm btn-square btn-ghost group-hover:text-primary"
+                data-tooltip-id="default-tooltip"
+                data-tooltip-content={t('edit-flow')}
+                href={`/flow/${flow.id}`}
+              >
+                <GoPencil className={clsx('w-4 h-4')} />
+              </Link>
+              <button
+                className="btn btn-sm btn-square btn-ghost group-hover:text-primary"
+                data-tooltip-id="default-tooltip"
+                data-tooltip-content={t('publish-flow') + flow.name}
+                onClick={() => setShowPublishModal(!showPublishModal)}
+              >
+                <GoShareAndroid className={clsx('w-4 h-4')} />
+              </button>
+              <button
+                className="btn btn-sm btn-square btn-ghost group-hover:text-red-500"
+                data-tooltip-id="default-tooltip"
+                data-tooltip-content={t('delete-flow') + flow.name}
+                onClick={onDelete}
+              >
+                <GoTrash
+                  className={clsx('w-4 h-4', {
+                    'loading loading-sm': isDeleting,
+                  })}
+                />
+              </button>
+            </>
+          )}
         </div>
       </div>
       {showPublishModal && (

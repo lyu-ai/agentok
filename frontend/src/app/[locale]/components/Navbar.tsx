@@ -4,7 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import ThemeSwitcher from './ThemeSwitcher';
 import NavLogo from './NavLogo';
-import { HiMenuAlt2 } from 'react-icons/hi';
+import NavButton from './NavButton';
 
 const Navbar = () => {
   const cookieStore = cookies();
@@ -22,19 +22,8 @@ const Navbar = () => {
   const isSupabaseConnected = canInitSupabaseClient();
   return (
     <div className="z-50 navbar flex w-full items-center justify-between px-2">
-      <div className="navbar-start gap-1">
-        <div className="dropdown">
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-sm btn-circle btn-ghost md:hidden"
-          >
-            <HiMenuAlt2 className="w-5 h-5" />
-          </div>
-          <div className="menu menu-sm dropdown-content dark:bg-gray-800 rounded-md gap-2 w-52">
-            <NavMenu />
-          </div>
-        </div>
+      <div className="navbar-start gap-2 flex items-center justify-start">
+        <NavButton className="md:hidden" />
         <NavLogo />
       </div>
       <div className="navbar-center gap-1 hidden md:flex">
