@@ -19,10 +19,19 @@ import { stripMatch } from '@/utils/re';
 import { ThinkTag } from '@/utils/chat';
 import { PiChatsCircleFill } from 'react-icons/pi';
 import { useTranslations } from 'next-intl';
+import { useChat } from '@/hooks';
 
 const supabase = createClient();
 
-const Chat = ({ flow, standalone }: any) => {
+const Chat = ({
+  chatId,
+  standalone,
+}: {
+  chatId: number;
+  standalone?: boolean;
+}) => {
+  const { chat } = useChat(chatId);
+
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [thinking, setThinking] = useState(false);
@@ -33,7 +42,7 @@ const Chat = ({ flow, standalone }: any) => {
 
   const fetchMessages = useCallback(
     () =>
-      fetch(`/api/flows/${flow.id}/messages`, {
+      fetch(`/api/chats/${chat!.id}/messages`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -43,11 +52,11 @@ const Chat = ({ flow, standalone }: any) => {
         .then(json => {
           setMessages(json ? json : []);
         }),
-    [setMessages, flow?.id]
+    [setMessages, chat?.id]
   );
 
   useEffect(() => {
-    if (!flow) return;
+    if (!chat) return;
     fetchMessages().finally(() => setLoading(false));
     const subscription = supabase
       .channel('flowgen')
@@ -92,7 +101,7 @@ const Chat = ({ flow, standalone }: any) => {
 
   const onClean = () => {
     setCleaning(true);
-    fetch(`/api/flows/${flow.id}/messages`, {
+    fetch(`/api/chats/${chat!.id}/messages`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -114,11 +123,11 @@ const Chat = ({ flow, standalone }: any) => {
     const newMessage = {
       type: 'user',
       id: genId(),
-      session: flow?.id,
+      session: chat?.id,
       content: message,
     };
     setMessages(msgs => [...msgs, newMessage]);
-    const res = await fetch(`/api/flows/${flow.id}/messages`, {
+    const res = await fetch(`/api/chats/${chat!.id}/messages`, {
       method: 'POST',
       body: JSON.stringify(newMessage),
       headers: {
@@ -147,7 +156,7 @@ const Chat = ({ flow, standalone }: any) => {
     ];
   }
 
-  if (!flow?.flow) {
+  if (!chat?.sourceId) {
     return null;
   }
 
@@ -157,7 +166,7 @@ const Chat = ({ flow, standalone }: any) => {
       <div className="flex items-center justify-between w-full px-2 py-1">
         <div className="flex items-center gap-2 text-sm font-bold">
           <PiChatsCircleFill className="w-5 h-5" />
-          <span>{t('start-chat') + (flow?.name ? ' - ' + flow.name : '')}</span>
+          {/* <span>{t('start-chat') + (flow?.name ? ' - ' + flow.name : '')}</span> */}
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -185,18 +194,19 @@ const Chat = ({ flow, standalone }: any) => {
               className="btn btn-sm btn-ghost btn-square"
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('share')}
-              href={`/chat/${flow.id}`}
+              href={`/chat/${chat.id}`}
               target="_blank"
             >
               <GoShareAndroid className="w-4 h-4" />
             </a>
           )}
-          {standalone && (
+          {standalone && chat.sourceType === 'flow' && (
             <a
               className="btn btn-sm btn-ghost btn-square"
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('go-to-editor')}
-              href={`/flow/${flow.id}`}
+              href={`/flow/${chat.sourceId}`}
+              target="_blank"
             >
               <GoPencil className="w-4 h-4" />
             </a>
@@ -204,6 +214,13 @@ const Chat = ({ flow, standalone }: any) => {
         </div>
       </div>
       <div className="relative flex flex-grow flex-col overflow-y-auto p-1">
+        {messagesToDisplay.length === 0 && !loading && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <div className="text-sm text-base-content/50">
+              {t('message-empty')}
+            </div>
+          </div>
+        )}
         {messagesToDisplay.map((message: any) => {
           const { found, text: resultText } = stripMatch(
             message.content,

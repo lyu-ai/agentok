@@ -6,7 +6,7 @@ import { PiChatsCircleFill } from 'react-icons/pi';
 import { RiRobot2Line, RiAppsLine } from 'react-icons/ri';
 import { usePathname } from 'next/navigation';
 
-const NAV_MENU_ITEMS = [
+export const NAV_MENU_ITEMS = [
   {
     id: 'flow',
     label: 'Flow',
@@ -29,6 +29,18 @@ const NAV_MENU_ITEMS = [
 
 const NavMenu = () => {
   const pathname = usePathname();
+  const pathSegments = pathname ? pathname.split('/').filter(p => p) : []; // filter to remove any empty strings caused by leading/trailing slashes
+
+  // Function to determine if the current path segment matches the item's href
+  const isActive = (href: string) => {
+    const hrefSegments = href.split('/').filter(p => p);
+    // Match the number of segments in the item's href
+    return (
+      pathSegments.length >= hrefSegments.length &&
+      hrefSegments.every((seg, i) => seg === pathSegments[i])
+    );
+  };
+
   return (
     <>
       {NAV_MENU_ITEMS.map(item => (
@@ -38,7 +50,7 @@ const NavMenu = () => {
           className={clsx(
             'flex items-center rounded-md py-2 px-4 gap-2 hover:text-primary/80 hover:bg-primary/5',
             {
-              'text-primary bg-primary/10': pathname?.includes(item.href),
+              'text-primary bg-primary/10': isActive(item.href),
             }
           )}
         >

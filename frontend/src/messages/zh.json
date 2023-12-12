@@ -84,12 +84,21 @@
       "clean-history": "清除聊天记录",
       "share": "分享此聊天",
       "go-to-editor": "转到工作流编辑器",
-      "message-loading": "正在加载聊天记录..."
+      "message-loading": "正在加载聊天记录...",
+      "message-empty": "尚无聊天记录。现在开始聊天！"
+    },
+    "ChatList": {
+      "select-chat": "选择一个聊天开始"
     },
     "ChatButton": {
       "start-chat": "开始聊天",
       "start-chat-tooltip": "保存工作流并开始聊天",
       "flows-tooltip": "查看现有工作流"
+    },
+    "ChatListButton": {
+      "new-chat": "新建会话",
+      "new-chat-tooltip": "创建一个新的会话",
+      "from-template-tooltip": "从模板创建一个新的会话"
     },
     "ChatInput": {
       "enter-message": "输入消息开始聊天..."
@@ -162,8 +171,11 @@
       "generate-fail": "生成 Python 代码失败"
     },
     "Chat": {
-      "select-flow": "选择一个工作流开始对话",
-      "coming-soon": "还在开发中... 当前可以在编辑器中体验对话。"
+      "chat-tagline": "开始和 FlowGen 交谈",
+      "start-chat": "开始聊天",
+      "chat-sessions": "会话",
+      "default-chat-title": "与 {source_name} 聊天",
+      "select-flow": "选择一个工作流开始对话"
     },
     "Flow": {
       "select-flow": "选择一个工作流进行编辑",

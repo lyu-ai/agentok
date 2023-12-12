@@ -2,7 +2,9 @@ import { create } from 'zustand';
 
 export interface Chat {
   id: number;
-  flowId: string; // Binded flow
+  name: string;
+  sourceId: string; // Binded flow
+  sourceType: 'flow' | 'template';
   config: any; // Complicated JSON object
 }
 

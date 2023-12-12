@@ -12,33 +12,63 @@ export function useChats() {
 
   useEffect(() => {
     if (data) {
-      setChats(data);
+      const normalizedChats = data.map((chatData: any) => {
+        const { template_id, flow_id, source_type, ...others } = chatData;
+        if (source_type === 'flow') {
+          return {
+            ...others,
+            sourceId: flow_id,
+            sourceType: source_type,
+          };
+        } else {
+          return {
+            ...others,
+            sourceId: template_id,
+            sourceType: source_type,
+          };
+        }
+      });
+      setChats(normalizedChats);
     }
   }, [data, setChats]);
 
   const [isCreating, setIsCreating] = useState(false);
-  const handleCreateChat = async (flowId: string) => {
+  const handleCreateChat = async (
+    sourceId: string,
+    sourceType: 'flow' | 'template'
+  ) => {
     setIsCreating(true);
     try {
       const supabase = createClient();
       const session = await supabase.auth.getSession();
+      if (!session.data.session?.access_token) {
+        throw new Error('No valid session found');
+      }
+      const body = {
+        source_type: sourceType,
+        ...(sourceType === 'flow'
+          ? { flow_id: sourceId }
+          : { template_id: sourceId }),
+      };
       const response = await fetch(`/api/chats`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + session.data.session?.access_token,
         },
-        body: JSON.stringify({
-          flowId,
-        }),
+        body: JSON.stringify(body),
       });
+      if (!response.ok) {
+        const errorBody = await response.text();
+        throw new Error(errorBody || response.statusText);
+      }
       const newChat = await response.json();
       // If the post was successful, update the Zustand store
       setChats([newChat, ...chats]);
       return newChat;
     } catch (error) {
-      console.error('Failed to create flow:', error);
-      // Handle any errors, possibly using an error state from useState
+      console.error(`Failed to create chat: ${error}`);
+      throw error;
     } finally {
       setIsCreating(false);
     }
@@ -60,7 +90,7 @@ export function useChats() {
       });
       mutate(); // Revalidate the cache to reflect the change
     } catch (error) {
-      console.error('Failed to delete the chat:', error);
+      console.error('Failed to delete chat:', error);
       // Rollback or handle the error state as necessary
       mutate();
     } finally {
@@ -69,7 +99,7 @@ export function useChats() {
   };
 
   return {
-    chats: data,
+    chats,
     isLoading: !error && !data,
     isError: error,
     refresh: mutate,
@@ -77,5 +107,15 @@ export function useChats() {
     deleteChat: handleDeleteChat,
     isDeleting,
     isCreating,
+  };
+}
+
+export function useChat(chatId: number) {
+  const { chats, isLoading, isError } = useChats();
+  const chat = chats.find(chat => chat.id === chatId);
+  return {
+    chat,
+    isLoading,
+    isError,
   };
 }
