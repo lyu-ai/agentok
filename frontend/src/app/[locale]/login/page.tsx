@@ -66,9 +66,9 @@ const Login = ({
   // for the `session` to be available on first SSR render, it must be
   // fetched in a Server Component and passed down as a prop
   return (
-    <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
+    <div className="flex-1 flex flex-col w-full items-center px-8 justify-center gap-2">
       <title>Sign In | FlowGen</title>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 w-96">
         <div className="flex w-full items-center gap-2">
           {providers.map(({ id, name, icon: Icon }) => (
             <button
