@@ -20,7 +20,7 @@ export function useTemplates() {
   const handleDeleteTemplate = async (id: string) => {
     setIsDeleting(true);
     // Optimistically remove the template from the local state
-    deleteTemplate(id);
+    deleteTemplate(Number(id));
     try {
       const supabase = createClient();
       const session = await supabase.auth.getSession();

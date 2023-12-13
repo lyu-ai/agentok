@@ -27,7 +27,9 @@ export default async function RootLayout({
           <NextIntlClientProvider locale={params.locale} messages={messages}>
             <Providers>
               <Navbar />
-              {children}
+              <div className="flex flex-1 w-full overflow-y-auto">
+                {children}
+              </div>
             </Providers>
           </NextIntlClientProvider>
         </div>

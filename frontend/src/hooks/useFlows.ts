@@ -57,7 +57,7 @@ export function useFlows() {
   };
 
   const [isDeleting, setIsDeleting] = useState(false);
-  const handleDeleteFlow = async (id: string) => {
+  const handleDeleteFlow = async (id: number) => {
     setIsDeleting(true);
     // Optimistically remove the flow from the local state
     deleteFlow(id);
@@ -82,7 +82,7 @@ export function useFlows() {
   };
 
   const [isUpdating, setIsUpdating] = useState(false);
-  const handleUpdateFlow = async (id: string, flow: Flow) => {
+  const handleUpdateFlow = async (id: number, flow: Flow) => {
     setIsUpdating(true);
     // Optimistically update the flow in the local state
     updateFlow(id, flow);

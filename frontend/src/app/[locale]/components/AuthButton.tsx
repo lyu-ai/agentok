@@ -7,6 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FaGithub, FaUserNinja } from 'react-icons/fa6';
 import { MdLogout } from 'react-icons/md';
+import clsx from 'clsx';
 
 const UserImage = ({ user, className }: any) => {
   // State to handle image load error
@@ -63,22 +64,28 @@ const UserPanel = ({ user }: { user: any }) => {
           <span className="text-red-500"> (unverified)</span>
         )}
       </span>
-      <div className="join my-2">
+      <div className="flex items-center no-wrap my-2 gap-1 font-bold">
         <a
           href={'https://github.com/tiwater/flowgen/issues/new'}
           target="_blank"
-          className="w-40 join-item btn btn-ghost border border-base-content/50 hover:border-base-content rounded-full"
+          className={clsx(
+            'w-40 flex items-center justify-center p-4 gap-2 bg-base-content/20  rounded-l-full',
+            'hover:bg-base-content/30'
+          )}
         >
           <FaGithub className="h-5 w-5" />
           Report Issues
         </a>
-        <button
+        <div
           onClick={signOut}
-          className="w-40 join-item btn btn-ghost border border-base-content/50 hover:border-base-content rounded-full"
+          className={clsx(
+            'w-40 flex items-center justify-center p-4 gap-2 bg-base-content/20 rounded-l-[2px] rounded-r-full',
+            'hover:bg-base-content/30'
+          )}
         >
           <MdLogout className="w-5 h-5" />
           Sign Out
-        </button>
+        </div>
       </div>
       <div className="flex items-center justify-center text-xs w-full gap-2 mt-4">
         <Link

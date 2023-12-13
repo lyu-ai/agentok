@@ -10,9 +10,9 @@ interface FlowState {
   flows: Flow[];
   // User flows
   setFlows: (flows: Flow[]) => void;
-  updateFlow: (id: string, flow: Flow) => void;
-  deleteFlow: (id: string) => void;
-  getFlowById: (id: string) => Flow | undefined;
+  updateFlow: (id: number, flow: Flow) => void;
+  deleteFlow: (id: number) => void;
+  getFlowById: (id: number) => Flow | undefined;
 }
 
 const useFlowStore = create<FlowState>((set, get) => ({
@@ -21,32 +21,25 @@ const useFlowStore = create<FlowState>((set, get) => ({
   setFlows: flows => set({ flows }),
   updateFlow: (id, newFlow) =>
     set(state => {
-      const numericId = Number(id);
-      console.log('Updating flow with id:', numericId);
-      const existingFlowIndex = state.flows.findIndex(
-        flow => flow.id === numericId
-      );
+      console.log('Updating flow with id:', id);
+      const existingFlowIndex = state.flows.findIndex(flow => flow.id === id);
       const newFlows =
         existingFlowIndex > -1
-          ? state.flows.map(flow => (flow.id === numericId ? newFlow : flow))
+          ? state.flows.map(flow => (flow.id === id ? newFlow : flow))
           : [...state.flows, newFlow];
       return { flows: newFlows };
     }),
   deleteFlow: id =>
     set(state => {
-      const numericId = Number(id);
-      console.log('Deleting flow with id:', numericId);
+      console.log('Deleting flow with id:', id);
       return {
-        flows: isNaN(numericId)
+        flows: isNaN(id)
           ? state.flows
-          : state.flows.filter(flow => flow.id !== numericId),
+          : state.flows.filter(flow => flow.id !== id),
       };
     }),
   getFlowById: id => {
-    const numericId = Number(id);
-    return isNaN(numericId)
-      ? undefined
-      : get().flows.find(flow => flow.id === numericId);
+    return isNaN(id) ? undefined : get().flows.find(flow => flow.id === id);
   },
 }));
 
