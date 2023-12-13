@@ -18,6 +18,7 @@ import { createClient } from '@/utils/supabase/client';
 import { stripMatch } from '@/utils/re';
 import { ThinkTag } from '@/utils/chat';
 import { PiChatsCircleFill } from 'react-icons/pi';
+import { TbArrowBarToLeft, TbArrowBarRight } from 'react-icons/tb';
 import { useTranslations } from 'next-intl';
 import { useChat } from '@/hooks';
 
@@ -30,7 +31,7 @@ const Chat = ({
   chatId: number;
   standalone?: boolean;
 }) => {
-  const { chat } = useChat(chatId);
+  const { chat, isLoading: isLoadingChat, expandSidebar } = useChat(chatId);
 
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -156,15 +157,31 @@ const Chat = ({
     ];
   }
 
-  if (!chat?.sourceId) {
-    return null;
+  if (!isLoadingChat && !chat) {
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-full">
+        <span className="mt-2 text-sm text-red-500">
+          Failed to load chat: {chatId}
+        </span>
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col w-full h-full ">
       <title>FlowGen Chat</title>
       <div className="flex items-center justify-between w-full px-2 py-1">
         <div className="flex items-center gap-2 text-sm font-bold">
+          <button
+            className="btn btn-ghost btn-sm btn-circle"
+            onClick={() => expandSidebar(!chat?.sidebarExpanded)}
+          >
+            {chat?.sidebarExpanded ? (
+              <TbArrowBarToLeft className="w-5 h-5" />
+            ) : (
+              <TbArrowBarRight className="w-5 h-5" />
+            )}
+          </button>
           <PiChatsCircleFill className="w-5 h-5" />
           {/* <span>{t('start-chat') + (flow?.name ? ' - ' + flow.name : '')}</span> */}
         </div>
@@ -194,13 +211,13 @@ const Chat = ({
               className="btn btn-sm btn-ghost btn-square"
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('share')}
-              href={`/chat/${chat.id}`}
+              href={`/chat/${chat?.id}`}
               target="_blank"
             >
               <GoShareAndroid className="w-4 h-4" />
             </a>
           )}
-          {standalone && chat.sourceType === 'flow' && (
+          {standalone && chat?.sourceType === 'flow' && (
             <a
               className="btn btn-sm btn-ghost btn-square"
               data-tooltip-id="chat-tooltip"
@@ -213,9 +230,15 @@ const Chat = ({
           )}{' '}
         </div>
       </div>
-      <div className="relative flex flex-grow flex-col overflow-y-auto p-1">
+      <div className="relative flex mx-auto w-full max-w-[640px] flex-grow flex-col overflow-y-auto p-1">
+        {loading && (
+          <div className="flex flex-col items-center justify-center w-full h-full">
+            <div className="loading loading-bars loading-sm" />
+            <span className="mt-2 text-sm">{t('message-loading')}</span>
+          </div>
+        )}
         {messagesToDisplay.length === 0 && !loading && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <div className="flex items-center justify-center w-full h-full">
             <div className="text-sm text-base-content/50">
               {t('message-empty')}
             </div>
@@ -264,16 +287,13 @@ const Chat = ({
             message.type === 'assistant'
               ? 'bg-base-content/20 text-white'
               : 'bg-primary/70 text-white';
-          const alignRight = message.type === 'user';
           const AvatarIcon =
             message.type === 'assistant' ? RiRobot2Fill : GoPersonFill;
 
           return (
             <div
               key={message.id}
-              className={`chat gap-x-1 lg:gap-x-2 ${
-                alignRight ? 'chat-end' : 'chat-start'
-              }`}
+              className={`chat gap-x-1 lg:gap-x-2 chat-start`}
             >
               <div className="chat-image text-base-content/50">
                 <div
@@ -304,7 +324,7 @@ const Chat = ({
                 className={`relative group chat-bubble rounded-md p-2 ${messageClass} break-words`}
               >
                 <Markdown>{message.content}</Markdown>
-                {alignRight && (
+                {message.type === 'user' && (
                   <div className="hidden group-hover:block absolute right-1 bottom-1">
                     <button
                       className="btn btn-xs btn-ghost btn-square"
@@ -319,14 +339,8 @@ const Chat = ({
           );
         })}
         <div ref={messagesEndRef} id="chat-messages-bottom"></div>
-        {loading && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="loading loading-bars loading-sm" />
-            <span className="mt-2 text-sm">{t('message-loading')}</span>
-          </div>
-        )}
       </div>
-      <div className="relative p-1">
+      <div className="relative justify-center w-full max-w-[640px] mx-auto p-1">
         <ChatInput
           className="flex items-center p-1 w-full bg-base-100/70 border border-primary rounded-lg shadow-lg"
           onSend={onSend}

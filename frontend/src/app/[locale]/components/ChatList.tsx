@@ -1,6 +1,8 @@
 import { useTranslations } from 'next-intl';
 import { BsInboxes } from 'react-icons/bs';
 import { useChats, useFlows, useTemplates } from '@/hooks';
+import clsx from 'clsx';
+import Link from 'next/link';
 
 export const ChatEmpty = () => {
   const t = useTranslations('component.ChatList');
@@ -16,58 +18,86 @@ export const ChatEmpty = () => {
 
 export const ChatLoading = () => {
   return (
-    <div className="flex flex-wrap justify-center gap-2">
-      {[...Array(3)].map((_, i) => (
+    <>
+      {[...Array(5)].map((_, i) => (
         <div
           key={i}
-          className="group relative  w-80 h-48 flex flex-col bg-base-content/10 rounded-md p-3 gap-3"
+          className="w-80 h-12 bg-base-content/10 rounded-md p-3 gap-3"
         >
-          <div className="flex items-center gap-2">
-            <div className="skeleton w-6 h-6 rounded-full shrink-0" />
-            <div className="skeleton h-4 w-1/2" />
-          </div>
-          <div className="skeleton h-3 w-full" />
           <div className="skeleton h-3 w-1/2" />
         </div>
       ))}
-    </div>
+    </>
   );
 };
 
-const ChatBlock = ({ chat }: any) => {
-  const t = useTranslations('component.ChatList');
+const ChatList = ({
+  className,
+  currentChatId,
+}: {
+  className?: string;
+  currentChatId: number;
+}) => {
+  const {
+    chats,
+    isLoading: isLoadingChats,
+    isError: isChatsError,
+  } = useChats();
   const { flows, isLoading: isLoadingFlows } = useFlows();
   const { templates, isLoading: isLoadingTemplates } = useTemplates();
-  if (isLoadingFlows || isLoadingTemplates) return <ChatLoading />;
-  const source =
-    chat.sourceType === 'flow'
-      ? flows?.find((flow: any) => flow.id === chat.sourceId)
-      : templates?.find((template: any) => template.id === chat.sourceId);
-  if (!source) return <ChatLoading />;
-  return (
-    <div className="card flex flex-col w-80 items-center justify-center gap-2 text-sm font-bold p-2 border">
-      <span className="break-all p-4">{source.name}</span>
-      <span className="text-xs font-bold p-4">{chat.sourceType}</span>
-    </div>
-  );
-};
-
-const ChatList = () => {
-  const { chats, isLoading, isError } = useChats();
   const t = useTranslations('component.ChatList');
 
-  if (isError) {
-    console.warn('Failed to load flow');
+  if (isChatsError) {
+    console.warn('Failed to load chats');
   }
-  if (isLoading) return <ChatLoading />;
+  if (isLoadingChats || isLoadingFlows || isLoadingTemplates)
+    return <ChatLoading />;
   if (!chats || chats.length === 0) return <ChatEmpty />;
 
   return (
-    <div className="flex flex-wrap justify-center gap-4 p-2">
-      {chats.map((chat: any) => (
-        <ChatBlock key={chat.id} chat={chat} />
-      ))}
-    </div>
+    <>
+      {chats.map(chat => {
+        const chatSource =
+          chat.sourceType === 'flow'
+            ? flows &&
+              flows.find((flow: any) => flow.id === Number(chat.sourceId))
+            : templates &&
+              templates.find(
+                (template: any) => template.id === Number(chat.sourceId)
+              );
+
+        return (
+          <Link
+            key={chat.id}
+            href={`/chat/${chat.id}`}
+            className={clsx(
+              'flex flex-col w-80 justify-center gap-2 text-sm font-bold rounded p-2 border hover:shadow-box hover:bg-base-content/40 hover:text-base-content hover:border-base-content/30',
+              {
+                'border-base-content/20 bg-base-content/30 shadow-box shadow-base-content/20':
+                  chat.id === currentChatId,
+              },
+              {
+                'border-base-content/5 bg-base-content/10':
+                  chat.id !== currentChatId,
+              },
+              className
+            )}
+          >
+            <div className="flex w-full gap-2 justify-between items-center">
+              <span className="font-bold truncate">
+                {chat.name ??
+                  t('default-chat-title', {
+                    source_name: chatSource?.name,
+                  })}
+              </span>
+              <span className="border border-base-content/40 text-base-content/60 rounded p-1 text-xs">
+                {chat.sourceType}
+              </span>
+            </div>
+          </Link>
+        );
+      })}
+    </>
   );
 };
 

@@ -15,8 +15,8 @@ interface TemplateState {
 
   // Public flows (do not support update operation)
   setTemplates: (templates: Template[]) => void;
-  deleteTemplate: (id: string) => void;
-  getTemplateById: (id: string) => Template | undefined;
+  deleteTemplate: (id: number) => void;
+  getTemplateById: (id: number) => Template | undefined;
 }
 
 const useTemplateStore = create<TemplateState>((set, get) => ({
@@ -25,19 +25,17 @@ const useTemplateStore = create<TemplateState>((set, get) => ({
   setTemplates: templates => set({ templates }),
   deleteTemplate: id =>
     set(state => {
-      const numericId = Number(id);
-      console.log('Deleting template with id:', numericId);
+      console.log('Deleting template with id:', id);
       return {
-        templates: isNaN(numericId)
+        templates: isNaN(id)
           ? state.templates
-          : state.templates.filter(flow => flow.id !== numericId),
+          : state.templates.filter(flow => flow.id !== id),
       };
     }),
   getTemplateById: id => {
-    const numericId = Number(id);
-    return isNaN(numericId)
+    return isNaN(id)
       ? undefined
-      : get().templates.find(template => template.id === numericId);
+      : get().templates.find(template => template.id === id);
   },
 }));
 

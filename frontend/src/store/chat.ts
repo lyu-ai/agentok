@@ -6,15 +6,16 @@ export interface Chat {
   sourceId: string; // Binded flow
   sourceType: 'flow' | 'template';
   config: any; // Complicated JSON object
+  sidebarExpanded: boolean;
 }
 
 interface ChatState {
   chats: Chat[];
   // User Chats
   setChats: (chats: Chat[]) => void;
-  updateChat: (id: string, chat: Chat) => void;
-  deleteChat: (id: string) => void;
-  getChatById: (id: string) => Chat | undefined;
+  updateChat: (id: number, chat: Partial<Chat>) => void;
+  deleteChat: (id: number) => void;
+  getChatById: (id: number) => Chat | undefined;
 }
 
 const useChatStore = create<ChatState>((set, get) => ({
@@ -23,32 +24,30 @@ const useChatStore = create<ChatState>((set, get) => ({
   setChats: chats => set({ chats }),
   updateChat: (id, newChat) =>
     set(state => {
-      const numericId = Number(id);
-      console.log('Updating chat with id:', numericId);
-      const existingChatIndex = state.chats.findIndex(
-        chat => chat.id === numericId
-      );
-      const newChats =
-        existingChatIndex > -1
-          ? state.chats.map(chat => (chat.id === numericId ? newChat : chat))
-          : [...state.chats, newChat];
-      return { chats: newChats };
+      console.log('Updating chat with id:', id);
+      const existingChatIndex = state.chats.findIndex(chat => chat.id === id);
+      if (existingChatIndex > -1) {
+        const updatedChats = state.chats.map(chat =>
+          chat.id === id ? { ...chat, ...newChat } : chat
+        );
+        return { chats: updatedChats };
+      } else {
+        // If the chat doesn't exist, you might choose to create it or do other error handling
+        console.error(`Chat with id ${id} not found.`);
+        return { chats: state.chats };
+      }
     }),
   deleteChat: id =>
     set(state => {
-      const numericId = Number(id);
-      console.log('Deleting chat with id:', numericId);
+      console.log('Deleting chat with id:', id);
       return {
-        chats: isNaN(numericId)
+        chats: isNaN(id)
           ? state.chats
-          : state.chats.filter(chat => chat.id !== numericId),
+          : state.chats.filter(chat => chat.id !== id),
       };
     }),
   getChatById: id => {
-    const numericId = Number(id);
-    return isNaN(numericId)
-      ? undefined
-      : get().chats.find(chat => chat.id === numericId);
+    return isNaN(id) ? undefined : get().chats.find(chat => chat.id === id);
   },
 }));
 

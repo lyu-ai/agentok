@@ -75,7 +75,7 @@ export function useChats() {
   };
 
   const [isDeleting, setIsDeleting] = useState(false);
-  const handleDeleteChat = async (id: string) => {
+  const handleDeleteChat = async (id: number) => {
     setIsDeleting(true);
     // Optimistically remove the flow from the local state
     deleteChat(id);
@@ -98,12 +98,15 @@ export function useChats() {
     }
   };
 
+  const updateChat = useChatStore(state => state.updateChat);
+
   return {
     chats,
     isLoading: !error && !data,
     isError: error,
     refresh: mutate,
     createChat: handleCreateChat,
+    updateChat,
     deleteChat: handleDeleteChat,
     isDeleting,
     isCreating,
@@ -111,9 +114,13 @@ export function useChats() {
 }
 
 export function useChat(chatId: number) {
-  const { chats, isLoading, isError } = useChats();
+  const { chats, updateChat, isLoading, isError } = useChats();
   const chat = chats.find(chat => chat.id === chatId);
+  const expandSidebar = async (expand: boolean) => {
+    updateChat(chatId, { sidebarExpanded: expand });
+  };
   return {
+    expandSidebar,
     chat,
     isLoading,
     isError,

@@ -8,7 +8,7 @@
 }
 
 input-sm[type="number"] {
-  padding-right: 0!important;
+  padding-right: 0 !important;
 }
 
 .skeleton {
@@ -71,7 +71,6 @@ input-sm[type="number"] {
   /* Tailwind classes for styling can be added here */
 }
 
-/* Add this to your global stylesheet (if using PostCSS with Tailwind) */
 .collapsing-height {
   max-height: 0;
   overflow: hidden;
@@ -83,4 +82,21 @@ input-sm[type="number"] {
   /* Use a large max-height value */
   overflow: hidden;
   transition: max-height 0.5s ease-in;
+}
+
+.collapsing-width {
+  max-width: 0;
+  overflow: hidden;
+  transition: max-width 0.5s ease-out, padding 0.5s ease-out, border 0.5s ease-out;
+  padding: 0;
+  border: 0;
+  /* or use 'border-none' if you use utility classes */
+}
+
+.expanding-width {
+  max-width: 1000px;
+  /* Use a sensible max-width based on the expected expanded size */
+  overflow: hidden;
+  transition: max-width 0.5s ease-in, padding 0.5s ease-in, border 0.5s ease-in;
+  /* If you had padding originally added, put those values here */
 }
