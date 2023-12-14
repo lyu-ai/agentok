@@ -6,7 +6,7 @@ export interface Chat {
   sourceId: string; // Binded flow
   sourceType: 'flow' | 'template';
   config: any; // Complicated JSON object
-  sidebarExpanded: boolean;
+  sidebarCollapsed: boolean;
 }
 
 interface ChatState {
@@ -24,12 +24,13 @@ const useChatStore = create<ChatState>((set, get) => ({
   setChats: chats => set({ chats }),
   updateChat: (id, newChat) =>
     set(state => {
-      console.log('Updating chat with id:', id);
+      console.log('Updating chat data:', id, newChat);
       const existingChatIndex = state.chats.findIndex(chat => chat.id === id);
       if (existingChatIndex > -1) {
         const updatedChats = state.chats.map(chat =>
           chat.id === id ? { ...chat, ...newChat } : chat
         );
+        console.log('>>> New chat data:', updatedChats);
         return { chats: updatedChats };
       } else {
         // If the chat doesn't exist, you might choose to create it or do other error handling

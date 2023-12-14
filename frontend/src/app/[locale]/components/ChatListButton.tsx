@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useFlows, useTemplates } from '@/hooks';
 import Link from 'next/link';
 import { Tab } from '@headlessui/react';
+import { Tooltip } from 'react-tooltip';
 
 const ChatListPanel = () => {
   const t = useTranslations('component.ChatListButton');
@@ -26,7 +27,7 @@ const ChatListPanel = () => {
   return (
     <>
       <Tab.Group>
-        <Tab.List className="tabs tabs-bordered flex rounded-xl bg-blue-900/20 p-1">
+        <Tab.List className="tabs tabs-bordered flex rounded-xl p-1">
           {chatSources.map(({ type }) => (
             <Tab
               key={type}
@@ -41,12 +42,12 @@ const ChatListPanel = () => {
             </Tab>
           ))}
         </Tab.List>
-        <Tab.Panels className="mt-2">
+        <Tab.Panels>
           {chatSources.map(({ type, data, isLoading }) => (
             <Tab.Panel
               key={type}
               className={clsx(
-                'flex flex-wrap rounded-xl p-2 gap-2 overflow-y-auto '
+                'flex flex-wrap rounded-xl p-2 gap-2 h-[240px] overflow-y-auto w-full h-full'
               )}
             >
               {isLoading ? (
@@ -56,7 +57,7 @@ const ChatListPanel = () => {
                   <Link
                     key={`${type}-${sourceItem.id}`}
                     href={`/chat?source_id=${sourceItem.id}&source_type=${type}`}
-                    className="w-36 p-4 border rounded-lg hover:bg-blue-900/20 hover:border-blue-900/40"
+                    className="w-36 flex flex-col justify-center gap-2 text-sm rounded p-2 border border-base-content/5 bg-base-content/10 hover:shadow-box hover:bg-base-content/40 hover:text-base-content hover:border-base-content/30"
                   >
                     {sourceItem.name}
                   </Link>
@@ -91,7 +92,7 @@ const ChatListButton = ({ className, onSelect }: any) => {
               className,
               'join-item btn btn-sm btn-primary btn-outline flex items-center gap-2'
             )}
-            data-tooltip-id="default-tooltip"
+            data-tooltip-id="chatlist-tooltip"
             data-tooltip-content={t('new-chat-tooltip')}
           >
             <div className="relative">
@@ -105,7 +106,7 @@ const ChatListButton = ({ className, onSelect }: any) => {
                 className,
                 'join-item btn btn-sm btn-primary btn-outline flex items-center gap-2'
               )}
-              data-tooltip-id="default-tooltip"
+              data-tooltip-id="chatlist-tooltip"
               data-tooltip-content={t('from-template-tooltip')}
             >
               <div className="relative">
@@ -114,10 +115,11 @@ const ChatListButton = ({ className, onSelect }: any) => {
             </div>
           </Popover.Button>
         </div>
-        <Popover.Panel className="origin-top-left w-[480px] absolute shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/80 text-base-content border border-gray-600 max-h-[80vh]">
+        <Popover.Panel className="origin-top-left w-[480px] absolute shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/90 text-base-content border border-gray-600">
           <ChatListPanel />
         </Popover.Panel>
       </Float>
+      <Tooltip id="chatlist-tooltip" />
     </Popover>
   );
 };

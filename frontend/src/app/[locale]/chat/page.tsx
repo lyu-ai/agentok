@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import FlowList from '../components/FlowList';
 import { RiRobot2Fill } from 'react-icons/ri';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useChats } from '@/hooks';
 import ChatList from '../components/ChatList';
@@ -25,11 +25,17 @@ const ChatPage = ({ searchParams: { source_id, source_type } }: any) => {
   const t = useTranslations('page.Chat');
   const router = useRouter();
   const { createChat, isCreating } = useChats();
+  const hasCreatedChat = useRef(false);
 
   useEffect(() => {
+    if (hasCreatedChat.current) {
+      // Prevent the side-effect if it has already run once
+      return;
+    }
     if (source_type === 'flow' || source_type === 'template') {
       createChat(source_id, source_type).then(chat => {
         if (chat) {
+          hasCreatedChat.current = true;
           router.replace(`/chat/${chat.id}`);
         }
       });
@@ -53,7 +59,7 @@ const ChatPage = ({ searchParams: { source_id, source_type } }: any) => {
       </div>
       <div className="divider">Sessions</div>
       <div className="flex flex-wrap justify-center gap-4 p-2">
-        <ChatList currentChatId={-1} className="py-4" />
+        <ChatList currentChatId={-1} maxCount={10} className="py-4" />
       </div>
       <div className="divider">Flows</div>
       <FlowList action={ChatAction} />

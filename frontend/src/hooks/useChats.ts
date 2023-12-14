@@ -116,11 +116,11 @@ export function useChats() {
 export function useChat(chatId: number) {
   const { chats, updateChat, isLoading, isError } = useChats();
   const chat = chats.find(chat => chat.id === chatId);
-  const expandSidebar = async (expand: boolean) => {
-    updateChat(chatId, { sidebarExpanded: expand });
+  const collapseSidebar = (collpased: boolean) => {
+    updateChat(chatId, { sidebarCollapsed: collpased });
   };
   return {
-    expandSidebar,
+    collapseSidebar,
     chat,
     isLoading,
     isError,

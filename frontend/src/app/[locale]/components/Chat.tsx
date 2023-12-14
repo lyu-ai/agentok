@@ -21,6 +21,7 @@ import { PiChatsCircleFill } from 'react-icons/pi';
 import { TbArrowBarToLeft, TbArrowBarRight } from 'react-icons/tb';
 import { useTranslations } from 'next-intl';
 import { useChat } from '@/hooks';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 const supabase = createClient();
 
@@ -31,7 +32,9 @@ const Chat = ({
   chatId: number;
   standalone?: boolean;
 }) => {
-  const { chat, isLoading: isLoadingChat, expandSidebar } = useChat(chatId);
+  const { chat, isLoading: isLoadingChat, isError, collapseSidebar } = useChat(
+    chatId
+  );
 
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -40,6 +43,7 @@ const Chat = ({
   const isFirstRender = useRef(true);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const t = useTranslations('component.Chat');
+  const isMediumScreen = useMediaQuery('(max-width: 768px)');
 
   const fetchMessages = useCallback(
     () =>
@@ -157,7 +161,7 @@ const Chat = ({
     ];
   }
 
-  if (!isLoadingChat && !chat) {
+  if (isError) {
     return (
       <div className="flex flex-col items-center justify-center w-full h-full">
         <span className="mt-2 text-sm text-red-500">
@@ -172,16 +176,19 @@ const Chat = ({
       <title>FlowGen Chat</title>
       <div className="flex items-center justify-between w-full px-2 py-1">
         <div className="flex items-center gap-2 text-sm font-bold">
-          <button
-            className="btn btn-ghost btn-sm btn-circle"
-            onClick={() => expandSidebar(!chat?.sidebarExpanded)}
-          >
-            {chat?.sidebarExpanded ? (
-              <TbArrowBarToLeft className="w-5 h-5" />
-            ) : (
-              <TbArrowBarRight className="w-5 h-5" />
-            )}
-          </button>
+          {standalone && (
+            <button
+              className="btn btn-ghost btn-sm btn-circle"
+              onClick={() => collapseSidebar(!chat?.sidebarCollapsed)}
+            >
+              {(isMediumScreen && chat?.sidebarCollapsed === undefined) ||
+              chat?.sidebarCollapsed ? (
+                <TbArrowBarRight className="w-5 h-5" />
+              ) : (
+                <TbArrowBarToLeft className="w-5 h-5" />
+              )}
+            </button>
+          )}
           <PiChatsCircleFill className="w-5 h-5" />
           {/* <span>{t('start-chat') + (flow?.name ? ' - ' + flow.name : '')}</span> */}
         </div>

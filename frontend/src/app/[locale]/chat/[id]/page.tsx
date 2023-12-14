@@ -6,6 +6,7 @@ import ChatListButton from '../../components/ChatListButton';
 import { useTranslations } from 'next-intl';
 import ChatList from '../../components/ChatList';
 import clsx from 'clsx';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 const ChatListPane = ({ currentChatId }: { currentChatId: number }) => {
   const t = useTranslations('page.Chat');
@@ -24,18 +25,29 @@ const ChatListPane = ({ currentChatId }: { currentChatId: number }) => {
 };
 
 const Page = ({ params: { id } }: any) => {
-  const { chat, isLoading: isLoadingChat } = useChat(Number(id));
+  const { chat, isLoading: isLoadingChat, isError, collapseSidebar } = useChat(
+    Number(id)
+  );
   const t = useTranslations('page.Chat');
+  const isMediumScreen = useMediaQuery('(max-width: 768px)');
 
-  console.log('chat', chat, isLoadingChat);
-
-  if (!chat && !isLoadingChat) {
+  if (isError) {
     return (
       <div className="flex items-center justify-center h-full w-full text-red-600">
         <span>{`Failed locating chat: ${id}`}</span>
       </div>
     );
   }
+
+  if (isLoadingChat) {
+    return (
+      <div className="flex items-center justify-center h-full w-full">
+        <div className="loading loading-bars loading-sm" />
+      </div>
+    );
+  }
+
+  console.log('chat?.sidebarCollapsed', chat?.sidebarCollapsed);
 
   return (
     <div className="flex w-full h-full">
@@ -44,15 +56,10 @@ const Page = ({ params: { id } }: any) => {
         <div
           className={clsx(
             'z-20 gap-1 text-sm font-bold shadow-box shadow-gray-600 rounded-xl backdrop-blur-md bg-gray-700/80 text-base-content border border-gray-600',
-            'transition-all ease-in-out',
-            {
-              hidden:
-                !chat?.sidebarExpanded &&
-                !window.matchMedia('(min-width: 768px)').matches,
-              'md:flex': window.matchMedia('(min-width: 768px)').matches, // flex on medium screens
-              'collapsed-width': !chat?.sidebarExpanded, // Apply collapsing when sidebar is not expanded
-              'expanded-width': chat?.sidebarExpanded, // Apply expanding when sidebar is expanded
-            }
+            (isMediumScreen && chat?.sidebarCollapsed === undefined) ||
+              chat?.sidebarCollapsed
+              ? 'hidden'
+              : 'md:flex'
           )}
         >
           <ChatListPane currentChatId={Number(id)} />
