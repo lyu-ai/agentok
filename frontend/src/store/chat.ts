@@ -11,8 +11,10 @@ export interface Chat {
 
 interface ChatState {
   chats: Chat[];
+  activeChat: number;
   // User Chats
   setChats: (chats: Chat[]) => void;
+  setActiveChat: (chatId: number) => void;
   updateChat: (id: number, chat: Partial<Chat>) => void;
   deleteChat: (id: number) => void;
   getChatById: (id: number) => Chat | undefined;
@@ -21,7 +23,9 @@ interface ChatState {
 const useChatStore = create<ChatState>((set, get) => ({
   // User Chats
   chats: [],
+  activeChat: -1,
   setChats: chats => set({ chats }),
+  setActiveChat: (chatId: number) => set({ activeChat: chatId }),
   updateChat: (id, newChat) =>
     set(state => {
       console.log('Updating chat data:', id, newChat);
@@ -30,7 +34,6 @@ const useChatStore = create<ChatState>((set, get) => ({
         const updatedChats = state.chats.map(chat =>
           chat.id === id ? { ...chat, ...newChat } : chat
         );
-        console.log('>>> New chat data:', updatedChats);
         return { chats: updatedChats };
       } else {
         // If the chat doesn't exist, you might choose to create it or do other error handling
@@ -40,7 +43,6 @@ const useChatStore = create<ChatState>((set, get) => ({
     }),
   deleteChat: id =>
     set(state => {
-      console.log('Deleting chat with id:', id);
       return {
         chats: isNaN(id)
           ? state.chats

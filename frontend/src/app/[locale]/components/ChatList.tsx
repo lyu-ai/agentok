@@ -1,13 +1,13 @@
 import { useTranslations } from 'next-intl';
 import { BsInboxes } from 'react-icons/bs';
-import { useChats, useFlows, useTemplates } from '@/hooks';
+import { useChat, useChats } from '@/hooks';
 import clsx from 'clsx';
-import Link from 'next/link';
 import { Float } from '@headlessui-float/react';
 import { Popover } from '@headlessui/react';
 import { GoTrash, GoPencil, GoKebabHorizontal } from 'react-icons/go';
 import EditableText from '@/components/EditableText';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export const ChatEmpty = () => {
   const t = useTranslations('component.ChatList');
@@ -24,32 +24,25 @@ export const ChatEmpty = () => {
 export const ChatLoading = () => {
   return (
     <>
-      {[...Array(5)].map((_, i) => (
+      {[...Array(6)].map((_, i) => (
         <div
           key={i}
-          className="w-80 h-12 bg-base-content/10 rounded-md p-3 gap-3"
+          className="flex items-center w-80 h-12 bg-base-content/10 rounded-md p-3 gap-3"
         >
-          <div className="skeleton h-3 w-1/2" />
+          <div className="skeleton h-5 w-2/3" />
         </div>
       ))}
     </>
   );
 };
 
-const ContextButton = ({ chat, onEdit: _onEdit }: any) => {
-  const { deleteChat } = useChats();
-  const onEdit = (e: any) => {
-    e.stopPropagation();
-    _onEdit && _onEdit();
-  };
-  const onDelete = (e: any) => {
-    e.stopPropagation();
-    deleteChat(chat.id);
-    console.log('Delete');
-  };
+const ContextButton = ({ onDelete, onEdit }: any) => {
+  const t = useTranslations('component.ChatList');
+  const router = useRouter();
   return (
     <Popover>
       <Float
+        autoPlacement={true}
         placement="bottom"
         offset={5}
         enter="transition ease-out duration-150"
@@ -65,22 +58,26 @@ const ContextButton = ({ chat, onEdit: _onEdit }: any) => {
         >
           <GoKebabHorizontal className="w-4 h-4" />
         </Popover.Button>
-        <Popover.Panel className="origin-top-left w-40 absolute shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-600/80 text-base-content border border-gray-600 max-h-[80vh]">
+        <Popover.Panel className="origin-top-left w-40 absolute shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-600/80 text-base-content border border-gray-500 max-h-[80vh]">
           {[
             {
-              label: 'Edit',
+              label: t('edit-chat-name'),
               icon: GoPencil,
               onClick: onEdit,
             },
             {
-              label: 'Delete',
+              label: t('delete-chat'),
               icon: GoTrash,
               onClick: onDelete,
+              className: 'text-red-500',
             },
-          ].map(({ label, icon: Icon, onClick }) => (
+          ].map(({ label, icon: Icon, className, onClick }) => (
             <Popover.Button
               key={label}
-              className="flex items-center w-full p-2 gap-2 rounded-md hover:bg-base-content/20 hover:text-base-content/80 cursor-pointer"
+              className={clsx(
+                'flex items-center w-full p-2 gap-2 rounded-md hover:bg-base-content/20 cursor-pointer',
+                className
+              )}
               onClick={onClick}
             >
               <Icon className="w-4 h-4" />
@@ -93,103 +90,125 @@ const ContextButton = ({ chat, onEdit: _onEdit }: any) => {
   );
 };
 
-const ChatBlock = ({ chat, flows, templates, selected, className }: any) => {
-  const t = useTranslations('component.ChatList');
+const ChatBlock = ({ chatId, className }: any) => {
+  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
-  const chatSource =
-    chat.sourceType === 'flow'
-      ? flows && flows.find((flow: any) => flow.id === Number(chat.sourceId))
-      : templates &&
-        templates.find(
-          (template: any) => template.id === Number(chat.sourceId)
-        );
-  const [title, setTitle] = useState(
-    chat.name ??
-      t('default-chat-title', {
-        source_name: chatSource?.name,
-      })
-  );
-  useEffect(() => {
+  const { chat, isLoading, chatSource } = useChat(chatId);
+  const {
+    chats,
+    setActiveChat,
+    activeChat,
+    updateChat,
+    deleteChat,
+  } = useChats();
+  const selected = activeChat === chatId;
+
+  const onEditStarted = () => {
+    setIsEditing(true);
+    console.log('onEditStarted');
+  };
+  const onEditCompleted = (newText: string) => {
     setIsEditing(false);
-  }, []);
-  const onEdit = () => {
-    setIsEditing(!isEditing);
-    console.log('onEdit');
+    updateChat(chatId, { name: newText });
+    console.log('onEditCompleted');
+  };
+  const onDelete = async () => {
+    if (!chat || !chats) {
+      console.warn('Chat not found', chatId);
+      return;
+    }
+    const currentIndex = chats.findIndex(c => c.id === chat.id);
+    if (currentIndex < 0) {
+      console.warn('Chat not found', chat.id);
+      return;
+    }
+    let nextChatId = -1;
+    if (currentIndex < chats.length - 1) {
+      // Has next one
+      nextChatId = chats[currentIndex + 1].id;
+    } else if (currentIndex > 1) {
+      // The current selection is the last and has previous one
+      nextChatId = chats[currentIndex - 1].id;
+    }
+    await deleteChat(chat.id);
+    setActiveChat(nextChatId);
+    if (nextChatId < 0) {
+      router.replace('/chat');
+    } else {
+      router.replace(`/chat/${nextChatId}`);
+    }
   };
 
+  if (!chat || isLoading) return <ChatLoading />;
+
   return (
-    <Link
+    <div
       key={chat.id}
-      href={`/chat/${chat.id}`}
       className={clsx(
-        'group flex flex-col w-80 justify-center gap-2 text-sm rounded p-2 border hover:shadow-box hover:bg-base-content/40 hover:text-base-content hover:border-base-content/30',
+        'group flex flex-col w-80 justify-center gap-2 text-sm rounded p-2 border cursor-pointer',
+        'hover:shadow-box hover:bg-base-content/40 hover:text-base-content hover:border-base-content/30',
         {
           'border-base-content/20 bg-base-content/30 shadow-box shadow-base-content/20': selected,
-        },
-        {
           'border-base-content/5 bg-base-content/10': !selected,
         },
         className
       )}
+      onClick={() => {
+        setActiveChat(chat.id);
+        router.push(`/chat/${chat.id}`);
+      }}
     >
       <div className="flex w-full gap-2 justify-between items-center">
         <EditableText
-          className="font-bold truncate"
-          editable={isEditing}
-          onModeChange={setIsEditing}
-          onChange={setTitle}
-          text={title}
+          className="font-bold w-full truncate"
+          editing={isEditing}
+          onChange={onEditCompleted}
+          text={chat.name ?? chatSource?.name ?? 'Untitled ' + chat.id}
         />
-        {selected && <ContextButton chat={chat} onEdit={onEdit} />}
+        {selected && (
+          <ContextButton
+            chat={chat}
+            onEdit={onEditStarted}
+            onDelete={onDelete}
+          />
+        )}
       </div>
       <div className="flex items-center gap-1">
         <span className="border border-base-content/40 text-base-content/60 rounded p-1 text-xs">
           {chat.sourceType}
         </span>
       </div>
-    </Link>
+    </div>
   );
 };
 
 const ChatList = ({
   className,
   maxCount,
-  currentChatId,
 }: {
   className?: string;
   maxCount?: number;
-  currentChatId: number;
 }) => {
   const {
     chats,
     isLoading: isLoadingChats,
     isError: isChatsError,
   } = useChats();
-  const { flows, isLoading: isLoadingFlows } = useFlows();
-  const { templates, isLoading: isLoadingTemplates } = useTemplates();
 
   if (isChatsError) {
     console.warn('Failed to load chats');
   }
-  if (isLoadingChats || isLoadingFlows || isLoadingTemplates)
-    return <ChatLoading />;
+  if (isLoadingChats) return <ChatLoading />;
   if (!chats || chats.length === 0) return <ChatEmpty />;
-  let reversedChats = [...chats].reverse();
 
+  let trimmedChats = chats;
   if (maxCount) {
-    reversedChats = reversedChats.slice(0, maxCount);
+    trimmedChats = trimmedChats.slice(0, maxCount);
   }
   return (
     <>
-      {reversedChats.map((chat: any) => (
-        <ChatBlock
-          key={chat.id}
-          chat={chat}
-          selected={currentChatId === chat.id}
-          flows={flows}
-          templates={templates}
-          className={className}
-        />
+      {trimmedChats.map((chat: any) => (
+        <ChatBlock key={chat.id} chatId={chat.id} className={className} />
       ))}
     </>
   );

@@ -90,6 +90,8 @@
     "ChatList": {
       "default-chat-title": "与 {source_name} 聊天",
       "chat-empty": "尚无开始的会话",
+      "edit-chat-name": "编辑名称",
+      "delete-chat": "删除会话",
       "select-chat": "选择一个聊天开始"
     },
     "ChatButton": {
@@ -175,7 +177,7 @@
     "Chat": {
       "chat-tagline": "开始和 FlowGen 交谈",
       "start-chat": "开始聊天",
-      "chat-sessions": "会话",
+      "chat-sessions": "近期会话",
       "select-flow": "选择一个工作流开始对话"
     },
     "Flow": {

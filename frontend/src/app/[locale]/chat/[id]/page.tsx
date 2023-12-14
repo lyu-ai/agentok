@@ -1,35 +1,38 @@
 'use client';
 
-import { useChat } from '@/hooks';
+import { useChat, useChats } from '@/hooks';
 import Chat from '../../components/Chat';
 import ChatListButton from '../../components/ChatListButton';
 import { useTranslations } from 'next-intl';
 import ChatList from '../../components/ChatList';
 import clsx from 'clsx';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { useEffect } from 'react';
+import { useMediaQuery } from '@/hooks';
 
-const ChatListPane = ({ currentChatId }: { currentChatId: number }) => {
+const ChatListPane = () => {
   const t = useTranslations('page.Chat');
 
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center w-full justify-between p-2">
-        <span className="text-lg font-bold">{t('chat-sessions')}</span>
+    <div className="flex flex-col items-center gap-2">
+      <div className="flex items-center w-80 justify-between p-2 gap-2">
+        <span className="font-bold">{t('chat-sessions')}</span>
         <ChatListButton />
       </div>
-      <div className="flex flex-col w-full h-full gap-1 overflow-y-auto overflow-x-hidden p-1">
-        <ChatList currentChatId={currentChatId} />
+      <div className="flex flex-col w-full h-full p-1 gap-1 overflow-y-auto overflow-x-hidden">
+        <ChatList />
       </div>
     </div>
   );
 };
 
 const Page = ({ params: { id } }: any) => {
-  const { chat, isLoading: isLoadingChat, isError, collapseSidebar } = useChat(
-    Number(id)
-  );
+  const { chat, isError } = useChat(Number(id));
+  const { setActiveChat } = useChats();
   const t = useTranslations('page.Chat');
   const isMediumScreen = useMediaQuery('(max-width: 768px)');
+  useEffect(() => {
+    setActiveChat(Number(id));
+  }, [id]);
 
   if (isError) {
     return (
@@ -38,16 +41,6 @@ const Page = ({ params: { id } }: any) => {
       </div>
     );
   }
-
-  if (isLoadingChat) {
-    return (
-      <div className="flex items-center justify-center h-full w-full">
-        <div className="loading loading-bars loading-sm" />
-      </div>
-    );
-  }
-
-  console.log('chat?.sidebarCollapsed', chat?.sidebarCollapsed);
 
   return (
     <div className="flex w-full h-full">
@@ -62,7 +55,7 @@ const Page = ({ params: { id } }: any) => {
               : 'md:flex'
           )}
         >
-          <ChatListPane currentChatId={Number(id)} />
+          <ChatListPane />
         </div>
         <div className="z-10 flex flex-1 shadow-box shadow-gray-600 rounded-xl backdrop-blur-md bg-gray-700/80 text-base-content border border-gray-600">
           <Chat chatId={Number(id)} standalone />

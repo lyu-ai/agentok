@@ -57,11 +57,11 @@ const ChatPage = ({ searchParams: { source_id, source_type } }: any) => {
         <span className="text-5xl font-bold p-4">{t('chat-tagline')}</span>
         <span className="text-lg p-4">{t('select-chat')}</span>
       </div>
-      <div className="divider">Sessions</div>
+      <div className="divider">{t('chat-sessions')}</div>
       <div className="flex flex-wrap justify-center gap-4 p-2">
-        <ChatList currentChatId={-1} maxCount={10} className="py-4" />
+        <ChatList maxCount={10} className="py-4" />
       </div>
-      <div className="divider">Flows</div>
+      <div className="divider">{t('your-flows')}</div>
       <FlowList action={ChatAction} />
     </div>
   );

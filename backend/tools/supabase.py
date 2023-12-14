@@ -85,7 +85,7 @@ def get_flows(token, max_retries=3, delay=1):
   user = data.user
   while attempt < max_retries:
     try:
-        records = supabase.table('flows').select('*').eq('user_id', user.id).execute()
+        records = supabase.table('flows').select('*').eq('user_id', user.id).order('created_at', desc=True).execute()
         return records.data if hasattr(records, "data") else []
     except Exception as e:
         print(f"Failed to get flows: {e}")
@@ -98,7 +98,7 @@ def get_templates(max_retries=3, delay=1):
   attempt = 0
   while attempt < max_retries:
     try:
-        records = supabase.table('templates').select('*').neq('id', 0).execute()
+        records = supabase.table('templates').select('*').neq('id', 0).order('id', desc=True).execute()
         print('get_public_templates', len(records.data))
         return records.data
     except Exception as e:
@@ -197,13 +197,11 @@ def upsert_chat(token, chat, max_retries=3, delay=1):
             else: # Try to update existing record
               response = supabase.table('chats').select('id').eq('id', chat_id).eq('user_id', user.id).execute()
               if len(response.data) > 0:
-                response = supabase.table('chats').update(chat).eq('id', chat_id).execute()
-                records = response.data if hasattr(response, "data") and response.data is not None else []
-                error = response.error if hasattr(response, "error") else None
-
-                if error:  # Assuming a successful insert will have a count > 0
-                    raise ValueError(f"Failed to insert chat: {error}")
-                return records[0]
+                data,count = supabase.table('chats').update(chat).eq('id', chat_id).execute()
+                print('upsert_chat >>>', chat, data, count, chat_id)
+                if count == 0:  # Assuming a successful insert will have a count > 0
+                    raise ValueError(f"Failed to insert chat: {data}")
+                return data
               else:
                 raise Exception(f"Chat not found ${chat_id} for user ${user.id}")
 
@@ -213,7 +211,7 @@ def upsert_chat(token, chat, max_retries=3, delay=1):
             attempt += 1  # Increment and try again after a short delay
 
     # If the loop completes without returning, all retries have failed
-    raise Exception("All attempts to add chat have failed.")
+    raise Exception("All attempts to update/insert chat have failed.")
 
 def get_chats(token, source_type=None, max_retries=3, delay=1):
   attempt = 0
@@ -223,7 +221,7 @@ def get_chats(token, source_type=None, max_retries=3, delay=1):
   user = data.user
   while attempt < max_retries:
     try:
-        records = supabase.table('chats').select('*').eq('user_id', user.id).execute()
+        records = supabase.table('chats').select('*').eq('user_id', user.id).order('id', desc=True).execute()
         print('get_chats', len(records.data))
         return records.data
     except Exception as e:
@@ -232,3 +230,22 @@ def get_chats(token, source_type=None, max_retries=3, delay=1):
         attempt += 1  # Increment and try again after a short delay
   # If the loop completes without returning, all retries have failed
   raise Exception("All attempts to get chats have failed.")
+
+def delete_chat(token, id, max_retries=3, delay=1):
+  attempt = 0
+  data = supabase.auth.get_user(token)
+  if not data:
+    raise Exception("User not authenticated")
+  user = data.user
+  while attempt < max_retries:
+    try:
+        records = supabase.table('chats').delete().eq('id', id).eq('user_id', user.id).execute()
+        print('delete_chat', records.data)
+        return records.data
+
+    except Exception as e:
+        print(f"Failed to delete chat: {e}")
+        time.sleep(delay)
+        attempt += 1  # Increment and try again after a short delay
+  # If the loop completes without returning, all retries have failed
+  raise Exception("All attempts to delete chat have failed.")

@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import useChatStore from '@/store/chat';
+import useChatStore, { Chat } from '@/store/chat';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { fetcher } from './fetcher';
@@ -8,6 +8,8 @@ export function useChats() {
   const { data, error, mutate } = useSWR('/api/chats', fetcher);
   const chats = useChatStore(state => state.chats);
   const setChats = useChatStore(state => state.setChats);
+  const activeChat = useChatStore(state => state.activeChat);
+  const setActiveChat = useChatStore(state => state.setActiveChat);
   const deleteChat = useChatStore(state => state.deleteChat);
 
   useEffect(() => {
@@ -99,30 +101,43 @@ export function useChats() {
   };
 
   const updateChat = useChatStore(state => state.updateChat);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const handleUpdateChat = async (id: number, chat: Partial<Chat>) => {
+    setIsUpdating(true);
+    // Optimistically update the chat to the local state
+    updateChat(id, chat);
+    try {
+      const supabase = createClient();
+      const session = await supabase.auth.getSession();
+      await fetch(`/api/chats/${id}`, {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + session.data.session?.access_token,
+        },
+        body: JSON.stringify({ id, ...chat }),
+      });
+      mutate(); // Revalidate the cache to reflect the change
+    } catch (error) {
+      console.error('Failed to update chat:', error);
+      // Rollback or handle the error state as necessary
+      mutate();
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   return {
     chats,
     isLoading: !error && !data,
     isError: error,
     refresh: mutate,
+    activeChat,
+    setActiveChat,
     createChat: handleCreateChat,
-    updateChat,
+    isCreating,
+    updateChat: handleUpdateChat,
+    isUpdating,
     deleteChat: handleDeleteChat,
     isDeleting,
-    isCreating,
-  };
-}
-
-export function useChat(chatId: number) {
-  const { chats, updateChat, isLoading, isError } = useChats();
-  const chat = chats.find(chat => chat.id === chatId);
-  const collapseSidebar = (collpased: boolean) => {
-    updateChat(chatId, { sidebarCollapsed: collpased });
-  };
-  return {
-    collapseSidebar,
-    chat,
-    isLoading,
-    isError,
   };
 }

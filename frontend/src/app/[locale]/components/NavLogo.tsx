@@ -21,10 +21,10 @@ const Logo = () => {
       <Image
         priority
         width={128}
-        height={32}
+        height={128}
         alt="logo"
         src={logo}
-        className="hidden md:block h-12 object-contain aspect-w-1 aspect-h-1"
+        className="hidden md:block h-8 w-auto object-contain aspect-w-1 aspect-h-1"
       />
       <Image
         priority
@@ -32,7 +32,7 @@ const Logo = () => {
         height={48}
         alt="logo"
         src={miniLogo}
-        className="md:hidden h-12 object-contain aspect-w-1 aspect-h-1"
+        className="md:hidden h-8 w-auto object-contain aspect-w-1 aspect-h-1"
       />
     </a>
   );

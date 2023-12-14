@@ -90,6 +90,8 @@
     "ChatList": {
       "default-chat-title": "Chat with {source_name}",
       "chat-empty": "No Chat Yet.",
+      "edit-chat-name": "Edit Name",
+      "delete-chat": "Delete Chat",
       "select-chat": "Select a chat to start"
     },
     "ChatButton": {
@@ -178,7 +180,8 @@
     "Chat": {
       "chat-tagline": "Start Chat with FlowGen",
       "start-chat": "Start Chat",
-      "chat-sessions": "Sessions",
+      "chat-sessions": "Recent Sessions",
+      "your-flows": "Your Flows",
       "select-chat": "Select a session to continue, or start a new one from Flow or Template."
     },
     "Flow": {

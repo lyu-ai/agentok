@@ -1,18 +1,24 @@
 import { Float } from '@headlessui-float/react';
 import { Popover } from '@headlessui/react';
 import clsx from 'clsx';
-import { IoAddCircle, IoApps } from 'react-icons/io5';
+import { GoPlusCircle } from 'react-icons/go';
 import { useTranslations } from 'next-intl';
-import { useFlows, useTemplates } from '@/hooks';
-import Link from 'next/link';
+import { useChats, useFlows, useTemplates } from '@/hooks';
 import { Tab } from '@headlessui/react';
 import { Tooltip } from 'react-tooltip';
+import { useRouter } from 'next/navigation';
 
-const ChatListPanel = () => {
+const ChatListPanel = ({ onAdd }: any) => {
   const t = useTranslations('component.ChatListButton');
   const { flows, isLoading: isLoadingFlows } = useFlows();
   const { templates, isLoading: isLoadingTemplates } = useTemplates();
-  const chatSources = [
+  const { createChat } = useChats();
+  const router = useRouter();
+  const chatSources: {
+    type: 'flow' | 'template';
+    data: any[];
+    isLoading: boolean;
+  }[] = [
     {
       type: 'flow',
       data: flows,
@@ -50,19 +56,19 @@ const ChatListPanel = () => {
                 'flex flex-wrap rounded-xl p-2 gap-2 h-[240px] overflow-y-auto w-full h-full'
               )}
             >
-              {isLoading ? (
-                <>Loading</>
-              ) : (
-                data.map((sourceItem: any) => (
-                  <Link
-                    key={`${type}-${sourceItem.id}`}
-                    href={`/chat?source_id=${sourceItem.id}&source_type=${type}`}
-                    className="w-36 flex flex-col justify-center gap-2 text-sm rounded p-2 border border-base-content/5 bg-base-content/10 hover:shadow-box hover:bg-base-content/40 hover:text-base-content hover:border-base-content/30"
-                  >
-                    {sourceItem.name}
-                  </Link>
-                ))
-              )}
+              {data.map((sourceItem: any) => (
+                <Popover.Button
+                  key={`${type}-${sourceItem.id}`}
+                  onClick={() =>
+                    createChat(sourceItem.id, type).then(chat =>
+                      router.push(`/chat/${chat.id}`)
+                    )
+                  }
+                  className="w-36 flex flex-col justify-center gap-2 text-sm rounded p-2 border border-base-content/5 bg-base-content/10 hover:shadow-box hover:bg-base-content/40 hover:text-base-content hover:border-base-content/30"
+                >
+                  {sourceItem.name}
+                </Popover.Button>
+              ))}
             </Tab.Panel>
           ))}
         </Tab.Panels>
@@ -73,7 +79,7 @@ const ChatListPanel = () => {
 
 const ChatListButton = ({ className, onSelect }: any) => {
   const t = useTranslations('component.ChatListButton');
-
+  const { chats, activeChat, createChat } = useChats();
   return (
     <Popover>
       <Float
@@ -86,36 +92,20 @@ const ChatListButton = ({ className, onSelect }: any) => {
         leaveFrom="transform scale-100 opacity-100"
         leaveTo="transform scale-0 opacity-0"
       >
-        <div className="flex items-center gap-1">
+        <Popover.Button>
           <div
             className={clsx(
               className,
-              'join-item btn btn-sm btn-primary btn-outline flex items-center gap-2'
+              'btn btn-sm btn-primary btn-outline flex items-center gap-2'
             )}
             data-tooltip-id="chatlist-tooltip"
-            data-tooltip-content={t('new-chat-tooltip')}
+            data-tooltip-content={t('from-template-tooltip')}
           >
-            <div className="relative">
-              <IoAddCircle className="w-4 h-4" />
-            </div>
-            <span>{t('new-chat')}</span>
+            <GoPlusCircle className="w-4 h-4" />
+            <span className="text-xs font-bold">{t('new-chat')}</span>
           </div>
-          <Popover.Button>
-            <div
-              className={clsx(
-                className,
-                'join-item btn btn-sm btn-primary btn-outline flex items-center gap-2'
-              )}
-              data-tooltip-id="chatlist-tooltip"
-              data-tooltip-content={t('from-template-tooltip')}
-            >
-              <div className="relative">
-                <IoApps className="w-4 h-4" />
-              </div>
-            </div>
-          </Popover.Button>
-        </div>
-        <Popover.Panel className="origin-top-left w-[480px] absolute shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/90 text-base-content border border-gray-600">
+        </Popover.Button>
+        <Popover.Panel className="origin-top-left w-[480px] h-[480px] shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/90 text-base-content border border-gray-600">
           <ChatListPanel />
         </Popover.Panel>
       </Float>

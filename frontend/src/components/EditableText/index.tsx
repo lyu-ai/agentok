@@ -12,12 +12,13 @@ const EditableText = ({
   className,
   alignRight,
 }: any) => {
-  const [isEditing, setIsEditing] = useState(editing);
-  const [inputValue, setInputValue] = useState(text);
+  const [isEditing, setIsEditing] = useState(false);
+  const [inputValue, setInputValue] = useState('');
 
-  useEffect(() => setIsEditing(editing), [editing]);
-  useEffect(() => setInputValue(text), [text]);
-  useEffect(() => onModeChange && onModeChange(isEditing), [onModeChange, isEditing]);
+  useEffect(() => {
+    setIsEditing(editing);
+    setInputValue(text);
+  }, [editing, text]);
 
   const onKeyDown = (e: any) => {
     if (e.key === 'Enter' || e.key === 'Escape') {
@@ -25,6 +26,7 @@ const EditableText = ({
         _onChange && _onChange(inputValue);
       }
       setIsEditing(false);
+      onModeChange && onModeChange(false);
     }
   };
 
@@ -32,6 +34,7 @@ const EditableText = ({
     console.log('apply changes', inputValue);
     _onChange && _onChange(inputValue);
     setIsEditing(false);
+    onModeChange && onModeChange(false);
   };
 
   return (
@@ -46,7 +49,7 @@ const EditableText = ({
           className={clsx(
             className,
             { 'text-right': alignRight },
-            'nodrag input input-xs input-bordered bg-transparent rounded p-1'
+            'nodrag input input-sm input-bordered bg-transparent rounded'
           )}
         />
       ) : (

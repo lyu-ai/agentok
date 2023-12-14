@@ -1,9 +1,7 @@
-import { HiPaperAirplane } from 'react-icons/hi2';
-import { GoImage } from 'react-icons/go';
+import { GoImage, GoPaperAirplane } from 'react-icons/go';
 import { useState } from 'react';
 import clsx from 'clsx';
 import ImagePanel from './ImagePanel';
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
 const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
@@ -72,11 +70,8 @@ const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
           onKeyDown={onKeyDown}
           onChange={(e: any) => setMessage(e.target.value)}
         />
-        <button
-          className="btn btn-sm bg-primary/80 border-primary/60 hover:bg-primary hover:border-primary/80 rounded-md"
-          onClick={onSend}
-        >
-          <HiPaperAirplane className="w-5 h-5" />
+        <button className="btn btn-sm btn-primary" onClick={onSend}>
+          <GoPaperAirplane className="w-5 h-5" />
         </button>
       </div>
     </div>

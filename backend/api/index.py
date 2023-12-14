@@ -11,7 +11,7 @@ import tempfile
 from dotenv import load_dotenv
 
 from tools.codegen import flow2py
-from tools.supabase import add_message, delete_flow, get_chats, get_flow, get_flows, get_templates, publish_template, unpublish_template, upsert_chat, upsert_flow
+from tools.supabase import add_message, delete_chat, delete_flow, get_chats, get_flow, get_flows, get_templates, publish_template, unpublish_template, upsert_chat, upsert_flow
 load_dotenv()  # This will load all environment variables from .env
 
 from tools.parser import parse_output
@@ -271,6 +271,30 @@ def api_add_chat():
       return jsonify({"error": "Unauthorized"}), 401
     data = request.json
     chat = upsert_chat(token, data)
+    return jsonify(chat)
+
+@app.route('/api/chats/<id>', methods=['POST'])
+def api_update_chat(id):
+    if (request.headers.get('Authorization') is None):
+      return jsonify({"error": "Unauthorized"}), 401
+    token = request.headers.get('Authorization').split(' ')[1]
+    if not token:
+      return jsonify({"error": "Unauthorized"}), 401
+    data = request.json
+    print(f'POST /api/chats/{id}', data)
+    if (int(id) != data['id']):
+      return jsonify({"error": "Chat id mismatch"}), 400
+    chat = upsert_chat(token, data)
+    return jsonify(chat)
+
+@app.route('/api/chats/<id>', methods=['DELETE'])
+def api_delete_chat(id):
+    if (request.headers.get('Authorization') is None):
+      return jsonify({"error": "Unauthorized"}), 401
+    token = request.headers.get('Authorization').split(' ')[1]
+    if not token:
+      return jsonify({"error": "Unauthorized"}), 401
+    chat = delete_chat(token, id)
     return jsonify(chat)
 
 @app.route('/api/codegen', methods=['POST'])
