@@ -18,6 +18,15 @@ services:
     networks:
       - app-network
 
+  pocketbase:
+    build:
+      context: ./pocketbase
+      dockerfile: Dockerfile
+    ports:
+      - "7676:7676"
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge

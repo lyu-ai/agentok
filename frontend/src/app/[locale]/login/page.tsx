@@ -1,6 +1,6 @@
 'use client';
 
-import { createClient } from '@/utils/supabase/client';
+import pb from '@/utils/pocketbase/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FaGithub, FaXTwitter } from 'react-icons/fa6';
@@ -21,45 +21,51 @@ const Login = ({
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
-  const supabase = createClient();
 
   const signIn = async (asGuest?: boolean) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email: asGuest ? 'hi@flowgen.dev' : email,
-      password: asGuest ? '123456' : password,
-    });
-
-    if (error) {
-      setError(error.message);
-    } else {
+    try {
+      const userData = await pb
+        .collection('users')
+        .authWithPassword(
+          asGuest ? 'hi@flowgen.dev' : email,
+          asGuest ? '12345678' : password
+        );
       setError('');
       router.push(redirectUrl ?? '/');
+    } catch (e) {
+      setError((e as any).message ?? `Sign in failed. ${e}`);
     }
   };
 
   const signInWithOAuth = async (provider: any) => {
-    console.log('redirect to:', `${window.location.origin}/api/auth/callback`);
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: `${window.location.origin}/api/auth/callback`,
-      },
-    });
+    try {
+      const authData = await pb.collection('users').authWithOAuth2({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/api/auth/callback`,
+        },
+      });
+      setError('');
+      console.log(authData);
+      console.log(pb.authStore);
+    } catch (e) {
+      setError(`Auth with ${provider} failed. ${e}`);
+    }
   };
 
   const signUp = async () => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/api/auth/callback`,
-      },
-    });
-
-    if (error) {
-      setError(error.message);
-    } else {
+    try {
+      const authData = await pb.collection('users').create({
+        email,
+        password,
+        passwordConfirm: password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/api/auth/callback`,
+        },
+      });
       setError('');
+    } catch (e) {
+      setError(`Sign up failed. ${e}`);
     }
   };
 

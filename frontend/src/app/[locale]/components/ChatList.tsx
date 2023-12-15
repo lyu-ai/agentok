@@ -27,9 +27,10 @@ export const ChatLoading = () => {
       {[...Array(6)].map((_, i) => (
         <div
           key={i}
-          className="flex items-center w-80 h-12 bg-base-content/10 rounded-md p-3 gap-3"
+          className="flex flex-col w-80 h-20 bg-base-content/10 rounded-md p-3 gap-3"
         >
-          <div className="skeleton h-5 w-2/3" />
+          <div className="skeleton h-5 w-full" />
+          <div className="skeleton h-5 w-1/3" />
         </div>
       ))}
     </>
@@ -45,6 +46,7 @@ const ContextButton = ({ className, onDelete, onEdit }: any) => {
         placement="bottom-start"
         offset={5}
         shift={5}
+        flip
         enter="transition ease-out duration-150"
         enterFrom="transform scale-0 opacity-0"
         enterTo="transform scale-100 opacity-100"
@@ -122,7 +124,7 @@ const ChatBlock = ({ chatId, className, disableSelection }: any) => {
       console.warn('Chat not found', chat.id);
       return;
     }
-    let nextChatId = -1;
+    let nextChatId = '';
     if (currentIndex < chats.length - 1) {
       // Has next one
       nextChatId = chats[currentIndex + 1].id;
@@ -132,11 +134,7 @@ const ChatBlock = ({ chatId, className, disableSelection }: any) => {
     }
     setActiveChat(nextChatId);
     await deleteChat(chat.id);
-    if (nextChatId < 0) {
-      router.replace('/chat');
-    } else {
-      router.replace(`/chat/${nextChatId}`);
-    }
+    router.replace(`/chat/${nextChatId}`); // It's fine if nextChatId is empty
   };
 
   if (!chat || isLoading) return <ChatLoading />;
@@ -207,8 +205,6 @@ const ChatList = ({
   if (maxCount) {
     trimmedChats = trimmedChats.slice(0, maxCount);
   }
-
-  console.log('Page ChatList', chats);
 
   return (
     <>

@@ -26,12 +26,12 @@ const ChatListPane = () => {
 };
 
 const Page = ({ params: { id } }: any) => {
-  const { chat, isError } = useChat(Number(id));
+  const { chat, isError } = useChat(id);
   const { setActiveChat } = useChats();
   const t = useTranslations('page.Chat');
   const isMediumScreen = useMediaQuery('(max-width: 768px)');
   useEffect(() => {
-    setActiveChat(Number(id));
+    setActiveChat(id);
   }, [id]);
 
   if (isError) {
@@ -58,7 +58,7 @@ const Page = ({ params: { id } }: any) => {
           <ChatListPane />
         </div>
         <div className="z-10 flex flex-1 shadow-box shadow-gray-600 rounded-xl backdrop-blur-md bg-gray-700/80 text-base-content border border-gray-600">
-          <Chat chatId={Number(id)} standalone />
+          <Chat chatId={id} standalone />
         </div>
       </div>
     </div>

@@ -1,40 +1,26 @@
 import { NextRequest } from 'next/server';
-
-const FLOWGEN_SERVER_URL =
-  process.env.FLOWGEN_SERVER_URL || 'http://127.0.0.1:5004';
+import loadAuthFromCookie from '@/utils/pocketbase/server';
 
 export async function GET(request: NextRequest) {
-  const token = request.headers.get('Authorization');
-  const res = await fetch(`${FLOWGEN_SERVER_URL}/api/flows`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: token ?? '',
-    },
-  });
-  if (!res.ok) {
-    console.error(`Failed GET /flows:`, res.status, res.statusText);
-    return new Response(res.statusText, { status: res.status });
+  const pb = await loadAuthFromCookie();
+  try {
+    const flows = await pb.collection('flows').getFullList();
+    return new Response(JSON.stringify(flows), { status: 200 });
+  } catch (e) {
+    console.error(`Failed GET /flows:`, (e as any).message);
+    return new Response((e as any).message, { status: 400 });
   }
-  const data = await res.json();
-  return new Response(JSON.stringify(data));
 }
 
 export async function POST(request: NextRequest) {
-  const token = request.headers.get('Authorization');
-  const flow = await request.json();
-  const res = await fetch(`${FLOWGEN_SERVER_URL}/api/flows`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: token ?? '',
-    },
-    body: JSON.stringify(flow),
-  });
-  if (!res.ok) {
-    console.error(`Failed POST /flows:`, res.status, res.statusText);
-    return new Response(res.statusText, { status: res.status });
+  console.log('POST /flows');
+  const pb = await loadAuthFromCookie();
+  const chat = await request.json();
+  try {
+    const res = await pb.collection('flows').create(chat);
+    return new Response(JSON.stringify(res));
+  } catch (e) {
+    console.error(`Failed POST /flows:`, (e as any).message);
+    return new Response((e as any).message, { status: 400 });
   }
-  const data = await res.json();
-  return new Response(JSON.stringify(data));
 }

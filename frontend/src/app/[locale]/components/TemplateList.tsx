@@ -3,7 +3,7 @@ import { BsInboxes } from 'react-icons/bs';
 import { GoRepoForked, GoTrash } from 'react-icons/go';
 import { useChats, useFlows, useTemplates } from '@/hooks';
 import clsx from 'clsx';
-import { createClient } from '@/utils/supabase/client';
+import pb from '@/utils/pocketbase/client';
 import { RiChatSmile2Line } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -47,9 +47,8 @@ export const TemplateLoading = () => {
   );
 };
 
-const TemplateBlock = ({ template }: any) => {
+const TemplateBlock = ({ template, index }: any) => {
   const [isOwned, setIsOwned] = useState(false);
-  const supabase = createClient();
   const t = useTranslations('component.TemplateList');
   const { deleteTemplate, isDeleting } = useTemplates();
   const { forkFlow, isForking } = useFlows();
@@ -70,20 +69,7 @@ const TemplateBlock = ({ template }: any) => {
     });
   }
   useEffect(() => {
-    supabase.auth
-      .getUserIdentities()
-      .then(({ data, error }) => {
-        if (error) {
-          console.log(error);
-          return;
-        }
-        const ownedByCurrentUser =
-          template.user_id === data.identities[0]?.user_id;
-        setIsOwned(ownedByCurrentUser);
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    setIsOwned(template.owner === pb.authStore.model?.id);
   }, []);
   const onDelete = (e: any) => {
     e.stopPropagation();
@@ -110,9 +96,7 @@ const TemplateBlock = ({ template }: any) => {
         toast.error(`Failed to create chat: ${e}`);
       });
   };
-  const randomImage = ['api', 'knowledge', 'rag', 'flow'][
-    Number(template.id) % 4
-  ];
+  const randomImage = ['api', 'knowledge', 'rag', 'flow'][index % 4];
   return (
     <div className="group card w-80 bg-base-content/10 border border-base-content/10 hover:border-primary">
       <figure>
@@ -128,7 +112,7 @@ const TemplateBlock = ({ template }: any) => {
       <div className="card-body p-4">
         <h2 className="card-title">{template.name}</h2>
         <div className="text-xs text-base-content/60">
-          {new Date(template.created_at).toLocaleString()}
+          {new Date(template.created).toLocaleString()}
         </div>
         <div className="text-left text-sm h-16 break-all line-clamp-2">
           {templateDescription}
@@ -191,8 +175,8 @@ const TemplateList = ({ maxCount }: any) => {
   if (maxCount) {
     return (
       <div className="flex flex-wrap justify-center gap-2 p-2">
-        {templates.slice(0, maxCount).map((template: any) => (
-          <TemplateBlock key={template.id} template={template} />
+        {templates.slice(0, maxCount).map((template: any, index: number) => (
+          <TemplateBlock key={template.id} template={template} index={index} />
         ))}
       </div>
     );
@@ -200,8 +184,8 @@ const TemplateList = ({ maxCount }: any) => {
 
   return (
     <div className="flex flex-wrap justify-center gap-4 p-2">
-      {templates.map((template: any) => (
-        <TemplateBlock key={template.id} template={template} />
+      {templates.map((template: any, index: number) => (
+        <TemplateBlock key={template.id} template={template} index={index} />
       ))}
     </div>
   );

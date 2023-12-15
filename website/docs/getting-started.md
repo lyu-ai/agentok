@@ -40,10 +40,6 @@ docker run -d -p 2855:2855 flowgen-ui
 
 (The default port number 2855 is the address of our first office.)
 
-When deploying online or running locally, ensure you configure the following environment variables: `PORT`, `NEXT_PUBLIC_SUPABASE_URL`, and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Both the frontend and backend services rely on Supabase for data storage and require these variables to be set for proper operation.
-
-To obtain the necessary Supabase URL and Anon Key, visit [Supabase Dashboard](https://supabase.com/dashboard/projects). By default, the service runs on port 2855. While you have the option to download and set up your own instance of Supabase, detailed guidance for such a deployment falls beyond the scope of this document.
-
 ## 🚀 Deployment
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/NCoZBC?referralCode=5I-BUc)
@@ -51,11 +47,8 @@ To obtain the necessary Supabase URL and Anon Key, visit [Supabase Dashboard](ht
 Railway.app supports the deployment of applications in Dockers. By clicking the "Deploy on Railway" button, you'll streamline the setup and deployment of your application on Railway platform:
 
 1. Click the "Deploy on Railway" button to start the process on Railway.app.
-2. Log in to Railway and set the following environment variables:
-   - `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase Project URL.
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anon/public key.
-3. Confirm the settings and deploy.
-4. After deployment, visit the provided URL to access your deployed application.
+1. Confirm the settings and deploy.
+1. After deployment, visit the provided URL to access your deployed application.
 
 ## 🛠️ Run on Local (Without Docker)
 

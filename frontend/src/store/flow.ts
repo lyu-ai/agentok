@@ -1,18 +1,20 @@
 import { create } from 'zustand';
 
 export interface Flow {
-  id: number;
+  id: string;
   name: string;
   flow: any; // Complicated JSON object
+  created?: string;
+  updated?: string;
 }
 
 interface FlowState {
   flows: Flow[];
   // User flows
   setFlows: (flows: Flow[]) => void;
-  updateFlow: (id: number, flow: Flow) => void;
-  deleteFlow: (id: number) => void;
-  getFlowById: (id: number) => Flow | undefined;
+  updateFlow: (id: string, flow: Flow) => void;
+  deleteFlow: (id: string) => void;
+  getFlowById: (id: string) => Flow | undefined;
 }
 
 const useFlowStore = create<FlowState>((set, get) => ({
@@ -33,13 +35,11 @@ const useFlowStore = create<FlowState>((set, get) => ({
     set(state => {
       console.log('Deleting flow with id:', id);
       return {
-        flows: isNaN(id)
-          ? state.flows
-          : state.flows.filter(flow => flow.id !== id),
+        flows: state.flows.filter(flow => flow.id !== id),
       };
     }),
   getFlowById: id => {
-    return isNaN(id) ? undefined : get().flows.find(flow => flow.id === id);
+    return get().flows.find(flow => flow.id === id);
   },
 }));
 

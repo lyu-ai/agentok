@@ -69,6 +69,7 @@ const PublishTemplateDialog = ({ className, flow, ...props }: any) => {
       name,
       description,
       flow,
+      owner: flow.owner,
     } as Template);
     if (result) {
       toast.success(t('publish-flow-success', { flow_name: name }));
@@ -150,7 +151,7 @@ const FlowBlock = ({ action: Action, flow }: any) => {
         <div className="flex flex-col gap-2">
           <h2 className="text-lg font-bold">{flow.name}</h2>
           <div className="text-xs text-base-content/60">
-            {new Date(flow.created_at).toLocaleString()}
+            {new Date(flow.created).toLocaleString()}
           </div>
         </div>
       </div>
@@ -211,7 +212,7 @@ const FlowList = ({ action }: any) => {
   const t = useTranslations('component.FlowList');
 
   if (isError) {
-    console.warn('Failed to load flow');
+    console.warn('Failed to load flow', isError);
   }
   if (isLoading) return <FlowLoading />;
   if (!flows || flows.length === 0) return <FlowEmpty />;
