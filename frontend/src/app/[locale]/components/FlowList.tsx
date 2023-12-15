@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { BsInboxes } from 'react-icons/bs';
-import { GoPencil, GoShareAndroid, GoTrash } from 'react-icons/go';
+import { GoPencil, GoShare, GoTrash } from 'react-icons/go';
 import { useFlows, useTemplates } from '@/hooks';
 import clsx from 'clsx';
 import { useState } from 'react';
@@ -82,7 +82,7 @@ const PublishTemplateDialog = ({ className, flow, ...props }: any) => {
     <PopupDialog
       title={
         <div className="flex items-center gap-2">
-          <GoShareAndroid className="w-7 h-7" />
+          <GoShare className="w-7 h-7" />
           <span className="text-md font-bold">{t('publish-flow-title')}</span>
         </div>
       }
@@ -177,7 +177,7 @@ const FlowBlock = ({ action: Action, flow }: any) => {
                 data-tooltip-content={t('publish-flow') + flow.name}
                 onClick={() => setShowPublishModal(!showPublishModal)}
               >
-                <GoShareAndroid className={clsx('w-4 h-4')} />
+                <GoShare className={clsx('w-4 h-4')} />
               </button>
               <button
                 className="btn btn-sm btn-square btn-ghost group-hover:text-red-500"

@@ -90,7 +90,7 @@ export function useChats() {
           Authorization: 'Bearer ' + session.data.session?.access_token,
         },
       });
-      mutate(); // Revalidate the cache to reflect the change
+      await mutate(); // Revalidate the cache to reflect the change
     } catch (error) {
       console.error('Failed to delete chat:', error);
       // Rollback or handle the error state as necessary
@@ -116,7 +116,7 @@ export function useChats() {
         },
         body: JSON.stringify({ id, ...chat }),
       });
-      mutate(); // Revalidate the cache to reflect the change
+      await mutate(); // Revalidate the cache to reflect the change
     } catch (error) {
       console.error('Failed to update chat:', error);
       // Rollback or handle the error state as necessary

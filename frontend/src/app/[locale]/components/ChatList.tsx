@@ -36,15 +36,15 @@ export const ChatLoading = () => {
   );
 };
 
-const ContextButton = ({ onDelete, onEdit }: any) => {
+const ContextButton = ({ className, onDelete, onEdit }: any) => {
   const t = useTranslations('component.ChatList');
   const router = useRouter();
   return (
     <Popover>
       <Float
-        autoPlacement={true}
-        placement="bottom"
+        placement="bottom-start"
         offset={5}
+        shift={5}
         enter="transition ease-out duration-150"
         enterFrom="transform scale-0 opacity-0"
         enterTo="transform scale-100 opacity-100"
@@ -54,11 +54,11 @@ const ContextButton = ({ onDelete, onEdit }: any) => {
       >
         <Popover.Button
           onClick={e => e.stopPropagation()}
-          className="hover:text-primary"
+          className={clsx('hover:text-primary', className)}
         >
           <GoKebabHorizontal className="w-4 h-4" />
         </Popover.Button>
-        <Popover.Panel className="origin-top-left w-40 absolute shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-600/80 text-base-content border border-gray-500 max-h-[80vh]">
+        <Popover.Panel className="origin-top-left w-40 shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-600/80 text-base-content border border-gray-500 max-h-[80vh]">
           {[
             {
               label: t('edit-chat-name'),
@@ -90,7 +90,7 @@ const ContextButton = ({ onDelete, onEdit }: any) => {
   );
 };
 
-const ChatBlock = ({ chatId, className }: any) => {
+const ChatBlock = ({ chatId, className, disableSelection }: any) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const { chat, isLoading, chatSource } = useChat(chatId);
@@ -101,7 +101,7 @@ const ChatBlock = ({ chatId, className }: any) => {
     updateChat,
     deleteChat,
   } = useChats();
-  const selected = activeChat === chatId;
+  const selected = activeChat === chatId && !disableSelection;
 
   const onEditStarted = () => {
     setIsEditing(true);
@@ -130,8 +130,8 @@ const ChatBlock = ({ chatId, className }: any) => {
       // The current selection is the last and has previous one
       nextChatId = chats[currentIndex - 1].id;
     }
-    await deleteChat(chat.id);
     setActiveChat(nextChatId);
+    await deleteChat(chat.id);
     if (nextChatId < 0) {
       router.replace('/chat');
     } else {
@@ -185,9 +185,11 @@ const ChatBlock = ({ chatId, className }: any) => {
 const ChatList = ({
   className,
   maxCount,
+  disableSelection = false,
 }: {
   className?: string;
   maxCount?: number;
+  disableSelection?: boolean;
 }) => {
   const {
     chats,
@@ -205,10 +207,18 @@ const ChatList = ({
   if (maxCount) {
     trimmedChats = trimmedChats.slice(0, maxCount);
   }
+
+  console.log('Page ChatList', chats);
+
   return (
     <>
       {trimmedChats.map((chat: any) => (
-        <ChatBlock key={chat.id} chatId={chat.id} className={className} />
+        <ChatBlock
+          key={chat.id}
+          chatId={chat.id}
+          className={className}
+          disableSelection={disableSelection}
+        />
       ))}
     </>
   );

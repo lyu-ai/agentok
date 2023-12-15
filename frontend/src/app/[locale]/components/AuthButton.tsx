@@ -5,8 +5,7 @@ import { Popover } from '@headlessui/react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { FaGithub, FaUserNinja } from 'react-icons/fa6';
-import { MdLogout } from 'react-icons/md';
+import { GoBug, GoPersonFill, GoSignOut } from 'react-icons/go';
 import clsx from 'clsx';
 
 const UserImage = ({ user, className }: any) => {
@@ -32,7 +31,7 @@ const UserImage = ({ user, className }: any) => {
           className="w-full h-full object-cover rounded-full"
         />
       ) : (
-        <FaUserNinja className="w-full h-full p-2" />
+        <GoPersonFill className="w-full h-full p-2" />
       )}
     </div>
   );
@@ -73,7 +72,7 @@ const UserPanel = ({ user }: { user: any }) => {
             'hover:bg-base-content/30'
           )}
         >
-          <FaGithub className="h-5 w-5" />
+          <GoBug className="h-5 w-5" />
           Report Issues
         </a>
         <div
@@ -83,7 +82,7 @@ const UserPanel = ({ user }: { user: any }) => {
             'hover:bg-base-content/30'
           )}
         >
-          <MdLogout className="w-5 h-5" />
+          <GoSignOut className="w-5 h-5" />
           Sign Out
         </div>
       </div>
@@ -113,6 +112,7 @@ const UserAvatar = ({ user }: any) => {
     <Popover>
       <Float
         placement="bottom-end"
+        shift
         offset={2}
         enter="transition ease-out duration-150"
         enterFrom="transform origin-top-right scale-0 opacity-0"

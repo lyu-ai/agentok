@@ -5,7 +5,7 @@ import {
   GoMegaphone,
   GoPencil,
   GoPersonFill,
-  GoShareAndroid,
+  GoShare,
 } from 'react-icons/go';
 import { RiRobot2Fill, RiRobot2Line } from 'react-icons/ri';
 import { MdOutlineCleaningServices } from 'react-icons/md';
@@ -221,7 +221,7 @@ const Chat = ({
               href={`/chat/${chat?.id}`}
               target="_blank"
             >
-              <GoShareAndroid className="w-4 h-4" />
+              <GoShare className="w-4 h-4" />
             </a>
           )}
           {standalone && chat?.sourceType === 'flow' && (

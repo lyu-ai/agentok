@@ -83,8 +83,9 @@ const ChatListButton = ({ className, onSelect }: any) => {
   return (
     <Popover>
       <Float
-        placement="bottom"
-        offset={5}
+        placement="bottom-start"
+        offset={4}
+        shift
         enter="transition ease-out duration-300"
         enterFrom="transform scale-0 opacity-0"
         enterTo="transform scale-100 opacity-100"
