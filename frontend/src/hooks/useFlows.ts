@@ -2,13 +2,13 @@ import useSWR from 'swr';
 import useFlowStore, { Flow } from '@/store/flow';
 import { Template } from '@/store/template';
 import { useEffect, useState } from 'react';
-import { createClient } from '@/utils/supabase/client';
 import {
   getFlowName,
   initialEdges,
   initialNodes,
 } from '@/app/[locale]/utils/flow';
 import { fetcher } from './fetcher';
+import pb from '@/utils/pocketbase/client';
 
 export function useFlows() {
   const { data, error, mutate } = useSWR('/api/flows', fetcher);
@@ -26,22 +26,22 @@ export function useFlows() {
 
   const [isCreating, setIsCreating] = useState(false);
   const handleCreateFlow = async (): Promise<Flow | undefined> => {
+    console.log('useFlows.createFlow');
     setIsCreating(true);
     try {
-      const supabase = createClient();
-      const session = await supabase.auth.getSession();
       const response = await fetch(`/api/flows`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + session.data.session?.access_token,
         },
+        credentials: 'include',
         body: JSON.stringify({
           name: getFlowName(initialNodes),
           flow: {
             nodes: initialNodes,
             edges: initialEdges,
           },
+          owner: pb.authStore.model?.id,
         }),
       });
       const newFlow = await response.json();
@@ -57,19 +57,14 @@ export function useFlows() {
   };
 
   const [isDeleting, setIsDeleting] = useState(false);
-  const handleDeleteFlow = async (id: number) => {
+  const handleDeleteFlow = async (id: string) => {
     setIsDeleting(true);
     // Optimistically remove the flow from the local state
     deleteFlow(id);
     try {
-      const supabase = createClient();
-      const session = await supabase.auth.getSession();
-
       await fetch(`/api/flows/${id}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: 'Bearer ' + session.data.session?.access_token,
-        },
+        credentials: 'include',
       });
       mutate(); // Revalidate the cache to reflect the change
     } catch (error) {
@@ -82,19 +77,17 @@ export function useFlows() {
   };
 
   const [isUpdating, setIsUpdating] = useState(false);
-  const handleUpdateFlow = async (id: number, flow: Flow) => {
+  const handleUpdateFlow = async (id: string, flow: Flow) => {
     setIsUpdating(true);
     // Optimistically update the flow in the local state
     updateFlow(id, flow);
     try {
-      const supabase = createClient();
-      const session = await supabase.auth.getSession();
       const response = await fetch(`/api/flows`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + session.data.session?.access_token,
         },
+        credentials: 'include',
         body: JSON.stringify(flow),
       });
       const updatedFlow = await response.json();
@@ -115,16 +108,13 @@ export function useFlows() {
   ): Promise<Flow | undefined> => {
     setIsForking(true);
     try {
-      const supabase = createClient();
-      const session = await supabase.auth.getSession();
-
       const { id, description, ...newFlow } = template;
       const response = await fetch(`/api/flows`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + session.data.session?.access_token,
         },
+        credentials: 'include',
         body: JSON.stringify(newFlow),
       });
       if (!response.ok) {

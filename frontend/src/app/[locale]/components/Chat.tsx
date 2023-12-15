@@ -14,7 +14,7 @@ import { RxReload } from 'react-icons/rx';
 import ChatInput from './ChatInput';
 import Markdown from '@/components/Markdown';
 import { genId } from '@/utils/id';
-import { createClient } from '@/utils/supabase/client';
+import pb from '@/utils/pocketbase/client';
 import { stripMatch } from '@/utils/re';
 import { ThinkTag } from '@/utils/chat';
 import { PiChatsCircleFill } from 'react-icons/pi';
@@ -23,13 +23,11 @@ import { useTranslations } from 'next-intl';
 import { useChat } from '@/hooks';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 
-const supabase = createClient();
-
 const Chat = ({
   chatId,
   standalone,
 }: {
-  chatId: number;
+  chatId: string;
   standalone?: boolean;
 }) => {
   const { chat, isLoading: isLoadingChat, isError, collapseSidebar } = useChat(
@@ -63,31 +61,24 @@ const Chat = ({
   useEffect(() => {
     if (!chat) return;
     fetchMessages().finally(() => setLoading(false));
-    const subscription = supabase
-      .channel('flowgen')
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'messages' },
-        payload => {
-          console.log('changes_event:', payload);
-          if (payload.new.type !== 'user') {
-            // The user message was added when sending, no need to add it again.
-            setMessages(msgs => [...msgs, payload.new as any]);
-          }
-          const content = (payload.new as any).content;
-          if (content.startsWith(ThinkTag.begin)) {
-            console.log('Begin thinking');
-            setThinking(true);
-          } else if (content.startsWith(ThinkTag.end)) {
-            setThinking(false);
-            console.log('End thinking');
-          }
-        }
-      )
-      .subscribe();
+    const subscription = pb.collection('messages').subscribe('*', payload => {
+      console.log('changes_event:', payload);
+      if (payload.record.type !== 'user') {
+        // The user message was added when sending, no need to add it again.
+        setMessages(msgs => [...msgs, payload.record as any]);
+      }
+      const content = payload.record.content;
+      if (content.startsWith(ThinkTag.begin)) {
+        console.log('Begin thinking');
+        setThinking(true);
+      } else if (content.startsWith(ThinkTag.end)) {
+        setThinking(false);
+        console.log('End thinking');
+      }
+    });
 
     return () => {
-      supabase.removeChannel(subscription);
+      pb.collection('messsages').unsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -111,6 +102,7 @@ const Chat = ({
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
     })
       .then(() => {
         setMessages([]);
@@ -138,6 +130,7 @@ const Chat = ({
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
     });
 
     if (!res.ok) {
@@ -323,7 +316,7 @@ const Chat = ({
                     )}
                   </div>
                   <div className="text-base-content/20 text-xs">
-                    {new Date(message.created_at).toLocaleTimeString()}
+                    {new Date(message.created).toLocaleString()}
                   </div>
                 </div>
               )}

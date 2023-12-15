@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import createIntlMiddleware from 'next-intl/middleware';
-import { createClient } from '@/utils/supabase/middleware';
+import loadAuthFromRequestCookie from './utils/pocketbase/middleware';
 
 // Create a middleware for internationalization
 const intlMiddleware = createIntlMiddleware({
@@ -23,34 +23,12 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // Process the Supabase auth middleware logic
-  const { supabase } = createClient(req);
-
-  // Get the session and if it sets any cookies or headers, apply those to the response
-  const {
-    data: { session },
-    error,
-  } = await supabase.auth.getSession();
-
-  // console.log('session', session);
-
-  if (error) {
-    // Handle the error according to your application's needs
-    console.error('Supabase auth error:', error.message);
-  }
-
-  // `session` is `null`, redirect to login page
-  if (!session) {
-    const url = req.nextUrl.clone();
-    // Define the public paths that don't require authentication
-    const publicPaths = ['/login']; // Add publicly accessible paths here
-    // Check if the current request path is not a public path
-    if (!publicPaths.includes(url.pathname)) {
-      // Redirect the user to the login page with a return URL
-      url.pathname = '/login';
-      url.searchParams.set('redirectUrl', req.nextUrl.pathname);
-      return NextResponse.redirect(url);
-    }
+  const pb = loadAuthFromRequestCookie(req);
+  if (!pb.authStore.isValid) {
+    const redirectTo = req.nextUrl.pathname;
+    return NextResponse.redirect(
+      new URL(`/auth/login?redirect=${redirectTo}`, req.nextUrl)
+    );
   }
 
   // Now return the response after processing both middlewares

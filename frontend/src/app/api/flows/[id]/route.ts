@@ -1,54 +1,46 @@
 import { NextRequest } from 'next/server';
-
-const FLOWGEN_SERVER_URL =
-  process.env.FLOWGEN_SERVER_URL || 'http://127.0.0.1:5004';
+import loadAuthFromCookie from '@/utils/pocketbase/server';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const token = request.headers.get('Authorization');
-
-  const res = await fetch(`${FLOWGEN_SERVER_URL}/api/flows/${params.id}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: token ?? '',
-    },
-  });
-  if (!res.ok) {
-    console.error(
-      `Failed GET /flows/${params.id}:`,
-      res.status,
-      res.statusText
-    );
-    return new Response(res.statusText, { status: res.status });
+  try {
+    const pb = await loadAuthFromCookie();
+    const flow = await pb.collection('flows').getOne(params.id);
+    return new Response(JSON.stringify(flow));
+  } catch (e) {
+    console.error(`Failed GET /flows/${params.id}: ${e}`);
+    return new Response((e as any).message, { status: 400 });
   }
-  const data = await res.json();
-  return new Response(JSON.stringify(data));
+}
+
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const flow = await request.json();
+  try {
+    const pb = loadAuthFromCookie();
+    const res = (await pb).collection('flows').update(params.id, flow);
+    return new Response(JSON.stringify(res));
+  } catch (e) {
+    console.error(`Failed POST /flows/${params.id}: ${e}`);
+    return new Response((e as any).message, { status: 400 });
+  }
 }
 
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const token = request.headers.get('Authorization');
-
-  const res = await fetch(`${FLOWGEN_SERVER_URL}/api/flows/${params.id}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: token ?? '',
-    },
-  });
-  if (!res.ok) {
-    console.error(
-      `Failed DELETE /flows/${params.id}:`,
-      res.status,
-      res.statusText
-    );
-    return new Response(res.statusText, { status: res.status });
+  const flow = await request.json();
+  try {
+    const pb = loadAuthFromCookie();
+    const res = (await pb).collection('flows').delete(params.id);
+    return new Response(JSON.stringify(res));
+  } catch (e) {
+    console.error(`Failed DELETE /flows/${params.id}: ${e}`);
+    return new Response((e as any).message, { status: 400 });
   }
-  const data = await res.json();
-  return new Response(JSON.stringify(data));
 }

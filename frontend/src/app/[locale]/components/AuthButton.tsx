@@ -1,5 +1,4 @@
 'use client';
-import { createClient } from '@/utils/supabase/client';
 import { Float } from '@headlessui-float/react';
 import { Popover } from '@headlessui/react';
 import Link from 'next/link';
@@ -7,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { GoBug, GoPersonFill, GoSignOut } from 'react-icons/go';
 import clsx from 'clsx';
+import pb from '@/utils/pocketbase/client';
 
 const UserImage = ({ user, className }: any) => {
   // State to handle image load error
@@ -40,8 +40,7 @@ const UserImage = ({ user, className }: any) => {
 const UserPanel = ({ user }: { user: any }) => {
   const router = useRouter();
   const signOut = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    pb.authStore.clear();
     router.replace('/login');
   };
   return (
@@ -88,7 +87,7 @@ const UserPanel = ({ user }: { user: any }) => {
       </div>
       <div className="flex items-center justify-center text-xs w-full gap-2 mt-4">
         <Link
-          href="https://docs.flowgen.dev/docs/privacy"
+          href="https://docs.flowgen.app/docs/privacy"
           target="_blank"
           className="link"
         >
@@ -96,7 +95,7 @@ const UserPanel = ({ user }: { user: any }) => {
         </Link>
         <span className="">•</span>
         <Link
-          href="https://docs.flowgen.dev/docs/tos"
+          href="https://docs.flowgen.app/docs/tos"
           target="_blank"
           className="link"
         >
@@ -134,15 +133,11 @@ const UserAvatar = ({ user }: any) => {
 
 const AuthButton = () => {
   const [user, setUser] = useState<any>(null);
-  const supabase = createClient();
   const pathname = usePathname();
   useEffect(() => {
-    supabase.auth.getUser().then(res => {
-      setUser(res.data?.user);
-    });
-    // Set up a subscription to auth changes
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
+    setUser(pb.authStore.model?.user);
+    pb.authStore.onChange(() => {
+      setUser(pb.authStore.model?.user);
     });
   }, []);
 

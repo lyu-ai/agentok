@@ -2,12 +2,13 @@ import { create } from 'zustand';
 import { Flow } from './flow';
 
 export interface Template {
-  id: number;
+  id: string;
   name: string; // Template name is probably different with the name of the included flow
   description: string;
   thumbnail?: string; // image url
   flow: Flow; // Complicated JSON object
   owner: string;
+  created?: string;
 }
 
 interface TemplateState {
@@ -15,8 +16,8 @@ interface TemplateState {
 
   // Public flows (do not support update operation)
   setTemplates: (templates: Template[]) => void;
-  deleteTemplate: (id: number) => void;
-  getTemplateById: (id: number) => Template | undefined;
+  deleteTemplate: (id: string) => void;
+  getTemplateById: (id: string) => Template | undefined;
 }
 
 const useTemplateStore = create<TemplateState>((set, get) => ({
@@ -27,15 +28,11 @@ const useTemplateStore = create<TemplateState>((set, get) => ({
     set(state => {
       console.log('Deleting template with id:', id);
       return {
-        templates: isNaN(id)
-          ? state.templates
-          : state.templates.filter(flow => flow.id !== id),
+        templates: state.templates.filter(flow => flow.id !== id),
       };
     }),
   getTemplateById: id => {
-    return isNaN(id)
-      ? undefined
-      : get().templates.find(template => template.id === id);
+    return get().templates.find(template => template.id === id);
   },
 }));
 

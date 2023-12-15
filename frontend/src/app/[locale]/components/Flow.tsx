@@ -51,6 +51,8 @@ const Flow = ({ flowId }: any) => {
     };
   }
 
+  console.log('flow', flow);
+
   useEffect(() => {
     if (!flow?.flow) return;
     setNodes(flow?.flow?.nodes ?? []);
@@ -153,12 +155,6 @@ const Flow = ({ flowId }: any) => {
       data,
     };
     setNodes(nds => nds.concat(newNode));
-  };
-
-  const onReset = () => {
-    setNodes(initialNodes);
-    setEdges(initialEdges);
-    fitView({ maxZoom: 1 });
   };
 
   const onSave = () => {

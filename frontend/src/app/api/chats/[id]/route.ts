@@ -1,85 +1,45 @@
 import { NextRequest } from 'next/server';
+import loadAuthFromCookie from '@/utils/pocketbase/server';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const token = request.headers.get('Authorization');
-  const res = await fetch(
-    `${process.env.FLOWGEN_SERVER_URL}/api/chats/${params.id}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token ?? '',
-      },
-    }
-  );
-  if (!res.ok) {
-    console.error(
-      `Failed GET /chats/${params.id}:`,
-      res.status,
-      res.statusText
-    );
-    return new Response(res.statusText, { status: res.status });
+  try {
+    const pb = await loadAuthFromCookie();
+    const chat = await pb.collection('chats').getOne(params.id);
+    return new Response(JSON.stringify(chat));
+  } catch (e) {
+    console.error(`Failed GET /chats/${params.id}: ${e}`);
+    return new Response((e as any).message, { status: 400 });
   }
-  const data = await res.json();
-  return new Response(JSON.stringify(data));
 }
 
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const token = request.headers.get('Authorization');
   const chat = await request.json();
-  const res = await fetch(
-    `${process.env.FLOWGEN_SERVER_URL}/api/chats/${params.id}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token ?? '',
-      },
-      body: JSON.stringify(chat),
-    }
-  );
-  if (!res.ok) {
-    console.error(
-      `Failed POST /chats/${params.id}:`,
-      res.status,
-      res.statusText,
-      await res.text()
-    );
-    return new Response(res.statusText, { status: res.status });
+  try {
+    const pb = loadAuthFromCookie();
+    const res = (await pb).collection('chats').update(params.id, chat);
+    return new Response(JSON.stringify(res));
+  } catch (e) {
+    console.error(`Failed POST /chats/${params.id}: ${e}`);
+    return new Response((e as any).message, { status: 400 });
   }
-  const data = await res.json();
-  return new Response(JSON.stringify(data));
 }
 
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const token = request.headers.get('Authorization');
-  const res = await fetch(
-    `${process.env.FLOWGEN_SERVER_URL}/api/chats/${params.id}`,
-    {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token ?? '',
-      },
-    }
-  );
-  if (!res.ok) {
-    console.error(
-      `Failed DELETE /chats/${params.id}:`,
-      res.status,
-      res.statusText
-    );
-    return new Response(res.statusText, { status: res.status });
+  try {
+    const pb = await loadAuthFromCookie();
+    const res = await pb.collection('chats').delete(params.id);
+    return new Response(JSON.stringify({ result: res }));
+  } catch (e) {
+    console.error(`Failed DELETE /chats/${params.id}: ${e}`);
+    return new Response((e as any).message, { status: 400 });
   }
-  const data = await res.json();
-  return new Response(JSON.stringify(data));
 }

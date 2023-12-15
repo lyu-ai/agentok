@@ -1,6 +1,5 @@
 import { NextRequest } from 'next/server';
-import { createClient } from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import loadAuthFromCookie from '@/utils/pocketbase/server';
 
 const FLOWGEN_SERVER_URL =
   process.env.FLOWGEN_SERVER_URL || 'https://localhost:5004';
@@ -9,25 +8,17 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-  const messages = await supabase
-    .from('messages')
-    .select()
-    .eq('session', params.id)
-    .order('created_at', { ascending: false })
-    .limit(50)
-    .then(response => {
-      // Assuming response.data contains the array of messages
-      if (response.data) {
-        // Reverse the array to get the oldest messages at the top
-        return response.data.reverse();
-      } else {
-        // Handle no data or error condition
-        return [];
-      }
-    });
-  return new Response(JSON.stringify(messages));
+  const pb = await loadAuthFromCookie();
+  try {
+    const record = await pb
+      .collection('messages')
+      .getList(1, 50, { filter: `chat='${params.id}'`, sort: '-created' });
+    // .getFullList();
+    return new Response(JSON.stringify(record.items));
+  } catch (e) {
+    console.error(`Failed GET /chats/${params.id}/messages: ${e}`);
+    return new Response((e as any).message, { status: 400 });
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -51,17 +42,22 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-  // Delete all messages
-  const { error } = await supabase
-    .from('messages')
-    .delete()
-    .eq('session', params.id);
-  if (error) {
-    console.error('Error', error);
-    return new Response(JSON.stringify(error), { status: 400 });
+  const pb = await loadAuthFromCookie();
+
+  try {
+    const messages = await pb
+      .collection('messages')
+      .getFullList({ filter: `chat='${params.id}'` });
+    for (const message of messages) {
+      await pb
+        .collection('messages')
+        .delete(message.id, { $autoCancel: false });
+    }
+
+    let message = 'Deleted ${messages.length} messages';
+    return new Response(message, { status: 200 });
+  } catch (e) {
+    console.error(`Failed DELETE /chats/${params.id}/messages: ${e}`);
+    return new Response((e as any).message, { status: 400 });
   }
-  let message = 'Deleted ';
-  return new Response(message, { status: 200 });
 }

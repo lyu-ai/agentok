@@ -4,11 +4,6 @@ FROM node:18-alpine AS base
 FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat build-base git
-# Python is required by node-gyp, which is required by supabase package
-RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
-# Add this line to install pip using apk instead of ensurepip
-RUN apk add py3-pip
-RUN apk add --no-cache py3-setuptools
 
 # Set the working directory inside the container to /app
 WORKDIR /app

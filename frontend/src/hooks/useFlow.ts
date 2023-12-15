@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import { fetcher } from './fetcher';
 import { useFlows } from './useFlows';
 
-export function useFlow(id: number) {
+export function useFlow(id: string) {
   const localFlow = useFlowStore(state => state.getFlowById(id));
   const { updateFlow, isUpdating } = useFlows();
 

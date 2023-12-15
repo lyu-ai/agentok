@@ -1,8 +1,8 @@
 import useSWR from 'swr';
 import useChatStore, { Chat } from '@/store/chat';
 import { useEffect, useState } from 'react';
-import { createClient } from '@/utils/supabase/client';
 import { fetcher } from './fetcher';
+import pb from '@/utils/pocketbase/client';
 
 export function useChats() {
   const { data, error, mutate } = useSWR('/api/chats', fetcher);
@@ -15,18 +15,18 @@ export function useChats() {
   useEffect(() => {
     if (data) {
       const normalizedChats = data.map((chatData: any) => {
-        const { template_id, flow_id, source_type, ...others } = chatData;
-        if (source_type === 'flow') {
+        const { from_template, from_flow, from_type, ...others } = chatData;
+        if (from_type === 'flow') {
           return {
             ...others,
-            sourceId: flow_id,
-            sourceType: source_type,
+            sourceId: from_flow,
+            sourceType: from_type,
           };
         } else {
           return {
             ...others,
-            sourceId: template_id,
-            sourceType: source_type,
+            sourceId: from_template,
+            sourceType: from_type,
           };
         }
       });
@@ -41,23 +41,20 @@ export function useChats() {
   ) => {
     setIsCreating(true);
     try {
-      const supabase = createClient();
-      const session = await supabase.auth.getSession();
-      if (!session.data.session?.access_token) {
-        throw new Error('No valid session found');
-      }
       const body = {
-        source_type: sourceType,
+        from_type: sourceType,
+        name: sourceType === 'flow' ? 'New Chat' : 'New Template Chat',
+        owner: pb.authStore.model?.id,
         ...(sourceType === 'flow'
-          ? { flow_id: sourceId }
-          : { template_id: sourceId }),
+          ? { from_flow: sourceId }
+          : { from_template: sourceId }),
       };
       const response = await fetch(`/api/chats`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + session.data.session?.access_token,
         },
+        credentials: 'include',
         body: JSON.stringify(body),
       });
       if (!response.ok) {
@@ -77,18 +74,14 @@ export function useChats() {
   };
 
   const [isDeleting, setIsDeleting] = useState(false);
-  const handleDeleteChat = async (id: number) => {
+  const handleDeleteChat = async (id: string) => {
     setIsDeleting(true);
     // Optimistically remove the flow from the local state
     deleteChat(id);
     try {
-      const supabase = createClient();
-      const session = await supabase.auth.getSession();
       await fetch(`/api/chats/${id}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: 'Bearer ' + session.data.session?.access_token,
-        },
+        credentials: 'include',
       });
       await mutate(); // Revalidate the cache to reflect the change
     } catch (error) {
@@ -102,18 +95,14 @@ export function useChats() {
 
   const updateChat = useChatStore(state => state.updateChat);
   const [isUpdating, setIsUpdating] = useState(false);
-  const handleUpdateChat = async (id: number, chat: Partial<Chat>) => {
+  const handleUpdateChat = async (id: string, chat: Partial<Chat>) => {
     setIsUpdating(true);
     // Optimistically update the chat to the local state
     updateChat(id, chat);
     try {
-      const supabase = createClient();
-      const session = await supabase.auth.getSession();
       await fetch(`/api/chats/${id}`, {
         method: 'POST',
-        headers: {
-          Authorization: 'Bearer ' + session.data.session?.access_token,
-        },
+        credentials: 'include',
         body: JSON.stringify({ id, ...chat }),
       });
       await mutate(); // Revalidate the cache to reflect the change

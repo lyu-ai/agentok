@@ -1,9 +1,9 @@
 import useSWR from 'swr';
 import useTemplateStore from '@/store/template';
 import { useEffect, useState } from 'react';
-import { createClient } from '@/utils/supabase/client';
 import { fetcher } from './fetcher';
 import { Template } from '@/store/template';
+import pb from '@/utils/pocketbase/client';
 
 export function useTemplates() {
   const { data, error, mutate } = useSWR('/api/templates', fetcher);
@@ -20,15 +20,11 @@ export function useTemplates() {
   const handleDeleteTemplate = async (id: string) => {
     setIsDeleting(true);
     // Optimistically remove the template from the local state
-    deleteTemplate(Number(id));
+    deleteTemplate(id);
     try {
-      const supabase = createClient();
-      const session = await supabase.auth.getSession();
       await fetch(`/api/templates/${id}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: 'Bearer ' + session.data.session?.access_token,
-        },
+        credentials: 'include',
       });
       mutate(); // Revalidate the cache to reflect the change
     } catch (error) {
@@ -44,13 +40,12 @@ export function useTemplates() {
   const publishTemplate = async (template: Template) => {
     setIsPublishing(true);
     try {
-      const supabase = createClient();
-      const session = await supabase.auth.getSession();
       const res = await fetch(`/api/templates`, {
         method: 'POST',
         headers: {
-          Authorization: 'Bearer ' + session.data.session?.access_token,
+          'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(template),
       });
       if (res.ok) {

@@ -1,31 +1,32 @@
 import { create } from 'zustand';
 
 export interface Chat {
-  id: number;
+  id: string;
   name: string;
   sourceId: string; // Binded flow
   sourceType: 'flow' | 'template';
   config: any; // Complicated JSON object
   sidebarCollapsed: boolean;
+  created?: string;
 }
 
 interface ChatState {
   chats: Chat[];
-  activeChat: number;
+  activeChat: string;
   // User Chats
   setChats: (chats: Chat[]) => void;
-  setActiveChat: (chatId: number) => void;
-  updateChat: (id: number, chat: Partial<Chat>) => void;
-  deleteChat: (id: number) => void;
-  getChatById: (id: number) => Chat | undefined;
+  setActiveChat: (chatId: string) => void;
+  updateChat: (id: string, chat: Partial<Chat>) => void;
+  deleteChat: (id: string) => void;
+  getChatById: (id: string) => Chat | undefined;
 }
 
 const useChatStore = create<ChatState>((set, get) => ({
   // User Chats
   chats: [],
-  activeChat: -1,
+  activeChat: '',
   setChats: chats => set({ chats }),
-  setActiveChat: (chatId: number) => set({ activeChat: chatId }),
+  setActiveChat: (chatId: string) => set({ activeChat: chatId }),
   updateChat: (id, newChat) =>
     set(state => {
       console.log('Updating chat data:', id, newChat);
@@ -44,13 +45,11 @@ const useChatStore = create<ChatState>((set, get) => ({
   deleteChat: id =>
     set(state => {
       return {
-        chats: isNaN(id)
-          ? state.chats
-          : state.chats.filter(chat => chat.id !== id),
+        chats: state.chats.filter(chat => chat.id !== id),
       };
     }),
   getChatById: id => {
-    return isNaN(id) ? undefined : get().chats.find(chat => chat.id === id);
+    return get().chats.find(chat => chat.id === id);
   },
 }));
 

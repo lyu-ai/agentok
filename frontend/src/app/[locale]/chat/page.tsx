@@ -6,18 +6,37 @@ import { RiRobot2Fill } from 'react-icons/ri';
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useChats } from '@/hooks';
+import { toast } from 'react-toastify';
 import ChatList from '../components/ChatList';
 
 const ChatAction = ({ flow }: any) => {
   const t = useTranslations('page.Chat');
+  const { createChat, isCreating } = useChats();
+  const router = useRouter();
+  const onChat = (e: any) => {
+    createChat(flow.id, 'flow')
+      .then(chat => {
+        if (chat) {
+          router.push(`/chat/${chat.id}`);
+        }
+      })
+      .catch(e => {
+        console.log(e);
+        toast.error(`Failed to create chat: ${e}`);
+      });
+  };
   return (
-    <a
-      href={`/chat?source_id=${flow.id}&source_type=flow`}
+    <div
+      onClick={onChat}
       className="btn group-hover:btn-primary btn-sm group-hover:animate-pulse"
     >
-      <RiRobot2Fill className="w-4 h-4" />
+      {isCreating ? (
+        <div className="loading loading-sm" />
+      ) : (
+        <RiRobot2Fill className="w-4 h-4" />
+      )}
       {t('start-chat')}
-    </a>
+    </div>
   );
 };
 
