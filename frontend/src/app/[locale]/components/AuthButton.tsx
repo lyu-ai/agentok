@@ -87,7 +87,7 @@ const UserPanel = ({ user }: { user: any }) => {
       </div>
       <div className="flex items-center justify-center text-xs w-full gap-2 mt-4">
         <Link
-          href="https://docs.flowgen.dev/docs/privacy"
+          href="https://docs.flowgen.app/docs/privacy"
           target="_blank"
           className="link"
         >
@@ -95,7 +95,7 @@ const UserPanel = ({ user }: { user: any }) => {
         </Link>
         <span className="">•</span>
         <Link
-          href="https://docs.flowgen.dev/docs/tos"
+          href="https://docs.flowgen.app/docs/tos"
           target="_blank"
           className="link"
         >

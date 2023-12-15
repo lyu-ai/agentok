@@ -103,7 +103,7 @@ const TemplateBlock = ({ template, index }: any) => {
         <img
           src={
             template.thumbnail ??
-            `https://docs.flowgen.dev/img/${randomImage}-2.png`
+            `https://docs.flowgen.app/img/${randomImage}-2.png`
           }
           alt={template.name}
           className="rounded-t-md h-48 w-full object-cover"

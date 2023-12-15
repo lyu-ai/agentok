@@ -27,7 +27,7 @@ const Login = ({
       const userData = await pb
         .collection('users')
         .authWithPassword(
-          asGuest ? 'hi@flowgen.dev' : email,
+          asGuest ? 'hi@flowgen.app' : email,
           asGuest ? '12345678' : password
         );
       setError('');
@@ -98,7 +98,7 @@ const Login = ({
             name="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            placeholder="hi@flowgen.dev"
+            placeholder="hi@flowgen.app"
             required
           />
           <label className="text-md" htmlFor="password">
