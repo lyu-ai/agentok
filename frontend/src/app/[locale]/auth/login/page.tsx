@@ -93,6 +93,7 @@ const Login = ({
           <input
             className="input input-bordered rounded py-2 bg-primary/20 mb-2"
             name="email"
+            defaultValue={'hi@flowgen.app'}
             value={email}
             onChange={e => setEmail(e.target.value)}
             placeholder="hi@flowgen.app"
@@ -106,8 +107,9 @@ const Login = ({
             type="password"
             name="password"
             value={password}
+            defaultValue={'12345678'}
             onChange={e => setPassword(e.target.value)}
-            placeholder="123456"
+            placeholder="12345678"
             required
           />
           {error && (
