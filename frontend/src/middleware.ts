@@ -29,7 +29,6 @@ export async function middleware(req: NextRequest) {
       '/:locale?/auth/(.*)', // /auth/*
     ]).test(req.nextUrl.pathname)
   ) {
-    console.log('pathToRegexp at middleware matched: ', req.nextUrl.pathname);
     return res;
   }
 

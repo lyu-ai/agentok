@@ -75,7 +75,7 @@ const UserPanel = ({ user }: { user: any }) => {
         <div
           onClick={signOut}
           className={clsx(
-            'w-40 flex items-center justify-center p-4 gap-2 bg-base-content/20 rounded-l-[2px] rounded-r-full',
+            'w-40 flex items-center justify-center p-4 gap-2 bg-base-content/20 rounded-l-[2px] rounded-r-full cursor-pointer',
             'hover:bg-base-content/30'
           )}
         >
