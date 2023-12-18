@@ -142,7 +142,8 @@ export const initialNodes: Node[] = [
     data: {
       name: 'Note',
       class: 'Note',
-      content: '点击**开始聊天**按钮，选择一个样例图片并输入：这是什么。',
+      content:
+        'Click **Start Chat** and select a sample picture and then enter: What is this?',
     },
     position: { x: 150, y: 700 },
   },
@@ -151,8 +152,8 @@ export const initialNodes: Node[] = [
     type: 'config',
     data: {
       name: 'Config',
-      flow_id: 'flow-sample1',
-      flow_description: '示例流程',
+      flow_id: 'sample-flow1',
+      flow_description: 'Sample Flow',
       class: 'Config',
       max_tokens: 1024,
       temperature: 0.5,

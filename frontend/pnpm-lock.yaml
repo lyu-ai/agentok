@@ -56,6 +56,9 @@ dependencies:
   next-themes:
     specifier: ^0.2.1
     version: 0.2.1(next@14.0.4)(react-dom@18.2.0)(react@18.2.0)
+  path-to-regexp:
+    specifier: ^6.2.1
+    version: 6.2.1
   pocketbase:
     specifier: ^0.20.1
     version: 0.20.1
@@ -3733,6 +3736,10 @@ packages:
     dependencies:
       lru-cache: 10.1.0
       minipass: 7.0.4
+    dev: false
+
+  /path-to-regexp@6.2.1:
+    resolution: {integrity: sha512-JLyh7xT1kizaEvcaXOQwOc2/Yhw6KZOvPf1S8401UyLk86CU79LN3vl7ztXGm/pZ+YjoyAJ4rxmHwbkBXJX+yw==}
     dev: false
 
   /path-type@4.0.0:

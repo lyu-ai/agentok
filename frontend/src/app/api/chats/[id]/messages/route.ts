@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import loadAuthFromCookie from '@/utils/pocketbase/server';
 
-const FLOWGEN_SERVER_URL =
-  process.env.FLOWGEN_SERVER_URL || 'https://localhost:5004';
+const NEXT_PUBLIC_BACKEND_URL =
+  process.env.NEXT_PUBLIC_BACKEND_URL || 'https://localhost:5004';
 
 export async function GET(
   request: NextRequest,
@@ -21,15 +21,28 @@ export async function GET(
   }
 }
 
-export async function POST(request: NextRequest) {
-  const message = await request.json();
-  const res = await fetch(`${FLOWGEN_SERVER_URL}/api/messages`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(message),
-  });
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const pb = await loadAuthFromCookie();
+  let message = await request.json();
+  message = {
+    ...message,
+    owner: pb.authStore.model?.id,
+  };
+
+  const res = await fetch(
+    `${NEXT_PUBLIC_BACKEND_URL}/chats/${params.id}/messages`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${pb.authStore.token}`,
+      },
+      body: JSON.stringify(message),
+    }
+  );
   if (!res.ok) {
     console.error('Error', await res.text());
     return new Response(res.statusText, { status: res.status });

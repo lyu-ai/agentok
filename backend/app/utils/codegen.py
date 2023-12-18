@@ -4,9 +4,10 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.ext import do
 from typing import Any, Dict, List, Union
 
+print('target path:', os.path.join(os.getcwd(), "app/", "templates"))
 # Set up the Jinja2 environment
 env = Environment(
-    loader=FileSystemLoader(searchpath="./templates/"),
+    loader=FileSystemLoader(searchpath=os.path.join(os.getcwd(), "app/", "templates")),
     autoescape=select_autoescape(),
     extensions=[do]
 )
@@ -44,6 +45,7 @@ def flow2py(flow: Data) -> str:
 
   # Use the template for each node
   template = env.get_template("base.j2") # Main template
+
   code = template.render(nodes=flow['nodes'],
                         assistant_nodes=assistant_nodes,
                         config_node=config_node,
@@ -51,8 +53,9 @@ def flow2py(flow: Data) -> str:
                         main_user_proxy=user_proxy,
                         first_converser=first_converser,
                         grouped_nodes=grouped_nodes,)
-  
+
   return code
+
 
 if __name__ == '__main__':
   flow_name = 'gptassistant'

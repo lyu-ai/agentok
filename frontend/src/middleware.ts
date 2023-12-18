@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import createIntlMiddleware from 'next-intl/middleware';
 import loadAuthFromRequestCookie from './utils/pocketbase/middleware';
+import { pathToRegexp } from 'path-to-regexp';
 
 // Create a middleware for internationalization
 const intlMiddleware = createIntlMiddleware({
@@ -23,11 +24,20 @@ export async function middleware(req: NextRequest) {
     }
   }
 
+  if (
+    pathToRegexp([
+      '/:locale?/auth/(.*)', // /auth/*
+    ]).test(req.nextUrl.pathname)
+  ) {
+    console.log('pathToRegexp at middleware matched: ', req.nextUrl.pathname);
+    return res;
+  }
+
   const pb = loadAuthFromRequestCookie(req);
   if (!pb.authStore.isValid) {
     const redirectTo = req.nextUrl.pathname;
     return NextResponse.redirect(
-      new URL(`/auth/login?redirect=${redirectTo}`, req.nextUrl)
+      new URL(`/auth/login?redirectTo=${redirectTo}`, req.nextUrl)
     );
   }
 
@@ -46,7 +56,5 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   // Skip all paths that should not be internationalized
-  matcher: [
-    '/((?!api|_next|auth|.*\\.(?:png|ico|svg|jpeg|jpg|webp|md|cer)).*)',
-  ], // Matcher ignoring `/_next/`, `/api/` and '/auth' routes; and all static assets
+  matcher: ['/((?!api|_next|.*\\.(?:png|ico|svg|jpeg|jpg|webp|md|cer)).*)'], // Matcher ignoring `/_next/`, `/api/` and '/auth' routes; and all static assets
 };

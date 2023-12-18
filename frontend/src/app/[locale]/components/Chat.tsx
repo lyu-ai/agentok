@@ -14,6 +14,7 @@ import { RxReload } from 'react-icons/rx';
 import ChatInput from './ChatInput';
 import Markdown from '@/components/Markdown';
 import { genId } from '@/utils/id';
+import { UnsubscribeFunc } from 'pocketbase';
 import pb from '@/utils/pocketbase/client';
 import { stripMatch } from '@/utils/re';
 import { ThinkTag } from '@/utils/chat';
@@ -61,11 +62,15 @@ const Chat = ({
   useEffect(() => {
     if (!chat) return;
     fetchMessages().finally(() => setLoading(false));
-    const subscription = pb.collection('messages').subscribe('*', payload => {
+    pb.collection('messages').subscribe('*', payload => {
       console.log('changes_event:', payload);
       if (payload.record.type !== 'user') {
         // The user message was added when sending, no need to add it again.
-        setMessages(msgs => [...msgs, payload.record as any]);
+        setMessages(msgs =>
+          msgs.some(m => m.id === payload.record.id)
+            ? msgs
+            : [...msgs, payload.record as any]
+        ); // Avoid duplicate messages
       }
       const content = payload.record.content;
       if (content.startsWith(ThinkTag.begin)) {
@@ -78,7 +83,7 @@ const Chat = ({
     });
 
     return () => {
-      pb.collection('messsages').unsubscribe();
+      pb.collection('messages').unsubscribe('*');
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -120,7 +125,7 @@ const Chat = ({
     const newMessage = {
       type: 'user',
       id: genId(),
-      session: chat?.id,
+      chat: chat?.id,
       content: message,
     };
     setMessages(msgs => [...msgs, newMessage]);
@@ -149,6 +154,7 @@ const Chat = ({
       {
         id: genId(),
         type: 'assistant',
+        chat: chat?.id,
         content: t('thinking'),
       },
     ];
@@ -166,7 +172,6 @@ const Chat = ({
 
   return (
     <div className="flex flex-col w-full h-full ">
-      <title>FlowGen Chat</title>
       <div className="flex items-center justify-between w-full px-2 py-1">
         <div className="flex items-center gap-2 text-sm font-bold">
           {standalone && (
@@ -227,16 +232,16 @@ const Chat = ({
             >
               <GoPencil className="w-4 h-4" />
             </a>
-          )}{' '}
+          )}
         </div>
       </div>
       <div className="relative flex mx-auto w-full max-w-[640px] flex-grow flex-col overflow-y-auto p-1">
-        {loading && (
+        {/* {loading && (
           <div className="flex flex-col items-center justify-center w-full h-full">
             <div className="loading loading-bars loading-sm" />
             <span className="mt-2 text-sm">{t('message-loading')}</span>
           </div>
-        )}
+        )} */}
         {messagesToDisplay.length === 0 && !loading && (
           <div className="flex items-center justify-center w-full h-full">
             <div className="text-sm text-base-content/50">
@@ -305,12 +310,12 @@ const Chat = ({
               {message.from && (
                 <div className="chat-header w-full flex items-end gap-2 text-sm p-1 text-base-content/80">
                   <div className="flex items-center gap-1">
-                    {message.from}
-                    {message.to && (
+                    {message.sender}
+                    {message.receiver && (
                       <>
                         <GoMegaphone className="w-3 h-3 inline-block mx-1" />
                         <span className=" text-base-content/50">
-                          {message.to}
+                          {message.receiver}
                         </span>
                       </>
                     )}

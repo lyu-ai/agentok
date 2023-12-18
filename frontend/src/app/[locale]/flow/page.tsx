@@ -23,6 +23,7 @@ const FlowPage = () => {
 
   return (
     <div className="flex flex-col w-full h-full gap-3 p-2">
+      <title>Flow | FlowGen</title>
       <div className="flex flex-col items-center justify-between w-full gap-6 px-4 py-8 text-sm font-bold">
         <span className="text-4xl font-bold">{t('flow-tagline')}</span>
         <div

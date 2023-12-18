@@ -27,6 +27,7 @@
     "next": "latest",
     "next-intl": "^3.3.2",
     "next-themes": "^0.2.1",
+    "path-to-regexp": "^6.2.1",
     "pocketbase": "^0.20.1",
     "postcss": "8.4.31",
     "react": "18.2.0",

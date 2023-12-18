@@ -21,8 +21,8 @@ export async function POST(
 ) {
   const flow = await request.json();
   try {
-    const pb = loadAuthFromCookie();
-    const res = (await pb).collection('flows').update(params.id, flow);
+    const pb = await loadAuthFromCookie();
+    const res = await pb.collection('flows').update(params.id, flow);
     return new Response(JSON.stringify(res));
   } catch (e) {
     console.error(`Failed POST /flows/${params.id}: ${e}`);
@@ -34,11 +34,10 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const flow = await request.json();
   try {
-    const pb = loadAuthFromCookie();
-    const res = (await pb).collection('flows').delete(params.id);
-    return new Response(JSON.stringify(res));
+    const pb = await loadAuthFromCookie();
+    const res = await pb.collection('flows').delete(params.id);
+    return new Response(JSON.stringify({ result: res }));
   } catch (e) {
     console.error(`Failed DELETE /flows/${params.id}: ${e}`);
     return new Response((e as any).message, { status: 400 });

@@ -12,7 +12,7 @@ RUN apk add --no-cache \
     linux-headers \
     libffi-dev \
     libc-dev
-RUN pip install gunicorn
+RUN pip install uvicorn
 
 # Copy only the requirements.txt first to leverage Docker cache
 COPY requirements.txt /app/
@@ -24,10 +24,5 @@ COPY . /app
 # Make port 5004 available to the world outside this container.
 EXPOSE 5004
 
-# Define environment variables.
-ENV FLASK_APP=api/index.py
-ENV FLASK_RUN_HOST=0.0.0.0
-ENV FLASK_RUN_PORT=5004
-
 # Define the startup command to use gunicorn
-CMD ["gunicorn", "-b", "0.0.0.0:5004", "api.index:app"]
+CMD ["uvicorn", "-b", "0.0.0.0:5004", "api.main:app"]

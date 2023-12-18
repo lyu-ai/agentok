@@ -1,4 +1,4 @@
-import PocketBase from 'pocketbase';
+import PocketBase, { RecordModel } from 'pocketbase';
 
 // Set a default value for the PocketBase URL for safety
 const DEFAULT_POCKETBASE_URL = 'http://localhost:7676';
@@ -22,5 +22,15 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
     document.cookie = client.authStore.exportToCookie({ httpOnly: false });
   });
 }
+
+export const getRecordFileUrl = (
+  pocketbase: PocketBase,
+  fileFieldName: string
+) => (record: RecordModel) =>
+  pocketbase.files.getUrl(record, record[fileFieldName]);
+
+export const getAssetFileUrl = (pocketbase: PocketBase) =>
+  getRecordFileUrl(client, 'file');
+export const getAvatarUrl = getRecordFileUrl(client, 'avatar');
 
 export default client;

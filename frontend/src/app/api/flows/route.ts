@@ -15,9 +15,15 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   console.log('POST /flows');
   const pb = await loadAuthFromCookie();
-  const chat = await request.json();
+  const flow = await request.json();
   try {
-    const res = await pb.collection('flows').create(chat);
+    console.log('POSTing flow', flow);
+    let res;
+    if (flow.id) {
+      res = await pb.collection('flows').update(flow.id, flow);
+    } else {
+      res = await pb.collection('flows').create(flow);
+    }
     return new Response(JSON.stringify(res));
   } catch (e) {
     console.error(`Failed POST /flows:`, (e as any).message);

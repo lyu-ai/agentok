@@ -1,14 +1,17 @@
+import loadAuthFromCookie from '@/utils/pocketbase/server';
 import { NextRequest } from 'next/server';
 
-const FLOWGEN_SERVER_URL =
-  process.env.FLOWGEN_SERVER_URL || 'https://flowgen.lyu.ai';
+const NEXT_PUBLIC_BACKEND_URL =
+  process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5004';
 
 export async function POST(request: NextRequest) {
+  const pb = await loadAuthFromCookie();
   const data = await request.json();
-  const res = await fetch(`${FLOWGEN_SERVER_URL}/api/codegen`, {
+  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/codegen`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${pb.authStore.token}`,
     },
     body: JSON.stringify(data),
   });

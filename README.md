@@ -1,3 +1,5 @@
+> [!IMPORTANT] > <font color="red"><b>This project is still under heavy development and functions might not work well yet. Please don't hestitate to <a href="https://github.com/tiwater/flowgen/issues/new">open new issues</a>.</b></font>
+
 <img src="./frontend/public/logo-full.png" width="320" />
 
 # FlowGen - AutoGen Visualized
@@ -71,7 +73,7 @@ If you're interested in contributing to the development of this project or wish 
    - Create virtual environment: `python3 -m venv venv`.
    - Activate virtual environment: `source venv/bin/activate`.
    - Install all required dependencies: `pip install -r requirements.txt`.
-   - Launch the backend service using command `python3 -m api.index`.
+   - Launch the backend service using command `uvicorn app.main:app --reload --port 5004`.
 
 3. **PocketBase:**
 

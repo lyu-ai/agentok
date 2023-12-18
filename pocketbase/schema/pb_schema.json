@@ -302,7 +302,7 @@
       {
         "system": false,
         "id": "mvp59xya",
-        "name": "from",
+        "name": "sender",
         "type": "text",
         "required": false,
         "presentable": false,
@@ -316,7 +316,7 @@
       {
         "system": false,
         "id": "6zofqhrc",
-        "name": "to",
+        "name": "receiver",
         "type": "text",
         "required": false,
         "presentable": false,

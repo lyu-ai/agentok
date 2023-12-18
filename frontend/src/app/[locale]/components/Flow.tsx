@@ -51,8 +51,6 @@ const Flow = ({ flowId }: any) => {
     };
   }
 
-  console.log('flow', flow);
-
   useEffect(() => {
     if (!flow?.flow) return;
     setNodes(flow?.flow?.nodes ?? []);
@@ -215,9 +213,6 @@ const Flow = ({ flowId }: any) => {
         selectionMode={SelectionMode.Partial}
         proOptions={{ hideAttribution: true }}
         fitView
-        fitViewOptions={{
-          maxZoom: 1,
-        }}
       >
         <Background
           id="logo"

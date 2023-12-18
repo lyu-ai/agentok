@@ -13,9 +13,9 @@ const providers = [
 ];
 
 const Login = ({
-  searchParams: { redirectUrl },
+  searchParams: { redirectTo },
 }: {
-  searchParams: { redirectUrl: string };
+  searchParams: { redirectTo: string };
 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,14 +24,14 @@ const Login = ({
 
   const signIn = async (asGuest?: boolean) => {
     try {
-      const userData = await pb
+      await pb
         .collection('users')
         .authWithPassword(
           asGuest ? 'hi@flowgen.app' : email,
           asGuest ? '12345678' : password
         );
       setError('');
-      router.push(redirectUrl ?? '/');
+      router.push(redirectTo ?? '/');
     } catch (e) {
       setError((e as any).message ?? `Sign in failed. ${e}`);
     }
@@ -41,8 +41,8 @@ const Login = ({
     try {
       const authData = await pb.collection('users').authWithOAuth2({
         provider,
-        options: {
-          redirectTo: `${window.location.origin}/api/auth/callback`,
+        query: {
+          state: 'somestate',
         },
       });
       setError('');
@@ -59,9 +59,6 @@ const Login = ({
         email,
         password,
         passwordConfirm: password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/api/auth/callback`,
-        },
       });
       setError('');
     } catch (e) {
