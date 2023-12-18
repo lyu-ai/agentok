@@ -14,7 +14,7 @@ export async function GET(
       .collection('messages')
       .getList(1, 50, { filter: `chat='${params.id}'`, sort: '-created' });
     // .getFullList();
-    return new Response(JSON.stringify(record.items));
+    return new Response(JSON.stringify(record.items.reverse()));
   } catch (e) {
     console.error(`Failed GET /chats/${params.id}/messages: ${e}`);
     return new Response((e as any).message, { status: 400 });

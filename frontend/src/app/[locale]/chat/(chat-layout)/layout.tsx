@@ -1,13 +1,15 @@
 'use client';
-
-import { useChat, useChats } from '@/hooks';
-import Chat from '../../components/Chat';
+// NOTE:
+// Putting this page into a group (chat-layout) is to avoid the remounting of layout page when switching between
+// different /chat/[id], because remounting of layout will only cause the flickering of the list, but also lose the
+// scroll position of the chat list.
+// Refer to: https://github.com/vercel/next.js/issues/44793#issuecomment-1382458981
+import { useChats, useMediaQuery } from '@/hooks';
 import ChatListButton from '../../components/ChatListButton';
 import { useTranslations } from 'next-intl';
 import ChatList from '../../components/ChatList';
 import clsx from 'clsx';
-import { useEffect } from 'react';
-import { useMediaQuery } from '@/hooks';
+import { useEffect, PropsWithChildren } from 'react';
 
 const ChatListPane = () => {
   const t = useTranslations('page.Chat');
@@ -25,13 +27,10 @@ const ChatListPane = () => {
   );
 };
 
-const Page = ({ params: { id } }: any) => {
-  const { setActiveChat, sidebarCollapsed, setSidebarCollapsed } = useChats();
+const LayoutPage = ({ children }: PropsWithChildren) => {
+  const { sidebarCollapsed, setSidebarCollapsed } = useChats();
   const t = useTranslations('page.Chat');
   const isMediumScreen = useMediaQuery('(max-width: 768px)');
-  useEffect(() => {
-    setActiveChat(id);
-  }, [id]);
 
   useEffect(() => {
     if (isMediumScreen) {
@@ -52,11 +51,11 @@ const Page = ({ params: { id } }: any) => {
           <ChatListPane />
         </div>
         <div className="z-10 flex flex-1 shadow-box shadow-gray-600 rounded-xl backdrop-blur-md bg-gray-700/80 text-base-content border border-gray-600">
-          <Chat chatId={id} standalone />
+          {children}
         </div>
       </div>
     </div>
   );
 };
 
-export default Page;
+export default LayoutPage;
