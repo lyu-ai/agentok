@@ -25,4 +25,4 @@ COPY . /app
 EXPOSE 5004
 
 # Define the startup command to use gunicorn
-CMD ["uvicorn", "-b", "0.0.0.0:5004", "api.main:app"]
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "5004"]
