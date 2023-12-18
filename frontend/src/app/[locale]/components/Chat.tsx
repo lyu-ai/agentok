@@ -21,7 +21,7 @@ import { ThinkTag } from '@/utils/chat';
 import { PiChatsCircleFill } from 'react-icons/pi';
 import { TbArrowBarToLeft, TbArrowBarRight } from 'react-icons/tb';
 import { useTranslations } from 'next-intl';
-import { useChat } from '@/hooks';
+import { useChat, useChats } from '@/hooks';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 const Chat = ({
@@ -31,9 +31,8 @@ const Chat = ({
   chatId: string;
   standalone?: boolean;
 }) => {
-  const { chat, isLoading: isLoadingChat, isError, collapseSidebar } = useChat(
-    chatId
-  );
+  const { chat, isLoading: isLoadingChat, isError } = useChat(chatId);
+  const { sidebarCollapsed, setSidebarCollapsed } = useChats();
 
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,7 +41,6 @@ const Chat = ({
   const isFirstRender = useRef(true);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const t = useTranslations('component.Chat');
-  const isMediumScreen = useMediaQuery('(max-width: 768px)');
 
   const fetchMessages = useCallback(
     () =>
@@ -177,10 +175,9 @@ const Chat = ({
           {standalone && (
             <button
               className="btn btn-ghost btn-sm btn-circle"
-              onClick={() => collapseSidebar(!chat?.sidebarCollapsed)}
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
             >
-              {(isMediumScreen && chat?.sidebarCollapsed === undefined) ||
-              chat?.sidebarCollapsed ? (
+              {sidebarCollapsed ? (
                 <TbArrowBarRight className="w-5 h-5" />
               ) : (
                 <TbArrowBarToLeft className="w-5 h-5" />

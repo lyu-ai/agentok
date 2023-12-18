@@ -12,14 +12,10 @@ export function useChat(chatId: string) {
       : templates &&
         templates.find((template: any) => template.id === chat?.sourceId);
 
-  const collapseSidebar = (collpased: boolean) => {
-    updateChat(chatId, { sidebarCollapsed: collpased });
-  };
   const handleUpdateChat = (chat: Partial<Chat>) => {
     updateChat(chatId, chat);
   };
   return {
-    collapseSidebar,
     chat,
     chatSource,
     updateChat: handleUpdateChat,

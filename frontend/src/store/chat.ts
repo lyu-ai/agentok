@@ -6,16 +6,17 @@ export interface Chat {
   sourceId: string; // Binded flow
   sourceType: 'flow' | 'template';
   config: any; // Complicated JSON object
-  sidebarCollapsed: boolean;
   created?: string;
 }
 
 interface ChatState {
   chats: Chat[];
+  sidebarCollapsed: boolean;
   activeChat: string;
   // User Chats
   setChats: (chats: Chat[]) => void;
   setActiveChat: (chatId: string) => void;
+  setSidebarCollapsed: (collapsed: boolean) => void;
   updateChat: (id: string, chat: Partial<Chat>) => void;
   deleteChat: (id: string) => void;
   getChatById: (id: string) => Chat | undefined;
@@ -24,9 +25,12 @@ interface ChatState {
 const useChatStore = create<ChatState>((set, get) => ({
   // User Chats
   chats: [],
+  sidebarCollapsed: false,
   activeChat: '',
   setChats: chats => set({ chats }),
   setActiveChat: (chatId: string) => set({ activeChat: chatId }),
+  setSidebarCollapsed: (collapsed: boolean) =>
+    set({ sidebarCollapsed: collapsed }),
   updateChat: (id, newChat) =>
     set(state => {
       console.log('Updating chat data:', id, newChat);

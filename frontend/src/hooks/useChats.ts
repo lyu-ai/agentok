@@ -11,6 +11,8 @@ export function useChats() {
   const activeChat = useChatStore(state => state.activeChat);
   const setActiveChat = useChatStore(state => state.setActiveChat);
   const deleteChat = useChatStore(state => state.deleteChat);
+  const sidebarCollapsed = useChatStore(state => state.sidebarCollapsed);
+  const setSidebarCollapsed = useChatStore(state => state.setSidebarCollapsed);
 
   useEffect(() => {
     if (data) {
@@ -122,6 +124,8 @@ export function useChats() {
     refresh: mutate,
     activeChat,
     setActiveChat,
+    sidebarCollapsed,
+    setSidebarCollapsed,
     createChat: handleCreateChat,
     isCreating,
     updateChat: handleUpdateChat,

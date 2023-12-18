@@ -26,21 +26,18 @@ const ChatListPane = () => {
 };
 
 const Page = ({ params: { id } }: any) => {
-  const { chat, isError } = useChat(id);
-  const { setActiveChat } = useChats();
+  const { setActiveChat, sidebarCollapsed, setSidebarCollapsed } = useChats();
   const t = useTranslations('page.Chat');
   const isMediumScreen = useMediaQuery('(max-width: 768px)');
   useEffect(() => {
     setActiveChat(id);
   }, [id]);
 
-  if (isError) {
-    return (
-      <div className="flex items-center justify-center h-full w-full text-red-600">
-        <span>{`Failed locating chat: ${id}`}</span>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (isMediumScreen) {
+      setSidebarCollapsed(true); // When screen is medium, collapse the sidebar
+    }
+  }, [isMediumScreen]);
 
   return (
     <div className="flex w-full h-full">
@@ -49,10 +46,7 @@ const Page = ({ params: { id } }: any) => {
         <div
           className={clsx(
             'z-20 gap-1 text-sm font-bold shadow-box shadow-gray-600 rounded-xl backdrop-blur-md bg-gray-700/80 text-base-content border border-gray-600',
-            (isMediumScreen && chat?.sidebarCollapsed === undefined) ||
-              chat?.sidebarCollapsed
-              ? 'hidden'
-              : 'md:flex'
+            sidebarCollapsed ? 'hidden' : 'md:flex'
           )}
         >
           <ChatListPane />
