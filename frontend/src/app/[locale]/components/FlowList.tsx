@@ -58,7 +58,7 @@ const PublishTemplateDialog = ({ className, flow, ...props }: any) => {
       flowDescription = config.data.flow_description;
     } else {
       flowDescription = t('default-description', {
-        node_count: flow.flow.nodes.length,
+        node_count: flow.flow?.nodes?.length ?? 0,
         edge_count: flow.flow?.edges?.length ?? 0,
       });
     }
@@ -133,7 +133,7 @@ const FlowBlock = ({ action: Action, flow }: any) => {
     flowDescription = config.data.flow_description;
   } else {
     flowDescription = t('default-description', {
-      node_count: flow.flow.nodes.length,
+      node_count: flow.flow?.nodes?.length ?? 0,
       edge_count: flow.flow?.edges?.length ?? 0,
     });
   }
