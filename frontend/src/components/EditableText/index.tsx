@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
-import { FaEdit } from 'react-icons/fa'; // You can get this from `react-icons` package
-import { FaCheck, FaX } from 'react-icons/fa6';
+import { GoPencil, GoCheck, GoX } from 'react-icons/go'; // You can get this from `react-icons` package
 
 const EditableText = ({
   text,
@@ -69,13 +68,13 @@ const EditableText = ({
             className="btn btn-square btn-xs btn-ghost text-red-800 hover:text-red-700"
             onClick={() => setIsEditing(false)}
           >
-            <FaX className="w-4 h-4" />
+            <GoX className="w-4 h-4" />
           </button>
           <button
             className="btn btn-square btn-xs btn-ghost text-green-800 hover:text-green-700"
             onClick={onApplyChanges}
           >
-            <FaCheck className="w-4 h-4" />
+            <GoCheck className="w-4 h-4" />
           </button>
         </div>
       )}
@@ -84,7 +83,7 @@ const EditableText = ({
           className="btn btn-square btn-xs btn-ghost"
           onClick={() => setIsEditing(true)}
         >
-          <FaEdit className="w-4 h-4" />
+          <GoPencil className="w-4 h-4" />
         </button>
       )}
     </div>

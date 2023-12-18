@@ -182,7 +182,7 @@ const UserConfig = ({ nodeId, data, className, ...props }: any) => {
         className
       )}
       classNameTitle="border-b border-base-content/10"
-      classNameBody="flex flex-grow flex-col w-full h-full p-2 gap-2 text-sm"
+      classNameBody="flex flex-grow flex-col w-full h-full p-2 gap-2 text-sm overflow-y-auto"
       {...props}
     >
       <label className="flex items-center justify-start cursor-pointer label gap-2">

@@ -57,33 +57,31 @@ const FunctionConfig = ({ nodeId, data, className, ...props }: any) => {
         </div>
       }
       className={clsx(
-        'flex flex-col w-full h-full bg-gray-800/80 backgrop-blur-md border border-gray-700 shadow-box-lg shadow-gray-700',
+        'flex flex-col bg-gray-800/80 backgrop-blur-md border border-gray-700 shadow-box-lg shadow-gray-700',
         className
       )}
       classNameTitle="border-b border-base-content/10"
-      classNameBody="flex flex-grow w-full h-full"
+      classNameBody="flex flex-grow h-full w-full overflow-y-auto"
       {...props}
     >
-      <div className="flex flex-col gap-2 h-full">
-        <div className="flex flex-col gap-2 h-full border-r p-2 border-base-content/10 w-64">
-          <button className="btn btn-primary" onClick={onAdd}>
-            <MdOutlineAdd className="w-5 h-5" />
-            <span>{t('new-function')}</span>
-          </button>
-          <div className="flex flex-col gap-2 h-full overflow-y-auto">
-            {data.functions?.map((func: any, index: any) => (
-              <FunctionBlock
-                selected={selectedFunction === index}
-                func={func}
-                key={index}
-                onDelete={() => onDelete(func)}
-                onClick={() => setSelectedFunction(index)}
-              />
-            ))}
-          </div>
+      <div className="flex flex-col w-80 h-full border-r p-2 gap-2 border-base-content/10">
+        <button className="btn btn-primary" onClick={onAdd}>
+          <MdOutlineAdd className="w-5 h-5" />
+          <span>{t('new-function')}</span>
+        </button>
+        <div className="flex flex-col gap-2 w-full h-full overflow-y-hidden">
+          {data.functions?.map((func: any, index: any) => (
+            <FunctionBlock
+              selected={selectedFunction === index}
+              func={func}
+              key={index}
+              onDelete={() => onDelete(func)}
+              onClick={() => setSelectedFunction(index)}
+            />
+          ))}
         </div>
       </div>
-      <div className="flex flex-col gap-2 flex-grow h-full overflow-y-auto">
+      <div className="flex flex-col w-full gap-2 p-2 flex-grow h-full overflow-y-auto">
         {selectedFunction === -1 ? (
           <div className="flex flex-col w-full h-full items-center justify-center flex-grow text-base-content/50">
             <div className="flex flex-col items-center gap-3 max-w-2xl text-center">

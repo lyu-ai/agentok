@@ -120,7 +120,9 @@ function Config({ id, data, selected }: any) {
           />
         </div>
         <div className="flex items-center justify-between text-sm text-base-content/60">
-        <div className="font-bold text-base-content/80">{t('max-tokens')}</div>
+          <div className="font-bold text-base-content/80">
+            {t('max-tokens')}
+          </div>
           <input
             type="number"
             className="input input-sm input-bordered w-24 bg-transparent rounded"
@@ -145,7 +147,7 @@ function Config({ id, data, selected }: any) {
         nodeId={id}
         data={data}
         onClose={() => setShowFunctionConfig(false)}
-        className="min-w-[80vw] w-[80vw] max-w-[90vw] min-h-[80vh] max-h-[90vh]"
+        className="w-[80vw] h-[80vh]"
       />
     </div>
   );

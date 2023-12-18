@@ -159,7 +159,7 @@
   "option": {
     "UserConfig": {
       "title": "More Options",
-      "support-retrieve": "Support Retrieve",
+      "support-retrieve": "Retrieve Support",
       "code-execution": "Code Execution",
       "work-dir": "Location",
       "last-n-messages": "Last (n) Messages",
