@@ -1,8 +1,9 @@
+'use client';
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import pb from '@/utils/pocketbase/client';
 
-export const Redirect = ({
+const RedirectPage = ({
   searchParams: { code, state, provider },
 }: {
   searchParams: { code: string; state: string; provider: string };
@@ -47,3 +48,5 @@ export const Redirect = ({
     </div>
   );
 };
+
+export default RedirectPage;
