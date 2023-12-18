@@ -50,7 +50,9 @@ const PublishTemplateDialog = ({ className, flow, ...props }: any) => {
   const { publishTemplate, isPublishing } = useTemplates();
   const [name, setName] = useState(flow.name);
   const getInitialDescription = (flow: any) => {
-    const config = flow.flow.nodes.find((node: any) => node.type === 'config');
+    const config = flow.flow?.nodes?.find(
+      (node: any) => node.type === 'config'
+    );
     let flowDescription = '';
     if (config?.data?.flow_description) {
       flowDescription = config.data.flow_description;
@@ -125,7 +127,7 @@ const FlowBlock = ({ action: Action, flow }: any) => {
   const t = useTranslations('component.FlowList');
   const { deleteFlow, isDeleting } = useFlows();
   const [showPublishModal, setShowPublishModal] = useState(false);
-  const config = flow.flow.nodes.find((node: any) => node.type === 'config');
+  const config = flow.flow?.nodes?.find((node: any) => node.type === 'config');
   let flowDescription = '';
   if (config?.data?.flow_description) {
     flowDescription = config.data.flow_description;
