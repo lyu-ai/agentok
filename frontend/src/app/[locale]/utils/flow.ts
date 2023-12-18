@@ -45,7 +45,7 @@ export const nodeMetas = [
     id: 'multimodal',
     icon: FaEye,
     name: 'MultimodalAssistant',
-    label: 'multimodel-assistant',
+    label: 'multimodal-assistant',
     type: 'assistant',
     class: 'MultimodalConversableAgent',
   },
@@ -120,6 +120,8 @@ export const initialNodes: Node[] = [
     type: 'assistant',
     data: {
       name: 'Image',
+      type: 'assistant',
+      label: 'multimodal-assistant',
       class: 'MultimodalConversableAgent',
       max_consecutive_auto_reply: 10,
     },
@@ -130,6 +132,7 @@ export const initialNodes: Node[] = [
     type: 'user',
     data: {
       name: 'UserProxy',
+      label: 'user-proxy',
       class: 'UserProxyAgent',
       human_input_mode: 'NEVER',
       max_consecutive_auto_reply: 0,
@@ -141,6 +144,7 @@ export const initialNodes: Node[] = [
     type: 'note',
     data: {
       name: 'Note',
+      label: 'note',
       class: 'Note',
       content:
         'Click **Start Chat** and select a sample picture and then enter: What is this?',
@@ -152,6 +156,7 @@ export const initialNodes: Node[] = [
     type: 'config',
     data: {
       name: 'Config',
+      label: 'config',
       flow_id: 'sample-flow1',
       flow_description: 'Sample Flow',
       class: 'Config',
