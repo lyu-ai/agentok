@@ -236,7 +236,6 @@ export function deepEqual(obj1: any, obj2: any, ignoreKeys: string[] = []) {
       (areObjects && !deepEqual(val1, val2, ignoreKeys)) ||
       (!areObjects && val1 !== val2)
     ) {
-      console.log('Diff key', key, 'val1', val1, 'val2', val2);
       return false;
     }
   }

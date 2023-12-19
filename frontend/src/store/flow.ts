@@ -23,7 +23,6 @@ const useFlowStore = create<FlowState>((set, get) => ({
   setFlows: flows => set({ flows }),
   updateFlow: (id, newFlow) =>
     set(state => {
-      console.log('Updating flow with id:', id);
       const existingFlowIndex = state.flows.findIndex(flow => flow.id === id);
       const newFlows =
         existingFlowIndex > -1

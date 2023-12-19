@@ -15,7 +15,6 @@ const FlowPage = () => {
   const onCreateFlow = async () => {
     await createFlow().then(flow => {
       if (flow) {
-        console.log('flow', flow);
         router.push(`/flow/${flow.id}`);
       }
     });

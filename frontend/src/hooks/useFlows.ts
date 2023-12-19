@@ -26,7 +26,6 @@ export function useFlows() {
 
   const [isCreating, setIsCreating] = useState(false);
   const handleCreateFlow = async (): Promise<Flow | undefined> => {
-    console.log('useFlows.createFlow');
     setIsCreating(true);
     try {
       const response = await fetch(`/api/flows`, {

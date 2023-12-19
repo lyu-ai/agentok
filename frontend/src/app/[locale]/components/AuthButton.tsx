@@ -28,7 +28,7 @@ const UserImage = ({ user, className }: any) => {
           alt="avatar"
           src={getAvatarUrl(user)}
           onError={handleError}
-          className="w-full h-full object-cover rounded-full p-1"
+          className="w-full h-full object-cover rounded-full"
         />
       ) : (
         <GoPersonFill className="w-full h-full p-2" />
@@ -47,7 +47,7 @@ const UserPanel = ({ user }: { user: any }) => {
     <div className="flex flex-col items-center w-full p-4 gap-3 text-sm">
       <UserImage
         user={user}
-        className="w-16 h-16 p-2 rounded-full bg-primary/20 text-primary overflow-hidden"
+        className="w-16 h-16 rounded-full bg-primary/20 text-primary overflow-hidden"
       />
       <span className="text-lg font-bold">
         {user.name ?? user.email?.match(/^([^@]+)/)?.[1] ?? '(No Name)'}

@@ -46,8 +46,25 @@ const Login = ({
         },
       });
       setError('');
+      // Update the avatar and name
+      // PocketBase will update email/verified automatically!
       console.log(authData);
       console.log(pb.authStore);
+      if (!authData.record.avatar || !authData.record.name) {
+        const formData = new FormData();
+        if (!authData.record.name) {
+          formData.append('name', authData.meta?.name);
+        }
+        if (!authData.record.avatar) {
+          const avatarResp = await fetch(authData.meta?.avatarUrl).then(resp =>
+            resp.blob()
+          );
+          formData.append('avatar', avatarResp);
+        }
+
+        await pb.collection('users').update(authData.record.id, formData);
+      }
+      router.push(redirectTo ?? '/');
     } catch (e) {
       setError(`Auth with ${provider} failed. ${e}`);
     }
@@ -93,7 +110,6 @@ const Login = ({
           <input
             className="input input-bordered rounded py-2 bg-primary/20 mb-2"
             name="email"
-            defaultValue={'hi@flowgen.app'}
             value={email}
             onChange={e => setEmail(e.target.value)}
             placeholder="hi@flowgen.app"
@@ -107,7 +123,6 @@ const Login = ({
             type="password"
             name="password"
             value={password}
-            defaultValue={'12345678'}
             onChange={e => setPassword(e.target.value)}
             placeholder="12345678"
             required
