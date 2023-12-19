@@ -204,7 +204,7 @@ const UserConfig = ({ nodeId, data, className, ...props }: any) => {
               : ''
           }
           onChange={e => setIsTerminationMsg(e.target.value)}
-          placeholder="TERMINATION"
+          placeholder="TERMINATE"
           className="input input-sm input-bordered rounded"
         />
       </div>

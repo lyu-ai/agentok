@@ -4,21 +4,23 @@ import clsx from 'clsx';
 import Chat from './Chat';
 import { RiChatSmile2Fill, RiChatSmile2Line, RiAppsLine } from 'react-icons/ri';
 import { useTranslations } from 'next-intl';
-import { useChats, useFlow } from '@/hooks';
+import { useChats } from '@/hooks';
 import { Chat as ChatType } from '@/store/chat';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const ChatButton = ({ className, flow }: any) => {
   const [chat, setChat] = useState<ChatType | undefined>();
+  const { chats } = useChats();
   const t = useTranslations('component.ChatButton');
-  const { updateFlow, isUpdating } = useFlow(flow.id);
   const { createChat, isCreating } = useChats();
 
   const onClick = async () => {
-    updateFlow(flow).then(updatedFlow => {
-      console.log('updated flow', updatedFlow);
-      createChat(updatedFlow.id, 'flow').then(chat => setChat(chat));
-    });
+    const existingChat = chats.findLast(chat => chat.sourceId === flow.id);
+    if (existingChat) {
+      setChat(existingChat);
+      return;
+    }
+    await createChat(flow.id, 'flow').then(chat => setChat(chat));
   };
 
   return (
@@ -43,14 +45,10 @@ const ChatButton = ({ className, flow }: any) => {
             data-tooltip-id="default-tooltip"
             data-tooltip-content={t('start-chat-tooltip')}
           >
-            {isUpdating ? (
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-            ) : (
-              <div className="relative">
-                <RiChatSmile2Line className="absolute left-0 animate-ping w-5 h-5" />
-                <RiChatSmile2Fill className="w-5 h-5" />
-              </div>
-            )}
+            <div className="relative">
+              <RiChatSmile2Line className="absolute left-0 animate-ping w-5 h-5" />
+              <RiChatSmile2Fill className="w-5 h-5" />
+            </div>
             <span>{t('start-chat')}</span>
           </div>
         </Popover.Button>

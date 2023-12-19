@@ -42,46 +42,51 @@ const Chat = ({
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const t = useTranslations('component.Chat');
 
-  const fetchMessages = useCallback(
-    () =>
-      fetch(`/api/chats/${chat!.id}/messages`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(resp => resp.json())
-        .then(json => {
-          setMessages(json ? json : []);
-        }),
-    [setMessages, chat?.id]
-  );
+  const fetchMessages = useCallback(() => {
+    return fetch(`/api/chats/${chat?.id}/messages`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(resp => resp.json())
+      .then(json => {
+        setMessages(json ? json : []);
+      });
+  }, [setMessages, chat?.id]);
 
   useEffect(() => {
     if (!chat) return;
     fetchMessages().finally(() => setLoading(false));
-    pb.collection('messages').subscribe('*', payload => {
-      console.log('changes_event:', payload);
-      if (payload.record.type !== 'user') {
-        // The user message was added when sending, no need to add it again.
-        setMessages(msgs =>
-          msgs.some(m => m.id === payload.record.id)
-            ? msgs
-            : [...msgs, payload.record as any]
-        ); // Avoid duplicate messages
-      }
-      const content = payload.record.content;
-      if (content.startsWith(ThinkTag.begin)) {
-        console.log('Begin thinking');
-        setThinking(true);
-      } else if (content.startsWith(ThinkTag.end)) {
-        setThinking(false);
-        console.log('End thinking');
-      }
-    });
+    let unsubscribFunc: UnsubscribeFunc | undefined;
+    pb.collection('messages')
+      .subscribe('*', payload => {
+        console.log('changes_event:', payload);
+        if (payload.record.type !== 'user') {
+          // The user message was added when sending, no need to add it again.
+          setMessages(msgs =>
+            msgs.some(m => m.id === payload.record.id)
+              ? msgs
+              : [...msgs, payload.record as any]
+          ); // Avoid duplicate messages
+        }
+        const content = payload.record.content;
+        if (content.startsWith(ThinkTag.begin)) {
+          console.log('Begin thinking');
+          setThinking(true);
+        } else if (content.startsWith(ThinkTag.end)) {
+          setThinking(false);
+          console.log('End thinking');
+        }
+      })
+      .then(unsubFunc => {
+        unsubscribFunc = unsubFunc;
+      });
 
     return () => {
-      pb.collection('messages').unsubscribe('*');
+      if (unsubscribFunc) {
+        unsubscribFunc();
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -99,8 +104,9 @@ const Chat = ({
   }, [messages]);
 
   const onClean = () => {
+    if (!chat) return;
     setCleaning(true);
-    fetch(`/api/chats/${chat!.id}/messages`, {
+    fetch(`/api/chats/${chat.id}/messages`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -128,7 +134,7 @@ const Chat = ({
       content: message,
     };
     setMessages(msgs => [...msgs, newMessage]);
-    const res = await fetch(`/api/chats/${chat!.id}/messages`, {
+    const res = await fetch(`/api/chats/${chat.id}/messages`, {
       method: 'POST',
       body: JSON.stringify(newMessage),
       headers: {
@@ -305,7 +311,7 @@ const Chat = ({
                   <AvatarIcon className="w-5 h-5 text-base-content" />
                 </div>
               </div>
-              {message.from && (
+              {message.sender && (
                 <div className="chat-header w-full flex items-end gap-2 text-sm p-1 text-base-content/80">
                   <div className="flex items-center gap-1">
                     {message.sender}
