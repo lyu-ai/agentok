@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.0.1">
 <title data-rh="true">Getting Started | FlowGen</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://docs.flowgen.app/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://docs.flowgen.app/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://docs.flowgen.app/docs/getting-started"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Getting Started | FlowGen"><meta data-rh="true" name="description" content="🤖 What is FlowGen"><meta data-rh="true" property="og:description" content="🤖 What is FlowGen"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://docs.flowgen.app/docs/getting-started"><link data-rh="true" rel="alternate" href="https://docs.flowgen.app/docs/getting-started" hreflang="en"><link data-rh="true" rel="alternate" href="https://docs.flowgen.app/docs/getting-started" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.769fa5b2.css">
-<script src="/assets/js/runtime~main.5b2ce03c.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.92cdf17f.js" defer="defer"></script>
 <script src="/assets/js/main.dfc38b67.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -37,18 +37,27 @@
 <p><strong>Frontend Service:</strong></p>
 <ul>
 <li>Navigate to the frontend service directory.</li>
+<li>Rename <code>.env.sample</code> to <code>.env.local</code> and set the value of variables correctly.</li>
 <li>Install the necessary dependencies using the appropriate package manager command (e.g., <code>pnpm install</code> or <code>yarn</code>).</li>
-<li>Before starting the service, make sure the <code>NEXT_PUBLIC_SUPABASE_URL</code> and <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> environment variables are set accordingly in file <code>.env.development</code>.</li>
 <li>Run the frontend service using the start-up script provided (e.g., <code>pnpm dev</code> or <code>yarn dev</code>).</li>
 </ul>
 </li>
 <li>
 <p><strong>Backend Service:</strong></p>
 <ul>
-<li>Switch to the backend service directory.</li>
+<li>Switch to the backend service directory <code>cd backend</code>.</li>
+<li>Create virtual environment: <code>python3 -m venv venv</code>.</li>
+<li>Activate virtual environment: <code>source venv/bin/activate</code>.</li>
 <li>Install all required dependencies: <code>pip install -r requirements.txt</code>.</li>
-<li>Confirm that the environment variables for Supabase (<code>NEXT_PUBLIC_SUPABASE_URL</code> and <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>) are correctly set in <code>.env</code> as well.</li>
-<li>Launch the backend service using command <code>python3 -m api.index</code>.</li>
+<li>Launch the backend service using command <code>uvicorn app.main:app --reload --port 5004</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>PocketBase:</strong></p>
+<ul>
+<li>Switch to the PocketBase directory <code>cd pocketbase</code>.</li>
+<li>Build the container: <code>docker build -t flowgen-db .</code></li>
+<li>Run the container: <code>docker run -it --rm -p 7676:7676 flowgen-db</code></li>
 </ul>
 </li>
 </ol>
