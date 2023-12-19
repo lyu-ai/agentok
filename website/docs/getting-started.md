@@ -57,15 +57,23 @@ If you're interested in contributing to the development of this project or wish 
 1. **Frontend Service:**
 
    - Navigate to the frontend service directory.
+   - Rename `.env.sample` to `.env.local` and set the value of variables correctly.
    - Install the necessary dependencies using the appropriate package manager command (e.g., `pnpm install` or `yarn`).
-   - Before starting the service, make sure the `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` environment variables are set accordingly in file `.env.development`.
    - Run the frontend service using the start-up script provided (e.g., `pnpm dev` or `yarn dev`).
 
 2. **Backend Service:**
-   - Switch to the backend service directory.
+
+   - Switch to the backend service directory `cd backend`.
+   - Create virtual environment: `python3 -m venv venv`.
+   - Activate virtual environment: `source venv/bin/activate`.
    - Install all required dependencies: `pip install -r requirements.txt`.
-   - Confirm that the environment variables for Supabase (`NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`) are correctly set in `.env` as well.
-   - Launch the backend service using command `python3 -m api.index`.
+   - Launch the backend service using command `uvicorn app.main:app --reload --port 5004`.
+
+3. **PocketBase:**
+
+   - Switch to the PocketBase directory `cd pocketbase`.
+   - Build the container: `docker build -t flowgen-db .`
+   - Run the container: `docker run -it --rm -p 7676:7676 flowgen-db`
 
 Once you've started both the frontend and backend services by following the steps previously outlined, you can access the application by opening your web browser and navigating to:
 
