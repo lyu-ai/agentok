@@ -6,7 +6,7 @@
 user_proxy = {{ class_name }}(
     name="{{ name }}",
     {%- if node['data'].get('human_input_mode') %}
-    human_input_mode="""{{ node['data']['human_input_mode'] }}""",
+    human_input_mode="{{ node['data']['human_input_mode'] }}",
     {%- endif %}
     {%- if node['data'].get('is_termination_msg') %}
     is_termination_msg={{ node['data']['is_termination_msg'] }},

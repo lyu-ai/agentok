@@ -11,7 +11,7 @@ import { TbMathFunction } from 'react-icons/tb';
 import { useTranslations } from 'next-intl';
 
 function Config({ id, data, selected }: any) {
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   const [showFunctionConfig, setShowFunctionConfig] = useState(false);
   const instance = useReactFlow();
   const t = useTranslations('node.Config');

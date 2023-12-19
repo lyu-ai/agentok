@@ -13,12 +13,12 @@ const ChatButton = ({ className, flow }: any) => {
   const t = useTranslations('component.ChatButton');
   const { updateFlow, isUpdating } = useFlow(flow.id);
   const { createChat, isCreating } = useChats();
-  useEffect(() => {
-    createChat(flow.id, 'flow').then(chat => setChat(chat));
-  }, []);
 
   const onClick = async () => {
-    updateFlow(flow);
+    updateFlow(flow).then(updatedFlow => {
+      console.log('updated flow', updatedFlow);
+      createChat(updatedFlow.id, 'flow').then(chat => setChat(chat));
+    });
   };
 
   return (

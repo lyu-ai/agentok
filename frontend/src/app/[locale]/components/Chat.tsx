@@ -120,6 +120,7 @@ const Chat = ({
   };
 
   const onSend = async (message: string): Promise<boolean> => {
+    if (!chat) return false;
     const newMessage = {
       type: 'user',
       id: genId(),

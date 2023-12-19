@@ -1,4 +1,5 @@
 # register the functions
+{%- if functions|length > 0 %}
 user_proxy.register_function(
     function_map={
       {%- for func in functions %}
@@ -6,3 +7,4 @@ user_proxy.register_function(
       {%- endfor %}
     }
 )
+{%- endif %}

@@ -212,3 +212,38 @@ export const getFlowName = (nodes: Node[]) => {
   }
   return name;
 };
+
+export const isFlowDirty = (flow1: any, flow2: any) =>
+  !deepEqual(flow1, flow2, ['selected', 'dragging']);
+
+export function deepEqual(obj1: any, obj2: any, ignoreKeys: string[] = []) {
+  if (obj1 === obj2) {
+    return true;
+  }
+
+  const keys1 = Object.keys(obj1).filter(key => !ignoreKeys.includes(key));
+  const keys2 = Object.keys(obj2).filter(key => !ignoreKeys.includes(key));
+
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+
+  for (let key of keys1) {
+    const val1 = obj1[key];
+    const val2 = obj2[key];
+    const areObjects = isObject(val1) && isObject(val2);
+    if (
+      (areObjects && !deepEqual(val1, val2, ignoreKeys)) ||
+      (!areObjects && val1 !== val2)
+    ) {
+      console.log('Diff key', key, 'val1', val1, 'val2', val2);
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function isObject(object: any) {
+  return object != null && typeof object === 'object';
+}

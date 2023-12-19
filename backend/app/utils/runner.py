@@ -9,7 +9,9 @@ def print_message(message):
     print("New message received:", message)
 
 async def run_assistant(message: str, source_path: str, on_message=print_message):
-    command = ["python3", source_path, message]
+    command = ["python3", source_path, f'message="{message}"']
+    
+    print('command: ', *command)
 
     # Start the subprocess with the provided command
     process = await asyncio.create_subprocess_exec(

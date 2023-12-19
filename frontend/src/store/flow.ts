@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 export interface Flow {
   id: string;
-  name: string;
+  name?: string;
   flow: any; // Complicated JSON object
   created?: string;
   updated?: string;

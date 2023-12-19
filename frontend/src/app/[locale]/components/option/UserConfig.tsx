@@ -177,7 +177,6 @@ const UserConfig = ({ nodeId, data, className, ...props }: any) => {
   };
   const extractTerminationMsg = (isTerminationMsg: string) => {
     const match = isTerminationMsg.match(/endswith\("([^"]+)"\)/);
-    console.log('extractTerminationMsg', isTerminationMsg, match);
     return match ? match[1] : '';
   };
   return (

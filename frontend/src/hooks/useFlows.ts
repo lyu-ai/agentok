@@ -93,6 +93,7 @@ export function useFlows() {
       const updatedFlow = await response.json();
       updateFlow(id, updatedFlow);
       mutate(); // Optional: if the PUT API call returns the updated list
+      return updatedFlow;
     } catch (error) {
       console.error('Failed to update the flow:', error);
       // Handle the error state as necessary

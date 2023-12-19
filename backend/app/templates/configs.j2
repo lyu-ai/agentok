@@ -38,8 +38,14 @@ llm_config = {
     ],
     {%- endif %}
     "config_list": config_list,
-    {%- if config_node.timeout %}
-    "timeout": {{ config_node.timeout }}
+    {%- if config_node['data'].get('timeout') is not none %}
+    "timeout": {{ config_node.timeout }},
+    {%- endif %}
+    {%- if config_node['data'].get('temperature') is not none %}
+    "temperature": {{ config_node['data'].get('temperature') }},
+    {%- endif %}
+    {%- if config_node['data'].get('max_tokens') is not none %}
+    "max_tokens": {{ config_node['data'].get('max_tokens') }},
     {%- endif %}
 }
 {%- endmacro %}

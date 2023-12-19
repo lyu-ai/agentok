@@ -14,7 +14,13 @@ import ReactFlow, {
   ConnectionLineType,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { nodeTypes, initialEdges, initialNodes } from '../utils/flow';
+import {
+  nodeTypes,
+  initialEdges,
+  initialNodes,
+  deepEqual,
+  isFlowDirty,
+} from '../utils/flow';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import ViewToggle from './ViewToggle';
 import NodeButton from './NodeButton';
@@ -28,6 +34,7 @@ import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useFlow } from '@/hooks';
 import { useRouter } from 'next/navigation';
+import { debounce } from 'lodash-es';
 
 const Flow = ({ flowId }: any) => {
   const { flow, updateFlow, isUpdating, isLoading, isError } = useFlow(flowId);
@@ -55,8 +62,35 @@ const Flow = ({ flowId }: any) => {
     if (!flow?.flow) return;
     setNodes(flow?.flow?.nodes ?? []);
     setEdges(flow?.flow?.edges ?? []);
-    fitView({ maxZoom: 1 });
-  }, [flow, fitView]);
+  }, [flow]);
+
+  const initialLoad = useRef(true);
+
+  const debouncedUpdateFlow = debounce((flowId: string, currentFlow: any) => {
+    updateFlow({
+      id: flowId,
+      flow: currentFlow,
+    });
+  }, 500);
+
+  useEffect(() => {
+    if (!flow?.flow) return;
+    if (initialLoad.current) {
+      initialLoad.current = false;
+      return;
+    }
+    const currentFlow = toObject();
+    const isDragging = currentFlow.nodes.some(
+      (node: Node) => node.dragging === true
+    );
+    if (!isDragging && isFlowDirty(currentFlow, flow?.flow)) {
+      debouncedUpdateFlow(flowId, currentFlow);
+    }
+
+    return () => {
+      debouncedUpdateFlow.cancel();
+    };
+  }, [nodes, edges]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -241,7 +275,9 @@ const Flow = ({ flowId }: any) => {
             className={clsx('w-4 h-4', { 'animate-spin': isUpdating })}
           />
         </button>
-        <ChatButton flow={flow} />
+        <ChatButton
+          flow={{ id: flow.id, name: flow?.name ?? genId(), flow: toObject() }}
+        />
       </div>
       <NodeButton onAddNode={onAddNode} className="absolute left-2 top-2" />
     </div>
