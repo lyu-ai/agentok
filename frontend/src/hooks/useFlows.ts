@@ -79,8 +79,12 @@ export function useFlows() {
   const [isUpdating, setIsUpdating] = useState(false);
   const handleUpdateFlow = async (id: string, flow: Flow) => {
     setIsUpdating(true);
+    const flowToUpdate = {
+      name: getFlowName(flow.flow?.nodes),
+      ...flow,
+    };
     // Optimistically update the flow in the local state
-    updateFlow(id, flow);
+    updateFlow(id, flowToUpdate);
     try {
       const response = await fetch(`/api/flows`, {
         method: 'POST',
@@ -88,10 +92,9 @@ export function useFlows() {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(flow),
+        body: JSON.stringify(flowToUpdate),
       });
       const updatedFlow = await response.json();
-      updateFlow(id, updatedFlow);
       mutate(); // Optional: if the PUT API call returns the updated list
       return updatedFlow;
     } catch (error) {

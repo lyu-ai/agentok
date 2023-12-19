@@ -157,7 +157,7 @@ export const initialNodes: Node[] = [
     data: {
       name: 'Config',
       label: 'config',
-      flow_id: 'sample-flow1',
+      flow_name: 'sample-flow1',
       flow_description: 'Sample Flow',
       class: 'Config',
       max_tokens: 1024,
@@ -205,8 +205,8 @@ export const setNodeData = (
 export const getFlowName = (nodes: Node[]) => {
   const configNode = nodes.find((node: any) => node.type === 'config');
   let name = 'flow-unknown';
-  if (configNode && configNode?.data.flow_id) {
-    name = configNode.data.flow_id;
+  if (configNode && configNode?.data.flow_name) {
+    name = configNode.data.flow_name;
   } else {
     name = 'flow-' + genId();
   }

@@ -151,7 +151,7 @@ const FlowBlock = ({ action: Action, flow }: any) => {
       <div className="card-title flex items-center bg-primary/5 group-hover:bg-primary/30 rounded-t-xl gap-4 group-hover:text-primary p-4">
         <RiRobot2Line className="w-8 h-8" />
         <div className="flex flex-col gap-2">
-          <h2 className="text-lg font-bold">{flow.name}</h2>
+          <h2 className="text-lg font-bold line-clamp-1">{flow.name}</h2>
           <div className="text-xs text-base-content/60">
             {new Date(flow.created).toLocaleString()}
           </div>

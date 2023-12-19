@@ -48,7 +48,7 @@ function Config({ id, data, selected }: any) {
               {getNodeLabel(data.label, tNodeMeta)}
             </div>
           </div>
-          {collapsed && <div>{data.flow_id}</div>}
+          {collapsed && <div>{data.flow_name}</div>}
         </div>
         <div
           className={clsx(
@@ -65,9 +65,9 @@ function Config({ id, data, selected }: any) {
             </div>
             <input
               className="nodrag input input-sm input-bordered w-32 bg-transparent rounded"
-              value={data.flow_id ?? ''}
+              value={data.flow_name ?? ''}
               onChange={e =>
-                setNodeData(instance, id, { flow_id: e.target.value })
+                setNodeData(instance, id, { flow_name: e.target.value })
               }
             />
           </div>
