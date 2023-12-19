@@ -169,7 +169,8 @@
       "chunk-token-size": "Chunk Token Size",
       "docs-path": "Docs Path",
       "get-or-create": "Get or Create",
-      "client": "Client"
+      "client": "Client",
+      "termination-msg": "Termination Keyword:"
     }
   },
   "page": {

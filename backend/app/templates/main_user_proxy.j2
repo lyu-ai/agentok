@@ -8,7 +8,9 @@ user_proxy = {{ class_name }}(
     {%- if node['data'].get('human_input_mode') %}
     human_input_mode="""{{ node['data']['human_input_mode'] }}""",
     {%- endif %}
-    is_termination_msg=lambda x: x.get("content", "") and x.get("content", "").rstrip().endswith("TERMINATE"),
+    {%- if node['data'].get('is_termination_msg') %}
+    is_termination_msg={{ node['data']['is_termination_msg'] }},
+    {%- endif %}
     {%- if node['data'].get('max_consecutive_auto_reply') %}
     max_consecutive_auto_reply={{ node['data']['max_consecutive_auto_reply'] }},
     {%- endif %}

@@ -169,6 +169,17 @@ const UserConfig = ({ nodeId, data, className, ...props }: any) => {
       },
     });
   };
+  const setIsTerminationMsg = (terminationMsg: string) => {
+    const formattedMsg = terminationMsg
+      ? `lambda x: x.get("content", "").rstrip().endswith("${terminationMsg}")`
+      : '';
+    setNodeData(instance, nodeId, { is_termination_msg: formattedMsg });
+  };
+  const extractTerminationMsg = (isTerminationMsg: string) => {
+    const match = isTerminationMsg.match(/endswith\("([^"]+)"\)/);
+    console.log('extractTerminationMsg', isTerminationMsg, match);
+    return match ? match[1] : '';
+  };
   return (
     <PopupDialog
       title={
@@ -185,6 +196,19 @@ const UserConfig = ({ nodeId, data, className, ...props }: any) => {
       classNameBody="flex flex-grow flex-col w-full h-full p-2 gap-2 text-sm overflow-y-auto"
       {...props}
     >
+      <div className="flex items-center justify-between">
+        <span>{t('termination-msg')}</span>
+        <input
+          value={
+            data.is_termination_msg
+              ? extractTerminationMsg(data.is_termination_msg)
+              : ''
+          }
+          onChange={e => setIsTerminationMsg(e.target.value)}
+          placeholder="TERMINATION"
+          className="input input-sm input-bordered rounded"
+        />
+      </div>
       <label className="flex items-center justify-start cursor-pointer label gap-2">
         <input
           checked={data.code_execution_config !== undefined}

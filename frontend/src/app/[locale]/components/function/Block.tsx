@@ -17,10 +17,10 @@ const FunctionBlock = ({
   return (
     <div
       className={clsx(
-        'relative group w-full flex items-center gap-2 p-3 rounded-md border border-base-content/10 cursor-pointer hover:bg-base-content/10 hover:shadow-box hover:shadow-gray-700',
+        'relative group w-full flex items-center gap-2 p-3 rounded-md border cursor-pointer hover:bg-base-content/10 hover:shadow-box hover:shadow-gray-700',
         selected
           ? 'shadow-box shadow-gray-600 bg-gray-700/90 border-gray-600'
-          : ''
+          : 'border-base-content/10 '
       )}
       {...props}
     >

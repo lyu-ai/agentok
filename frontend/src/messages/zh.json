@@ -163,7 +163,8 @@
       "chunk-token-size": "块标记大小",
       "docs-path": "文档路径",
       "get-or-create": "获取或创建",
-      "client": "客户端"
+      "client": "客户端",
+      "termination-msg": "终止关键字："
     },
     "ThemeSwitcher": {
       "theme-tooltip": "切换浅色/深色模式"
