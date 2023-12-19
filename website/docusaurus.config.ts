@@ -90,7 +90,7 @@ const config: Config = {
       //     ],
       //   },
       // ],
-      copyright: `Copyright © ${new Date().getFullYear()} FlowGen. Built with Docusaurus.`,
+      copyright: `© ${new Date().getFullYear()} FlowGen. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,
