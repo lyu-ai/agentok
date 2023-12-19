@@ -10,8 +10,6 @@ def print_message(message):
 
 async def run_assistant(message: str, source_path: str, on_message=print_message):
     command = ["python3", source_path, f'"{message}"']
-    
-    print('command: ', *command)
 
     # Start the subprocess with the provided command
     process = await asyncio.create_subprocess_exec(
@@ -21,6 +19,12 @@ async def run_assistant(message: str, source_path: str, on_message=print_message
     )
 
     output_parser = OutputParser(on_message=on_message)
+
+    on_message({
+        'type': 'assistant',
+        'content': 'ASSISTANT_CHAT_BEGIN',
+    })
+
 
     # Process the subprocess output until it terminates
     async for line in process.stdout:
@@ -41,6 +45,15 @@ async def run_assistant(message: str, source_path: str, on_message=print_message
         error_message = err.decode().strip()
         print(f'Assistant process exited with return code {process.returncode} and error message: {error_message}')
         # You might want to handle the error or propagate it
+        on_message({
+            'type': 'assistant',
+            'content': f'ASSISTANT_CHAT_END {process.returncode}: {error_message}',
+        })
+    else:
+        on_message({
+            'type': 'assistant',
+            'content': 'ASSISTANT_CHAT_END DONE',
+        })
 
 # Example of how to call `run_assistant`
 # Ensure the event loop is running and call await run_assistant("<message>", "<source_path>")
