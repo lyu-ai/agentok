@@ -9,7 +9,7 @@ def print_message(message):
     print("New message received:", message)
 
 async def run_assistant(message: str, source_path: str, on_message=print_message):
-    command = ["python3", source_path, f'message="{message}"']
+    command = ["python3", source_path, f'"{message}"']
     
     print('command: ', *command)
 
