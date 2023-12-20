@@ -4,6 +4,7 @@ import { useChat, useChats } from '@/hooks';
 import clsx from 'clsx';
 import { Float } from '@headlessui-float/react';
 import { Popover } from '@headlessui/react';
+import { PiChatsCircle } from 'react-icons/pi';
 import { GoTrash, GoPencil, GoKebabHorizontal } from 'react-icons/go';
 import EditableText from '@/components/EditableText';
 import { useState } from 'react';
@@ -107,12 +108,10 @@ const ChatBlock = ({ chatId, className, disableSelection }: any) => {
 
   const onEditStarted = () => {
     setIsEditing(true);
-    console.log('onEditStarted');
   };
   const onEditCompleted = (newText: string) => {
     setIsEditing(false);
     updateChat(chatId, { name: newText });
-    console.log('onEditCompleted');
   };
   const onDelete = async () => {
     if (!chat || !chats) {
@@ -157,12 +156,15 @@ const ChatBlock = ({ chatId, className, disableSelection }: any) => {
       }}
     >
       <div className="flex w-full gap-2 justify-between items-center">
-        <EditableText
-          className="font-bold w-full truncate"
-          editing={isEditing}
-          onChange={onEditCompleted}
-          text={chat.name ?? chatSource?.name ?? 'Untitled ' + chat.id}
-        />
+        <div className="flex items-center gap-1">
+          <PiChatsCircle className="w-5 h-5" />
+          <EditableText
+            className="font-bold w-full truncate"
+            editing={isEditing}
+            onChange={onEditCompleted}
+            text={chat.name ?? chatSource?.name ?? 'Untitled ' + chat.id}
+          />
+        </div>
         {selected && (
           <ContextButton
             chat={chat}
@@ -171,9 +173,12 @@ const ChatBlock = ({ chatId, className, disableSelection }: any) => {
           />
         )}
       </div>
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2">
         <span className="border border-base-content/40 text-base-content/60 rounded p-1 text-xs">
           {chat.sourceType}
+        </span>
+        <span className="text-base-content/60 line-clamp-1">
+          {chatSource?.name ?? ''}
         </span>
       </div>
     </div>

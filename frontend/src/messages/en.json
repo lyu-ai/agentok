@@ -181,15 +181,15 @@
     "Chat": {
       "chat-tagline": "Start Chat with FlowGen",
       "start-chat": "Start Chat",
-      "chat-sessions": "Recent Sessions",
-      "your-flows": "Your Flows",
+      "chat-sessions": "Continue with Recent Chats",
+      "your-flows": "Chat from Your Flows",
       "select-chat": "Select a session to continue, or start a new one from Flow or Template."
     },
     "Flow": {
       "flow-tagline": "Build Multi-Agent Apps with FlowGen",
       "new-flow": "Start to Build",
       "creating-flow": "Creating Flow ...",
-      "your-flows": "Your Flows",
+      "your-flows": "Chat from Your Flows",
       "start-from-template": "Start from Template",
       "more-templates": "Explore More Templates"
     },

@@ -31,7 +31,9 @@ const Chat = ({
   chatId: string;
   standalone?: boolean;
 }) => {
-  const { chat, isLoading: isLoadingChat, isError } = useChat(chatId);
+  const { chat, isLoading: isLoadingChat, isError, chatSource } = useChat(
+    chatId
+  );
   const { sidebarCollapsed, setSidebarCollapsed } = useChats();
 
   const [messages, setMessages] = useState<any[]>([]);
@@ -191,8 +193,10 @@ const Chat = ({
               )}
             </button>
           )}
-          <PiChatsCircleFill className="w-5 h-5" />
-          {/* <span>{t('start-chat') + (flow?.name ? ' - ' + flow.name : '')}</span> */}
+          <PiChatsCircleFill className="w-5 h-5 shrink-0" />
+          <span className="line-clamp-1">{`${
+            chat?.name ?? 'Untitled ' + chatId
+          } ${chatSource?.name ? ' | ' + chatSource?.name : ''}`}</span>
         </div>
         <div className="flex items-center gap-2">
           <button

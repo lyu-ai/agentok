@@ -45,9 +45,9 @@ const Login = ({
       setError('');
       // Update the avatar and name
       // PocketBase will update email/verified automatically!
-      console.log(authData);
-      console.log(pb.authStore);
-      // Different OAuth2 will be merged to
+      // console.log(authData);
+      // console.log(pb.authStore);
+      // Different OAuth2 will be merged to the same user record, so need to update the user and avatar every time
       if (authData.meta?.name || authData.meta?.avatarUrl) {
         const formData = new FormData();
         if (!authData.meta?.name) {
