@@ -7,7 +7,7 @@ import { Popover } from '@headlessui/react';
 import { PiChatsCircle } from 'react-icons/pi';
 import { GoTrash, GoPencil, GoKebabHorizontal } from 'react-icons/go';
 import EditableText from '@/components/EditableText';
-import { useState } from 'react';
+import { useState, useEffect, useRef, createRef, forwardRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 export const ChatEmpty = () => {
@@ -30,8 +30,8 @@ export const ChatLoading = () => {
           key={i}
           className="flex flex-col w-80 h-20 bg-base-content/10 rounded-md p-3 gap-3"
         >
-          <div className="skeleton h-5 w-full" />
-          <div className="skeleton h-5 w-1/3" />
+          <div className="skeleton h-4 w-full" />
+          <div className="skeleton h-4 w-1/3" />
         </div>
       ))}
     </>
@@ -93,97 +93,109 @@ const ContextButton = ({ className, onDelete, onEdit }: any) => {
   );
 };
 
-const ChatBlock = ({ chatId, className, disableSelection }: any) => {
-  const router = useRouter();
-  const [isEditing, setIsEditing] = useState(false);
-  const { chat, isLoading, chatSource } = useChat(chatId);
-  const {
-    chats,
-    setActiveChat,
-    activeChat,
-    updateChat,
-    deleteChat,
-  } = useChats();
-  const selected = activeChat === chatId && !disableSelection;
+interface ChatBlockProps {
+  chatId: string;
+  disableSelection: boolean;
+  className?: string;
+  // ... any other props
+}
 
-  const onEditStarted = () => {
-    setIsEditing(true);
-  };
-  const onEditCompleted = (newText: string) => {
-    setIsEditing(false);
-    updateChat(chatId, { name: newText });
-  };
-  const onDelete = async () => {
-    if (!chat || !chats) {
-      console.warn('Chat not found', chatId);
-      return;
-    }
-    const currentIndex = chats.findIndex(c => c.id === chat.id);
-    if (currentIndex < 0) {
-      console.warn('Chat not found', chat.id);
-      return;
-    }
-    let nextChatId = '';
-    if (currentIndex < chats.length - 1) {
-      // Has next one
-      nextChatId = chats[currentIndex + 1].id;
-    } else if (currentIndex > 1) {
-      // The current selection is the last and has previous one
-      nextChatId = chats[currentIndex - 1].id;
-    }
-    setActiveChat(nextChatId);
-    await deleteChat(chat.id);
-    router.replace(`/chat/${nextChatId}`); // It's fine if nextChatId is empty
-  };
+const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
+  ({ chatId, className, disableSelection }: any, ref) => {
+    const router = useRouter();
+    const [isEditing, setIsEditing] = useState(false);
+    const { chat, isLoading, chatSource } = useChat(chatId);
+    const {
+      chats,
+      setActiveChat,
+      activeChat,
+      updateChat,
+      deleteChat,
+    } = useChats();
+    const selected = activeChat === chatId && !disableSelection;
 
-  if (!chat || isLoading) return <ChatLoading />;
+    const onEditStarted = () => {
+      setIsEditing(true);
+    };
+    const onEditCompleted = (newText: string) => {
+      setIsEditing(false);
+      updateChat(chatId, { name: newText });
+    };
+    const onDelete = async () => {
+      if (!chat || !chats) {
+        console.warn('Chat not found', chatId);
+        return;
+      }
+      const currentIndex = chats.findIndex(c => c.id === chat.id);
+      if (currentIndex < 0) {
+        console.warn('Chat not found', chat.id);
+        return;
+      }
+      let nextChatId = '';
+      if (currentIndex < chats.length - 1) {
+        // Has next one
+        nextChatId = chats[currentIndex + 1].id;
+      } else if (currentIndex > 1) {
+        // The current selection is the last and has previous one
+        nextChatId = chats[currentIndex - 1].id;
+      }
+      setActiveChat(nextChatId);
+      await deleteChat(chat.id);
+      router.replace(`/chat/${nextChatId}`); // It's fine if nextChatId is empty
+    };
 
-  return (
-    <div
-      key={chat.id}
-      className={clsx(
-        'group flex flex-col w-80 justify-center gap-2 text-sm rounded p-2 border cursor-pointer',
-        'hover:shadow-box hover:bg-base-content/40 hover:text-base-content hover:border-base-content/30',
-        {
-          'border-base-content/20 bg-base-content/30 shadow-box shadow-base-content/20': selected,
-          'border-base-content/5 bg-base-content/10': !selected,
-        },
-        className
-      )}
-      onClick={() => {
-        setActiveChat(chat.id);
-        router.push(`/chat/${chat.id}`);
-      }}
-    >
-      <div className="flex w-full gap-2 justify-between items-center">
-        <div className="flex items-center gap-1">
-          <PiChatsCircle className="w-5 h-5" />
-          <EditableText
-            className="font-bold w-full truncate"
-            editing={isEditing}
-            onChange={onEditCompleted}
-            text={chat.name ?? chatSource?.name ?? 'Untitled ' + chat.id}
-          />
-        </div>
-        {selected && (
-          <ContextButton
-            chat={chat}
-            onEdit={onEditStarted}
-            onDelete={onDelete}
-          />
+    if (!chat || isLoading) return <ChatLoading />;
+
+    return (
+      <div
+        key={chat.id}
+        ref={ref}
+        className={clsx(
+          'group flex flex-col w-80 justify-center gap-2 text-sm rounded p-2 border cursor-pointer',
+          'hover:shadow-box hover:bg-base-content/40 hover:text-base-content hover:border-base-content/30',
+          {
+            'border-base-content/20 bg-base-content/30 shadow-box shadow-base-content/20': selected,
+            'border-base-content/5 bg-base-content/10': !selected,
+          },
+          className
         )}
+        onClick={() => {
+          setActiveChat(chat.id);
+          router.push(`/chat/${chat.id}`);
+        }}
+      >
+        <div className="flex w-full gap-2 justify-between items-center">
+          <div className="flex items-center gap-1">
+            <PiChatsCircle className="w-5 h-5" />
+            <EditableText
+              className="font-bold w-full truncate"
+              editing={isEditing}
+              onChange={onEditCompleted}
+              text={chat.name ?? chatSource?.name ?? 'Untitled ' + chat.id}
+            />
+          </div>
+          {selected && (
+            <ContextButton
+              chat={chat}
+              onEdit={onEditStarted}
+              onDelete={onDelete}
+            />
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="border border-base-content/40 text-base-content/60 rounded p-1 text-xs">
+            {chat.sourceType}
+          </span>
+          <span className="text-base-content/60 line-clamp-1">
+            {chatSource?.name ?? ''}
+          </span>
+        </div>
       </div>
-      <div className="flex items-center gap-2">
-        <span className="border border-base-content/40 text-base-content/60 rounded p-1 text-xs">
-          {chat.sourceType}
-        </span>
-        <span className="text-base-content/60 line-clamp-1">
-          {chatSource?.name ?? ''}
-        </span>
-      </div>
-    </div>
-  );
-};
+    );
+  }
+);
+
+ChatBlock.displayName = 'ChatBlock';
 
 const ChatList = ({
   className,
@@ -198,7 +210,19 @@ const ChatList = ({
     chats,
     isLoading: isLoadingChats,
     isError: isChatsError,
+    activeChat,
   } = useChats();
+  const chatRefs = useRef(new Map()).current;
+  useEffect(() => {
+    // Perform the scrolling when the active chat is changed
+    if (activeChat && chatRefs.has(activeChat)) {
+      const ref = chatRefs.get(activeChat);
+      ref.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      });
+    }
+  }, [activeChat, chatRefs]);
 
   if (isChatsError) {
     console.warn('Failed to load chats');
@@ -213,14 +237,20 @@ const ChatList = ({
 
   return (
     <>
-      {trimmedChats.map((chat: any) => (
-        <ChatBlock
-          key={chat.id}
-          chatId={chat.id}
-          className={className}
-          disableSelection={disableSelection}
-        />
-      ))}
+      {trimmedChats.map((chat: any) => {
+        if (!chatRefs.has(chat.id)) {
+          chatRefs.set(chat.id, createRef<HTMLDivElement>());
+        }
+        return (
+          <ChatBlock
+            key={chat.id}
+            ref={chatRefs.get(chat.id)}
+            chatId={chat.id}
+            className={className}
+            disableSelection={disableSelection}
+          />
+        );
+      })}
     </>
   );
 };

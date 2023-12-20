@@ -177,12 +177,11 @@ const Chat = ({
   }
 
   const userNodeName =
-    chatSource.flow?.nodes?.find(
+    chatSource?.flow?.nodes?.find(
       (node: any) =>
         node.data.class === 'UserProxyAgent' ||
         node.data.class === 'RetrieveUserProxyAgent'
     )?.data?.name ?? '';
-  console.log('userNodeName', userNodeName);
 
   return (
     <div className="flex flex-col w-full h-full ">

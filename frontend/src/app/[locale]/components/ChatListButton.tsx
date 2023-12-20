@@ -1,7 +1,7 @@
 import { Float } from '@headlessui-float/react';
 import { Popover } from '@headlessui/react';
 import clsx from 'clsx';
-import { GoPlusCircle } from 'react-icons/go';
+import { GoPlus } from 'react-icons/go';
 import { useTranslations } from 'next-intl';
 import { useChats, useFlows, useTemplates } from '@/hooks';
 import { Tab } from '@headlessui/react';
@@ -97,13 +97,12 @@ const ChatListButton = ({ className, onSelect }: any) => {
           <div
             className={clsx(
               className,
-              'btn btn-sm btn-primary btn-outline flex items-center gap-2'
+              'btn btn-sm btn-primary btn-outline btn-circle flex items-center gap-2'
             )}
             data-tooltip-id="chatlist-tooltip"
             data-tooltip-content={t('from-template-tooltip')}
           >
-            <GoPlusCircle className="w-4 h-4" />
-            <span className="text-xs font-bold">{t('new-chat')}</span>
+            <GoPlus className="w-4 h-4" />
           </div>
         </Popover.Button>
         <Popover.Panel className="origin-top-left w-[480px] h-[480px] shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/90 text-base-content border border-gray-600">
