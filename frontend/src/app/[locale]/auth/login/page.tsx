@@ -41,9 +41,6 @@ const Login = ({
     try {
       const authData = await pb.collection('users').authWithOAuth2({
         provider,
-        query: {
-          state: 'somestate',
-        },
       });
       setError('');
       // Update the avatar and name
