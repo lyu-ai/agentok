@@ -47,12 +47,13 @@ const Login = ({
       // PocketBase will update email/verified automatically!
       console.log(authData);
       console.log(pb.authStore);
-      if (!authData.record.avatar || !authData.record.name) {
+      // Different OAuth2 will be merged to
+      if (authData.meta?.name || authData.meta?.avatarUrl) {
         const formData = new FormData();
-        if (!authData.record.name) {
+        if (!authData.meta?.name) {
           formData.append('name', authData.meta?.name);
         }
-        if (!authData.record.avatar) {
+        if (authData.meta?.avatarUrl) {
           const avatarResp = await fetch(authData.meta?.avatarUrl).then(resp =>
             resp.blob()
           );
