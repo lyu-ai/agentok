@@ -1,4 +1,5 @@
-> [!IMPORTANT] > <font color="red"><b>This project is still under heavy development and functions might not work well yet. Please don't hestitate to <a href="https://github.com/tiwater/flowgen/issues/new">open new issues</a>.</b></font>
+> [!IMPORTANT]
+> <font color="red"><b>This project is still under heavy development and functions might not work well yet. Please don't hestitate to <a href="https://github.com/tiwater/flowgen/issues/new">open new issues</a>.</b></font>
 
 <img src="./frontend/public/logo-full.png" width="320" />
 
