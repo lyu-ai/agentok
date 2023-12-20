@@ -127,6 +127,10 @@
       "publish-flow-description": "描述",
       "publish-flow-tip": "将此工作流发布到 FlowGen 社区。您随时可以取消发布。"
     },
+    "Json": {
+      "import": "从 JSON 文件导入",
+      "export": "导出为 JSON 文件"
+    },
     "TemplateList": {
       "template-empty": "尚无公开的工作流模版，你可以将一个工作流发布为模版。",
       "unpublish-template": "取消发布该模版",

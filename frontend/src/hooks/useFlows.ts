@@ -94,6 +94,7 @@ export function useFlows() {
         body: JSON.stringify(flowToUpdate),
       });
       const updatedFlow = await response.json();
+      updateFlow(id, updatedFlow);
       mutate(); // Optional: if the PUT API call returns the updated list
       return updatedFlow;
     } catch (error) {
@@ -137,7 +138,7 @@ export function useFlows() {
   };
 
   return {
-    flows: data,
+    flows,
     isLoading: !error && !data,
     isError: error,
     refresh: mutate,
@@ -148,6 +149,17 @@ export function useFlows() {
     isCreating,
     isDeleting,
     isForking,
+    isUpdating,
+  };
+}
+
+export function useFlow(id: string) {
+  const { flows, isLoading, isError, updateFlow, isUpdating } = useFlows();
+  return {
+    flow: flows.find(flow => flow.id === id),
+    isLoading,
+    isError: isError,
+    updateFlow: (flow: Flow) => updateFlow(id, flow),
     isUpdating,
   };
 }
