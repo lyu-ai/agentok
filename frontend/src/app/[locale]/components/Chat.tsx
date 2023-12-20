@@ -15,14 +15,13 @@ import ChatInput from './ChatInput';
 import Markdown from '@/components/Markdown';
 import { genId } from '@/utils/id';
 import { UnsubscribeFunc } from 'pocketbase';
-import pb from '@/utils/pocketbase/client';
+import pb, { getAvatarUrl } from '@/utils/pocketbase/client';
 import { stripMatch } from '@/utils/re';
 import { ThinkTag } from '@/utils/chat';
 import { PiChatsCircleFill } from 'react-icons/pi';
 import { TbArrowBarToLeft, TbArrowBarRight } from 'react-icons/tb';
 import { useTranslations } from 'next-intl';
 import { useChat, useChats } from '@/hooks';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 const Chat = ({
   chatId,
@@ -177,6 +176,14 @@ const Chat = ({
     );
   }
 
+  const userNodeName =
+    chatSource.flow?.nodes?.find(
+      (node: any) =>
+        node.data.class === 'UserProxyAgent' ||
+        node.data.class === 'RetrieveUserProxyAgent'
+    )?.data?.name ?? '';
+  console.log('userNodeName', userNodeName);
+
   return (
     <div className="flex flex-col w-full h-full ">
       <div className="flex items-center justify-between w-full px-2 py-1">
@@ -298,10 +305,23 @@ const Chat = ({
 
           const messageClass =
             message.type === 'assistant'
-              ? 'bg-base-content/20 text-white'
-              : 'bg-primary/70 text-white';
-          const AvatarIcon =
-            message.type === 'assistant' ? RiRobot2Fill : GoPersonFill;
+              ? 'bg-base-content/20 text-base-content'
+              : 'bg-primary/80 text-white';
+
+          let avatarIcon = <RiRobot2Fill className="w-5 h-5" />;
+          if (message.type === 'user') {
+            avatarIcon = pb.authStore.model?.avatar ? (
+              <img
+                alt="avatar"
+                src={getAvatarUrl(pb.authStore.model as any)}
+                className="w-full h-full object-cover rounded-full"
+              />
+            ) : (
+              <GoPersonFill className="w-5 h-5" />
+            );
+          } else if (message.sender === userNodeName) {
+            avatarIcon = <GoPersonFill className="w-5 h-5" />;
+          }
 
           return (
             <div
@@ -312,7 +332,7 @@ const Chat = ({
                 <div
                   className={`w-8 h-8 rounded-full ${messageClass} flex items-center justify-center`}
                 >
-                  <AvatarIcon className="w-5 h-5 text-base-content" />
+                  {avatarIcon}
                 </div>
               </div>
               {message.sender && (

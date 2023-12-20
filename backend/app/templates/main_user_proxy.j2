@@ -11,7 +11,7 @@ user_proxy = {{ class_name }}(
     {%- if node['data'].get('is_termination_msg') %}
     is_termination_msg={{ node['data']['is_termination_msg'] }},
     {%- endif %}
-    {%- if node['data'].get('max_consecutive_auto_reply') %}
+    {%- if node['data'].get('max_consecutive_auto_reply') is not none %}
     max_consecutive_auto_reply={{ node['data']['max_consecutive_auto_reply'] }},
     {%- endif %}
     {%- if node['data'].get('enable_code_execution', False) %}
