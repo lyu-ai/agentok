@@ -1,0 +1,121 @@
+{
+  "collectionId": "69a19ir8h3u17m6",
+  "collectionName": "flows",
+  "created": "2023-12-20 04:29:10.267Z",
+  "flow": {
+    "edges": [
+      {
+        "animated": true,
+        "id": "1-3",
+        "source": "1",
+        "style": {
+          "strokeWidth": 2
+        },
+        "target": "3",
+        "type": "smoothstep"
+      }
+    ],
+    "nodes": [
+      {
+        "data": {
+          "class": "MultimodalConversableAgent",
+          "label": "multimodal-assistant",
+          "max_consecutive_auto_reply": 10,
+          "name": "Image",
+          "type": "assistant"
+        },
+        "dragging": false,
+        "height": 285,
+        "id": "1",
+        "position": {
+          "x": 145,
+          "y": 360
+        },
+        "positionAbsolute": {
+          "x": 145,
+          "y": 360
+        },
+        "selected": false,
+        "type": "assistant",
+        "width": 256
+      },
+      {
+        "data": {
+          "class": "UserProxyAgent",
+          "human_input_mode": "NEVER",
+          "label": "user-proxy",
+          "max_consecutive_auto_reply": 0,
+          "name": "UserProxy"
+        },
+        "dragging": false,
+        "height": 336,
+        "id": "3",
+        "position": {
+          "x": 547.660422960725,
+          "y": 443.8839879154079
+        },
+        "positionAbsolute": {
+          "x": 547.660422960725,
+          "y": 443.8839879154079
+        },
+        "selected": true,
+        "type": "user",
+        "width": 269
+      },
+      {
+        "data": {
+          "class": "Note",
+          "content": "Click **Start Chat** and select a sample picture and then enter: What is this?",
+          "label": "note",
+          "name": "Note"
+        },
+        "height": 85,
+        "id": "998",
+        "position": {
+          "x": 150,
+          "y": 700
+        },
+        "positionAbsolute": {
+          "x": 150,
+          "y": 700
+        },
+        "type": "note",
+        "width": 503
+      },
+      {
+        "data": {
+          "class": "Config",
+          "flow_description": "Sample Flow",
+          "flow_name": "Sample Flow 1",
+          "label": "config",
+          "max_tokens": 1024,
+          "name": "Config",
+          "temperature": 0.5
+        },
+        "dragging": false,
+        "height": 444,
+        "id": "999",
+        "position": {
+          "x": -198.69206534422403,
+          "y": 560
+        },
+        "positionAbsolute": {
+          "x": -198.69206534422403,
+          "y": 560
+        },
+        "selected": false,
+        "type": "config",
+        "width": 253
+      }
+    ],
+    "viewport": {
+      "x": 222.01240409074745,
+      "y": -275.96162869392367,
+      "zoom": 0.8899730626010611
+    }
+  },
+  "id": "eqy8c5bdroyu199",
+  "name": "Sample Flow 1",
+  "owner": "l3xel8d8m26l87s",
+  "updated": "2023-12-20 11:13:59.610Z"
+}

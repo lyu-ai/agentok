@@ -28,8 +28,6 @@ import Json from './Json';
 import { genId } from '@/utils/id';
 import ChatButton from './ChatButton';
 import { toast } from 'react-toastify';
-import { GoUpload } from 'react-icons/go';
-import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useFlow } from '@/hooks';
 import { useRouter } from 'next/navigation';
@@ -40,6 +38,7 @@ const Flow = ({ flowId }: any) => {
   const [mode, setMode] = useState<'main' | 'flow' | 'json' | 'python'>('flow');
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
+  const [isDirty, setIsDirty] = useState<boolean>(false);
   const flowParent = useRef<HTMLDivElement>(null);
   const { fitView, screenToFlowPosition, toObject } = useReactFlow();
   const t = useTranslations('component.Flow');
@@ -61,6 +60,7 @@ const Flow = ({ flowId }: any) => {
     if (!flow?.flow) return;
     setNodes(flow?.flow?.nodes ?? []);
     setEdges(flow?.flow?.edges ?? []);
+    setIsDirty(false);
   }, [flow]);
 
   const initialLoad = useRef(true);
@@ -70,6 +70,7 @@ const Flow = ({ flowId }: any) => {
       id: flowId,
       flow: currentFlow,
     });
+    setIsDirty(false);
   }, 500);
 
   useEffect(() => {
@@ -78,12 +79,8 @@ const Flow = ({ flowId }: any) => {
       initialLoad.current = false;
       return;
     }
-    const currentFlow = toObject();
-    const isDragging = currentFlow.nodes.some(
-      (node: Node) => node.dragging === true
-    );
-    if (!isDragging && isFlowDirty(currentFlow, flow?.flow)) {
-      debouncedUpdateFlow(flowId, currentFlow);
+    if (isDirty) {
+      debouncedUpdateFlow(flowId, toObject());
     }
 
     return () => {
@@ -92,11 +89,27 @@ const Flow = ({ flowId }: any) => {
   }, [nodes, edges]);
 
   const onNodesChange = useCallback(
-    (changes: NodeChange[]) => setNodes(nds => applyNodeChanges(changes, nds)),
+    (changes: NodeChange[]) => {
+      if (
+        !initialLoad.current &&
+        changes.some(change => change.type !== 'select')
+      ) {
+        setIsDirty(true);
+      }
+      setNodes(nds => applyNodeChanges(changes, nds));
+    },
     [setNodes]
   );
   const onEdgesChange = useCallback(
-    (changes: EdgeChange[]) => setEdges(eds => applyEdgeChanges(changes, eds)),
+    (changes: EdgeChange[]) => {
+      if (
+        !initialLoad.current &&
+        changes.some(change => change.type !== 'select')
+      ) {
+        setIsDirty(true);
+      }
+      setEdges(eds => applyEdgeChanges(changes, eds));
+    },
     [setEdges]
   );
 
@@ -188,24 +201,16 @@ const Flow = ({ flowId }: any) => {
     setNodes(nds => nds.concat(newNode));
   };
 
-  const onSave = () => {
-    if (!flow?.id) {
-      toast.error(t('flow-not-found'));
-      return;
-    }
-    updateFlow({ id: flow.id, name: flow?.name ?? genId(), flow: toObject() });
-  };
-
   if (mode === 'python') {
     return (
       <div className="relative flex w-full h-full">
-        <Python data={{ nodes, edges }} setMode={setMode} />
+        <Python data={flow} setMode={setMode} />
       </div>
     );
   } else if (mode === 'json') {
     return (
       <div className="relative flex w-full h-full">
-        <Json data={{ nodes, edges }} setMode={setMode} />
+        <Json data={flow} setMode={setMode} />
       </div>
     );
   } else if (isLoading) {
@@ -264,16 +269,6 @@ const Flow = ({ flowId }: any) => {
         <ViewToggle mode={'main'} setMode={() => router.push('/flow')} />
         <ViewToggle mode={'python'} setMode={setMode} />
         <ViewToggle mode={'json'} setMode={setMode} />
-        <button
-          className="btn btn-sm btn-square btn-ghost hover:text-primary"
-          onClick={onSave}
-          data-tooltip-id="default-tooltip"
-          data-tooltip-content={t('save-flow')}
-        >
-          <GoUpload
-            className={clsx('w-4 h-4', { 'animate-spin': isUpdating })}
-          />
-        </button>
         <ChatButton
           flow={{ id: flow.id, name: flow?.name ?? genId(), flow: toObject() }}
         />

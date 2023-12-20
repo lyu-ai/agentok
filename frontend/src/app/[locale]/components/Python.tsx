@@ -38,7 +38,7 @@ const Python = ({ data, setMode }: any) => {
   if (loading) {
     return (
       <div className="relative flex flex-col w-full h-full items-center justify-center gap-2">
-        <div className="loading loading-infinity"></div>
+        <div className="loading loading-primary loading-infinity"></div>
         <div className="text-sm text-base-content/60">{t('generating')}</div>
       </div>
     );
