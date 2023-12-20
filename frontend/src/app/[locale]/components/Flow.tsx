@@ -18,7 +18,6 @@ import {
   nodeTypes,
   initialEdges,
   initialNodes,
-  deepEqual,
   isFlowDirty,
 } from '../utils/flow';
 import { useState, useCallback, useRef, useEffect } from 'react';
