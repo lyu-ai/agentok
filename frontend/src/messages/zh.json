@@ -127,10 +127,6 @@
       "publish-flow-description": "描述",
       "publish-flow-tip": "将此工作流发布到 FlowGen 社区。您随时可以取消发布。"
     },
-    "Json": {
-      "import": "从 JSON 文件导入",
-      "export": "导出为 JSON 文件"
-    },
     "TemplateList": {
       "template-empty": "尚无公开的工作流模版，你可以将一个工作流发布为模版。",
       "unpublish-template": "取消发布该模版",
@@ -175,9 +171,14 @@
     }
   },
   "page": {
+    "Json": {
+      "import": "从 JSON 文件导入",
+      "download": "下载为 JSON 文件"
+    },
     "Python": {
       "generating": "正在生成 Python 代码...",
-      "generate-fail": "生成 Python 代码失败"
+      "generate-fail": "生成 Python 代码失败",
+      "download": "下载 Python 代码到本地"
     },
     "Chat": {
       "chat-tagline": "开始和 FlowGen 交谈",

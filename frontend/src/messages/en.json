@@ -130,10 +130,6 @@
       "publish-flow-description": "Description",
       "publish-flow-tip": "Publish this flow to the FlowGen community. You can unpublish at any time."
     },
-    "Json": {
-      "import": "Import from JSON file",
-      "export": "Export as JSON file"
-    },
     "TemplateList": {
       "template-empty": "No template here yet. You can publish your flow.",
       "unpublish-template": "Unpublish this template",
@@ -178,9 +174,14 @@
     }
   },
   "page": {
+    "Json": {
+      "import": "Import from JSON file",
+      "download": "Download as JSON file"
+    },
     "Python": {
       "generating": "Generating Python code ...",
-      "generate-fail": "Failed to generate Python code"
+      "generate-fail": "Failed to generate Python code",
+      "download": "Download Python souce code"
     },
     "Chat": {
       "chat-tagline": "Start Chat with FlowGen",

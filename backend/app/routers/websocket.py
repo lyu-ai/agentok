@@ -5,8 +5,8 @@ import subprocess
 from fastapi import APIRouter, BackgroundTasks, Depends, WebSocket, WebSocketDisconnect
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.ext import do
-from ..schemas import Message
-from ..utils.codegen import Data, flow2py
+from ..schemas import Message, Flow
+from ..utils.codegen import flow2py
 from ..dependencies import oauth2_scheme
 connected_websockets = set()
 
@@ -22,7 +22,7 @@ env = Environment(
 
 # Generate and execute the code asynchronously
 @router.post("/execute-code/{flow_name}")
-async def execute_code(flow_name: str, flow: Data, message: Message, background_tasks: BackgroundTasks, token: str = Depends(oauth2_scheme)):
+async def execute_code(flow_name: str, flow: Flow, message: Message, background_tasks: BackgroundTasks, token: str = Depends(oauth2_scheme)):
     generated_dir = './generated/'
 
     # Generate the code using Jinja2 templates

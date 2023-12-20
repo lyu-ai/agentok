@@ -1,8 +1,11 @@
+from datetime import datetime
 import json
 import os
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.ext import do
 from typing import Any, Dict, List, Union
+
+from ..schemas import Flow
 
 print('target path:', os.path.join(os.getcwd(), "app/", "templates"))
 # Set up the Jinja2 environment
@@ -12,43 +15,43 @@ env = Environment(
     extensions=[do]
 )
 
-Node = Dict[str, Any]
-Edge = Dict[str, Any]
-Data = Dict[str, Union[List[Node], List[Edge]]]
-
-def flow2py(flow: Data) -> str:
-  assistant_nodes = [node for node in flow['nodes'] if node['type'] == 'assistant']
+def flow2py(flow: Flow) -> str:
+  flow = flow.flow
+  assistant_nodes = [node for node in flow.nodes if node['type'] == 'assistant']
   # TODO: It's possible there are multiple user_proxy nodes
   # Now we assumed there is only one user_proxy node has no incoming edges
   user_proxy = next(
-      (node for node in flow['nodes']
+      (node for node in flow.nodes
       if node['type'] == 'user' and
-      not any(edge['source'] == node['id'] for edge in flow['edges'])),
+      not any(edge['source'] == node['id'] for edge in flow.edges)),
       None
   )
   if not user_proxy:
     raise Exception('No user proxy node found')
   first_converser = next(
-      (node for node in flow['nodes']
+      (node for node in flow.nodes
       if any(edge['source'] == node['id'] and
-              edge['target'] == user_proxy['id'] for edge in flow['edges'])),
+              edge['target'] == user_proxy['id'] for edge in flow.edges)),
       None
   )
-  config_node = next((node for node in flow['nodes'] if node['type'] == 'config'), None)
+  config_node = next((node for node in flow.nodes if node['type'] == 'config'), None)
   functions = config_node['data'].get('functions', [])
-  group_chat_node = next((node for node in flow['nodes'] if node['type'] == 'group'), None)
+  group_chat_node = next((node for node in flow.nodes if node['type'] == 'group'), None)
   grouped_nodes = []
   if group_chat_node:
-    grouped_nodes = [node for node in flow['nodes'] if any(
-      edge['source'] == node['id'] and edge['target'] == group_chat_node['id'] for edge in flow['edges']
+    grouped_nodes = [node for node in flow.nodes if any(
+      edge['source'] == node['id'] and edge['target'] == group_chat_node['id'] for edge in flow.edges
     )]
+  note_nodes = [node for node in flow.nodes if node['type'] == 'note']
 
   # Use the template for each node
   template = env.get_template("base.j2") # Main template
 
-  code = template.render(nodes=flow['nodes'],
+  code = template.render(nodes=flow.nodes,
                         assistant_nodes=assistant_nodes,
                         config_node=config_node,
+                        generation_date=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                        note_nodes=note_nodes,
                         functions=functions,
                         main_user_proxy=user_proxy,
                         first_converser=first_converser,

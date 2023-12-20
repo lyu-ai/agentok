@@ -1,4 +1,5 @@
 > [!IMPORTANT]
+>
 > <font color="red"><b>This project is still under heavy development and functions might not work well yet. Please don't hestitate to <a href="https://github.com/tiwater/flowgen/issues/new">open new issues</a>.</b></font>
 
 <img src="./frontend/public/logo-full.png" width="320" />
@@ -8,7 +9,7 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![GitHub star chart](https://img.shields.io/github/stars/tiwater/flowgen?style=social)](https://star-history.com/#tiwater/flowgen)
 
-![flow-1](./website/static/img/screenshot-flow-1.jpeg)
+![flow-1](./website/static/img/screenshot-flow-1.png)
 
 ## 🤖 What is FlowGen
 
@@ -16,9 +17,33 @@ FlowGen is a tool built for [AutoGen](https://microsoft.github.io/autogen/), a g
 
 AutoGen streamlines the process of creating multi-agent applications with its clear and user-friendly approach. FlowGen takes this accessibility a step further by offering visual tools that simplify the building and management of agent workflows with AutoGen.
 
+### Visual Flow Editing
+
+![flow-0](./website/static/img/screenshot-flow-0.png)
+
+![flow-1](./website/static/img/screenshot-flow-1.png)
+
+### Chat
+
+![chat-0](./website/static/img/screenshot-chat-0.png)
+
+![chat-1](./website/static/img/screenshot-chat-1.png)
+
+### Gallery
+
+![gallery-0](./website/static/img/screenshot-gallery-0.png)
+
 ## 💡 Quickstart
 
-To quickly explore what FlowGen has to offer, simply visit it [online](https://flowgen.app). Each new commit to the main branch triggers an automatic deployment on [Railway.app](https://railway.app), ensuring you experience the latest version of the service.
+To quickly explore what FlowGen has to offer, simply visit it [https://flowgen.app](https://flowgen.app).
+
+Each new commit to the main branch triggers an automatic deployment on [Railway.app](https://railway.app), ensuring you experience the latest version of the service.
+
+> [!WARNING]
+>
+> Changes to Pocketbase project will cause the rebuild and redeployment of all instances, which will swipe all the data.
+>
+> Please do not use it for production purpose, and make sure you export flows in time.
 
 ## 🐳 Run on Local (with Docker)
 

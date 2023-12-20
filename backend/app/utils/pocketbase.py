@@ -13,7 +13,6 @@ POCKETBASE_URL: str = os.environ.get("POCKETBASE_URL")
 def add_messsage(token: str, message: Message):
   # Send requests to PocketBase instance
   message_to_persist = dict(message)
-  print('saving message', message_to_persist)
   message_to_persist.pop('id', None) # Should remove id for auto-generation
   response = requests.post(
     f'{POCKETBASE_URL}/api/collections/messages/records',

@@ -2,11 +2,12 @@ import CopyButton from '@/components/CopyButton';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import style from 'react-syntax-highlighter/dist/esm/styles/hljs/a11y-dark';
 import ViewToggle from './ViewToggle';
-import { GoUpload, GoDownload } from 'react-icons/go';
+import { GoUpload } from 'react-icons/go';
 import { useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'react-toastify';
 import { useFlow } from '@/hooks';
+import DownloadButton from '@/components/DownloadButton';
 
 const ImportIcon = ({ onImport }: any) => {
   const t = useTranslations('component.Json');
@@ -65,40 +66,6 @@ const ImportIcon = ({ onImport }: any) => {
   );
 };
 
-const ExportIcon = ({ data, filename }: any) => {
-  const t = useTranslations('component.Json');
-  const onExport = () => {
-    // Create a Blob from the JSON data
-    const fileData = JSON.stringify(data, null, 2);
-    const blob = new Blob([fileData], { type: 'application/json' });
-
-    // Create an URL for the Blob
-    const url = URL.createObjectURL(blob);
-
-    // Create a new anchor element
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename || 'export.json';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-
-    // Cleanup the URL Object after the download
-    window.URL.revokeObjectURL(url);
-  };
-
-  return (
-    <button
-      className="btn btn-sm btn-square btn-ghost"
-      onClick={onExport}
-      data-tooltip-id="default-tooltip"
-      data-tooltip-content={t('export')}
-    >
-      <GoDownload className="w-4 h-4" />
-    </button>
-  );
-};
-
 const Json = ({ data, setMode }: any) => {
   const t = useTranslations('component.Json');
   const json = JSON.stringify(data, null, 2);
@@ -122,8 +89,9 @@ const Json = ({ data, setMode }: any) => {
         <ViewToggle mode={'python'} setMode={setMode} />
         <CopyButton content={json} />
         <ImportIcon onImport={onImport} />
-        <ExportIcon
-          data={data}
+        <DownloadButton
+          data={JSON.stringify(data, null, 2)}
+          label={t('download')}
           filename={`${
             data?.name ?? 'flowgen-data'
           }-${new Date().toLocaleString()}.json`}

@@ -5,6 +5,7 @@ import ViewToggle from './ViewToggle';
 import { useState, useEffect } from 'react';
 import { GoAlertFill } from 'react-icons/go';
 import { useTranslations } from 'next-intl';
+import DownloadButton from '@/components/DownloadButton';
 
 const Python = ({ data, setMode }: any) => {
   const [loading, setLoading] = useState(true);
@@ -16,6 +17,9 @@ const Python = ({ data, setMode }: any) => {
   const t = useTranslations('page.Python');
 
   useEffect(() => {
+    if (!data?.flow) return;
+    console.log('Python data:', data);
+    setLoading(true);
     fetch('/api/codegen', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -69,6 +73,13 @@ const Python = ({ data, setMode }: any) => {
         <ViewToggle mode={'flow'} setMode={setMode} />
         <ViewToggle mode={'json'} setMode={setMode} />{' '}
         <CopyButton content={result.python ?? result.message ?? ''} />
+        {result.python && (
+          <DownloadButton
+            data={result.python}
+            label={t('download')}
+            filename={`${data?.name ?? 'flow2py'}.py`}
+          />
+        )}
       </div>
     </div>
   );

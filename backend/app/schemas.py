@@ -21,7 +21,9 @@ class Chat(BaseModel):
 
 Node = Dict[str, Any]
 Edge = Dict[str, Any]
-FlowData = Dict[str, Union[List[Node], List[Edge]]]
+class FlowData(BaseModel):
+  nodes: List[Node]
+  edges: List[Edge]
 
 class Flow(BaseModel):
   id: str
