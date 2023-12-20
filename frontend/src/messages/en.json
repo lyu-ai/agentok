@@ -122,7 +122,7 @@
       "create-flow": "Start Build from Templates",
       "edit-flow": "Edit Flow",
       "start-chat": "Start Chat",
-      "publish-flow": "Publish Now",
+      "publish-flow": "Publish",
       "publish-flow-success": "Successfully published flow {flow_name}",
       "publish-flow-failed": "Failed to publish flow {flow_name}",
       "publish-flow-title": "Publish Flow",

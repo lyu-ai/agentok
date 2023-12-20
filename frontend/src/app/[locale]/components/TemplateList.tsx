@@ -110,7 +110,7 @@ const TemplateBlock = ({ template, index }: any) => {
         />
       </figure>
       <div className="card-body p-4">
-        <h2 className="card-title">{template.name}</h2>
+        <h2 className="card-title line-clamp-1">{template.name}</h2>
         <div className="text-xs text-base-content/60">
           {new Date(template.created).toLocaleString()}
         </div>

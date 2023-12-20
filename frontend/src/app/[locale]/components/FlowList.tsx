@@ -177,7 +177,7 @@ const FlowBlock = ({ action: Action, flow }: any) => {
               <button
                 className="btn btn-sm btn-square btn-ghost group-hover:text-primary"
                 data-tooltip-id="default-tooltip"
-                data-tooltip-content={t('publish-flow') + flow.name}
+                data-tooltip-content={t('publish-flow') + ' ' + flow.name}
                 onClick={() => setShowPublishModal(!showPublishModal)}
               >
                 <GoShare className={clsx('w-4 h-4')} />
