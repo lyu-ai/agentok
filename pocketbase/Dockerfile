@@ -35,7 +35,7 @@ EXPOSE 7676
 # Make sure the data and backup directories are setup
 RUN mkdir /data /backups
 
-COPY ./backups/pb_backup_flow_gen_20231218040919.zip /backups/pb_backup.zip
+COPY ./backups/pb_backup.zip /backups/pb_backup.zip
 
 # Add the entrypoint script.
 COPY entrypoint.sh /entrypoint.sh
