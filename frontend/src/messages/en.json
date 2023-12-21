@@ -82,10 +82,10 @@
       "start-chat": "Start Chat",
       "reload-history": "Reload chat history",
       "clean-history": "Clean chat history",
-      "share": "Share this chat",
+      "open-in-new-window": "Open this chat in new window",
       "go-to-editor": "Go to Flow Editor",
       "message-loading": "Loading chat history ...",
-      "message-empty": "No chat history yet. Start chat now!"
+      "message-empty": "Start chat now!"
     },
     "ChatList": {
       "default-chat-title": "Chat with {source_name}",

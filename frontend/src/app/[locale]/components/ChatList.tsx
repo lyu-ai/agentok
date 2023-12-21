@@ -212,17 +212,32 @@ const ChatList = ({
     isError: isChatsError,
     activeChat,
   } = useChats();
+  const chatListRef = useRef<HTMLDivElement | null>(null); // This ref should attach to the chat list container
+
+  const autoScrollIntoView = (targetElement: any, containerElement: any) => {
+    const targetRect = targetElement.getBoundingClientRect();
+    const containerRect = containerElement.getBoundingClientRect();
+
+    if (
+      targetRect.bottom <= containerRect.top ||
+      targetRect.top >= containerRect.bottom
+    ) {
+      targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
   const chatRefs = useRef(new Map()).current;
   useEffect(() => {
-    // Perform the scrolling when the active chat is changed
-    if (activeChat && chatRefs.has(activeChat)) {
-      const ref = chatRefs.get(activeChat);
-      ref.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-      });
+    if (!chatListRef.current) return;
+    if (isLoadingChats) return;
+    if (
+      activeChat &&
+      chatRefs.has(activeChat) &&
+      chatRefs.size === chats.length
+    ) {
+      const activeChatRef = chatRefs.get(activeChat);
+      autoScrollIntoView(activeChatRef.current, chatListRef.current);
     }
-  }, [activeChat, chatRefs]);
+  }, [isLoadingChats, activeChat, chatRefs.size]);
 
   if (isChatsError) {
     console.warn('Failed to load chats');
@@ -236,7 +251,7 @@ const ChatList = ({
   }
 
   return (
-    <>
+    <div ref={chatListRef} className="flex flex-col w-full h-full">
       {trimmedChats.map((chat: any) => {
         if (!chatRefs.has(chat.id)) {
           chatRefs.set(chat.id, createRef<HTMLDivElement>());
@@ -251,7 +266,7 @@ const ChatList = ({
           />
         );
       })}
-    </>
+    </div>
   );
 };
 

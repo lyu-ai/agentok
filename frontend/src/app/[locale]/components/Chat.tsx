@@ -5,12 +5,11 @@ import {
   GoMegaphone,
   GoPencil,
   GoPersonFill,
-  GoShare,
 } from 'react-icons/go';
 import { RiRobot2Fill, RiRobot2Line } from 'react-icons/ri';
-import { MdOutlineCleaningServices } from 'react-icons/md';
+import { MdOutlineCleaningServices, MdOpenInBrowser } from 'react-icons/md';
+import { RxOpenInNewWindow } from 'react-icons/rx';
 import { IoReload } from 'react-icons/io5';
-import { RxReload } from 'react-icons/rx';
 import ChatInput from './ChatInput';
 import Markdown from '@/components/Markdown';
 import { genId } from '@/utils/id';
@@ -44,8 +43,8 @@ const Chat = ({
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const t = useTranslations('component.Chat');
 
-  const fetchMessages = useCallback(() => {
-    return fetch(`/api/chats/${chat?.id}/messages`, {
+  const fetchMessages = useCallback(async () => {
+    return fetch(`/api/chats/${chatId}/messages`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -55,7 +54,7 @@ const Chat = ({
       .then(json => {
         setMessages(json ? json : []);
       });
-  }, [setMessages, chat?.id]);
+  }, [setMessages, chatId]);
 
   useEffect(() => {
     if (!chat) return;
@@ -91,7 +90,7 @@ const Chat = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [chat]);
 
   // This is to make sure that the scroll is at the bottom when the messages are updated, such as when
   // user sends a message or when the bot generates a message.
@@ -121,12 +120,6 @@ const Chat = ({
       .finally(() => setCleaning(false));
   };
 
-  const onReload = () => {
-    setLoading(true);
-    setMessages([]);
-    fetchMessages().finally(() => setLoading(false));
-  };
-
   const onSend = async (message: string): Promise<boolean> => {
     if (!chat) return false;
     const newMessage = {
@@ -154,19 +147,13 @@ const Chat = ({
     return true;
   };
 
-  let messagesToDisplay = messages;
-  if (thinking) {
-    messagesToDisplay = [
-      ...messages,
-      {
-        id: genId(),
-        type: 'assistant',
-        chat: chat?.id,
-        content: t('thinking'),
-      },
-    ];
+  if (loading || isLoadingChat) {
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-full">
+        <div className="loading loading-bars loading-sm" />
+      </div>
+    );
   }
-
   if (isError) {
     return (
       <div className="flex flex-col items-center justify-center w-full h-full">
@@ -175,6 +162,16 @@ const Chat = ({
         </span>
       </div>
     );
+  }
+
+  let messagesToDisplay = messages;
+  if (thinking) {
+    messagesToDisplay.push({
+      id: genId(),
+      type: 'assistant',
+      chat: chat?.id,
+      content: t('thinking'),
+    });
   }
 
   const userNodeName =
@@ -209,14 +206,6 @@ const Chat = ({
           <button
             className="btn btn-sm btn-ghost btn-square"
             data-tooltip-id="chat-tooltip"
-            data-tooltip-content={t('reload-history')}
-            onClick={onReload}
-          >
-            <RxReload className="w-4 h-4" />
-          </button>
-          <button
-            className="btn btn-sm btn-ghost btn-square"
-            data-tooltip-id="chat-tooltip"
             data-tooltip-content={t('clean-history')}
             onClick={onClean}
           >
@@ -230,11 +219,11 @@ const Chat = ({
             <a
               className="btn btn-sm btn-ghost btn-square"
               data-tooltip-id="chat-tooltip"
-              data-tooltip-content={t('share')}
+              data-tooltip-content={t('open-in-new-window')}
               href={`/chat/${chat?.id}`}
               target="_blank"
             >
-              <GoShare className="w-4 h-4" />
+              <RxOpenInNewWindow className="w-4 h-4" />
             </a>
           )}
           {standalone && chat?.sourceType === 'flow' && (
@@ -259,7 +248,8 @@ const Chat = ({
         )} */}
         {messagesToDisplay.length === 0 && !loading && (
           <div className="flex items-center justify-center w-full h-full">
-            <div className="text-sm text-base-content/50">
+            <div className="flex flex-col items-center gap-2 text-sm text-base-content/20">
+              <RiRobot2Line className="w-12 h-12" />
               {t('message-empty')}
             </div>
           </div>

@@ -82,7 +82,7 @@
       "start-chat": "开始聊天",
       "reload-history": "重新加载聊天记录",
       "clean-history": "清除聊天记录",
-      "share": "分享此聊天",
+      "open-in-new-window": "在独立窗口中打开",
       "go-to-editor": "转到工作流编辑器",
       "message-loading": "正在加载聊天记录...",
       "message-empty": "尚无聊天记录。现在开始聊天！"
