@@ -27,14 +27,27 @@ const FunctionDetail = ({ nodeId, func, ...props }: any) => {
       <div className="flex items-center gap-2">
         <TbMathFunction className="w-7 h-7" />
         <div className="w-full flex flex-col gap-2 text-base font-bold">
-          <EditableText
-            text={func?.name}
-            onChange={(text: any) => {
-              setFunctionData('name', text);
-            }}
-            showButtons
-            className="text-base-content/80 !text-lg !font-bold"
-          />
+          <div className="flex items-center w-full justify-between">
+            <EditableText
+              text={func?.name}
+              onChange={(text: any) => {
+                setFunctionData('name', text);
+              }}
+              showButtons
+              className="text-base-content/80 !text-lg !font-bold"
+            />
+            <div className="flex items-center gap-2 text-sm">
+              <span>Async Function</span>
+              <input
+                type="checkbox"
+                checked={func?.async ?? false}
+                onChange={e => {
+                  setFunctionData('async', e.target.checked);
+                }}
+                className="toggle toggle-sm"
+              />
+            </div>
+          </div>
           <EditableText
             text={func?.description}
             onChange={(text: any) => {

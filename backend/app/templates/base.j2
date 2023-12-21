@@ -9,14 +9,14 @@
 # Flow Name: {{ config_node['data']['flow_name'] }}
 # Description: {{ config_node['data']['flow_description'] }}
 #
-{%- if note_nodes %}
+{% if note_nodes %}
 """
-{%- for node in note_nodes %}
+Notes:
+{% for node in note_nodes %}
 {{ node['data']['content'] }}
-
 {%- endfor %}
 """
-{%- endif %}
+{% endif %}
 
 {{- get_imports(nodes) }}
 {{- generate_configs(config_node) }}
@@ -27,4 +27,4 @@
 {%- if group_chat_node %}
 {{- generate_group_chat(group_chat_node, assistant_nodes, user_proxies) }}
 {%- endif %}
-{%- include 'main.j2' -%}
+{% include 'main.j2' %}

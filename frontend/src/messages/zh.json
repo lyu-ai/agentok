@@ -162,6 +162,7 @@
       "task-code": "代码",
       "chunk-token-size": "块标记大小",
       "docs-path": "文档路径",
+      "custom-text-types": "文本类型",
       "get-or-create": "获取或创建",
       "client": "客户端",
       "termination-msg": "终止关键字："

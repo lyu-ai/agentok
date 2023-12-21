@@ -1,6 +1,6 @@
 # Function template content generator
 {% for function in functions %}
-def __func_{{ function.name }}({% for param in function.parameters %}{{ param.name }}{% if not loop.last %},{% endif %}{% endfor %}):
+{% if function.async %}async {% endif %}def __func_{{ function.name }}({% for param in function.parameters %}{{ param.name }}{% if not loop.last %},{% endif %}{% endfor %}):
 {%- if function.code %}
 {%- for line in function.code.split('\n') %}
     {{ line }}

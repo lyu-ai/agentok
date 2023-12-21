@@ -34,7 +34,6 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const template = await request.json();
   try {
     const pb = await loadAuthFromCookie();
     const res = await pb.collection('templates').delete(params.id);

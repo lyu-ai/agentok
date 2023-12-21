@@ -1,0 +1,156 @@
+{
+  "collectionId": "69a19ir8h3u17m6",
+  "collectionName": "flows",
+  "created": "2023-12-18 14:28:35.222Z",
+  "flow": {
+    "edges": [
+      {
+        "animated": true,
+        "id": "reactflow__edge-gwbmmi371c-3",
+        "source": "gwbmmi371c",
+        "sourceHandle": null,
+        "style": {
+          "strokeWidth": 2
+        },
+        "target": "3",
+        "targetHandle": null,
+        "type": "smoothstep"
+      }
+    ],
+    "nodes": [
+      {
+        "data": {
+          "class": "UserProxyAgent",
+          "human_input_mode": "NEVER",
+          "label": "user-proxy",
+          "max_consecutive_auto_reply": 10,
+          "name": "UserProxy"
+        },
+        "dragging": false,
+        "height": 336,
+        "id": "3",
+        "position": {
+          "x": 550,
+          "y": 300
+        },
+        "positionAbsolute": {
+          "x": 550,
+          "y": 300
+        },
+        "selected": false,
+        "type": "user",
+        "width": 269
+      },
+      {
+        "data": {
+          "class": "Note",
+          "content": "Sample message:\n\n```\nDraw two agents chatting with each other with an example dialog. Don't add plt.show().\n```",
+          "label": "note",
+          "name": "Note"
+        },
+        "dragging": false,
+        "height": 137,
+        "id": "998",
+        "position": {
+          "x": 150,
+          "y": 700
+        },
+        "positionAbsolute": {
+          "x": 150,
+          "y": 700
+        },
+        "selected": false,
+        "type": "note",
+        "width": 717
+      },
+      {
+        "data": {
+          "class": "Config",
+          "flow_description": "Task Solving with Provided Tools as Functions (Sync)",
+          "flow_name": "Auto Generated Agent Chat",
+          "functions": [
+            {
+              "code": "return user_proxy.execute_code_blocks([(\"sh\", script)])",
+              "description": "Execute shell script",
+              "id": "function-o50t4q6kfv",
+              "name": "sh",
+              "parameters": [
+                {
+                  "description": "The script to execute",
+                  "id": "param-gjkycaoig4",
+                  "name": "script",
+                  "type": "string"
+                }
+              ]
+            },
+            {
+              "code": "ipython = get_ipython()\nresult = ipython.run_cell(cell)\nlog = str(result.result)\nif result.error_before_exec is not None:\n    log += f\"\\n{result.error_before_exec}\"\nif result.error_in_exec is not None:\n    log += f\"\\n{result.error_in_exec}\"\nreturn log",
+              "description": "Execute python code with iPython",
+              "id": "function-y5fk2okxjh",
+              "name": "python",
+              "parameters": [
+                {
+                  "description": "the code to execute",
+                  "id": "param-y29kedpy2x",
+                  "name": "cell",
+                  "type": "string"
+                }
+              ]
+            }
+          ],
+          "label": "config",
+          "max_tokens": 1024,
+          "name": "Config",
+          "temperature": 0
+        },
+        "dragging": false,
+        "height": 444,
+        "id": "999",
+        "position": {
+          "x": -320.4882175226586,
+          "y": 397.3993957703927
+        },
+        "positionAbsolute": {
+          "x": -320.4882175226586,
+          "y": 397.3993957703927
+        },
+        "selected": true,
+        "type": "config",
+        "width": 253
+      },
+      {
+        "data": {
+          "class": "AssistantAgent",
+          "enable_system_message": true,
+          "label": "assistant",
+          "name": "chatbot",
+          "system_message": "For coding tasks, only use the functions you have been provided with. Reply TERMINATE when the task is done.",
+          "type": "assistant"
+        },
+        "dragging": true,
+        "height": 356,
+        "id": "gwbmmi371c",
+        "position": {
+          "x": 104.22145015105733,
+          "y": 249.12483383685793
+        },
+        "positionAbsolute": {
+          "x": 104.22145015105733,
+          "y": 249.12483383685793
+        },
+        "selected": false,
+        "type": "assistant",
+        "width": 240
+      }
+    ],
+    "viewport": {
+      "x": 331.5197650611709,
+      "y": -144.869839995637,
+      "zoom": 0.8727359320884053
+    }
+  },
+  "id": "q13mx69lsj5aez7",
+  "name": "Auto Generated Agent Chat",
+  "owner": "l3xel8d8m26l87s",
+  "updated": "2023-12-21 04:17:04.024Z"
+}

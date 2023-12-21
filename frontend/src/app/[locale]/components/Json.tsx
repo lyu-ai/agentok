@@ -10,7 +10,7 @@ import { useFlow } from '@/hooks';
 import DownloadButton from '@/components/DownloadButton';
 
 const ImportIcon = ({ onImport }: any) => {
-  const t = useTranslations('component.Json');
+  const t = useTranslations('page.Json');
   const fileInputRef = useRef<any>();
 
   const handleIconClick = () => {
@@ -67,7 +67,7 @@ const ImportIcon = ({ onImport }: any) => {
 };
 
 const Json = ({ data, setMode }: any) => {
-  const t = useTranslations('component.Json');
+  const t = useTranslations('page.Json');
   const json = JSON.stringify(data, null, 2);
   const { updateFlow } = useFlow(data?.id);
   const onImport = async (json: any) => {

@@ -1,5 +1,5 @@
 import PopupDialog from '@/components/PopupDialog';
-import { GoGear } from 'react-icons/go';
+import { GoGear, GoCopilot } from 'react-icons/go';
 import clsx from 'clsx';
 import { useReactFlow } from 'reactflow';
 import { setNodeData } from '../../utils/flow';
@@ -39,13 +39,34 @@ const RetrieveConfig = ({ data, setRetrieveOption, ...props }: any) => {
             }
           />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col gap-2">
           <span className="shrink-0">{t('docs-path')}</span>
+          <textarea
+            rows={3}
+            className="nodrag textarea textarea-xs textarea-bordered rounded w-full overflow-x-auto"
+            value={
+              data.retrieve_config?.docs_path
+                ? data.retrieve_config?.docs_path.join('\n')
+                : ''
+            }
+            onChange={e =>
+              setRetrieveOption('docs_path', e.target.value.split('\n'))
+            }
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="shrink-0">{t('custom-text-types')}</span>
           <input
             type="text"
-            className="input input-sm input-bordered w-full"
-            value={data.retrieve_config?.docs_path ?? 20}
-            onChange={e => setRetrieveOption('docs_path', e.target.value)}
+            className="input input-sm input-bordered rounded w-full"
+            value={
+              data.retrieve_config?.custom_text_types
+                ? data.retrieve_config?.custom_text_types.join(',')
+                : ''
+            }
+            onChange={e =>
+              setRetrieveOption('custom_text_types', e.target.value.split(','))
+            }
           />
         </div>
         <label className="flex items-center gap-2 cursor-pointer">
@@ -60,12 +81,13 @@ const RetrieveConfig = ({ data, setRetrieveOption, ...props }: any) => {
         <div className="flex items-center gap-2">
           <span>{t('client')}</span>
           <select
-            className="select select-bordered select-sm w-24"
+            className="select select-bordered select-sm"
             value={data.retrieve_config?.client ?? 'code'}
             onChange={e => setRetrieveOption('client', e.target.value)}
           >
+            <option value={''}>(None)</option>
             <option value={`chromadb.PersistentClient(path="/tmp/chromadb")`}>
-              chromadb
+              ChromaDB
             </option>
           </select>
         </div>
@@ -171,7 +193,7 @@ const UserConfig = ({ nodeId, data, className, ...props }: any) => {
   };
   const setIsTerminationMsg = (terminationMsg: string) => {
     const formattedMsg = terminationMsg
-      ? `lambda x: x.get("content", "").rstrip().endswith("${terminationMsg}")`
+      ? `lambda x: x.get("content", "") and x.get("content", "").rstrip().endswith("${terminationMsg}")`
       : '';
     setNodeData(instance, nodeId, { is_termination_msg: formattedMsg });
   };
@@ -197,16 +219,26 @@ const UserConfig = ({ nodeId, data, className, ...props }: any) => {
     >
       <div className="flex items-center justify-between">
         <span>{t('termination-msg')}</span>
-        <input
-          value={
-            data.is_termination_msg
-              ? extractTerminationMsg(data.is_termination_msg)
-              : ''
-          }
-          onChange={e => setIsTerminationMsg(e.target.value)}
-          placeholder="TERMINATE"
-          className="input input-sm input-bordered rounded"
-        />
+        <div className="flex items-center gap-2">
+          <input
+            value={
+              data.is_termination_msg
+                ? extractTerminationMsg(data.is_termination_msg)
+                : ''
+            }
+            onChange={e => setIsTerminationMsg(e.target.value)}
+            placeholder="TERMINATE"
+            className="input input-sm input-bordered rounded"
+          />
+          <button
+            className="btn btn-sm btn-primary btn-square btn-ghost"
+            onClick={() => setIsTerminationMsg('TERMINATE')}
+            data-tooltip-content={'TERMINATE'}
+            data-tooltip-id="default-tooltip"
+          >
+            <GoCopilot className="w-4 h-4" />
+          </button>
+        </div>
       </div>
       <label className="flex items-center justify-start cursor-pointer label gap-2">
         <input

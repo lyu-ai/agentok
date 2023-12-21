@@ -3,7 +3,9 @@ import loadAuthFromCookie from '@/utils/pocketbase/server';
 
 export async function GET(request: NextRequest) {
   const pb = await loadAuthFromCookie();
-  const templates = await pb.collection('templates').getFullList();
+  const templates = await pb
+    .collection('templates')
+    .getFullList({ expand: 'owner' });
   return new Response(JSON.stringify(templates));
 }
 

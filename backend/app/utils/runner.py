@@ -45,9 +45,11 @@ async def run_assistant(message: str, source_path: str, on_message=print_message
         error_message = err.decode().strip()
         print(f'Assistant process exited with return code {process.returncode} and error message: {error_message}')
         # You might want to handle the error or propagate it
+        # Splits the message by lines and takes the last one
+        last_line = error_message.splitlines()[-1]
         on_message({
             'type': 'assistant',
-            'content': f'ASSISTANT_CHAT_END {process.returncode}: {error_message}',
+            'content': f'ASSISTANT_CHAT_END {process.returncode}: {last_line}',
         })
     else:
         on_message({

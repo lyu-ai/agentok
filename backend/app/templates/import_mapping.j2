@@ -18,7 +18,9 @@
     {%- endfor %}
 import autogen
 import argparse
+import time
 from termcolor import colored
+from IPython import get_ipython
 
 {{ import_lines|unique|join('\n') }}
 

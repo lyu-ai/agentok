@@ -1,0 +1,146 @@
+{
+  "collectionId": "69a19ir8h3u17m6",
+  "collectionName": "flows",
+  "created": "2023-12-21 04:41:41.323Z",
+  "flow": {
+    "edges": [
+      {
+        "animated": true,
+        "id": "reactflow__edge-8iig1ifacr4-8fx3bghg51u",
+        "source": "8iig1ifacr4",
+        "sourceHandle": null,
+        "style": {
+          "strokeWidth": 2
+        },
+        "target": "8fx3bghg51u",
+        "targetHandle": null,
+        "type": "smoothstep"
+      }
+    ],
+    "nodes": [
+      {
+        "data": {
+          "class": "Note",
+          "content": "Use RetrieveChat to help generate sample code and automatically run the code and fix errors if there is any.\n\nProblem: \n```\nWhich API should I use if I want to use FLAML for a classification task and I want to train the model in 30 seconds. Use spark to parallel the training. Force cancel jobs if time limit is reached.\n```",
+          "label": "note",
+          "name": "Note"
+        },
+        "dragging": false,
+        "height": 242,
+        "id": "998",
+        "position": {
+          "x": 136.17430437443863,
+          "y": 749.9744063095355
+        },
+        "positionAbsolute": {
+          "x": 136.17430437443863,
+          "y": 749.9744063095355
+        },
+        "resizing": false,
+        "selected": false,
+        "style": {
+          "height": 242,
+          "width": 632
+        },
+        "type": "note",
+        "width": 632
+      },
+      {
+        "data": {
+          "class": "Config",
+          "flow_description": "RAG Example1: Generate code based off docstrings w/o human feedback",
+          "flow_name": "RAG 1(not working)",
+          "functions": [],
+          "label": "config",
+          "max_tokens": 1024,
+          "name": "Config",
+          "temperature": 0.5
+        },
+        "dragging": false,
+        "height": 444,
+        "id": "999",
+        "position": {
+          "x": -214.43559681350945,
+          "y": 351.38744931826614
+        },
+        "positionAbsolute": {
+          "x": -214.43559681350945,
+          "y": 351.38744931826614
+        },
+        "selected": false,
+        "type": "config",
+        "width": 253
+      },
+      {
+        "data": {
+          "class": "RetrieveUserProxyAgent",
+          "human_input_mode": "NEVER",
+          "is_termination_msg": "lambda x: x.get(\"content\", \"\") and x.get(\"content\", \"\").rstrip().endswith(\"TERMINATE\")",
+          "label": "retrieve-user-proxy",
+          "max_consecutive_auto_reply": 3,
+          "name": "RetrieveUserProxy",
+          "retrieve_config": {
+            "chunk_token_size": 2000,
+            "client": "chromadb.PersistentClient(path=\"/tmp/chromadb\")",
+            "custom_text_types": [
+              "mdx"
+            ],
+            "docs_path": [
+              "https://raw.githubusercontent.com/microsoft/FLAML/main/website/docs/Examples/Integrate%20-%20Spark.md",
+              "https://raw.githubusercontent.com/microsoft/FLAML/main/website/docs/Research.md"
+            ],
+            "get_or_create": true,
+            "task": "code"
+          },
+          "type": "user"
+        },
+        "dragging": false,
+        "height": 336,
+        "id": "8fx3bghg51u",
+        "position": {
+          "x": 648.9038000512322,
+          "y": 348.85964405752907
+        },
+        "positionAbsolute": {
+          "x": 648.9038000512322,
+          "y": 348.85964405752907
+        },
+        "selected": false,
+        "type": "user",
+        "width": 294
+      },
+      {
+        "data": {
+          "class": "RetrieveAssistantAgent",
+          "enable_system_message": true,
+          "label": "retrieve-assistant",
+          "name": "RetrieveAssistant",
+          "type": "assistant"
+        },
+        "dragging": false,
+        "height": 356,
+        "id": "8iig1ifacr4",
+        "position": {
+          "x": 147.48429003021147,
+          "y": 331.47794561933523
+        },
+        "positionAbsolute": {
+          "x": 147.48429003021147,
+          "y": 331.47794561933523
+        },
+        "selected": false,
+        "type": "assistant",
+        "width": 295
+      }
+    ],
+    "viewport": {
+      "x": 201.0602259181353,
+      "y": -157.5991934224641,
+      "zoom": 0.7383706602060184
+    }
+  },
+  "id": "qfgmvq7je3k7mpb",
+  "name": "RAG 1(not working)",
+  "owner": "l3xel8d8m26l87s",
+  "updated": "2023-12-21 10:57:10.285Z"
+}

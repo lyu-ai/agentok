@@ -3,11 +3,12 @@ import { BsInboxes } from 'react-icons/bs';
 import { GoRepoForked, GoTrash } from 'react-icons/go';
 import { useChats, useFlows, useTemplates } from '@/hooks';
 import clsx from 'clsx';
-import pb from '@/utils/pocketbase/client';
+import pb, { getAvatarUrl } from '@/utils/pocketbase/client';
 import { RiChatSmile2Line } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import Image from 'next/image';
 
 export const TemplateEmpty = () => {
   const t = useTranslations('component.TemplateList');
@@ -111,6 +112,18 @@ const TemplateBlock = ({ template, index }: any) => {
       </figure>
       <div className="card-body p-4">
         <h2 className="card-title line-clamp-1">{template.name}</h2>
+        <div className="flex gap-2 items-center text-xs text-base-content/60">
+          {template.expand?.owner?.avatar && (
+            <img
+              src={getAvatarUrl(template.expand?.owner)}
+              height={16}
+              width={16}
+              alt="owner"
+              className="w-4 h-4 rounded-full"
+            />
+          )}
+          {template.expand?.owner?.name ?? template.expand?.owner?.email ?? ''}
+        </div>
         <div className="text-xs text-base-content/60">
           {new Date(template.created).toLocaleString()}
         </div>

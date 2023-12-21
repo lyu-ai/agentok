@@ -2,9 +2,11 @@
 {% macro generate_main_user_proxy(node) %}
 {%- set class_name = node['data']['class'] %}
 {%- set name = node['data']['name'] %}
-{%- set other_props = node['data'].get('other_properties', {}) %}
 user_proxy = {{ class_name }}(
     name="{{ name }}",
+    {%- if node['data'].get('system_message') %}
+    system_message="{{ node['data']['system_message'] }}",
+    {%- endif %}
     {%- if node['data'].get('human_input_mode') %}
     human_input_mode="{{ node['data']['human_input_mode'] }}",
     {%- endif %}
@@ -18,6 +20,29 @@ user_proxy = {{ class_name }}(
     code_execution_config={
       {%- if node['data'].get('work_dir', False) %}
       "work_dir": "{{ node['data']['work_dir'] }}",
+      {%- endif %}
+    },
+    {%- endif %}
+    {%- if node.data.retrieve_config %}
+    retrieve_config={
+      {%- if node.data.retrieve_config.task %}
+      "task": "{{ node.data.retrieve_config.task }}",
+      {%- endif %}
+      {%- if node.data.retrieve_config.docs_path %}
+      "docs_path": {{ node.data.retrieve_config.docs_path }},
+      {%- endif %}
+      {%- if node.data.retrieve_config.custom_text_types %}
+      "custom_text_types": {{ node.data.retrieve_config.custom_text_types }},
+      {%- endif %}
+      {%- if node.data.retrieve_config.chunk_token_size %}
+      "chunk_token_size": {{ node.data.retrieve_config.chunk_token_size }},
+      {%- endif %}
+      {%- if node.data.retrieve_config.client %}
+      "client": {{ node.data.retrieve_config.client }},
+      {%- endif %}
+      "model": config_list[0]["model"],
+      {%- if node.data.retrieve_config.get_or_create %}
+      "get_or_create": {{ node.data.retrieve_config.get_or_create }},
       {%- endif %}
     },
     {%- endif %}

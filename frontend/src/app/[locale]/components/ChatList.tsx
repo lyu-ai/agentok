@@ -182,7 +182,7 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
             />
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 font-normal">
           <span className="border border-base-content/40 text-base-content/60 rounded p-1 text-xs">
             {chat.sourceType}
           </span>

@@ -17,7 +17,7 @@ const FunctionConfig = ({ nodeId, data, className, ...props }: any) => {
   const instance = useReactFlow();
   useEffect(() => {
     if (data.functions?.length) setSelectedFunction(0);
-  }, [data.functions]);
+  }, []);
   const onAdd = () => {
     setNodeData(instance, nodeId, {
       functions: [

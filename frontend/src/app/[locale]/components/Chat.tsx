@@ -22,6 +22,7 @@ import { PiChatsCircleFill } from 'react-icons/pi';
 import { TbArrowBarToLeft, TbArrowBarRight } from 'react-icons/tb';
 import { useTranslations } from 'next-intl';
 import { useChat, useChats } from '@/hooks';
+import { Tooltip } from 'react-tooltip';
 
 const Chat = ({
   chatId,
@@ -249,7 +250,7 @@ const Chat = ({
           )}
         </div>
       </div>
-      <div className="relative flex mx-auto w-full max-w-[640px] flex-grow flex-col overflow-y-auto p-1">
+      <div className="relative flex mx-auto w-full flex-grow flex-col overflow-y-auto p-1 font-normal">
         {/* {loading && (
           <div className="flex flex-col items-center justify-center w-full h-full">
             <div className="loading loading-bars loading-sm" />
@@ -323,10 +324,7 @@ const Chat = ({
           }
 
           return (
-            <div
-              key={message.id}
-              className={`chat gap-x-1 lg:gap-x-2 chat-start`}
-            >
+            <div key={message.id} className={`chat gap-x-1 chat-start`}>
               <div className="chat-image text-base-content/50">
                 <div
                   className={`w-8 h-8 rounded-full ${messageClass} flex items-center justify-center`}
@@ -353,7 +351,8 @@ const Chat = ({
                 </div>
               )}
               <div
-                className={`relative group chat-bubble rounded-md p-2 ${messageClass} break-words`}
+                className={`relative group chat-bubble rounded-md p-2 ${messageClass} break-all`}
+                style={{ maxWidth: '100%' }}
               >
                 <Markdown>{message.content}</Markdown>
                 {message.type === 'user' && (
@@ -372,7 +371,7 @@ const Chat = ({
         })}
         <div ref={messagesEndRef} id="chat-messages-bottom"></div>
       </div>
-      <div className="relative justify-center w-full max-w-[640px] mx-auto p-1">
+      <div className="relative justify-center w-full p-1 font-normal">
         <ChatInput
           className="flex items-center p-1 w-full bg-base-100/70 border border-primary rounded-lg shadow-lg"
           onSend={onSend}
@@ -386,6 +385,7 @@ const Chat = ({
           </div>
         )}
       </div>
+      <Tooltip id="chat-tooltip" />
     </div>
   );
 };

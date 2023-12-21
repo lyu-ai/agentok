@@ -29,7 +29,9 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
         <div className="w-full flex items-center justify-between gap-2 text-primary">
           <div className="flex items-center gap-2 ">
             <RiChatSmile2Fill className="w-5 h-5" />
-            <div className="text-sm font-bold">{getNodeLabel(data.label, tNodeMeta)}</div>
+            <div className="text-sm font-bold">
+              {getNodeLabel(data.label, tNodeMeta)}
+            </div>
           </div>
           <EditableText
             text={data.name}
@@ -70,7 +72,9 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
           </span>
         </div>
         <div className="divider my-0" />
-        <div className="font-bold text-base-content/80">{t('system-message')}</div>
+        <div className="font-bold text-base-content/80">
+          {t('system-message')}
+        </div>
         <div className="text-xs text-base-content/60">
           <textarea
             value={data.system_message ?? ''}
@@ -83,7 +87,9 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
           />
         </div>
         <div className="flex items-center justify-between text-base-content/60 gap-2">
-          <div className="font-bold text-base-content/80">{t('human-input-mode')}</div>
+          <div className="font-bold text-base-content/80">
+            {t('human-input-mode')}
+          </div>
           <select
             className="select select-bordered select-sm bg-transparent rounded"
             value={data.human_input_mode ?? 'NEVER'}
@@ -97,7 +103,9 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
           </select>
         </div>
         <div className="flex items-center text-sm justify-between gap-2">
-          <div className="font-bold text-base-content/80">{t('max-consecutive-auto-reply')}</div>
+          <div className="font-bold text-base-content/80">
+            {t('max-consecutive-auto-reply')}
+          </div>
           <input
             type="number"
             className="nodrag input input-bordered input-sm w-24 bg-transparent rounded"
@@ -109,7 +117,10 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
             }}
           />
         </div>
-        <button className="btn btn-outline btn-sm flex items-center gap-2 rounded" onClick={()=> setShowOptions(o => !o)}>
+        <button
+          className="btn btn-outline btn-sm flex items-center gap-2 rounded"
+          onClick={() => setShowOptions(o => !o)}
+        >
           <GoGear className="w-4 h-4" />
           <span>{t('options')}</span>
         </button>
@@ -130,7 +141,7 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
         nodeId={id}
         data={data}
         onClose={() => setShowOptions(false)}
-        className="flex shrink-0 w-96 max-w-[80vw] max-h-[90vh]"
+        className="flex shrink-0 w-[640px] max-w-[80vw] max-h-[90vh]"
       />
     </div>
   );
