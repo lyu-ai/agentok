@@ -30,7 +30,7 @@ const FlowPage = () => {
           className="btn btn-primary btn-lg px-6 flex gap-2 items-center py-2"
         >
           {isCreating ? (
-            <div className="loading loading-bars" />
+            <div className="loading loading-primary" />
           ) : (
             <RiRobot2Fill className="w-8 h-8" />
           )}
@@ -46,7 +46,10 @@ const FlowPage = () => {
         <TemplateList maxCount={3} />
       </div>
       <div className="flex w-full justify-center items-center py-8">
-        <Link href="/gallery" className="link text-lg link-primary link-hover">
+        <Link
+          href="/gallery"
+          className="btn btn-lg text-lg btn-primary btn-outline"
+        >
           {t('more-templates')}
         </Link>
       </div>

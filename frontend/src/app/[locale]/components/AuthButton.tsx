@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { GoBug, GoPersonFill, GoSignOut } from 'react-icons/go';
+import { PiGithubLogo } from 'react-icons/pi';
 import clsx from 'clsx';
 import pb, { getAvatarUrl } from '@/utils/pocketbase/client';
 
@@ -20,7 +21,7 @@ const UserImage = ({ user, className }: any) => {
     <div
       className={
         className ??
-        'w-10 h-10 rounded-full bg-primary/10 text-primary/80 hover:text-primary hover:bg-primary/20 overflow-hidden'
+        'w-8 h-8 rounded-full bg-primary/10 text-primary/80 hover:text-primary hover:bg-primary/20 overflow-hidden'
       }
     >
       {user.avatar && !imgLoadError ? (
@@ -69,7 +70,7 @@ const UserPanel = ({ user }: { user: any }) => {
             'hover:bg-base-content/30'
           )}
         >
-          <GoBug className="h-5 w-5" />
+          <PiGithubLogo className="h-5 w-5" />
           Report Issues
         </a>
         <div

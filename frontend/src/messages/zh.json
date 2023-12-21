@@ -128,8 +128,8 @@
       "publish-flow-tip": "将此工作流发布到 FlowGen 社区。您随时可以取消发布。"
     },
     "TemplateList": {
-      "template-empty": "尚无公开的工作流模版，你可以将一个工作流发布为模版。",
-      "unpublish-template": "取消发布该模版",
+      "template-empty": "尚无公开的工作流模板，你可以将一个工作流发布为模板。",
+      "unpublish-template": "取消发布该模板",
       "start-chat": "聊天",
       "start-chat-tooltip": "基于这个模板聊天",
       "fork": "派生",
@@ -193,11 +193,11 @@
       "creating-flow": "创建工作流...",
       "your-flows": "你的工作流",
       "start-from-template": "从一个模板开始",
-      "more-templates": "更多模版"
+      "more-templates": "探索更多模板..."
     },
     "Gallery": {
-      "select-template-title": "工作流模版",
-      "select-flow": "选择一个模版进行编辑或者开始对话",
+      "select-template-title": "工作流模板",
+      "select-flow": "选择一个模板进行编辑或者开始对话",
       "refresh": "刷新"
     }
   },

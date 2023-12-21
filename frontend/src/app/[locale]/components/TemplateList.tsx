@@ -185,19 +185,12 @@ const TemplateList = ({ maxCount }: any) => {
   }
   if (isLoading) return <TemplateLoading />;
   if (!templates || templates.length === 0) return <TemplateEmpty />;
-  if (maxCount) {
-    return (
-      <div className="flex flex-wrap justify-center gap-2 p-2">
-        {templates.slice(0, maxCount).map((template: any, index: number) => (
-          <TemplateBlock key={template.id} template={template} index={index} />
-        ))}
-      </div>
-    );
-  }
 
+  const slicedTemplates =
+    maxCount > 0 ? templates.slice(0, maxCount) : templates;
   return (
     <div className="flex flex-wrap justify-center gap-4 p-2">
-      {templates.map((template: any, index: number) => (
+      {slicedTemplates.map((template: any, index: number) => (
         <TemplateBlock key={template.id} template={template} index={index} />
       ))}
     </div>

@@ -3,6 +3,7 @@ import NavMenu from './NavMenu';
 import ThemeSwitcher from './ThemeSwitcher';
 import NavLogo from './NavLogo';
 import NavButton from './NavButton';
+import GitHubButton from '@/components/GitHubButton';
 
 const Navbar = () => {
   return (
@@ -14,7 +15,8 @@ const Navbar = () => {
       <div className="navbar-center gap-1 hidden md:flex">
         <NavMenu />
       </div>
-      <div className="navbar-end flex items-center gap-2">
+      <div className="navbar-end flex items-center my-auto gap-2">
+        <GitHubButton />
         {/* <ThemeSwitcher /> */}
         <AuthButton />
       </div>
