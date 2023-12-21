@@ -12,11 +12,10 @@ RUN apk add --no-cache \
     linux-headers \
     libffi-dev \
     libc-dev
-RUN pip install uvicorn
 
 # Copy only the requirements.txt first to leverage Docker cache
 COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Afterwards copy the rest of your application code
 COPY . /app
