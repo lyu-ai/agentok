@@ -1,6 +1,6 @@
 # Use the official Python 3 image.
 # https://hub.docker.com/_/python
-FROM python:3.11-alpine
+FROM python:3.11-slim
 
 # Set the working directory inside the container to /app.
 WORKDIR /app
