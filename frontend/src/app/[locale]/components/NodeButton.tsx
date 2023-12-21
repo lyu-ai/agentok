@@ -79,7 +79,9 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
                   }
                 }}
                 key={id}
-                onClick={() => onAddNode(type, { name, class: _class, type })}
+                onClick={() =>
+                  onAddNode(type, { name, class: _class, label, type })
+                }
                 className="group min-w-64 flex p-2 items-center rounded-lg hover:bg-base-content/10 cursor-pointer"
               >
                 <Icon className="flex-shrink-0 w-6 h-6 mx-1 group-hover:text-white" />
