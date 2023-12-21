@@ -5,13 +5,12 @@ FROM python:3.11-slim
 # Set the working directory inside the container to /app.
 WORKDIR /app
 
-# Install build dependencies
-RUN apk add --no-cache \
-    build-base \
-    g++ \
-    linux-headers \
+# Install system dependencies required for Python packages like `onnxruntime`
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libc6-dev \
     libffi-dev \
-    libc-dev
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy only the requirements.txt first to leverage Docker cache
 COPY requirements.txt /app/
@@ -20,8 +19,11 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Afterwards copy the rest of your application code
 COPY . /app
 
-# Make port 5004 available to the world outside this container.
-EXPOSE 5004
+# Define environment variable defaults for Uvicorn (Optional)
+ENV UVICORN_WORKERS=3 \
+    UVICORN_PORT=5004 \
+    UVICORN_HOST=0.0.0.0 \
+    UVICORN_LOG_LEVEL=info
 
-# Define the startup command to use gunicorn
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5004"]
+# Define the command to run your application on Uvicorn with multiple workers
+CMD ["sh", "-c", "uvicorn app.main:app --host ${UVICORN_HOST} --port ${UVICORN_PORT} --workers ${UVICORN_WORKERS} --log-level ${UVICORN_LOG_LEVEL}"]
