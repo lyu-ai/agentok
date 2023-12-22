@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { memo, useEffect, useState } from 'react';
-import { FaEye } from 'react-icons/fa6';
+import { FaEye, FaMeta } from 'react-icons/fa6';
 import { Handle, Position, useReactFlow } from 'reactflow';
 import { IconType } from 'react-icons';
 import Toolbar from './Toolbar';
@@ -10,6 +10,7 @@ import { getNodeLabel, setNodeData } from '../../utils/flow';
 import EditableText from '@/components/EditableText';
 import EditButton from '@/components/EditButton';
 import { useTranslations } from 'next-intl';
+import LLavaOptions from '../option/LLaVaOptions';
 
 function AssistantNode({ id, data, selected }: any) {
   const [editingName, setEditingName] = useState(false);
@@ -19,6 +20,7 @@ function AssistantNode({ id, data, selected }: any) {
     AssistantAgent: RiRobot2Fill,
     RetrieveAssistantAgent: RiRobot2Fill,
     MultimodalConversableAgent: FaEye,
+    LLaVAAgent: FaMeta,
   };
 
   const NodeIcon = iconDict[data.class || 'AssistantAgent'];
@@ -52,7 +54,9 @@ function AssistantNode({ id, data, selected }: any) {
         <div className="w-full flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <NodeIcon className="w-5 h-5" />
-            <div className="text-sm font-bold">{getNodeLabel(data.label, tNodeMeta)}</div>
+            <div className="text-sm font-bold">
+              {getNodeLabel(data.label, tNodeMeta)}
+            </div>
           </div>
           <EditableText
             text={data.name}
@@ -67,7 +71,9 @@ function AssistantNode({ id, data, selected }: any) {
         </div>
         <div className="divider my-0" />
         <div className="flex items-center justify-between text-base-content/60 gap-2">
-          <div className="font-bold text-base-content/80">{t('system-message')}</div>
+          <div className="font-bold text-base-content/80">
+            {t('system-message')}
+          </div>
           <div className="form-control"></div>
           <label className="flex items-center cursor-pointer label gap-2">
             <span className="label-text">{t('enable-system-message')}</span>
@@ -103,10 +109,14 @@ function AssistantNode({ id, data, selected }: any) {
           />
         </div>
         <div className="flex items-center justify-between text-base-content/60 gap-2">
-          <div className="font-bold text-base-content/80">{t('instructions')}</div>
+          <div className="font-bold text-base-content/80">
+            {t('instructions')}
+          </div>
           <div className="form-control">
             <label className="flex items-center cursor-pointer label gap-2">
-              <span className="label-text">{t('instructions-use-defaults')}</span>
+              <span className="label-text">
+                {t('instructions-use-defaults')}
+              </span>
               <input
                 id="default_instructions"
                 type="checkbox"
@@ -139,7 +149,9 @@ function AssistantNode({ id, data, selected }: any) {
           />
         </div>
         <div className="flex items-center justify-between text-sm text-base-content/60">
-        <div className="font-bold text-base-content/80">{t('max-consecutive-auto-reply')}</div>
+          <div className="font-bold text-base-content/80">
+            {t('max-consecutive-auto-reply')}
+          </div>
           <input
             type="number"
             className="input input-sm input-bordered w-14 bg-transparent px-0 rounded"
@@ -151,6 +163,9 @@ function AssistantNode({ id, data, selected }: any) {
             }}
           />
         </div>
+        {data.class === 'LLaVAAgent' && (
+          <LLavaOptions id={id} data={data} selected={selected} />
+        )}
       </div>
 
       <Handle

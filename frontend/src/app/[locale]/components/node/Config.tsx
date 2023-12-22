@@ -22,8 +22,8 @@ function Config({ id, data, selected }: any) {
       className={clsx(
         'p-2 rounded-md border text-base-content/90 min-w-[240px] backdrop-blur-sm',
         selected
-          ? 'shadow-box shadow-gray-500 bg-gray-600/90 border-gray-500'
-          : 'border-gray-600 bg-gray-700/90'
+          ? 'bg-gray-400/60 border-gray-300 text-white'
+          : 'border-gray-400 bg-gray-500/60'
       )}
     >
       <Toolbar nodeId={id} selected={selected} hideDelete>
@@ -84,8 +84,8 @@ function Config({ id, data, selected }: any) {
           />
         </div>
         <div className="divider my-0" />
-        <div className="font-bold text-base-content/80">{t('filter-dict')}</div>
-        <div className="text-sm text-base-content/60">
+        <div className="font-bold">{t('filter-dict')}</div>
+        <div className="text-sm">
           <input
             className="input input-sm input-bordered w-full bg-transparent rounded"
             value={data.filter_dict ?? ''}
@@ -95,16 +95,14 @@ function Config({ id, data, selected }: any) {
           />
         </div>
         <div className="divider my-1">{t('model-config')}</div>
-        <div className="flex items-center justify-between text-sm text-base-content/60 w-full">
+        <div className="flex items-center justify-between text-sm w-full">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-base-content/80">
-              {t('temperature')}
-            </span>
+            <span className="font-bold">{t('temperature')}</span>
             <Tip content={t('temperature-tooltip')} />
           </div>
           <div className="ml-2 font-bold">{data.temperature}</div>
         </div>
-        <div className="flex items-center justify-between text-sm text-base-content/60 w-full">
+        <div className="flex items-center justify-between text-sm w-full">
           <input
             type="range"
             min="0"
@@ -119,10 +117,8 @@ function Config({ id, data, selected }: any) {
             className="range nodrag range-xs w-full"
           />
         </div>
-        <div className="flex items-center justify-between text-sm text-base-content/60">
-          <div className="font-bold text-base-content/80">
-            {t('max-tokens')}
-          </div>
+        <div className="flex items-center justify-between text-sm">
+          <div className="font-bold">{t('max-tokens')}</div>
           <input
             type="number"
             className="input input-sm input-bordered w-24 bg-transparent rounded"
@@ -132,15 +128,13 @@ function Config({ id, data, selected }: any) {
             }}
           />
         </div>
-        <div className="flex items-center justify-end w-full text-base-content/60 gap-2">
-          <button
-            className="w-full btn btn-sm btn-outline rounded"
-            onClick={() => setShowFunctionConfig(c => !c)}
-          >
-            <TbMathFunction className="w-4 h-4" />
-            <span>{t('function')}</span>
-          </button>
-        </div>
+        <button
+          className="w-full btn btn-sm btn-outline rounded"
+          onClick={() => setShowFunctionConfig(c => !c)}
+        >
+          <TbMathFunction className="w-4 h-4" />
+          <span>{t('function')}</span>
+        </button>
       </div>
       <FunctionConfig
         show={showFunctionConfig}

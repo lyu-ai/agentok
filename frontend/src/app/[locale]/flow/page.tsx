@@ -30,7 +30,7 @@ const FlowPage = () => {
           className="btn btn-primary btn-lg px-6 flex gap-2 items-center py-2"
         >
           {isCreating ? (
-            <div className="loading loading-primary" />
+            <div className="loading text-primary" />
           ) : (
             <RiRobot2Fill className="w-8 h-8" />
           )}

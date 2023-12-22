@@ -9,6 +9,7 @@
         'MultimodalConversableAgent': 'from autogen.agentchat.contrib.multimodal_conversable_agent import MultimodalConversableAgent',
         'RetrieveAssistantAgent': 'from autogen.agentchat.contrib.retrieve_assistant_agent import RetrieveAssistantAgent\nimport chromadb',
         'RetrieveUserProxyAgent': 'from autogen.agentchat.contrib.retrieve_user_proxy_agent import RetrieveUserProxyAgent',
+        'LLaVAAgent': 'from autogen.agentchat.contrib.llava_agent import LLaVAAgent',
     } -%}
     {%- for node in nodes -%}
         {% set cls = node['data'].get('class') %}
@@ -18,6 +19,7 @@
     {%- endfor %}
 import autogen
 import argparse
+import os
 import time
 from termcolor import colored
 from IPython import get_ipython

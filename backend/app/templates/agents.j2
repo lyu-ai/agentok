@@ -17,7 +17,17 @@ node_{{ node.id }} = {{ class_name }}(
     {%- if node.data.max_consecutive_auto_reply %}
     max_consecutive_auto_reply={{ node.data.max_consecutive_auto_reply }},
     {%- endif %}
+    {%- if node.data.class == 'LLaVAAgent' %}
+    llm_config={
+      **llm_config,
+      "config_list": [{
+          "api_key": os.environ["REPLICATE_API_TOKEN"],
+          "base_url": "{{ node.data.llava_config.base_url }}",
+      }],
+    }
+    {%- else %}
     llm_config=llm_config,
+    {%- endif %}
 )
 
 {%- endfor %}

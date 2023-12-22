@@ -44,7 +44,7 @@ const RedirectPage = ({
 
   return (
     <div className="w-full h-full flex items-center justify-center">
-      <div className="loading loading-primary" />
+      <div className="loading text-primary" />
     </div>
   );
 };

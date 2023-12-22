@@ -33,7 +33,8 @@
       "instructions": "说明",
       "instructions-use-defaults": "使用默认值",
       "instructions-placeholder": "在此处输入说明",
-      "max-consecutive-auto-reply": "最大自动回复次数"
+      "max-consecutive-auto-reply": "最大自动回复次数",
+      "llava-url": "LLaVa URL"
     },
     "Config": {
       "flow-name": "工作流名称",
@@ -85,7 +86,8 @@
       "open-in-new-window": "在独立窗口中打开",
       "go-to-editor": "转到工作流编辑器",
       "message-loading": "正在加载聊天记录...",
-      "message-empty": "尚无聊天记录。现在开始聊天！"
+      "message-empty": "尚无聊天记录。现在开始聊天！",
+      "resend": "重新发送此消息"
     },
     "ChatList": {
       "default-chat-title": "与 {source_name} 聊天",

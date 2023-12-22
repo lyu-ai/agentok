@@ -11,6 +11,7 @@ def print_message(message):
 
 async def run_assistant(message: str, source_path: str, on_message=print_message):
     command = ["python3", source_path, f'"{message}"']
+    print(colored(text=f'Running {" ".join(command)}', color='green'))
 
     # Start the subprocess with the provided command
     process = await asyncio.create_subprocess_exec(

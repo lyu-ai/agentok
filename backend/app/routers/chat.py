@@ -32,7 +32,6 @@ async def api_start_chat(message: Message, chat_id: str, token: str = Depends(oa
             file.write(generated_code)
 
     # Launch the agent instance and intialize the chat
-    print(colored(text=f'Running {source_path}', color='green'))
     def on_message(assistant_message):
         assistant_message['chat'] = chat_id
         assistant_message['owner'] = message.owner

@@ -18,7 +18,6 @@ const Python = ({ data, setMode }: any) => {
 
   useEffect(() => {
     if (!data?.flow) return;
-    console.log('Python data:', data);
     setLoading(true);
     fetch('/api/codegen', {
       method: 'POST',

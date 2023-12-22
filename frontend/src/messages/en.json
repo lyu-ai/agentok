@@ -33,7 +33,8 @@
       "instructions": "Instructions",
       "instructions-use-defaults": "Use defaults",
       "instructions-placeholder": "Enter instructions here",
-      "max-consecutive-auto-reply": "Max Auto-Replies"
+      "max-consecutive-auto-reply": "Max Auto-Replies",
+      "llava-url": "LLaVa URL"
     },
     "Config": {
       "flow-name": "Flow Name",
@@ -85,7 +86,8 @@
       "open-in-new-window": "Open this chat in new window",
       "go-to-editor": "Go to Flow Editor",
       "message-loading": "Loading chat history ...",
-      "message-empty": "Start chat now!"
+      "message-empty": "Start chat now!",
+      "resend": "Resend this message"
     },
     "ChatList": {
       "default-chat-title": "Chat with {source_name}",

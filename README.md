@@ -101,6 +101,8 @@ If you're interested in contributing to the development of this project or wish 
    - Install all required dependencies: `pip install -r requirements.txt`.
    - Launch the backend service using command `uvicorn app.main:app --reload --port 5004`.
 
+`REPLICATE_API_TOKEN` is needed for LLaVa agent. If you need to use this agent, make sure to include this token in environment variables, such as the Environment Variables on Railway.app.
+
 3. **PocketBase:**
 
    - Switch to the PocketBase directory `cd pocketbase`.
@@ -119,47 +121,51 @@ If your services are started successfully and running on the expected ports, you
 
 Please check the original notebooks with the same name in [AutoGen](https://github.com/microsoft/autogen/blob/main/notebook/).
 
+🔲 Planned
+✅ Completed
+⭕ Out of Scope
+
 | Example                                 | Status | Comments                                                  |
 | --------------------------------------- | ------ | --------------------------------------------------------- |
 | [auto_feedback_from_code_execution]()   | ✅     | [Feedback from Code Execution](https://flowgen.app/flow/) |
-| auto_build                              |        |                                                           |
-| chess                                   |        |                                                           |
-| compression                             |        |                                                           |
-| dalle_and_gpt4v                         |        | This requires the import of custom Agent class            |
-| function_call_async                     |        |                                                           |
-| function_call                           |        |                                                           |
-| graph_modelling_language                |        |                                                           |
-| group_chat_RAG                          |        | This notebook does not work                               |
-| groupchat_research                      |        |                                                           |
-| groupchat_vis                           |        |                                                           |
-| groupchat                               |        |                                                           |
-| hierarchy_flow_using_select_speaker     |        |                                                           |
-| human_feedback                          |        |                                                           |
-| inception_function                      |        |                                                           |
+| auto_build                              | 🔲     |                                                           |
+| chess                                   | 🔲     |                                                           |
+| compression                             | 🔲     |                                                           |
+| dalle_and_gpt4v                         | 🔲     | This requires the import of custom Agent class            |
+| function_call_async                     | ✅     |                                                           |
+| function_call                           | ✅     |                                                           |
+| graph_modelling_language                | ⭕     | This is out of project scope. Open an issue if necessary  |
+| group_chat_RAG                          | ✅     | This notebook does not work                               |
+| groupchat_research                      | ✅     |                                                           |
+| groupchat_vis                           | ✅     |                                                           |
+| groupchat                               | ✅     |                                                           |
+| hierarchy_flow_using_select_speaker     | 🔲     |                                                           |
+| human_feedback                          | 🔲     |                                                           |
+| inception_function                      | 🔲     |                                                           |
 | langchain                               | ⭕     | No plan to support                                        |
 | lmm_gpt-4v                              | ✅     |                                                           |
-| lmm_llava                               |        |                                                           |
-| MathChat                                |        |                                                           |
-| oai_assistant_function_call             |        |                                                           |
-| oai_assistant_groupchat                 | ✅     |                                                           |
-| oai_assistant_retrieval                 |        |                                                           |
-| oai_assistant_twoagents_basic           |        |                                                           |
-| oai_code_interpreter                    |        |                                                           |
-| planning                                |        |                                                           |
-| qdrant_RetrieveChat                     |        |                                                           |
-| RetrieveChat                            |        |                                                           |
-| stream                                  |        |                                                           |
-| teachability                            |        |                                                           |
-| teaching                                |        |                                                           |
-| two_users                               |        |                                                           |
-| video_transcript_translate_with_whisper |        |                                                           |
-| web_info                                |        |                                                           |
-| cq_math                                 |        |                                                           |
-| Async_human_input                       |        |                                                           |
-| oai_chatgpt_gpt4                        |        |                                                           |
-| oai_client_cost                         |        |                                                           |
-| oai_completion                          |        |                                                           |
-| oai_openai_utils                        |        |                                                           |
+| lmm_llava                               | ✅     | Depends on Replicate                                      |
+| MathChat                                | 🔲     |                                                           |
+| oai_assistant_function_call             | ✅     |                                                           |
+| oai_assistant_groupchat                 | ✅     | Very slow and not work well, sometimes not returning.     |
+| oai_assistant_retrieval                 | 🔲     |                                                           |
+| oai_assistant_twoagents_basic           | 🔲     |                                                           |
+| oai_code_interpreter                    | 🔲     |                                                           |
+| planning                                | 🔲     |                                                           |
+| qdrant_RetrieveChat                     | 🔲     |                                                           |
+| RetrieveChat                            | 🔲     |                                                           |
+| stream                                  | 🔲     |                                                           |
+| teachability                            | 🔲     |                                                           |
+| teaching                                | 🔲     |                                                           |
+| two_users                               | 🔲     |                                                           |
+| video_transcript_translate_with_whisper | 🔲     |                                                           |
+| web_info                                | 🔲     |                                                           |
+| cq_math                                 | 🔲     |                                                           |
+| Async_human_input                       | 🔲     |                                                           |
+| oai_chatgpt_gpt4                        | 🔲     |                                                           |
+| oai_client_cost                         | 🔲     |                                                           |
+| oai_completion                          | 🔲     |                                                           |
+| oai_openai_utils                        | 🔲     |                                                           |
 
 ## 👨‍💻 Contributing
 

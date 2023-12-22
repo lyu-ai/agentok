@@ -78,6 +78,9 @@ const Markdown = ({ className, children }: any) => {
         a(data): JSX.Element {
           return <a target="_blank" style={{ color: '#0022cc' }} {...data} />;
         },
+        img: ({ node, ...props }) => (
+          <img style={{ maxWidth: '480px', maxHeight: '320px' }} {...props} />
+        ),
       }}
       className={clsx(className, `markdown`)}
     >

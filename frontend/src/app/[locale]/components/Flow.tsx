@@ -71,7 +71,7 @@ const Flow = ({ flowId }: any) => {
       flow: currentFlow,
     });
     setIsDirty(false);
-  }, 500);
+  }, 100);
 
   useEffect(() => {
     if (!flow?.flow) return;
@@ -216,7 +216,7 @@ const Flow = ({ flowId }: any) => {
   } else if (isLoading) {
     return (
       <div className="relative flex w-full h-full items-center justify-center">
-        <div className="loading loading-bars loading-primary"></div>
+        <div className="loading loading-bars text-primary"></div>
       </div>
     );
   }
