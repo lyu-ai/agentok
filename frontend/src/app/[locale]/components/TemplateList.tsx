@@ -8,7 +8,6 @@ import { RiChatSmile2Line } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import Image from 'next/image';
 
 export const TemplateEmpty = () => {
   const t = useTranslations('component.TemplateList');

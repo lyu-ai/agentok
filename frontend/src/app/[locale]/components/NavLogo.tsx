@@ -1,5 +1,4 @@
 'use client';
-import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
@@ -18,16 +17,14 @@ const Logo = () => {
   }, [theme]);
   return (
     <a href="/" className="flex shrink-0 gap-2 items-end">
-      <Image
-        priority
+      <img
         width={128}
         height={128}
         alt="logo"
         src={logo}
         className="hidden md:block h-7 w-auto object-contain aspect-w-1 aspect-h-1"
       />
-      <Image
-        priority
+      <img
         width={48}
         height={48}
         alt="logo"

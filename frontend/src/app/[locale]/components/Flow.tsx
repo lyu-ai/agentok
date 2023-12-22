@@ -71,7 +71,7 @@ const Flow = ({ flowId }: any) => {
       flow: currentFlow,
     });
     setIsDirty(false);
-  }, 100);
+  }, 1000);
 
   useEffect(() => {
     if (!flow?.flow) return;

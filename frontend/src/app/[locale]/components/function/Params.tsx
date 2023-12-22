@@ -31,6 +31,7 @@ const FunctionParams = ({ nodeId, func, ...props }: any) => {
               [name]: value,
             };
           }
+          return p;
         }); // explicitly remove undefined entries
         return {
           ...f,
@@ -63,6 +64,8 @@ const FunctionParams = ({ nodeId, func, ...props }: any) => {
     setNodeData(instance, nodeId, { functions: newFunctions });
   };
 
+  console.log('func?.parameters', func?.parameters);
+
   return (
     <div className="flex flex-col gap-2 overflow-x-auto p-2 border border-base-content/20 rounded">
       <div className="flex items-center justify-between">
@@ -94,7 +97,7 @@ const FunctionParams = ({ nodeId, func, ...props }: any) => {
               <td className="w-16 flex items-center px-1">
                 <input
                   type="checkbox"
-                  checked={param.required}
+                  checked={param.required ?? false}
                   onChange={e =>
                     onUpdateParam(param, 'required', e.target.checked)
                   }
@@ -103,7 +106,7 @@ const FunctionParams = ({ nodeId, func, ...props }: any) => {
               <td className="w-28 px-1">
                 <input
                   type="text"
-                  value={param.name}
+                  value={param.name ?? ''}
                   onChange={e => onUpdateParam(param, 'name', e.target.value)}
                   className="input input-xs input-bordered bg-transparent rounded w-full"
                 />
@@ -111,7 +114,7 @@ const FunctionParams = ({ nodeId, func, ...props }: any) => {
               <td className="w-24 px-1">
                 <select
                   className="select select-xs select-bordered bg-transparent rounded w-full"
-                  value={param.type}
+                  value={param.type ?? 'string'}
                   onChange={e => onUpdateParam(param, 'type', e.target.value)}
                 >
                   <option value="string">string</option>
@@ -122,7 +125,7 @@ const FunctionParams = ({ nodeId, func, ...props }: any) => {
               <td className="flex-grow px-0">
                 <input
                   type="text"
-                  value={param.description}
+                  value={param.description ?? ''}
                   onChange={e =>
                     onUpdateParam(param, 'description', e.target.value)
                   }
