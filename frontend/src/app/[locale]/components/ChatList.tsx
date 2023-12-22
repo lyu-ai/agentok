@@ -200,10 +200,12 @@ ChatBlock.displayName = 'ChatBlock';
 const ChatList = ({
   className,
   maxCount,
+  horitontal = false,
   disableSelection = false,
 }: {
   className?: string;
   maxCount?: number;
+  horitontal?: boolean;
   disableSelection?: boolean;
 }) => {
   const {
@@ -251,7 +253,13 @@ const ChatList = ({
   }
 
   return (
-    <div ref={chatListRef} className="flex flex-col w-full h-full gap-1">
+    <div
+      ref={chatListRef}
+      className={clsx(
+        'flex w-full h-full',
+        horitontal ? 'flex-wrap justify-center gap-4' : 'flex-col gap-1'
+      )}
+    >
       {trimmedChats.map((chat: any) => {
         if (!chatRefs.has(chat.id)) {
           chatRefs.set(chat.id, createRef<HTMLDivElement>());

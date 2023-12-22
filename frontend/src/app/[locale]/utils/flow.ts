@@ -213,6 +213,15 @@ export const getFlowName = (nodes: Node[]) => {
   return name;
 };
 
+export const getFlowDescription = (nodes: Node[]) => {
+  const configNode = nodes.find((node: any) => node.type === 'config');
+  let description = '';
+  if (configNode && configNode?.data.flow_description) {
+    description = configNode.data.flow_description;
+  }
+  return description;
+};
+
 export const isFlowDirty = (flow1: any, flow2: any) =>
   !deepEqual(flow1, flow2, ['selected', 'dragging']);
 

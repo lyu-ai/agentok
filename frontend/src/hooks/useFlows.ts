@@ -3,6 +3,7 @@ import useFlowStore, { Flow } from '@/store/flow';
 import { Template } from '@/store/template';
 import { useEffect, useState } from 'react';
 import {
+  getFlowDescription,
   getFlowName,
   initialEdges,
   initialNodes,
@@ -80,6 +81,7 @@ export function useFlows() {
     setIsUpdating(true);
     const flowToUpdate = {
       name: getFlowName(flow.flow?.nodes),
+      description: getFlowDescription(flow.flow?.nodes),
       ...flow,
     };
     // Optimistically update the flow in the local state

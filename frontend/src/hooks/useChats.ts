@@ -45,7 +45,10 @@ export function useChats() {
     try {
       const body = {
         from_type: sourceType,
-        name: sourceType === 'flow' ? 'New Chat' : 'New Template Chat',
+        name:
+          sourceType === 'flow'
+            ? 'New Chat ' + sourceId
+            : 'New Template Chat ' + sourceId,
         owner: pb.authStore.model?.id,
         ...(sourceType === 'flow'
           ? { from_flow: sourceId }

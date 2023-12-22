@@ -31,7 +31,7 @@ async def run_assistant(message: str, source_path: str, on_message=print_message
     async for line in process.stdout:
         if line:  # Truthy if the line is not empty
             response_message = line.decode().rstrip()  # Remove trailing newline/whitespace
-            print(colored('>>', 'blue'), response_message)
+            print('🤖', response_message)
             output_parser.parse_line(response_message)
         else:
             break  # No more output, terminate loop

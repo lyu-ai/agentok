@@ -53,7 +53,7 @@ const ChatListPanel = ({ onAdd }: any) => {
             <Tab.Panel
               key={type}
               className={clsx(
-                'flex flex-wrap rounded-xl p-2 gap-2 h-[240px] overflow-y-auto w-full h-full'
+                'flex flex-wrap justify-center rounded-xl p-2 gap-2 h-[240px] overflow-y-auto w-full h-full'
               )}
             >
               {data.map((sourceItem: any) => (
@@ -64,9 +64,14 @@ const ChatListPanel = ({ onAdd }: any) => {
                       router.push(`/chat/${chat.id}`)
                     )
                   }
-                  className="w-36 flex flex-col justify-center gap-2 text-sm rounded p-2 border border-base-content/5 bg-base-content/10 hover:shadow-box hover:bg-base-content/40 hover:text-base-content hover:border-base-content/30"
+                  className="w-56 flex flex-col items-start gap-2 text-sm rounded p-2 border backdrop-blur-md border-base-content/5 bg-base-content/10 hover:shadow-box hover:bg-base-content/40 hover:border-base-content/30"
                 >
-                  {sourceItem.name}
+                  <span className="line-clamp-1 text-sm text-left font-bold">
+                    {sourceItem.name}
+                  </span>
+                  <span className="h-8 line-clamp-2 text-xs text-left text-base-content/60 font-normal">
+                    {sourceItem.description || '(No description)'}
+                  </span>
                 </Popover.Button>
               ))}
             </Tab.Panel>
@@ -97,7 +102,7 @@ const ChatListButton = ({ className, onSelect }: any) => {
           <div
             className={clsx(
               className,
-              'btn btn-sm btn-primary btn-outline btn-circle flex items-center gap-2'
+              'btn btn-sm btn-primary btn-circle flex items-center gap-2'
             )}
             data-tooltip-id="chatlist-tooltip"
             data-tooltip-content={t('from-template-tooltip')}
@@ -105,7 +110,7 @@ const ChatListButton = ({ className, onSelect }: any) => {
             <GoPlus className="w-4 h-4" />
           </div>
         </Popover.Button>
-        <Popover.Panel className="origin-top-left w-[480px] h-[480px] shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/90 text-base-content border border-gray-600">
+        <Popover.Panel className="origin-top-left w-[500px] h-[480px] shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/90 text-base-content border border-gray-600">
           <ChatListPanel />
         </Popover.Panel>
       </Float>
