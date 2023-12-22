@@ -42,7 +42,7 @@ const Python = ({ data, setMode }: any) => {
   if (loading) {
     return (
       <div className="relative flex flex-col w-full h-full items-center justify-center gap-2">
-        <div className="loading loading-lg loading-primary loading-infinity"></div>
+        <div className="loading text-primary loading-infinity"></div>
       </div>
     );
   }

@@ -123,9 +123,9 @@ const CodeExecutionConfig = ({ data, setExecutionOption, ...props }: any) => {
           <input
             type="number"
             className="input input-sm input-bordered w-24"
-            value={data.retrieve_config?.last_n_messages ?? 0}
+            value={data.code_execution_config?.last_n_messages ?? 0}
             onChange={e =>
-              setExecutionOption('last_n_messages', e.target.value)
+              setExecutionOption('last_n_messages', e.target.valueAsNumber)
             }
           />
         </div>
@@ -133,8 +133,8 @@ const CodeExecutionConfig = ({ data, setExecutionOption, ...props }: any) => {
           <input
             type="checkbox"
             className="checkbox checkbox-xs"
-            checked={data.retrieve_config?.use_docker}
-            onChange={e => setExecutionOption('use_docker', e.target.value)}
+            checked={data.code_execution_config?.use_docker}
+            onChange={e => setExecutionOption('use_docker', e.target.checked)}
           />
           <span>{t('use-docker')}</span>
         </label>

@@ -36,7 +36,7 @@ def flow2py(flow: Flow) -> str:
   )
   config_node = next((node for node in flow.nodes if node['type'] == 'config'), None)
   functions = config_node['data'].get('functions', [])
-  group_chat_node = next((node for node in flow.nodes if node['type'] == 'group'), None)
+  group_chat_node = next((node for node in flow.nodes if node['type'] == 'groupchat'), None)
   grouped_nodes = []
   if group_chat_node:
     grouped_nodes = [node for node in flow.nodes if any(
@@ -55,6 +55,7 @@ def flow2py(flow: Flow) -> str:
                         functions=functions,
                         main_user_proxy=user_proxy,
                         first_converser=first_converser,
+                        group_chat_node=group_chat_node,
                         grouped_nodes=grouped_nodes,)
 
   return code

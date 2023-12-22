@@ -164,7 +164,7 @@ const Chat = ({
     );
   }
 
-  let messagesToDisplay = messages;
+  let messagesToDisplay = [...messages];
   if (thinking) {
     messagesToDisplay.push({
       id: genId(),

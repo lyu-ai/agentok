@@ -115,6 +115,45 @@ Once you've started both the frontend and backend services by following the step
 
 If your services are started successfully and running on the expected ports, you should see the user interface or receive responses from the backend via this URL.
 
+## Migration of Official Examples
+
+| Example                                 | Status             | Comments                                                  |
+| --------------------------------------- | ------------------ | --------------------------------------------------------- |
+| [auto_feedback_from_code_execution]()   | :white_check_mark: | [Feedback from Code Execution](https://flowgen.app/flow/) |
+| auto_build                              |                    |                                                           |
+| graph_modelling_language                |                    |                                                           |
+| group_chat_RAG                          |                    | This notebook does not work                               |
+| groupchat_research                      |                    |                                                           |
+| groupchat_vis                           |                    |                                                           |
+| groupchat                               |                    |                                                           |
+| hierarchy_flow_using_select_speaker     |                    |                                                           |
+| human_feedback                          |                    |                                                           |
+| inception_function                      |                    |                                                           |
+| langchain                               | :x:                | No plan to support                                        |
+| lmm_gpt-4v                              | :white_check_mark: |                                                           |
+| lmm_llava                               |                    |                                                           |
+| MathChat                                |                    |                                                           |
+| oai_assistant_function_call             |                    |                                                           |
+| oai_assistant_groupchat                 | :white_check_mark: |                                                           |
+| oai_assistant_retrieval                 |                    |                                                           |
+| oai_assistant_twoagents_basic           |                    |                                                           |
+| oai_code_interpreter                    |                    |                                                           |
+| planning                                |                    |                                                           |
+| qdrant_RetrieveChat                     |                    |                                                           |
+| RetrieveChat                            |                    |                                                           |
+| stream                                  |                    |                                                           |
+| teachability                            |                    |                                                           |
+| teaching                                |                    |                                                           |
+| two_users                               |                    |                                                           |
+| video_transcript_translate_with_whisper |                    |                                                           |
+| web_info                                |                    |                                                           |
+| cq_math                                 |                    |                                                           |
+| Async_human_input                       |                    |                                                           |
+| oai_chatgpt_gpt4                        |                    |                                                           |
+| oai_client_cost                         |                    |                                                           |
+| oai_completion                          |                    |                                                           |
+| oai_openai_utils                        |                    |                                                           |
+
 ## 👨‍💻 Contributing
 
 This project welcomes contributions and suggestions. Please read our [Contributing Guide](./CONTRIBUTING.md) first.

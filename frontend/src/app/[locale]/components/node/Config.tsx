@@ -76,7 +76,7 @@ function Config({ id, data, selected }: any) {
           </div>
           <textarea
             rows={2}
-            className="nodrag textarea textarea-sm textarea-bordered w-full bg-transparent rounded resize-none"
+            className="nodrag textarea textarea-xs textarea-bordered w-full bg-transparent rounded resize-none"
             value={data.flow_description ?? ''}
             onChange={e =>
               setNodeData(instance, id, { flow_description: e.target.value })

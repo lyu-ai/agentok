@@ -26,7 +26,9 @@ const GroupChatManager = ({ id, selected, data }: any) => {
       <div className="flex flex-col w-full gap-2 text-sm">
         <div className="flex items-center gap-2 text-primary">
           <FaUserGroup className="w-5 h-5" />
-          <div className="text-sm font-bold">{getNodeLabel(data.label, tNodeMeta)}</div>
+          <div className="text-sm font-bold">
+            {getNodeLabel(data.label, tNodeMeta)}
+          </div>
         </div>
         <div className="divider my-0" />
         <div className="flex items-center justify-between text-base-content/60 gap-2">
@@ -36,7 +38,7 @@ const GroupChatManager = ({ id, selected, data }: any) => {
             className="input input-sm input-bordered w-20 bg-transparent rounded"
             value={data.max_round ?? 20}
             onChange={e =>
-              setNodeData(instance, id, { max_round: e.target.value })
+              setNodeData(instance, id, { max_round: e.target.valueAsNumber })
             }
           />
         </div>

@@ -1,5 +1,6 @@
 import asyncio
 from asyncio import subprocess
+from termcolor import colored
 
 from .pocketbase import add_messsage
 from .parser import OutputParser  # Assuming OutputParser is in output_parser.py
@@ -30,7 +31,7 @@ async def run_assistant(message: str, source_path: str, on_message=print_message
     async for line in process.stdout:
         if line:  # Truthy if the line is not empty
             response_message = line.decode().rstrip()  # Remove trailing newline/whitespace
-            print('response_message', response_message)
+            print(colored('>>', 'blue'), response_message)
             output_parser.parse_line(response_message)
         else:
             break  # No more output, terminate loop

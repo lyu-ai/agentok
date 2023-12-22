@@ -1,18 +1,24 @@
 # agents.j2
 {% macro generate_agents(assistant_nodes) %}
 {%- for node in assistant_nodes %}
-{%- set class_name = node['data']['class'] %}
-{%- set name = node['data']['name'] %}
+{%- set class_name = node.data.class %}
+{%- set name = node.data.name %}
 
-node_{{ node['id'] }} = {{ class_name }}(
+node_{{ node.id }} = {{ class_name }}(
     name="{{ name }}",
-    {%- if node['data'].get('system_message') %}
-    system_message="""{{ node['data']['system_message'] }}""",
+    {%- if node.data.system_message %}
+    system_message="""{{ node.data.system_message }}""",
     {%- endif %}
-    {%- if node['data'].get('max_consecutive_auto_reply') %}
-    max_consecutive_auto_reply={{ node['data']['max_consecutive_auto_reply'] }},
+    {%- if node.data.default_instructions %}
+    instructions=AssistantAgent.DEFAULT_SYSTEM_MESSAGE,
+    {%- elif node.data.instructions %}
+    instructions="""{{ node.data.instructions }}""",
+    {%- endif %}
+    {%- if node.data.max_consecutive_auto_reply %}
+    max_consecutive_auto_reply={{ node.data.max_consecutive_auto_reply }},
     {%- endif %}
     llm_config=llm_config,
 )
+
 {%- endfor %}
 {% endmacro %}

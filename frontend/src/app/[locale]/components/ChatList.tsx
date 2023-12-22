@@ -251,7 +251,7 @@ const ChatList = ({
   }
 
   return (
-    <div ref={chatListRef} className="flex flex-col w-full h-full">
+    <div ref={chatListRef} className="flex flex-col w-full h-full gap-1">
       {trimmedChats.map((chat: any) => {
         if (!chatRefs.has(chat.id)) {
           chatRefs.set(chat.id, createRef<HTMLDivElement>());
