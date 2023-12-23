@@ -1,15 +1,76 @@
 import { useReactFlow } from 'reactflow';
 import { setNodeData } from '../../utils/flow';
 import { genId } from '@/utils/id';
-import { GoTrash, GoX } from 'react-icons/go';
+import { GoTrash } from 'react-icons/go';
 import { MdOutlineAdd } from 'react-icons/md';
 import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 
-const FunctionParams = ({ nodeId, func, ...props }: any) => {
+const ParamRow = ({ param, onDelete, onUpdate }: any) => {
+  const [name, setName] = useState(param.name ?? '');
+  const [description, setDescription] = useState(param.description ?? '');
+  useEffect(() => {
+    setName(param.name ?? '');
+    setDescription(param.description ?? '');
+  }, [param?.name, param?.description]);
+
+  return (
+    <tr className="group flex items-center w-full hover:bg-gray-700">
+      <td className="w-16 flex items-center px-1">
+        <input
+          type="checkbox"
+          checked={param.required ?? false}
+          onChange={e => onUpdate(param, 'required', e.target.checked)}
+        />
+      </td>
+      <td className="w-28 px-1">
+        <input
+          type="text"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          onBlur={e => onUpdate(param, 'name', e.target.value)}
+          className="input input-xs input-bordered bg-transparent rounded w-full"
+        />
+      </td>
+      <td className="w-24 px-1">
+        <select
+          className="select select-xs select-bordered bg-transparent rounded w-full"
+          value={param.type ?? 'string'}
+          onChange={e => onUpdate(param, 'type', e.target.value)}
+        >
+          <option value="string">string</option>
+          <option value="number">number</option>
+          <option value="boolean">boolean</option>
+        </select>
+      </td>
+      <td className="flex-grow px-0">
+        <input
+          type="text"
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          onBlur={e => onUpdate(param, 'description', e.target.value)}
+          className="input input-xs input-bordered bg-transparent rounded w-full"
+        />
+      </td>
+      <td className="w-12 flex text-right justify-end px-1">
+        <div className="hidden group-hover:block w-full">
+          <button
+            className="btn btn-xs btn-square btn-ghost hover:text-red-600"
+            onClick={() => onDelete(param)}
+          >
+            <GoTrash className="w-4 h-4" />
+          </button>
+        </div>
+      </td>
+    </tr>
+  );
+};
+
+const ParamList = ({ nodeId, func, ...props }: any) => {
   const t = useTranslations('function.Params');
   const instance = useReactFlow();
   const node = instance.getNode(nodeId);
-  const onDeleteParam = (param: any) => {
+  const onDelete = (param: any) => {
     const newFunctions = node?.data?.functions?.map((f: any) => {
       if (f.id === func.id) {
         return {
@@ -21,7 +82,8 @@ const FunctionParams = ({ nodeId, func, ...props }: any) => {
     });
     setNodeData(instance, nodeId, { functions: newFunctions });
   };
-  const onUpdateParam = (param: any, name: string, value: any) => {
+  const onUpdate = (param: any, name: string, value: any) => {
+    console.log('onUpdate', param, name, value);
     const newFunctions = node?.data?.functions?.map((f: any) => {
       if (f.id === func.id) {
         const newParams = f.parameters?.map((p: any) => {
@@ -48,6 +110,7 @@ const FunctionParams = ({ nodeId, func, ...props }: any) => {
         return {
           ...f,
           parameters: [
+            ...(f.parameters || []),
             {
               id: 'param-' + genId(),
               name: 'newParam',
@@ -55,7 +118,6 @@ const FunctionParams = ({ nodeId, func, ...props }: any) => {
               description: 'new param description',
               required: true,
             },
-            ...(f.parameters || []),
           ],
         };
       }
@@ -63,8 +125,6 @@ const FunctionParams = ({ nodeId, func, ...props }: any) => {
     });
     setNodeData(instance, nodeId, { functions: newFunctions });
   };
-
-  console.log('func?.parameters', func?.parameters);
 
   return (
     <div className="flex flex-col gap-2 overflow-x-auto p-2 border border-base-content/20 rounded">
@@ -90,59 +150,12 @@ const FunctionParams = ({ nodeId, func, ...props }: any) => {
         </thead>
         <tbody>
           {func?.parameters?.map((param: any, index: number) => (
-            <tr
+            <ParamRow
+              param={param}
               key={index}
-              className="group flex items-center w-full hover:bg-gray-700"
-            >
-              <td className="w-16 flex items-center px-1">
-                <input
-                  type="checkbox"
-                  checked={param.required ?? false}
-                  onChange={e =>
-                    onUpdateParam(param, 'required', e.target.checked)
-                  }
-                />
-              </td>
-              <td className="w-28 px-1">
-                <input
-                  type="text"
-                  value={param.name ?? ''}
-                  onChange={e => onUpdateParam(param, 'name', e.target.value)}
-                  className="input input-xs input-bordered bg-transparent rounded w-full"
-                />
-              </td>
-              <td className="w-24 px-1">
-                <select
-                  className="select select-xs select-bordered bg-transparent rounded w-full"
-                  value={param.type ?? 'string'}
-                  onChange={e => onUpdateParam(param, 'type', e.target.value)}
-                >
-                  <option value="string">string</option>
-                  <option value="number">number</option>
-                  <option value="boolean">boolean</option>
-                </select>
-              </td>
-              <td className="flex-grow px-0">
-                <input
-                  type="text"
-                  value={param.description ?? ''}
-                  onChange={e =>
-                    onUpdateParam(param, 'description', e.target.value)
-                  }
-                  className="input input-xs input-bordered bg-transparent rounded w-full"
-                />
-              </td>
-              <td className="w-12 flex text-right justify-end px-1">
-                <div className="hidden group-hover:block w-full">
-                  <button
-                    className="btn btn-xs btn-square btn-ghost hover:text-red-600"
-                    onClick={() => onDeleteParam(param)}
-                  >
-                    <GoTrash className="w-4 h-4" />
-                  </button>
-                </div>
-              </td>
-            </tr>
+              onUpdate={onUpdate}
+              onDelete={onDelete}
+            />
           ))}
         </tbody>
       </table>
@@ -150,4 +163,4 @@ const FunctionParams = ({ nodeId, func, ...props }: any) => {
   );
 };
 
-export default FunctionParams;
+export default ParamList;

@@ -8,7 +8,7 @@ import { RiRobot2Line } from 'react-icons/ri';
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 
-const FunctionEditor = ({ nodeId, func, ...props }: any) => {
+const CodeEditor = ({ nodeId, func, ...props }: any) => {
   const t = useTranslations('function.Editor');
   const instance = useReactFlow();
   const node = instance?.getNode(nodeId);
@@ -71,4 +71,4 @@ const FunctionEditor = ({ nodeId, func, ...props }: any) => {
   );
 };
 
-export default FunctionEditor;
+export default CodeEditor;

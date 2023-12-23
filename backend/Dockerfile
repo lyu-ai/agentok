@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     gcc \
     libc6-dev \
     libffi-dev \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy only the requirements.txt first to leverage Docker cache
@@ -24,6 +25,8 @@ ENV UVICORN_WORKERS=3 \
     UVICORN_PORT=5004 \
     UVICORN_HOST=0.0.0.0 \
     UVICORN_LOG_LEVEL=info
+
+ENV IMAGEIO_FFMPEG_EXE=/usr/bin/ffmpeg
 
 # Define the command to run your application on Uvicorn with multiple workers
 CMD ["sh", "-c", "uvicorn app.main:app --host ${UVICORN_HOST} --port ${UVICORN_PORT} --workers ${UVICORN_WORKERS} --log-level ${UVICORN_LOG_LEVEL}"]

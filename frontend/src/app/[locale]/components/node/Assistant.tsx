@@ -38,11 +38,15 @@ function AssistantNode({ id, data, selected }: any) {
       className={clsx(
         'p-2 rounded-md border min-w-[240px] backdrop-blur-sm',
         selected
-          ? 'shadow-box shadow-gray-500 bg-gray-600/90 border-gray-500'
-          : 'border-gray-600 bg-gray-700/90'
+          ? 'shadow-box shadow-lime-700 bg-lime-700 border-lime-600'
+          : 'border-lime-600 bg-lime-700/80'
       )}
     >
-      <Toolbar nodeId={id} selected={selected}>
+      <Toolbar
+        nodeId={id}
+        selected={selected}
+        className="bg-lime-700 border-lime-600"
+      >
         <EditButton
           editing={editingName}
           setEditing={setEditingName}

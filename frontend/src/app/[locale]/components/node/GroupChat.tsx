@@ -12,16 +12,16 @@ const GroupChatManager = ({ id, selected, data }: any) => {
   return (
     <div
       className={clsx(
-        'p-2 rounded-md border text-primary min-w-[160px] backdrop-blur-sm',
+        'p-2 rounded-md border min-w-[160px] backdrop-blur-sm',
         selected
-          ? 'shadow-box shadow-sky-500 bg-sky-600/90 border-sky-500'
-          : 'border-sky-600 bg-sky-700/90'
+          ? 'shadow-box shadow-gray-700/80 border-gray-600/90 bg-gray-700/90'
+          : 'border-gray-600/80 bg-gray-700/80'
       )}
     >
       <Toolbar
         nodeId={id}
         selected={selected}
-        className="bg-sky-600/90 border-sky-500"
+        className="border-gray-600/90 bg-gray-700/90"
       />
       <div className="flex flex-col w-full gap-2 text-sm">
         <div className="flex items-center gap-2 text-primary">

@@ -44,18 +44,23 @@ function Note({ id, data, selected, ...props }: any) {
   return (
     <div
       className={clsx(
-        'w-full h-full p-2 rounded-md border text-lime-400 backdrop-blur-md',
+        'w-full h-full p-2 rounded-md border text-orange-100 backdrop-blur-md',
         selected
-          ? 'shadow-box shadow-lime-600 bg-lime-700/70 border-lime-600'
-          : 'border-lime-700 bg-lime-800/70'
+          ? 'border-yellow-600/60 bg-yellow-500/60'
+          : 'border-yellow-700/40 bg-yellow-500/50'
       )}
     >
       <Toolbar
         nodeId={id}
         selected={selected}
-        className="bg-lime-700/70 border-lime-600"
+        className="border-yellow-600/60 bg-yellow-500/60"
       >
-        <CopyButton content={content} place='top' className="hover:text-white" minimal />
+        <CopyButton
+          content={content}
+          place="top"
+          className="hover:text-white"
+          minimal
+        />
       </Toolbar>
       <div className="relative flex flex-col w-full h-full gap-2 text-sm">
         <div className="flex items-center gap-2 justify-between">
@@ -63,7 +68,9 @@ function Note({ id, data, selected, ...props }: any) {
             <div className="flex justify-center items-center">
               <FaNoteSticky className="w-5 h-5" />
             </div>
-            <div className="text-sm font-bold">{getNodeLabel(data.label, tNodeMeta)}</div>
+            <div className="text-sm font-bold">
+              {getNodeLabel(data.label, tNodeMeta)}
+            </div>
           </div>
           {editing ? (
             <div className="flex items-center gap-2">

@@ -158,13 +158,13 @@ Please check the original notebooks with the same name in [AutoGen](https://gith
 | teachability                            | 🔲     |                                                           |
 | teaching                                | 🔲     |                                                           |
 | two_users                               | 🔲     |                                                           |
-| video_transcript_translate_with_whisper | 🔲     |                                                           |
+| video_transcript_translate_with_whisper | ✅     | `brew install ffmpeg` and export IMAGEIO_FFMPEG_EXE       |
 | web_info                                | 🔲     |                                                           |
 | cq_math                                 | 🔲     |                                                           |
 | Async_human_input                       | 🔲     |                                                           |
-| oai_chatgpt_gpt4                        | 🔲     |                                                           |
-| oai_client_cost                         | 🔲     |                                                           |
-| oai_completion                          | 🔲     |                                                           |
+| oai_chatgpt_gpt4                        | ⭕     | Fine-tuning, out of project scope                         |
+| oai_client_cost                         | ⭕     | This is a utility tool, not related to flow.              |
+| oai_completion                          | ⭕     | Fine-tuning, out of project scope                         |
 | oai_openai_utils                        | 🔲     |                                                           |
 
 ## 👨‍💻 Contributing

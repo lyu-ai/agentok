@@ -22,11 +22,16 @@ function Config({ id, data, selected }: any) {
       className={clsx(
         'p-2 rounded-md border text-base-content/90 min-w-[240px] backdrop-blur-sm',
         selected
-          ? 'bg-gray-400/60 border-gray-300 text-white'
-          : 'border-gray-400 bg-gray-500/60'
+          ? 'shadow-box shadow-gray-700/80 border-gray-600/90 bg-gray-700/90'
+          : 'border-gray-600/80 bg-gray-700/80'
       )}
     >
-      <Toolbar nodeId={id} selected={selected} hideDelete>
+      <Toolbar
+        nodeId={id}
+        selected={selected}
+        hideDelete
+        className="border-gray-600/90 bg-gray-700/90"
+      >
         <div
           className="cursor-pointer"
           onClick={() => setCollapsed(c => !c)}
@@ -65,8 +70,8 @@ function Config({ id, data, selected }: any) {
             </div>
             <input
               className="nodrag input input-sm input-bordered w-32 bg-transparent rounded"
-              value={data.flow_name ?? ''}
-              onChange={e =>
+              defaultValue={data.flow_name ?? ''}
+              onBlur={e =>
                 setNodeData(instance, id, { flow_name: e.target.value })
               }
             />
@@ -77,8 +82,8 @@ function Config({ id, data, selected }: any) {
           <textarea
             rows={2}
             className="nodrag textarea textarea-xs textarea-bordered w-full bg-transparent rounded resize-none"
-            value={data.flow_description ?? ''}
-            onChange={e =>
+            defaultValue={data.flow_description ?? ''}
+            onBlur={e =>
               setNodeData(instance, id, { flow_description: e.target.value })
             }
           />
@@ -88,8 +93,8 @@ function Config({ id, data, selected }: any) {
         <div className="text-sm">
           <input
             className="input input-sm input-bordered w-full bg-transparent rounded"
-            value={data.filter_dict ?? ''}
-            onChange={e =>
+            defaultValue={data.filter_dict ?? ''}
+            onBlur={e =>
               setNodeData(instance, id, { filter_dict: e.target.value })
             }
           />
@@ -122,8 +127,8 @@ function Config({ id, data, selected }: any) {
           <input
             type="number"
             className="input input-sm input-bordered w-24 bg-transparent rounded"
-            value={data.max_tokens ?? 1024}
-            onChange={e => {
+            defaultValue={data.max_tokens ?? 1024}
+            onBlur={e => {
               setNodeData(instance, id, { max_tokens: e.target.valueAsNumber });
             }}
           />

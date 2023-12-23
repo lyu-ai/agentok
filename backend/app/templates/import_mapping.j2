@@ -18,6 +18,13 @@
         {%- endif -%}
     {%- endfor %}
 import autogen
+
+# openai, whisper and moviepy are optional dependencies, currently only used in video transcript example
+# However, we beleive they are useful for other future examples, so we include them here as part of standard imports
+from openai import OpenAI
+import whisper
+from moviepy.editor import VideoFileClip
+
 import argparse
 import os
 import time

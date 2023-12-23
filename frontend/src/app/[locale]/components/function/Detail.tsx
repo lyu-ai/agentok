@@ -2,14 +2,13 @@ import EditableText from '@/components/EditableText';
 import { TbMathFunction } from 'react-icons/tb';
 import { setNodeData } from '../../utils/flow';
 import { useReactFlow } from 'reactflow';
-import FunctionParams from './Params';
-import FunctionEditor from './Editor';
+import ParamList from './ParamList';
+import CodeEditor from './CodeEditor';
 
 const FunctionDetail = ({ nodeId, func, ...props }: any) => {
   const instance = useReactFlow();
   const node = instance?.getNode(nodeId);
   const setFunctionData = (key: any, value: any) => {
-    console.log('function detail', node?.data?.functions);
     setNodeData(instance, nodeId, {
       functions: node?.data?.functions?.map((f: any) => {
         if (f.id === func.id) {
@@ -58,8 +57,8 @@ const FunctionDetail = ({ nodeId, func, ...props }: any) => {
           />
         </div>
       </div>
-      <FunctionParams nodeId={nodeId} func={func} />
-      <FunctionEditor nodeId={nodeId} func={func} />
+      <ParamList nodeId={nodeId} func={func} />
+      <CodeEditor nodeId={nodeId} func={func} />
     </div>
   );
 };
