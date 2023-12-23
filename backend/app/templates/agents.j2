@@ -19,11 +19,18 @@ node_{{ node.id }} = {{ class_name }}(
     {%- endif %}
     {%- if node.data.class == 'LLaVAAgent' %}
     llm_config={
-      **llm_config,
-      "config_list": [{
-          "api_key": os.environ["REPLICATE_API_TOKEN"],
-          "base_url": "{{ node.data.llava_config.base_url }}",
-      }],
+        **llm_config,
+        "config_list": [{
+            "api_key": os.environ["REPLICATE_API_TOKEN"],
+            "base_url": "{{ node.data.llava_config.base_url }}",
+        }],
+    }
+    {%- elif node.data.class == 'GPTAssistantAgent' %}
+    llm_config={
+        **llm_config,
+        "tools": [{
+            "type": "code_interpreter",
+        }],
     }
     {%- else %}
     llm_config=llm_config,

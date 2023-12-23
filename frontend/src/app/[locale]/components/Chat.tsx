@@ -344,7 +344,11 @@ const Chat = ({
                 className={`relative group chat-bubble rounded-md p-2 ${messageClass} break-all`}
                 style={{ maxWidth: '100%' }}
               >
-                <Markdown>{message.content}</Markdown>
+                {message.content ? (
+                  <Markdown>{message.content}</Markdown>
+                ) : (
+                  <span className="text-lime-600">(Empty Message)</span>
+                )}
                 {message.type === 'user' && (
                   <div className="hidden group-hover:block absolute right-1 bottom-1">
                     <button
@@ -369,8 +373,8 @@ const Chat = ({
           onSend={onSend}
         />
         {thinking && (
-          <div className="absolute inset-1 rounded-md backdrop-blur-sm bg-gray-700/70">
-            <div className="flex w-full h-full items-center justify-center gap-2 text-gray-300">
+          <div className="absolute inset-1.5 rounded-sm backdrop-blur-sm bg-primary/10">
+            <div className="flex w-full h-full items-center justify-center gap-2 text-primary">
               <div className="loading loading-infinity loading-sm" />
               <span className="text-sm">{t('thinking')}</span>
             </div>

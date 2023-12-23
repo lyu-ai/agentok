@@ -78,28 +78,10 @@ function AssistantNode({ id, data, selected }: any) {
           <div className="font-bold text-base-content/80">
             {t('system-message')}
           </div>
-          <div className="form-control"></div>
-          <label className="flex items-center cursor-pointer label gap-2">
-            <span className="label-text">{t('enable-system-message')}</span>
-            <input
-              id="enable_system_message"
-              type="checkbox"
-              className="checkbox checkbox-xs bg-transparent rounded"
-              checked={data.enable_system_message ?? false}
-              onChange={e => {
-                setNodeData(instance, id, {
-                  enable_system_message: e.target.checked,
-                });
-              }}
-            />
-          </label>
         </div>
         <div
           className={clsx(
-            'text-sm text-base-content/60 transition-all ease-in-out',
-            !data.enable_system_message
-              ? 'collapsing-height'
-              : 'expanding-height'
+            'text-sm text-base-content/60 transition-all ease-in-out'
           )}
         >
           <textarea
@@ -113,12 +95,22 @@ function AssistantNode({ id, data, selected }: any) {
           />
         </div>
         <div className="flex items-center justify-between text-base-content/60 gap-2">
-          <div className="font-bold text-base-content/80">
+          <div className="flex items-center gap-2 font-bold text-base-content/80">
+            <input
+              type="checkbox"
+              checked={data.enable_instructions ?? false}
+              onChange={e =>
+                setNodeData(instance, id, {
+                  enable_instructions: e.target.checked,
+                })
+              }
+              className="checkbox checkbox-xs bg-transparent rounded"
+            />
             {t('instructions')}
           </div>
           <div className="form-control">
             <label className="flex items-center cursor-pointer label gap-2">
-              <span className="label-text">
+              <span className="label-text text-xs">
                 {t('instructions-use-defaults')}
               </span>
               <input
@@ -139,7 +131,9 @@ function AssistantNode({ id, data, selected }: any) {
         <div
           className={clsx(
             'text-sm text-base-content/60 transition-all',
-            data.default_instructions ? 'collapsing-height' : 'expanding-height'
+            data.enable_instructions && !data.default_instructions
+              ? 'expanding-height'
+              : 'collapsing-height'
           )}
         >
           <textarea

@@ -62,9 +62,9 @@
       "start-chat-tooltip": "After build the flow, click",
       "options": "More Options",
       "human-input-mode": "Input Mode",
-      "input-mode-never": "Never",
-      "input-mode-always": "Always",
-      "input-mode-terminate": "Terminate",
+      "input-mode-never": "NEVER",
+      "input-mode-always": "ALWAYS",
+      "input-mode-terminate": "TERMINATE",
       "max-consecutive-auto-reply": "Max Auto-Replies"
     },
     "Note": {
