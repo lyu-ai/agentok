@@ -166,9 +166,9 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
       >
         <div className="flex w-full gap-2 justify-between items-center">
           <div className="flex items-center gap-1">
-            <PiChatsCircle className="w-5 h-5" />
+            <PiChatsCircle className="w-5 h-5 flex-0" />
             <EditableText
-              className="font-bold w-full truncate"
+              className="font-bold truncate w-64"
               editing={isEditing}
               onChange={onEditCompleted}
               text={chat.name ?? chatSource?.name ?? 'Untitled ' + chat.id}
@@ -176,6 +176,7 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
           </div>
           {selected && (
             <ContextButton
+              className="flex-0"
               chat={chat}
               onEdit={onEditStarted}
               onDelete={onDelete}

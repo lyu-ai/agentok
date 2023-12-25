@@ -52,7 +52,7 @@ const ChatButton = ({ className, flow }: any) => {
             <span>{t('start-chat')}</span>
           </div>
         </Popover.Button>
-        <Popover.Panel className="origin-top-right shadow-box-lg shadow-gray-600 rounded-xl backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 w-[480px] h-[80vh] max-h-[80vh]">
+        <Popover.Panel className="origin-top-right shadow-box-lg shadow-gray-600 rounded-xl backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 w-[400px] md:w-[480px] h-[80vh] max-h-[80vh]">
           {isCreating || !chat ? (
             <div className="loading loading-sm" />
           ) : (

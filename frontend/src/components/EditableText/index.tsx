@@ -59,7 +59,7 @@ const EditableText = ({
             'flex items-center gap-1 px-2 py-1'
           )}
         >
-          <span>{text}</span>
+          {text}
         </div>
       )}
       {showButtons && isEditing && (
