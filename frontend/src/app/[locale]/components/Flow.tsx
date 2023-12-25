@@ -14,12 +14,7 @@ import ReactFlow, {
   ConnectionLineType,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import {
-  nodeTypes,
-  initialEdges,
-  initialNodes,
-  isFlowDirty,
-} from '../utils/flow';
+import { nodeTypes, initialEdges, initialNodes } from '../utils/flow';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import ViewToggle from './ViewToggle';
 import NodeButton from './NodeButton';
@@ -27,7 +22,6 @@ import Python from './Python';
 import Json from './Json';
 import { genId } from '@/utils/id';
 import ChatButton from './ChatButton';
-import { toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
 import { useFlow } from '@/hooks';
 import { useRouter } from 'next/navigation';
@@ -65,17 +59,19 @@ const Flow = ({ flowId }: any) => {
 
   const initialLoad = useRef(true);
 
-  const debouncedUpdateFlow = debounce((flowId: string, currentFlow: any) => {
-    updateFlow({
-      id: flowId,
-      flow: currentFlow,
-    });
-    setIsDirty(false);
-  }, 1000);
+  const debouncedUpdateFlow = useCallback(
+    debounce((flowId: string, currentFlow: any) => {
+      updateFlow({
+        id: flowId,
+        flow: currentFlow,
+      });
+      setIsDirty(false);
+    }, 1000),
+    []
+  );
 
   useEffect(() => {
-    if (!flow?.flow) return;
-    if (initialLoad.current) {
+    if (!flow?.flow || initialLoad.current) {
       initialLoad.current = false;
       return;
     }
@@ -86,15 +82,16 @@ const Flow = ({ flowId }: any) => {
     return () => {
       debouncedUpdateFlow.cancel();
     };
-  }, [nodes, edges]);
+  }, [nodes, edges, isDirty, flowId, toObject, debouncedUpdateFlow]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
+      console.log('onNodesChange', changes);
       if (
         !initialLoad.current &&
         changes.some(change => change.type !== 'select')
       ) {
-        setIsDirty(true);
+        setIsDirty(true); // Ignore the dragging and selection events
       }
       setNodes(nds => applyNodeChanges(changes, nds));
     },

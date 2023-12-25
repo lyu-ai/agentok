@@ -22,11 +22,11 @@ We may collect and use information in accordance with our Privacy Policy, which 
 
 ## License
 
-Our project is open source under the [Your Open Source License], which lets others remix, adapt, and build upon your work non-commercially, as long as they credit you and license their new creations under identical terms.
+Our project is open source under Apache 2.0 with additional terms and conditions, which lets others remix, adapt, and build upon your work non-commercially, as long as they credit you and license their new creations under identical terms.
 
 ## User Obligations
 
-By using [Your Project Name], you agree not to:
+By using FlowGen, you agree not to:
 
 - Misuse our services for any illegal or unauthorized purposes
 - Infringe upon the intellectual property rights of others

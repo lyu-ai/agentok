@@ -31,54 +31,52 @@ const ChatListPanel = ({ onAdd }: any) => {
     },
   ];
   return (
-    <>
-      <Tab.Group>
-        <Tab.List className="tabs tabs-bordered flex rounded-xl p-1">
-          {chatSources.map(({ type }) => (
-            <Tab
-              key={type}
-              className={({ selected }) =>
-                clsx(
-                  'tab w-full text-sm hover:text-primary',
-                  selected ? 'tab-active text-primary' : 'text-base-content'
-                )
-              }
-            >
-              {t(type)}
-            </Tab>
-          ))}
-        </Tab.List>
-        <Tab.Panels>
-          {chatSources.map(({ type, data, isLoading }) => (
-            <Tab.Panel
-              key={type}
-              className={clsx(
-                'flex flex-wrap justify-center rounded-xl p-2 gap-2 h-[240px] overflow-y-auto w-full h-full'
-              )}
-            >
-              {data.map((sourceItem: any) => (
-                <Popover.Button
-                  key={`${type}-${sourceItem.id}`}
-                  onClick={() =>
-                    createChat(sourceItem.id, type).then(chat =>
-                      router.push(`/chat/${chat.id}`)
-                    )
-                  }
-                  className="w-56 flex flex-col items-start gap-2 text-sm rounded p-2 border backdrop-blur-md border-base-content/5 bg-base-content/10 hover:shadow-box hover:bg-base-content/40 hover:border-base-content/30"
-                >
-                  <span className="line-clamp-1 text-sm text-left font-bold">
-                    {sourceItem.name}
-                  </span>
-                  <span className="h-8 line-clamp-2 text-xs text-left text-base-content/60 font-normal">
-                    {sourceItem.description || '(No description)'}
-                  </span>
-                </Popover.Button>
-              ))}
-            </Tab.Panel>
-          ))}
-        </Tab.Panels>
-      </Tab.Group>
-    </>
+    <Tab.Group>
+      <Tab.List className="tabs tabs-bordered flex rounded-xl p-1 flex-0">
+        {chatSources.map(({ type }) => (
+          <Tab
+            key={type}
+            className={({ selected }) =>
+              clsx(
+                'tab w-full text-sm hover:text-primary',
+                selected ? 'tab-active text-primary' : 'text-base-content'
+              )
+            }
+          >
+            {t(type)}
+          </Tab>
+        ))}
+      </Tab.List>
+      <Tab.Panels className="flex flex-col flex-1 w-full">
+        {chatSources.map(({ type, data, isLoading }) => (
+          <Tab.Panel
+            key={type}
+            className={clsx(
+              'flex flex-wrap justify-center rounded-xl p-2 gap-2 '
+            )}
+          >
+            {data.map((sourceItem: any) => (
+              <Popover.Button
+                key={`${type}-${sourceItem.id}`}
+                onClick={() =>
+                  createChat(sourceItem.id, type).then(chat =>
+                    router.push(`/chat/${chat.id}`)
+                  )
+                }
+                className="w-56 flex flex-col items-start gap-2 text-sm rounded p-2 border backdrop-blur-md border-base-content/5 bg-base-content/10 hover:shadow-box hover:bg-base-content/40 hover:border-base-content/30"
+              >
+                <span className="line-clamp-1 text-sm text-left font-bold">
+                  {sourceItem.name}
+                </span>
+                <span className="h-8 line-clamp-2 text-xs text-left text-base-content/60 font-normal break-all">
+                  {sourceItem.description || '(No description)'}
+                </span>
+              </Popover.Button>
+            ))}
+          </Tab.Panel>
+        ))}
+      </Tab.Panels>
+    </Tab.Group>
   );
 };
 
@@ -110,7 +108,7 @@ const ChatListButton = ({ className, onSelect }: any) => {
             <GoPlus className="w-4 h-4" />
           </div>
         </Popover.Button>
-        <Popover.Panel className="origin-top-left w-[500px] h-[480px] shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/90 text-base-content border border-gray-600">
+        <Popover.Panel className="origin-top-left w-[500px] h-[480px] overflow-y-auto shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/90 text-base-content border border-gray-600">
           <ChatListPanel />
         </Popover.Panel>
       </Float>

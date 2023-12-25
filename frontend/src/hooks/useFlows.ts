@@ -84,10 +84,11 @@ export function useFlows() {
       description: getFlowDescription(flow.flow?.nodes),
       ...flow,
     };
+    const currentFlowState = flows.find(f => f.id === id);
     // Optimistically update the flow in the local state
     updateFlow(id, flowToUpdate);
     try {
-      const response = await fetch(`/api/flows`, {
+      const response = await fetch(`/api/flows/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -95,14 +96,13 @@ export function useFlows() {
         credentials: 'include',
         body: JSON.stringify(flowToUpdate),
       });
-      const updatedFlow = await response.json();
-      updateFlow(id, updatedFlow);
-      mutate(); // Optional: if the PUT API call returns the updated list
-      return updatedFlow;
+      if (!response.ok) throw new Error(await response.text());
     } catch (error) {
       console.error('Failed to update the flow:', error);
-      // Handle the error state as necessary
-      mutate();
+      // Rollback local state changes
+      if (currentFlowState) {
+        updateFlow(id, currentFlowState);
+      }
     } finally {
       setIsUpdating(false);
     }
