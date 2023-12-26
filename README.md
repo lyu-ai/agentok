@@ -131,7 +131,7 @@ Please check the original notebooks with the same name in [AutoGen](https://gith
 | [auto_feedback_from_code_execution]()   | ✅     | [Feedback from Code Execution](https://flowgen.app/flow/)                 |
 | auto_build                              | 🔲     |                                                                           |
 | chess                                   | 🔲     |                                                                           |
-| compression                             | 🔲     |                                                                           |
+| compression                             | ✅     |                                                                           |
 | dalle_and_gpt4v                         | 🔲     | This requires the import of custom Agent class                            |
 | function_call_async                     | ✅     |                                                                           |
 | function_call                           | ✅     |                                                                           |

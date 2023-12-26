@@ -4,6 +4,7 @@
     {%- set import_dict = {
         'UserProxyAgent': 'from autogen import UserProxyAgent',
         'AssistantAgent': 'from autogen import AssistantAgent',
+        'CompressibleAgent': 'from autogen.agentchat.contrib.compressible_agent import CompressibleAgent',
         'GroupChat': 'from autogen import GroupChat\nfrom autogen import GroupChatManager',
         'GPTAssistantAgent': 'from autogen.agentchat.contrib.gpt_assistant_agent import GPTAssistantAgent',
         'MultimodalConversableAgent': 'from autogen.agentchat.contrib.multimodal_conversable_agent import MultimodalConversableAgent',

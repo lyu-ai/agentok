@@ -34,7 +34,8 @@
       "instructions-use-defaults": "Use defaults",
       "instructions-placeholder": "Enter instructions here",
       "max-consecutive-auto-reply": "Max Auto-Replies",
-      "llava-url": "LLaVa URL"
+      "llava-url": "LLaVa URL",
+      "options": "More Options"
     },
     "Config": {
       "flow-name": "Flow Name",
@@ -174,6 +175,14 @@
       "get-or-create": "Get or Create",
       "client": "Client",
       "termination-msg": "Termination Keyword:"
+    },
+    "AssistantConfig": {
+      "title": "More Options",
+      "mode": "Mode",
+      "verbose": "Verbose",
+      "leave_last_n": "Leave Last N",
+      "trigger_count": "Trigger Count",
+      "support_compress": "Support Compress"
     }
   },
   "page": {
@@ -213,6 +222,8 @@
       "config-description": "Configure the node",
       "assistant": "Assistant",
       "assistant-description": "General-purpose Assistant",
+      "compress": "Compress",
+      "compress-description": "Assistant with Compress",
       "gpt-assistant": "GPT Assistant",
       "gpt-assistant-description": "Enpowered by GPT Assistant API",
       "user-proxy": "User Proxy",

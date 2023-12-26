@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import React, { memo, useEffect, useState } from 'react';
 import { FaEye, FaMeta } from 'react-icons/fa6';
+import { GoGear } from 'react-icons/go';
 import { Handle, Position, useReactFlow } from 'reactflow';
 import { IconType } from 'react-icons';
 import Toolbar from './Toolbar';
@@ -11,19 +12,22 @@ import EditableText from '@/components/EditableText';
 import EditButton from '@/components/EditButton';
 import { useTranslations } from 'next-intl';
 import LLavaOptions from '../option/LLaVaOptions';
+import AssistantConfig from '../option/AssistantConfig';
 
 function AssistantNode({ id, data, selected }: any) {
   const [editingName, setEditingName] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
   const instance = useReactFlow();
   const iconDict: Record<string, IconType> = {
     GPTAssistantAgent: TbBrandOpenai,
     AssistantAgent: RiRobot2Fill,
+    CompressibleAgent: RiRobot2Fill,
     RetrieveAssistantAgent: RiRobot2Fill,
     MultimodalConversableAgent: FaEye,
     LLaVAAgent: FaMeta,
   };
 
-  const NodeIcon = iconDict[data.class || 'AssistantAgent'];
+  const NodeIcon = iconDict[data.class ?? 'AssistantAgent'];
   useEffect(() => {
     if (!selected) {
       setEditingName(false);
@@ -158,12 +162,29 @@ function AssistantNode({ id, data, selected }: any) {
         {data.class === 'LLaVAAgent' && (
           <LLavaOptions id={id} data={data} selected={selected} />
         )}
+        {['AssistantAgent', 'CompressibleAgent'].includes(data.class) && (
+          <button
+            className="btn btn-outline btn-sm flex items-center gap-2 rounded"
+            onClick={() => setShowOptions(o => !o)}
+          >
+            <GoGear className="w-4 h-4" />
+            <span>{t('options')}</span>
+          </button>
+        )}
       </div>
 
       <Handle
         type="source"
         position={Position.Right}
         className="w-16 !bg-green-600"
+      />
+
+      <AssistantConfig
+        show={showOptions}
+        nodeId={id}
+        data={data}
+        onClose={() => setShowOptions(false)}
+        className="flex shrink-0 w-[640px] max-w-[80vw] max-h-[90vh]"
       />
     </div>
   );

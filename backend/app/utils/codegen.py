@@ -59,10 +59,20 @@ def flow2py(flow: Flow) -> str:
                         grouped_nodes=grouped_nodes,)
 
   return code
+
+
 import openai
 from openai import OpenAI
 
 def func2py(func: Function) -> json:
+  """Generate code based on the provided function meta information.
+
+  Args:
+      func (Function): Function meta, such as name, description, parameters etc.
+
+  Returns:
+      json: Generated function code in JSON format.
+  """
 
   client = OpenAI()
   client.api_key = os.environ['OPENAI_API_KEY']

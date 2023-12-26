@@ -34,7 +34,8 @@
       "instructions-use-defaults": "使用默认值",
       "instructions-placeholder": "在此处输入说明",
       "max-consecutive-auto-reply": "最大自动回复次数",
-      "llava-url": "LLaVa URL"
+      "llava-url": "LLaVa URL",
+      "options": "更多选项"
     },
     "Config": {
       "flow-name": "工作流名称",
@@ -209,6 +210,8 @@
       "config-description": "配置节点",
       "assistant": "助手",
       "assistant-description": "通用助手",
+      "compress": "助手（文本压缩）",
+      "compress-description": "带文本压缩功能的助手",
       "gpt-assistant": "GPT 助手",
       "gpt-assistant-description": "由 GPT 助手 API 提供支持",
       "user-proxy": "用户代理",

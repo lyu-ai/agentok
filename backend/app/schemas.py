@@ -28,7 +28,7 @@ class FlowData(BaseModel):
 class Flow(BaseModel):
   id: str
   flow: FlowData
-  owner: str
+  owner: Optional[str] = None
   created: str
   updated: str
 
