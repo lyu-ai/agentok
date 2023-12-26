@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import TemplateList from '../components/TemplateList';
 
 // standalone means this is not a child of Popover component
-const GalleryPage = ({ onLoad: _onLoad }: any) => {
+const GalleryPage = () => {
   const t = useTranslations('page.Gallery');
   return (
     <div className="relative flex flex-col w-full h-full gap-2 p-2 overflow-y-auto">

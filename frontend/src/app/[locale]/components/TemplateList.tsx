@@ -47,7 +47,7 @@ export const TemplateLoading = () => {
   );
 };
 
-const TemplateBlock = ({ template, index }: any) => {
+export const TemplateBlock = ({ template, index, className }: any) => {
   const [isOwned, setIsOwned] = useState(false);
   const t = useTranslations('component.TemplateList');
   const { deleteTemplate, isDeleting } = useTemplates();
@@ -85,6 +85,8 @@ const TemplateBlock = ({ template, index }: any) => {
     }
   };
   const onChat = async (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
     await createChat(template.id, 'template')
       .then(chat => {
         if (chat) {
@@ -98,7 +100,14 @@ const TemplateBlock = ({ template, index }: any) => {
   };
   const randomImage = ['api', 'knowledge', 'rag', 'flow'][index % 4];
   return (
-    <div className="group card w-80 bg-base-content/10 border border-base-content/10 hover:border-primary">
+    <a
+      className={clsx(
+        'group card w-80 bg-base-content/10 border border-base-content/10 hover:border-primary',
+        className
+      )}
+      href={`/gallery/${template.id}`}
+      target="_blank"
+    >
       <figure>
         <img
           src={
@@ -169,7 +178,7 @@ const TemplateBlock = ({ template, index }: any) => {
           )}
         </div>
       </div>
-    </div>
+    </a>
   );
 };
 

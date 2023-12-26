@@ -3,7 +3,6 @@ import useTemplateStore from '@/store/template';
 import { useEffect, useState } from 'react';
 import { fetcher } from './fetcher';
 import { Template } from '@/store/template';
-import pb from '@/utils/pocketbase/client';
 
 export function useTemplates() {
   const { data, error, mutate } = useSWR('/api/templates', fetcher);
