@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { BsInboxes } from 'react-icons/bs';
-import { GoPencil, GoShare, GoTrash } from 'react-icons/go';
+import { GoShare, GoTrash } from 'react-icons/go';
 import { useFlows, useTemplates } from '@/hooks';
 import clsx from 'clsx';
 import { useState } from 'react';
@@ -123,7 +123,7 @@ const PublishTemplateDialog = ({ className, flow, ...props }: any) => {
   );
 };
 
-const FlowBlock = ({ action: Action, flow }: any) => {
+const FlowBlock = ({ action: Action, flow, suppressLink }: any) => {
   const t = useTranslations('component.FlowList');
   const { deleteFlow, isDeleting } = useFlows();
   const [showPublishModal, setShowPublishModal] = useState(false);
@@ -142,13 +142,28 @@ const FlowBlock = ({ action: Action, flow }: any) => {
     e.preventDefault();
     await deleteFlow(flow.id);
   };
-
+  const ConditionalLink = ({ children, className }: any) => {
+    if (suppressLink) {
+      return <div className={className}>{children}</div>;
+    } else {
+      return (
+        <Link href={`/flow/${flow.id}`} className={className}>
+          {children}
+        </Link>
+      );
+    }
+  };
   return (
-    <div
+    <ConditionalLink
       key={flow.id}
-      className="card group relative flex flex-col w-80 bg-base-content/10 hover:bg-primary/10 gap-3 border border-base-content/10 hover:border-primary overflow-hidden"
+      className={clsx(
+        'card group relative flex flex-col w-80 bg-base-content/10 gap-3 border border-base-content/10',
+        {
+          'hover:shadow-box hover:shadow-primary/40 hover:text-primary hover:border-primary/20': !suppressLink,
+        }
+      )}
     >
-      <div className="card-title flex items-center bg-primary/5 group-hover:bg-primary/30 rounded-t-xl gap-4 group-hover:text-primary p-4">
+      <div className="card-title flex items-center bg-primary/5 group-hover:bg-primary/10 rounded-t-xl gap-4 group-hover:text-primary p-4">
         <RiRobot2Line className="w-8 h-8" />
         <div className="flex flex-col gap-2">
           <h2 className="text-lg font-bold line-clamp-1">{flow.name}</h2>
@@ -166,19 +181,23 @@ const FlowBlock = ({ action: Action, flow }: any) => {
             <Action flow={flow} />
           ) : (
             <>
-              <Link
+              {/* <Link
                 className="btn btn-sm btn-square btn-ghost group-hover:text-primary"
                 data-tooltip-id="default-tooltip"
                 data-tooltip-content={t('edit-flow')}
                 href={`/flow/${flow.id}`}
               >
                 <GoPencil className={clsx('w-4 h-4')} />
-              </Link>
+              </Link> */}
               <button
                 className="btn btn-sm btn-square btn-ghost group-hover:text-primary"
                 data-tooltip-id="default-tooltip"
-                data-tooltip-content={t('publish-flow') + ' ' + flow.name}
-                onClick={() => setShowPublishModal(!showPublishModal)}
+                data-tooltip-content={t('publish-flow')}
+                onClick={e => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  setShowPublishModal(!showPublishModal);
+                }}
               >
                 <GoShare className={clsx('w-4 h-4')} />
               </button>
@@ -205,11 +224,11 @@ const FlowBlock = ({ action: Action, flow }: any) => {
           flow={flow}
         />
       )}
-    </div>
+    </ConditionalLink>
   );
 };
 
-const FlowList = ({ action }: any) => {
+const FlowList = ({ action, suppressLink }: any) => {
   const { flows, isLoading, isError } = useFlows();
   const t = useTranslations('component.FlowList');
 
@@ -222,7 +241,12 @@ const FlowList = ({ action }: any) => {
   return (
     <div className="flex flex-wrap justify-center gap-4 p-2">
       {flows.map((flow: any) => (
-        <FlowBlock key={flow.id} action={action} flow={flow} />
+        <FlowBlock
+          key={flow.id}
+          action={action}
+          flow={flow}
+          suppressLin={suppressLink}
+        />
       ))}
     </div>
   );

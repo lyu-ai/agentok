@@ -121,7 +121,7 @@
       "flow-empty": "尚无工作流，你可以从样例开始创建一个新的工作流。",
       "create-flow": "从模板开始构建",
       "edit-flow": "编辑工作流",
-      "publish-flow": "立即发布",
+      "publish-flow": "发布为模板",
       "publish-flow-success": "成功发布工作流 {flow_name} 。",
       "publish-flow-failed": "未能发布工作流 {flow_name}",
       "publish-flow-title": "发布工作流",
@@ -190,7 +190,7 @@
       "select-flow": "选择一个工作流开始对话"
     },
     "Flow": {
-      "select-flow": "选择一个工作流进行编辑",
+      "flow-tagline": "以可视化方式构建 AutoGen 应用",
       "new-flow": "开始构建",
       "creating-flow": "创建工作流...",
       "your-flows": "你的工作流",

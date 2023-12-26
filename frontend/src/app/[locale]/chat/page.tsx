@@ -3,18 +3,18 @@
 import { useTranslations } from 'next-intl';
 import FlowList from '../components/FlowList';
 import { RiRobot2Fill } from 'react-icons/ri';
-import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useChats } from '@/hooks';
 import { toast } from 'react-toastify';
+import clsx from 'clsx';
 import ChatList from '../components/ChatList';
 
 const ChatAction = ({ flow }: any) => {
   const t = useTranslations('page.Chat');
   const { createChat, isCreating } = useChats();
   const router = useRouter();
-  const onChat = (e: any) => {
-    createChat(flow.id, 'flow')
+  const onChat = async (e: any) => {
+    await createChat(flow.id, 'flow')
       .then(chat => {
         if (chat) {
           router.push(`/chat/${chat.id}`);
@@ -33,41 +33,17 @@ const ChatAction = ({ flow }: any) => {
       {isCreating ? (
         <div className="loading loading-sm" />
       ) : (
-        <RiRobot2Fill className="w-4 h-4" />
+        <RiRobot2Fill
+          className={clsx('w-4 h-4', { 'animate-spin': isCreating })}
+        />
       )}
       {t('start-chat')}
     </div>
   );
 };
 
-const ChatPage = ({ searchParams: { source_id, source_type } }: any) => {
+const ChatPage = () => {
   const t = useTranslations('page.Chat');
-  const router = useRouter();
-  const { createChat, isCreating } = useChats();
-  const hasCreatedChat = useRef(false);
-
-  useEffect(() => {
-    if (hasCreatedChat.current) {
-      // Prevent the side-effect if it has already run once
-      return;
-    }
-    if (source_type === 'flow' || source_type === 'template') {
-      createChat(source_id, source_type).then(chat => {
-        if (chat) {
-          hasCreatedChat.current = true;
-          router.replace(`/chat/${chat.id}`);
-        }
-      });
-    }
-  }, []);
-
-  if (source_type || isCreating) {
-    return (
-      <div className="flex items-center justify-center w-full h-full">
-        <div className="loading loading-bars" />
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col items-center w-full h-full p-2">
@@ -81,7 +57,7 @@ const ChatPage = ({ searchParams: { source_id, source_type } }: any) => {
         <ChatList maxCount={10} disableSelection horitontal />
       </div>
       <div className="divider">{t('your-flows')}</div>
-      <FlowList action={ChatAction} />
+      <FlowList action={ChatAction} suppressLink />
     </div>
   );
 };

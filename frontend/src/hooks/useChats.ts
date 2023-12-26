@@ -34,7 +34,7 @@ export function useChats() {
       });
       setChats(normalizedChats);
     }
-  }, [data, setChats]);
+  }, [data]);
 
   const [isCreating, setIsCreating] = useState(false);
   const handleCreateChat = async (
@@ -110,7 +110,6 @@ export function useChats() {
         credentials: 'include',
         body: JSON.stringify({ id, ...chat }),
       });
-      await mutate(); // Revalidate the cache to reflect the change
     } catch (error) {
       console.error('Failed to update chat:', error);
       // Rollback or handle the error state as necessary

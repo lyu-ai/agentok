@@ -30,8 +30,8 @@ export const ChatLoading = () => {
           key={i}
           className="flex flex-col w-80 h-20 bg-base-content/10 rounded-md p-3 gap-3"
         >
-          <div className="skeleton h-4 w-full" />
-          <div className="skeleton h-4 w-1/3" />
+          <div className="skeleton h-3 w-full" />
+          <div className="skeleton h-3 w-1/3" />
         </div>
       ))}
     </>

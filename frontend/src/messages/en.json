@@ -124,7 +124,7 @@
       "create-flow": "Start Build from Templates",
       "edit-flow": "Edit Flow",
       "start-chat": "Start Chat",
-      "publish-flow": "Publish",
+      "publish-flow": "Publish as Template",
       "publish-flow-success": "Successfully published flow {flow_name}",
       "publish-flow-failed": "Failed to publish flow {flow_name}",
       "publish-flow-title": "Publish Flow",
@@ -194,16 +194,16 @@
       "select-chat": "Select a session to continue, or start a new one from Flow or Template."
     },
     "Flow": {
-      "flow-tagline": "Build Multi-Agent Apps with FlowGen",
-      "new-flow": "Start to Build",
+      "flow-tagline": "Build Multi-Agent Apps Visually.",
+      "new-flow": "Build from Scratch",
       "creating-flow": "Creating Flow ...",
       "your-flows": "Chat from Your Flows",
       "start-from-template": "Start from Template",
       "more-templates": "Dicover More Templates ..."
     },
     "Gallery": {
-      "select-template-title": "Awesome Templates",
-      "select-flow": "Check out the wonderful work from FlowGen community.",
+      "select-template-title": "FlowGen Templates",
+      "select-flow": "Discover top FlowGen templates. Chat, or Fork to customize.",
       "refresh": "Refresh"
     }
   },

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useFlows } from '@/hooks';
 import TemplateList from '../components/TemplateList';
 import Link from 'next/link';
+import clsx from 'clsx';
 import { RiRobot2Fill } from 'react-icons/ri';
 
 const FlowPage = () => {
@@ -23,19 +24,18 @@ const FlowPage = () => {
   return (
     <div className="flex flex-col w-full h-full gap-3 p-2">
       <title>Flow | FlowGen</title>
-      <div className="flex flex-col items-center justify-between w-full gap-6 px-4 py-8 text-sm font-bold">
+      <div className="flex flex-col items-center justify-between w-full gap-8 px-4 py-8 text-sm font-bold">
+        <img src="/logo.svg" className="w-24 h-24" />
         <span className="text-4xl font-bold">{t('flow-tagline')}</span>
-        <div
+        <button
           onClick={onCreateFlow}
           className="btn btn-primary btn-lg px-6 flex gap-2 items-center py-2"
         >
-          {isCreating ? (
-            <div className="loading text-primary" />
-          ) : (
-            <RiRobot2Fill className="w-8 h-8" />
-          )}
+          <RiRobot2Fill
+            className={clsx('w-8 h-8', { 'animate-spin': isCreating })}
+          />
           {t('new-flow')}
-        </div>
+        </button>
       </div>
       <div className="divider">{t('your-flows')}</div>
       <div className="flex justify-center">
