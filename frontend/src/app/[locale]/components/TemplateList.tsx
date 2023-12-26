@@ -8,6 +8,7 @@ import { RiChatSmile2Line } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import Link from 'next/link';
 
 export const TemplateEmpty = () => {
   const t = useTranslations('component.TemplateList');
@@ -47,7 +48,12 @@ export const TemplateLoading = () => {
   );
 };
 
-export const TemplateBlock = ({ template, index, className }: any) => {
+export const TemplateBlock = ({
+  template,
+  index,
+  className,
+  suppressLink,
+}: any) => {
   const [isOwned, setIsOwned] = useState(false);
   const t = useTranslations('component.TemplateList');
   const { deleteTemplate, isDeleting } = useTemplates();
@@ -99,14 +105,26 @@ export const TemplateBlock = ({ template, index, className }: any) => {
       });
   };
   const randomImage = ['api', 'knowledge', 'rag', 'flow'][index % 4];
+  const ConditionalLink = ({ children, className }: any) => {
+    if (suppressLink) {
+      return <div className={className}>{children}</div>;
+    } else {
+      return (
+        <Link href={`/gallery/${template.id}`} className={className}>
+          {children}
+        </Link>
+      );
+    }
+  };
   return (
-    <a
+    <ConditionalLink
       className={clsx(
-        'group card w-80 bg-base-content/10 border border-base-content/10 hover:border-primary',
-        className
+        'group card w-80 bg-base-content/10 border border-base-content/10',
+        className,
+        {
+          'hover:shadow-box hover:shadow-primary/40 hover:text-primary hover:border-primary/40': !suppressLink,
+        }
       )}
-      href={`/gallery/${template.id}`}
-      target="_blank"
     >
       <figure>
         <img
@@ -178,7 +196,7 @@ export const TemplateBlock = ({ template, index, className }: any) => {
           )}
         </div>
       </div>
-    </a>
+    </ConditionalLink>
   );
 };
 

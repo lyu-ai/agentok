@@ -47,12 +47,15 @@ const GalleryDetailPage = ({ params }: { params: { id: string } }) => {
     <div className="relative flex flex-col w-full h-full gap-2 p-2 overflow-y-auto items-center">
       <title>Gallery | FlowGen</title>
       <div className="flex flex-col items-center justify-center gap-2 text-sm font-bold p-2">
-        <span className="text-5xl font-bold p-4">
-          {t('select-template-title')}
-        </span>
-        <span className="text-lg p-4">{t('select-flow')}</span>
+        <span className="text-5xl font-bold p-4">{template.name}</span>
+        <span className="text-lg p-4">{template.description}</span>
       </div>
-      <TemplateBlock template={template} index={index} className="w-[480px]" />
+      <TemplateBlock
+        template={template}
+        index={index}
+        className="w-[480px]"
+        suppressLink
+      />
     </div>
   );
 };
