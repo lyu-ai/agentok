@@ -238,6 +238,8 @@
       "groupchat-description": "Group agents for collaboration",
       "retrieve-assistant": "Assistant (RAG)",
       "retrieve-assistant-description": "Assistant supports RAG",
+      "math-user-proxy": "Math User Proxy",
+      "math-user-proxy-description": "User Proxy for Math",
       "retrieve-user-proxy": "User Proxy (RAG)",
       "retrieve-user-proxy-description": "User Proxy supports RAG"
     }

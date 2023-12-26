@@ -18,7 +18,7 @@ node_{{ node.id }} = {{ class_name }}(
     max_consecutive_auto_reply={{ node.data.max_consecutive_auto_reply }},
     {%- endif %}
     {%- if node.data.compress_config %}
-    compress_config={{ node.data.compress_config | tojson }},
+    compress_config={{ node.data.compress_config }},
     {%- endif %}
     {%- if node.data.class == 'LLaVAAgent' %}
     llm_config={

@@ -6,7 +6,7 @@ args = parser.parse_args()
 # Start the conversation
 user_proxy.initiate_chat(
     node_{{ first_converser['id'] }},
-    {%- if main_user_proxy.data.class == 'RetrieveUserProxyAgent' %}
+    {%- if main_user_proxy.data.class in ['RetrieveUserProxyAgent', 'MathUserProxyAgent']  %}
     problem=args.message,
     {%- else %}
     message=args.message,

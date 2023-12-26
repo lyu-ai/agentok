@@ -226,6 +226,8 @@
       "groupchat-description": "用于协作的群代理",
       "retrieve-assistant": "助手（RAG）",
       "retrieve-assistant-description": "支持 RAG 的助手",
+      "math-user-proxy": "用户代理（数学）",
+      "math-user-proxy-description": "擅长做数学的用户代理",
       "retrieve-user-proxy": "用户代理（RAG）",
       "retrieve-user-proxy-description": "支持 RAG 的用户代理"
     }

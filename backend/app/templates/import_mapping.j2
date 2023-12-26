@@ -11,6 +11,7 @@
         'RetrieveAssistantAgent': 'from autogen.agentchat.contrib.retrieve_assistant_agent import RetrieveAssistantAgent\nimport chromadb',
         'RetrieveUserProxyAgent': 'from autogen.agentchat.contrib.retrieve_user_proxy_agent import RetrieveUserProxyAgent',
         'LLaVAAgent': 'from autogen.agentchat.contrib.llava_agent import LLaVAAgent',
+        'MathUserProxyAgent': 'from autogen.agentchat.contrib.math_user_proxy_agent import MathUserProxyAgent',
     } -%}
     {%- for node in nodes -%}
         {% set cls = node['data'].get('class') %}

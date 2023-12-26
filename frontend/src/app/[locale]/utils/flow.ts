@@ -105,6 +105,14 @@ export const nodeMetas = [
     type: 'user',
     class: 'RetrieveUserProxyAgent',
   },
+  {
+    id: 'math_user_proxy',
+    icon: RiChatSmile2Line,
+    name: 'MathUserProxyAgent',
+    label: 'math-user-proxy',
+    type: 'user',
+    class: 'MathUserProxyAgent',
+  },
 ];
 
 export const getNodeLabel = (label: string, tNodeMeta: any) => {
