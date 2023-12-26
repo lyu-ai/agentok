@@ -21,7 +21,7 @@ env = Environment(
 )
 
 # Generate and execute the code asynchronously
-@router.post("/execute-code/{flow_name}")
+@router.post("/execute-code/{flow_name}", tags=["Chat"])
 async def execute_code(flow_name: str, flow: Flow, message: Message, background_tasks: BackgroundTasks, token: str = Depends(oauth2_scheme)):
     generated_dir = './generated/'
 

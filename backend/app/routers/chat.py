@@ -11,7 +11,7 @@ from ..dependencies import oauth2_scheme
 
 router = APIRouter()
 
-@router.post('/chats/{chat_id}/messages')
+@router.post('/chats/{chat_id}/messages', tags=["Chat"])
 async def api_start_chat(message: Message, chat_id: str, token: str = Depends(oauth2_scheme)):
     # No matter what happnes next, persist the message to the database beforehand
     add_messsage(token, message)

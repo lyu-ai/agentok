@@ -6,7 +6,7 @@ from ..dependencies import oauth2_scheme
 
 router = APIRouter()
 
-@router.post('/codegen')
+@router.post('/codegen', tags=["Codegen"])
 async def api_code_gen(flow: Flow, token: str = Depends(oauth2_scheme)):
   if not token:
     raise HTTPException(
@@ -16,7 +16,7 @@ async def api_code_gen(flow: Flow, token: str = Depends(oauth2_scheme)):
   code = flow2py(flow)
   return { 'code': code }
 
-@router.post('/codegen/function')
+@router.post('/codegen/function', tags=["Codegen"])
 async def api_code_gen_function(func: Function, token: str = Depends(oauth2_scheme)):
   if not token:
     raise HTTPException(
