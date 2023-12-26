@@ -100,3 +100,9 @@ input-sm[type="number"] {
   transition: max-width 0.5s ease-in, padding 0.5s ease-in, border 0.5s ease-in;
   /* If you had padding originally added, put those values here */
 }
+
+/* The default padding-left and padding-right of input-sm is too wide */
+.input-sm {
+  padding-left: 0.25rem;
+  padding-right: 0% !important;
+}

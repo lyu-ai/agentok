@@ -99,21 +99,22 @@ function Note({ id, data, selected, ...props }: any) {
             </button>
           )}
         </div>
-        <div className="w-full h-full text-sm text-white/80 overflow-y-auto">
+        <div
+          className="w-full h-full text-sm text-white/80 overflow-y-auto"
+          onDoubleClick={() => {
+            setEditing(true);
+          }}
+        >
           {editing && (
             <textarea
               value={content}
               onChange={e => setContent(e.target.value)}
               placeholder={t('note-placeholder')}
-              className="nodrag textarea w-full h-full p-1 bg-base-content/20 rounded resize-none"
+              className="nodrag nowheel textarea w-full h-full p-1 bg-base-content/20 rounded"
               rows={6}
             />
           )}
-          {!editing && (
-            <Markdown className="nodrag">
-              {data.content ?? t('note-blank')}
-            </Markdown>
-          )}
+          {!editing && <Markdown>{data.content ?? t('note-blank')}</Markdown>}
         </div>
         <NodeResizeControl
           nodeId={id}

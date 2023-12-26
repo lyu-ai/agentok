@@ -48,7 +48,7 @@ const EditableText = ({
           className={clsx(
             className,
             { 'text-right': alignRight },
-            'nodrag input input-sm input-bordered bg-transparent rounded'
+            'nodrag nowheel input input-sm input-bordered bg-transparent rounded'
           )}
         />
       ) : (

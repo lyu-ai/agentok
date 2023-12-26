@@ -90,7 +90,7 @@ function AssistantNode({ id, data, selected }: any) {
               setNodeData(instance, id, { system_message: e.target.value });
             }}
             placeholder={t('system-message-placeholder')}
-            className="nodrag textarea textarea-bordered w-full p-1 bg-transparent rounded"
+            className="nodrag nowheel textarea textarea-bordered w-full p-1 bg-transparent rounded"
             rows={2}
           />
         </div>
@@ -134,7 +134,7 @@ function AssistantNode({ id, data, selected }: any) {
                   setNodeData(instance, id, { instructions: e.target.value });
                 }}
                 placeholder={t('instructions-placeholder')}
-                className="nodrag textarea textarea-bordered w-full p-1 bg-transparent rounded resize-none"
+                className="nodrag nowheel textarea textarea-bordered w-full p-1 bg-transparent rounded resize-none"
                 rows={2}
               />
             </div>

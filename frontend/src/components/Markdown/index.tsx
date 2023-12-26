@@ -52,7 +52,7 @@ const CodeComponent = ({
   );
 };
 
-const Markdown = ({ className, children }: any) => {
+const Markdown = ({ className, children, ...props }: any) => {
   // This function is for image format in autogen
   function preprocessImageTags(content: string): string {
     // Regex to find <img> tags with the assumed format
@@ -83,6 +83,7 @@ const Markdown = ({ className, children }: any) => {
         ),
       }}
       className={clsx(className, `markdown`)}
+      {...props}
     >
       {markdownWithImages}
     </ReactMarkdown>

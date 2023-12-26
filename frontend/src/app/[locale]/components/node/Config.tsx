@@ -69,7 +69,7 @@ function Config({ id, data, selected }: any) {
               <Tip content={t('flow-name-tooltip')} />
             </div>
             <input
-              className="nodrag input input-sm input-bordered w-32 bg-transparent rounded"
+              className="nodrag nowheel input input-sm input-bordered w-32 bg-transparent rounded"
               defaultValue={data.flow_name ?? ''}
               onBlur={e =>
                 setNodeData(instance, id, { flow_name: e.target.value })
@@ -81,7 +81,7 @@ function Config({ id, data, selected }: any) {
           </div>
           <textarea
             rows={2}
-            className="nodrag textarea textarea-xs textarea-bordered w-full bg-transparent rounded resize-none"
+            className="nodrag nowheel textarea textarea-xs textarea-bordered w-full bg-transparent rounded resize-none"
             defaultValue={data.flow_description ?? ''}
             onBlur={e =>
               setNodeData(instance, id, { flow_description: e.target.value })
@@ -119,7 +119,7 @@ function Config({ id, data, selected }: any) {
                 temperature: e.target.valueAsNumber,
               });
             }}
-            className="range nodrag range-xs w-full"
+            className="range nodrag nowheel range-xs w-full"
           />
         </div>
         <div className="flex items-center justify-between text-sm">

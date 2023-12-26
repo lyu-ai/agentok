@@ -43,7 +43,7 @@ const RetrieveConfig = ({ data, setRetrieveOption, ...props }: any) => {
           <span className="shrink-0">{t('docs-path')}</span>
           <textarea
             rows={3}
-            className="nodrag textarea textarea-xs textarea-bordered rounded w-full overflow-x-auto"
+            className="nodrag nowheel textarea textarea-xs textarea-bordered rounded w-full overflow-x-auto"
             value={
               data.retrieve_config?.docs_path
                 ? data.retrieve_config?.docs_path.join('\n')

@@ -79,7 +79,7 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
           <textarea
             value={data.system_message ?? ''}
             placeholder={t('system-message-placeholder')}
-            className="nodrag textarea textarea-bordered textarea-sm w-full p-1 bg-transparent rounded resize-none"
+            className="nodrag nowheel textarea textarea-bordered textarea-sm w-full p-1 bg-transparent rounded resize-none"
             rows={2}
             onChange={e => {
               setNodeData(instance, id, { system_message: e.target.value });
@@ -108,7 +108,7 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
           </div>
           <input
             type="number"
-            className="nodrag input input-bordered input-sm w-24 bg-transparent rounded"
+            className="nodrag nowheel input input-bordered input-sm w-24 bg-transparent rounded"
             value={data.max_consecutive_auto_reply ?? 0}
             onChange={e => {
               setNodeData(instance, id, {

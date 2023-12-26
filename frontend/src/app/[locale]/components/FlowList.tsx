@@ -112,7 +112,7 @@ const PublishTemplateDialog = ({ className, flow, ...props }: any) => {
           value={description}
           rows={3}
           onChange={e => setDescription(e.target.value)}
-          className="textarea textarea-bordered"
+          className="nodrag nowheel textarea textarea-bordered"
         />
         <button className="btn btn-primary" onClick={onPublish}>
           {isPublishing && <div className="loading loading-sm" />}
