@@ -95,7 +95,6 @@ def func2py(func: Function) -> json:
 
       # Print the generated code
       generated_code = response.choices[0].message.content
-      print(generated_code)
       return json.loads(generated_code)
   except openai.APIStatusError as e:
       print(f"Error: {e}")

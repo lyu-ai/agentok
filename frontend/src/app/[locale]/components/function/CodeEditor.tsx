@@ -40,7 +40,6 @@ const CodeEditor = ({ nodeId, func, ...props }: any) => {
       .then(async res => {
         if (res.ok) {
           const generatedFunc = await res.json();
-          console.log('generatedFunc', generatedFunc);
           onUpdateCode(generatedFunc.code);
         }
       })
