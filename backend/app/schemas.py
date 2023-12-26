@@ -32,4 +32,15 @@ class Flow(BaseModel):
   created: str
   updated: str
 
+class Parameter(BaseModel):
+  id: str
+  name: str
+  description: str
+  type: Literal['boolean', 'string', 'number']
+  required: Optional[bool] = False
 
+class Function(BaseModel):
+  id: str
+  name: str
+  description: Optional[str] = None
+  parameters: List[Parameter]

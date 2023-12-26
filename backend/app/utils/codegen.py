@@ -5,7 +5,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.ext import do
 from typing import Any, Dict, List, Union
 
-from ..schemas import Flow
+from ..schemas import Flow, Function
 
 print('target path:', os.path.join(os.getcwd(), "app/", "templates"))
 # Set up the Jinja2 environment
@@ -59,24 +59,59 @@ def flow2py(flow: Flow) -> str:
                         grouped_nodes=grouped_nodes,)
 
   return code
+import openai
+from openai import OpenAI
 
+def func2py(func: Function) -> json:
+
+  client = OpenAI()
+  client.api_key = os.environ['OPENAI_API_KEY']
+
+  # Create the prompt with detailed parameter information
+  prompt = "Create a Python function as one text string based on the following information, provide the result in JSON format \{name, description, code\}"
+  prompt += f"the 'code' field should only include the function body and should not include the function name and parameters \n\n"
+  prompt += f"Function Name: {func.name}\n"
+  prompt += f"Description: {func.description}\n"
+  prompt += f"Parameters:\n"
+
+  for param in func.parameters:
+      prompt += f"- {param.name} ({param.type}): {param.description}\n"
+
+  prompt += "\nPython Function:\n"
+
+  # Now call the OpenAI API with this prompt
+  try:
+      response = client.chat.completions.create(
+          messages=[
+              {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
+              {
+                  "role": "user",
+                  "content": prompt,
+              }
+          ],
+          response_format={ "type": "json_object" },
+          model="gpt-4-1106-preview",
+      )
+
+      # Print the generated code
+      generated_code = response.choices[0].message.content
+      print(generated_code)
+      return json.loads(generated_code)
+  except openai.APIStatusError as e:
+      print(f"Error: {e}")
 
 if __name__ == '__main__':
-  flow_name = 'gptassistant'
-  data_dir = './data/'
-  generated_dir = './generated/'
+  func = {
+    'name': 'run_python',
+    'description': 'run the provided python code with ipython',
+    'parameters': [
+      {
+        'name': 'code',
+        'description': 'the python code to be run',
+        'type': 'string',
+      }
+    ],
+  }
 
-  data_path = os.path.join(data_dir, f'{flow_name}.json')
-  with open(data_path, 'r', encoding='utf-8') as file:
-      flow = json.load(file)
+  generated_code = func2py(func)
 
-  generated_code = flow2py(flow)
-  print(generated_code)
-
-  # Save the generated code to the output file
-  if not os.path.exists(generated_dir):
-      os.makedirs(generated_dir)
-  code_path = os.path.join(generated_dir, f'{flow_name}.py')
-  with open(code_path, 'w', encoding='utf-8') as file:
-    file.write(generated_code)
-    print('Generated code saved to', code_path)
