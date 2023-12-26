@@ -207,6 +207,7 @@ const Chat = ({
             className="btn btn-sm btn-ghost btn-square"
             data-tooltip-id="chat-tooltip"
             data-tooltip-content={t('clean-history')}
+            data-tooltip-place="bottom"
             onClick={onClean}
           >
             {cleaning ? (
@@ -220,6 +221,7 @@ const Chat = ({
               className="btn btn-sm btn-ghost btn-square"
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('open-in-new-window')}
+              data-tooltip-place="bottom"
               href={`/chat/${chat?.id}`}
               target="_blank"
             >
@@ -231,6 +233,7 @@ const Chat = ({
               className="btn btn-sm btn-ghost btn-square"
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('go-to-editor')}
+              data-tooltip-place="bottom"
               href={`/flow/${chat.sourceId}`}
               target="_blank"
             >
