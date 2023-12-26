@@ -62,7 +62,7 @@ const Chat = ({
     let unsubscribFunc: UnsubscribeFunc | undefined;
     pb.collection('messages')
       .subscribe('*', payload => {
-        console.log('changes_event:', payload);
+        // console.log('changes_event:', payload);
         if (payload.record.type !== 'user') {
           // The user message was added when sending, no need to add it again.
           setMessages(msgs =>
@@ -73,11 +73,11 @@ const Chat = ({
         }
         const content = payload.record.content;
         if (content.startsWith(ThinkTag.begin)) {
-          console.log('Begin thinking');
+          // console.log('Begin thinking');
           setThinking(true);
         } else if (content.startsWith(ThinkTag.end)) {
           setThinking(false);
-          console.log('End thinking');
+          // console.log('End thinking');
         }
       })
       .then(unsubFunc => {
@@ -352,8 +352,8 @@ const Chat = ({
                 {message.type === 'user' && (
                   <div className="hidden group-hover:block absolute right-1 bottom-1">
                     <button
-                      className="btn btn-xs btn-outline btn-square"
-                      data-tooltip-content={'Resend'}
+                      className="btn btn-xs btn-ghost btn-square group-hover:bg-yellow-600"
+                      data-tooltip-content={t('resend')}
                       data-tooltip-id="chat-tooltip"
                       onClick={() => onSend(message.content)}
                     >

@@ -86,7 +86,6 @@ const Flow = ({ flowId }: any) => {
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
-      console.log('onNodesChange', changes);
       if (
         !initialLoad.current &&
         changes.some(change => change.type !== 'select')

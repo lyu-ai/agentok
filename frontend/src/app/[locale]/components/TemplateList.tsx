@@ -84,8 +84,8 @@ const TemplateBlock = ({ template, index }: any) => {
       router.push(`/flow/${forkedFlow.id}`);
     }
   };
-  const onChat = (e: any) => {
-    createChat(template.id, 'template')
+  const onChat = async (e: any) => {
+    await createChat(template.id, 'template')
       .then(chat => {
         if (chat) {
           router.push(`/chat/${chat.id}`);
@@ -136,12 +136,10 @@ const TemplateBlock = ({ template, index }: any) => {
             data-tooltip-id="default-tooltip"
             data-tooltip-content={t('start-chat-tooltip')}
           >
-            {isCreating ? (
-              <div className="loading loading-xs" />
-            ) : (
-              <RiChatSmile2Line className={clsx('w-3 h-3')} />
-            )}
-            Chat
+            <RiChatSmile2Line
+              className={clsx('w-3 h-3', { 'animate-spin': isCreating })}
+            />
+            {t('start-chat')}
           </button>
           <button
             className="btn btn-xs btn-outline rounded group-hover:btn-primary"
@@ -150,7 +148,7 @@ const TemplateBlock = ({ template, index }: any) => {
             data-tooltip-content={t('fork-tooltip')}
           >
             <GoRepoForked
-              className={clsx('w-3 h-3', { 'loading loading-xs': isForking })}
+              className={clsx('w-3 h-3', { 'animate-spin': isForking })}
             />
             {t('fork')}
           </button>

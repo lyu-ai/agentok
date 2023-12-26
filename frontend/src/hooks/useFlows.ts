@@ -114,14 +114,18 @@ export function useFlows() {
   ): Promise<Flow | undefined> => {
     setIsForking(true);
     try {
-      const { id, description, ...newFlow } = template;
       const response = await fetch(`/api/flows`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(newFlow),
+        body: JSON.stringify({
+          name: template.name,
+          description: template.description,
+          flow: template.flow,
+          owner: pb.authStore.model?.id,
+        }),
       });
       if (!response.ok) {
         throw new Error(response.statusText);

@@ -70,7 +70,7 @@ const PublishTemplateDialog = ({ className, flow, ...props }: any) => {
     const result = await publishTemplate({
       name,
       description,
-      flow,
+      flow: flow.flow,
       owner: flow.owner,
     } as Template);
     if (result) {

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { Flow } from './flow';
 
 export interface Template {
-  id: string;
+  id?: string;
   name: string; // Template name is probably different with the name of the included flow
   description: string;
   thumbnail?: string; // image url

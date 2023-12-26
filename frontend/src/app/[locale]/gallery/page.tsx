@@ -2,8 +2,6 @@
 
 import { useTranslations } from 'next-intl';
 import TemplateList from '../components/TemplateList';
-import { AiOutlineReload } from 'react-icons/ai';
-import { useTemplates } from '@/hooks';
 
 // standalone means this is not a child of Popover component
 const GalleryPage = ({ onLoad: _onLoad }: any) => {

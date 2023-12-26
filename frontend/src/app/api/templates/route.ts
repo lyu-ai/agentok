@@ -3,9 +3,19 @@ import loadAuthFromCookie from '@/utils/pocketbase/server';
 
 export async function GET(request: NextRequest) {
   const pb = await loadAuthFromCookie();
-  const templates = await pb
+  let templates = await pb
     .collection('templates')
     .getFullList({ expand: 'owner' });
+
+  // TEMP: solve the data format issue
+  if (templates.length > 0 && templates[0].flow?.collectionId !== undefined) {
+    templates = templates.map(template => {
+      return {
+        ...template,
+        flow: template.flow.flow,
+      };
+    });
+  }
   return new Response(JSON.stringify(templates));
 }
 
