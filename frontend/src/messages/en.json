@@ -33,7 +33,7 @@
       "instructions": "Instructions",
       "instructions-use-defaults": "Use defaults",
       "instructions-placeholder": "Enter instructions here",
-      "max-consecutive-auto-reply": "Max Auto-Replies",
+      "max-consecutive-auto-reply": "Max Consecutive Auto-Replies",
       "llava-url": "LLaVa URL",
       "options": "More Options"
     },
