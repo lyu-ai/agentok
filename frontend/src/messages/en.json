@@ -62,11 +62,11 @@
       "start-chat": "Start Chat",
       "start-chat-tooltip": "After build the flow, click",
       "options": "More Options",
-      "human-input-mode": "Input Mode",
+      "human-input-mode": "Human Input Mode",
       "input-mode-never": "NEVER",
       "input-mode-always": "ALWAYS",
       "input-mode-terminate": "TERMINATE",
-      "max-consecutive-auto-reply": "Max Auto-Replies"
+      "max-consecutive-auto-reply": "Max Consecutive Auto-Replies"
     },
     "Note": {
       "note-placeholder": "Start to write about current agent flow",
