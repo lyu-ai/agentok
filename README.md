@@ -136,7 +136,7 @@ Please check the original notebooks with the same name in [AutoGen](https://gith
 | function_call_async                     | ✅     |                                                                           |
 | function_call                           | ✅     |                                                                           |
 | graph_modelling_language                | ⭕     | This is out of project scope. Open an issue if necessary                  |
-| group_chat_RAG                          | ✅     | This notebook does not work                                               |
+| group_chat_RAG                          | 🆘     | This notebook does not work                                               |
 | groupchat_research                      | ✅     |                                                                           |
 | groupchat_vis                           | ✅     |                                                                           |
 | groupchat                               | ✅     |                                                                           |
