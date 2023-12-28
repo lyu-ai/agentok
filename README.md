@@ -128,7 +128,8 @@ Please check the original notebooks with the same name in [AutoGen](https://gith
 
 | Example                                 | Status | Comments                                                                                                   |
 | --------------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------- |
-| [auto_feedback_from_code_execution]()   | ✅     | [Feedback from Code Execution](https://flowgen.app/flow/)                                                  |
+| simple_chat                             | ✅     | [Simple Chat](https://flowgen.app/gallery/yp0appx814q7na1)                                                 |
+| auto_feedback_from_code_execution       | ✅     | [Feedback from Code Execution](https://flowgen.app/flow/)                                                  |
 | auto_build                              | 🔲     |                                                                                                            |
 | chess                                   | 🔲     | This depends on the feature of importing custom Agent [#38](https://github.com/tiwater/flowgen/issues/38)  |
 | compression                             | ✅     |                                                                                                            |
