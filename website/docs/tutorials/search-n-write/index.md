@@ -24,8 +24,8 @@ Delete the existing sample nodes, then drag and drop the following nodes from th
 
 - `Assistant Agent`, name it `Searcher`
 - `Assistant Agent`, name it `Writer`
-- `UserProxy Agent`, name it `User`
-- `GroupChat Manager`, name it `chat_manager`
+- `UserProxy Agent`, name it `UserProxy`
+- `GroupChat`, make sure the `Involve User` option is checked
 
 ![Alt text](./img/flow.png)
 

@@ -15,7 +15,7 @@ const Navbar = () => {
       <div className="navbar-center gap-1 hidden md:flex">
         <NavMenu />
       </div>
-      <div className="navbar-end flex items-center my-auto gap-2">
+      <div className="navbar-end flex items-center my-auto gap-4">
         <a
           href="https://docs.flowgen.app/"
           target="_blank"
