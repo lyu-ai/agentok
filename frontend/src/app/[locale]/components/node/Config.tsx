@@ -68,8 +68,8 @@ function Config({ id, data, selected }: any) {
             </div>
             <input
               className="nodrag nowheel input input-sm input-bordered w-32 bg-transparent rounded"
-              defaultValue={data.flow_name ?? ''}
-              onBlur={e =>
+              value={data.flow_name ?? ''}
+              onChange={e =>
                 setNodeData(instance, id, { flow_name: e.target.value })
               }
             />
@@ -80,8 +80,8 @@ function Config({ id, data, selected }: any) {
           <textarea
             rows={2}
             className="nodrag nowheel textarea textarea-xs textarea-bordered w-full bg-transparent rounded resize-none"
-            defaultValue={data.flow_description ?? ''}
-            onBlur={e =>
+            value={data.flow_description ?? ''}
+            onChange={e =>
               setNodeData(instance, id, { flow_description: e.target.value })
             }
           />
@@ -91,8 +91,8 @@ function Config({ id, data, selected }: any) {
         <div className="text-sm">
           <input
             className="input input-sm input-bordered w-full bg-transparent rounded"
-            defaultValue={data.filter_dict ?? ''}
-            onBlur={e =>
+            value={data.filter_dict ?? ''}
+            onChange={e =>
               setNodeData(instance, id, { filter_dict: e.target.value })
             }
           />
