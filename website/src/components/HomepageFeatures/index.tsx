@@ -4,19 +4,19 @@ import styles from './styles.module.css';
 
 type FeatureItem = {
   title: string;
-  Svg: React.ComponentType<React.ComponentProps<'svg'>>;
+  image: string;
   description: JSX.Element;
 };
 
 const FeatureList: FeatureItem[] = [
   {
     title: 'Multi-Agents',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    image: '/img/rag.png',
     description: <>Built on the promising AutoGen framework from Microsoft.</>,
   },
   {
     title: 'Fully Visualized',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    image: '/img/flow.png',
     description: (
       <>
         Visualize the Agents and Agent Flow, further simplifies the building of
@@ -26,7 +26,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Open with AI',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    image: '/img/api.png',
     description: (
       <>
         Extend or customize the flow with Python, and let AI write the Python
@@ -36,14 +36,16 @@ const FeatureList: FeatureItem[] = [
   },
 ];
 
-function Feature({ title, Svg, description }: FeatureItem) {
+function Feature({ title, image, description }: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
-      <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
-      </div>
+      {/* <div className="text--center">
+        <img src={image} className={styles.featureImage} role="img" />
+      </div> */}
       <div className="text--center padding-horiz--md">
-        <Heading as="h3">{title}</Heading>
+        <Heading as="h3" className="text--primary">
+          {title}
+        </Heading>
         <p>{description}</p>
       </div>
     </div>

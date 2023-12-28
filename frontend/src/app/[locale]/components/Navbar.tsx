@@ -16,6 +16,14 @@ const Navbar = () => {
         <NavMenu />
       </div>
       <div className="navbar-end flex items-center my-auto gap-2">
+        <a
+          href="https://docs.flowgen.app/"
+          target="_blank"
+          rel="noreferrer"
+          className="link link-hover text-sm"
+        >
+          Docs
+        </a>
         <GitHubButton />
         {/* <ThemeSwitcher /> */}
         <AuthButton />

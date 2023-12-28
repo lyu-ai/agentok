@@ -2,6 +2,8 @@
 
 In this tutorial, we will learn how to use GroupChat and Functions to build an agent can search online news and write articles for you.
 
+This tutorial is available as a FlowGen template [Search and Write](https://flowgen.app/gallery/udaciyj0xp325ye). You can chat with it directly, or fork it to modify the flow.
+
 ## Prerequisites
 
 FlowGen. You can experiment with FlowGen [online](https://flowgen.app) or [run it on your local machine](https://docs.flowgen.app/docs/getting-started).
@@ -10,13 +12,13 @@ Our tutorial will use the online version of FlowGen.
 
 ## Steps
 
-### 1. Create a new Flow
+### Create a new Flow
 
 Log in to FlowGen and click Build from Scratch to create a new Flow.
 
 ![Build from Scratch](./img/build-from-scratch.png)
 
-### 2. Orchestrate the Flow
+### Orchestrate the Flow
 
 Delete the existing sample nodes, then drag and drop the following nodes from the left panel to the canvas.
 
@@ -27,7 +29,7 @@ Delete the existing sample nodes, then drag and drop the following nodes from th
 
 ![Alt text](./img/flow.png)
 
-### 3. Add Search function
+### Add Search function
 
 Please follow these steps to add a search function:
 
@@ -70,7 +72,7 @@ else:
     return []
 ```
 
-### 4. Check the configurations
+### Check the configurations
 
 Click the `More Options` button on the UserProxy node and make sure the `Code Execution` is enabled.
 
@@ -80,7 +82,7 @@ In the same option dialog, you can click the small robot head icon to fill in `T
 
 All the changes will be saved automatically.
 
-### 5. Everything is ready, Let's start with message
+### Everything is ready, Let's start with message
 
 Now, we can start to chat with the Flow. Click the `Start Chat` button on the top right corner of the canvas, and you will see a chat window. Enter `search the lastest news about Elon Musk, and generate an article on it, a very detailed article.` in the input box and press Enter to start the chat.
 
@@ -94,6 +96,6 @@ The area is not enough to show the whole chat, so we can click the `Open this ch
 
 Congratulations! You have successfully created a writing agent that can search and write articles for you.
 
-### 6. Conclusion
+### Conclusion
 
 In this tutorial, we have learned how to use GroupChat and Functions to build a flow with code execution and collaboration between multiple agents. We also learned how to use the Function Editor to create a new function and use it in the Flow.
