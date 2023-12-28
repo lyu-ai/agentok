@@ -244,7 +244,7 @@ const Chat = ({
           className={clsx(
             'flex items-center p-1 w-full bg-base-100/70 border rounded-lg shadow-lg',
             {
-              'border-accent': waitForHumanInput,
+              'border-secondary bg-secondary/40': waitForHumanInput,
               'border-primary ': !waitForHumanInput,
             }
           )}

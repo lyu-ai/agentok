@@ -18,6 +18,7 @@ const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
       );
       if (success) {
         setMessage(''); // clear input only when sent successfully
+        setImage(''); // clear image only when sent successfully
       }
     }
   };
