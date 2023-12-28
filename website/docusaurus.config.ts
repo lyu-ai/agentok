@@ -65,7 +65,7 @@ const config: Config = {
           position: 'left',
         },
         {
-          to: '/docs/tutorials/search-n-write/article',
+          to: '/docs/tutorials/search-n-write/',
           label: 'Tutorials',
           position: 'left',
         },

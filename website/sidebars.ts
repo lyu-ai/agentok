@@ -20,7 +20,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Tutorials',
-      items: ['tutorials/search-n-write/article'],
+      items: ['tutorials/search-n-write/index'],
     },
     // {
     //   type: 'category',
