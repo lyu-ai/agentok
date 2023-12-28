@@ -1,7 +1,3 @@
-# Parse command line arguments
-parser = argparse.ArgumentParser(description='Start a chat with agents.')
-parser.add_argument('message', type=str, help='The message to send to agent.')
-args = parser.parse_args()
 
 # Start the conversation
 user_proxy.initiate_chat(

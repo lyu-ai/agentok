@@ -141,7 +141,7 @@ Please check the original notebooks with the same name in [AutoGen](https://gith
 | groupchat_vis                           | ✅     |                                                                           |
 | groupchat                               | ✅     |                                                                           |
 | hierarchy_flow_using_select_speaker     | 🔲     |                                                                           |
-| human_feedback                          | 🔲     |                                                                           |
+| human_feedback                          | ✅     | [Human in the Loop](https://flowgen.app/gallery/4pbokrvi7zguv48)          |
 | inception_function                      | 🔲     |                                                                           |
 | langchain                               | ⭕     | No plan to support                                                        |
 | lmm_gpt-4v                              | ✅     |                                                                           |

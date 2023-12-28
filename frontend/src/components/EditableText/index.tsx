@@ -30,7 +30,6 @@ const EditableText = ({
   };
 
   const onApplyChanges = () => {
-    console.log('apply changes', inputValue);
     _onChange && _onChange(inputValue);
     setIsEditing(false);
     onModeChange && onModeChange(false);

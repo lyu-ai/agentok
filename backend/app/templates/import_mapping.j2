@@ -19,6 +19,20 @@
             {% do import_lines.append(import_dict[cls]) %}
         {%- endif -%}
     {%- endfor %}
+
+from dotenv import load_dotenv
+load_dotenv()  # This will load all environment variables from .env
+
+import argparse
+import os
+import time
+from termcolor import colored
+
+# Parse command line arguments
+parser = argparse.ArgumentParser(description='Start a chat with agents.')
+parser.add_argument('message', type=str, help='The message to send to agent.')
+args = parser.parse_args()
+
 import autogen
 
 # openai, whisper and moviepy are optional dependencies, currently only used in video transcript example
@@ -27,12 +41,19 @@ from openai import OpenAI
 import whisper
 from moviepy.editor import VideoFileClip
 
-import argparse
-import os
-import time
-from termcolor import colored
 from IPython import get_ipython
 
 {{ import_lines|unique|join('\n') }}
+
+# Replace the default get_human_input function for status control
+def custom_get_human_input(self, prompt: str) -> str:
+    # Set wait_for_human_input to True
+    print('__STATUS_WAIT_FOR_HUMAN_INPUT__', prompt)
+    reply = input(prompt)
+    # Restore the status to running
+    print('__STATUS_RECEIVED_HUMAN_INPUT__', prompt)
+    return reply
+
+autogen.ConversableAgent.get_human_input = custom_get_human_input
 
 {% endmacro %}

@@ -6,6 +6,12 @@ Run the service:
 uvicorn app.main:app --reload --port 5004
 ```
 
+For convenience (assumed you have created a virtual environment named `venv`):
+
+```bash
+./start.sh
+```
+
 ## Deps
 
 For retrieve related agents, should install pyautogen[retrievechat]:

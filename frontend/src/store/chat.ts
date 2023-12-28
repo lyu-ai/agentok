@@ -33,18 +33,14 @@ const useChatStore = create<ChatState>((set, get) => ({
     set({ sidebarCollapsed: collapsed }),
   updateChat: (id, newChat) =>
     set(state => {
-      console.log('Updating chat data:', id, newChat);
-      const existingChatIndex = state.chats.findIndex(chat => chat.id === id);
-      if (existingChatIndex > -1) {
-        const updatedChats = state.chats.map(chat =>
-          chat.id === id ? { ...chat, ...newChat } : chat
-        );
-        return { chats: updatedChats };
-      } else {
-        // If the chat doesn't exist, you might choose to create it or do other error handling
-        console.error(`Chat with id ${id} not found.`);
-        return { chats: state.chats };
-      }
+      const chats = state.chats.map(chat => {
+        if (chat.id === id) {
+          // Merge the existing flow with the new flow data, allowing for partial updates
+          return { ...chat, ...newChat };
+        }
+        return chat;
+      });
+      return { chats };
     }),
   deleteChat: id =>
     set(state => {

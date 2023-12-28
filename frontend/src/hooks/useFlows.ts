@@ -10,6 +10,7 @@ import {
 } from '@/app/[locale]/utils/flow';
 import { fetcher } from './fetcher';
 import pb from '@/utils/pocketbase/client';
+import { isEqual } from 'lodash-es';
 
 export function useFlows() {
   const { data, error, mutate } = useSWR('/api/flows', fetcher);
@@ -17,9 +18,10 @@ export function useFlows() {
   const setFlows = useFlowStore(state => state.setFlows);
   const deleteFlow = useFlowStore(state => state.deleteFlow);
   const updateFlow = useFlowStore(state => state.updateFlow);
+  const getFlowById = useFlowStore(state => state.getFlowById);
 
   useEffect(() => {
-    if (data) {
+    if (data && !isEqual(data, flows)) {
       setFlows(data);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,6 +99,7 @@ export function useFlows() {
         body: JSON.stringify(flowToUpdate),
       });
       if (!response.ok) throw new Error(await response.text());
+      return await response.json();
     } catch (error) {
       console.error('Failed to update the flow:', error);
       // Rollback local state changes
@@ -152,6 +155,7 @@ export function useFlows() {
     updateFlow: handleUpdateFlow,
     deleteFlow: handleDeleteFlow,
     forkFlow: handleForkFlow,
+    getFlowById,
     isCreating,
     isDeleting,
     isForking,
@@ -160,9 +164,15 @@ export function useFlows() {
 }
 
 export function useFlow(id: string) {
-  const { flows, isLoading, isError, updateFlow, isUpdating } = useFlows();
+  const {
+    isLoading,
+    isError,
+    updateFlow,
+    isUpdating,
+    getFlowById,
+  } = useFlows();
   return {
-    flow: flows.find(flow => flow.id === id),
+    flow: getFlowById(id),
     isLoading,
     isError: isError,
     updateFlow: (flow: Flow) => updateFlow(id, flow),

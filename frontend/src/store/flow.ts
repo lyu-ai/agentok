@@ -24,16 +24,17 @@ const useFlowStore = create<FlowState>((set, get) => ({
   setFlows: flows => set({ flows }),
   updateFlow: (id, newFlow) =>
     set(state => {
-      const existingFlowIndex = state.flows.findIndex(flow => flow.id === id);
-      const newFlows =
-        existingFlowIndex > -1
-          ? state.flows.map(flow => (flow.id === id ? newFlow : flow))
-          : [...state.flows, newFlow];
-      return { flows: newFlows };
+      const flows = state.flows.map(flow => {
+        if (flow.id === id) {
+          // Merge the existing flow with the new flow data, allowing for partial updates
+          return { ...flow, ...newFlow };
+        }
+        return flow;
+      });
+      return { flows };
     }),
   deleteFlow: id =>
     set(state => {
-      console.log('Deleting flow with id:', id);
       return {
         flows: state.flows.filter(flow => flow.id !== id),
       };

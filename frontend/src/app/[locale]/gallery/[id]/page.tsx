@@ -17,7 +17,6 @@ const GalleryDetailPage = ({ params }: { params: { id: string } }) => {
       const index = templates.findIndex(
         (template: any) => template.id === params.id
       );
-      console.log('foundIndex', index);
       if (index >= 0) {
         setTemplate(templates[index]);
         setIndex(index);
@@ -40,8 +39,6 @@ const GalleryDetailPage = ({ params }: { params: { id: string } }) => {
       </div>
     );
   }
-
-  console.log('template', template);
 
   return (
     <div className="relative flex flex-col w-full h-full gap-2 p-2 overflow-y-auto items-center">

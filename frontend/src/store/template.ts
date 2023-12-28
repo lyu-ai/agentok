@@ -26,7 +26,6 @@ const useTemplateStore = create<TemplateState>((set, get) => ({
   setTemplates: templates => set({ templates }),
   deleteTemplate: id =>
     set(state => {
-      console.log('Deleting template with id:', id);
       return {
         templates: state.templates.filter(flow => flow.id !== id),
       };
