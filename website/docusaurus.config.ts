@@ -3,7 +3,7 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'FlowGen Docs',
+  title: 'FlowGen',
   tagline: 'AutoGen Visualized - Visual Tools for Multi-Agent Development.',
   favicon: 'img/favicon.ico',
 
