@@ -2,14 +2,18 @@ import asyncio
 from asyncio import subprocess
 from termcolor import colored
 
-from .pocketbase import add_messsage
+from .pocketbase import add_message, set_chat_status
 from .parser import OutputParser  # Assuming OutputParser is in output_parser.py
+
+# Global dictionary to store references to subprocesses
+# Structure: {chat_id: {"process": <process_obj>, "stdin": <StreamWriter_obj>}}
+subprocesses = {}
 
 # Callback example
 def print_message(message):
     print("New message received:", message)
 
-async def run_assistant(message: str, source_path: str, on_message=print_message):
+async def run_assistant(chat_id: str, message: str, source_path: str, on_message=print_message):
     command = ["python3", source_path, f'"{message}"']
     print(colored(text=f'Running {" ".join(command)}', color='green'))
 
@@ -17,28 +21,40 @@ async def run_assistant(message: str, source_path: str, on_message=print_message
     process = await asyncio.create_subprocess_exec(
         *command,
         stdout=subprocess.PIPE,
+        stdin=subprocess.PIPE,
         stderr=subprocess.PIPE  # Capture stderr too, if you need to handle errors
     )
+
+    # Store the process and its stdin so we can use it to send input later
+    subprocesses[chat_id] = {"process": process, "stdin": process.stdin}
 
     output_parser = OutputParser(on_message=on_message)
 
     on_message({
         'type': 'assistant',
-        'content': 'ASSISTANT_CHAT_BEGIN',
+        'content': '__STATUS_RUNNING__',
     })
-
 
     # Process the subprocess output until it terminates
     async for line in process.stdout:
         if line:  # Truthy if the line is not empty
             response_message = line.decode().rstrip()  # Remove trailing newline/whitespace
             print('🤖', response_message)
-            output_parser.parse_line(response_message)
+            if response_message.startswith(('__STATUS_RECEIVED_HUMAN_INPUT__', '__STATUS_WAIT_FOR_HUMAN_INPUT__')):
+                on_message({
+                    'type': 'assistant',
+                    'content': response_message,
+                })
+            else:
+                output_parser.parse_line(response_message)
         else:
             break  # No more output, terminate loop
 
     # Wait for the subprocess to finish if it hasn't already
     await process.wait()
+
+    # Cleanup happens here regardless of whether there was an error or not
+    subprocesses.pop(chat_id, None)
 
     # Check the exit code of the subprocess to see if there were errors
     if process.returncode != 0:
@@ -51,13 +67,27 @@ async def run_assistant(message: str, source_path: str, on_message=print_message
         last_line = error_message.splitlines()[-1]
         on_message({
             'type': 'assistant',
-            'content': f'ASSISTANT_CHAT_END {process.returncode}: {last_line}',
+            'content': f'__STATUS_COMPLETED__ {process.returncode}: {last_line}',
         })
     else:
         on_message({
             'type': 'assistant',
-            'content': 'ASSISTANT_CHAT_END DONE',
+            'content': '__STATUS_COMPLETED__ DONE',
         })
 
 # Example of how to call `run_assistant`
 # Ensure the event loop is running and call await run_assistant("<message>", "<source_path>")
+
+async def send_human_input(chat_id: str, user_input: str):
+    """Sends input to a running subprocess."""
+    proc_info = subprocesses.get(chat_id)
+    if not proc_info:
+        return {"error": "No assistant found with that chat ID."}
+
+    try:
+        # Send input to the process's stdin
+        proc_info["stdin"].write(user_input.encode() + b'\n')
+        await proc_info["stdin"].drain()
+        return {"detail": "Input sent to assistant."}
+    except Exception as e:
+        return {"error": str(e)}

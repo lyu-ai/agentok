@@ -29,7 +29,6 @@ function Config({ id, data, selected }: any) {
       <Toolbar
         nodeId={id}
         selected={selected}
-        hideDelete
         className="border-gray-600/90 bg-gray-700/90"
       >
         <div
@@ -66,7 +65,6 @@ function Config({ id, data, selected }: any) {
               <div className="font-bold text-base-content/80">
                 {t('flow-name')}
               </div>
-              <Tip content={t('flow-name-tooltip')} />
             </div>
             <input
               className="nodrag nowheel input input-sm input-bordered w-32 bg-transparent rounded"
@@ -88,7 +86,7 @@ function Config({ id, data, selected }: any) {
             }
           />
         </div>
-        <div className="divider my-0" />
+        <div className="divider my-1">{t('model-config')}</div>
         <div className="font-bold">{t('filter-dict')}</div>
         <div className="text-sm">
           <input
@@ -99,7 +97,6 @@ function Config({ id, data, selected }: any) {
             }
           />
         </div>
-        <div className="divider my-1">{t('model-config')}</div>
         <div className="flex items-center justify-between text-sm w-full">
           <div className="flex items-center gap-2">
             <span className="font-bold">{t('temperature')}</span>

@@ -144,7 +144,7 @@ function AssistantNode({ id, data, selected }: any) {
             </div>
           </>
         )}
-        <div className="flex items-center justify-between text-sm text-base-content/60">
+        <div className="flex items-center justify-between text-sm text-base-content/60 gap-2">
           <div className="font-bold text-base-content/80">
             {t('max-consecutive-auto-reply')}
           </div>

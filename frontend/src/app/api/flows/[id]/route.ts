@@ -22,6 +22,7 @@ export async function POST(
   const flow = await request.json();
   try {
     const pb = await loadAuthFromCookie();
+    console.log(`POST /flows/${params.id}`, flow);
     const res = await pb.collection('flows').update(params.id, flow);
     return new Response(JSON.stringify(res));
   } catch (e) {

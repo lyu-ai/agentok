@@ -10,9 +10,8 @@ import { useState } from 'react';
 
 const ChatButton = ({ className, flow }: any) => {
   const [chat, setChat] = useState<ChatType | undefined>();
-  const { chats } = useChats();
   const t = useTranslations('component.ChatButton');
-  const { createChat, isCreating } = useChats();
+  const { chats, createChat, isCreating } = useChats();
 
   const onClick = async () => {
     const existingChat = chats.findLast(chat => chat.sourceId === flow.id);

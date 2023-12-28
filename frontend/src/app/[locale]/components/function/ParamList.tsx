@@ -83,7 +83,6 @@ const ParamList = ({ nodeId, func, ...props }: any) => {
     setNodeData(instance, nodeId, { functions: newFunctions });
   };
   const onUpdate = (param: any, name: string, value: any) => {
-    console.log('onUpdate', param, name, value);
     const newFunctions = node?.data?.functions?.map((f: any) => {
       if (f.id === func.id) {
         const newParams = f.parameters?.map((p: any) => {

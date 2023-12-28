@@ -6,7 +6,7 @@ import tempfile
 from termcolor import colored
 
 from ..schemas import Flow, Message
-from ..utils import flow2py, add_messsage, get_source_metadata, run_assistant
+from ..utils import flow2py, add_message, get_source_metadata, run_assistant, send_human_input, set_chat_status
 from ..dependencies import oauth2_scheme
 
 router = APIRouter()
@@ -14,7 +14,7 @@ router = APIRouter()
 @router.post('/chats/{chat_id}/messages', tags=["Chat"])
 async def api_start_chat(message: Message, chat_id: str, token: str = Depends(oauth2_scheme)):
     # No matter what happnes next, persist the message to the database beforehand
-    add_messsage(token, message)
+    add_message(token, message)
 
     # Check the existence of latest code
     source = get_source_metadata(token, chat_id)
@@ -35,5 +35,13 @@ async def api_start_chat(message: Message, chat_id: str, token: str = Depends(oa
     def on_message(assistant_message):
         assistant_message['chat'] = chat_id
         assistant_message['owner'] = message.owner
-        add_messsage(token, assistant_message)
-    await run_assistant(message.content, source_path, on_message=on_message)
+        add_message(token, assistant_message)
+
+    await run_assistant(chat_id, message.content, source_path, on_message=on_message)
+
+@router.post('/chats/{chat_id}/inputs', tags=["Chat"])
+async def api_human_input(message: Message, chat_id: str, token: str = Depends(oauth2_scheme)):
+    # No matter what happnes next, persist the message to the database beforehand
+    add_message(token, message)
+
+    return await send_human_input(chat_id, message.content)

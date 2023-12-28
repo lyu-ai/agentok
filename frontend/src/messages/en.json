@@ -81,6 +81,7 @@
       "thinking": "I am thinking hard ...",
       "thinking-begin": "Begin Thinking",
       "thinking-end": "End of Thinking",
+      "wait-for-human-input": "Wait for human input ...",
       "start-chat": "Start Chat",
       "reload-history": "Reload chat history",
       "clean-history": "Clean chat history",

@@ -3,6 +3,7 @@ import useChatStore, { Chat } from '@/store/chat';
 import { useEffect, useState } from 'react';
 import { fetcher } from './fetcher';
 import pb from '@/utils/pocketbase/client';
+import { isEqual } from 'lodash-es';
 
 export function useChats() {
   const { data, error, mutate } = useSWR('/api/chats', fetcher);
@@ -32,7 +33,9 @@ export function useChats() {
           };
         }
       });
-      setChats(normalizedChats);
+      if (!isEqual(normalizedChats, chats)) {
+        setChats(normalizedChats);
+      }
     }
   }, [data]);
 

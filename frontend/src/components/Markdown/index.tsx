@@ -79,7 +79,10 @@ const Markdown = ({ className, children, ...props }: any) => {
           return <a target="_blank" style={{ color: '#0022cc' }} {...data} />;
         },
         img: ({ node, ...props }) => (
-          <img style={{ maxWidth: '480px', maxHeight: '320px' }} {...props} />
+          <img
+            style={{ maxWidth: '480px', width: '100%', maxHeight: '320px' }}
+            {...props}
+          />
         ),
       }}
       className={clsx(className, `markdown`)}

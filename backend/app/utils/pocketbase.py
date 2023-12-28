@@ -10,7 +10,7 @@ load_dotenv()  # This will load all environment variables from .env
 
 POCKETBASE_URL: str = os.environ.get("POCKETBASE_URL")
 
-def add_messsage(token: str, message: Message):
+def add_message(token: str, message: Message):
   # Send requests to PocketBase instance
   message_to_persist = dict(message)
   message_to_persist.pop('id', None) # Should remove id for auto-generation
@@ -50,3 +50,13 @@ def get_source_metadata(token: str, chat: str):
     )
     response.raise_for_status()
     return response.json()
+
+def set_chat_status(token: str, chat_id: str, status: Literal['running', 'wait_for_human_input']):
+  print('set_chat_status', chat_id, status)
+  response = requests.patch(
+    f'{POCKETBASE_URL}/api/collections/chats/records/{chat_id}',
+    headers={"Authorization": f"Bearer {token}"},
+    json={"status": status}
+  )
+  response.raise_for_status()
+  return response.json()

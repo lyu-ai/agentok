@@ -81,6 +81,7 @@
       "thinking": "我正在努力思考...",
       "thinking-begin": "开始思考",
       "thinking-end": "思考结束",
+      "wait-for-human-input": "等待用户输入...",
       "start-chat": "开始聊天",
       "reload-history": "重新加载聊天记录",
       "clean-history": "清除聊天记录",

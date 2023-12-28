@@ -13,7 +13,6 @@ const Toolbar = ({
   const reactFlowInstance = useReactFlow();
   const t = useTranslations('node.Toolbar');
   const onDelete = (e: any) => {
-    console.log('deleting', nodeId);
     e.stopPropagation();
 
     const node = reactFlowInstance.getNode(nodeId);

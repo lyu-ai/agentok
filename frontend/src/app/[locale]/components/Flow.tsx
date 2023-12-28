@@ -23,12 +23,13 @@ import Json from './Json';
 import { genId } from '@/utils/id';
 import ChatButton from './ChatButton';
 import { useTranslations } from 'next-intl';
-import { useFlow } from '@/hooks';
+import { useFlow, useFlows } from '@/hooks';
 import { useRouter } from 'next/navigation';
 import { debounce } from 'lodash-es';
 
 const Flow = ({ flowId }: any) => {
   const { flow, updateFlow, isUpdating, isLoading, isError } = useFlow(flowId);
+
   const [mode, setMode] = useState<'main' | 'flow' | 'json' | 'python'>('flow');
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
@@ -265,9 +266,7 @@ const Flow = ({ flowId }: any) => {
         <ViewToggle mode={'main'} setMode={() => router.push('/flow')} />
         <ViewToggle mode={'python'} setMode={setMode} />
         <ViewToggle mode={'json'} setMode={setMode} />
-        <ChatButton
-          flow={{ id: flow.id, name: flow?.name ?? genId(), flow: toObject() }}
-        />
+        <ChatButton flow={flow} />
       </div>
       <NodeButton onAddNode={onAddNode} className="absolute left-2 top-2" />
     </div>
