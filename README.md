@@ -112,7 +112,7 @@ If you're interested in contributing to the development of this project or wish 
 Once you've started both the frontend and backend services by following the steps previously outlined, you can access the application by opening your web browser and navigating to:
 
 - Frontend: http://localhost:2855
-- Backend: http://localhost:5004 (Here I should provide a Swagger API doc, maybe later.)
+- Backend: http://localhost:5004 (OpenAPI docs served at http://localhost:5004/redoc)
 - PocketBase: http://localhost:7676
 
 If your services are started successfully and running on the expected ports, you should see the user interface or receive responses from the backend via this URL.
