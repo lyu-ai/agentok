@@ -12,14 +12,10 @@ const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
 
   const onSend = async () => {
     setShowImagePanel(false);
+    setMessage(''); // clear input only when sent successfully
+    setImage(''); // clear image only when sent successfully
     if (_onSend) {
-      const success = await _onSend(
-        image ? `${message} <img ${image}>` : message
-      );
-      if (success) {
-        setMessage(''); // clear input only when sent successfully
-        setImage(''); // clear image only when sent successfully
-      }
+      await _onSend(image ? `${message} <img ${image}>` : message);
     }
   };
   const onKeyDown = (event: any) => {
