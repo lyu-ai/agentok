@@ -130,9 +130,9 @@ Please check the original notebooks with the same name in [AutoGen](https://gith
 | --------------------------------------- | ------ | ------------------------------------------------------------------------- |
 | [auto_feedback_from_code_execution]()   | ✅     | [Feedback from Code Execution](https://flowgen.app/flow/)                 |
 | auto_build                              | 🔲     |                                                                           |
-| chess                                   | 🔲     |                                                                           |
+| chess                                   | 🔲     | This depends on the feature of importing custom Agent #38                 |
 | compression                             | ✅     |                                                                           |
-| dalle_and_gpt4v                         | 🔲     | This requires the import of custom Agent class                            |
+| dalle_and_gpt4v                         | 🔲     | TThis depends on the feature of importing custom Agent #38                |
 | function_call_async                     | ✅     |                                                                           |
 | function_call                           | ✅     |                                                                           |
 | graph_modelling_language                | ⭕     | This is out of project scope. Open an issue if necessary                  |
