@@ -48,4 +48,20 @@ llm_config = {
     "max_tokens": {{ config_node['data'].get('max_tokens') }},
     {%- endif %}
 }
+
+{%- if group_chat_node %}
+group_llm_config={
+    "config_list": config_list,
+    {%- if config_node['data'].get('timeout') is not none %}
+    "timeout": {{ config_node.timeout }},
+    {%- endif %}
+    {%- if config_node['data'].get('temperature') is not none %}
+    "temperature": {{ config_node['data'].get('temperature') }},
+    {%- endif %}
+    {%- if config_node['data'].get('max_tokens') is not none %}
+    "max_tokens": {{ config_node['data'].get('max_tokens') }},
+    {%- endif %}
+}
+{%- endif %}
+
 {%- endmacro %}

@@ -40,14 +40,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/tiwater/flowgen/tree/main/packages/create-docusaurus/templates/shared/',
-        },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/tiwater/flowgen/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/tiwater/flowgen/edit/main/website',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -67,6 +60,21 @@ const config: Config = {
       },
       items: [
         {
+          to: '/docs/getting-started',
+          label: 'Getting Started',
+          position: 'left',
+        },
+        {
+          to: '/docs/tutorials/search-n-write/article',
+          label: 'Tutorials',
+          position: 'left',
+        },
+        {
+          href: 'https://svc.flowgen.app/redoc',
+          label: 'API',
+          position: 'right',
+        },
+        {
           href: 'https://github.com/tiwater/flowgen',
           label: 'GitHub',
           position: 'right',
@@ -74,22 +82,7 @@ const config: Config = {
       ],
     },
     footer: {
-      style: 'dark',
-      // links: [
-      //   {
-      //     title: 'Legal',
-      //     items: [
-      //       {
-      //         label: 'Term of Services',
-      //         to: '/legal/tos',
-      //       },
-      //       {
-      //         label: 'Privacy Policy',
-      //         to: '/legal/privacy',
-      //       },
-      //     ],
-      //   },
-      // ],
+      style: 'light',
       copyright: `© ${new Date().getFullYear()} FlowGen. Built with Docusaurus.`,
     },
     prism: {

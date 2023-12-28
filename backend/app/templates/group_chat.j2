@@ -14,5 +14,6 @@ groupchat_{{ group_chat_node['id'] }} = GroupChat(agents=[
     max_round={{ group_chat_node.data.max_round }},
     {%- endif %}
 )
-node_{{ group_chat_node['id'] }} = GroupChatManager(groupchat=groupchat_{{ group_chat_node['id'] }}, llm_config=llm_config)
+
+node_{{ group_chat_node['id'] }} = GroupChatManager(groupchat=groupchat_{{ group_chat_node['id'] }}, llm_config=group_llm_config)
 {% endmacro %}
