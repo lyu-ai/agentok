@@ -68,10 +68,12 @@ const Chat = ({
           setThinking(true);
         } else if (content.startsWith(StatusMessage.completed)) {
           setThinking(false);
+          setWaitForHumanInput(false);
           // console.log('End thinking');
         } else if (content.startsWith(StatusMessage.waitForHumanInput)) {
           setWaitForHumanInput(true);
         } else if (content.startsWith(StatusMessage.receivedHumanInput)) {
+          // BUG: This does not happen as expected
           setWaitForHumanInput(false);
         }
       })
@@ -119,7 +121,7 @@ const Chat = ({
       type: 'user',
       id: genId(),
       chat: chatId,
-      content: message,
+      content: message ?? '\n', // If it's empty message, let's simulate a Enter key-press
     };
     setMessages(msgs => [...msgs, newMessage]);
     const res = await fetch(

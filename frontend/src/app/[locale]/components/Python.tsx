@@ -61,7 +61,6 @@ const Python = ({ data, setMode }: any) => {
           language="python"
           style={style}
           showLineNumbers
-          wrapLongLines
           showInlineLineNumbers
           className="h-full text-xs text-base-content"
         >
