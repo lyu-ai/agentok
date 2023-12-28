@@ -1,6 +1,8 @@
 {
-  "name": "website",
-  "version": "0.0.0",
+  "name": "docs",
+  "version": "0.5.0",
+  "description": "FlowGen Docs",
+  "license": "Apache-2.0",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",

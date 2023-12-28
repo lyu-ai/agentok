@@ -131,7 +131,7 @@ const MessageBlock = ({ chatId, message, onSend }: any) => {
       </div>
       {messageHeader}
       <div
-        className={`relative group chat-bubble rounded-md p-2 ${messageClass} break-all`}
+        className={`relative group chat-bubble rounded-md p-2 ${messageClass} break-word word-wrap`}
         style={{ maxWidth: '100%' }}
       >
         {message.content ? (

@@ -1,53 +1,53 @@
-# GroupChat and Functions
+# Building a News-Searching and Article-Writing Agent
 
-In this tutorial, we will learn how to use GroupChat and Functions to build an agent can search online news and write articles for you.
+In this tutorial, we'll dive into the use of FlowGen's GroupChat and Functions features to develop an agent capable of searching for online news and crafting articles for you.
 
-This tutorial is available as a FlowGen template [Search and Write](https://flowgen.app/gallery/udaciyj0xp325ye). You can chat with it directly, or fork it to modify the flow.
+You can access this tutorial as a FlowGen template named [Search and Write](https://flowgen.app/gallery/udaciyj0xp325ye). Feel free to interact with it directly, or fork the flow to apply your custom modifications.
 
 ## Prerequisites
 
-FlowGen. You can experiment with FlowGen [online](https://flowgen.app) or [run it on your local machine](https://docs.flowgen.app/docs/getting-started).
+Before we begin, ensure you have access to FlowGen. You can explore FlowGen [online](https://flowgen.app) or opt to [install it on your local system](https://docs.flowgen.app/docs/getting-started).
 
-Our tutorial will use the online version of FlowGen.
+This tutorial will utilize the online platform of FlowGen.
 
-## Steps
+## Steps to Build Your Agent
 
-### Create a new Flow
+### Initiating a New Flow
 
-Log in to FlowGen and click Build from Scratch to create a new Flow.
+After logging into FlowGen, you can kickstart your new flow by clicking on 'Build from Scratch'.
 
 ![Build from Scratch](./img/build-from-scratch.png)
 
-### Orchestrate the Flow
+### Orchestrating the Flow
 
-Delete the existing sample nodes, then drag and drop the following nodes from the left panel to the canvas.
+Clear the deck by deleting any pre-existing sample nodes. Then, from the left panel, drag and drop the following nodes onto your workspace:
 
-- `Assistant Agent`, name it `Searcher`
-- `Assistant Agent`, name it `Writer`
-- `UserProxy Agent`, name it `UserProxy`
-- `GroupChat`, make sure the `Involve User` option is checked
+- First `Assistant Agent`, aptly named `Searcher`.
+- Second `Assistant Agent`, titled `Writer` — make sure to append 'add TERMINATE at the end' in the `system_message`, otherwise the conversation will persist indefinitely.
+- `UserProxy Agent`, referred to as `UserProxy`.
+- `GroupChat`, with the `Involve User` option enabled.
 
-![Alt text](./img/flow.png)
+![Flow Diagram](./img/flow.png)
 
-### Add Search function
+### Integrating the Search Function
 
-Please follow these steps to add a search function:
+Now let's insert a search capability:
 
-1. Click the `Build Functions` button on Config node to open the Function Editor.
+1. In the configuration node, select the `Build Functions` option to bring up the Function Editor.
 
-1. Click the Add Function button to add a new function.
+2. Add a new function by clicking on the 'Add Function' button.
 
-1. Set the function name to `search_bing_news`, and set the description as `Search Bing for the question and return a list of found links.`, add a parameter `keyword`, with description as `The search keyword for Bing`.
+3. Name this function `search_bing_news`, and for its description, enter `Search Bing with the query and return a compilation of links.` Next, introduce a parameter termed `keyword`, and describe it as `The Bing search term.`
 
-1. Click the `Generate Code` button to generate the code for the function.
+4. Generate the code by clicking on `Generate Code`. Please note that the function name, descriptions, and parameter explanations play a vital part in the accurate generation of code, so a clear and precise definition is critical.
 
-1. Check the generated code, and fix issues. AI can do the magic, but with some flaws. In this case, the generated code is not correct, we need to fix it.
+5. Review the code for any potential errors or areas of improvement. AI is proficient but not infallible.
 
-The function UI should look like this:
+Once completed, your function editor should resemble this:
 
-![Alt text](./img/function-editor.png)
+![Function Editor](./img/function-editor.png)
 
-The generated code should look like this:
+The auto-generated code will look something like this:
 
 ```python
 import requests
@@ -72,30 +72,30 @@ else:
     return []
 ```
 
-### Check the configurations
+### Verifying Configurations
 
-Click the `More Options` button on the UserProxy node and make sure the `Code Execution` is enabled.
+Access the `More Options` on the UserProxy node ensuring that `Code Execution` is enabled.
 
-![Alt text](./img/code-execution.png)
+![Code Execution Option](./img/code-execution.png)
 
-In the same option dialog, you can click the small robot head icon to fill in `TERMINATE` as the termination check flag of messages.
+Within the same dialog, you can set `TERMINATE` as the message's termination flag by clicking on the robot icon.
 
-All the changes will be saved automatically.
+Rest assured, all configurations are preserved automatically.
 
-### Everything is ready, Let's start with message
+### Initiating the Chat
 
-Now, we can start to chat with the Flow. Click the `Start Chat` button on the top right corner of the canvas, and you will see a chat window. Enter `search the lastest news about Elon Musk, and generate an article on it, a very detailed article.` in the input box and press Enter to start the chat.
+Everything's set! Hit the `Start Chat` button situated on the canvas's top-right corner to engage with the Flow. Prompt the process with an entry like `search the latest news about Elon Musk and generate a detailed article on it.`
 
-The Searcher will search the news about Elon Musk and return a list of links. Then the Writer will extract the information from these links and then write a detailed article based on these retrieved news.
+Consequently, the `Searcher` will retrieve a list of relevant links, after which the `Writer` expertly extracts information from these sources to fabricate a comprehensive article.
 
-![Embed Chat](./img/embed-chat.png)
+![Chat Display](./img/embed-chat.png)
 
-The area is not enough to show the whole chat, so we can click the `Open this chat in new window` to open the chat in a new tab.
+If the display area is inadequate, utilize the 'Open this chat in a new window' option for an expanded view.
 
-![Standalone Chat](./img/chat.png)
+![Expanded Chat](./img/chat.png)
 
-Congratulations! You have successfully created a writing agent that can search and write articles for you.
+Kudos! You've successfully configured an intelligent agent adept at performing online searches and article generation.
 
 ### Conclusion
 
-In this tutorial, we have learned how to use GroupChat and Functions to build a flow with code execution and collaboration between multiple agents. We also learned how to use the Function Editor to create a new function and use it in the Flow.
+Throughout this tutorial, we’ve explored the implementation of GroupChat and Functions within a flow, enabling code execution and agent collaboration. Additionally, you've learned to harness the Function Editor for creating custom functions to enhance your workflow.

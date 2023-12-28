@@ -3,8 +3,11 @@
 import pb from '@/utils/pocketbase/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { FaGithub, FaXTwitter } from 'react-icons/fa6';
+import { BiSolidFaceMask } from 'react-icons/bi';
+import { FaGithub, FaMasksTheater, FaXTwitter } from 'react-icons/fa6';
 import { FcGoogle } from 'react-icons/fc';
+import { GoZap } from 'react-icons/go';
+import { HiSparkles } from 'react-icons/hi2';
 
 const providers = [
   { id: 'github', name: 'GitHub', icon: FaGithub },
@@ -139,10 +142,11 @@ const Login = ({
               Sign up this Email
             </button>
             <button
-              className="link link-hover link-primary"
+              className="link link-hover link-primary flex items-center gap-1"
               onClick={() => signIn(true)}
             >
-              Sign in as Guest
+              <GoZap className="w-4 h-4" />
+              Login as Guest
             </button>
           </div>
         </div>
