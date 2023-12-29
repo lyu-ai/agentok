@@ -11,6 +11,7 @@ import ReactFlow, {
   useStoreApi,
 } from 'reactflow';
 import { nodeTypes } from '../../utils/flow';
+import Markdown from '@/components/Markdown';
 
 const FlowViewer = ({ template, className }: any) => {
   const [nodes, setNodes] = useState<any[]>([]);
@@ -24,7 +25,7 @@ const FlowViewer = ({ template, className }: any) => {
     fitView({ padding: 0.1 });
   }, [template?.flow?.nodes, template?.flow?.edges, fitView]);
 
-  console.log('nodes:', template.flow.nodes);
+  console.log('nodes:', template.flow?.nodes);
 
   // Suppress error code 002
   // https://github.com/xyflow/xyflow/issues/3243
@@ -97,7 +98,9 @@ const GalleryDetailPage = ({ params }: { params: { id: string } }) => {
       <title>Gallery | FlowGen</title>
       <div className="flex flex-col items-center justify-center gap-2 text-sm font-bold p-2">
         <span className="text-5xl font-bold p-4">{template.name}</span>
-        <span className="text-lg p-4 font-normal">{template.description}</span>
+        <span className="text-lg p-4 font-normal max-w-5xl">
+          <Markdown>{template.description}</Markdown>
+        </span>
       </div>
       <div className="flex items-center justify-center w-full gap-2 text-sm font-bold">
         <TemplateBlock template={template} index={index} suppressLink />
