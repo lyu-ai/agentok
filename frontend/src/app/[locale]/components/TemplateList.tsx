@@ -4,12 +4,12 @@ import { GoRepoForked, GoTrash } from 'react-icons/go';
 import { useChats, useFlows, useTemplates } from '@/hooks';
 import clsx from 'clsx';
 import pb, { getAvatarUrl } from '@/utils/pocketbase/client';
-import { RiChatSmile2Line } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
-import { PiChatsTeardrop } from 'react-icons/pi';
+import { PiChatCircleDotsBold } from 'react-icons/pi';
+import Markdown from '@/components/Markdown';
 
 export const TemplateEmpty = () => {
   const t = useTranslations('component.TemplateList');
@@ -18,9 +18,6 @@ export const TemplateEmpty = () => {
       <div className="flex flex-col gap-2 items-center text-base-content/60">
         <BsInboxes className="w-12 h-12" />
         <div className="mt-2 text-sm">{t('template-empty')}</div>
-        {/* <div className="btn btn-sm btn-primary" onClick={onReset}>
-          {t('new-template')}
-        </div> */}
       </div>
     </div>
   );
@@ -123,7 +120,7 @@ export const TemplateBlock = ({
         'group card w-80 bg-base-content/10 border border-base-content/10',
         className,
         {
-          'hover:shadow-box hover:shadow-primary/40 hover:text-primary hover:border-primary/40': !suppressLink,
+          'hover:shadow-box hover:shadow-primary/40 hover:border-primary/40': !suppressLink,
         }
       )}
     >
@@ -137,8 +134,10 @@ export const TemplateBlock = ({
           className="rounded-t-md h-48 w-full object-cover"
         />
       </figure>
-      <div className="card-body p-4 font-normal">
-        <h2 className="card-title line-clamp-1">{template.name}</h2>
+      <div className="card-body p-4 gap-2 font-normal">
+        <h2 className="card-title  group-hover:text-primary line-clamp-1">
+          {template.name}
+        </h2>
         <div className="flex gap-2 items-center text-xs text-base-content/60">
           {template.expand?.owner?.avatar && (
             <img
@@ -154,23 +153,28 @@ export const TemplateBlock = ({
         <div className="text-xs text-base-content/60">
           {new Date(template.created).toLocaleString()}
         </div>
-        <div className="text-left text-sm h-16 break-word word-wrap line-clamp-2">
+        <Markdown
+          suppressLink={!suppressLink}
+          className="text-left text-sm h-20 break-word word-wrap line-clamp-2"
+        >
           {templateDescription}
-        </div>
+        </Markdown>
         <div className="relative card-actions justify-end gap-1 text-xs text-base-content/60">
           <button
-            className="btn btn-xs rounded btn-primary"
+            className="btn btn-xs rounded btn-outline group-hover:bg-primary group-hover:text-primary-content gap-1 group-hover:animate-pulse"
             onClick={onChat}
             data-tooltip-id="default-tooltip"
             data-tooltip-content={t('start-chat-tooltip')}
           >
-            <PiChatsTeardrop
-              className={clsx('w-4 h-4', { 'animate-spin': isCreating })}
+            <PiChatCircleDotsBold
+              className={clsx('w-4 h-4', {
+                'animate-spin': isCreating,
+              })}
             />
             {t('start-chat')}
           </button>
           <button
-            className="btn btn-xs btn-outline rounded group-hover:btn-primary"
+            className="btn btn-xs btn-outline rounded group-hover:btn-primary gap-1"
             onClick={onFork}
             data-tooltip-id="default-tooltip"
             data-tooltip-content={t('fork-tooltip')}

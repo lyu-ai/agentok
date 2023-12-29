@@ -8,14 +8,17 @@ export async function GET(request: NextRequest) {
     .getFullList({ expand: 'owner' });
 
   // TEMP: solve the data format issue
-  if (templates.length > 0 && templates[0].flow?.collectionId !== undefined) {
-    templates = templates.map(template => {
+  templates = templates.map(template => {
+    if (template.flow?.collectionId !== undefined) {
+      console.warn('Found legacy malformatted template:', template);
       return {
         ...template,
         flow: template.flow.flow,
       };
-    });
-  }
+    }
+    return template;
+  });
+
   return new Response(JSON.stringify(templates));
 }
 

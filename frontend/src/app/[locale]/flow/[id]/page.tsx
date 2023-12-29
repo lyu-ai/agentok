@@ -15,7 +15,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   }, [flow?.name]);
 
   return (
-    <ReactFlowProvider>
+    <ReactFlowProvider key="reactflow-flow">
       <Flow flowId={params.id} />
     </ReactFlowProvider>
   );

@@ -52,7 +52,11 @@ const CodeComponent = ({
   );
 };
 
-const Markdown = ({ className, children, ...props }: any) => {
+// suppressLink:
+//    Replace the link in the markdown with span
+//    This is to solve the link-nesting issue if the container itself is a link
+//
+const Markdown = ({ className, suppressLink, children, ...props }: any) => {
   // This function is for image format in autogen
   function preprocessImageTags(content: string): string {
     // Regex to find <img> tags with the assumed format
@@ -76,7 +80,15 @@ const Markdown = ({ className, children, ...props }: any) => {
       components={{
         code: CodeComponent,
         a(data): JSX.Element {
-          return <a target="_blank" style={{ color: '#0022cc' }} {...data} />;
+          return suppressLink ? (
+            <span className="text-primary" {...data} />
+          ) : (
+            <a
+              target="_blank"
+              className="text-primary link link-hover"
+              {...data}
+            />
+          );
         },
         img: ({ node, ...props }) => (
           <img

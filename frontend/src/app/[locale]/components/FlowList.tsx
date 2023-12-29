@@ -9,6 +9,7 @@ import PopupDialog from '@/components/PopupDialog';
 import { toast } from 'react-toastify';
 import { Template } from '@/store/template';
 import { RiRobot2Line } from 'react-icons/ri';
+import Markdown from '@/components/Markdown';
 
 export const FlowEmpty = () => {
   const t = useTranslations('component.FlowList');
@@ -159,22 +160,24 @@ const FlowBlock = ({ action: Action, flow, suppressLink }: any) => {
       className={clsx(
         'card group relative flex flex-col w-80 bg-base-content/10 gap-3 border border-base-content/10',
         {
-          'hover:shadow-box hover:shadow-primary/40 hover:text-primary hover:border-primary/20': !suppressLink,
+          'hover:shadow-box hover:shadow-primary/40 hover:border-primary/20': !suppressLink,
         }
       )}
     >
       <div className="card-title flex items-center bg-primary/5 group-hover:bg-primary/10 rounded-t-xl gap-4 group-hover:text-primary p-4">
         <RiRobot2Line className="w-8 h-8" />
         <div className="flex flex-col gap-2">
-          <h2 className="text-lg font-bold line-clamp-1">{flow.name}</h2>
+          <h2 className="text-lg font-bold hover:text-primary line-clamp-1">
+            {flow.name}
+          </h2>
           <div className="text-xs text-base-content/60">
             {new Date(flow.created).toLocaleString()}
           </div>
         </div>
       </div>
-      <div className="card-body p-4">
-        <div className="h-16 text-left text-sm break-all line-clamp-3">
-          {flowDescription}
+      <div className="card-body p-2">
+        <div className="h-20 text-left text-sm break-word word-wrap line-clamp-3">
+          <Markdown suppressLink={!suppressLink}>{flowDescription}</Markdown>
         </div>
         <div className="flex justify-end text-xs gap-2 text-base-content/60">
           {Action ? (

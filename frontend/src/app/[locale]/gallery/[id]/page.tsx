@@ -4,29 +4,13 @@ import { useTranslations } from 'next-intl';
 import { TemplateBlock } from '../../components/TemplateList';
 import { useTemplates } from '@/hooks';
 import { useEffect, useState } from 'react';
-import ReactFlow, {
-  Background,
-  ReactFlowProvider,
-  useReactFlow,
-  useStoreApi,
-} from 'reactflow';
+import ReactFlow, { ReactFlowProvider, useStoreApi } from 'reactflow';
+import 'reactflow/dist/style.css';
 import { nodeTypes } from '../../utils/flow';
 import Markdown from '@/components/Markdown';
+import clsx from 'clsx';
 
 const FlowViewer = ({ template, className }: any) => {
-  const [nodes, setNodes] = useState<any[]>([]);
-  const [edges, setEdges] = useState<any[]>([]);
-  const { fitView } = useReactFlow();
-
-  useEffect(() => {
-    if (!template?.flow) return;
-    setNodes(template.flow.nodes ?? []);
-    setEdges(template.flow.edges ?? []);
-    fitView({ padding: 0.1 });
-  }, [template?.flow?.nodes, template?.flow?.edges, fitView]);
-
-  console.log('nodes:', template.flow?.nodes);
-
   // Suppress error code 002
   // https://github.com/xyflow/xyflow/issues/3243
   const store = useStoreApi();
@@ -39,26 +23,22 @@ const FlowViewer = ({ template, className }: any) => {
     };
   }
 
+  if (!template?.flow?.nodes) return null;
+
   return (
-    <ReactFlow
-      nodes={template?.flow?.nodes}
-      edges={template?.flow?.edges}
-      nodeTypes={nodeTypes}
-      proOptions={{ hideAttribution: true }}
-      className={className}
-    >
-      <Background
-        id="logo"
-        gap={32}
-        color="hsl(var(--sc))"
-        className="engraved-bg bg-no-repeat bg-center bg-[url('/logo-bg.svg')]"
-        style={{ backgroundSize: '80px' }}
+    <div className={clsx('relative w-full h-full', className)}>
+      <ReactFlow
+        nodes={template.flow.nodes}
+        edges={template.flow.edges}
+        nodeTypes={nodeTypes}
+        fitView
+        proOptions={{ hideAttribution: true }}
       />
-    </ReactFlow>
+      <div className="absolute inset-0 rounded-xl w-full h-full flex items-start justify-center pointer-event-none bg-primary/10"></div>
+    </div>
   );
 };
 
-// standalone means this is not a child of Popover component
 const GalleryDetailPage = ({ params }: { params: { id: string } }) => {
   const t = useTranslations('page.Gallery');
   const { templates, isLoading, isError } = useTemplates();
@@ -94,20 +74,25 @@ const GalleryDetailPage = ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <div className="relative flex flex-col w-full h-full gap-2 p-2 overflow-y-auto items-center">
+    <div className="relative flex flex-col w-full h-full gap-2 p-4 overflow-y-auto items-center">
       <title>Gallery | FlowGen</title>
-      <div className="flex flex-col items-center justify-center gap-2 text-sm font-bold p-2">
+      <div className="flex flex-col items-center justify-center gap-2 text-sm p-2">
         <span className="text-5xl font-bold p-4">{template.name}</span>
         <span className="text-lg p-4 font-normal max-w-5xl">
           <Markdown>{template.description}</Markdown>
         </span>
       </div>
-      <div className="flex items-center justify-center w-full gap-2 text-sm font-bold">
-        <TemplateBlock template={template} index={index} suppressLink />
-        <ReactFlowProvider>
+      <div className="flex flex-col md:flex-row items-center justify-center w-full gap-2 text-sm">
+        <TemplateBlock
+          template={template}
+          index={index}
+          suppressLink
+          className="w-full max-w-sm"
+        />
+        <ReactFlowProvider key="reactflow-gallery">
           <FlowViewer
             template={template}
-            className="w-full max-w-2xl h-full bg-base-content/10 border border-base-content/5 rounded-xl"
+            className="max-w-2xl min-h-[420px] bg-base-content/10 border border-base-content/5 rounded-xl"
           />
         </ReactFlowProvider>
       </div>
