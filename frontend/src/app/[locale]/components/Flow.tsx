@@ -247,6 +247,7 @@ const Flow = ({ flowId }: any) => {
         selectionOnDrag
         selectionMode={SelectionMode.Partial}
         fitView
+        proOptions={{ hideAttribution: true }}
       >
         <Background
           id="logo"

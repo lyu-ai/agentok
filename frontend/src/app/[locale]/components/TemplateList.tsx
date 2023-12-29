@@ -186,7 +186,7 @@ export const TemplateBlock = ({
           </button>
           {isOwned && (
             <button
-              className="absolute left-0 btn btn-xs btn-ghost btn-square hover:text-red-500"
+              className="absolute left-0 btn btn-xs btn-ghost btn-square group-hover:text-red-300"
               data-tooltip-id="default-tooltip"
               data-tooltip-content={t('unpublish-tooltip')}
               onClick={onDelete}
