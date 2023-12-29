@@ -1,6 +1,6 @@
 > [!IMPORTANT]
 >
-> <font color="red"><b>This project is still under heavy development and functions might not work well yet. Please don't hestitate to <a href="https://github.com/tiwater/flowgen/issues/new">open new issues</a>.</b></font>
+> This project is still under heavy development and functions might not work well yet. Please don't hestitate to [Open an Issue](https://github.com/tiwater/flowgen/issues/new").
 
 <img src="./frontend/public/logo-full.png" width="320" />
 
@@ -13,11 +13,13 @@
 
 ## 🤖 What is FlowGen
 
-FlowGen is a tool built for [AutoGen](https://microsoft.github.io/autogen/), a great agent framework from Microsoft Research.
+FlowGen is a tool built for [AutoGen](https://microsoft.github.io/autogen/), a great agent framework from Microsoft and [a lot of contributors](https://github.com/microsoft/autogen?tab=readme-ov-file#contributors-wall).
 
-AutoGen streamlines the process of creating multi-agent applications with its clear and user-friendly approach. FlowGen takes this accessibility a step further by offering visual tools that simplify the building and management of agent workflows with AutoGen.
+We regard AutoGen as one of the best frontier technology for next-generation Multi-Agent Applications. FlowGen elevates this concept, providing intuitive visual tools that streamline the construction and oversight of complex agent-based workflows, thereby simplifying the entire process for creators and developers.
 
 ### Visual Flow Editing
+
+You can create a flow from scratch, or fork from a template. The flow is visualized as a graph, and you can drag and drop nodes to build agents in flow style.
 
 ![flow-0](./website/static/img/screenshot-flow-0.png)
 
@@ -25,13 +27,19 @@ AutoGen streamlines the process of creating multi-agent applications with its cl
 
 ### Chat
 
+You can launch a flow or a flow template in a chat window, and chat with the agents.
+
 ![chat-0](./website/static/img/screenshot-chat-0.png)
 
 ![chat-1](./website/static/img/screenshot-chat-1.png)
 
 ### Gallery
 
+Place to share and discover flow templates.
+
 ![gallery-0](./website/static/img/screenshot-gallery-0.png)
+
+![gallery-1](./website/static/img/screenshot-gallery-1.png)
 
 ## 💡 Quickstart
 
@@ -173,7 +181,9 @@ Please check the original notebooks with the same name in [AutoGen](https://gith
 
 This project welcomes contributions and suggestions. Please read our [Contributing Guide](./CONTRIBUTING.md) first.
 
-If you are new to GitHub [here](https://help.github.com/categories/collaborating-with-issues-and-pull-requests/) is a detailed help source on getting involved with development on GitHub.
+If you are new to GitHub, [here](https://help.github.com/categories/collaborating-with-issues-and-pull-requests/) is a detailed help source on getting involved with development on GitHub.
+
+Please consider contributing to [AutoGen](https://github.com/microsoft/autogen), as FlowGen relies on a robust foundation to deliver its capabilities. Your contributions can help enhance the platform's core functionalities, ensuring a more seamless and efficient development experience for Multi-Agent Applications.
 
 ## Contributors Wall
 

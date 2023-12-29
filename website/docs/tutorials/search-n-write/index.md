@@ -96,6 +96,6 @@ If the display area is inadequate, utilize the 'Open this chat in a new window' 
 
 Kudos! You've successfully configured an intelligent agent adept at performing online searches and article generation.
 
-### Conclusion
+## Conclusion
 
 Throughout this tutorial, we’ve explored the implementation of GroupChat and Functions within a flow, enabling code execution and agent collaboration. Additionally, you've learned to harness the Function Editor for creating custom functions to enhance your workflow.

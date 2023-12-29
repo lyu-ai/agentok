@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
+import { PiChatsTeardrop } from 'react-icons/pi';
 
 export const TemplateEmpty = () => {
   const t = useTranslations('component.TemplateList');
@@ -136,7 +137,7 @@ export const TemplateBlock = ({
           className="rounded-t-md h-48 w-full object-cover"
         />
       </figure>
-      <div className="card-body p-4">
+      <div className="card-body p-4 font-normal">
         <h2 className="card-title line-clamp-1">{template.name}</h2>
         <div className="flex gap-2 items-center text-xs text-base-content/60">
           {template.expand?.owner?.avatar && (
@@ -153,18 +154,18 @@ export const TemplateBlock = ({
         <div className="text-xs text-base-content/60">
           {new Date(template.created).toLocaleString()}
         </div>
-        <div className="text-left text-sm h-16 break-all line-clamp-2">
+        <div className="text-left text-sm h-16 break-word word-wrap line-clamp-2">
           {templateDescription}
         </div>
-        <div className="card-actions justify-end gap-1 text-xs text-base-content/60">
+        <div className="relative card-actions justify-end gap-1 text-xs text-base-content/60">
           <button
-            className="btn btn-xs btn-outline rounded group-hover:btn-primary"
+            className="btn btn-xs rounded btn-primary"
             onClick={onChat}
             data-tooltip-id="default-tooltip"
             data-tooltip-content={t('start-chat-tooltip')}
           >
-            <RiChatSmile2Line
-              className={clsx('w-3 h-3', { 'animate-spin': isCreating })}
+            <PiChatsTeardrop
+              className={clsx('w-4 h-4', { 'animate-spin': isCreating })}
             />
             {t('start-chat')}
           </button>
@@ -175,23 +176,22 @@ export const TemplateBlock = ({
             data-tooltip-content={t('fork-tooltip')}
           >
             <GoRepoForked
-              className={clsx('w-3 h-3', { 'animate-spin': isForking })}
+              className={clsx('w-4 h-4', { 'animate-spin': isForking })}
             />
             {t('fork')}
           </button>
           {isOwned && (
             <button
-              className="btn btn-xs btn-outline rounded text-red-300 hover:text-red-500"
+              className="absolute left-0 btn btn-xs btn-ghost btn-square hover:text-red-500"
               data-tooltip-id="default-tooltip"
               data-tooltip-content={t('unpublish-tooltip')}
               onClick={onDelete}
             >
               <GoTrash
-                className={clsx('w-3 h-3', {
+                className={clsx('w-4 h-4', {
                   'loading loading-xs': isDeleting,
                 })}
               />
-              {t('unpublish')}
             </button>
           )}
         </div>

@@ -246,7 +246,6 @@ const Flow = ({ flowId }: any) => {
         panOnScroll
         selectionOnDrag
         selectionMode={SelectionMode.Partial}
-        proOptions={{ hideAttribution: true }}
         fitView
       >
         <Background

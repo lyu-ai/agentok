@@ -2,7 +2,7 @@
 
 import clsx from 'clsx';
 import Link from 'next/link';
-import { PiChatsCircleFill } from 'react-icons/pi';
+import { PiChatsCircle } from 'react-icons/pi';
 import { RiRobot2Line, RiAppsLine } from 'react-icons/ri';
 import { usePathname } from 'next/navigation';
 
@@ -16,7 +16,7 @@ export const NAV_MENU_ITEMS = [
   {
     id: 'chat',
     label: 'Chat',
-    icon: PiChatsCircleFill,
+    icon: PiChatsCircle,
     href: '/chat',
   },
   {
