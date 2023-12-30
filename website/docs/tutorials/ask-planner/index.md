@@ -6,7 +6,7 @@ This tutorial provides step-by-step guidance on constructing a workflow that sho
 
 ## Prerequisites
 
-You’ll need access to FlowGen, which is accessible either [online](https://flowgen.app) for immediate use or [locally on your machine](https://docs.flowgen.app/docs/tutorials/getting-started) for a more personalized setup. This guide will focus on utilizing the online version of FlowGen.
+You’ll need access to FlowGen, which is accessible either [online](https://flowgen.app) for immediate use or [locally on your machine](https://docs.flowgen.app/getting-started) for a more personalized setup. This guide will focus on utilizing the online version of FlowGen.
 
 ## Steps to Create a New Workflow
 

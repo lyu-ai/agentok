@@ -37,6 +37,8 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
+          sidebarCollapsed: false,
+          routeBasePath: '',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
@@ -60,12 +62,12 @@ const config: Config = {
       },
       items: [
         {
-          to: '/docs/tutorials/getting-started',
+          to: '/getting-started',
           label: 'Getting Started',
           position: 'left',
         },
         {
-          to: '/docs/tutorials/search-n-write/',
+          to: '/tutorials/search-n-write/',
           label: 'Tutorials',
           position: 'left',
         },
@@ -102,7 +104,7 @@ const config: Config = {
     },
     footer: {
       style: 'light',
-      copyright: `© ${new Date().getFullYear()} FlowGen. Built with Docusaurus.`,
+      copyright: `© ${new Date().getFullYear()} FlowGen Team. Built with <a target="_blank" href="https://docusaurus.io">Docusaurus</a>.`,
     },
     prism: {
       theme: prismThemes.github,
