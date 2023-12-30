@@ -9,10 +9,12 @@ import ChatListButton from '../../components/ChatListButton';
 import { useTranslations } from 'next-intl';
 import ChatList from '../../components/ChatList';
 import clsx from 'clsx';
-import { useEffect, PropsWithChildren } from 'react';
+import { useEffect, PropsWithChildren, useState } from 'react';
+import { GoFilter } from 'react-icons/go';
 
 const ChatListPane = () => {
   const t = useTranslations('page.Chat');
+  const [filter, setFilter] = useState('');
 
   return (
     <div className="flex flex-col items-center gap-2">
@@ -20,8 +22,18 @@ const ChatListPane = () => {
         <span className="font-bold">{t('chat-sessions')}</span>
         <ChatListButton />
       </div>
+      <div className="flex items-center w-full px-2 gap-1">
+        <GoFilter className="w-5 h-5" />
+        <input
+          className="flex-1 input input-sm input-bordered rounded font-normal"
+          placeholder={t('filter')}
+          value={filter}
+          autoFocus
+          onChange={e => setFilter(e.target.value)}
+        />
+      </div>
       <div className="flex flex-col w-full h-full p-1 gap-1 overflow-y-auto overflow-x-hidden">
-        <ChatList />
+        <ChatList filter={filter} />
       </div>
     </div>
   );

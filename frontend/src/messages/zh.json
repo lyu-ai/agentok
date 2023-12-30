@@ -192,6 +192,7 @@
     "Chat": {
       "chat-tagline": "开始和 FlowGen 交谈",
       "start-chat": "开始聊天",
+      "filter": "输入过滤词",
       "chat-sessions": "近期会话",
       "select-flow": "选择一个工作流开始对话"
     },

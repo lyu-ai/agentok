@@ -1,10 +1,10 @@
 import { useTranslations } from 'next-intl';
 import { BsInboxes } from 'react-icons/bs';
-import { useChat, useChats } from '@/hooks';
+import { useChat, useChats, useFlows, useTemplates } from '@/hooks';
 import clsx from 'clsx';
 import { Float } from '@headlessui-float/react';
 import { Popover } from '@headlessui/react';
-import { PiChatsCircle } from 'react-icons/pi';
+import { PiChatsCircle, PiChatsCircleFill } from 'react-icons/pi';
 import { GoTrash, GoPencil, GoKebabHorizontal } from 'react-icons/go';
 import EditableText from '@/components/EditableText';
 import { useState, useEffect, useRef, createRef, forwardRef } from 'react';
@@ -40,11 +40,10 @@ export const ChatLoading = () => {
 
 const ContextButton = ({ className, onDelete, onEdit }: any) => {
   const t = useTranslations('component.ChatList');
-  const router = useRouter();
   return (
     <Popover>
       <Float
-        placement="bottom-start"
+        placement="bottom-end"
         offset={5}
         shift={5}
         flip
@@ -57,11 +56,11 @@ const ContextButton = ({ className, onDelete, onEdit }: any) => {
       >
         <Popover.Button
           onClick={e => e.stopPropagation()}
-          className={clsx('hover:text-primary', className)}
+          className={clsx('btn btn-xs btn-circle', className)}
         >
           <GoKebabHorizontal className="w-4 h-4" />
         </Popover.Button>
-        <Popover.Panel className="origin-top-left w-40 shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-600/80 text-base-content border border-gray-500 max-h-[80vh]">
+        <Popover.Panel className="origin-top-right w-40 shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-600/80 text-base-content border border-gray-500 max-h-[80vh]">
           {[
             {
               label: t('edit-chat-name'),
@@ -164,32 +163,38 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
           router.push(`/chat/${chat.id}`);
         }}
       >
-        <div className="flex w-full gap-2 justify-between items-center">
-          <div className="flex items-center gap-1">
-            <PiChatsCircle className="w-5 h-5 flex-0" />
-            <EditableText
-              className="font-bold truncate w-64"
-              editing={isEditing}
-              onChange={onEditCompleted}
-              text={chat.name ?? chatSource?.name ?? 'Untitled ' + chat.id}
-            />
+        <div className="relative flex flex-col w-full gap-2 justify-between items-start">
+          <div className="flex items-center gap-2">
+            <PiChatsCircleFill className="w-8 h-8 flex-0" />
+            <div className="flex flex-col items-start gap-1">
+              <EditableText
+                className="font-bold truncate w-64"
+                editing={isEditing}
+                onChange={onEditCompleted}
+                text={chat.name ?? chatSource?.name ?? 'Untitled ' + chat.id}
+              />
+              <div className="text-xs text-base-content/60 px-2">
+                {chat.created && new Date(chat.created).toLocaleString()}
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 font-normal">
+            <span className="border border-base-content/40 text-base-content/60 rounded p-1 text-xs">
+              {chat.sourceType}
+            </span>
+            <span className="text-base-content/60 line-clamp-1">
+              {chatSource?.name ?? ''}
+            </span>
           </div>
           {selected && (
-            <ContextButton
-              className="flex-0"
-              chat={chat}
-              onEdit={onEditStarted}
-              onDelete={onDelete}
-            />
+            <div className="absolute top-0 right-0">
+              <ContextButton
+                chat={chat}
+                onEdit={onEditStarted}
+                onDelete={onDelete}
+              />
+            </div>
           )}
-        </div>
-        <div className="flex items-center gap-2 font-normal">
-          <span className="border border-base-content/40 text-base-content/60 rounded p-1 text-xs">
-            {chat.sourceType}
-          </span>
-          <span className="text-base-content/60 line-clamp-1">
-            {chatSource?.name ?? ''}
-          </span>
         </div>
       </div>
     );
@@ -201,11 +206,13 @@ ChatBlock.displayName = 'ChatBlock';
 const ChatList = ({
   className,
   maxCount,
+  filter,
   horitontal = false,
   disableSelection = false,
 }: {
   className?: string;
   maxCount?: number;
+  filter?: string;
   horitontal?: boolean;
   disableSelection?: boolean;
 }) => {
@@ -215,6 +222,8 @@ const ChatList = ({
     isError: isChatsError,
     activeChat,
   } = useChats();
+  const { templates } = useTemplates();
+  const { flows } = useFlows();
   const chatListRef = useRef<HTMLDivElement | null>(null); // This ref should attach to the chat list container
 
   const autoScrollIntoView = (targetElement: any, containerElement: any) => {
@@ -228,6 +237,7 @@ const ChatList = ({
       targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
+  const [filteredChats, setFilteredChats] = useState<any[]>([]);
   const chatRefs = useRef(new Map()).current;
   useEffect(() => {
     if (!chatListRef.current) return;
@@ -241,17 +251,31 @@ const ChatList = ({
       autoScrollIntoView(activeChatRef.current, chatListRef.current);
     }
   }, [isLoadingChats, activeChat, chatRefs.size]);
+  useEffect(() => {
+    if (!chats) return;
+    if (!filter) {
+      setFilteredChats(chats);
+      return;
+    }
+    let newChats = chats.filter((chat: any) => {
+      if (chat.name?.toLowerCase().includes(filter.toLowerCase())) return true;
+      const chatSource =
+        chat.sourceType === 'template'
+          ? templates?.find(t => t.id === chat.sourceId)
+          : flows?.find(f => f.id === chat.sourceId);
+      return chatSource?.name?.toLowerCase().includes(filter.toLowerCase());
+    });
+    if (maxCount) {
+      newChats = newChats.slice(0, maxCount);
+    }
+    setFilteredChats(newChats);
+  }, [chats, filter]);
 
   if (isChatsError) {
     console.warn('Failed to load chats');
   }
   if (isLoadingChats) return <ChatLoading />;
   if (!chats || chats.length === 0) return <ChatEmpty />;
-
-  let trimmedChats = chats;
-  if (maxCount) {
-    trimmedChats = trimmedChats.slice(0, maxCount);
-  }
 
   return (
     <div
@@ -261,7 +285,7 @@ const ChatList = ({
         horitontal ? 'flex-wrap justify-center gap-4' : 'flex-col gap-1'
       )}
     >
-      {trimmedChats.map((chat: any) => {
+      {filteredChats.map((chat: any) => {
         if (!chatRefs.has(chat.id)) {
           chatRefs.set(chat.id, createRef<HTMLDivElement>());
         }

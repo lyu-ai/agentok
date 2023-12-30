@@ -5,7 +5,7 @@ import { fetcher } from './fetcher';
 import { Template } from '@/store/template';
 
 export function useTemplates() {
-  const { data, error, mutate } = useSWR('/api/templates', fetcher);
+  const { data, error, mutate } = useSWR<Template[]>('/api/templates', fetcher);
   const setTemplates = useTemplateStore(state => state.setTemplates);
   const deleteTemplate = useTemplateStore(state => state.deleteTemplate);
 
