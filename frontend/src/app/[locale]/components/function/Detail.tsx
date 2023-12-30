@@ -23,7 +23,7 @@ const FunctionDetail = ({ nodeId, func, ...props }: any) => {
   };
   return (
     <div className="relative flex flex-col w-full gap-2 p-2 h-full overflow-y-auto">
-      <div className="flex items-center gap-2">
+      <div className="flex items-start gap-2">
         <TbMathFunction className="w-7 h-7" />
         <div className="w-full flex flex-col gap-2 text-base font-bold">
           <div className="flex items-center w-full justify-between">

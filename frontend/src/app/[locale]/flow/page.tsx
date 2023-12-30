@@ -7,7 +7,7 @@ import { useFlows } from '@/hooks';
 import TemplateList from '../components/TemplateList';
 import Link from 'next/link';
 import clsx from 'clsx';
-import { RiRobot2Fill } from 'react-icons/ri';
+import { RiRobot2Line } from 'react-icons/ri';
 
 const FlowPage = () => {
   const t = useTranslations('page.Flow');
@@ -24,15 +24,15 @@ const FlowPage = () => {
   return (
     <div className="flex flex-col w-full h-full gap-3 p-2">
       <title>Flow | FlowGen</title>
-      <div className="flex flex-col items-center justify-between w-full gap-8 px-4 py-8 text-sm font-bold">
+      <div className="flex flex-col items-center justify-between w-full gap-8 px-4 py-8 font-bold">
         <img src="/logo.svg" className="w-24 h-24" />
         <span className="text-4xl font-bold">{t('flow-tagline')}</span>
         <button
           onClick={onCreateFlow}
-          className="btn btn-primary btn-lg px-6 flex gap-2 items-center py-2"
+          className="btn btn-primary btn-lg px-4 flex gap-3 items-center py-2"
         >
-          <RiRobot2Fill
-            className={clsx('w-8 h-8', { 'animate-spin': isCreating })}
+          <RiRobot2Line
+            className={clsx('w-7 h-7', { 'animate-spin': isCreating })}
           />
           {t('new-flow')}
         </button>

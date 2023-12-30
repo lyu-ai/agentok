@@ -1,4 +1,4 @@
-# Human-in-the-Loop
+# Human in the Loop
 
 This tutorial provides step-by-step guidance on constructing a workflow that incorporates a human-in-the-loop approach. Utilizing the FlowGen template, [Human in the Loop](https://flowgen.app/gallery/4pbokrvi7zguv48), you can engage with it directly or fork it to tweak the flow to your specifications.
 
@@ -6,7 +6,7 @@ The tutorial leverages the official notebooks [Simple Chat](https://github.com/m
 
 ## Prerequisites
 
-You’ll need access to FlowGen, which is accessible either [online](https://flowgen.app) for immediate use or [locally on your machine](https://docs.flowgen.app/docs/getting-started) for a more personalized setup. This guide will focus on utilizing the online version of FlowGen.
+You’ll need access to FlowGen, which is accessible either [online](https://flowgen.app) for immediate use or [locally on your machine](https://docs.flowgen.app/docs/tutorials/getting-started) for a more personalized setup. This guide will focus on utilizing the online version of FlowGen.
 
 ## Steps to Create a New Workflow
 

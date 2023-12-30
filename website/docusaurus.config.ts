@@ -60,7 +60,7 @@ const config: Config = {
       },
       items: [
         {
-          to: '/docs/getting-started',
+          to: '/docs/tutorials/getting-started',
           label: 'Getting Started',
           position: 'left',
         },
@@ -89,7 +89,7 @@ const config: Config = {
           `,
         },
         {
-          href: 'https://svc.flowgen.app/redoc',
+          href: 'https://api.flowgen.app/redoc',
           label: 'API',
           position: 'right',
         },

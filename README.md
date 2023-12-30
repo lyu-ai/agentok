@@ -66,11 +66,11 @@ docker-compose up -d
 You can also build and run the frontend and backend services separately with docker:
 
 ```bash
-docker build -t flowgen-svc ./backend
-docker run -d -p 5004:5004 flowgen-svc
+docker build -t flowgen-api ./backend
+docker run -d -p 5004:5004 flowgen-api
 
-docker build -t flowgen-ui ./frontend
-docker run -d -p 2855:2855 flowgen-ui
+docker build -t flowgen-app ./frontend
+docker run -d -p 2855:2855 flowgen-app
 
 docker build -t flowgen-db ./pocketbase
 docker run -d -p 7676:7676 flowgen-db
@@ -134,48 +134,46 @@ Please check the original notebooks with the same name in [AutoGen](https://gith
 🆘 With Issues
 ⭕ Out of Scope
 
-| Example                                 | Status | Comments                                                                                                   |
-| --------------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------- |
-| simple_chat                             | ✅     | [Simple Chat](https://flowgen.app/gallery/yp0appx814q7na1)                                                 |
-| auto_feedback_from_code_execution       | ✅     | [Feedback from Code Execution](https://flowgen.app/flow/)                                                  |
-| auto_build                              | 🔲     |                                                                                                            |
-| chess                                   | 🔲     | This depends on the feature of importing custom Agent [#38](https://github.com/tiwater/flowgen/issues/38)  |
-| compression                             | ✅     |                                                                                                            |
-| dalle_and_gpt4v                         | 🔲     | TThis depends on the feature of importing custom Agent [#38](https://github.com/tiwater/flowgen/issues/38) |
-| function_call_async                     | ✅     |                                                                                                            |
-| function_call                           | ✅     |                                                                                                            |
-| graph_modelling_language                | ⭕     | This is out of project scope. Open an issue if necessary                                                   |
-| group_chat_RAG                          | 🆘     | This notebook does not work                                                                                |
-| groupchat_research                      | ✅     |                                                                                                            |
-| groupchat_vis                           | ✅     |                                                                                                            |
-| groupchat                               | ✅     |                                                                                                            |
-| hierarchy_flow_using_select_speaker     | 🔲     |                                                                                                            |
-| human_feedback                          | ✅     | [Human in the Loop](https://flowgen.app/gallery/4pbokrvi7zguv48)                                           |
-| inception_function                      | 🔲     |                                                                                                            |
-| langchain                               | ⭕     | No plan to support                                                                                         |
-| lmm_gpt-4v                              | ✅     |                                                                                                            |
-| lmm_llava                               | ✅     | Depends on Replicate                                                                                       |
-| MathChat                                | 🔲     |                                                                                                            |
-| oai_assistant_function_call             | ✅     |                                                                                                            |
-| oai_assistant_groupchat                 | 🆘     | Very slow and not work well, sometimes not returning.                                                      |
-| oai_assistant_retrieval                 | 🔲     |                                                                                                            |
-| oai_assistant_twoagents_basic           | ✅     |                                                                                                            |
-| oai_code_interpreter                    | ✅     |                                                                                                            |
-| planning                                | 🔲     |                                                                                                            |
-| qdrant_RetrieveChat                     | 🔲     |                                                                                                            |
-| RetrieveChat                            | 🔲     |                                                                                                            |
-| stream                                  | 🔲     |                                                                                                            |
-| teachability                            | 🔲     |                                                                                                            |
-| teaching                                | 🔲     |                                                                                                            |
-| two_users                               | ✅     | The response will be very long and should set a large max_tokens.                                          |
-| video_transcript_translate_with_whisper | ✅     | `brew install ffmpeg` and export IMAGEIO_FFMPEG_EXE                                                        |
-| web_info                                | ✅     |                                                                                                            |
-| cq_math                                 | ⭕     | This example is quite irrelevant to autogen, why not just use OpenAI API?                                  |
-| Async_human_input                       | 🔲     |                                                                                                            |
-| oai_chatgpt_gpt4                        | ⭕     | Fine-tuning, out of project scope                                                                          |
-| oai_client_cost                         | ⭕     | This is a utility tool, not related to flow.                                                               |
-| oai_completion                          | ⭕     | Fine-tuning, out of project scope                                                                          |
-| oai_openai_utils                        | 🔲     |                                                                                                            |
+| Example                                 | Status | Comments                                                                                                          |
+| --------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------- |
+| simple_chat                             | ✅     | [Simple Chat](https://flowgen.app/gallery/yp0appx814q7na1)                                                        |
+| auto_feedback_from_code_execution       | ✅     | [Feedback from Code Execution](https://flowgen.app/flow/)                                                         |
+| ~~auto_build~~                          | ⭕     | This is a feature to be considered to add to flow generation. [#40](https://github.com/tiwater/flowgen/issues/40) |
+| chess                                   | 🔲     | This depends on the feature of importing custom Agent [#38](https://github.com/tiwater/flowgen/issues/38)         |
+| compression                             | ✅     |                                                                                                                   |
+| dalle_and_gpt4v                         | 🔲     | This depends on the feature of importing custom Agent [#38](https://github.com/tiwater/flowgen/issues/38)         |
+| function_call_async                     | ✅     |                                                                                                                   |
+| function_call                           | ✅     |                                                                                                                   |
+| graph_modelling_language                | ⭕     | This is out of project scope. Open an issue if necessary                                                          |
+| group_chat_RAG                          | 🆘     | This notebook does not work                                                                                       |
+| groupchat_research                      | ✅     |                                                                                                                   |
+| groupchat_vis                           | ✅     |                                                                                                                   |
+| groupchat                               | ✅     |                                                                                                                   |
+| hierarchy_flow_using_select_speaker     | 🔲     |                                                                                                                   |
+| human_feedback                          | ✅     | [Human in the Loop](https://flowgen.app/gallery/4pbokrvi7zguv48)                                                  |
+| inception_function                      | 🔲     |                                                                                                                   |
+| ~~langchain~~                           | ⭕     | No plan to support                                                                                                |
+| lmm_gpt-4v                              | ✅     |                                                                                                                   |
+| lmm_llava                               | ✅     | Depends on Replicate                                                                                              |
+| MathChat                                | 🔲     |                                                                                                                   |
+| oai_assistant_function_call             | ✅     |                                                                                                                   |
+| oai_assistant_groupchat                 | 🆘     | Very slow and not work well, sometimes not returning.                                                             |
+| oai_assistant_retrieval                 | 🔲     |                                                                                                                   |
+| oai_assistant_twoagents_basic           | ✅     |                                                                                                                   |
+| oai_code_interpreter                    | ✅     |                                                                                                                   |
+| planning                                | ✅     | This sample works fine, but does not exit gracefully.                                                             |
+| qdrant_RetrieveChat                     | 🔲     |                                                                                                                   |
+| RetrieveChat                            | 🔲     |                                                                                                                   |
+| stream                                  | 🔲     |                                                                                                                   |
+| teachability                            | 🔲     |                                                                                                                   |
+| teaching                                | 🔲     |                                                                                                                   |
+| two_users                               | ✅     | The response will be very long and should set a large max_tokens.                                                 |
+| video_transcript_translate_with_whisper | ✅     | Depends on ffmpeg lib, should `brew install ffmpeg` and export IMAGEIO_FFMPEG_EXE                                 |
+| web_info                                | ✅     |                                                                                                                   |
+| cq_math                                 | ⭕     | This example is quite irrelevant to autogen, why not just use OpenAI API?                                         |
+| Async_human_input                       | 🔲     |                                                                                                                   |
+| oai_chatgpt_gpt4                        | ⭕     | Fine-tuning, out of project scope                                                                                 |
+| oai_completion                          | ⭕     | Fine-tuning, out of project scope                                                                                 |
 
 ## 👨‍💻 Contributing
 

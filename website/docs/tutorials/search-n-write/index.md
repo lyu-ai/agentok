@@ -1,4 +1,4 @@
-# Building a News-Searching and Article-Writing Agent
+# Search and Write
 
 In this tutorial, we'll dive into the use of FlowGen's GroupChat and Functions features to develop an agent capable of searching for online news and crafting articles for you.
 
@@ -6,7 +6,7 @@ You can access this tutorial as a FlowGen template named [Search and Write](http
 
 ## Prerequisites
 
-Before we begin, ensure you have access to FlowGen. You can explore FlowGen [online](https://flowgen.app) or opt to [install it on your local system](https://docs.flowgen.app/docs/getting-started).
+Before we begin, ensure you have access to FlowGen. You can explore FlowGen [online](https://flowgen.app) or opt to [install it on your local system](https://github.com/tiwater/flowgen/).
 
 This tutorial will utilize the online platform of FlowGen.
 

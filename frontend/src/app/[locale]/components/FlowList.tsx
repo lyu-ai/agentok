@@ -205,7 +205,7 @@ const FlowBlock = ({ action: Action, flow, suppressLink }: any) => {
                 <GoShare className={clsx('w-4 h-4')} />
               </button>
               <button
-                className="btn btn-sm btn-square btn-ghost group-hover:text-red-500"
+                className="btn btn-sm btn-square btn-ghost group-hover:text-red-400"
                 data-tooltip-id="default-tooltip"
                 data-tooltip-content={t('delete-flow') + flow.name}
                 onClick={onDelete}

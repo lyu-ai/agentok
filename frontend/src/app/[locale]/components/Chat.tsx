@@ -253,7 +253,7 @@ const Chat = ({
           onSend={onSend}
         />
         {thinking && !waitForHumanInput && (
-          <div className="absolute inset-1.5 rounded-sm backdrop-blur-sm bg-primary/10">
+          <div className="absolute inset-1.5 rounded-md backdrop-blur-sm bg-primary/10">
             <div className="flex w-full h-full items-center justify-center gap-2 text-primary">
               <div className="loading loading-infinity loading-sm" />
               <span className="text-sm">{t('thinking')}</span>

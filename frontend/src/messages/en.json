@@ -158,6 +158,10 @@
     },
     "ThemeSwitcher": {
       "theme-tooltip": "Switch Light/Dark Mode"
+    },
+    "Navbar": {
+      "getting-started": "Getting Started",
+      "docs": "Docs"
     }
   },
   "option": {

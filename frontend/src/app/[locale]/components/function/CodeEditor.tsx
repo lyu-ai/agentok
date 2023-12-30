@@ -4,7 +4,7 @@ import { useReactFlow } from 'reactflow';
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
 import { vscodeDark as theme } from '@uiw/codemirror-theme-vscode';
-import { RiRobot2Line } from 'react-icons/ri';
+import { RiMagicFill } from 'react-icons/ri';
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -70,14 +70,14 @@ const CodeEditor = ({ nodeId, func, ...props }: any) => {
           >
             <button
               className={clsx(
-                'btn btn-outline rounded bg-base-content/30',
-                func?.code ? 'btn-sm p-1' : 'btn-primary btn-sm p-2'
+                'btn rounded btn-outline gap-1',
+                func?.code ? 'btn-xs px-2' : 'btn-primary btn-sm p-2'
               )}
               data-tooltip-id="func-tooltip"
               data-tooltip-content={t('generate-code-tooltip')}
               onClick={onGenerateCode}
             >
-              <RiRobot2Line
+              <RiMagicFill
                 className={clsx('w-4 h-4', { 'animate-spin': isGenerating })}
               />
               <span>{t('generate-code')}</span>
