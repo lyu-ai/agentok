@@ -27,6 +27,7 @@ export async function middleware(req: NextRequest) {
   if (
     pathToRegexp([
       '/:locale?/auth/(.*)', // /auth/*
+      '/:locale?/gallery(/.*)?', // /gallery/* or /gallery
     ]).test(req.nextUrl.pathname)
   ) {
     return res;

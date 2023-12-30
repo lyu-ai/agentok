@@ -53,6 +53,7 @@ export const TemplateBlock = ({
   suppressLink,
 }: any) => {
   const [isOwned, setIsOwned] = useState(false);
+  const [isAuthed, setIsAuthed] = useState(false);
   const t = useTranslations('component.TemplateList');
   const { deleteTemplate, isDeleting } = useTemplates();
   const { forkFlow, isForking } = useFlows();
@@ -73,6 +74,7 @@ export const TemplateBlock = ({
     });
   }
   useEffect(() => {
+    setIsAuthed(!!pb.authStore.model);
     setIsOwned(template.owner === pb.authStore.model?.id);
   }, []);
   const onDelete = (e: any) => {
@@ -159,46 +161,48 @@ export const TemplateBlock = ({
         >
           {templateDescription}
         </Markdown>
-        <div className="relative card-actions justify-end gap-1 text-xs text-base-content/60">
-          <button
-            className="btn btn-xs rounded btn-outline group-hover:bg-primary group-hover:text-primary-content gap-1 group-hover:animate-pulse"
-            onClick={onChat}
-            data-tooltip-id="default-tooltip"
-            data-tooltip-content={t('start-chat-tooltip')}
-          >
-            <PiChatCircleDotsBold
-              className={clsx('w-4 h-4', {
-                'animate-spin': isCreating,
-              })}
-            />
-            {t('start-chat')}
-          </button>
-          <button
-            className="btn btn-xs btn-outline rounded group-hover:btn-primary gap-1"
-            onClick={onFork}
-            data-tooltip-id="default-tooltip"
-            data-tooltip-content={t('fork-tooltip')}
-          >
-            <GoRepoForked
-              className={clsx('w-4 h-4', { 'animate-spin': isForking })}
-            />
-            {t('fork')}
-          </button>
-          {isOwned && (
+        {isAuthed && (
+          <div className="relative card-actions justify-end gap-1 text-xs text-base-content/60">
             <button
-              className="absolute left-0 btn btn-xs btn-ghost btn-square group-hover:text-red-400"
+              className="btn btn-xs rounded btn-outline group-hover:bg-primary group-hover:text-primary-content gap-1 group-hover:animate-pulse"
+              onClick={onChat}
               data-tooltip-id="default-tooltip"
-              data-tooltip-content={t('unpublish-tooltip')}
-              onClick={onDelete}
+              data-tooltip-content={t('start-chat-tooltip')}
             >
-              <GoTrash
+              <PiChatCircleDotsBold
                 className={clsx('w-4 h-4', {
-                  'loading loading-xs': isDeleting,
+                  'animate-spin': isCreating,
                 })}
               />
+              {t('start-chat')}
             </button>
-          )}
-        </div>
+            <button
+              className="btn btn-xs btn-outline rounded group-hover:btn-primary gap-1"
+              onClick={onFork}
+              data-tooltip-id="default-tooltip"
+              data-tooltip-content={t('fork-tooltip')}
+            >
+              <GoRepoForked
+                className={clsx('w-4 h-4', { 'animate-spin': isForking })}
+              />
+              {t('fork')}
+            </button>
+            {isOwned && (
+              <button
+                className="absolute left-0 btn btn-xs btn-ghost btn-square group-hover:text-red-400"
+                data-tooltip-id="default-tooltip"
+                data-tooltip-content={t('unpublish-tooltip')}
+                onClick={onDelete}
+              >
+                <GoTrash
+                  className={clsx('w-4 h-4', {
+                    'loading loading-xs': isDeleting,
+                  })}
+                />
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </ConditionalLink>
   );
