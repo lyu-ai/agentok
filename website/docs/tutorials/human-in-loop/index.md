@@ -10,9 +10,9 @@ You’ll need access to FlowGen, which is accessible either [online](https://flo
 
 ## Steps to Create a New Workflow
 
-### Initialize a New Flow
+### Initialize a New Autoflow
 
-Begin by signing into FlowGen. Once logged in, opt for the 'Build from Scratch' option to establish a new Flow.
+Begin by signing into FlowGen. Once logged in, opt for the 'Build from Scratch' option to establish a new Autoflow.
 
 ### Orchestrating Your Workflow
 

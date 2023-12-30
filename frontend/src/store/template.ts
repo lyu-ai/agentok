@@ -1,26 +1,26 @@
 import { create } from 'zustand';
-import { Flow } from './flow';
+import { Autoflow } from './flow';
 
-export interface Template {
+export interface AutoflowTemplate {
   id?: string;
-  name: string; // Template name is probably different with the name of the included flow
+  name: string; // AutoflowTemplate name is probably different with the name of the included flow
   description: string;
   thumbnail?: string; // image url
-  flow: Flow; // Complicated JSON object
+  flow: Autoflow; // Complicated JSON object
   owner: string;
   created?: string;
 }
 
-interface TemplateState {
-  templates: Template[];
+interface AutoflowTemplateState {
+  templates: AutoflowTemplate[];
 
   // Public flows (do not support update operation)
-  setTemplates: (templates: Template[]) => void;
+  setTemplates: (templates: AutoflowTemplate[]) => void;
   deleteTemplate: (id: string) => void;
-  getTemplateById: (id: string) => Template | undefined;
+  getTemplateById: (id: string) => AutoflowTemplate | undefined;
 }
 
-const useTemplateStore = create<TemplateState>((set, get) => ({
+const useTemplateStore = create<AutoflowTemplateState>((set, get) => ({
   // Public flows
   templates: [],
   setTemplates: templates => set({ templates }),

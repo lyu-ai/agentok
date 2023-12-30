@@ -16,7 +16,7 @@ const ChatListPanel = ({ onAdd }: any) => {
   const router = useRouter();
   const chatSources: {
     type: 'flow' | 'template';
-    data: any[];
+    data: any[] | undefined;
     isLoading: boolean;
   }[] = [
     {
@@ -55,7 +55,7 @@ const ChatListPanel = ({ onAdd }: any) => {
               'flex flex-wrap justify-center rounded-xl p-2 gap-2 '
             )}
           >
-            {data.map((sourceItem: any) => (
+            {data?.map((sourceItem: any) => (
               <Popover.Button
                 key={`${type}-${sourceItem.id}`}
                 onClick={() =>
@@ -80,9 +80,8 @@ const ChatListPanel = ({ onAdd }: any) => {
   );
 };
 
-const ChatListButton = ({ className, onSelect }: any) => {
+const ChatListButton = ({ className }: any) => {
   const t = useTranslations('component.ChatListButton');
-  const { chats, activeChat, createChat } = useChats();
   return (
     <Popover>
       <Float

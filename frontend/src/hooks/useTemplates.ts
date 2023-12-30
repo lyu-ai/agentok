@@ -2,10 +2,13 @@ import useSWR from 'swr';
 import useTemplateStore from '@/store/template';
 import { useEffect, useState } from 'react';
 import { fetcher } from './fetcher';
-import { Template } from '@/store/template';
+import { AutoflowTemplate } from '@/store/template';
 
 export function useTemplates() {
-  const { data, error, mutate } = useSWR<Template[]>('/api/templates', fetcher);
+  const { data, error, mutate } = useSWR<AutoflowTemplate[]>(
+    '/api/templates',
+    fetcher
+  );
   const setTemplates = useTemplateStore(state => state.setTemplates);
   const deleteTemplate = useTemplateStore(state => state.deleteTemplate);
 
@@ -36,7 +39,7 @@ export function useTemplates() {
   };
 
   const [isPublishing, setIsPublishing] = useState(false);
-  const publishTemplate = async (template: Template) => {
+  const publishTemplate = async (template: AutoflowTemplate) => {
     setIsPublishing(true);
     try {
       const res = await fetch(`/api/templates`, {

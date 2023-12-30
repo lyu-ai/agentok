@@ -14,6 +14,12 @@ yarn dev
 pnpm dev
 ```
 
+## Analyze
+
+```bash
+ANALYZE=true pnpm build
+```
+
 Open [http://localhost:666](http://localhost:666) with your browser to see the result.
 
 ## Deployment

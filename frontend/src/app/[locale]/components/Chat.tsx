@@ -175,7 +175,7 @@ const Chat = ({
   return (
     <div className="flex flex-col w-full h-full ">
       <div className="flex items-center justify-between w-full px-2 py-1">
-        <div className="flex items-center gap-2 text-sm font-bold">
+        <div className="flex items-center gap-2 text-sm">
           {standalone && (
             <button
               className="btn btn-ghost btn-sm btn-circle"
@@ -189,7 +189,7 @@ const Chat = ({
             </button>
           )}
           <PiChatsCircleFill className="w-5 h-5 shrink-0" />
-          <span className="line-clamp-1">{`${
+          <span className="line-clamp-1 font-bold">{`${
             chat?.name ?? 'Untitled ' + chatId
           } ${chatSource?.name ? ' | ' + chatSource?.name : ''}`}</span>
         </div>

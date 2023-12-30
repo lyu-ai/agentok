@@ -61,7 +61,7 @@ const UserPanel = ({ user }: { user: any }) => {
           <span className="text-red-500"> (unverified)</span>
         )}
       </span>
-      <div className="flex items-center no-wrap my-2 gap-1 font-bold">
+      <div className="flex items-center no-wrap my-2 gap-1">
         <a
           href={'https://github.com/tiwater/flowgen/issues/new'}
           target="_blank"

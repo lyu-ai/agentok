@@ -38,9 +38,9 @@
       "options": "More Options"
     },
     "Config": {
-      "flow-name": "Flow Name",
+      "flow-name": "Autoflow Name",
       "flow-name-tooltip": "The process name is used for code generation, so you need to follow the rules below:\n* Ensure the legality of the process name, using only letters, numbers, hyphens, and underscores.\n* Ensure the clarity of the process name, such as **Critics** instead of **Node1**.",
-      "flow-description": "Flow Description",
+      "flow-description": "Autoflow Description",
       "expand": "Expand",
       "collapse": "Collapse",
       "filter-dict": "Filter Dictionary",
@@ -86,7 +86,7 @@
       "reload-history": "Reload chat history",
       "clean-history": "Clean chat history",
       "open-in-new-window": "Open this chat in new window",
-      "go-to-editor": "Go to Flow Editor",
+      "go-to-editor": "Go to Autoflow Editor",
       "message-loading": "Loading chat history ...",
       "message-empty": "Start chat now!",
       "resend": "Resend this message"
@@ -105,15 +105,15 @@
     },
     "ChatListButton": {
       "new-chat": "New Chat",
-      "flow": "Flow",
-      "template": "Template",
+      "flow": "Autoflow",
+      "template": "AutoflowTemplate",
       "new-chat-tooltip": "Create a new chat",
       "from-template-tooltip": "Create a new chat from template"
     },
     "ChatInput": {
       "enter-message": "Enter message to start chat ..."
     },
-    "Flow": {
+    "Autoflow": {
       "reset-default-tooltip": "Reset to default",
       "save-flow": "Upload to Cloud",
       "save-success": "Successfully saved flow",
@@ -124,12 +124,12 @@
       "default-description": "This flow has {node_count} node(s) and {edge_count} edge(s).",
       "flow-empty": "No flow here yet. You can start from a sample flow.",
       "create-flow": "Start Build from Templates",
-      "edit-flow": "Edit Flow",
+      "edit-flow": "Edit Autoflow",
       "start-chat": "Start Chat",
-      "publish-flow": "Publish as Template",
+      "publish-flow": "Publish as AutoflowTemplate",
       "publish-flow-success": "Successfully published flow {flow_name}",
       "publish-flow-failed": "Failed to publish flow {flow_name}",
-      "publish-flow-title": "Publish Flow",
+      "publish-flow-title": "Publish Autoflow",
       "publish-flow-name": "Name",
       "publish-flow-description": "Description",
       "publish-flow-tip": "Publish this flow to the FlowGen community. You can unpublish at any time."
@@ -149,8 +149,8 @@
       "image-url-placeholder": "Please enter the image URL to send with message"
     },
     "ViewToggle": {
-      "back-to-main": "Back to Flow List",
-      "back-to-editor": "Back to Flow Editor"
+      "back-to-main": "Back to Autoflow List",
+      "back-to-editor": "Back to Autoflow Editor"
     },
     "CopyButton": {
       "copy": "Copy",
@@ -205,15 +205,15 @@
       "start-chat": "Start Chat",
       "chat-sessions": "Chat Sessions",
       "filter": "Input to filter result",
-      "your-flows": "Chat from Your Flows",
-      "select-chat": "Select a session to continue, or start a new one from Flow or Template."
+      "your-flows": "Chat from Your Autoflows",
+      "select-chat": "Select a session to continue, or start a new one from Autoflow or AutoflowTemplate."
     },
-    "Flow": {
+    "Autoflow": {
       "flow-tagline": "Build Multi-Agent Apps Visually.",
       "new-flow": "Build from Scratch",
-      "creating-flow": "Creating Flow ...",
-      "your-flows": "Chat from Your Flows",
-      "start-from-template": "Start from Template",
+      "creating-flow": "Creating Autoflow ...",
+      "your-flows": "Chat from Your Autoflows",
+      "start-from-template": "Start from AutoflowTemplate",
       "more-templates": "Dicover More Templates ..."
     },
     "Gallery": {

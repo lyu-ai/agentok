@@ -48,15 +48,15 @@ const LayoutPage = ({ children }: PropsWithChildren) => {
     if (isMediumScreen) {
       setSidebarCollapsed(true); // When screen is medium, collapse the sidebar
     }
-  }, [isMediumScreen]);
+  }, [isMediumScreen, setSidebarCollapsed]);
 
   return (
     <div className="flex w-full h-full">
       <title>Chat | FlowGen</title>
-      <div className="flex gap-2 text-sm w-full h-full font-bold p-2">
+      <div className="flex gap-2 text-sm w-full h-full p-2">
         <div
           className={clsx(
-            'z-20 gap-1 text-sm font-bold shadow-box shadow-gray-600 rounded-xl bg-gray-700/80 text-base-content border border-gray-600',
+            'z-20 gap-1 text-sm shadow-box shadow-gray-600 rounded-xl bg-gray-700/80 text-base-content border border-gray-600',
             sidebarCollapsed ? 'hidden' : 'md:flex'
           )}
         >

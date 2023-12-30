@@ -20,25 +20,25 @@ The `Agent` is the core concept in AutoGen and FlowGen. For applications, this u
 
   The `UserProxyAgent` enables interaction with the `AssistantAgent`. It can take the form of a chatbot, a code executor, or even a human—it's quite the versatile agent.
 
-### 🌊 Flow
+### 🌊 Autoflow
 
-A `Flow` consists of a network of `Agents`. It's the foundation of any multi-agent application.
+A `Autoflow` consists of a network of `Agents`. It's the foundation of any multi-agent application.
 
-A standard Flow usually includes one `UserProxyAgent` and one or several `AssistantAgents`. The `UserProxyAgent` is your direct line of interaction, while the `AssistantAgents` work behind the scenes, collaborating to build a robust multi-agent application.
+A standard Autoflow usually includes one `UserProxyAgent` and one or several `AssistantAgents`. The `UserProxyAgent` is your direct line of interaction, while the `AssistantAgents` work behind the scenes, collaborating to build a robust multi-agent application.
 
-### 📄 Template
+### 📄 AutoflowTemplate
 
-Ready to launch a Flow? Publish it as a `Template` in the [FlowGen Gallery](https://flowgen.app/gallery/)! Users can then deploy these templates to conjure up new Flows or strike up chats directly on the template itself.
+Ready to launch a Autoflow? Publish it as a `AutoflowTemplate` in the [FlowGen Gallery](https://flowgen.app/gallery/)! Users can then deploy these templates to conjure up new Autoflows or strike up chats directly on the template itself.
 
 ### 💬 Chat
 
-Each Chat represents a live session that has been spun up from a Flow or a Template.
+Each Chat represents a live session that has been spun up from a Autoflow or a AutoflowTemplate.
 
 ## "Hello World"
 
 Let's jump straight in and create a simple "Hello World" flow.
 
-### Initialize a New Flow
+### Initialize a New Autoflow
 
 Head over to [FlowGen Login](https://flowgen.app/auth/login) and tap **Login as Guest** for a test run without the need to sign up.
 
@@ -47,9 +47,9 @@ Head over to [FlowGen Login](https://flowgen.app/auth/login) and tap **Login as 
 > [!WARNING]
 > Guest mode means your data is an open book to other guests. Sign in with your GitHub/Google/X account for a private experience.
 
-Once you're in, go to the [homepage](https://flowgen.app) and hit the 'Build from Scratch' button to weave a new Flow.
+Once you're in, go to the [homepage](https://flowgen.app) and hit the 'Build from Scratch' button to weave a new Autoflow.
 
-### Build Your First Flow
+### Build Your First Autoflow
 
 Get started by tidying up the canvas—scrap any sample nodes that are hanging about. Now, let's get crafting:
 

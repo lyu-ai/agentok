@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import PopupDialog from '@/components/PopupDialog';
 import { toast } from 'react-toastify';
-import { Template } from '@/store/template';
+import { AutoflowTemplate } from '@/store/template';
 import { RiRobot2Line } from 'react-icons/ri';
 import Markdown from '@/components/Markdown';
 
@@ -73,7 +73,7 @@ const PublishTemplateDialog = ({ className, flow, ...props }: any) => {
       description,
       flow: flow.flow,
       owner: flow.owner,
-    } as Template);
+    } as AutoflowTemplate);
     if (result) {
       toast.success(t('publish-flow-success', { flow_name: name }));
     } else {

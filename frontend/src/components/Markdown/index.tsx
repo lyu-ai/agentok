@@ -93,6 +93,7 @@ const Markdown = ({ className, suppressLink, children, ...props }: any) => {
         img: ({ node, ...props }) => (
           <img
             style={{ maxWidth: '480px', width: '100%', maxHeight: '320px' }}
+            alt={props.alt ?? 'md-img'}
             {...props}
           />
         ),

@@ -40,6 +40,7 @@ const RedirectPage = ({
         console.log('error logging in with provider  == ', e);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

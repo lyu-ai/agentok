@@ -111,7 +111,7 @@
     "ChatInput": {
       "enter-message": "输入消息开始聊天..."
     },
-    "Flow": {
+    "Autoflow": {
       "reset-default-tooltip": "重置为默认值",
       "save-flow": "上传到云端",
       "save-success": "成功保存工作流",
@@ -196,7 +196,7 @@
       "chat-sessions": "近期会话",
       "select-flow": "选择一个工作流开始对话"
     },
-    "Flow": {
+    "Autoflow": {
       "flow-tagline": "以可视化方式构建 AutoGen 应用",
       "new-flow": "开始构建",
       "creating-flow": "创建工作流...",

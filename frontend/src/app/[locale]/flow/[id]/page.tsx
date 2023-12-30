@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactFlowProvider } from 'reactflow';
-import Flow from '../../components/Flow';
+import Autoflow from '../../components/Flow';
 import { useFlow } from '@/hooks';
 import { useEffect } from 'react';
 
@@ -16,7 +16,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   return (
     <ReactFlowProvider key="reactflow-flow">
-      <Flow flowId={params.id} />
+      <Autoflow flowId={params.id} />
     </ReactFlowProvider>
   );
 };

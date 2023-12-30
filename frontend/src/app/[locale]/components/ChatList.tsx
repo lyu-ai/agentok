@@ -250,7 +250,7 @@ const ChatList = ({
       const activeChatRef = chatRefs.get(activeChat);
       autoScrollIntoView(activeChatRef.current, chatListRef.current);
     }
-  }, [isLoadingChats, activeChat, chatRefs.size]);
+  }, [isLoadingChats, activeChat, chatRefs, chats]);
   useEffect(() => {
     if (!chats) return;
     if (!filter) {
@@ -269,7 +269,7 @@ const ChatList = ({
       newChats = newChats.slice(0, maxCount);
     }
     setFilteredChats(newChats);
-  }, [chats, filter]);
+  }, [chats, filter, setFilteredChats, maxCount, templates, flows]);
 
   if (isChatsError) {
     console.warn('Failed to load chats');

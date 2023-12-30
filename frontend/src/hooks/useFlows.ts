@@ -1,6 +1,6 @@
 import useSWR from 'swr';
-import useFlowStore, { Flow } from '@/store/flow';
-import { Template } from '@/store/template';
+import useFlowStore, { Autoflow } from '@/store/flow';
+import { AutoflowTemplate } from '@/store/template';
 import { useEffect, useState } from 'react';
 import {
   getFlowDescription,
@@ -28,7 +28,7 @@ export function useFlows() {
   }, [data]);
 
   const [isCreating, setIsCreating] = useState(false);
-  const handleCreateFlow = async (): Promise<Flow | undefined> => {
+  const handleCreateFlow = async (): Promise<Autoflow | undefined> => {
     setIsCreating(true);
     try {
       const response = await fetch(`/api/flows`, {
@@ -79,7 +79,7 @@ export function useFlows() {
   };
 
   const [isUpdating, setIsUpdating] = useState(false);
-  const handleUpdateFlow = async (id: string, flow: Flow) => {
+  const handleUpdateFlow = async (id: string, flow: Autoflow) => {
     setIsUpdating(true);
     const flowToUpdate = {
       name: getFlowName(flow.flow?.nodes),
@@ -113,8 +113,8 @@ export function useFlows() {
 
   const [isForking, setIsForking] = useState(false);
   const handleForkFlow = async (
-    template: Template
-  ): Promise<Flow | undefined> => {
+    template: AutoflowTemplate
+  ): Promise<Autoflow | undefined> => {
     setIsForking(true);
     try {
       const response = await fetch(`/api/flows`, {
@@ -175,7 +175,7 @@ export function useFlow(id: string) {
     flow: getFlowById(id),
     isLoading,
     isError: isError,
-    updateFlow: (flow: Flow) => updateFlow(id, flow),
+    updateFlow: (flow: Autoflow) => updateFlow(id, flow),
     isUpdating,
   };
 }

@@ -37,7 +37,7 @@ export function useChats() {
         setChats(normalizedChats);
       }
     }
-  }, [data]);
+  }, [data, chats, setChats]);
 
   const [isCreating, setIsCreating] = useState(false);
   const handleCreateChat = async (
@@ -51,7 +51,7 @@ export function useChats() {
         name:
           sourceType === 'flow'
             ? 'New Chat ' + sourceId
-            : 'New Template Chat ' + sourceId,
+            : 'New AutoflowTemplate Chat ' + sourceId,
         owner: pb.authStore.model?.id,
         ...(sourceType === 'flow'
           ? { from_flow: sourceId }

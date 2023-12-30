@@ -10,7 +10,7 @@ import clsx from 'clsx';
 import { RiRobot2Line } from 'react-icons/ri';
 
 const FlowPage = () => {
-  const t = useTranslations('page.Flow');
+  const t = useTranslations('page.Autoflow');
   const router = useRouter();
   const { createFlow, isCreating } = useFlows();
   const onCreateFlow = async () => {
@@ -23,9 +23,9 @@ const FlowPage = () => {
 
   return (
     <div className="flex flex-col w-full h-full gap-3 p-2">
-      <title>Flow | FlowGen</title>
-      <div className="flex flex-col items-center justify-between w-full gap-8 px-4 py-8 font-bold">
-        <img src="/logo.svg" className="w-24 h-24" />
+      <title>Autoflow | FlowGen</title>
+      <div className="flex flex-col items-center justify-between w-full gap-8 px-4 py-8">
+        <img src="/logo.svg" alt="logo" className="w-24 h-24" />
         <span className="text-4xl font-bold">{t('flow-tagline')}</span>
         <button
           onClick={onCreateFlow}

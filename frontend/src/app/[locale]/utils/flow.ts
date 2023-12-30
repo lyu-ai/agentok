@@ -166,7 +166,7 @@ export const initialNodes: Node[] = [
       name: 'Config',
       label: 'config',
       flow_name: 'sample-flow1',
-      flow_description: 'Sample Flow',
+      flow_description: 'Sample Autoflow',
       class: 'Config',
       max_tokens: 1024,
       temperature: 0.5,

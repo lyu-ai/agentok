@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export interface Flow {
+export interface Autoflow {
   id: string;
   name?: string;
   description?: string;
@@ -9,16 +9,16 @@ export interface Flow {
   updated?: string;
 }
 
-interface FlowState {
-  flows: Flow[];
+interface AutoflowState {
+  flows: Autoflow[];
   // User flows
-  setFlows: (flows: Flow[]) => void;
-  updateFlow: (id: string, flow: Flow) => void;
+  setFlows: (flows: Autoflow[]) => void;
+  updateFlow: (id: string, flow: Autoflow) => void;
   deleteFlow: (id: string) => void;
-  getFlowById: (id: string) => Flow | undefined;
+  getFlowById: (id: string) => Autoflow | undefined;
 }
 
-const useFlowStore = create<FlowState>((set, get) => ({
+const useFlowStore = create<AutoflowState>((set, get) => ({
   // User flows
   flows: [],
   setFlows: flows => set({ flows }),

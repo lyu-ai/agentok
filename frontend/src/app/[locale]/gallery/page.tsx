@@ -9,7 +9,7 @@ const GalleryPage = () => {
   return (
     <div className="relative flex flex-col w-full h-full gap-2 p-2 overflow-y-auto">
       <title>Gallery | FlowGen</title>
-      <div className="flex flex-col items-center justify-center gap-2 text-sm font-bold p-2">
+      <div className="flex flex-col items-center justify-center gap-2 text-sm p-2">
         <span className="text-5xl font-bold p-4">
           {t('select-template-title')}
         </span>

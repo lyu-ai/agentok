@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation';
 export const NAV_MENU_ITEMS = [
   {
     id: 'flow',
-    label: 'Flow',
+    label: 'Autoflow',
     icon: RiRobot2Line,
     href: '/flow',
   },

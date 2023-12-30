@@ -76,7 +76,7 @@ export const TemplateBlock = ({
   useEffect(() => {
     setIsAuthed(!!pb.authStore.model);
     setIsOwned(template.owner === pb.authStore.model?.id);
-  }, []);
+  }, [template]);
   const onDelete = (e: any) => {
     e.stopPropagation();
     e.preventDefault();

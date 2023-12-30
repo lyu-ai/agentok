@@ -19,7 +19,7 @@ const FlowViewer = ({ template, className }: any) => {
       if (code === '002') {
         return;
       }
-      console.warn('Flow warning:', code, message);
+      console.warn('Autoflow warning:', code, message);
     };
   }
 
@@ -45,7 +45,7 @@ const GalleryDetailPage = ({ params }: { params: { id: string } }) => {
   const [template, setTemplate] = useState<any>();
   const [index, setIndex] = useState<number>(0);
   useEffect(() => {
-    if (isLoading) return;
+    if (isLoading || !templates) return;
     if (params?.id) {
       const index = templates.findIndex(
         (template: any) => template.id === params.id

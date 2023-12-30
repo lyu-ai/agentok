@@ -18,7 +18,7 @@ const FunctionConfig = ({ nodeId, data, className, ...props }: any) => {
   useEffect(() => {
     if (data.functions?.length > 0 && selectedFunction === -1)
       setSelectedFunction(0);
-  }, [data.functions?.length]);
+  }, [data.functions?.length, selectedFunction, setSelectedFunction]);
   const onAdd = () => {
     setNodeData(instance, nodeId, {
       functions: [

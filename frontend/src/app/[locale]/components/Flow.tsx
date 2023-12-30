@@ -23,11 +23,11 @@ import Json from './Json';
 import { genId } from '@/utils/id';
 import ChatButton from './ChatButton';
 import { useTranslations } from 'next-intl';
-import { useFlow, useFlows } from '@/hooks';
+import { useFlow } from '@/hooks';
 import { useRouter } from 'next/navigation';
 import { debounce } from 'lodash-es';
 
-const Flow = ({ flowId }: any) => {
+const Autoflow = ({ flowId }: any) => {
   const { flow, updateFlow, isUpdating, isLoading, isError } = useFlow(flowId);
 
   const [mode, setMode] = useState<'main' | 'flow' | 'json' | 'python'>('flow');
@@ -36,7 +36,7 @@ const Flow = ({ flowId }: any) => {
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const flowParent = useRef<HTMLDivElement>(null);
   const { fitView, screenToFlowPosition, toObject } = useReactFlow();
-  const t = useTranslations('component.Flow');
+  const t = useTranslations('component.Autoflow');
   const router = useRouter();
 
   // Suppress error code 002
@@ -47,7 +47,7 @@ const Flow = ({ flowId }: any) => {
       if (code === '002') {
         return;
       }
-      console.warn('Flow warning:', code, message);
+      console.warn('Autoflow warning:', code, message);
     };
   }
 
@@ -60,16 +60,13 @@ const Flow = ({ flowId }: any) => {
 
   const initialLoad = useRef(true);
 
-  const debouncedUpdateFlow = useCallback(
-    debounce((flowId: string, currentFlow: any) => {
-      updateFlow({
-        id: flowId,
-        flow: currentFlow,
-      });
-      setIsDirty(false);
-    }, 1000),
-    []
-  );
+  const debouncedUpdateFlow = debounce((flowId: string, currentFlow: any) => {
+    updateFlow({
+      id: flowId,
+      flow: currentFlow,
+    });
+    setIsDirty(false);
+  }, 1000);
 
   useEffect(() => {
     if (!flow?.flow || initialLoad.current) {
@@ -83,7 +80,7 @@ const Flow = ({ flowId }: any) => {
     return () => {
       debouncedUpdateFlow.cancel();
     };
-  }, [nodes, edges, isDirty, flowId, toObject, debouncedUpdateFlow]);
+  }, [flow, nodes, edges, isDirty, flowId, toObject, debouncedUpdateFlow]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
@@ -273,4 +270,4 @@ const Flow = ({ flowId }: any) => {
   );
 };
 
-export default Flow;
+export default Autoflow;

@@ -12,13 +12,13 @@ This tutorial will utilize the online platform of FlowGen.
 
 ## Steps to Build Your Agent
 
-### Initiating a New Flow
+### Initiating a New Autoflow
 
 After logging into FlowGen, you can kickstart your new flow by clicking on 'Build from Scratch'.
 
 ![Build from Scratch](./img/build-from-scratch.png)
 
-### Orchestrating the Flow
+### Orchestrating the Autoflow
 
 Clear the deck by deleting any pre-existing sample nodes. Then, from the left panel, drag and drop the following nodes onto your workspace:
 
@@ -27,7 +27,7 @@ Clear the deck by deleting any pre-existing sample nodes. Then, from the left pa
 - `UserProxy Agent`, referred to as `UserProxy`.
 - `GroupChat`, with the `Involve User` option enabled.
 
-![Flow Diagram](./img/flow.png)
+![Autoflow Diagram](./img/flow.png)
 
 ### Integrating the Search Function
 
@@ -84,7 +84,7 @@ Rest assured, all configurations are preserved automatically.
 
 ### Initiating the Chat
 
-Everything's set! Hit the `Start Chat` button situated on the canvas's top-right corner to engage with the Flow. Prompt the process with an entry like `search the latest news about Elon Musk and generate a detailed article on it.`
+Everything's set! Hit the `Start Chat` button situated on the canvas's top-right corner to engage with the Autoflow. Prompt the process with an entry like `search the latest news about Elon Musk and generate a detailed article on it.`
 
 Consequently, the `Searcher` will retrieve a list of relevant links, after which the `Writer` expertly extracts information from these sources to fabricate a comprehensive article.
 

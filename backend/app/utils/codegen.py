@@ -5,7 +5,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.ext import do
 from typing import Any, Dict, List, Union
 
-from ..schemas import Flow, Function
+from ..schemas import Autoflow, Function
 
 print('target path:', os.path.join(os.getcwd(), "app/", "templates"))
 # Set up the Jinja2 environment
@@ -15,7 +15,7 @@ env = Environment(
     extensions=[do]
 )
 
-def flow2py(flow: Flow) -> str:
+def flow2py(flow: Autoflow) -> str:
   flow = flow.flow
   assistant_nodes = [node for node in flow.nodes if node['type'] == 'assistant']
   # TODO: It's possible there are multiple user_proxy nodes

@@ -19,8 +19,8 @@ const FeatureList: FeatureItem[] = [
     image: '/img/flow.png',
     description: (
       <>
-        Visualize the Agents and Agent Flow, further simplifies the building of
-        Multi-Agents Apps.
+        Visualize the Agents and Agent Autoflow, further simplifies the building
+        of Multi-Agents Apps.
       </>
     ),
   },

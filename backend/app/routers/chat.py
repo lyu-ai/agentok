@@ -5,7 +5,7 @@ import tempfile
 
 from termcolor import colored
 
-from ..schemas import Flow, Message
+from ..schemas import Autoflow, Message
 from ..utils import flow2py, add_message, get_source_metadata, run_assistant, send_human_input, set_chat_status
 from ..dependencies import oauth2_scheme
 
@@ -27,7 +27,7 @@ async def api_start_chat(message: Message, chat_id: str, token: str = Depends(oa
     os.makedirs(os.path.dirname(source_path), exist_ok=True)
 
     if not os.path.exists(source_path):
-        generated_code = flow2py(Flow(**source))
+        generated_code = flow2py(Autoflow(**source))
         with open(source_path, 'w', encoding='utf-8') as file:
             file.write(generated_code)
 
