@@ -44,7 +44,7 @@ Head over to [FlowGen Login](https://flowgen.app/auth/login) and tap **Login as 
 
 ![Login](./img/login.png)
 
-> [!WARNING] ⚠️
+> [!WARNING]
 > Guest mode means your data is an open book to other guests. Sign in with your GitHub/Google/X account for a private experience.
 
 Once you're in, go to the [homepage](https://flowgen.app) and hit the 'Build from Scratch' button to weave a new Flow.
