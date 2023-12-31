@@ -1,17 +1,17 @@
 version: '3.8'
 services:
-  frontend:
+  ui:
     build:
-      context: ./frontend
+      context: ./ui
       dockerfile: Dockerfile
     ports:
       - "2855:2855"
     networks:
       - app-network
 
-  backend:
+  api:
     build:
-      context: ./backend
+      context: ./api
       dockerfile: Dockerfile
     ports:
       - "5004:5004"

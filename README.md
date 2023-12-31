@@ -2,7 +2,7 @@
 >
 > This project is still under heavy development and functions might not work well yet. Please don't hestitate to [Open an Issue](https://github.com/tiwater/flowgen/issues/new").
 
-<img src="./frontend/public/logo-full.png" width="320" />
+<img src="./ui/public/logo-full.png" width="320" />
 
 # FlowGen - AutoGen Visualized
 
@@ -101,14 +101,14 @@ The easiest way to run on local is using docker-compose:
 docker-compose up -d
 ```
 
-You can also build and run the frontend and backend services separately with docker:
+You can also build and run the ui and service separately with docker:
 
 ```bash
-docker build -t flowgen-api ./backend
+docker build -t flowgen-api ./api
 docker run -d -p 5004:5004 flowgen-api
 
-docker build -t flowgen-app ./frontend
-docker run -d -p 2855:2855 flowgen-app
+docker build -t flowgen-ui ./ui
+docker run -d -p 2855:2855 flowgen-ui
 
 docker build -t flowgen-db ./pocketbase
 docker run -d -p 7676:7676 flowgen-db
@@ -130,22 +130,22 @@ Railway.app supports the deployment of applications in Dockers. By clicking the 
 
 ## 🛠️ Run on Local (Without Docker)
 
-If you're interested in contributing to the development of this project or wish to run it from the source code, you have the option to run the frontend and backend services independently. Here's how you can do that:
+If you're interested in contributing to the development of this project or wish to run it from the source code, you have the option to run the ui and service independently. Here's how you can do that:
 
 1. **Frontend Service:**
 
-   - Navigate to the frontend service directory.
+   - Navigate to the ui directory.
    - Rename `.env.sample` to `.env.local` and set the value of variables correctly.
    - Install the necessary dependencies using the appropriate package manager command (e.g., `pnpm install` or `yarn`).
-   - Run the frontend service using the start-up script provided (e.g., `pnpm dev` or `yarn dev`).
+   - Run the ui service using the start-up script provided (e.g., `pnpm dev` or `yarn dev`).
 
 2. **Backend Service:**
 
-   - Switch to the backend service directory `cd backend`.
+   - Switch to the api service directory `cd api`.
    - Create virtual environment: `python3 -m venv venv`.
    - Activate virtual environment: `source venv/bin/activate`.
    - Install all required dependencies: `pip install -r requirements.txt`.
-   - Launch the backend service using command `uvicorn app.main:app --reload --port 5004`.
+   - Launch the api service using command `uvicorn app.main:app --reload --port 5004`.
 
 `REPLICATE_API_TOKEN` is needed for LLaVa agent. If you need to use this agent, make sure to include this token in environment variables, such as the Environment Variables on Railway.app.
 
@@ -163,13 +163,13 @@ Each new commit to the main branch triggers an automatic deployment on [Railway.
 >
 > Please do not use it for production purpose, and make sure you export flows in time.
 
-Once you've started both the frontend and backend services by following the steps previously outlined, you can access the application by opening your web browser and navigating to:
+Once you've started both the ui and api services by following the steps previously outlined, you can access the application by opening your web browser and navigating to:
 
 - Frontend: http://localhost:2855
 - Backend: http://localhost:5004 (OpenAPI docs served at http://localhost:5004/redoc)
 - PocketBase: http://localhost:7676
 
-If your services are started successfully and running on the expected ports, you should see the user interface or receive responses from the backend via this URL.
+If your services are started successfully and running on the expected ports, you should see the user interface or receive responses from the api services via this URL.
 
 ## 👨‍💻 Contributing
 

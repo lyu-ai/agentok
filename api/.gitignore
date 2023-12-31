@@ -136,7 +136,7 @@ dmypy.json
 cython_debug/
 .vercel
 .next/
-frontend/.next/
+ui/.next/
 
 OAI_CONFIG_LIST
 
