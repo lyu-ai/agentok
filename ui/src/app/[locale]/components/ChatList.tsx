@@ -166,9 +166,9 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
         <div className="relative flex flex-col w-full gap-2 justify-between items-start">
           <div className="flex items-center gap-1">
             <PiChatsCircleFill className="w-7 h-7 flex-0" />
-            <div className="flex flex-col items-start gap-1">
+            <div className="flex flex-col items-start">
               <EditableText
-                className="font-bold truncate w-64"
+                className="font-bold nowrap line-clamp-1 truncate w-64"
                 editing={isEditing}
                 onChange={onEditCompleted}
                 text={chat.name ?? chatSource?.name ?? 'Untitled ' + chat.id}
@@ -177,6 +177,9 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
                 {chat.created && new Date(chat.created).toLocaleString()}
               </div>
             </div>
+          </div>
+          <div className="text-sm text-base-content/80 h-10 line-clamp-2">
+            {chatSource?.description}
           </div>
           <div
             className={clsx(
