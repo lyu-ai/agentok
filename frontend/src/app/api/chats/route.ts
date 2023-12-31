@@ -4,7 +4,9 @@ import loadAuthFromCookie from '@/utils/pocketbase/server';
 export async function GET(request: NextRequest) {
   const pb = await loadAuthFromCookie();
   try {
-    const chats = await pb.collection('chats').getFullList();
+    const chats = await pb
+      .collection('chats')
+      .getFullList({ sort: '-created' });
     return new Response(JSON.stringify(chats));
   } catch (e) {
     console.error(`Failed GET /chats:`, (e as any).message);

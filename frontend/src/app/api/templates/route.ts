@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   const pb = await loadAuthFromCookie();
   let templates = await pb
     .collection('templates')
-    .getFullList({ expand: 'owner' });
+    .getFullList({ sort: '-created', expand: 'owner' });
 
   // TEMP: solve the data format issue
   templates = templates.map(template => {

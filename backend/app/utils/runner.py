@@ -13,9 +13,34 @@ subprocesses = {}
 def print_message(message):
     print("New message received:", message)
 
+def strip_prefix(input_string, substrings):
+    # Loop through the list of substrings
+    for substring in substrings:
+        # Check if the substring is in the input
+        if substring in input_string:
+            # Find the index where the substring is found
+            index = input_string.find(substring)
+            # Return the remaining string starting with the found substring
+            return input_string[index:]
+    # If none of the substrings are found, return the original string
+    return input_string
+
 async def run_assistant(chat_id: str, message: str, source_path: str, on_message=print_message):
     command = ["python3", source_path, f'"{message}"']
     print(colored(text=f'Running {" ".join(command)}', color='green'))
+
+    # Check if there is already a subprocess for given chat_id
+    if subprocesses.get(chat_id):
+        print(colored(text=f'Found existing subprocess for chat_id {chat_id}. Terminating...', color='yellow'))
+        old_process_info = subprocesses[chat_id]
+        old_process = old_process_info['process']
+
+        # Terminate the old process
+        old_process.terminate()
+        # Optionally, you can also use old_process.kill() if terminate is not forceful enough
+
+        # Wait for the process to terminate before moving on
+        await old_process.wait()
 
     # Start the subprocess with the provided command
     process = await asyncio.create_subprocess_exec(
@@ -40,10 +65,10 @@ async def run_assistant(chat_id: str, message: str, source_path: str, on_message
         if line:  # Truthy if the line is not empty
             response_message = line.decode().rstrip()  # Remove trailing newline/whitespace
             print('🤖', response_message)
-            if response_message.startswith(('__STATUS_RECEIVED_HUMAN_INPUT__', '__STATUS_WAIT_FOR_HUMAN_INPUT__')):
+            if any(status in response_message for status in ('__STATUS_RECEIVED_HUMAN_INPUT__', '__STATUS_WAIT_FOR_HUMAN_INPUT__')):
                 on_message({
                     'type': 'assistant',
-                    'content': response_message,
+                    'content': strip_prefix(response_message, ('__STATUS_RECEIVED_HUMAN_INPUT__', '__STATUS_WAIT_FOR_HUMAN_INPUT__')),
                 })
             else:
                 output_parser.parse_line(response_message)

@@ -164,8 +164,8 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
         }}
       >
         <div className="relative flex flex-col w-full gap-2 justify-between items-start">
-          <div className="flex items-center gap-2">
-            <PiChatsCircleFill className="w-8 h-8 flex-0" />
+          <div className="flex items-center gap-1">
+            <PiChatsCircleFill className="w-7 h-7 flex-0" />
             <div className="flex flex-col items-start gap-1">
               <EditableText
                 className="font-bold truncate w-64"
@@ -178,11 +178,26 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2 font-normal">
-            <span className="border border-base-content/40 text-base-content/60 rounded p-1 text-xs">
+          <div
+            className={clsx(
+              'join flex items-center border border-base-content/40 text-xs rounded ',
+              {
+                'border-primary/40 text-primary/40 bg-primary/5':
+                  chat.sourceType === 'flow',
+                'border-secondary/40 text-secondary/40 bg-primary/5':
+                  chat.sourceType === 'template',
+              }
+            )}
+          >
+            <span
+              className={clsx('join-item px-2 py-0.5 border-r ', {
+                'border-primary/40': chat.sourceType === 'flow',
+                'border-secondary/40': chat.sourceType === 'template',
+              })}
+            >
               {chat.sourceType}
             </span>
-            <span className="text-base-content/60 line-clamp-1">
+            <span className="join-item line-clamp-1 px-2 py-0.5">
               {chatSource?.name ?? ''}
             </span>
           </div>

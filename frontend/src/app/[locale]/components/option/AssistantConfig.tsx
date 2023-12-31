@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { useReactFlow } from 'reactflow';
 import { setNodeData } from '../../utils/flow';
 import { useTranslations } from 'next-intl';
+import { set } from 'lodash-es';
 
 const CompressConfig = ({ data, setCompressOption, ...props }: any) => {
   const t = useTranslations('option.AssistantConfig');
@@ -62,6 +63,52 @@ const CompressConfig = ({ data, setCompressOption, ...props }: any) => {
   );
 };
 
+const ToolConfig = ({ data, setToolOption, ...props }: any) => {
+  const t = useTranslations('option.AssistantConfig');
+  return (
+    <div
+      className={`text-sm transition-all ease-in-out ${
+        data?.tools ? 'expanding-height' : 'collapsing-height'
+      }`}
+    >
+      <div
+        className={
+          'flex flex-col gap-2 border rounded border-base-content/20 bg-base-content/5 p-3'
+        }
+      >
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            className="checkbox checkbox-xs rounnded"
+            checked={
+              (data.tools &&
+                data.tools.find((t: any) => t && t.type === 'retrieval')) ||
+              false
+            }
+            onChange={e => setToolOption('retrieval', e.target.checked)}
+          />
+          <span>{t('retrieval')}</span>
+        </label>
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            className="checkbox checkbox-xs rounnded"
+            checked={
+              (data.tools &&
+                data.tools.find(
+                  (t: any) => t && t.type === 'code_interpreter'
+                )) ||
+              false
+            }
+            onChange={e => setToolOption('code_interpreter', e.target.checked)}
+          />
+          <span>{t('code_interpreter')}</span>
+        </label>
+      </div>
+    </div>
+  );
+};
+
 const AssistantConfig = ({ nodeId, data, className, ...props }: any) => {
   const instance = useReactFlow();
   const t = useTranslations('option.AssistantConfig');
@@ -94,6 +141,45 @@ const AssistantConfig = ({ nodeId, data, className, ...props }: any) => {
       },
     });
   };
+  const onEnableTool = (checked: boolean) => {
+    if (checked) {
+      setNodeData(instance, nodeId, {
+        tools: [
+          {
+            type: 'retrieval',
+          },
+          {
+            type: 'code_interpreter',
+          },
+        ],
+      });
+    } else {
+      setNodeData(instance, nodeId, {
+        tools: undefined,
+      });
+    }
+  };
+  const setToolOption = (key: string, value: any) => {
+    let newTools: { type: string }[] | undefined;
+    if (value) {
+      if (!data.tools) {
+        newTools = [{ type: key }];
+      } else {
+        // If 'value' is true, add a new tool if it doesn't exist
+        const toolExists = data.tools.some((t: any) => t && t.type === key);
+        newTools = toolExists
+          ? [...data.tools]
+          : [...data.tools, { type: key }];
+      }
+    } else {
+      if (data.tools) {
+        // If 'value' is false, filter out the tool
+        newTools = data.tools.filter((t: any) => t && t.type !== key);
+        if (newTools?.length === 0) newTools = undefined;
+      }
+    }
+    setNodeData(instance, nodeId, { tools: newTools });
+  };
   return (
     <PopupDialog
       title={
@@ -110,16 +196,61 @@ const AssistantConfig = ({ nodeId, data, className, ...props }: any) => {
       classNameBody="flex flex-grow flex-col w-full h-full p-2 gap-2 text-sm overflow-y-auto"
       {...props}
     >
-      <label className="flex items-center justify-start cursor-pointer label gap-2">
-        <input
-          checked={data.compress_config !== undefined}
-          onChange={e => onEnableCompress(e.target.checked ?? false)}
-          type="checkbox"
-          className="checkbox checkbox-sm rounded"
-        />
-        <span className="font-bold">{t('support_compress')}</span>
-      </label>
-      <CompressConfig data={data} setCompressOption={setCompressOption} />
+      {data.class !== 'GPTAssistantAgent' && (
+        <>
+          <label className="flex items-center justify-start cursor-pointer label gap-2">
+            <input
+              checked={data.compress_config !== undefined}
+              onChange={e => onEnableCompress(e.target.checked ?? false)}
+              type="checkbox"
+              className="checkbox checkbox-sm rounded"
+            />
+            <span className="font-bold">{t('support_compress')}</span>
+          </label>
+          <CompressConfig data={data} setCompressOption={setCompressOption} />
+        </>
+      )}
+      {data.class === 'GPTAssistantAgent' && (
+        <>
+          <label className="flex items-center justify-start cursor-pointer label gap-2">
+            <input
+              checked={data.tools !== undefined}
+              disabled={data.class !== 'GPTAssistantAgent'}
+              onChange={e => onEnableTool(e.target.checked ?? false)}
+              type="checkbox"
+              className="checkbox checkbox-sm rounded"
+            />
+            <span className="font-bold">{t('enable_tools')}</span>
+          </label>
+          <ToolConfig data={data} setToolOption={setToolOption} />
+          <label className="flex items-center justify-start cursor-pointer label gap-2">
+            <span className="font-bold shrink-0">{t('assistant_id')}</span>
+            <input
+              type="text"
+              value={data.assistant_id ?? ''}
+              onChange={e =>
+                setNodeData(instance, nodeId, {
+                  assistant_id: e.target.value,
+                })
+              }
+              className="input input-sm input-bordered rounded w-full"
+            />
+          </label>
+          <label className="flex w-full items-start label gap-2">
+            <span className="font-bold shrink-0">{t('file_ids')}</span>
+            <textarea
+              value={data.file_ids?.join('\n') ?? ''}
+              onChange={e =>
+                setNodeData(instance, nodeId, {
+                  file_ids: e.target.value.split('\n'),
+                })
+              }
+              rows={4}
+              className="textarea textarea-sm textarea-bordered w-full rounded"
+            />
+          </label>
+        </>
+      )}
     </PopupDialog>
   );
 };

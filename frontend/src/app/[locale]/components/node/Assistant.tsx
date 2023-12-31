@@ -162,7 +162,9 @@ function AssistantNode({ id, data, selected }: any) {
         {data.class === 'LLaVAAgent' && (
           <LLavaOptions id={id} data={data} selected={selected} />
         )}
-        {['AssistantAgent', 'CompressibleAgent'].includes(data.class) && (
+        {['AssistantAgent', 'CompressibleAgent', 'GPTAssistantAgent'].includes(
+          data.class
+        ) && (
           <button
             className="btn btn-outline btn-sm flex items-center gap-2 rounded"
             onClick={() => setShowOptions(o => !o)}

@@ -35,19 +35,24 @@ const CodeComponent = ({
   inline,
   className,
   children,
+  suppressCopy,
   ...props
 }: any) => {
   const match = /language-(\w+)/.exec(className || '');
+  console.log('CodeComponent', node, suppressCopy);
   if (inline) return <InlineCode {...props}>{children}</InlineCode>;
   return (
     <div className="relative">
       <CodeBlock language={match && match[1]} {...props}>
         {String(children).replace(/\n$/, '')}
       </CodeBlock>
-      <CopyButton
-        content={String(children).replace(/\n$/, '')}
-        className="absolute top-1 right-1"
-      />
+      {!suppressCopy && (
+        <CopyButton
+          minimal
+          content={String(children).replace(/\n$/, '')}
+          className="absolute top-1 right-1"
+        />
+      )}
     </div>
   );
 };
@@ -56,7 +61,13 @@ const CodeComponent = ({
 //    Replace the link in the markdown with span
 //    This is to solve the link-nesting issue if the container itself is a link
 //
-const Markdown = ({ className, suppressLink, children, ...props }: any) => {
+const Markdown = ({
+  className,
+  suppressLink,
+  suppressCopy,
+  children,
+  ...props
+}: any) => {
   // This function is for image format in autogen
   function preprocessImageTags(content: string): string {
     // Regex to find <img> tags with the assumed format
@@ -78,7 +89,9 @@ const Markdown = ({ className, suppressLink, children, ...props }: any) => {
     <ReactMarkdown
       remarkPlugins={[RemarkGfm, RemarkBreaks]}
       components={{
-        code: CodeComponent,
+        code(data): JSX.Element {
+          return <CodeComponent {...data} suppressCopy={suppressCopy} />;
+        },
         a(data): JSX.Element {
           return suppressLink ? (
             <span className="text-primary" {...data} />

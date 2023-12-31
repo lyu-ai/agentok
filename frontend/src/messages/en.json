@@ -82,6 +82,7 @@
       "thinking-begin": "Begin Thinking",
       "thinking-end": "End of Thinking",
       "wait-for-human-input": "Wait for human input ...",
+      "received-human-input": "Received human input. Continue...",
       "start-chat": "Start Chat",
       "reload-history": "Reload chat history",
       "clean-history": "Clean chat history",
@@ -187,7 +188,12 @@
       "verbose": "Verbose",
       "leave_last_n": "Leave Last N",
       "trigger_count": "Trigger Count",
-      "support_compress": "Support Compress"
+      "support_compress": "Support Compress",
+      "enable_tools": "Enable Tools",
+      "retrieval": "Retrieval",
+      "code_interpreter": "Code Interpreter",
+      "file_ids": "File IDs",
+      "assistant_id": "Assistant ID"
     }
   },
   "page": {
@@ -204,7 +210,7 @@
       "chat-tagline": "Start Chat with FlowGen",
       "start-chat": "Start Chat",
       "chat-sessions": "Chat Sessions",
-      "filter": "Input to filter result",
+      "filter": "Filter chats by keywords",
       "your-flows": "Chat from Your Autoflows",
       "select-chat": "Select a session to continue, or start a new one from Autoflow or AutoflowTemplate."
     },

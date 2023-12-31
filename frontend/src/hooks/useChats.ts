@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { fetcher } from './fetcher';
 import pb from '@/utils/pocketbase/client';
 import { isEqual } from 'lodash-es';
+import useFlowStore from '@/store/flow';
+import useTemplateStore from '@/store/template';
 
 export function useChats() {
   const { data, error, mutate } = useSWR('/api/chats', fetcher);
@@ -14,6 +16,19 @@ export function useChats() {
   const deleteChat = useChatStore(state => state.deleteChat);
   const sidebarCollapsed = useChatStore(state => state.sidebarCollapsed);
   const setSidebarCollapsed = useChatStore(state => state.setSidebarCollapsed);
+  const flows = useFlowStore(state => state.flows);
+  const templates = useTemplateStore(state => state.templates);
+
+  const getInitialName = (
+    sourceId: string,
+    sourceType: 'flow' | 'template'
+  ) => {
+    const source =
+      sourceType === 'flow'
+        ? flows.find(flow => flow.id === sourceId)
+        : templates.find(template => template.id === sourceId);
+    return `Chat for ${source?.name || ''}`;
+  };
 
   useEffect(() => {
     if (data) {
@@ -48,10 +63,7 @@ export function useChats() {
     try {
       const body = {
         from_type: sourceType,
-        name:
-          sourceType === 'flow'
-            ? 'New Chat ' + sourceId
-            : 'New AutoflowTemplate Chat ' + sourceId,
+        name: getInitialName(sourceId, sourceType),
         owner: pb.authStore.model?.id,
         ...(sourceType === 'flow'
           ? { from_flow: sourceId }

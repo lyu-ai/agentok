@@ -14,6 +14,8 @@ import { useChat, useChats } from '@/hooks';
 import { Tooltip } from 'react-tooltip';
 import MessageList from './MessageList';
 import clsx from 'clsx';
+import { get } from 'http';
+import Tip from './Tip';
 
 const Chat = ({
   chatId,
@@ -29,6 +31,7 @@ const Chat = ({
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [thinking, setThinking] = useState(false);
+  const [help, setHelp] = useState('');
   const [waitForHumanInput, setWaitForHumanInput] = useState(false);
   const [cleaning, setCleaning] = useState(false);
   const isFirstRender = useRef(true);
@@ -48,8 +51,20 @@ const Chat = ({
       });
   }, [setMessages, chatId]);
 
+  const extractHelp = useCallback(() => {
+    const noteNode = chatSource?.flow?.nodes?.find(
+      (node: any) => node.type === 'note'
+    );
+    if (noteNode) {
+      setHelp(noteNode.data.content);
+    }
+  }, [chatSource]);
+
   useEffect(() => {
     fetchMessages().finally(() => setLoading(false));
+
+    extractHelp();
+
     let unsubscribFunc: UnsubscribeFunc | undefined;
     pb.collection('messages')
       .subscribe('*', payload => {
@@ -188,10 +203,12 @@ const Chat = ({
               )}
             </button>
           )}
-          <PiChatsCircleFill className="w-5 h-5 shrink-0" />
           <span className="line-clamp-1 font-bold">{`${
             chat?.name ?? 'Untitled ' + chatId
           } ${chatSource?.name ? ' | ' + chatSource?.name : ''}`}</span>
+          {help && (
+            <Tip content={help} className="mx-2" data-tooltip-place="bottom" />
+          )}
         </div>
         <div className="flex items-center gap-2">
           <button

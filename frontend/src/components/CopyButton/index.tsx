@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 import { GoCheck, GoCopy } from 'react-icons/go';
 import { PlacesType } from 'react-tooltip';
@@ -8,15 +7,16 @@ const CopyButton = ({
   content,
   minimal,
   className,
+  tooltip,
   place,
 }: {
   content: string;
   minimal?: boolean;
   className?: string;
+  tooltip?: string;
   place?: PlacesType;
 }) => {
   const [copied, setCopied] = useState(false);
-  const t = useTranslations('component.CopyButton')
   const onCopy = () => {
     navigator.clipboard.writeText(content);
     setCopied(true);
@@ -28,9 +28,13 @@ const CopyButton = ({
   return (
     <div
       onClick={() => onCopy()}
-      className={clsx(className, !minimal && 'btn btn-sm btn-ghost btn-square')}
+      className={clsx(
+        className,
+        'cursor-pointer',
+        !minimal && 'btn btn-sm btn-ghost btn-square'
+      )}
       data-tooltip-id="default-tooltip"
-      data-tooltip-content={copied ? t('copied'): t('copy')}
+      data-tooltip-content={tooltip}
       data-tooltip-place={place ?? 'bottom'}
     >
       <CopyIcon className="w-4 h-4" />

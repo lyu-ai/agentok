@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { GoInfo } from 'react-icons/go';
+import { GoQuestion } from 'react-icons/go';
 import Markdown from '@/components/Markdown';
 import { createRoot } from 'react-dom/client';
 import clsx from 'clsx';
@@ -10,7 +10,9 @@ const Tip = ({ content, icon, className, classNameContent, ...props }: any) => {
     let isMounted = true; // Guard to prevent setting state if the component is unmounted
     if (typeof content === 'string') {
       renderToString(
-        <Markdown className={classNameContent}>{content}</Markdown>
+        <Markdown className={classNameContent} suppressCopy>
+          {content}
+        </Markdown>
       ).then(html => {
         if (isMounted) setHtmlContent(html);
       });
@@ -42,12 +44,12 @@ const Tip = ({ content, icon, className, classNameContent, ...props }: any) => {
   return (
     <div
       data-tooltip-id="html-tooltip"
-      data-tooltip-html={htmlContent || '<span>waiting...<span>'}
+      data-tooltip-html={htmlContent}
       data-tooltip-place="top"
       className={clsx(className, 'cursor-pointer')}
       {...props}
     >
-      {icon ?? <GoInfo className="w-4 h-4" />}
+      {icon ?? <GoQuestion className="w-4 h-4" />}
     </div>
   );
 };

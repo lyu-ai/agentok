@@ -82,6 +82,7 @@
       "thinking-begin": "开始思考",
       "thinking-end": "思考结束",
       "wait-for-human-input": "等待用户输入...",
+      "received-human-input": "收到用户输入。继续会话...",
       "start-chat": "开始聊天",
       "reload-history": "重新加载聊天记录",
       "clean-history": "清除聊天记录",
@@ -175,8 +176,18 @@
       "client": "客户端",
       "termination-msg": "终止关键字："
     },
-    "ThemeSwitcher": {
-      "theme-tooltip": "切换浅色/深色模式"
+    "AssistantConfig": {
+      "title": "更多选项",
+      "mode": "模式",
+      "verbose": "调试信息",
+      "leave_last_n": "Leave Last N",
+      "trigger_count": "Trigger Count",
+      "support_compress": "支持压缩",
+      "enable_tools": "启用工具",
+      "retrieval": "检索（RAG）",
+      "code_interpreter": "代码解释器",
+      "file_ids": "文档集合",
+      "assistant_id": "助理 ID"
     }
   },
   "page": {

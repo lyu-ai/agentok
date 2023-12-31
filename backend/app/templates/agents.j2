@@ -31,9 +31,15 @@ node_{{ node.id }} = {{ class_name }}(
     {%- elif node.data.class == 'GPTAssistantAgent' %}
     llm_config={
         **llm_config,
-        "tools": [{
-            "type": "code_interpreter",
-        }],
+        {%- if node.data.tools %}
+        "tools": {{ node.data.tools }},
+        {%- endif %}
+        {%- if node.data.file_ids %}
+        "file_ids": {{ node.data.file_ids }},
+        {%- endif %}
+        {%- if node.data.assistant_id %}
+        "assistant_id": "{{ node.data.assistant_id }}",
+        {%- endif %}
     }
     {%- else %}
     llm_config=llm_config,

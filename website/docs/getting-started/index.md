@@ -78,7 +78,7 @@ Notice the conversation's quick? Just one round and boom, done—`UserProxyAgent
 Got a taste for FlowGen? Feast on these resources for seconds:
 
 - [FlowGen Gallery](https://flowgen.app/gallery/): Feast your eyes on a buffet of ready-to-serve templates.
-- [FlowGen Documentation](https://flowgen.app/docs/): The ultimate guide to becoming a FlowGen whiz.
+- [FlowGen Documentation](https://docs.flowgen.app/): The ultimate guide to becoming a FlowGen whiz.
 - [FlowGen GitHub](https://github.com/tiwater/flowgen): Peek under the hood at the source code.
 - [AutoGen Documentation](https://microsoft.github.io/autogen/): Master the art of AutoGen with this comprehensive tutorial.
 - [AutoGen Notebook](https://github.com/microsoft/autogen/tree/main/notebook): Dive into Jupyter notebooks showcasing AutoGen's prowess.
