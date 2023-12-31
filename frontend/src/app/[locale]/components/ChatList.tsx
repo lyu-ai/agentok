@@ -263,6 +263,10 @@ const ChatList = ({
       chatRefs.size === chats.length
     ) {
       const activeChatRef = chatRefs.get(activeChat);
+      if (!activeChatRef.current) {
+        console.warn('Active chat ref not found');
+        return;
+      }
       autoScrollIntoView(activeChatRef.current, chatListRef.current);
     }
   }, [isLoadingChats, activeChat, chatRefs, chats]);
