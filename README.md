@@ -39,13 +39,7 @@ Place to share and discover flow templates.
 
 To quickly explore what FlowGen has to offer, simply visit it [https://flowgen.app](https://flowgen.app).
 
-Each new commit to the main branch triggers an automatic deployment on [Railway.app](https://railway.app), ensuring you experience the latest version of the service.
-
-> [!WARNING]
->
-> Changes to Pocketbase project will cause the rebuild and redeployment of all instances, which will swipe all the data.
->
-> Please do not use it for production purpose, and make sure you export flows in time.
+For a more in-depth look at the platform, please refer to our [Getting Started](https://docs.flowgen.app/getting-started) and [other documents](https://docs.flowgen.app).
 
 ## Migration of Official Notebooks
 
@@ -80,7 +74,7 @@ We made tutorials based on the official notebooks from Autogen repository. You c
 | MathChat                                | 🔲     |                                                                                                                   |
 | oai_assistant_function_call             | ✅     |                                                                                                                   |
 | oai_assistant_groupchat                 | 🆘     | Very slow and not work well, sometimes not returning.                                                             |
-| oai_assistant_retrieval                 | 🔲     |                                                                                                                   |
+| oai_assistant_retrieval                 | ✅     | [Retrieval (OAI)](https://flowgen.app/flow/budldnqtap02saj)                                                       |
 | oai_assistant_twoagents_basic           | ✅     |                                                                                                                   |
 | oai_code_interpreter                    | ✅     |                                                                                                                   |
 | planning                                | ✅     | This sample works fine, but does not exit gracefully.                                                             |
@@ -160,6 +154,14 @@ If you're interested in contributing to the development of this project or wish 
    - Switch to the PocketBase directory `cd pocketbase`.
    - Build the container: `docker build -t flowgen-db .`
    - Run the container: `docker run -it --rm -p 7676:7676 flowgen-db`
+
+Each new commit to the main branch triggers an automatic deployment on [Railway.app](https://railway.app), ensuring you experience the latest version of the service.
+
+> [!WARNING]
+>
+> Changes to Pocketbase project will cause the rebuild and redeployment of all instances, which will swipe all the data.
+>
+> Please do not use it for production purpose, and make sure you export flows in time.
 
 Once you've started both the frontend and backend services by following the steps previously outlined, you can access the application by opening your web browser and navigating to:
 

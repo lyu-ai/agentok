@@ -39,7 +39,6 @@ const CodeComponent = ({
   ...props
 }: any) => {
   const match = /language-(\w+)/.exec(className || '');
-  console.log('CodeComponent', node, suppressCopy);
   if (inline) return <InlineCode {...props}>{children}</InlineCode>;
   return (
     <div className="relative">
