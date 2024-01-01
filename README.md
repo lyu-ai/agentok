@@ -75,7 +75,7 @@ We made tutorials based on the official notebooks from Autogen repository. You c
 | MathChat                                | 🔲     |                                                                                                                   |
 | oai_assistant_function_call             | ✅     |                                                                                                                   |
 | oai_assistant_groupchat                 | 🆘     | Very slow and not work well, sometimes not returning.                                                             |
-| oai_assistant_retrieval                 | ✅     | [Retrieval (OAI)](https://flowgen.app/flow/budldnqtap02saj)                                                       |
+| oai_assistant_retrieval                 | ✅     | [Retrieval (OAI)](https://flowgen.app/gallery/budldnqtap02saj)                                                    |
 | oai_assistant_twoagents_basic           | ✅     |                                                                                                                   |
 | oai_code_interpreter                    | ✅     |                                                                                                                   |
 | planning                                | ✅     | This sample works fine, but does not exit gracefully.                                                             |
