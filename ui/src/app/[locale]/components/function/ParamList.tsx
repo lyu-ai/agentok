@@ -5,6 +5,7 @@ import { GoTrash } from 'react-icons/go';
 import { MdOutlineAdd } from 'react-icons/md';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
+import clsx from 'clsx';
 
 const ParamRow = ({ param, onDelete, onUpdate }: any) => {
   const [name, setName] = useState(param.name ?? '');
@@ -66,7 +67,7 @@ const ParamRow = ({ param, onDelete, onUpdate }: any) => {
   );
 };
 
-const ParamList = ({ nodeId, func, ...props }: any) => {
+const ParamList = ({ nodeId, func, className, ...props }: any) => {
   const t = useTranslations('function.Params');
   const instance = useReactFlow();
   const node = instance.getNode(nodeId);
@@ -126,7 +127,12 @@ const ParamList = ({ nodeId, func, ...props }: any) => {
   };
 
   return (
-    <div className="flex flex-col gap-2 overflow-x-auto p-2 border border-base-content/20 rounded">
+    <div
+      className={clsx(
+        'flex flex-col gap-2 overflow-x-auto p-2 border border-base-content/20 rounded',
+        className
+      )}
+    >
       <div className="flex items-center justify-between">
         <div className="font-bold">{t('title')}</div>
         <button

@@ -46,16 +46,16 @@ const CodeEditor = ({ nodeId, func, ...props }: any) => {
       .finally(() => setIsGenerating(false));
   };
   return (
-    <div className="flex flex-col w-full gap-2">
-      <div className="rounded overflow-hidden border h-[200px] border-base-content/20">
+    <div className="flex flex-col w-full h-full gap-2">
+      <div className="rounded overflow-hidden border h-full border-base-content/20">
         <div className="w-full h-full relative group">
           <CodeMirror
             value={func?.code ?? ''}
-            height="200px"
+            height="100%"
             theme={theme}
             extensions={[python()]}
             onChange={code => onUpdateCode(code)}
-            style={{ fontSize: '0.75rem' }}
+            style={{ fontSize: '0.75rem', height: '100%' }}
           />
           <div
             className={clsx(
@@ -70,8 +70,8 @@ const CodeEditor = ({ nodeId, func, ...props }: any) => {
           >
             <button
               className={clsx(
-                'btn rounded btn-outline gap-1',
-                func?.code ? 'btn-xs px-2' : 'btn-primary btn-sm p-2'
+                'btn btn-sm rounded btn-outline gap-1 p-2',
+                func?.code ? '' : 'btn-primary'
               )}
               data-tooltip-id="func-tooltip"
               data-tooltip-content={t('generate-code-tooltip')}
@@ -85,7 +85,7 @@ const CodeEditor = ({ nodeId, func, ...props }: any) => {
           </div>
         </div>
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center flex-=0">
         <button className="btn btn-sm btn-outline rounded btn-disabled">
           <VscDebugAlt className="w-4 h-4" />
           <span>{t('run-test')}</span>

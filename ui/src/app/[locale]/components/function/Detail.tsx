@@ -57,8 +57,8 @@ const FunctionDetail = ({ nodeId, func, ...props }: any) => {
           />
         </div>
       </div>
-      <ParamList nodeId={nodeId} func={func} />
-      <CodeEditor nodeId={nodeId} func={func} />
+      <ParamList nodeId={nodeId} func={func} className="shrink-0" />
+      <CodeEditor nodeId={nodeId} func={func} className="flex-grow" />
     </div>
   );
 };
