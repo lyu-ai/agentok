@@ -44,16 +44,16 @@ function Note({ id, data, selected, ...props }: any) {
   return (
     <div
       className={clsx(
-        'w-full h-full p-2 rounded-md border text-orange-100 backdrop-blur-md',
+        'group w-full h-full rounded-md border text-orange-100 backdrop-blur-md',
         selected
-          ? 'border-yellow-600/60 bg-yellow-500/60'
-          : 'border-yellow-700/40 bg-yellow-500/50'
+          ? 'border-orange-300/20 bg-orange-300/40'
+          : 'border-orange-300/10 bg-orange-300/20'
       )}
     >
       <Toolbar
         nodeId={id}
         selected={selected}
-        className="border-yellow-600/60 bg-yellow-500/60"
+        className="border-orange-300/20 bg-orange-300/40"
       >
         <CopyButton
           content={content}
@@ -63,7 +63,7 @@ function Note({ id, data, selected, ...props }: any) {
         />
       </Toolbar>
       <div className="relative flex flex-col w-full h-full gap-2 text-sm">
-        <div className="flex items-center gap-2 justify-between">
+        <div className="flex items-center gap-2 p-2 justify-between">
           <div className="flex items-center gap-2">
             <div className="flex justify-center items-center">
               <FaNoteSticky className="w-5 h-5" />
@@ -110,17 +110,21 @@ function Note({ id, data, selected, ...props }: any) {
               value={content}
               onChange={e => setContent(e.target.value)}
               placeholder={t('note-placeholder')}
-              className="nodrag nowheel textarea w-full h-full p-1 bg-base-content/20 rounded"
+              className="nodrag nowheel textarea w-full h-full p-2 bg-base-content/20 rounded"
               rows={6}
             />
           )}
-          {!editing && <Markdown>{data.content ?? t('note-blank')}</Markdown>}
+          {!editing && (
+            <Markdown className="nodrag nowheel p-2">
+              {data.content ?? t('note-blank')}
+            </Markdown>
+          )}
         </div>
         <NodeResizeControl
           nodeId={id}
           minWidth={240}
           minHeight={120}
-          className={clsx({ hidden: !selected })}
+          className="hidden group-hover:block"
           style={{
             background: 'transparent',
             border: 'none',

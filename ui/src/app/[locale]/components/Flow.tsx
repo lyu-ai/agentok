@@ -56,6 +56,7 @@ const Autoflow = ({ flowId }: any) => {
     setNodes(flow?.flow?.nodes ?? []);
     setEdges(flow?.flow?.edges ?? []);
     setIsDirty(false);
+    fitView({ padding: 0.2, maxZoom: 1 });
   }, [flow]);
 
   const initialLoad = useRef(true);
@@ -244,6 +245,7 @@ const Autoflow = ({ flowId }: any) => {
         selectionOnDrag
         selectionMode={SelectionMode.Partial}
         fitView
+        fitViewOptions={{ maxZoom: 1 }}
         proOptions={{ hideAttribution: true }}
       >
         <Background
