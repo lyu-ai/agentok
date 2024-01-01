@@ -104,7 +104,20 @@ export const TemplateBlock = ({
         toast.error(`Failed to create chat: ${e}`);
       });
   };
-  const randomImage = ['api', 'knowledge', 'rag', 'flow'][index % 4];
+  const randomImage = [
+    'api',
+    'knowledge',
+    'rag',
+    'flow',
+    'random-1',
+    'random-2',
+    'random-3',
+    'random-4',
+    'random-5',
+    'random-6',
+    'random-7',
+    'random-8',
+  ][index % 12];
   const ConditionalLink = ({ children, className }: any) => {
     if (suppressLink) {
       return <div className={className}>{children}</div>;
@@ -130,7 +143,7 @@ export const TemplateBlock = ({
         <img
           src={
             template.thumbnail ??
-            `https://docs.flowgen.app/img/${randomImage}-2.png`
+            `https://docs.flowgen.app/img/${randomImage}.png`
           }
           alt={template.name}
           className="rounded-t-md h-48 w-full object-cover"
