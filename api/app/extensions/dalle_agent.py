@@ -3,7 +3,7 @@ from autogen import Agent, ConversableAgent
 from openai import OpenAI
 from typing import Dict, Union, Optional, List
 import PIL
-from autogen.agentchat.contrib.img_utils import get_image_data, _to_pil
+from ..utils.img_utils import get_image_data, _to_pil
 from termcolor import colored
 import random
 
@@ -48,10 +48,11 @@ def dalle_call(client: OpenAI, model: str, prompt: str, size: str, quality: str,
           n=n,
         )
     image_url = response.data[0].url
-    img_data = get_image_data(image_url)
-    cache[key] = img_data
+    # img_data = get_image_data(image_url)
+    # cache[key] = img_data
 
-    return img_data
+    # return img_data
+    return image_url
 
 def extract_img(agent: Agent) -> PIL.Image:
     """
@@ -79,9 +80,17 @@ def extract_img(agent: Agent) -> PIL.Image:
     return pil_img
 
 class DALLEAgent(ConversableAgent):
+    metadata = {
+        'id': 'dalle_agent',
+        'name': 'DALLEAgent',
+        "description": "An agent that uses OpenAI's DALL-E model to generate images.",
+        "type": "custom_conversable",
+        "label": "DALLE",
+        "class": "DALLEAgent", # Assumed the path is always "app.extensions.*"
+    }
     def __init__(self, name, llm_config: dict, **kwargs):
         super().__init__(name, llm_config=llm_config, **kwargs)
-        
+
         try:
             config_list = llm_config["config_list"]
             api_key = config_list[0]["api_key"]
@@ -90,7 +99,7 @@ class DALLEAgent(ConversableAgent):
             api_key = os.getenv('OPENAI_API_KEY')
         self.client = OpenAI(api_key=api_key)
         self.register_reply([Agent, None], DALLEAgent.generate_dalle_reply)
-        
+
     def send(
         self,
         message: Union[Dict, str],
@@ -98,10 +107,8 @@ class DALLEAgent(ConversableAgent):
         request_reply: Optional[bool] = None,
         silent: Optional[bool] = False,
     ):
-        # override and always "silent" the send out message; 
-        # otherwise, the print log would be super long!
-        super().send(message, recipient, request_reply, silent=True)
-        
+        super().send(message, recipient, request_reply, silent)
+
     def generate_dalle_reply(self, messages: Optional[List[Dict]], sender: "Agent", config):
         """Generate a reply using OpenAI DALLE call."""
         client = self.client if config is None else config
@@ -120,6 +127,7 @@ class DALLEAgent(ConversableAgent):
             quality="standard",
             n=1,
         )
-        out_message = f"<img {img_data}>"
+        print(f'Result of dalle prompt "{prompt}":', img_data)
+        out_message = f"![img]({img_data})"
         return True, out_message
 

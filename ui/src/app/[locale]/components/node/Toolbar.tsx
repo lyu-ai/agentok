@@ -36,6 +36,8 @@ const Toolbar = ({
       {children}
       {!hideDelete && (
         <button
+          type="button"
+          aria-label="delete"
           className="flex items-center justify-center hover:text-red-600"
           data-tooltip-content={t('delete-node-tooltip')}
           data-tooltip-id="default-tooltip"

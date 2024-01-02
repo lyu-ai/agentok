@@ -75,12 +75,16 @@ function Note({ id, data, selected, ...props }: any) {
           {editing ? (
             <div className="flex items-center gap-2">
               <button
+                type="button"
+                aria-label="Cancel editing"
                 className="btn btn-xs btn-ghost btn-square"
                 onClick={() => setEditing(!editing)}
               >
                 <GoX className="text-red-500 w-4 h-4" />
               </button>
               <button
+                type="button"
+                aria-label="Confirm editing"
                 className="btn btn-xs btn-ghost btn-square"
                 onClick={e => {
                   setEditing(false);
@@ -92,6 +96,8 @@ function Note({ id, data, selected, ...props }: any) {
             </div>
           ) : (
             <button
+              type="button"
+              aria-label="Edit note"
               className="btn btn-xs btn-ghost btn-square"
               onClick={() => setEditing(!editing)}
             >

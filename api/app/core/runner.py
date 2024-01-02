@@ -1,5 +1,6 @@
 import asyncio
 from asyncio import subprocess
+import os
 from termcolor import colored
 
 from .pocketbase import add_message, set_chat_status
@@ -26,8 +27,11 @@ def strip_prefix(input_string, substrings):
     return input_string
 
 async def run_assistant(chat_id: str, message: str, source_path: str, on_message=print_message):
-    command = ["python3", source_path, f'"{message}"']
+    command = ["python3", source_path, message]
     print(colored(text=f'Running {" ".join(command)}', color='green'))
+
+    env = os.environ.copy()
+    env['PYTHONPATH'] = os.getcwd()
 
     # Check if there is already a subprocess for given chat_id
     if subprocesses.get(chat_id):
@@ -45,6 +49,7 @@ async def run_assistant(chat_id: str, message: str, source_path: str, on_message
     # Start the subprocess with the provided command
     process = await asyncio.create_subprocess_exec(
         *command,
+        env=env, # This is crucial when need to import local code such as app.extensions.dalle_agent
         stdout=subprocess.PIPE,
         stdin=subprocess.PIPE,
         stderr=subprocess.PIPE  # Capture stderr too, if you need to handle errors

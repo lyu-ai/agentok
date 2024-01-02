@@ -12,6 +12,7 @@
         'RetrieveUserProxyAgent': 'from autogen.agentchat.contrib.retrieve_user_proxy_agent import RetrieveUserProxyAgent',
         'LLaVAAgent': 'from autogen.agentchat.contrib.llava_agent import LLaVAAgent',
         'MathUserProxyAgent': 'from autogen.agentchat.contrib.math_user_proxy_agent import MathUserProxyAgent',
+        'DALLEAgent': 'from app.extensions.dalle_agent import DALLEAgent',
     } -%}
     {%- for node in nodes -%}
         {% set cls = node['data'].get('class') %}
@@ -43,7 +44,13 @@ from moviepy.editor import VideoFileClip
 
 from IPython import get_ipython
 
-{{ import_lines|unique|join('\n') }}
+try:
+  {%- for import_line in import_lines|unique %}
+  {{ import_line }}
+  {%- endfor %}
+except ImportError as e:
+  print(colored(f'Error: {e}', 'red'))
+  raise
 
 # Replace the default get_human_input function for status control
 def custom_get_human_input(self, prompt: str) -> str:

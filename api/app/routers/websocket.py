@@ -6,7 +6,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, WebSocket, WebSocketDis
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.ext import do
 from ..schemas import Message, Autoflow
-from ..utils.codegen import flow2py
+from ..core.codegen import flow2py
 from ..dependencies import oauth2_scheme
 connected_websockets = set()
 

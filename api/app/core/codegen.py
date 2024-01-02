@@ -7,7 +7,6 @@ from typing import Any, Dict, List, Union
 
 from ..schemas import Autoflow, Function
 
-print('target path:', os.path.join(os.getcwd(), "app/", "templates"))
 # Set up the Jinja2 environment
 env = Environment(
     loader=FileSystemLoader(searchpath=os.path.join(os.getcwd(), "app/", "templates")),
@@ -18,6 +17,7 @@ env = Environment(
 def flow2py(flow: Autoflow) -> str:
   flow = flow.flow
   assistant_nodes = [node for node in flow.nodes if node['type'] == 'assistant']
+  custom_conversable_nodes = [node for node in flow.nodes if node['type'] == 'custom_conversable']
   # TODO: It's possible there are multiple user_proxy nodes
   # Now we assumed there is only one user_proxy node has no incoming edges
   user_proxy = next(
@@ -49,6 +49,7 @@ def flow2py(flow: Autoflow) -> str:
 
   code = template.render(nodes=flow.nodes,
                         assistant_nodes=assistant_nodes,
+                        custom_conversable_nodes=custom_conversable_nodes,
                         config_node=config_node,
                         generation_date=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                         note_nodes=note_nodes,

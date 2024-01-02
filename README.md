@@ -30,6 +30,8 @@ You can launch an autoflow or a template in a chat window, and chat with the age
 
 ![chat-1](./website/static/img/screenshot-chat-1.png)
 
+![chat-2](./website/static/img/screenshot-chat-dalle3.png)
+
 ### Gallery
 
 Place to share and discover flow templates.
@@ -58,7 +60,7 @@ We made tutorials based on the official notebooks from Autogen repository. You c
 | ~~auto_build~~                          | ⭕     | This is a feature to be considered to add to flow generation. [#40](https://github.com/tiwater/flowgen/issues/40) |
 | chess                                   | 🔲     | This depends on the feature of importing custom Agent [#38](https://github.com/tiwater/flowgen/issues/38)         |
 | compression                             | ✅     |                                                                                                                   |
-| dalle_and_gpt4v                         | 🔲     | This depends on the feature of importing custom Agent [#38](https://github.com/tiwater/flowgen/issues/38)         |
+| dalle_and_gpt4v                         | ✅     | Supported with app.extensions                                                                                     |
 | function_call_async                     | ✅     |                                                                                                                   |
 | function_call                           | ✅     |                                                                                                                   |
 | graph_modelling_language                | ⭕     | This is out of project scope. Open an issue if necessary                                                          |

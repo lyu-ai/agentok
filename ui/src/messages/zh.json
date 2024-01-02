@@ -37,6 +37,12 @@
       "llava-url": "LLaVa URL",
       "options": "更多选项"
     },
+    "CustomConversable": {
+      "name-edit-tooltip": "编辑节点名称（作为变量）",
+      "name-edit-done-tooltip": "完成编辑节点名称",
+      "system-message": "系统消息",
+      "system-message-placeholder": "在此处输入系统消息"
+    },
     "Config": {
       "flow-name": "工作流名称",
       "flow-name-tooltip": "工作流名称用于代码生成，因此您需要遵循以下规则：\n* 仅使用字母、数字、连字符和下划线确保工作流名称的合法性。\n* 确保工作流名称的清晰性，例如使用 **Critics** 而不是 **Node1**。",
@@ -131,6 +137,10 @@
       "publish-flow-name": "名称",
       "publish-flow-description": "描述",
       "publish-flow-tip": "将此工作流发布到 FlowGen 社区。您随时可以取消发布。"
+    },
+    "NodeButton": {
+      "built-in-nodes": "缺省节点",
+      "custom-agents": "自定义智能体"
     },
     "TemplateList": {
       "template-empty": "尚无公开的工作流模板，你可以将一个工作流发布为模板。",

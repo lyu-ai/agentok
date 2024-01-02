@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { memo, useEffect, useState } from 'react';
 import { FaEye, FaMeta } from 'react-icons/fa6';
 import { GoGear } from 'react-icons/go';
-import { Handle, Position, useReactFlow } from 'reactflow';
+import { Handle, useReactFlow } from 'reactflow';
 import { IconType } from 'react-icons';
 import Toolbar from './Toolbar';
 import { TbBrandOpenai } from 'react-icons/tb';
@@ -175,11 +175,7 @@ function AssistantNode({ id, data, selected }: any) {
         )}
       </div>
 
-      <Handle
-        type="source"
-        position={Position.Right}
-        className="w-16 !bg-green-600"
-      />
+      <Handle type="source" position={'right'} className="w-16 !bg-green-600" />
 
       <AssistantConfig
         show={showOptions}

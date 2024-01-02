@@ -37,6 +37,12 @@
       "llava-url": "LLaVa URL",
       "options": "More Options"
     },
+    "CustomConversable": {
+      "name-edit-tooltip": "Edit node name (as variables)",
+      "name-edit-done-tooltip": "Finish editing node name",
+      "system-message": "System Message",
+      "system-message-placeholder": "Enter system message here"
+    },
     "Config": {
       "flow-name": "Autoflow Name",
       "flow-name-tooltip": "The process name is used for code generation, so you need to follow the rules below:\n* Ensure the legality of the process name, using only letters, numbers, hyphens, and underscores.\n* Ensure the clarity of the process name, such as **Critics** instead of **Node1**.",
@@ -134,6 +140,10 @@
       "publish-flow-name": "Name",
       "publish-flow-description": "Description",
       "publish-flow-tip": "Publish this flow to the FlowGen community. You can unpublish at any time."
+    },
+    "NodeButton": {
+      "built-in-nodes": "Built-in Nodes",
+      "custom-agents": "Custom Agents"
     },
     "TemplateList": {
       "template-empty": "No template here yet. You can publish your flow.",
@@ -250,10 +260,10 @@
       "groupchat-description": "Group agents for collaboration",
       "retrieve-assistant": "Assistant (RAG)",
       "retrieve-assistant-description": "Assistant supports RAG",
-      "math-user-proxy": "Math User Proxy",
-      "math-user-proxy-description": "User Proxy for Math",
-      "retrieve-user-proxy": "User Proxy (RAG)",
-      "retrieve-user-proxy-description": "User Proxy supports RAG"
+      "math-user-proxy": "User Proxy for Math",
+      "math-user-proxy-description": "User Proxy with Math Expertise",
+      "retrieve-user-proxy": "User Proxy for RAG",
+      "retrieve-user-proxy-description": "User Proxy supports Retrieval"
     }
   }
 }

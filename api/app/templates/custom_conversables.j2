@@ -1,0 +1,16 @@
+# custom_conversables.j2
+{% macro generate_custom_conversables(custom_conversable_nodes) %}
+{%- for node in custom_conversable_nodes %}
+{%- set class_name = node.data.class %}
+{%- set name = node.data.name %}
+
+node_{{ node.id }} = {{ class_name }}(
+    name="{{ name }}",
+    {%- if node.data.system_message %}
+    system_message="""{{ node.data.system_message }}""",
+    {%- endif %}
+    llm_config=llm_config,
+)
+
+{%- endfor %}
+{% endmacro %}

@@ -9,5 +9,5 @@ def gen_id(length=13):
     return random_string
 
 # Example usage:
-random_string = gen_id()
-print(random_string)
+# random_string = gen_id()
+# print(random_string)

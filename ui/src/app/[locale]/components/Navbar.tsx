@@ -22,7 +22,7 @@ const Navbar = () => {
           href="https://docs.flowgen.app/getting-started"
           target="_blank"
           rel="noreferrer"
-          className="link link-hover text-sm font-bold"
+          className="link link-hover text-sm font-bold hidden lg:block"
         >
           {t('getting-started')}
         </a>

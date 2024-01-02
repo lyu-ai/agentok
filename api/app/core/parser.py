@@ -1,7 +1,7 @@
 import json
 import re
 
-from .id import gen_id
+from ..utils.id import gen_id
 
 class OutputParser:
     # Define states
