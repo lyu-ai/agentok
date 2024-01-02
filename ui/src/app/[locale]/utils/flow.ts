@@ -15,7 +15,6 @@ import {
   RiUser4Line,
   RiUserSearchLine,
 } from 'react-icons/ri';
-import { Edge, Node, ReactFlowInstance } from 'reactflow';
 import { genId } from '@/utils/id';
 import CustomConversable from '../components/node/CustomConversable';
 import { ComponentType } from 'react';
@@ -146,7 +145,7 @@ export const getNodeLabel = (label: string, tNodeMeta: any) => {
 
 // ---------------------
 
-export const initialNodes: Node[] = [
+export const initialNodes: any[] = [
   {
     id: '1',
     type: 'assistant',
@@ -199,7 +198,7 @@ export const initialNodes: Node[] = [
   },
 ];
 
-export const initialEdges: Edge[] = [
+export const initialEdges: any[] = [
   {
     id: '1-3',
     source: '1',
@@ -213,7 +212,7 @@ export const initialEdges: Edge[] = [
 ];
 
 export const setNodeData = (
-  instance: ReactFlowInstance,
+  instance: any,
   id: string,
   dataset: { [key: string]: any },
   scope: string = ''
@@ -234,7 +233,7 @@ export const setNodeData = (
   );
 };
 
-export const getFlowName = (nodes: Node[]) => {
+export const getFlowName = (nodes: any[]) => {
   const configNode = nodes.find((node: any) => node.type === 'config');
   let name = 'flow-unknown';
   if (configNode && configNode?.data.flow_name) {
@@ -245,7 +244,7 @@ export const getFlowName = (nodes: Node[]) => {
   return name;
 };
 
-export const getFlowDescription = (nodes: Node[]) => {
+export const getFlowDescription = (nodes: any[]) => {
   const configNode = nodes.find((node: any) => node.type === 'config');
   let description = '';
   if (configNode && configNode?.data.flow_description) {

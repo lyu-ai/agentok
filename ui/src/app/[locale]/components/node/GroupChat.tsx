@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Handle, Position, useReactFlow } from 'reactflow';
+import { Handle, useReactFlow } from 'reactflow';
 import { getNodeLabel, setNodeData } from '../../utils/flow';
 import { FaUserGroup } from 'react-icons/fa6';
 import Toolbar from './Toolbar';
@@ -55,16 +55,8 @@ const GroupChatManager = ({ id, selected, data }: any) => {
           />
         </div>
       </div>
-      <Handle
-        type="target"
-        position={Position.Left}
-        className="w-16 !bg-primary"
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        className="w-16 !bg-primary"
-      />
+      <Handle type="target" position={'left'} className="w-16 !bg-primary" />
+      <Handle type="source" position={'right'} className="w-16 !bg-primary" />
     </div>
   );
 };

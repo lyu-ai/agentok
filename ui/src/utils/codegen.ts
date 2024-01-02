@@ -1,5 +1,3 @@
-import { Edge, Node } from 'reactflow';
-
 export enum AgentTypes {
   user_proxy = 'UserProxyAgent',
   assistant = 'AssistantAgent',
@@ -69,7 +67,7 @@ const importDict: Record<string, string> = {
 };
 
 export const genEntry = (
-  data: { nodes: Node[]; edges: Edge[] },
+  data: { nodes: any[]; edges: any[] },
   message: string
 ) => {
   const { nodes, edges } = data;
