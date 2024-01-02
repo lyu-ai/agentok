@@ -142,7 +142,7 @@ const MessageBlock = ({ chatId, message, onSend }: any) => {
         {message.type === 'user' && (
           <div className="hidden group-hover:block absolute right-1 bottom-1">
             <button
-              className="btn btn-xs btn-ghost btn-square group-hover:bg-yellow-600"
+              className="btn btn-xs btn-circle"
               data-tooltip-content={t('resend')}
               data-tooltip-id="chat-tooltip"
               onClick={() => onSend(message.content)}

@@ -3,12 +3,22 @@ import Config from '../components/node/Config';
 import UserProxyAgent from '../components/node/UserProxy';
 import GroupChat from '../components/node/GroupChat';
 import Note from '../components/node/Note';
-import { FaEye, FaMeta, FaRegNoteSticky, FaUserGroup } from 'react-icons/fa6';
-import { RiChatSmile2Line, RiRobot2Line } from 'react-icons/ri';
-import { SiOpenai } from 'react-icons/si';
+import {
+  RiChatSmile2Line,
+  RiEyeLine,
+  RiGroupLine,
+  RiMetaLine,
+  RiOpenaiFill,
+  RiRobot2Line,
+  RiSettingsLine,
+  RiStickyNoteLine,
+  RiUser4Line,
+  RiUserSearchLine,
+} from 'react-icons/ri';
 import { Edge, Node, ReactFlowInstance } from 'reactflow';
 import { genId } from '@/utils/id';
-import { LuSettings2 } from 'react-icons/lu';
+import CustomConversable from '../components/node/CustomConversable';
+import { ComponentType } from 'react';
 
 export const nodeTypes = {
   assistant: AssistantAgent,
@@ -16,6 +26,7 @@ export const nodeTypes = {
   config: Config,
   groupchat: GroupChat,
   note: Note,
+  custom_conversable: CustomConversable,
 };
 
 // Fields of Node Meta:
@@ -24,7 +35,17 @@ export const nodeTypes = {
 // - type: 'assistant' | 'user' | 'group', indicates the classes for code generation
 // - class: The class to be choosen during code generation
 // - (description): UI will look for value of label + '-description', for example 'assistant-description'
-export const nodeMetas = [
+export type NodeMeta = {
+  id?: string;
+  name: string;
+  description?: string;
+  icon?: ComponentType;
+  type: string;
+  label: string;
+  class: string;
+};
+
+export const basicNodes: NodeMeta[] = [
   {
     id: 'assistant',
     icon: RiRobot2Line,
@@ -34,32 +55,16 @@ export const nodeMetas = [
     class: 'AssistantAgent',
   },
   {
-    id: 'gpt_assistant',
-    icon: SiOpenai,
-    name: 'GPTAssistant',
-    label: 'gpt-assistant',
-    type: 'assistant',
-    class: 'GPTAssistantAgent',
-  },
-  {
-    id: 'multimodal',
-    icon: FaEye,
-    name: 'MultimodalAssistant',
-    label: 'multimodal-assistant',
-    type: 'assistant',
-    class: 'MultimodalConversableAgent',
-  },
-  {
-    id: 'llava',
-    icon: FaMeta,
-    name: 'LLaVA',
-    label: 'llava',
-    type: 'assistant',
-    class: 'LLaVAAgent',
+    id: 'user_proxy',
+    icon: RiChatSmile2Line,
+    name: 'UserProxy',
+    label: 'user-proxy',
+    type: 'user',
+    class: 'UserProxyAgent',
   },
   {
     id: 'groupchat',
-    icon: FaUserGroup,
+    icon: RiGroupLine,
     type: 'groupchat',
     name: 'GroupChat',
     label: 'groupchat',
@@ -67,7 +72,7 @@ export const nodeMetas = [
   },
   {
     id: 'note',
-    icon: FaRegNoteSticky,
+    icon: RiStickyNoteLine,
     name: 'Note',
     label: 'note',
     type: 'note',
@@ -75,19 +80,38 @@ export const nodeMetas = [
   },
   {
     id: 'config',
-    icon: LuSettings2,
+    icon: RiSettingsLine,
     name: 'Config',
     label: 'config',
     type: 'config',
     class: 'Config',
   },
+];
+
+export const advancedNodes: NodeMeta[] = [
   {
-    id: 'user_proxy',
-    icon: RiChatSmile2Line,
-    name: 'UserProxy',
-    label: 'user-proxy',
-    type: 'user',
-    class: 'UserProxyAgent',
+    id: 'gpt_assistant',
+    icon: RiOpenaiFill,
+    name: 'GPTAssistant',
+    label: 'gpt-assistant',
+    type: 'assistant',
+    class: 'GPTAssistantAgent',
+  },
+  {
+    id: 'multimodal',
+    icon: RiEyeLine,
+    name: 'MultimodalAssistant',
+    label: 'multimodal-assistant',
+    type: 'assistant',
+    class: 'MultimodalConversableAgent',
+  },
+  {
+    id: 'llava',
+    icon: RiMetaLine,
+    name: 'LLaVA',
+    label: 'llava',
+    type: 'assistant',
+    class: 'LLaVAAgent',
   },
   {
     id: 'retrieve_assistant',
@@ -99,7 +123,7 @@ export const nodeMetas = [
   },
   {
     id: 'retrieve_user_proxy',
-    icon: RiChatSmile2Line,
+    icon: RiUserSearchLine,
     name: 'RetrieveUserProxy',
     label: 'retrieve-user-proxy',
     type: 'user',
@@ -107,7 +131,7 @@ export const nodeMetas = [
   },
   {
     id: 'math_user_proxy',
-    icon: RiChatSmile2Line,
+    icon: RiUser4Line,
     name: 'MathUserProxyAgent',
     label: 'math-user-proxy',
     type: 'user',
@@ -196,7 +220,7 @@ export const setNodeData = (
 ) => {
   const nodes = instance.getNodes();
   instance.setNodes(
-    nodes.map(node => {
+    nodes.map((node: any) => {
       if (node.id === id) {
         if (scope) {
           node.data = {
