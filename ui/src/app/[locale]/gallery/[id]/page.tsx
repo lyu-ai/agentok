@@ -15,7 +15,7 @@ const FlowViewer = ({ template, className }: any) => {
   // https://github.com/xyflow/xyflow/issues/3243
   const store = useStoreApi();
   if (process.env.NODE_ENV === 'development') {
-    store.getState().onError = (code, message) => {
+    store.getState().onError = (code: any, message: any) => {
       if (code === '002') {
         return;
       }
