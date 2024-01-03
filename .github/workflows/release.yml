@@ -10,13 +10,12 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0 # Necessary to get all commits for semantic-release
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
-          cache: 'npm' # This ensures npm's cache is handled but doesn't affect pnpm
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -24,11 +23,13 @@ jobs:
       - name: Cache pnpm modules
         uses: actions/cache@v2
         with:
-          path: '~/.pnpm-store'
+          path: |
+            ~/.pnpm-store
+            **/pnpm-lock.yaml
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-
-
+            
       - name: Install dependencies with pnpm
         run: pnpm ci --frozen-lockfile
 
