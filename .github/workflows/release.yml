@@ -7,26 +7,24 @@ jobs:
     name: release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out repository
+        uses: actions/checkout@v3
         with:
-          # Fetches all commits history so semantic-release can analyze the whole project history
-          fetch-depth: 0
+          fetch-depth: 0 # Necessary to get all commits for semantic-release
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: '20.x'
+          cache: 'npm' # This ensures npm's cache is handled but doesn't affect pnpm
 
       - name: Install pnpm
         run: npm install -g pnpm
 
-      - name: Get pnpm cache directory
-        id: pnpm-cache-dir
-        run: echo "::set-output name=dir::$(pnpm cache dir)"
-
-      - uses: actions/cache@v2
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
         with:
-          path: ${{ steps.pnpm-cache-dir.outputs.dir }}
+          path: '~/.pnpm-store'
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-
