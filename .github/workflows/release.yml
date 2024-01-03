@@ -4,7 +4,7 @@ on:
 
 jobs:
   release:
-    name: release
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -12,24 +12,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Node.js
+      - name: Set up Node.js with pnpm support
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
+          cache: 'pnpm' # This enables automatic caching for pnpm
 
       - name: Install pnpm
         run: npm install -g pnpm
 
-      - name: Cache pnpm modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.pnpm-store
-            **/pnpm-lock.yaml
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-            
       - name: Install dependencies with pnpm
         run: pnpm ci --frozen-lockfile
 
