@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { GoTrash } from 'react-icons/go';
-import { NodeToolbar, useReactFlow } from 'reactflow';
+import { Position, NodeToolbar, useReactFlow } from 'reactflow';
 
 const Toolbar = ({
   nodeId,
@@ -26,7 +26,7 @@ const Toolbar = ({
   return (
     <NodeToolbar
       isVisible={selected}
-      position={'top'}
+      position={Position.Top}
       align="end"
       className={clsx(
         className,
