@@ -113,7 +113,7 @@
     "ChatListButton": {
       "new-chat": "New Chat",
       "flow": "Autoflow",
-      "template": "AutoflowTemplate",
+      "template": "Autoflow Template",
       "new-chat-tooltip": "Create a new chat",
       "from-template-tooltip": "Create a new chat from template"
     },

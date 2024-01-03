@@ -19,14 +19,14 @@ const CustomConversable = ({ id, data, selected }: any) => {
       className={clsx(
         'p-2 rounded-md border min-w-[240px] backdrop-blur-sm',
         selected
-          ? 'shadow-box shadow-orange-700 bg-orange-700 border-orange-600'
-          : 'border-orange-600 bg-orange-700/80'
+          ? 'shadow-box shadow-sky-700 bg-sky-700 border-sky-600'
+          : 'border-sky-600 bg-sky-700/80'
       )}
     >
       <Toolbar
         nodeId={id}
         selected={selected}
-        className="bg-orange-700 border-orange-600"
+        className="bg-sky-700 border-sky-600"
       >
         <EditButton
           editing={editingName}
