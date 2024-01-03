@@ -89,7 +89,7 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
               onClick={() =>
                 onAddNode(type, { name, class: _class, label, type })
               }
-              className="group min-w-64 flex p-2 items-center rounded-lg hover:bg-base-content/10 cursor-pointer"
+              className="group min-w-64 flex p-2 items-center rounded-lg bg-base-content/5 hover:bg-base-content/10 cursor-pointer"
             >
               <Icon className="flex-shrink-0 w-6 h-6 mx-1 group-hover:text-white" />
               <div className="ml-3 flex flex-col gap-1">
@@ -113,13 +113,18 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
   };
 
   const NodeGroup = ({ index, name, nodes, open }: any) => {
+    const [openState, setOpenState] = useState(open ?? false);
     return (
       <div
         tabIndex={index}
-        className={clsx('collapse collapse-arrow rounded-lg', {
-          'collapse-open': open,
-        })}
+        className={clsx('collapse collapse-arrow rounded-lg')}
       >
+        <input
+          type="checkbox"
+          className="peer"
+          onChange={e => setOpenState(e.target.checked)}
+          checked={openState}
+        />
         <div className="collapse-title flex items-center font-bold text-sm">
           {name}
         </div>
@@ -152,7 +157,7 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
           id="agent-list"
           className="origin-top-left absolute shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 overflow-auto max-h-[80vh]"
         >
-          <NodeGroup index={0} name="Basic" nodes={basicNodes} />
+          <NodeGroup index={0} name="Basic" nodes={basicNodes} open />
           <NodeGroup index={1} name="Advanced" nodes={advancedNodes} />
           {customAgents?.length > 0 && (
             <NodeGroup index={2} name="Extensions" nodes={customAgents} />
