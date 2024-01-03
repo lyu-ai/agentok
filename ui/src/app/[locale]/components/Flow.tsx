@@ -1,11 +1,17 @@
 import ReactFlow, {
+  Node,
+  Edge,
   Background,
   Controls,
   applyNodeChanges,
   applyEdgeChanges,
+  EdgeChange,
+  NodeChange,
+  SelectionMode,
   useStoreApi,
   useReactFlow,
   addEdge,
+  ConnectionLineType,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { nodeTypes, initialEdges, initialNodes } from '../utils/flow';
@@ -25,8 +31,8 @@ const Autoflow = ({ flowId }: any) => {
   const { flow, updateFlow, isUpdating, isLoading, isError } = useFlow(flowId);
 
   const [mode, setMode] = useState<'main' | 'flow' | 'json' | 'python'>('flow');
-  const [nodes, setNodes] = useState<any[]>(initialNodes);
-  const [edges, setEdges] = useState<any[]>(initialEdges);
+  const [nodes, setNodes] = useState<Node[]>(initialNodes);
+  const [edges, setEdges] = useState<Edge[]>(initialEdges);
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const flowParent = useRef<HTMLDivElement>(null);
   const { fitView, screenToFlowPosition, toObject } = useReactFlow();
@@ -37,7 +43,7 @@ const Autoflow = ({ flowId }: any) => {
   // https://github.com/xyflow/xyflow/issues/3243
   const store = useStoreApi();
   if (process.env.NODE_ENV === 'development') {
-    store.getState().onError = (code: any, message: any) => {
+    store.getState().onError = (code, message) => {
       if (code === '002') {
         return;
       }
@@ -78,7 +84,7 @@ const Autoflow = ({ flowId }: any) => {
   }, [flow, nodes, edges, isDirty, flowId, toObject, debouncedUpdateFlow]);
 
   const onNodesChange = useCallback(
-    (changes: any[]) => {
+    (changes: NodeChange[]) => {
       if (
         !initialLoad.current &&
         changes.some(change => change.type !== 'select')
@@ -90,7 +96,7 @@ const Autoflow = ({ flowId }: any) => {
     [setNodes]
   );
   const onEdgesChange = useCallback(
-    (changes: any[]) => {
+    (changes: EdgeChange[]) => {
       if (
         !initialLoad.current &&
         changes.some(change => change.type !== 'select')
@@ -144,7 +150,7 @@ const Autoflow = ({ flowId }: any) => {
       // Generate a unique node ID
       const newId = genId();
 
-      const newNode = {
+      const newNode: Node = {
         id: newId,
         type: data.type,
         position,
@@ -155,7 +161,7 @@ const Autoflow = ({ flowId }: any) => {
       // Add the new node to the list of nodes in state
       // And clean the previous selections
       setNodes(nds =>
-        nds.map(nd => ({ ...nd, selected: false })).concat(newNode)
+        nds.map(nd => ({ ...nd, selected: false } as Node)).concat(newNode)
       );
     },
     // Specify dependencies for useCallback
@@ -181,7 +187,7 @@ const Autoflow = ({ flowId }: any) => {
     const randInt = (max: number) =>
       Math.floor(Math.random() * Math.floor(max));
 
-    const newNode = {
+    const newNode: Node = {
       id: newId,
       type,
       position: { x: 150 + randInt(100), y: 50 + randInt(50) },
@@ -231,13 +237,13 @@ const Autoflow = ({ flowId }: any) => {
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
         onConnect={onConnect}
-        connectionLineType={'smoothstep'}
+        connectionLineType={ConnectionLineType.SmoothStep}
         connectionLineStyle={{ strokeWidth: 2, stroke: 'lightgreen' }}
         onDragOver={onDragOver}
         onDrop={onDrop}
         panOnScroll
         selectionOnDrag
-        selectionMode={'partial'}
+        selectionMode={SelectionMode.Partial}
         fitView
         fitViewOptions={{ maxZoom: 1 }}
         proOptions={{ hideAttribution: true }}

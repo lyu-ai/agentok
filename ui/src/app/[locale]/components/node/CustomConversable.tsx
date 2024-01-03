@@ -2,7 +2,7 @@ import EditButton from '@/components/EditButton';
 import EditableText from '@/components/EditableText';
 import clsx from 'clsx';
 import { IoExtensionPuzzleSharp } from 'react-icons/io5';
-import { Handle, useReactFlow } from 'reactflow';
+import { Handle, Position, useReactFlow } from 'reactflow';
 import { setNodeData } from '../../utils/flow';
 import Toolbar from './Toolbar';
 import { useState } from 'react';
@@ -75,7 +75,11 @@ const CustomConversable = ({ id, data, selected }: any) => {
         </div>
       </div>
 
-      <Handle type="source" position={'right'} className="w-16 !bg-green-600" />
+      <Handle
+        type="source"
+        position={Position.Right}
+        className="w-16 !bg-green-600"
+      />
     </div>
   );
 };

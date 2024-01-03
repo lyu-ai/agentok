@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { RiChatSmile2Fill } from 'react-icons/ri';
-import { Handle, useReactFlow } from 'reactflow';
+import { Handle, Position, useReactFlow } from 'reactflow';
 import { getNodeLabel, setNodeData } from '../../utils/flow';
 import Toolbar from './Toolbar';
 import { useState } from 'react';
@@ -126,8 +126,16 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
         </button>
       </div>
 
-      <Handle type="target" position={'left'} className="w-16 !bg-primary" />
-      <Handle type="source" position={'right'} className="w-16 !bg-primary" />
+      <Handle
+        type="target"
+        position={Position.Left}
+        className="w-16 !bg-primary"
+      />
+      <Handle
+        type="source"
+        position={Position.Right}
+        className="w-16 !bg-primary"
+      />
       <UserConfig
         show={showOptions}
         nodeId={id}
