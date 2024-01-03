@@ -28,7 +28,7 @@ jobs:
             ${{ runner.os }}-pnpm-
 
       - name: Install dependencies with pnpm
-        run: pnpm ci --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Run semantic release
         run: npx semantic-release
