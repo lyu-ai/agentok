@@ -12,7 +12,7 @@ slug: /privacy
 
 ### Introduction
 
-Thank you for using FlowGen ("we", "us", or "our"). We are committed to protecting the privacy of all users ("you") of our website [https://flowgen.app](https://flowgen.app)("Site") and our services ("Services"). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our Site and use our Services.
+Thank you for using FlowGen ("we", "us", or "our"). We are committed to protecting the privacy of all users ("you") of our website [https://platform.flowgen.app](https://platform.flowgen.app)("Site") and our services ("Services"). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our Site and use our Services.
 
 ### Information We Collect
 

@@ -28,7 +28,7 @@ A standard Autoflow usually includes one `UserProxyAgent` and one or several `As
 
 ### 📄 AutoflowTemplate
 
-Ready to launch a Autoflow? Publish it as a `AutoflowTemplate` in the [FlowGen Gallery](https://flowgen.app/gallery/)! Users can then deploy these templates to conjure up new Autoflows or strike up chats directly on the template itself.
+Ready to launch a Autoflow? Publish it as a `AutoflowTemplate` in the [FlowGen Gallery](https://platform.flowgen.app/gallery/)! Users can then deploy these templates to conjure up new Autoflows or strike up chats directly on the template itself.
 
 ### 💬 Chat
 
@@ -40,14 +40,14 @@ Let's jump straight in and create a simple "Hello World" flow.
 
 ### Initialize a New Autoflow
 
-Head over to [FlowGen Login](https://flowgen.app/auth/login) and tap **Login as Guest** for a test run without the need to sign up.
+Head over to [FlowGen Login](https://platform.flowgen.app/auth/login) and tap **Login as Guest** for a test run without the need to sign up.
 
 ![Login](./img/login.png)
 
 > [!WARNING]
 > Guest mode means your data is an open book to other guests. Sign in with your GitHub/Google/X account for a private experience.
 
-Once you're in, go to the [homepage](https://flowgen.app) and hit the 'Build from Scratch' button to weave a new Autoflow.
+Once you're in, go to the [homepage](https://platform.flowgen.app) and hit the 'Build from Scratch' button to weave a new Autoflow.
 
 ### Build Your First Autoflow
 
@@ -77,7 +77,7 @@ Notice the conversation's quick? Just one round and boom, done—`UserProxyAgent
 
 Got a taste for FlowGen? Feast on these resources for seconds:
 
-- [FlowGen Gallery](https://flowgen.app/gallery/): Feast your eyes on a buffet of ready-to-serve templates.
+- [FlowGen Gallery](https://platform.flowgen.app/gallery/): Feast your eyes on a buffet of ready-to-serve templates.
 - [FlowGen Documentation](https://docs.flowgen.app/): The ultimate guide to becoming a FlowGen whiz.
 - [FlowGen GitHub](https://github.com/tiwater/flowgen): Peek under the hood at the source code.
 - [AutoGen Documentation](https://microsoft.github.io/autogen/): Master the art of AutoGen with this comprehensive tutorial.

@@ -38,7 +38,7 @@ Place to share and discover flow templates.
 
 ## 💡 Quickstart
 
-To quickly explore what FlowGen has to offer, simply visit it [https://flowgen.app](https://flowgen.app).
+To quickly explore what FlowGen has to offer, simply visit it [https://platform.flowgen.app](https://platform.flowgen.app).
 
 For a more in-depth look at the platform, please refer to our [Getting Started](https://docs.flowgen.app/getting-started) and [other documents](https://docs.flowgen.app).
 
@@ -53,8 +53,8 @@ We made tutorials based on the official notebooks from Autogen repository. You c
 
 | Example                                 | Status | Comments                                                                                                          |
 | --------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------- |
-| simple_chat                             | ✅     | [Simple Chat](https://flowgen.app/gallery/yp0appx814q7na1)                                                        |
-| auto_feedback_from_code_execution       | ✅     | [Feedback from Code Execution](https://flowgen.app/flow/)                                                         |
+| simple_chat                             | ✅     | [Simple Chat](https://platform.flowgen.app/gallery/yp0appx814q7na1)                                               |
+| auto_feedback_from_code_execution       | ✅     | [Feedback from Code Execution](https://platform.flowgen.app/flow/)                                                |
 | ~~auto_build~~                          | ⭕     | This is a feature to be considered to add to flow generation. [#40](https://github.com/tiwater/flowgen/issues/40) |
 | chess                                   | 🔲     | This depends on the feature of importing custom Agent [#38](https://github.com/tiwater/flowgen/issues/38)         |
 | compression                             | ✅     |                                                                                                                   |
@@ -67,7 +67,7 @@ We made tutorials based on the official notebooks from Autogen repository. You c
 | groupchat_vis                           | ✅     |                                                                                                                   |
 | groupchat                               | ✅     |                                                                                                                   |
 | hierarchy_flow_using_select_speaker     | 🔲     |                                                                                                                   |
-| human_feedback                          | ✅     | [Human in the Loop](https://flowgen.app/gallery/4pbokrvi7zguv48)                                                  |
+| human_feedback                          | ✅     | [Human in the Loop](https://platform.flowgen.app/gallery/4pbokrvi7zguv48)                                         |
 | inception_function                      | 🔲     |                                                                                                                   |
 | ~~langchain~~                           | ⭕     | No plan to support                                                                                                |
 | lmm_gpt-4v                              | ✅     |                                                                                                                   |
@@ -75,7 +75,7 @@ We made tutorials based on the official notebooks from Autogen repository. You c
 | MathChat                                | 🔲     |                                                                                                                   |
 | oai_assistant_function_call             | ✅     |                                                                                                                   |
 | oai_assistant_groupchat                 | 🆘     | Very slow and not work well, sometimes not returning.                                                             |
-| oai_assistant_retrieval                 | ✅     | [Retrieval (OAI)](https://flowgen.app/gallery/tgq6dxu32yzwcgg)                                                    |
+| oai_assistant_retrieval                 | ✅     | [Retrieval (OAI)](https://platform.flowgen.app/gallery/tgq6dxu32yzwcgg)                                           |
 | oai_assistant_twoagents_basic           | ✅     |                                                                                                                   |
 | oai_code_interpreter                    | ✅     |                                                                                                                   |
 | planning                                | ✅     | This sample works fine, but does not exit gracefully.                                                             |
