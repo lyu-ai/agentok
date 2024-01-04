@@ -42,8 +42,8 @@ function AssistantNode({ id, data, selected }: any) {
       className={clsx(
         'p-2 rounded-md border min-w-[240px] backdrop-blur-sm',
         selected
-          ? 'shadow-box shadow-lime-700 bg-lime-700 border-lime-600'
-          : 'border-lime-600 bg-lime-700/80'
+          ? 'shadow-box shadow-lime-600 bg-lime-700/80 border-lime-600/80'
+          : 'border-lime-600 bg-lime-700/90'
       )}
     >
       <Toolbar

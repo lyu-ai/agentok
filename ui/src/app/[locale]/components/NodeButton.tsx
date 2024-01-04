@@ -9,10 +9,9 @@ import { BsRobot } from 'react-icons/bs';
 
 const DRAGGING_NODE_NAME = '__dragging-node';
 
-const NodeButton = ({ className, onAddNode, ...props }: any) => {
-  const [customAgents, setCustomAgents] = useState<any[]>([]);
+const NodeGroup = ({ name, nodes, open, onAddNode }: any) => {
   const tNodeMeta = useTranslations('meta.node');
-  const t = useTranslations('component.NodeButton');
+  const [openState, setOpenState] = useState(open ?? false);
   const onDragStart = (
     event: React.DragEvent<any>,
     data: { type: string; name: string; label: string; class: string }
@@ -39,20 +38,6 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
     );
   };
 
-  useEffect(() => {
-    fetch('/api/agents', {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then(res => res.json())
-      .then(agents => {
-        setCustomAgents(agents);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, []);
-
   const buildAgentNodes = (nodes: any) => {
     return (
       <>
@@ -69,15 +54,17 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
             <Popover.Button
               as="a"
               draggable
-              onDragStart={event =>
+              onDragStart={event => {
+                console.log('onDragStart', event);
                 onDragStart(event, {
                   type,
                   name,
                   label,
                   class: _class,
-                })
-              }
-              onDragEnd={() => {
+                });
+              }}
+              onDragEnd={event => {
+                console.log('onDragEnd', event);
                 const dragImage = document.querySelector(
                   `.${DRAGGING_NODE_NAME}`
                 );
@@ -111,30 +98,43 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
       </>
     );
   };
-
-  const NodeGroup = ({ name, nodes, open }: any) => {
-    const [openState, setOpenState] = useState(open ?? false);
-    return (
-      <div className="collapse collapse-arrow">
-        <input
-          type="checkbox"
-          onChange={e => setOpenState(e.target.checked)}
-          checked={openState}
-        />
-        <div
-          className={clsx(
-            'collapse-title flex items-center font-bold text-sm',
-            { 'text-white': openState }
-          )}
-        >
-          {name}
-        </div>
-        <div className="collapse-content flex flex-col gap-1 p-1">
-          {buildAgentNodes(nodes)}
-        </div>
+  return (
+    <div className="collapse collapse-arrow">
+      <input
+        type="checkbox"
+        onChange={e => setOpenState(e.target.checked)}
+        checked={openState}
+      />
+      <div
+        className={clsx('collapse-title flex items-center font-bold text-sm', {
+          'text-white': openState,
+        })}
+      >
+        {name}
       </div>
-    );
-  };
+      <div className="collapse-content flex flex-col gap-1 p-1">
+        {buildAgentNodes(nodes)}
+      </div>
+    </div>
+  );
+};
+
+const NodeButton = ({ className, onAddNode, ...props }: any) => {
+  const [customAgents, setCustomAgents] = useState<any[]>([]);
+  const t = useTranslations('component.NodeButton');
+  useEffect(() => {
+    fetch('/api/agents', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then(res => res.json())
+      .then(agents => {
+        setCustomAgents(agents);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <Popover>
@@ -151,7 +151,7 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
         <Popover.Button
           className={clsx(
             className,
-            'h-9 w-9 flex items-center justify-center bg-primary text-primary-content bg-primary/20 rounded-full hover:shadow-box-lg hover:shadow-primary/50 hover:bg-primary-focus hover:border-primary/50'
+            'h-10 w-10 flex items-center justify-center bg-primary text-primary-content rounded-full hover:shadow-box hover:shadow-primary/60 hover:bg-primary-focus hover:border-primary/50'
           )}
           {...props}
         >
@@ -161,10 +161,23 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
           id="agent-list"
           className="origin-top-left absolute shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 overflow-auto max-h-[80vh]"
         >
-          <NodeGroup name={t('group-basic')} nodes={basicNodes} open />
-          <NodeGroup name={t('group-advanced')} nodes={advancedNodes} />
+          <NodeGroup
+            name={t('group-basic')}
+            nodes={basicNodes}
+            onAddNode={onAddNode}
+            open
+          />
+          <NodeGroup
+            name={t('group-advanced')}
+            nodes={advancedNodes}
+            onAddNode={onAddNode}
+          />
           {customAgents?.length > 0 && (
-            <NodeGroup name={t('group-extensions')} nodes={customAgents} />
+            <NodeGroup
+              name={t('group-extensions')}
+              nodes={customAgents}
+              onAddNode={onAddNode}
+            />
           )}
         </Popover.Panel>
       </Float>
