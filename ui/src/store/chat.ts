@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export interface Chat {
   id: string;
@@ -22,35 +23,42 @@ interface ChatState {
   getChatById: (id: string) => Chat | undefined;
 }
 
-const useChatStore = create<ChatState>((set, get) => ({
-  // User Chats
-  chats: [],
-  sidebarCollapsed: false,
-  activeChat: '',
-  setChats: chats => set({ chats }),
-  setActiveChat: (chatId: string) => set({ activeChat: chatId }),
-  setSidebarCollapsed: (collapsed: boolean) =>
-    set({ sidebarCollapsed: collapsed }),
-  updateChat: (id, newChat) =>
-    set(state => {
-      const chats = state.chats.map(chat => {
-        if (chat.id === id) {
-          // Merge the existing flow with the new flow data, allowing for partial updates
-          return { ...chat, ...newChat };
-        }
-        return chat;
-      });
-      return { chats };
+const useChatStore = create<ChatState>()(
+  persist(
+    (set, get) => ({
+      // User Chats
+      chats: [],
+      sidebarCollapsed: false,
+      activeChat: '',
+      setChats: chats => set({ chats }),
+      setActiveChat: (chatId: string) => set({ activeChat: chatId }),
+      setSidebarCollapsed: (collapsed: boolean) =>
+        set({ sidebarCollapsed: collapsed }),
+      updateChat: (id, newChat) =>
+        set(state => {
+          const chats = state.chats.map(chat => {
+            if (chat.id === id) {
+              // Merge the existing flow with the new flow data, allowing for partial updates
+              return { ...chat, ...newChat };
+            }
+            return chat;
+          });
+          return { chats };
+        }),
+      deleteChat: id =>
+        set(state => {
+          return {
+            chats: state.chats.filter(chat => chat.id !== id),
+          };
+        }),
+      getChatById: id => {
+        return get().chats.find(chat => chat.id === id);
+      },
     }),
-  deleteChat: id =>
-    set(state => {
-      return {
-        chats: state.chats.filter(chat => chat.id !== id),
-      };
-    }),
-  getChatById: id => {
-    return get().chats.find(chat => chat.id === id);
-  },
-}));
+    {
+      name: 'chat-storage',
+    }
+  )
+);
 
 export default useChatStore;

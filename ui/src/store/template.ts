@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { Autoflow } from './flow';
 
 export interface AutoflowTemplate {
@@ -20,19 +21,26 @@ interface AutoflowTemplateState {
   getTemplateById: (id: string) => AutoflowTemplate | undefined;
 }
 
-const useTemplateStore = create<AutoflowTemplateState>((set, get) => ({
-  // Public flows
-  templates: [],
-  setTemplates: templates => set({ templates }),
-  deleteTemplate: id =>
-    set(state => {
-      return {
-        templates: state.templates.filter(flow => flow.id !== id),
-      };
+const useTemplateStore = create<AutoflowTemplateState>()(
+  persist(
+    (set, get) => ({
+      // Public flows
+      templates: [],
+      setTemplates: templates => set({ templates }),
+      deleteTemplate: id =>
+        set(state => {
+          return {
+            templates: state.templates.filter(flow => flow.id !== id),
+          };
+        }),
+      getTemplateById: id => {
+        return get().templates.find(template => template.id === id);
+      },
     }),
-  getTemplateById: id => {
-    return get().templates.find(template => template.id === id);
-  },
-}));
+    {
+      name: 'template-storage',
+    }
+  )
+);
 
 export default useTemplateStore;

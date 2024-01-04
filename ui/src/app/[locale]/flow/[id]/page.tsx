@@ -3,11 +3,11 @@
 import { ReactFlowProvider } from 'reactflow';
 import Autoflow from '../../components/Flow';
 import { useFlow, useFlows } from '@/hooks';
-import { use, useEffect } from 'react';
+import { useEffect } from 'react';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const { flow } = useFlow(params.id);
-  const { activeFlowId, openFlow } = useFlows();
+  const { openFlow } = useFlows();
 
   useEffect(() => {
     if (flow?.name && typeof window !== 'undefined') {
