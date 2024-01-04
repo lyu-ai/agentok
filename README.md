@@ -180,6 +180,10 @@ If you are new to GitHub, [here](https://help.github.com/categories/collaboratin
 
 Please consider contributing to [AutoGen](https://github.com/microsoft/autogen), as FlowGen relies on a robust foundation to deliver its capabilities. Your contributions can help enhance the platform's core functionalities, ensuring a more seamless and efficient development experience for Multi-Agent Applications.
 
+This project uses [📦🚀semantic-release](https://github.com/semantic-release/semantic-release) to manage versioning and releases. To avoid too frequent auto-releases, we make it a manual GitHub Action to trigger the release.
+
+To follow the Semantic Release process, we enforced commit-lint convention on commit messages. Please refer to [Commitlint](https://commitlint.js.org/#/) for more details.
+
 ## Contributors Wall
 
 <a href="https://github.com/tiwater/flowgen/graphs/contributors">

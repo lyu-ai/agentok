@@ -20,8 +20,8 @@ pnpm dev
 ANALYZE=true pnpm build
 ```
 
-Open [http://localhost:666](http://localhost:666) with your browser to see the result.
+Open [http://localhost:2855](http://localhost:2855) with your browser to see the result.
 
 ## Deployment
 
-This project is deployed on Vercel, the production environment is https://demo.penless.ai/.
+Please refer to [README.md](../README.md) for deployment related information.
