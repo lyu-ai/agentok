@@ -64,6 +64,8 @@ const useFlowStore = create<AutoflowState>((set, get) => ({
     set(state => {
       return {
         flows: state.flows.filter(flow => flow.id !== id),
+        openFlowIds: state.openFlowIds.filter(openFlowId => openFlowId !== id),
+        activeFlowId: state.activeFlowId === id ? '' : state.activeFlowId,
       };
     }),
   getFlowById: id => {
