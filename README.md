@@ -1,14 +1,12 @@
-> [!IMPORTANT]
->
-> This project is still under heavy development and functions might not work well yet. Please don't hestitate to [Open an Issue](https://github.com/tiwater/flowgen/issues/new").
-
 <img src="./ui/public/logo-full.png" width="320" />
 
 # FlowGen - AutoGen Visualized
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![GitHub star chart](https://img.shields.io/github/stars/tiwater/flowgen?style=social)](https://star-history.com/#tiwater/flowgen)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/tiwater/flowgen)
 [![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/tiwater/flowgen)
+[![Open in GitHub Codespaces](https://img.shields.io/badge/Codespaces-Open-blue?style=flat&logo=github)](https://codespaces.new/tiwater/flowgen)
 
 ![flow-1](./website/static/img/screenshot-flow-1.png)
 
@@ -175,8 +173,6 @@ Once you've started both the ui and api services by following the steps previous
 If your services are started successfully and running on the expected ports, you should see the user interface or receive responses from the api services via this URL.
 
 ## 👨‍💻 Contributing
-
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/tiwater/flowgen)
 
 This project welcomes contributions and suggestions. Please read our [Contributing Guide](./CONTRIBUTING.md) first.
 
