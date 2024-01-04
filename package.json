@@ -1,6 +1,5 @@
 {
   "name": "flowgen",
-  "version": "0.5.1",
   "description": "FlowGen - AutoGen Visualized.",
   "private": true,
   "release": {
