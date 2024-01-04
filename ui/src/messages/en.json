@@ -121,6 +121,7 @@
       "enter-message": "Enter message to start chat ..."
     },
     "Autoflow": {
+      "back-to-main": "Back to Autoflow List",
       "reset-default-tooltip": "Reset to default",
       "save-flow": "Upload to Cloud",
       "save-success": "Successfully saved flow",
@@ -142,8 +143,9 @@
       "publish-flow-tip": "Publish this flow to the FlowGen community. You can unpublish at any time."
     },
     "NodeButton": {
-      "built-in-nodes": "Built-in Nodes",
-      "custom-agents": "Custom Agents"
+      "group-basic": "Basic Nodes",
+      "group-advanced": "Advanced Nodes",
+      "group-extensions": "Extensions"
     },
     "TemplateList": {
       "template-empty": "No template here yet. You can publish your flow.",
@@ -160,7 +162,6 @@
       "image-url-placeholder": "Please enter the image URL to send with message"
     },
     "ViewToggle": {
-      "back-to-main": "Back to Autoflow List",
       "back-to-editor": "Back to Autoflow Editor"
     },
     "CopyButton": {
@@ -258,7 +259,7 @@
       "note-description": "Place to write documents",
       "groupchat": "Group Chat",
       "groupchat-description": "Group agents for collaboration",
-      "retrieve-assistant": "Assistant (RAG)",
+      "retrieve-assistant": "Assistant for RAG",
       "retrieve-assistant-description": "Assistant supports RAG",
       "math-user-proxy": "User Proxy for Math",
       "math-user-proxy-description": "User Proxy with Math Expertise",

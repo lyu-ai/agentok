@@ -26,6 +26,9 @@ import { useTranslations } from 'next-intl';
 import { useFlow } from '@/hooks';
 import { useRouter } from 'next/navigation';
 import { debounce } from 'lodash-es';
+import FlowTabs from './FlowTabs';
+import Link from 'next/link';
+import { RiArrowGoBackLine } from 'react-icons/ri';
 
 const Autoflow = ({ flowId }: any) => {
   const { flow, updateFlow, isUpdating, isLoading, isError } = useFlow(flowId);
@@ -230,44 +233,58 @@ const Autoflow = ({ flowId }: any) => {
 
   return (
     <div className="relative w-full h-full overflow-hidden" ref={flowParent}>
-      <ReactFlow
-        nodes={nodes}
-        onNodesChange={onNodesChange}
-        edges={edges}
-        onEdgesChange={onEdgesChange}
-        nodeTypes={nodeTypes}
-        onConnect={onConnect}
-        connectionLineType={ConnectionLineType.SmoothStep}
-        connectionLineStyle={{ strokeWidth: 2, stroke: 'lightgreen' }}
-        onDragOver={onDragOver}
-        onDrop={onDrop}
-        panOnScroll
-        selectionOnDrag
-        selectionMode={SelectionMode.Partial}
-        fitView
-        fitViewOptions={{ maxZoom: 1 }}
-        proOptions={{ hideAttribution: true }}
-      >
-        <Background
-          id="logo"
-          gap={32}
-          color="hsl(var(--sc))"
-          className="engraved-bg bg-no-repeat bg-center bg-[url('/logo-bg.svg')]"
-          style={{ backgroundSize: '160px' }}
-        />
-        <Controls
+      <div className="relative gap-4 flex flex-grow flex-col w-full h-full">
+        <ReactFlow
+          nodes={nodes}
+          onNodesChange={onNodesChange}
+          edges={edges}
+          onEdgesChange={onEdgesChange}
+          nodeTypes={nodeTypes}
+          onConnect={onConnect}
+          connectionLineType={ConnectionLineType.SmoothStep}
+          connectionLineStyle={{ strokeWidth: 2, stroke: 'lightgreen' }}
+          onDragOver={onDragOver}
+          onDrop={onDrop}
+          panOnScroll
+          selectionOnDrag
+          selectionMode={SelectionMode.Partial}
+          fitView
           fitViewOptions={{ maxZoom: 1 }}
-          showInteractive={false}
-          position="bottom-right"
-        />
-      </ReactFlow>
-      <div className="absolute flex items-center gap-2 right-2 top-2">
-        <ViewToggle mode={'main'} setMode={() => router.push('/flow')} />
-        <ViewToggle mode={'python'} setMode={setMode} />
-        <ViewToggle mode={'json'} setMode={setMode} />
-        <ChatButton flow={flow} />
+          proOptions={{ hideAttribution: true }}
+        >
+          <Background
+            id="logo"
+            gap={32}
+            color="hsl(var(--sc))"
+            className="engraved-bg bg-no-repeat bg-center bg-[url('/logo-bg.svg')]"
+            style={{ backgroundSize: '160px' }}
+          />
+          <Controls
+            fitViewOptions={{ maxZoom: 1 }}
+            showInteractive={false}
+            position="bottom-right"
+          />
+        </ReactFlow>
+        <div className="absolute top-0 flex w-full items-center justify-between px-2">
+          <div className="flex flex-grow items-center gap-2 overflow-x-auto">
+            <Link
+              href="/flow"
+              className="text-primary/60 hover:text-primary"
+              data-tooltip-id="default-tooltip"
+              data-tooltip-content={t('back-to-main')}
+            >
+              <RiArrowGoBackLine className="w-5 h-5" />
+            </Link>
+            <FlowTabs className="hidden lg:flex flex-1 overflow-x-auto" />
+          </div>
+          <div className="flex flex-shrink-0 items-center gap-2">
+            <ViewToggle mode={'python'} setMode={setMode} />
+            <ViewToggle mode={'json'} setMode={setMode} />
+            <ChatButton flow={flow} />
+          </div>
+        </div>
+        <NodeButton onAddNode={onAddNode} className="absolute top-14 left-2" />
       </div>
-      <NodeButton onAddNode={onAddNode} className="absolute left-2 top-2" />
     </div>
   );
 };

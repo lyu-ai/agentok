@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   // TEMP: solve the data format issue
   templates = templates.map(template => {
     if (template.flow?.collectionId !== undefined) {
-      console.warn('Found legacy malformatted template:', template);
+      // console.warn('Found legacy malformatted template:', template);
       return {
         ...template,
         flow: template.flow.flow,

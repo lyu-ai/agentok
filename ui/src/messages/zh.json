@@ -119,6 +119,7 @@
       "enter-message": "输入消息开始聊天..."
     },
     "Autoflow": {
+      "back-to-main": "回到工作流首页",
       "reset-default-tooltip": "重置为默认值",
       "save-flow": "上传到云端",
       "save-success": "成功保存工作流",
@@ -139,8 +140,9 @@
       "publish-flow-tip": "将此工作流发布到 FlowGen 社区。您随时可以取消发布。"
     },
     "NodeButton": {
-      "built-in-nodes": "缺省节点",
-      "custom-agents": "自定义智能体"
+      "group-basic": "基本节点",
+      "group-advanced": "高级节点",
+      "group-extensions": "扩展节点"
     },
     "TemplateList": {
       "template-empty": "尚无公开的工作流模板，你可以将一个工作流发布为模板。",
@@ -157,7 +159,6 @@
       "image-url-placeholder": "请输入要发送的图片 URL"
     },
     "ViewToggle": {
-      "back-to-main": "回到工作流首页",
       "back-to-editor": "回到工作流编辑器"
     },
     "CopyButton": {

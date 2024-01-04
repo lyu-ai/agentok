@@ -112,20 +112,21 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
     );
   };
 
-  const NodeGroup = ({ index, name, nodes, open }: any) => {
+  const NodeGroup = ({ name, nodes, open }: any) => {
     const [openState, setOpenState] = useState(open ?? false);
     return (
-      <div
-        tabIndex={index}
-        className={clsx('collapse collapse-arrow rounded-lg')}
-      >
+      <div className="collapse collapse-arrow">
         <input
           type="checkbox"
-          className="peer"
           onChange={e => setOpenState(e.target.checked)}
           checked={openState}
         />
-        <div className="collapse-title flex items-center font-bold text-sm">
+        <div
+          className={clsx(
+            'collapse-title flex items-center font-bold text-sm',
+            { 'text-white': openState }
+          )}
+        >
           {name}
         </div>
         <div className="collapse-content flex flex-col gap-1 p-1">
@@ -138,7 +139,7 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
   return (
     <Popover>
       <Float
-        placement="bottom"
+        placement="bottom-start"
         offset={5}
         enter="transition ease-out duration-300"
         enterFrom="transform scale-0 opacity-0"
@@ -148,19 +149,22 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
         leaveTo="transform scale-0 opacity-0"
       >
         <Popover.Button
-          className={clsx(className, 'btn btn-sm btn-primary btn-circle')}
+          className={clsx(
+            className,
+            'h-12 w-12 flex items-center justify-center bg-primary text-primary-content bg-primary/20 rounded-full hover:shadow-box-lg hover:shadow-primary/50 hover:bg-primary-focus hover:border-primary/50'
+          )}
           {...props}
         >
-          <GoPlus className="w-6 h-6" />
+          <GoPlus className="w-8 h-8" />
         </Popover.Button>
         <Popover.Panel
           id="agent-list"
           className="origin-top-left absolute shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 overflow-auto max-h-[80vh]"
         >
-          <NodeGroup index={0} name="Basic" nodes={basicNodes} open />
-          <NodeGroup index={1} name="Advanced" nodes={advancedNodes} />
+          <NodeGroup name={t('group-basic')} nodes={basicNodes} open />
+          <NodeGroup name={t('group-advanced')} nodes={advancedNodes} />
           {customAgents?.length > 0 && (
-            <NodeGroup index={2} name="Extensions" nodes={customAgents} />
+            <NodeGroup name={t('group-extensions')} nodes={customAgents} />
           )}
         </Popover.Panel>
       </Float>

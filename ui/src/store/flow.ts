@@ -11,8 +11,12 @@ export interface Autoflow {
 
 interface AutoflowState {
   flows: Autoflow[];
+  openFlowIds: string[];
+  activeFlowId: string;
   // User flows
   setFlows: (flows: Autoflow[]) => void;
+  openFlow: (id: string) => void;
+  closeFlow: (id: string) => void;
   updateFlow: (id: string, flow: Autoflow) => void;
   deleteFlow: (id: string) => void;
   getFlowById: (id: string) => Autoflow | undefined;
@@ -21,7 +25,30 @@ interface AutoflowState {
 const useFlowStore = create<AutoflowState>((set, get) => ({
   // User flows
   flows: [],
+  openFlowIds: [],
+  activeFlowId: '',
   setFlows: flows => set({ flows }),
+  openFlow: (id: string) =>
+    set(state => {
+      if (state.openFlowIds.includes(id)) {
+        if (state.activeFlowId !== id) {
+          return { activeFlowId: id };
+        }
+        return {};
+      }
+      const openFlowIds = [id, ...state.openFlowIds];
+      return { activeFlowId: id, openFlowIds };
+    }),
+  closeFlow: (id: string) =>
+    set(state => {
+      const openFlowIds = state.openFlowIds.filter(
+        editingFlowId => editingFlowId !== id
+      );
+      if (state.activeFlowId === id) {
+        set({ activeFlowId: '' });
+      }
+      return { openFlowIds };
+    }),
   updateFlow: (id, newFlow) =>
     set(state => {
       const flows = state.flows.map(flow => {

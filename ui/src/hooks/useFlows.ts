@@ -148,11 +148,15 @@ export function useFlows() {
 
   return {
     flows,
+    openFlowIds: useFlowStore(state => state.openFlowIds),
+    activeFlowId: useFlowStore(state => state.activeFlowId),
     isLoading: !error && !data,
     isError: error,
     refresh: mutate,
     createFlow: handleCreateFlow,
     updateFlow: handleUpdateFlow,
+    openFlow: useFlowStore(state => state.openFlow),
+    closeFlow: useFlowStore(state => state.closeFlow),
     deleteFlow: handleDeleteFlow,
     forkFlow: handleForkFlow,
     getFlowById,
