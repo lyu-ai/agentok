@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+        with:
+          ref: 'main' # Explicitly state that you want to check out 'main'
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
