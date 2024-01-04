@@ -5,7 +5,7 @@
         'UserProxyAgent': 'from autogen import UserProxyAgent',
         'AssistantAgent': 'from autogen import AssistantAgent',
         'CompressibleAgent': 'from autogen.agentchat.contrib.compressible_agent import CompressibleAgent',
-        'GroupChat': 'from autogen import GroupChat\n  from autogen import GroupChatManager',
+        'GroupChat': 'from autogen import GroupChat\nfrom autogen import GroupChatManager',
         'GPTAssistantAgent': 'from autogen.agentchat.contrib.gpt_assistant_agent import GPTAssistantAgent',
         'MultimodalConversableAgent': 'from autogen.agentchat.contrib.multimodal_conversable_agent import MultimodalConversableAgent',
         'RetrieveAssistantAgent': 'from autogen.agentchat.contrib.retrieve_assistant_agent import RetrieveAssistantAgent\nimport chromadb',
@@ -44,13 +44,9 @@ from moviepy.editor import VideoFileClip
 
 from IPython import get_ipython
 
-try:
-  {%- for import_line in import_lines|unique %}
-  {{ import_line }}
-  {%- endfor %}
-except ImportError as e:
-  print(colored(f'Error: {e}', 'red'))
-  raise
+{%- for import_line in import_lines|unique %}
+{{ import_line }}
+{%- endfor %}
 
 # Replace the default get_human_input function for status control
 def custom_get_human_input(self, prompt: str) -> str:

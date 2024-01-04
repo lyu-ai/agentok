@@ -72,7 +72,7 @@ We made tutorials based on the official notebooks from Autogen repository. You c
 | ~~langchain~~                           | ⭕     | No plan to support                                                                                                |
 | lmm_gpt-4v                              | ✅     |                                                                                                                   |
 | lmm_llava                               | ✅     | Depends on Replicate                                                                                              |
-| MathChat                                | 🔲     |                                                                                                                   |
+| MathChat                                | ✅     | [Math Chat](https://platform.flowgen.app/gallery/m337e85xr95omtv)                                                 |
 | oai_assistant_function_call             | ✅     |                                                                                                                   |
 | oai_assistant_groupchat                 | 🆘     | Very slow and not work well, sometimes not returning.                                                             |
 | oai_assistant_retrieval                 | ✅     | [Retrieval (OAI)](https://platform.flowgen.app/gallery/tgq6dxu32yzwcgg)                                           |
@@ -88,7 +88,7 @@ We made tutorials based on the official notebooks from Autogen repository. You c
 | video_transcript_translate_with_whisper | ✅     | Depends on ffmpeg lib, should `brew install ffmpeg` and export IMAGEIO_FFMPEG_EXE                                 |
 | web_info                                | ✅     |                                                                                                                   |
 | cq_math                                 | ⭕     | This example is quite irrelevant to autogen, why not just use OpenAI API?                                         |
-| Async_human_input                       | 🔲     |                                                                                                                   |
+| Async_human_input                       | ⭕     | Need scenario.                                                                                                    |
 | oai_chatgpt_gpt4                        | ⭕     | Fine-tuning, out of project scope                                                                                 |
 | oai_completion                          | ⭕     | Fine-tuning, out of project scope                                                                                 |
 
