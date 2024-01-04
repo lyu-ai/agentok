@@ -151,11 +151,11 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
         <Popover.Button
           className={clsx(
             className,
-            'h-12 w-12 flex items-center justify-center bg-primary text-primary-content bg-primary/20 rounded-full hover:shadow-box-lg hover:shadow-primary/50 hover:bg-primary-focus hover:border-primary/50'
+            'h-9 w-9 flex items-center justify-center bg-primary text-primary-content bg-primary/20 rounded-full hover:shadow-box-lg hover:shadow-primary/50 hover:bg-primary-focus hover:border-primary/50'
           )}
           {...props}
         >
-          <GoPlus className="w-8 h-8" />
+          <GoPlus className="w-7 h-7" />
         </Popover.Button>
         <Popover.Panel
           id="agent-list"

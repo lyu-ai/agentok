@@ -16,15 +16,15 @@ FlowGen is a tool built for [AutoGen](https://microsoft.github.io/autogen/), a g
 
 We regard AutoGen as one of the best frontier technology for next-generation Multi-Agent Applications. FlowGen elevates this concept, providing intuitive visual tools that streamline the construction and oversight of complex agent-based workflows, thereby simplifying the entire process for creators and developers.
 
-### Autoflow Visual Editing
+### Autoflow
 
-You can create a autoflow from scratch, or fork from a template. The autoflow is visualized as a graph, and you can drag and drop nodes to build agents in flow style.
+You can create an Autoflow from scratch, or fork from a template. The Autoflow is visualized as a graph, and you can drag and drop nodes to build agents in flow style.
 
 ![flow-1](./website/static/img/screenshot-flow-1.png)
 
 ### Chat
 
-You can launch an autoflow or a template in a chat window, and chat with the agents.
+You can launch an Autoflow or an Autoflow Template in a chat window, and chat with the agents.
 
 ![chat-1](./website/static/img/screenshot-chat-1.png)
 
@@ -133,14 +133,14 @@ Railway.app supports the deployment of applications in Dockers. By clicking the 
 
 If you're interested in contributing to the development of this project or wish to run it from the source code, you have the option to run the ui and service independently. Here's how you can do that:
 
-1. **Frontend Service:**
+1. **UI (Frontend)**
 
-   - Navigate to the ui directory.
+   - Navigate to the ui directory `cd ui`.
    - Rename `.env.sample` to `.env.local` and set the value of variables correctly.
    - Install the necessary dependencies using the appropriate package manager command (e.g., `pnpm install` or `yarn`).
    - Run the ui service using the start-up script provided (e.g., `pnpm dev` or `yarn dev`).
 
-2. **Backend Service:**
+2. **API (Backend Services)**
 
    - Switch to the api service directory `cd api`.
    - Create virtual environment: `python3 -m venv venv`.
@@ -166,9 +166,9 @@ Each new commit to the main branch triggers an automatic deployment on [Railway.
 
 Once you've started both the ui and api services by following the steps previously outlined, you can access the application by opening your web browser and navigating to:
 
-- Frontend: http://localhost:2855
-- Backend: http://localhost:5004 (OpenAPI docs served at http://localhost:5004/redoc)
-- PocketBase: http://localhost:7676
+- ui: http://localhost:2855
+- api: http://localhost:5004 (OpenAPI docs served at http://localhost:5004/redoc)
+- pocketbase: http://localhost:7676
 
 If your services are started successfully and running on the expected ports, you should see the user interface or receive responses from the api services via this URL.
 

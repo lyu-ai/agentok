@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { GoAlertFill } from 'react-icons/go';
 import { useTranslations } from 'next-intl';
 import DownloadButton from '@/components/DownloadButton';
+import { toast } from 'react-toastify';
 
 const Python = ({ data, setMode }: any) => {
   const [loading, setLoading] = useState(true);
@@ -34,6 +35,10 @@ const Python = ({ data, setMode }: any) => {
         } else {
           setResult({ code: 200, python: json.code });
         }
+      })
+      .catch(e => {
+        console.error(e);
+        toast.error(t('generate-fail') + ': ' + String(e));
       })
       .finally(() => setLoading(false));
   }, [data]);
