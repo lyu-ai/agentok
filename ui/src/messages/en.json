@@ -97,7 +97,8 @@
       "go-to-editor": "Go to Autoflow Editor",
       "message-loading": "Loading chat history ...",
       "message-empty": "Start chat now!",
-      "resend": "Resend this message"
+      "resend": "Resend this message",
+      "click-to-send": "Click to send this sample message"
     },
     "ChatList": {
       "default-chat-title": "Chat with {source_name}",

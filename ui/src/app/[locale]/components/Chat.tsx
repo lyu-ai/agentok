@@ -17,6 +17,7 @@ import Tip from './Tip';
 import { isArray } from 'lodash-es';
 
 const SampleMessagePanel = ({ flow, className, onSelect }: any) => {
+  const t = useTranslations('component.Chat');
   const [minimized, setMinimized] = useState(false);
   const config = flow?.nodes?.find((node: any) => node.type === 'config');
   if (!config?.data?.sample_messages || !isArray(config.data.sample_messages)) {
@@ -36,6 +37,9 @@ const SampleMessagePanel = ({ flow, className, onSelect }: any) => {
           <div
             key={i}
             onClick={() => onSelect(msg)}
+            data-tooltip-id="chat-tooltip"
+            data-tooltip-content={t('click-to-send')}
+            data-tooltip-place="left-end"
             className="cursor-pointer btn btn-primary btn-xs max-w-md font-normal border-opacity-80 bg-opacity-80"
           >
             <span className="line-clamp-2">{msg}</span>

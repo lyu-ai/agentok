@@ -97,7 +97,8 @@
       "go-to-editor": "转到工作流编辑器",
       "message-loading": "正在加载聊天记录...",
       "message-empty": "尚无聊天记录。现在开始聊天！",
-      "resend": "重新发送此消息"
+      "resend": "重新发送此消息",
+      "click-to-send": "点击发送此条示例消息"
     },
     "ChatList": {
       "default-chat-title": "与 {source_name} 聊天",

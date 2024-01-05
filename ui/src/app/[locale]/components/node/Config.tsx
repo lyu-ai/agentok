@@ -21,7 +21,7 @@ function Config({ id, data, selected }: any) {
   return (
     <div
       className={clsx(
-        'p-2 rounded-md border text-base-content/90 min-w-[240px] backdrop-blur-sm',
+        'p-2 rounded-md border text-base-content/90 min-w-[320px] backdrop-blur-sm',
         selected
           ? 'shadow-box shadow-gray-700/80 border-gray-600/90 bg-gray-700/90'
           : 'border-gray-600/80 bg-gray-700/80'

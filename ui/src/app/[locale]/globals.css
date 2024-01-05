@@ -29,16 +29,8 @@ input-sm[type="number"] {
   background-color: transparent;
 }
 
-[data-theme='dim'] .react-flow__controls-button {
-  @apply bg-gray-800 hover:bg-gray-700 text-base-content border-gray-800 shadow;
-}
-
 .react-flow__controls-button {
-  @apply bg-base-100 hover:bg-base-200 text-base-content border-gray-700;
-}
-
-[data-theme='dim'] .react-flow__panel {
-  @apply flex flex-row;
+  @apply bg-gray-800 hover:bg-gray-700 text-base-content border-gray-800 shadow !important;
 }
 
 .react-flow__controls svg {
