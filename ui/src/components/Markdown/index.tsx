@@ -4,6 +4,9 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus as style } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import RemarkBreaks from 'remark-breaks';
 import RemarkGfm from 'remark-gfm';
+import RemarkMath from 'remark-math';
+import RehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css'; // import the KaTeX CSS
 import './markdown.css';
 import CopyButton from '../CopyButton';
 import { common, createLowlight } from 'lowlight';
@@ -86,7 +89,8 @@ const Markdown = ({
 
   return (
     <ReactMarkdown
-      remarkPlugins={[RemarkGfm, RemarkBreaks]}
+      remarkPlugins={[RemarkGfm, RemarkBreaks, RemarkMath]}
+      rehypePlugins={[RehypeKatex]}
       components={{
         code(data): JSX.Element {
           return <CodeComponent {...data} suppressCopy={suppressCopy} />;
