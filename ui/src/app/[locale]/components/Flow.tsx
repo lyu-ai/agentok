@@ -233,7 +233,7 @@ const Autoflow = ({ flowId }: any) => {
 
   return (
     <div className="relative w-full h-full overflow-hidden" ref={flowParent}>
-      <div className="relative gap-4 flex flex-grow flex-col w-full h-full">
+      <div className="relative flex flex-grow flex-col w-full h-full">
         <ReactFlow
           nodes={nodes}
           onNodesChange={onNodesChange}
@@ -250,7 +250,7 @@ const Autoflow = ({ flowId }: any) => {
           selectionMode={SelectionMode.Partial}
           fitView
           fitViewOptions={{ maxZoom: 1 }}
-          proOptions={{ hideAttribution: true }}
+          attributionPosition="bottom-left"
         >
           <Background
             id="logo"

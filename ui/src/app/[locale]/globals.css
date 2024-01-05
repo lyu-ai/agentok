@@ -37,6 +37,10 @@ input-sm[type="number"] {
   fill: currentColor;
 }
 
+.react-flow__attribution {
+  @apply bg-transparent !important;
+}
+
 .engraved-bg::after {
   content: "";
   background-image: url('/logo-bg.svg');
