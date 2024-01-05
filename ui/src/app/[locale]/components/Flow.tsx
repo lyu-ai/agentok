@@ -268,7 +268,7 @@ const Autoflow = ({ flowId }: any) => {
         <div className="absolute top-0 flex w-full items-center justify-between px-2">
           <div className="flex flex-grow items-center gap-2 overflow-x-auto">
             <Link
-              href="/flow"
+              href="/flows"
               className="text-primary/60 hover:text-primary"
               data-tooltip-id="default-tooltip"
               data-tooltip-content={t('back-to-main')}

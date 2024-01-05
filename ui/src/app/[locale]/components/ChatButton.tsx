@@ -5,7 +5,7 @@ import Chat from './Chat';
 import { RiChatSmile2Fill, RiChatSmile2Line, RiAppsLine } from 'react-icons/ri';
 import { useTranslations } from 'next-intl';
 import { useChats } from '@/hooks';
-import { Chat as ChatType } from '@/store/chat';
+import { Chat as ChatType } from '@/store/chats';
 import { useState } from 'react';
 
 const ChatButton = ({ className, flow }: any) => {

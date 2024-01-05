@@ -2,28 +2,45 @@
 
 import clsx from 'clsx';
 import Link from 'next/link';
-import { PiChatsCircle } from 'react-icons/pi';
-import { RiRobot2Line, RiAppsLine } from 'react-icons/ri';
+import { PiChatsCircle, PiChatsCircleFill } from 'react-icons/pi';
+import {
+  RiRobot2Line,
+  RiAppsLine,
+  RiRobot2Fill,
+  RiAppsFill,
+  RiSettingsFill,
+  RiSettingsLine,
+} from 'react-icons/ri';
 import { usePathname } from 'next/navigation';
 
 export const NAV_MENU_ITEMS = [
   {
-    id: 'flow',
+    id: 'flows',
     label: 'Autoflow',
     icon: RiRobot2Line,
-    href: '/flow',
+    activeIcon: RiRobot2Fill,
+    href: '/flows',
   },
   {
-    id: 'chat',
+    id: 'chats',
     label: 'Chat',
     icon: PiChatsCircle,
-    href: '/chat',
+    activeIcon: PiChatsCircleFill,
+    href: '/chats',
   },
   {
-    id: 'gallery',
-    label: 'Gallery',
+    id: 'templates',
+    label: 'Template',
     icon: RiAppsLine,
-    href: '/gallery',
+    activeIcon: RiAppsFill,
+    href: '/templates',
+  },
+  {
+    id: 'settings',
+    label: 'Settings',
+    icon: RiSettingsLine,
+    activeIcon: RiSettingsFill,
+    href: '/settings',
   },
 ];
 
@@ -48,13 +65,17 @@ const NavMenu = () => {
           key={item.id}
           href={item.href}
           className={clsx(
-            'flex items-center rounded-md py-2 px-4 gap-2 hover:text-primary/80 hover:bg-primary/5',
+            'flex items-center rounded-md text-sm py-2 px-3 gap-2 hover:text-primary/80 hover:bg-base-content/30',
             {
-              'text-primary bg-primary/10': isActive(item.href),
+              'text-primary bg-base-content/20': isActive(item.href),
             }
           )}
         >
-          <item.icon className="h-5 w-5" />
+          {isActive(item.href) ? (
+            <item.activeIcon className="h-5 w-5" />
+          ) : (
+            <item.icon className="h-5 w-5" />
+          )}
           {item.label}
         </Link>
       ))}

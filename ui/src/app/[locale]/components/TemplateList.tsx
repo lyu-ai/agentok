@@ -87,7 +87,7 @@ export const TemplateBlock = ({
     e.preventDefault();
     const forkedFlow = await forkFlow(template);
     if (forkedFlow) {
-      router.push(`/flow/${forkedFlow.id}`);
+      router.push(`/flows/${forkedFlow.id}`);
     }
   };
   const onChat = async (e: any) => {
@@ -96,7 +96,7 @@ export const TemplateBlock = ({
     await createChat(template.id, 'template')
       .then(chat => {
         if (chat) {
-          router.push(`/chat/${chat.id}`);
+          router.push(`/chats/${chat.id}`);
         }
       })
       .catch(e => {
@@ -123,7 +123,7 @@ export const TemplateBlock = ({
       return <div className={className}>{children}</div>;
     } else {
       return (
-        <Link href={`/gallery/${template.id}`} className={className}>
+        <Link href={`/templates/${template.id}`} className={className}>
           {children}
         </Link>
       );

@@ -3,14 +3,14 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-const HomePage = () => {
+const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace('/flows');
+    router.replace('/settings/apikeys');
   }, [router]);
 
   return null; // or a loading indicator if preferred
 };
 
-export default HomePage;
+export default Page;

@@ -32,7 +32,7 @@ Each Chat represents a live session that has been spun up from a Autoflow or a A
 
 ### Autoflow Template
 
-Ready to launch a Autoflow? Publish it as a **AutoflowTemplate** in the [FlowGen Gallery](https://platform.flowgen.app/gallery/)! Users can then deploy these templates to conjure up new Autoflows or strike up chats directly on the template itself.
+Ready to launch a Autoflow? Publish it as a **AutoflowTemplate** in the [FlowGen Template](https://platform.flowgen.app/templates/)! Users can then deploy these templates to conjure up new Autoflows or strike up chats directly on the template itself.
 
 ## "Hello World"
 
@@ -98,17 +98,17 @@ In most cases, the generated code has few dependencies other than AutoGen. You c
 
 ### Publish as Template
 
-If you're happy with your flow, publish it as a template for others to use. On [Autoflow](https://platform.flowgen.app/flow) page you can find your Autoflow to publish:
+If you're happy with your flow, publish it as a template for others to use. On [Autoflow](https://platform.flowgen.app/flows) page you can find your Autoflow to publish:
 
-![flows](./img/flows.png)
+![flows](./img/flow.png)
 
 hit the **Publish as Template** button at the bottom right of the Autoflow card:
 
 ![publish](./img/publish-as-template.png)
 
-And then you can find your template on [Gallery](https://platform.flowgen.app/gallery) page:
+And then you can find your template on [Template](https://platform.flowgen.app/templates) page:
 
-![gallery](./img/gallery.png)
+![template](./img/template.png)
 
 By clicking on the template card, you can view the details of the template:
 
@@ -126,7 +126,7 @@ Looking ahead, we plan to enhance the functionality, introducing additional feat
 
 Got a taste for FlowGen? Feast on these resources for seconds:
 
-- [FlowGen Gallery](https://platform.flowgen.app/gallery/): Feast your eyes on a buffet of ready-to-serve templates.
+- [FlowGen Template](https://platform.flowgen.app/templates/): Feast your eyes on a buffet of ready-to-serve templates.
 - [FlowGen Documentation](https://docs.flowgen.app/): The ultimate guide to becoming a FlowGen whiz.
 - [FlowGen GitHub](https://github.com/tiwater/flowgen): Peek under the hood at the source code.
 - [AutoGen Documentation](https://microsoft.github.io/autogen/): Master the art of AutoGen with this comprehensive tutorial.

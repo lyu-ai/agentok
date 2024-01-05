@@ -60,7 +60,7 @@ const ChatListPanel = ({ onAdd }: any) => {
                 key={`${type}-${sourceItem.id}`}
                 onClick={() =>
                   createChat(sourceItem.id, type).then(chat =>
-                    router.push(`/chat/${chat.id}`)
+                    router.push(`/chats/${chat.id}`)
                   )
                 }
                 className="w-56 flex flex-col items-start gap-2 text-sm rounded p-2 border backdrop-blur-md border-base-content/5 bg-base-content/10 hover:shadow-box hover:bg-base-content/40 hover:border-base-content/30"

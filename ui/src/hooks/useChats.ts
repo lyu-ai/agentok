@@ -1,11 +1,11 @@
 import useSWR from 'swr';
-import useChatStore, { Chat } from '@/store/chat';
+import useChatStore, { Chat } from '@/store/chats';
 import { useEffect, useState } from 'react';
 import { fetcher } from './fetcher';
 import pb from '@/utils/pocketbase/client';
 import { isEqual } from 'lodash-es';
-import useFlowStore from '@/store/flow';
-import useTemplateStore from '@/store/template';
+import useFlowStore from '@/store/flows';
+import useTemplateStore from '@/store/templates';
 
 export function useChats() {
   const { data, error, mutate } = useSWR('/api/chats', fetcher);

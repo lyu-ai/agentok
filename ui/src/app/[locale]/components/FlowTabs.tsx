@@ -45,7 +45,7 @@ const FlowTabs = ({ className }: any) => {
 
     closeFlow(flowId);
 
-    router.replace(`/flow/${nextFlowId}`);
+    router.replace(`/flows/${nextFlowId}`);
   };
 
   return (
@@ -58,7 +58,7 @@ const FlowTabs = ({ className }: any) => {
               ? 'bg-primary/80 text-primary-content'
               : 'bg-base-content/20 text-base-content'
           } group relative flex flex-shrink-0 items-center gap-1 px-3 py-1 text-sm rounded-full hover:bg-primary/80 hover:text-primary-content`}
-          href={`/flow/${id}`}
+          href={`/flows/${id}`}
         >
           <RiRobot2Line className="w-4 h-4" />
           <span className="max-w-xs truncate text-sm">{name}</span>

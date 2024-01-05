@@ -22,7 +22,7 @@ const Logo = () => {
         height={128}
         alt="logo"
         src={logo}
-        className="hidden md:block h-7 w-auto object-contain aspect-w-1 aspect-h-1"
+        className="hidden md:block h-6 w-auto object-contain aspect-w-1 aspect-h-1"
       />
       <img
         width={48}

@@ -1,6 +1,6 @@
 # Ask Planner
 
-This tutorial provides step-by-step guidance on constructing a workflow that shows how to use functions to incorporate subflows. Utilizing the FlowGen template, [Planning](https://platform.flowgen.app/gallery/hp0xjckf3qqp31j), you can engage with it directly or fork it to tweak the flow to your specifications.
+This tutorial provides step-by-step guidance on constructing a workflow that shows how to use functions to incorporate subflows. Utilizing the FlowGen template, [Planning](https://platform.flowgen.app/templates/hp0xjckf3qqp31j), you can engage with it directly or fork it to tweak the flow to your specifications.
 
 ![Planning](./img/template.png)
 

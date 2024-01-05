@@ -1,6 +1,6 @@
 import useSWR from 'swr';
-import useFlowStore, { Autoflow } from '@/store/flow';
-import { AutoflowTemplate } from '@/store/template';
+import useFlowStore, { Autoflow } from '@/store/flows';
+import { AutoflowTemplate } from '@/store/templates';
 import { useEffect, useState } from 'react';
 import {
   getFlowDescription,

@@ -17,7 +17,7 @@ const ChatAction = ({ flow }: any) => {
     await createChat(flow.id, 'flow')
       .then(chat => {
         if (chat) {
-          router.push(`/chat/${chat.id}`);
+          router.push(`/chats/${chat.id}`);
         }
       })
       .catch(e => {

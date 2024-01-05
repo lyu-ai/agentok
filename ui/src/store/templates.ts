@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Autoflow } from './flow';
+import { Autoflow } from './flows';
 
 export interface AutoflowTemplate {
   id?: string;

@@ -40,7 +40,7 @@ const FlowViewer = ({ template, className }: any) => {
 };
 
 const GalleryDetailPage = ({ params }: { params: { id: string } }) => {
-  const t = useTranslations('page.Gallery');
+  const t = useTranslations('page.Template');
   const { templates, isLoading, isError } = useTemplates();
   const [template, setTemplate] = useState<any>();
   const [index, setIndex] = useState<number>(0);
@@ -75,7 +75,7 @@ const GalleryDetailPage = ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="relative flex flex-col w-full h-full gap-2 p-4 overflow-y-auto items-center">
-      <title>Gallery | FlowGen</title>
+      <title>Template | FlowGen</title>
       <div className="flex flex-col items-center justify-center gap-2 text-sm p-2">
         <span className="text-5xl font-bold p-4">{template.name}</span>
         <span className="text-lg p-4 font-normal max-w-5xl">
@@ -89,7 +89,7 @@ const GalleryDetailPage = ({ params }: { params: { id: string } }) => {
           suppressLink
           className="w-full max-w-sm"
         />
-        <ReactFlowProvider key="reactflow-gallery">
+        <ReactFlowProvider key="reactflow-template">
           <FlowViewer
             template={template}
             className="max-w-2xl min-h-[420px] bg-base-content/10 border border-base-content/5 rounded-xl"

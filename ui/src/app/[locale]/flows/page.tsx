@@ -16,7 +16,7 @@ const FlowPage = () => {
   const onCreateFlow = async () => {
     await createFlow().then(flow => {
       if (flow) {
-        router.push(`/flow/${flow.id}`);
+        router.push(`/flows/${flow.id}`);
       }
     });
   };
@@ -47,7 +47,7 @@ const FlowPage = () => {
       </div>
       <div className="flex w-full justify-center items-center py-8">
         <Link
-          href="/gallery"
+          href="/templates"
           className="btn btn-lg text-lg btn-primary btn-outline"
         >
           {t('more-templates')}

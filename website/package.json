@@ -1,7 +1,7 @@
 {
   "name": "docs",
   "version": "0.5.0",
-  "description": "FlowGen Docs",
+  "description": "FlowGen",
   "license": "Apache-2.0",
   "private": true,
   "scripts": {

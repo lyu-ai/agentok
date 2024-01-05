@@ -140,7 +140,7 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
       }
       setActiveChat(nextChatId);
       await deleteChat(chat.id);
-      router.replace(`/chat/${nextChatId}`); // It's fine if nextChatId is empty
+      router.replace(`/chats/${nextChatId}`); // It's fine if nextChatId is empty
     };
 
     if (!chat || isLoading) return <ChatLoading />;
@@ -160,7 +160,7 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
         )}
         onClick={() => {
           setActiveChat(chat.id);
-          router.push(`/chat/${chat.id}`);
+          router.push(`/chats/${chat.id}`);
         }}
       >
         <div className="relative flex flex-col w-full gap-2 justify-between items-start">

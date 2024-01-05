@@ -1,7 +1,7 @@
 'use client';
 // NOTE:
 // Putting this page into a group (chat-layout) is to avoid the remounting of layout page when switching between
-// different /chat/[id], because remounting of layout will only cause the flickering of the list, but also lose the
+// different /chats/[id], because remounting of layout will only cause the flickering of the list, but also lose the
 // scroll position of the chat list.
 // Refer to: https://github.com/vercel/next.js/issues/44793#issuecomment-1382458981
 import { useChats, useMediaQuery } from '@/hooks';

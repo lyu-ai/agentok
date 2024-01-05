@@ -1,8 +1,8 @@
 import useSWR from 'swr';
-import useTemplateStore from '@/store/template';
+import useTemplateStore from '@/store/templates';
 import { useEffect, useState } from 'react';
 import { fetcher } from './fetcher';
-import { AutoflowTemplate } from '@/store/template';
+import { AutoflowTemplate } from '@/store/templates';
 
 export function useTemplates() {
   const { data, error, mutate } = useSWR<AutoflowTemplate[]>(

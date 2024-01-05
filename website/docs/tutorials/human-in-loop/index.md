@@ -1,6 +1,6 @@
 # Human in the Loop
 
-This tutorial provides step-by-step guidance on constructing a workflow that incorporates a human-in-the-loop approach. Utilizing the FlowGen template, [Human in the Loop](https://platform.flowgen.app/gallery/4pbokrvi7zguv48), you can engage with it directly or fork it to tweak the flow to your specifications.
+This tutorial provides step-by-step guidance on constructing a workflow that incorporates a human-in-the-loop approach. Utilizing the FlowGen template, [Human in the Loop](https://platform.flowgen.app/templates/4pbokrvi7zguv48), you can engage with it directly or fork it to tweak the flow to your specifications.
 
 The tutorial leverages the official notebooks [Simple Chat](https://github.com/microsoft/autogen/blob/main/samples/simple_chat.py) and [Human Feedback](https://github.com/microsoft/autogen/blob/main/notebook/agentchat_human_feedback.ipynb) as its foundation.
 

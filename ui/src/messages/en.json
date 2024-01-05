@@ -235,10 +235,16 @@
       "start-from-template": "Start from AutoflowTemplate",
       "more-templates": "Dicover More Templates ..."
     },
-    "Gallery": {
+    "Template": {
       "select-template-title": "FlowGen Templates",
       "select-flow": "Discover top FlowGen templates. Chat, or Fork to customize.",
       "refresh": "Refresh"
+    },
+    "Settings": {
+      "account": "Account",
+      "apikeys": "API Keys",
+      "tools": "Tools",
+      "billing": "Billing"
     }
   },
   "meta": {
