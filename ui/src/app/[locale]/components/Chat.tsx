@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { GoPencil } from 'react-icons/go';
+import { GoArrowDown, GoArrowUp, GoPencil } from 'react-icons/go';
 import { MdOutlineCleaningServices } from 'react-icons/md';
 import { RxOpenInNewWindow } from 'react-icons/rx';
 import ChatInput from './ChatInput';
@@ -7,15 +7,43 @@ import { genId } from '@/utils/id';
 import { UnsubscribeFunc } from 'pocketbase';
 import pb from '@/utils/pocketbase/client';
 import { StatusMessage } from '@/utils/chat';
-import { PiChatsCircleFill } from 'react-icons/pi';
 import { TbArrowBarToLeft, TbArrowBarRight } from 'react-icons/tb';
 import { useTranslations } from 'next-intl';
 import { useChat, useChats } from '@/hooks';
 import { Tooltip } from 'react-tooltip';
 import MessageList from './MessageList';
 import clsx from 'clsx';
-import { get } from 'http';
 import Tip from './Tip';
+import { isArray } from 'lodash-es';
+
+const SampleMessagePanel = ({ flow, className, onSelect }: any) => {
+  const [minimized, setMinimized] = useState(false);
+  const config = flow?.nodes?.find((node: any) => node.type === 'config');
+  if (!config?.data?.sample_messages || !isArray(config.data.sample_messages)) {
+    return null;
+  }
+  const sampleMessages = config.data.sample_messages as string[];
+  return (
+    <div className={clsx(className, 'flex flex-col items-end gap-1')}>
+      <button
+        className="btn btn-primary btn-outline btn-xs btn-circle"
+        onClick={() => setMinimized(!minimized)}
+      >
+        {minimized ? <GoArrowUp /> : <GoArrowDown />}
+      </button>
+      {!minimized &&
+        sampleMessages.map((msg, i) => (
+          <div
+            key={i}
+            onClick={() => onSelect(msg)}
+            className="cursor-pointer btn btn-primary btn-xs max-w-md font-normal border-opacity-80 bg-opacity-80"
+          >
+            <span className="line-clamp-2">{msg}</span>
+          </div>
+        ))}
+    </div>
+  );
+};
 
 const Chat = ({
   chatId,
@@ -139,6 +167,7 @@ const Chat = ({
       content: message ?? '\n', // If it's empty message, let's simulate a Enter key-press
     };
     setMessages(msgs => [...msgs, newMessage]);
+    setThinking(true); // Activate thinking immediately
     const res = await fetch(
       `/api/chats/${chatId}/${waitForHumanInput ? 'inputs' : 'messages'}`,
       {
@@ -276,6 +305,13 @@ const Chat = ({
               <span className="text-sm">{t('thinking')}</span>
             </div>
           </div>
+        )}
+        {!thinking && (
+          <SampleMessagePanel
+            flow={chatSource?.flow}
+            className="absolute bottom-full mb-2 right-2 z-20"
+            onSelect={onSend}
+          />
         )}
       </div>
       <Tooltip id="chat-tooltip" className="max-w-md" />

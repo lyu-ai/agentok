@@ -44,9 +44,10 @@
       "system-message-placeholder": "Enter system message here"
     },
     "Config": {
-      "flow-name": "Autoflow Name",
-      "flow-name-tooltip": "The process name is used for code generation, so you need to follow the rules below:\n* Ensure the legality of the process name, using only letters, numbers, hyphens, and underscores.\n* Ensure the clarity of the process name, such as **Critics** instead of **Node1**.",
-      "flow-description": "Autoflow Description",
+      "flow-name": "Name",
+      "flow-description": "Description",
+      "sample-messages": "Sample Message",
+      "sample-messages-tooltip": "Sample messages for new chat, will be shown and clickable above the Send button.\nPlease put each message on a separate line.",
       "expand": "Expand",
       "collapse": "Collapse",
       "filter-dict": "Filter Dictionary",

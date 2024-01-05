@@ -9,6 +9,7 @@ import Tip from '../Tip';
 import FunctionConfig from '../function/Config';
 import { TbMathFunction } from 'react-icons/tb';
 import { useTranslations } from 'next-intl';
+import { isArray } from 'lodash-es';
 
 function Config({ id, data, selected }: any) {
   const [collapsed, setCollapsed] = useState(false);
@@ -67,7 +68,7 @@ function Config({ id, data, selected }: any) {
               </div>
             </div>
             <input
-              className="nodrag nowheel input input-sm input-bordered w-32 bg-transparent rounded"
+              className="nodrag nowheel input input-sm input-bordered w-full bg-transparent rounded"
               value={data.flow_name ?? ''}
               onChange={e =>
                 setNodeData(instance, id, { flow_name: e.target.value })
@@ -83,6 +84,26 @@ function Config({ id, data, selected }: any) {
             value={data.flow_description ?? ''}
             onChange={e =>
               setNodeData(instance, id, { flow_description: e.target.value })
+            }
+          />
+          <div className="font-bold text-base-content/80 flex items-center gap-1">
+            {t('sample-messages')}
+            <Tip content={t('sample-messages-tooltip')} />
+          </div>
+          <textarea
+            rows={2}
+            className="nodrag nowheel textarea textarea-xs textarea-bordered w-full bg-transparent rounded"
+            value={
+              data.sample_messages
+                ? isArray(data.sample_messages)
+                  ? data.sample_messages.join('\n')
+                  : data.sample_messages
+                : ''
+            }
+            onChange={e =>
+              setNodeData(instance, id, {
+                sample_messages: e.target.value.split('\n'),
+              })
             }
           />
         </div>

@@ -64,6 +64,7 @@ const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
           className="w-full bg-transparent rounded-md"
           placeholder={t('enter-message')}
           value={message}
+          autoFocus
           onKeyDown={onKeyDown}
           onChange={(e: any) => setMessage(e.target.value)}
         />
