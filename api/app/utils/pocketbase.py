@@ -5,7 +5,7 @@ import requests
 
 from dotenv import load_dotenv
 
-from ..schemas import Message
+from ..models import Message
 load_dotenv()  # This will load all environment variables from .env
 
 POCKETBASE_URL: str = os.environ.get("POCKETBASE_URL")

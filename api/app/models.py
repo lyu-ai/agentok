@@ -12,13 +12,6 @@ class Message(BaseModel):
   owner: str
   created: Optional[str] = None
 
-class Chat(BaseModel):
-  id: str
-  from_type: Literal['flow', 'template']
-  from_flow: str
-  from_template: str
-  owner: str
-
 Node = Dict[str, Any]
 Edge = Dict[str, Any]
 class FlowData(BaseModel):
@@ -44,3 +37,33 @@ class Function(BaseModel):
   name: str
   description: Optional[str] = None
   parameters: List[Parameter]
+
+from pydantic import BaseModel
+from typing import List, Optional
+
+class MessageBase(BaseModel):
+    message: str
+
+class MessageCreate(MessageBase):
+    pass
+
+class ChatCreate(BaseModel):
+    name: str
+    from_type: Literal['flow', 'template']
+    from_flow: Optional[str] = None
+    from_template: Optional[str] = None
+    owner: str
+
+class Chat(ChatCreate):
+    id: str
+    status: str
+    created: str
+    updated: str
+
+class ExtendedAgent(BaseModel):
+    id: str
+    name: str
+    description: str
+    type: str
+    label: str
+    class_type: str

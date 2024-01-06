@@ -1,13 +1,33 @@
 from fastapi import FastAPI
-from .routers import chat, websocket, dev, agent
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from .routers import chat_router, dev_router, extension_router, message_router, doc_router
 
-app = FastAPI(description="FlowGen Backend Services", version="1.0.0")
+app = FastAPI(description="FlowGen APIs", version="1.0.0")
 
-app.include_router(chat.router)
-app.include_router(websocket.router)
-app.include_router(dev.router)
-app.include_router(agent.router)
+app.include_router(chat_router.router, prefix="/chats", tags=["Chat"])
+app.include_router(message_router.router, prefix="/messages", tags=["Message"])
+app.include_router(dev_router.router, prefix="/dev", tags=["Dev"])
+app.include_router(extension_router.router, prefix="/agents", tags=["Agent"])
+app.include_router(doc_router.router)
 
-@app.get("/", tags=["Chat"])
+@app.get("/", response_class=HTMLResponse)
 async def root():
-    return {"message": "Hello from FlowGen Backend Services!"}
+    html_content = """
+    <html>
+        <head>
+            <title>Welcome to FlowGen API Services</title>
+            <meta charset="utf-8" />
+            <link rel="icon" href="https://platform.flowgen.app/favicon.ico" />
+        </head>
+        <body>
+            <img src="https://platform.flowgen.app/logo-full.png" alt="FlowGen Logo" style="width: 240px" />
+            <h1>Welcome to FlowGen APIs!</h1>
+            <p>Check out our <a href="/api-docs">API Documentations</a>, <a target="_blank" href="https://github.com/tiwater/flowgen">GitHub Repo</a>, or <a target="_blank" href="https://platform.flowgen.app">Try FlowGen</a>.</p>
+        </body>
+    </html>
+    """
+    return HTMLResponse(content=html_content)
+
+# Mount the static directory to serve favicon file
+app.mount("/static", StaticFiles(directory="static"), name="static")

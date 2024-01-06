@@ -86,7 +86,7 @@ class DALLEAgent(ConversableAgent):
         "description": "An agent that uses OpenAI's DALL-E model to generate images.",
         "type": "custom_conversable",
         "label": "DALLE",
-        "class": "DALLEAgent", # Assumed the path is always "app.extensions.*"
+        "class_type": "DALLEAgent", # Assumed the path is always "app.extensions.*"
     }
     def __init__(self, name, llm_config: dict, **kwargs):
         super().__init__(name, llm_config=llm_config, **kwargs)

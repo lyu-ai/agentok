@@ -173,7 +173,7 @@ const Chat = ({
     setMessages(msgs => [...msgs, newMessage]);
     setThinking(true); // Activate thinking immediately
     const res = await fetch(
-      `/api/chats/${chatId}/${waitForHumanInput ? 'inputs' : 'messages'}`,
+      `/api/chats/${chatId}/${waitForHumanInput ? 'input' : 'messages'}`,
       {
         method: 'POST',
         body: JSON.stringify(newMessage),

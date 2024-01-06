@@ -28,10 +28,17 @@ export const ChatLoading = () => {
       {[...Array(6)].map((_, i) => (
         <div
           key={i}
-          className="flex flex-col w-80 h-20 bg-base-content/10 rounded-md p-3 gap-3"
+          className="flex flex-col w-80 h-28 bg-base-content/10 rounded-md p-3 gap-2"
         >
+          <div className="flex items-center gap-2">
+            <div className="skeleton h-8 w-8 rounded-full shrink-0" />
+            <div className="flex flex-col gap-2 w-full">
+              <div className="skeleton h-4 w-1/2" />
+              <div className="skeleton h-2 w-1/4" />
+            </div>
+          </div>
           <div className="skeleton h-3 w-full" />
-          <div className="skeleton h-3 w-1/3" />
+          <div className="skeleton h-3 w-3/4" />
         </div>
       ))}
     </>

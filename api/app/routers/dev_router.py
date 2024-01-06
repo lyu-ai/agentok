@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from ..schemas import Autoflow, Function
-from ..core.codegen import flow2py, func2py
+from ..models import Autoflow, Function
+from ..services.dev_service import flow2py, func2py
 from ..dependencies import oauth2_scheme
 
 router = APIRouter()

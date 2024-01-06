@@ -157,15 +157,15 @@ export const TemplateBlock = ({
           {template.expand?.owner?.avatar && (
             <img
               src={getAvatarUrl(template.expand?.owner)}
-              height={16}
-              width={16}
+              height={24}
+              width={24}
               alt="owner"
-              className="w-4 h-4 rounded-full"
+              className="w-6 h-6 rounded-full"
             />
           )}
           {template.expand?.owner?.name ?? template.expand?.owner?.email ?? ''}
         </div>
-        <div className="text-xs text-base-content/60">
+        <div className="text-xs text-base-content/40">
           {new Date(template.created).toLocaleString()}
         </div>
         <Markdown

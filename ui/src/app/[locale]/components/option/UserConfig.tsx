@@ -133,7 +133,7 @@ const CodeExecutionConfig = ({ data, setExecutionOption, ...props }: any) => {
           <input
             type="checkbox"
             className="checkbox checkbox-xs"
-            checked={data.code_execution_config?.use_docker}
+            checked={data.code_execution_config?.use_docker ?? false}
             onChange={e => setExecutionOption('use_docker', e.target.checked)}
           />
           <span>{t('use-docker')}</span>

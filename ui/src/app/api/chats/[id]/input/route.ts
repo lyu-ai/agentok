@@ -16,7 +16,7 @@ export async function POST(
   };
 
   const res = await fetch(
-    `${NEXT_PUBLIC_BACKEND_URL}/chats/${params.id}/inputs`,
+    `${NEXT_PUBLIC_BACKEND_URL}/chats/${params.id}/input`,
     {
       method: 'POST',
       headers: {

@@ -5,7 +5,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.ext import do
 from typing import Any, Dict, List, Union
 
-from ..schemas import Autoflow, Function
+from ..models import Autoflow, Function
 
 # Set up the Jinja2 environment
 env = Environment(
