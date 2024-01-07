@@ -71,7 +71,7 @@ export default function ApiDocs() {
     return (
       <redoc
         key={key}
-        spec-url="http://localhost:5004/openapi.json"
+        spec-url="https://api.flowgen.app/openapi.json"
         expand-responses="all"
         hide-download-button="true"
         scroll-y-offset="nav"
