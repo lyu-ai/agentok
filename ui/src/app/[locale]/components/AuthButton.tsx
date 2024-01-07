@@ -150,7 +150,7 @@ const AuthButton = () => {
   ) : (
     <Link
       href="/auth/login"
-      className="ml-4 btn btn-sm btn-primary rounded font-normal"
+      className="ml-4 btn btn-sm btn-primary rounded text-xs font-normal"
     >
       Login / Sign Up
     </Link>

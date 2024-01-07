@@ -173,7 +173,7 @@ const Chat = ({
     setMessages(msgs => [...msgs, newMessage]);
     setThinking(true); // Activate thinking immediately
     const res = await fetch(
-      `/api/chats/${chatId}/${waitForHumanInput ? 'inputs' : 'messages'}`,
+      `/api/chats/${chatId}/${waitForHumanInput ? 'input' : 'messages'}`,
       {
         method: 'POST',
         body: JSON.stringify(newMessage),
@@ -263,7 +263,7 @@ const Chat = ({
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('open-in-new-window')}
               data-tooltip-place="bottom"
-              href={`/chat/${chat?.id}`}
+              href={`/chats/${chat?.id}`}
               target="_blank"
             >
               <RxOpenInNewWindow className="w-4 h-4" />
@@ -275,7 +275,7 @@ const Chat = ({
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('go-to-editor')}
               data-tooltip-place="bottom"
-              href={`/flow/${chat.sourceId}`}
+              href={`/flows/${chat.sourceId}`}
               target="_blank"
             >
               <GoPencil className="w-4 h-4" />

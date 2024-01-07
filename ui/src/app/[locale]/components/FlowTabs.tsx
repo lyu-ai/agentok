@@ -4,11 +4,35 @@ import { GoX } from 'react-icons/go';
 import clsx from 'clsx';
 import { RiRobot2Line } from 'react-icons/ri';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+type FlowMeta = {
+  id: string;
+  name: string;
+};
 
 const FlowTabs = ({ className }: any) => {
   const router = useRouter();
   const { flows, openFlowIds, activeFlowId, closeFlow } = useFlows();
   if (!flows) return null;
+  const [flowMetas, setFlowMetas] = useState<FlowMeta[]>([]);
+  useEffect(() => {
+    const flowInfo = openFlowIds
+      .map(flowId => {
+        const targetFlow = flows.find(flow => flow.id === flowId);
+        if (targetFlow) {
+          return {
+            id: flowId,
+            name: targetFlow.name,
+          };
+        } else {
+          closeFlow(flowId); // Clean up dirty data
+          return undefined;
+        }
+      })
+      .filter(Boolean);
+    setFlowMetas(flowInfo as FlowMeta[]);
+  }, [openFlowIds, flows]);
 
   const onCloseFlow = (flowId: string) => {
     const currentIndex = openFlowIds.indexOf(flowId);
@@ -21,31 +45,29 @@ const FlowTabs = ({ className }: any) => {
 
     closeFlow(flowId);
 
-    router.replace(`/flow/${nextFlowId}`);
+    router.replace(`/flows/${nextFlowId}`);
   };
 
   return (
     <div className={clsx('flex gap-1', className)}>
-      {openFlowIds.map((flowId, i) => (
+      {flowMetas.map(({ id, name }, i) => (
         <Link
-          key={flowId}
+          key={id}
           className={`${
-            activeFlowId === flowId
+            activeFlowId === id
               ? 'bg-primary/80 text-primary-content'
               : 'bg-base-content/20 text-base-content'
           } group relative flex flex-shrink-0 items-center gap-1 px-3 py-1 text-sm rounded-full hover:bg-primary/80 hover:text-primary-content`}
-          href={`/flow/${flowId}`}
+          href={`/flows/${id}`}
         >
           <RiRobot2Line className="w-4 h-4" />
-          <span className="max-w-xs truncate text-sm">
-            {flows.find(flow => flow.id === flowId)?.name ?? 'Untitled'}
-          </span>
+          <span className="max-w-xs truncate text-sm">{name}</span>
           <button
             className="rounded-full hidden group-hover:flex hover:text-red-500"
             onClick={e => {
               e.stopPropagation();
               e.preventDefault();
-              onCloseFlow(flowId);
+              onCloseFlow(id);
             }}
           >
             <GoX className="w-4 h-4" />

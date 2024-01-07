@@ -233,7 +233,7 @@ const Autoflow = ({ flowId }: any) => {
 
   return (
     <div className="relative w-full h-full overflow-hidden" ref={flowParent}>
-      <div className="relative gap-4 flex flex-grow flex-col w-full h-full">
+      <div className="relative flex flex-grow flex-col w-full h-full">
         <ReactFlow
           nodes={nodes}
           onNodesChange={onNodesChange}
@@ -250,7 +250,7 @@ const Autoflow = ({ flowId }: any) => {
           selectionMode={SelectionMode.Partial}
           fitView
           fitViewOptions={{ maxZoom: 1 }}
-          proOptions={{ hideAttribution: true }}
+          attributionPosition="bottom-left"
         >
           <Background
             id="logo"
@@ -268,7 +268,7 @@ const Autoflow = ({ flowId }: any) => {
         <div className="absolute top-0 flex w-full items-center justify-between px-2">
           <div className="flex flex-grow items-center gap-2 overflow-x-auto">
             <Link
-              href="/flow"
+              href="/flows"
               className="text-primary/60 hover:text-primary"
               data-tooltip-id="default-tooltip"
               data-tooltip-content={t('back-to-main')}

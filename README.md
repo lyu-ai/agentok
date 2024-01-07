@@ -30,11 +30,11 @@ You can launch an Autoflow or an Autoflow Template in a chat window, and chat wi
 
 ![chat-2](./website/static/img/screenshot-chat-dalle3.png)
 
-### Gallery
+### Template
 
 Place to share and discover flow templates.
 
-![gallery-1](./website/static/img/screenshot-gallery-1.png)
+![template-1](./website/static/img/screenshot-template-1.png)
 
 ## 💡 Quickstart
 
@@ -53,8 +53,8 @@ We made tutorials based on the official notebooks from Autogen repository. You c
 
 | Example                                 | Status | Comments                                                                                                          |
 | --------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------- |
-| simple_chat                             | ✅     | [Simple Chat](https://platform.flowgen.app/gallery/yp0appx814q7na1)                                               |
-| auto_feedback_from_code_execution       | ✅     | [Feedback from Code Execution](https://platform.flowgen.app/flow/)                                                |
+| simple_chat                             | ✅     | [Simple Chat](https://platform.flowgen.app/templates/yp0appx814q7na1)                                             |
+| auto_feedback_from_code_execution       | ✅     | [Feedback from Code Execution](https://platform.flowgen.app/flows/)                                               |
 | ~~auto_build~~                          | ⭕     | This is a feature to be considered to add to flow generation. [#40](https://github.com/tiwater/flowgen/issues/40) |
 | chess                                   | 🔲     | This depends on the feature of importing custom Agent [#38](https://github.com/tiwater/flowgen/issues/38)         |
 | compression                             | ✅     |                                                                                                                   |
@@ -67,15 +67,15 @@ We made tutorials based on the official notebooks from Autogen repository. You c
 | groupchat_vis                           | ✅     |                                                                                                                   |
 | groupchat                               | ✅     |                                                                                                                   |
 | hierarchy_flow_using_select_speaker     | 🔲     |                                                                                                                   |
-| human_feedback                          | ✅     | [Human in the Loop](https://platform.flowgen.app/gallery/4pbokrvi7zguv48)                                         |
+| human_feedback                          | ✅     | [Human in the Loop](https://platform.flowgen.app/templates/4pbokrvi7zguv48)                                       |
 | inception_function                      | 🔲     |                                                                                                                   |
 | ~~langchain~~                           | ⭕     | No plan to support                                                                                                |
 | lmm_gpt-4v                              | ✅     |                                                                                                                   |
 | lmm_llava                               | ✅     | Depends on Replicate                                                                                              |
-| MathChat                                | ✅     | [Math Chat](https://platform.flowgen.app/gallery/m337e85xr95omtv)                                                 |
+| MathChat                                | ✅     | [Math Chat](https://platform.flowgen.app/templates/m337e85xr95omtv)                                               |
 | oai_assistant_function_call             | ✅     |                                                                                                                   |
 | oai_assistant_groupchat                 | 🆘     | Very slow and not work well, sometimes not returning.                                                             |
-| oai_assistant_retrieval                 | ✅     | [Retrieval (OAI)](https://platform.flowgen.app/gallery/tgq6dxu32yzwcgg)                                           |
+| oai_assistant_retrieval                 | ✅     | [Retrieval (OAI)](https://platform.flowgen.app/templates/tgq6dxu32yzwcgg)                                         |
 | oai_assistant_twoagents_basic           | ✅     |                                                                                                                   |
 | oai_code_interpreter                    | ✅     |                                                                                                                   |
 | planning                                | ✅     | This sample works fine, but does not exit gracefully.                                                             |
@@ -119,7 +119,7 @@ docker run -d -p 7676:7676 flowgen-db
 
 ## 🚀 Deployment
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/NCoZBC?referralCode=5I-BUc)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/templates/NCoZBC?referralCode=5I-BUc)
 
 Railway.app supports the deployment of applications in Dockers. By clicking the "Deploy on Railway" button, you'll streamline the setup and deployment of your application on Railway platform:
 

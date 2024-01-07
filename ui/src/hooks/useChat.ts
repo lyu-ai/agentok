@@ -1,4 +1,4 @@
-import { Chat } from '@/store/chat';
+import { Chat } from '@/store/chats';
 import { useFlows, useTemplates, useChats } from '.';
 
 export function useChat(chatId: string) {

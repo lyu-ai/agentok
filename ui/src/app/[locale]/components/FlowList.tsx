@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import PopupDialog from '@/components/PopupDialog';
 import { toast } from 'react-toastify';
-import { AutoflowTemplate } from '@/store/template';
+import { AutoflowTemplate } from '@/store/templates';
 import { RiRobot2Line } from 'react-icons/ri';
 import Markdown from '@/components/Markdown';
 
@@ -148,7 +148,7 @@ const FlowBlock = ({ action: Action, flow, suppressLink }: any) => {
       return <div className={className}>{children}</div>;
     } else {
       return (
-        <Link href={`/flow/${flow.id}`} className={className}>
+        <Link href={`/flows/${flow.id}`} className={className}>
           {children}
         </Link>
       );
@@ -188,7 +188,7 @@ const FlowBlock = ({ action: Action, flow, suppressLink }: any) => {
                 className="btn btn-sm btn-square btn-ghost group-hover:text-primary"
                 data-tooltip-id="default-tooltip"
                 data-tooltip-content={t('edit-flow')}
-                href={`/flow/${flow.id}`}
+                href={`/flows/${flow.id}`}
               >
                 <GoPencil className={clsx('w-4 h-4')} />
               </Link> */}

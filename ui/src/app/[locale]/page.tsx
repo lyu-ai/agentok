@@ -7,7 +7,7 @@ const HomePage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace('/flow');
+    router.replace('/flows');
   }, [router]);
 
   return null; // or a loading indicator if preferred

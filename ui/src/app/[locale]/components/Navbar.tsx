@@ -19,18 +19,10 @@ const Navbar = () => {
       </div>
       <div className="navbar-end flex items-center my-auto gap-4">
         <a
-          href="https://docs.flowgen.app/getting-started"
-          target="_blank"
-          rel="noreferrer"
-          className="link link-hover text-sm font-bold hidden lg:block"
-        >
-          {t('getting-started')}
-        </a>
-        <a
           href="https://docs.flowgen.app/"
           target="_blank"
           rel="noreferrer"
-          className="link link-hover text-sm"
+          className="link link-hover text-xs"
         >
           {t('docs')}
         </a>

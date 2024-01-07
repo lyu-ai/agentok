@@ -56,7 +56,7 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'FlowGen Docs',
+      title: 'FlowGen',
       logo: {
         alt: 'FlowGen Logo',
         src: 'img/logo.svg',
@@ -70,6 +70,11 @@ const config: Config = {
         {
           to: '/tutorials/search-n-write/',
           label: 'Tutorials',
+          position: 'left',
+        },
+        {
+          to: '/api-docs',
+          label: 'API',
           position: 'left',
         },
         {
@@ -92,8 +97,8 @@ const config: Config = {
           `,
         },
         {
-          href: 'https://api.flowgen.app/redoc',
-          label: 'API',
+          href: 'https://github.com/tiwater/flowgen/releases',
+          label: 'Changelog',
           position: 'right',
         },
         {
