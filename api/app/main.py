@@ -1,9 +1,19 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from .routers import chat_router, dev_router, extension_router, message_router, doc_router
 
-app = FastAPI(description="FlowGen APIs", version="1.0.0")
+app = FastAPI(title="FlowGen API",
+              description="Specifications of FlowGen OpenAPI.",
+              version="1.0.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 app.include_router(chat_router.router, prefix="/chats", tags=["Chat"])
 app.include_router(message_router.router, prefix="/messages", tags=["Message"])

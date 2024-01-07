@@ -28,3 +28,41 @@
   --ifm-color-primary-lightest: #bbf7d0;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* Light Mode Styles (default) */
+.redoc-wrap {
+  /* Define light mode styles here */
+  background-color: #ffffff;
+  /* White background for ReDoc content */
+  color: #333333;
+  /* Dark text for ReDoc content */
+}
+
+/* Dark Mode Styles */
+html[data-theme='dark'] .redoc-wrap {
+  background-color: #1A1A1A;
+  /* Dark background for ReDoc content */
+  color: #ffffff;
+  /* White text for ReDoc content */
+}
+
+html[data-theme='dark'] .redoc-wrap .menu-content {
+  background-color: #333;
+  /* Darker background for the sidebar */
+  color: #ffffff;
+  /* White text for the sidebar */
+}
+
+html[data-theme='dark'] .redoc-wrap .sidebar-container {
+  background-color: #333;
+  /* Darker background for the sidebar */
+  color: #ffffff;
+  /* White text for the sidebar */
+}
+
+html[data-theme='dark'] .redoc-wrap a {
+  color: #59a6ff;
+  /* Adjust link colors for better visibility in dark mode */
+}
+
+/* Add any other specific dark mode customizations here */

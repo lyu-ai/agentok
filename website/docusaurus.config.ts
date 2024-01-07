@@ -73,6 +73,11 @@ const config: Config = {
           position: 'left',
         },
         {
+          to: '/api-docs',
+          label: 'API',
+          position: 'left',
+        },
+        {
           href: 'https://platform.flowgen.app/',
           position: 'right',
           html: `
@@ -90,11 +95,6 @@ const config: Config = {
             </svg>
             <span style="margin-left: 2px">Platform</span>
           `,
-        },
-        {
-          href: 'https://api.flowgen.app/redoc',
-          label: 'API',
-          position: 'right',
         },
         {
           href: 'https://github.com/tiwater/flowgen/releases',
