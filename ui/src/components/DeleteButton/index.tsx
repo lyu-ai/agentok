@@ -24,14 +24,14 @@ const DeleteButton = ({
     <div
       onClick={() => onDelete()}
       className={clsx(
-        'cursor-pointer btn btn-sm btn-ghost btn-square',
+        'cursor-pointer btn btn-sm btn-ghost btn-square text-red-500',
         className
       )}
       data-tooltip-id="default-tooltip"
       data-tooltip-content={tooltip}
       data-tooltip-place={place ?? 'bottom'}
     >
-      {deleting ? <div className="loading loading-sm" /> : <GoTrash />}
+      {deleting ? <div className="loading loading-xs" /> : <GoTrash />}
     </div>
   );
 };

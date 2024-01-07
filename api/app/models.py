@@ -77,3 +77,13 @@ class ApiKey(ApiKeyCreate):
     owner: str
     created: str
     updated: str
+
+class User(BaseModel):
+    id: str
+    name: str
+    email: str
+    emailVisibility: bool
+    avatar: str
+    created: str
+    updated: str
+    verified: bool
