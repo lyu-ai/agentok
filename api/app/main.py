@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from .routers import chat_router, dev_router, extension_router, message_router, doc_router
+from .routers import chat_router, dev_router, extension_router, message_router, doc_router, admin_router
 
 app = FastAPI(title="FlowGen API",
               description="Specifications of FlowGen OpenAPI.",
@@ -19,7 +19,8 @@ app.include_router(chat_router.router, prefix="/chats", tags=["Chat"])
 app.include_router(message_router.router, prefix="/messages", tags=["Message"])
 app.include_router(dev_router.router, prefix="/dev", tags=["Dev"])
 app.include_router(extension_router.router, prefix="/extensions", tags=["Extension"])
-app.include_router(doc_router.router)
+app.include_router(doc_router.router, include_in_schema=False)
+app.include_router(admin_router.router, prefix="/admin", include_in_schema=False)
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def root():

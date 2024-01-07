@@ -6,6 +6,7 @@ from .services.chat_manager import chat_manager, ChatManager
 from .services.chat_service import ChatService
 from .services.pocketbase_client import PocketBaseClient, pocketbase_client
 from .services.extension_service import ExtensionService
+from .services.admin_service import AdminService
 
 from pathlib import Path
 
@@ -19,9 +20,11 @@ def get_extension_service():
 def get_pocketbase_client():
     return pocketbase_client
 
-# Modify or create a new dependency function to provide a ChatManager instance
 def get_chat_manager() -> ChatManager:
     return chat_manager
 
 def get_chat_service(token: str = Depends(oauth2_scheme), pocketbase_client: PocketBaseClient = Depends(get_pocketbase_client)) -> ChatService:
     return ChatService(token=token, pocketbase_client=pocketbase_client)
+
+def get_admin_service() -> AdminService:
+    return AdminService()

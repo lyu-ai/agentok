@@ -3,7 +3,7 @@ from starlette.responses import HTMLResponse
 
 router = APIRouter()
 
-@router.get("/api-docs", include_in_schema=False)
+@router.get("/api-docs")
 async def custom_redoc():
     return HTMLResponse("""
     <!DOCTYPE html>

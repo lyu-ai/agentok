@@ -36,11 +36,11 @@ export const NAV_MENU_ITEMS = [
     href: '/templates',
   },
   {
-    id: 'settings',
-    label: 'Settings',
+    id: 'admin',
+    label: 'Admin',
     icon: RiSettingsLine,
     activeIcon: RiSettingsFill,
-    href: '/settings',
+    href: '/admin',
   },
 ];
 

@@ -46,7 +46,9 @@ const SettingLink = ({ path }: { path: SettingPath }) => {
       ) : (
         <path.icon className="w-4 h-4" />
       )}
-      <span className="text-base-content text-sm">{path.label}</span>
+      <span className="hidden lg:flex text-base-content text-sm">
+        {path.label}
+      </span>
     </Link>
   );
 };
@@ -54,46 +56,46 @@ const SettingLink = ({ path }: { path: SettingPath }) => {
 const SettingsLayout = ({ children }: PropsWithChildren) => {
   const t = useTranslations('page.Settings');
   const paths: SettingPath[] = [
-    {
-      id: 'account',
-      label: t('account'),
-      icon: PiUser,
-      activeIcon: PiUserFill,
-      href: '/settings/account',
-    },
-    {
-      id: 'tools',
-      label: t('tools'),
-      icon: PiToolbox,
-      activeIcon: PiToolboxFill,
-      href: '/settings/tools',
-    },
+    // {
+    //   id: 'account',
+    //   label: t('account'),
+    //   icon: PiUser,
+    //   activeIcon: PiUserFill,
+    //   href: '/settings/account',
+    // },
+    // {
+    //   id: 'tools',
+    //   label: t('tools'),
+    //   icon: PiToolbox,
+    //   activeIcon: PiToolboxFill,
+    //   href: '/settings/tools',
+    // },
     {
       id: 'apikeys',
       label: t('apikeys'),
       icon: PiKey,
       activeIcon: PiKeyFill,
-      href: '/settings/apikeys',
+      href: '/admin/api-keys',
     },
-    {
-      id: 'billing',
-      label: t('billing'),
-      icon: PiReceipt,
-      activeIcon: PiReceiptFill,
-      href: '/settings/billing',
-    },
+    // {
+    //   id: 'billing',
+    //   label: t('billing'),
+    //   icon: PiReceipt,
+    //   activeIcon: PiReceiptFill,
+    //   href: '/settings/billing',
+    // },
   ];
 
   return (
-    <div className="flex w-full h-full">
-      <div className="hidden md:flex flex-shrink-0 w-64 h-full p-2">
+    <div className="flex w-full h-full p-2 gap-2">
+      <div className="flex md:flex-shrink-0 lg:min-w-64 h-full">
         <div className="flex flex-col rounded-md bg-base-content/5 gap-1 w-full h-full overflow-y-auto p-2">
           {paths.map(path => (
             <SettingLink key={path.id} path={path} />
           ))}
         </div>
       </div>
-      <div className="flex flex-col flex-grow w-full h-full overflow-y-auto p-2">
+      <div className="flex flex-col flex-grow w-full h-full overflow-y-auto">
         {children}
       </div>
     </div>

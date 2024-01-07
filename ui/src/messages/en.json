@@ -210,6 +210,19 @@
     }
   },
   "page": {
+    "Admin": {
+      "ApiKeys": {
+        "create-apikey": "Create API Key",
+        "creating-apikey": "Creating API Key ...",
+        "name": "Name",
+        "key": "Key",
+        "created": "Created At",
+        "actions": "Actions",
+        "delete-apikey": "Delete API Key",
+        "show-apikey": "Click to show/hide API key",
+        "delete-apikey-success": "Successfully deleted API key {key_name}"
+      }
+    },
     "Json": {
       "import": "Import from JSON file",
       "download": "Download as JSON file"

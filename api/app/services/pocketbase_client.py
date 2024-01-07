@@ -5,8 +5,6 @@ from typing import Dict, Literal
 from dotenv import load_dotenv
 load_dotenv()  # This will load all environment variables from .env
 
-from ..models import Chat, ChatCreate, Message
-
 class PocketBaseClient:
     def __init__(self):
         self.base_url = os.environ.get("POCKETBASE_URL")

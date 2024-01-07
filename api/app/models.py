@@ -67,3 +67,13 @@ class ExtendedAgent(BaseModel):
     type: str
     label: str
     class_type: str
+
+class ApiKeyCreate(BaseModel):
+    name: str
+
+class ApiKey(ApiKeyCreate):
+    id: str
+    key: str
+    owner: str
+    created: str
+    updated: str
