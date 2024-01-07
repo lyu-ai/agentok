@@ -191,7 +191,7 @@ torchvision==0.16.1
 tornado==6.3.3
 tqdm==4.66.1
 traitlets==5.13.0
-transformers==4.35.2
+transformers==4.36.0
 twine==4.0.2
 typepy==1.3.2
 typer==0.9.0
