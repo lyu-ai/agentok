@@ -14,7 +14,6 @@ type FlowMeta = {
 const FlowTabs = ({ className }: any) => {
   const router = useRouter();
   const { flows, openFlowIds, activeFlowId, closeFlow } = useFlows();
-  if (!flows) return null;
   const [flowMetas, setFlowMetas] = useState<FlowMeta[]>([]);
   useEffect(() => {
     const flowInfo = openFlowIds
@@ -47,6 +46,8 @@ const FlowTabs = ({ className }: any) => {
 
     router.replace(`/flows/${nextFlowId}`);
   };
+
+  if (!flows) return null;
 
   return (
     <div className={clsx('flex gap-1', className)}>

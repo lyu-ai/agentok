@@ -103,7 +103,8 @@ const config: Config = {
         },
         {
           href: 'https://github.com/tiwater/flowgen',
-          label: 'GitHub',
+          'aria-label': 'GitHub repository',
+          className: 'header-github-link',
           position: 'right',
         },
       ],
