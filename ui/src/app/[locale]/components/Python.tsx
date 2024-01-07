@@ -41,7 +41,7 @@ const Python = ({ data, setMode }: any) => {
         toast.error(t('generate-fail') + ': ' + String(e));
       })
       .finally(() => setLoading(false));
-  }, [data]);
+  }, [data, t]);
 
   if (loading) {
     return (

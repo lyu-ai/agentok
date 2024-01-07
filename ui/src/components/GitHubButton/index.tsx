@@ -1,12 +1,12 @@
 'use client';
 import { FaGithub } from 'react-icons/fa6';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const GitHubButton = ({ user = 'tiwater', repo = 'flowgen' }: any) => {
   const [stars, setStars] = useState(null);
   const [fetching, setFetching] = useState(false);
 
-  const fetchStars = async () => {
+  const fetchStars = useCallback(async () => {
     const api = `https://api.github.com/repos/${user}/${repo}`;
     try {
       setFetching(true);
@@ -18,15 +18,16 @@ const GitHubButton = ({ user = 'tiwater', repo = 'flowgen' }: any) => {
     } finally {
       setFetching(false);
     }
-  };
+  }, [user, repo]);
 
   useEffect(() => {
     fetchStars();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     fetchStars();
-  }, [user, repo]);
+  }, [user, repo, fetchStars]);
 
   return (
     <a

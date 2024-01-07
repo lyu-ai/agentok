@@ -6,7 +6,7 @@ from ..models import ExtendedAgent
 
 router = APIRouter()
 
-@router.get('/extension',
+@router.get('/agent',
             status_code=status.HTTP_200_OK,
             response_model=List[ExtendedAgent],
             responses={

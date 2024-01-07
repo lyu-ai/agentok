@@ -7,7 +7,7 @@ const NEXT_PUBLIC_BACKEND_URL =
 export async function GET(request: NextRequest) {
   const pb = await loadAuthFromCookie();
 
-  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/agents/extension`, {
+  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/extensions/agent`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

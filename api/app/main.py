@@ -18,10 +18,10 @@ app.add_middleware(
 app.include_router(chat_router.router, prefix="/chats", tags=["Chat"])
 app.include_router(message_router.router, prefix="/messages", tags=["Message"])
 app.include_router(dev_router.router, prefix="/dev", tags=["Dev"])
-app.include_router(extension_router.router, prefix="/agents", tags=["Agent"])
+app.include_router(extension_router.router, prefix="/extensions", tags=["Extension"])
 app.include_router(doc_router.router)
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def root():
     html_content = """
     <html>

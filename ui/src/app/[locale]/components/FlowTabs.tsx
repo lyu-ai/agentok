@@ -31,7 +31,7 @@ const FlowTabs = ({ className }: any) => {
       })
       .filter(Boolean);
     setFlowMetas(flowInfo as FlowMeta[]);
-  }, [openFlowIds, flows]);
+  }, [openFlowIds, flows, closeFlow]);
 
   const onCloseFlow = (flowId: string) => {
     const currentIndex = openFlowIds.indexOf(flowId);

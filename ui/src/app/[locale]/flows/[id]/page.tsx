@@ -17,7 +17,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     openFlow(params.id);
-  }, [params.id]);
+  }, [params.id, openFlow]);
 
   return (
     <ReactFlowProvider key="reactflow-flow">
