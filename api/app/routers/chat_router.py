@@ -2,15 +2,15 @@ from typing import List
 from fastapi import APIRouter, Depends
 from ..models import Chat, ChatCreate, Message
 from ..services.chat_service import ChatService
-from ..dependencies import get_current_user, get_chat_service
+from ..dependencies import get_chat_service
 
-router = APIRouter()
+router = APIRouter(trailing_slash=False)
 
-@router.get('/', summary="Get existing chats",  response_model=List[Chat],)
+@router.get('', summary="Get existing chats",  response_model=List[Chat])
 async def get_chats(service: ChatService = Depends(get_chat_service)):
     return await service.get_chats()
 
-@router.post('/', response_model=Chat, summary="Create a new chat")
+@router.post('', response_model=Chat, summary="Create a new chat")
 async def new_chat(chat_to_create: ChatCreate, service: ChatService = Depends(get_chat_service)):
     # print('chat_to_create', chat_to_create, chat_to_create.model_dump_json())
     return await service.create_chat(chat_to_create.model_dump())
