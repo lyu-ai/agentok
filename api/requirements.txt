@@ -23,6 +23,7 @@ numpy==1.26.3
 openai==1.6.1
 parso==0.8.3
 pexpect==4.9.0
+pillow==10.2.0
 prompt-toolkit==3.0.43
 ptyprocess==0.7.0
 pure-eval==0.2.2
