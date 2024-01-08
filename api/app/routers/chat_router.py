@@ -4,7 +4,7 @@ from ..models import Chat, ChatCreate, Message
 from ..services.chat_service import ChatService
 from ..dependencies import get_chat_service
 
-router = APIRouter(trailing_slash=False)
+router = APIRouter()
 
 @router.get('', summary="Get existing chats",  response_model=List[Chat])
 async def get_chats(service: ChatService = Depends(get_chat_service)):

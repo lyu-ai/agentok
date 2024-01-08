@@ -87,6 +87,11 @@ const Markdown = ({
 
   const markdownWithImages: string = preprocessImageTags(children as string);
 
+  const processedMarkdown = markdownWithImages.replace(
+    /\\\((.*?)\\\)/g,
+    (match, p1) => `$${p1}$`
+  );
+
   return (
     <ReactMarkdown
       remarkPlugins={[RemarkGfm, RemarkBreaks, RemarkMath]}
@@ -117,7 +122,7 @@ const Markdown = ({
       className={clsx(className, `markdown`)}
       {...props}
     >
-      {markdownWithImages}
+      {processedMarkdown}
     </ReactMarkdown>
   );
 };

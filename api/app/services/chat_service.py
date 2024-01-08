@@ -20,7 +20,7 @@ class ChatService:
 
     async def create_chat(self, chat: dict):
         """Create a new chat session"""
-        new_chat = self.pocketbase_client.create_chat(self.token, chat)
+        new_chat = self.pocketbase_client.create_chat(self.user, chat)
         return new_chat
 
     async def start_chat(self, message: dict, chat_id: str):

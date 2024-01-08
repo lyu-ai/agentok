@@ -16,7 +16,7 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-app.include_router(chat_router.router, prefix="/chats", tags=["Chat"], trailing_slash=False)
+app.include_router(chat_router.router, prefix="/chats", tags=["Chat"])
 app.include_router(message_router.router, prefix="/messages", tags=["Message"])
 app.include_router(dev_router.router, prefix="/dev", tags=["Dev"])
 app.include_router(extension_router.router, prefix="/extensions", tags=["Extension"])
