@@ -4,8 +4,9 @@ import pkgutil
 import importlib
 
 class ExtensionService:
-    def __init__(self, extensions_path: Path):
+    def __init__(self, user: dict, extensions_path: Path):
         self.extensions_path = extensions_path
+        self.user = user
 
     def load_extensions(self):
         extensions = []
