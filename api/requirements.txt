@@ -13,6 +13,7 @@ black==23.12.1
 blinker==1.7.0
 cachetools==5.3.2
 certifi==2023.7.22
+cffi==1.16.0
 chardet==5.2.0
 charset-normalizer==3.3.2
 chess==1.10.0
@@ -23,6 +24,7 @@ click==8.1.7
 coloredlogs==15.0.1
 comm==0.2.0
 contourpy==1.2.0
+cryptography==41.0.7
 cycler==0.12.1
 DataProperty==1.0.1
 debugpy==1.8.0
@@ -138,9 +140,11 @@ pyasn1==0.5.1
 pyasn1-modules==0.3.0
 pyautogen==0.2.3
 pycodestyle==2.11.1
+pycparser==2.21
 pydantic==2.4.2
 pydantic_core==2.10.1
 Pygments==2.16.1
+PyJWT==2.8.0
 pyparsing==3.1.1
 pypdf==3.17.1
 PyPika==0.48.9
