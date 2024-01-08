@@ -210,6 +210,17 @@
     }
   },
   "page": {
+    "Login": {
+      "sign-in": "Sign In",
+      "signing-in": "Signing In ...",
+      "sign-in-with": "Sign in with {provider}",
+      "sign-up-email": "Sign up this Email",
+      "sign-in-as-guest": "Login as Guest",
+      "email": "Email",
+      "email-placeholder": "Enter your email",
+      "password": "Password",
+      "password-placeholder": "Enter your password"
+    },
     "Admin": {
       "ApiKeys": {
         "create-apikey": "Create API Key",

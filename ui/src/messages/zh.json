@@ -204,6 +204,17 @@
     }
   },
   "page": {
+    "Login": {
+      "sign-in": "登录",
+      "signing-in": "正在登录...",
+      "sign-in-with": "使用 {provider} 登录",
+      "sign-up-email": "使用此电子邮件注册",
+      "sign-in-as-guest": "以访客身份登录",
+      "email": "电子邮件",
+      "email-placeholder": "输入您的电子邮件",
+      "password": "密码",
+      "password-placeholder": "输入您的密码"
+    },
     "Json": {
       "import": "从 JSON 文件导入",
       "download": "下载为 JSON 文件"

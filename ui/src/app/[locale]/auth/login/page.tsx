@@ -1,10 +1,10 @@
 'use client';
 
 import pb from '@/utils/pocketbase/client';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { BiSolidFaceMask } from 'react-icons/bi';
-import { FaGithub, FaMasksTheater, FaXTwitter } from 'react-icons/fa6';
+import { FaGithub, FaXTwitter } from 'react-icons/fa6';
 import { FcGoogle } from 'react-icons/fc';
 import { GoZap } from 'react-icons/go';
 import { HiSparkles } from 'react-icons/hi2';
@@ -15,6 +15,18 @@ const providers = [
   { id: 'twitter', name: 'X', icon: FaXTwitter },
 ];
 
+const LoginToast = () => {
+  const t = useTranslations('page.Login');
+  return (
+    <div className="fixed items-center justify-centre z-50">
+      <div className="flex flex-col items-center justify-center p-4 gap-2 bg-base-content/50 backdrop-blur-md rounded-md">
+        <HiSparkles className="w-6 h-6 text-primary animate-spin" />
+        <span className="text-sm text-primary">{t('signing-in')}</span>
+      </div>
+    </div>
+  );
+};
+
 const Login = ({
   searchParams: { redirectTo },
 }: {
@@ -24,9 +36,12 @@ const Login = ({
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+  const [authenticating, setAuthenticating] = useState(false);
+  const t = useTranslations('page.Login');
 
   const signIn = async (asGuest?: boolean) => {
     try {
+      setAuthenticating(true);
       await pb
         .collection('users')
         .authWithPassword(
@@ -37,11 +52,14 @@ const Login = ({
       router.push(redirectTo ?? '/');
     } catch (e) {
       setError((e as any).message ?? `Sign in failed. ${e}`);
+    } finally {
+      setAuthenticating(false);
     }
   };
 
   const signInWithOAuth = async (provider: any) => {
     try {
+      setAuthenticating(true);
       const authData = await pb.collection('users').authWithOAuth2({
         provider,
       });
@@ -68,6 +86,8 @@ const Login = ({
       router.push(redirectTo ?? '/');
     } catch (e) {
       setError(`Auth with ${provider} failed. ${e}`);
+    } finally {
+      setAuthenticating(false);
     }
   };
 
@@ -96,7 +116,7 @@ const Login = ({
               className="flex-1 btn btn-outline bg-base-content/10 border-base-content/20"
               key={id}
               onClick={() => signInWithOAuth(id)}
-              data-tooltip-content={`Sign in with ${name}`}
+              data-tooltip-content={t('sign-in-with', { provider: name })}
               data-tooltip-id="default-tooltip"
             >
               <Icon className="w-5 h-5" />
@@ -106,18 +126,18 @@ const Login = ({
 
         <div className="flex flex-col w-full justify-center border border-base-content/20 bg-base-content/10 rounded-md p-4 gap-2 text-foreground">
           <label className="text-md" htmlFor="email">
-            Email
+            {t('email')}
           </label>
           <input
             className="input input-bordered rounded py-2 bg-primary/20 mb-2"
             name="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            placeholder="hi@flowgen.app"
+            placeholder={t('email-placeholder')}
             required
           />
           <label className="text-md" htmlFor="password">
-            Password
+            {t('password')}
           </label>
           <input
             className="input input-bordered rounded py-2 bg-primary/20 mb-2"
@@ -125,32 +145,33 @@ const Login = ({
             name="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
-            placeholder="12345678"
+            placeholder={t('password-placeholder')}
             required
           />
           {error && (
             <p className="p-2 text-error text-center w-full">{error}</p>
           )}
           <button className="btn btn-primary rounded" onClick={() => signIn()}>
-            Sign In
+            {t('sign-in')}
           </button>
           <div className="mt-2 flex items-center justify-between text-sm">
             <button
               className="link link-hover link-primary"
               onClick={() => signUp()}
             >
-              Sign up this Email
+              {t('sign-up-email')}
             </button>
             <button
               className="link link-hover link-primary flex items-center gap-1"
               onClick={() => signIn(true)}
             >
               <GoZap className="w-4 h-4" />
-              Login as Guest
+              {t('sign-in-as-guest')}
             </button>
           </div>
         </div>
       </div>
+      {authenticating && <LoginToast />}
     </div>
   );
 };
