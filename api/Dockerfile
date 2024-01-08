@@ -3,11 +3,6 @@ FROM python:3.11-slim as builder
 
 WORKDIR /app 
 
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends gcc libffi-dev g++ \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
-
 # Copy requirements and install dependencies,
 # Utilize the cache unless requirements.txt has changed
 COPY requirements.txt .
