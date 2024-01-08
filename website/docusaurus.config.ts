@@ -68,8 +68,13 @@ const config: Config = {
           position: 'left',
         },
         {
-          to: '/tutorials/search-n-write/',
-          label: 'Tutorials',
+          to: '/guides/using/api',
+          label: 'Guides',
+          position: 'left',
+        },
+        {
+          to: '/examples/search-n-write/',
+          label: 'Examples',
           position: 'left',
         },
         {

@@ -1,3 +1,9 @@
+---
+position: 1
+title: Concepts
+description: Key concepts should know before using FlowGen.
+---
+
 # Concepts
 
 This article introduces the concepts of AutoGen and FlowGen. Part of the content is from the [AutoGen documentation](https://microsoft.github.io/autogen/) just for convenience.

@@ -1,8 +1,5 @@
-from enum import auto
 from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import APIKeyHeader, OAuth2PasswordBearer
-from regex import F
-from termcolor import colored
 
 from .models import User
 

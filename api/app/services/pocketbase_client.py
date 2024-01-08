@@ -1,5 +1,6 @@
 import os
 from httpx import AsyncClient
+import jwt
 import requests
 from fastapi import HTTPException, status
 from typing import Dict, Literal
@@ -40,18 +41,20 @@ class PocketBaseClient:
 
     async def authenticate_with_bearer(self, token: str) -> User:
         async with AsyncClient() as client:  # Use AsyncClient context manager for async operations
-            response = await client.post(
-                f'{self.base_url}/api/collections/users/auth-refresh',
-                headers={"Authorization": f"Bearer {token}"},
+            payload = jwt.decode(token, options={"verify_signature": False})
+            print('payload', payload)
+            response = await client.get(
+                f'{self.base_url}/api/collections/users/records/{payload["id"]}',
+                headers={"Authorization": f"Bearer {self.admin_auth['token']}"},
             )
             if response.status_code == 200:
-                user_data = response.json().get('record')
+                user_data = response.json()
                 if user_data:
                     user = User(**user_data)
-                    print(colored(f"Authenticated with user {user}", 'green'))
+                    print(colored(f"Retrieved user {user}", 'green'))
                     return user
             else:
-                print(colored(f"Failed to authenticate with apikey {token}", 'red'))
+                print(colored(f"Failed to retrieve user for the provided token {response.status_code} {response.text}", 'red'))
 
             return None
 
@@ -79,6 +82,21 @@ class PocketBaseClient:
                 print(colored(f"Failed to authenticate with apikey {apikey}", 'red'))
 
             return None
+    def authenticate_with_session(self, session_token: str) -> User:
+        response = self.session.post(
+            f'{self.base_url}/api/users/me',
+            headers={"Authorization": f"Bearer {session_token}"},
+        )
+        if response.status_code == 200:
+            user_data = response.json()
+            if user_data:
+                user = User(**user_data)
+                print(colored(f"Retrieved user {user}", 'green'))
+                return user
+        else:
+            print(colored(f"Failed to retrieve user for the provided token {response.status_code} {response.text}", 'red'))
+
+        return None
 
     def save_apikey(self, key_to_create: dict) -> Dict:
         response = self.session.post(

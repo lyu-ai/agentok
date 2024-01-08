@@ -1,6 +1,7 @@
 {
   "label": "Legal",
-  "position": 10,
+  "position": 99,
+  "collapsed": true,
   "link": {
     "type": "generated-index"
   }
