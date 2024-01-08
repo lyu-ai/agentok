@@ -1,32 +1,40 @@
-# Use the official Python 3 image.
-# https://hub.docker.com/_/python
+# Use a build stage to compile and build dependencies
+FROM python:3.11-slim as builder
+
+WORKDIR /app 
+
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends gcc libffi-dev g++ \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and install dependencies,
+# Utilize the cache unless requirements.txt has changed
+COPY requirements.txt .
+RUN pip3 wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.txt
+
+############################
+# Begin the final stage
 FROM python:3.11-slim
 
-# Set the working directory inside the container to /app.
+# Copy only the necessary wheels from builder stage
+COPY --from=builder /app/wheels /wheels
+COPY --from=builder /app/requirements.txt .
+
+# Install the python dependencies
+RUN pip3 install --no-cache /wheels/*
+
+# Set the working directory in the container
 WORKDIR /app
 
-# Install system dependencies required for Python packages like `onnxruntime`
-RUN apt-get update && apt-get install -y \
-    gcc \
-    libc6-dev \
-    libffi-dev \
-    ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
+# Copy the code into the container
+COPY . .
 
-# Copy only the requirements.txt first to leverage Docker cache
-COPY requirements.txt /app/
-RUN pip3 install --no-cache-dir -r requirements.txt
-
-# Afterwards copy the rest of your application code
-COPY . /app
-
-# Define environment variable defaults for Uvicorn (Optional)
+# Set environment variables
 ENV UVICORN_WORKERS=3 \
-    UVICORN_PORT=5004 \
-    UVICORN_HOST=0.0.0.0 \
-    UVICORN_LOG_LEVEL=info
+  UVICORN_PORT=5004 \
+  UVICORN_HOST=0.0.0.0 \
+  UVICORN_LOG_LEVEL=info
 
-ENV IMAGEIO_FFMPEG_EXE=/usr/bin/ffmpeg
-
-# Define the command to run your application on Uvicorn with multiple workers
+# Command to run the application
 CMD ["sh", "-c", "uvicorn app.main:app --host ${UVICORN_HOST} --port ${UVICORN_PORT} --workers ${UVICORN_WORKERS} --log-level ${UVICORN_LOG_LEVEL}"]

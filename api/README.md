@@ -20,6 +20,13 @@ For retrieve related agents, should install pyautogen[retrievechat]:
 pip install "pyautogen[retrievechat]"
 ```
 
+## Docker Build
+
+```bash
+docker build -t flowgen-api ./api
+docker run -d -p 5004:5004 flowgen-api
+```
+
 ## API Docs
 
 By default, when you create a FastAPI application, it automatically generates OpenAPI schemas for all your routes and serves them under /docs and /redoc paths.
