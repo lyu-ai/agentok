@@ -8,7 +8,7 @@ export const fetcher = async (url: string) => {
   });
   if (!response.ok) {
     console.error(`Failed fetcher ${url}:`, response.statusText);
-    throw new Error(`Error fetching data ${url}: ${response.statusText}`);
+    return null;
   }
   return response.json();
 };

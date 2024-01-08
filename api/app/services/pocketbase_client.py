@@ -147,9 +147,9 @@ class PocketBaseClient:
         get_result = response.json()
         return get_result.get('items', [])
 
-    def create_chat(self, chat_to_create: dict) -> Dict:
+    def create_chat(self, user: dict, chat_to_create: dict) -> Dict:
         print('chat_to_create', chat_to_create)
-        chat_to_create['owner'] = self.user.id
+        chat_to_create['owner'] = user.id
         response = self.session.post(
             f'{self.base_url}/api/collections/chats/records',
             headers={"Authorization": f"Bearer {self.admin_auth['token']}"},
@@ -158,9 +158,10 @@ class PocketBaseClient:
         response.raise_for_status()
         return response.json()
 
-    def add_message(self, message: dict) -> Dict:
+    def add_message(self, user: dict, message: dict) -> Dict:
         message_to_persist = message
         message_to_persist.pop('id', None)  # Should remove id for auto-generation
+        message_to_persist['owner'] = user.id
         response = self.session.post(
             f'{self.base_url}/api/collections/messages/records',
             headers={"Authorization": f"Bearer {self.admin_auth['token']}"},
@@ -169,9 +170,9 @@ class PocketBaseClient:
         response.raise_for_status()
         return response.json()
 
-    def get_source_metadata(self, token: str, chat: str) -> Dict:
+    def get_source_metadata(self, chat_id: str) -> Dict:
         response = requests.get(
-            f'{self.base_url}/api/collections/chats/records/{chat}',
+            f'{self.base_url}/api/collections/chats/records/{chat_id}',
             headers={"Authorization": f"Bearer {self.admin_auth['token']}"},
         )
         response.raise_for_status()
@@ -198,7 +199,7 @@ class PocketBaseClient:
             response.raise_for_status()
             return response.json()
 
-    def set_chat_status(self, token: str, chat_id: str, status: Literal['running', 'wait_for_human_input']):
+    def set_chat_status(self, chat_id: str, status: Literal['running', 'wait_for_human_input']):
         print('set_chat_status', chat_id, status)
         response = requests.patch(
             f'{self.base_url}/api/collections/chats/records/{chat_id}',

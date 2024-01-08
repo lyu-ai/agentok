@@ -13,6 +13,12 @@ export async function GET(request: NextRequest) {
         Authorization: `Bearer ${pb.authStore.token}`,
       },
     });
+    if (!res.ok) {
+      console.error(`Failed GET /chats:`, res.statusText);
+      return new Response(`Failed GET /chats: ${res.statusText}`, {
+        status: res.status,
+      });
+    }
     const chat = await res.json();
     return new Response(JSON.stringify(chat));
   } catch (e) {

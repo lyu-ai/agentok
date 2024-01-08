@@ -28,7 +28,7 @@ class ChatService:
         self.pocketbase_client.add_message(self.user, message)
 
         # Check the existence of latest code
-        source = self.pocketbase_client.get_source_metadata(self.user, chat_id)
+        source = self.pocketbase_client.get_source_metadata(chat_id)
         datetime_obj = datetime.strptime(source['updated'], '%Y-%m-%d %H:%M:%S.%fZ')
 
         source_file = f"{source['id']}-{datetime_obj.timestamp()}.py"
