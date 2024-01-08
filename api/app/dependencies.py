@@ -18,7 +18,7 @@ async def get_current_user(
     api_key: str = Security(api_key_header),
     token: str = Depends(oauth2_scheme),
 ) -> User:
-    print('api_key', api_key)
+    print('get_current_user: api_key & token', api_key, token)
     if token:
         # Here you would validate the bearer token
         user = await pocketbase_client.authenticate_with_bearer(token)
