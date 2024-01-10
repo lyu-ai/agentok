@@ -26,7 +26,16 @@ const Navbar = () => {
         >
           {t('docs')}
         </a>
-        <GitHubButton />
+        <a
+          href="https://github.com/tiwater/flowgen"
+          aria-label="github"
+          target="_blank"
+        >
+          <img
+            src="https://img.shields.io/github/stars/tiwater/flowgen?style=social"
+            alt="github"
+          />
+        </a>
         {/* <ThemeSwitcher /> */}
         <AuthButton />
       </div>

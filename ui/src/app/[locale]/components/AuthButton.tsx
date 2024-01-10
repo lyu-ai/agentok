@@ -84,6 +84,17 @@ const UserPanel = ({ user }: { user: any }) => {
           Sign Out
         </div>
       </div>
+      <a
+        href="https://discord.gg/xBQxwRSWfm"
+        aria-label="discord"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <img
+          src="https://dcbadge.vercel.app/api/server/xBQxwRSWfm?style=plastic"
+          alt="discord"
+        />
+      </a>
       <div className="flex items-center justify-center text-xs w-full gap-2 mt-4">
         <Link
           href="https://docs.flowgen.app/docs/privacy"
