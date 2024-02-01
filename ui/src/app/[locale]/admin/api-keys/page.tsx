@@ -168,6 +168,8 @@ const Page = () => {
       });
   };
 
+  console.log('keys', keys, 'loading', loading);
+
   if (loading) {
     return (
       <div className="relative flex flex-col w-full h-full items-center justify-center gap-2">
