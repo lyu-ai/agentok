@@ -6,7 +6,7 @@ import PopupDialog from '@/components/PopupDialog';
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
-import { GoEye, GoEyeClosed, GoPencil, GoTrash } from 'react-icons/go';
+import { GoEye, GoEyeClosed } from 'react-icons/go';
 import { toast } from 'react-toastify';
 
 const ApiKeyText = ({ apikey }: { apikey: string }) => {
@@ -137,7 +137,6 @@ const Page = () => {
     })
       .then(resp => resp.json())
       .then(json => {
-        console.log('keys', json);
         setKeys(json);
       })
       .catch(e => {
