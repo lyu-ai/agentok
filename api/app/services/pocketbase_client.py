@@ -1,3 +1,6 @@
+from base64 import b64decode
+from io import BytesIO
+import json
 import os
 from httpx import AsyncClient
 import jwt
@@ -209,5 +212,62 @@ class PocketBaseClient:
         response.raise_for_status()
         return response.json()
 
+    def upload_image(self, name, file, owner, tags, metadata):
+        # Create the `files` dictionary for the `requests.post` call
+        files = {}
+        headers={"Authorization": f"Bearer {self.admin_auth['token']}", "Content-Type": "multipart/form-data"}
+
+        # If file is a string, it means either a remote URL or a DataURL is being used
+        if file and isinstance(file, str):
+            if file.startswith('http'):  # Remote file
+                response = requests.get(file)
+                # Assuming the fetched file is an image
+                files['file'] = (name, BytesIO(response.content))  # You might need to provide the file name
+            else:  # DataURL
+                if file.startswith('data:image'):
+                    file = file.split(',')[1]
+                file_buffer = b64decode(file)
+                files['file'] = (name, BytesIO(file_buffer))  # The file name is optionally provided here
+        else:
+            files['file'] = (name, open(file, 'rb'))  # Local file path
+
+        # Prepare form data
+        data = {}
+        if name:
+            data['name'] = name
+        if owner:
+            data['owner'] = owner
+        if tags:
+            data['tags'] = tags
+        if metadata:
+            # Ensure that `metadata` is properly converted to a JSON string
+            data['metadata'] = json.dumps(metadata)
+
+        # Make the POST request
+        response = self.session.post(f'{self.base_url}/api/collections/assets/records', data=data, files=files)
+        # It's important to close files after use to free up system resources
+        if isinstance(files['file'], tuple):  # If using BytesIO or equivalent
+            files['file'][1].close()
+        else:  # If we opened a file
+            files['file'].close()
+
+        # Check the response
+        if response.status_code == 200:
+            print('Success! File uploaded.')
+            created_record = response.json()
+            print(created_record)
+
+            # Build the access url
+            access_url = f'{self.base_url}/api/files/{created_record["collectionId"]}/{created_record["id"]}/{created_record["file"]}'
+            print('access_url', access_url)
+
+            return response.status_code, { "access_url": access_url, "record": created_record}
+        else:
+            print('Failed to upload the file.')
+            print(response.json())
+            return response.status_code, response.json()
+
 # A single reusable client instance
 pocketbase_client = PocketBaseClient()
+
+# pocketbase_client.upload_image('img-1GxeEv5trBMjT7wcOEFIqpWb.png', 'https://oaidalleapiprodscus.blob.core.windows.net/private/org-nJhe0aW6oC7eG9EdUFiZXtgT/user-1tjEAwFXFilgD1vrmxlJrwMV/img-1GxeEv5trBMjT7wcOEFIqpWb.png?st=2024-02-02T03%3A58%3A47Z&se=2024-02-02T05%3A58%3A47Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-02-01T22%3A40%3A04Z&ske=2024-02-02T22%3A40%3A04Z&sks=b&skv=2021-08-06&sig=mkDnV3NXN1he6RzWGHyWwBiW/SfD8/F9avlrxUyn0%2BQ%3D', '', ['dalle'], {'image_url': 'https://oaidalleapiprodscus.blob.core.windows.net/private/org-nJhe0aW6oC7eG9EdUFiZXtgT/user-1tjEAwFXFilgD1vrmxlJrwMV/img-1GxeEv5trBMjT7wcOEFIqpWb.png?st=2024-02-02T03%3A58%3A47Z&se=2024-02-02T05%3A58%3A47Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-02-01T22%3A40%3A04Z&ske=2024-02-02T22%3A40%3A04Z&sks=b&skv=2021-08-06&sig=mkDnV3NXN1he6RzWGHyWwBiW/SfD8/F9avlrxUyn0%2BQ%3D'})

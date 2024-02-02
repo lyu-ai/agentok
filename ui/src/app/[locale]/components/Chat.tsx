@@ -16,7 +16,7 @@ import clsx from 'clsx';
 import Tip from './Tip';
 import { isArray } from 'lodash-es';
 
-const SampleMessagePanel = ({ flow, className, onSelect }: any) => {
+const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
   const t = useTranslations('component.Chat');
   const [minimized, setMinimized] = useState(false);
   const config = flow?.nodes?.find((node: any) => node.type === 'config');
@@ -24,6 +24,10 @@ const SampleMessagePanel = ({ flow, className, onSelect }: any) => {
     return null;
   }
   const sampleMessages = config.data.sample_messages as string[];
+  const onSelect = (msg: string) => {
+    setMinimized(true);
+    _onSelect && _onSelect(msg);
+  }
   return (
     <div className={clsx(className, 'flex flex-col items-end gap-1')}>
       <button
@@ -40,9 +44,9 @@ const SampleMessagePanel = ({ flow, className, onSelect }: any) => {
             data-tooltip-id="chat-tooltip"
             data-tooltip-content={t('click-to-send')}
             data-tooltip-place="left-end"
-            className="cursor-pointer btn btn-primary btn-xs max-w-md font-normal border-opacity-80 bg-opacity-80"
+            className="cursor-pointer btn btn-primary backdrop-blur-md text-xs max-w-xs font-normal border-opacity-80 bg-opacity-80"
           >
-            <span className="line-clamp-2">{msg}</span>
+            <span className="line-clamp-2 text-right">{msg}</span>
           </div>
         ))}
     </div>
@@ -310,13 +314,11 @@ const Chat = ({
             </div>
           </div>
         )}
-        {!thinking && (
-          <SampleMessagePanel
-            flow={chatSource?.flow}
-            className="absolute bottom-full mb-2 right-2 z-20"
-            onSelect={onSend}
-          />
-        )}
+        <SampleMessagePanel
+          flow={chatSource?.flow}
+          className="absolute bottom-full mb-2 right-2 z-20"
+          onSelect={onSend}
+        />
       </div>
       <Tooltip id="chat-tooltip" className="max-w-md" />
     </div>
