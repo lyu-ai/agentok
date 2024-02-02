@@ -16,31 +16,31 @@ import { usePathname } from 'next/navigation';
 export const NAV_MENU_ITEMS = [
   {
     id: 'flows',
-    label: 'Autoflow',
+    label: 'Autoflows',
     icon: RiRobot2Line,
     activeIcon: RiRobot2Fill,
     href: '/flows',
   },
   {
     id: 'chats',
-    label: 'Chat',
+    label: 'Chats',
     icon: PiChatsCircle,
     activeIcon: PiChatsCircleFill,
     href: '/chats',
   },
   {
     id: 'templates',
-    label: 'Template',
+    label: 'Templates',
     icon: RiAppsLine,
     activeIcon: RiAppsFill,
     href: '/templates',
   },
   {
-    id: 'admin',
-    label: 'Admin',
+    id: 'settings',
+    label: 'Settings',
     icon: RiSettingsLine,
     activeIcon: RiSettingsFill,
-    href: '/admin',
+    href: '/settings',
   },
 ];
 

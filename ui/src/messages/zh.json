@@ -245,10 +245,18 @@
       "refresh": "刷新"
     },
     "Settings": {
-      "account": "账户",
-      "tools": "工具",
-      "billing": "计费",
-      "apikeys": "API 秘钥"
+      "ApiKeys": {
+        "title": "API 密钥",
+        "create-apikey": "创建 API 密钥",
+        "creating-apikey": "正在创建 API 密钥...",
+        "name": "名称",
+        "key": "密钥",
+        "created": "创建时间",
+        "actions": "操作",
+        "delete-apikey": "删除 API 密钥",
+        "show-apikey": "点击显示/隐藏 API 密钥",
+        "delete-apikey-success": "成功删除 API 密钥 {key_name}"
+      }
     }
   },
   "meta": {

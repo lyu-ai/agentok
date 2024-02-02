@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 const ApiKeyText = ({ apikey }: { apikey: string }) => {
   const [isShowing, setIsShowing] = useState(false);
   const [text, setText] = useState('');
-  const t = useTranslations('page.Admin.ApiKeys');
+  const t = useTranslations('page.Settings.ApiKeys');
   useEffect(() => {
     if (isShowing) {
       setText(apikey);
@@ -55,7 +55,7 @@ const CreateKeyDialog = ({ show, onClose }: any) => {
   const [name, setName] = useState('Default Name');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const t = useTranslations('page.Admin.ApiKeys');
+  const t = useTranslations('page.Settings.ApiKeys');
   const onSubmit = (e: any) => {
     e.preventDefault();
     setLoading(true);
@@ -124,7 +124,7 @@ const Page = () => {
   const [loading, setLoading] = useState(true);
   const [keys, setKeys] = useState<any[]>([]);
   const [showCreateKeyDialog, setShowCreateKeyDialog] = useState(false);
-  const t = useTranslations('page.Admin.ApiKeys');
+  const t = useTranslations('page.Settings.ApiKeys');
   const fetchKeys = async () => {
     setLoading(true);
     await fetch('/api/api-keys', {

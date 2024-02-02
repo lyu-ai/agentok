@@ -85,7 +85,7 @@ function AssistantNode({ id, data, selected }: any) {
         </div>
         <div
           className={clsx(
-            'text-sm text-base-content/60 transition-all ease-in-out'
+            'text-sm text-base-content transition-all ease-in-out'
           )}
         >
           <textarea
@@ -100,7 +100,7 @@ function AssistantNode({ id, data, selected }: any) {
         </div>
         {data.class === 'GPTAssistantAgent' && (
           <>
-            <div className="flex items-center justify-between text-base-content/60 gap-2">
+            <div className="flex items-center justify-between text-base-content gap-2">
               <div className="flex items-center gap-2 font-bold text-base-content/80">
                 {t('instructions')}
               </div>
@@ -138,7 +138,7 @@ function AssistantNode({ id, data, selected }: any) {
                   setNodeData(instance, id, { instructions: e.target.value });
                 }}
                 placeholder={t('instructions-placeholder')}
-                className="nodrag nowheel textarea textarea-bordered w-full p-1 bg-transparent rounded resize-none"
+                className="nodrag nowheel textarea textarea-bordered text-white w-full p-1 bg-transparent rounded resize-none"
                 rows={2}
               />
             </div>

@@ -221,8 +221,9 @@
       "password": "Password",
       "password-placeholder": "Enter your password"
     },
-    "Admin": {
+    "Settings": {
       "ApiKeys": {
+        "title": "API Keys",
         "create-apikey": "Create API Key",
         "creating-apikey": "Creating API Key ...",
         "name": "Name",
@@ -263,12 +264,6 @@
       "select-template-title": "FlowGen Templates",
       "select-flow": "Discover top FlowGen templates. Chat, or Fork to customize.",
       "refresh": "Refresh"
-    },
-    "Settings": {
-      "account": "Account",
-      "apikeys": "API Keys",
-      "tools": "Tools",
-      "billing": "Billing"
     }
   },
   "meta": {

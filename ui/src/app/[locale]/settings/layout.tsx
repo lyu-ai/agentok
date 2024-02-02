@@ -72,10 +72,10 @@ const SettingsLayout = ({ children }: PropsWithChildren) => {
     // },
     {
       id: 'apikeys',
-      label: t('apikeys'),
+      label: t('ApiKeys.title'),
       icon: PiKey,
       activeIcon: PiKeyFill,
-      href: '/admin/api-keys',
+      href: '/settings/api-keys',
     },
     // {
     //   id: 'billing',
