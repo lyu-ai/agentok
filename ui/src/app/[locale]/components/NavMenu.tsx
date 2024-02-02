@@ -65,16 +65,16 @@ const NavMenu = () => {
           key={item.id}
           href={item.href}
           className={clsx(
-            'flex items-center rounded-md text-sm py-2 px-3 gap-2 hover:text-primary/80 hover:bg-base-content/30',
+            'flex items-center rounded-full text-sm py-1 px-3 gap-2 hover:text-primary/80 hover:bg-base-content/30',
             {
               'text-primary bg-base-content/20': isActive(item.href),
             }
           )}
         >
           {isActive(item.href) ? (
-            <item.activeIcon className="h-5 w-5" />
+            <item.activeIcon className="h-4 w-4" />
           ) : (
-            <item.icon className="h-5 w-5" />
+            <item.icon className="h-4 w-4" />
           )}
           {item.label}
         </Link>

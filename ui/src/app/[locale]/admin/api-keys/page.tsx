@@ -69,7 +69,6 @@ const CreateKeyDialog = ({ show, onClose }: any) => {
     })
       .then(resp => resp.json())
       .then(json => {
-        console.log('keys', json);
         onClose(true);
       })
       .catch(e => {
@@ -145,7 +144,6 @@ const Page = () => {
       .finally(() => setLoading(false));
   };
   useEffect(() => {
-    console.log('fetching keys ...');
     fetchKeys();
   }, []);
 
@@ -170,8 +168,6 @@ const Page = () => {
         console.error(e);
       });
   };
-
-  console.log('keys', keys, 'loading', loading);
 
   if (loading) {
     return (
@@ -207,7 +203,6 @@ const Page = () => {
           </thead>
           <tbody className="gap-2">
             {keys.map(key => {
-              console.log('key', key);
               return (
                 <tr key={key.id} className="flex items-center w-full py-2">
                   <td className="w-12 lg:w-32">{key.name || '(No name)'}</td>

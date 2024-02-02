@@ -14,7 +14,7 @@ const Navbar = () => {
         <NavButton className="md:hidden" />
         <NavLogo />
       </div>
-      <div className="navbar-center gap-1 hidden md:flex">
+      <div className="navbar-center gap-2 hidden md:flex">
         <NavMenu />
       </div>
       <div className="navbar-end flex items-center my-auto gap-4">
