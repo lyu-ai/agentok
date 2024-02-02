@@ -1,8 +1,11 @@
+from distutils.command import upload
 import os
 from autogen import Agent, ConversableAgent
 from openai import OpenAI
 from typing import Dict, Union, Optional, List
 import PIL
+
+from ..dependencies import get_pocketbase_client
 from ..utils.img_utils import get_image_data, _to_pil
 from termcolor import colored
 import random
@@ -119,7 +122,7 @@ class DALLEAgent(ConversableAgent):
 
         prompt = messages[-1]["content"]
         # TODO: integrate with autogen.oai. For instance, with caching for the API call
-        img_data = dalle_call(
+        img_url = dalle_call(
             client=self.client,
             model="dall-e-3",
             prompt=prompt,
@@ -127,7 +130,24 @@ class DALLEAgent(ConversableAgent):
             quality="standard",
             n=1,
         )
-        print(f'Result of dalle prompt "{prompt}":', img_data)
-        out_message = f"![img]({img_data})"
+        print(f'Result of dalle prompt "{prompt}":', img_url)
+        # Remove the query string part of the URL if it exists
+        base_url = img_url.split('?')[0]
+
+        # Split the URL by "/"
+        parts = base_url.split("/")
+
+        # Extract the desired part of the URL (assuming the structure is known)
+        extracted_filename = '/'.join(parts[-2:])  # Joins the last two parts of the split URL
+
+        # The img_data is a temporary file so we need to persist it and return the persisted one instead
+        # Retrieve the img_data and upload to pocketbase
+        img_data = get_image_data(img_url)
+        status_code, upload_result = get_pocketbase_client().upload_image(extracted_filename, img_data, "", "dalle", {})
+        if status_code != 200:
+            print(colored(f"Failed to upload image to pocketbase: {upload_result}", "red"))
+            return False, "Failed to upload image"
+
+        out_message = f"![img]({upload_result['access_url']})"
         return True, out_message
 
