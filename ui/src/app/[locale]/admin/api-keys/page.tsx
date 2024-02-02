@@ -126,9 +126,9 @@ const Page = () => {
   const [keys, setKeys] = useState<any[]>([]);
   const [showCreateKeyDialog, setShowCreateKeyDialog] = useState(false);
   const t = useTranslations('page.Admin.ApiKeys');
-  const fetchKeys = () => {
+  const fetchKeys = async () => {
     setLoading(true);
-    fetch('/api/api-keys', {
+    await fetch('/api/api-keys', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -144,7 +144,10 @@ const Page = () => {
       })
       .finally(() => setLoading(false));
   };
-  useEffect(() => fetchKeys, []);
+  useEffect(() => {
+    console.log('fetching keys ...');
+    fetchKeys();
+  }, []);
 
   const onCloseCreateKeyDialog = (refresh: boolean) => {
     setShowCreateKeyDialog(false);

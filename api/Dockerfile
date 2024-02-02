@@ -29,7 +29,7 @@ COPY . .
 ENV UVICORN_WORKERS=3 \
   UVICORN_PORT=5004 \
   UVICORN_HOST=0.0.0.0 \
-  UVICORN_LOG_LEVEL=info
+  UVICORN_LOG_LEVEL=debug
 
 # Command to run the application
 CMD ["sh", "-c", "uvicorn app.main:app --host ${UVICORN_HOST} --port ${UVICORN_PORT} --workers ${UVICORN_WORKERS} --log-level ${UVICORN_LOG_LEVEL}"]
