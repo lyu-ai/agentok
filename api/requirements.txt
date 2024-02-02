@@ -27,7 +27,7 @@ pillow==10.2.0
 prompt-toolkit==3.0.43
 ptyprocess==0.7.0
 pure-eval==0.2.2
-pyautogen==0.2.7
+pyautogen==0.2.9
 pydantic==2.5.3
 pydantic_core==2.14.6
 Pygments==2.17.2
