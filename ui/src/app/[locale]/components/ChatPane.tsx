@@ -205,10 +205,26 @@ const ChatPane = ({
   // If the chat is not loaded yet, show a button to start the chat.
   if (!chatId) {
     return (
-      <div className="flex flex-col items-center justify-center w-full h-full">
-        <button className="btn btn-primary" onClick={onStartChat}>
-          {t('start-chat')}
-        </button>
+      <div className="flex flex-col w-full h-full z-10 shadow-box shadow-gray-700 rounded-xl bg-gray-700/80 text-base-content border border-gray-600">
+        <div className="p-2 flex items-center justify-end">
+          <button
+            className="btn btn-ghost btn-square btn-xs"
+            onClick={() => pinChatPane(!chatPanePinned)}
+            data-tooltip-content={chatPanePinned ? t('unpin') : t('pin')}
+            data-tooltip-id="chat-tooltip"
+          >
+            {chatPanePinned ? (
+              <RiUnpinLine className="w-4 h-4" />
+            ) : (
+              <RiPushpinLine className="w-4 h-4" />
+            )}
+          </button>
+        </div>
+        <div className="flex items-center justify-center">
+          <button className="btn btn-primary" onClick={onStartChat}>
+            {t('start-chat')}
+          </button>
+        </div>
       </div>
     );
   }

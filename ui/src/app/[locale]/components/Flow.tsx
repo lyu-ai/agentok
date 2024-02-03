@@ -187,8 +187,8 @@ const Autoflow = ({ flowId }: any) => {
     setEdges((eds: any) => {
       const newEdges = {
         ...params,
-        type: 'smoothstep',
         animated: true,
+        type: 'bezier',
         style: {
           strokeWidth: 2,
         },

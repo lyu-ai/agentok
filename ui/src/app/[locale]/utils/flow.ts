@@ -205,7 +205,6 @@ export const initialEdges: Edge[] = [
     source: '1',
     target: '3',
     animated: true,
-    type: 'smoothstep',
     style: {
       strokeWidth: 2,
     },
