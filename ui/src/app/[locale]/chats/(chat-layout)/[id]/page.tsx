@@ -1,7 +1,7 @@
 'use client';
 
 import { useChat, useChats } from '@/hooks';
-import Chat from '../../../components/Chat';
+import ChatPane from '../../../components/ChatPane';
 import { useEffect } from 'react';
 
 const Page = ({ params: { id } }: any) => {
@@ -14,7 +14,7 @@ const Page = ({ params: { id } }: any) => {
     }
   }, [id, chat?.name, setActiveChat]);
 
-  return <Chat chatId={id} standalone />;
+  return <ChatPane chatId={id} standalone />;
 };
 
 export default Page;

@@ -14,6 +14,8 @@ interface AutoflowState {
   flows: Autoflow[];
   openFlowIds: string[];
   activeFlowId: string;
+  chatPanePinned: boolean;
+  nodePanePinned: boolean;
   // User flows
   setFlows: (flows: Autoflow[]) => void;
   openFlow: (id: string) => void;
@@ -21,6 +23,8 @@ interface AutoflowState {
   updateFlow: (id: string, flow: Autoflow) => void;
   deleteFlow: (id: string) => void;
   getFlowById: (id: string) => Autoflow | undefined;
+  pinChatPane: (pin: boolean) => void; // pin/unpin chat pane
+  pinNodePane: (pin: boolean) => void;
 }
 
 const useFlowStore = create<AutoflowState>()(
@@ -30,6 +34,8 @@ const useFlowStore = create<AutoflowState>()(
       flows: [],
       openFlowIds: [],
       activeFlowId: '',
+      chatPanePinned: false,
+      nodePanePinned: false,
       setFlows: flows => set({ flows }),
       openFlow: (id: string) =>
         set(state => {
@@ -76,6 +82,8 @@ const useFlowStore = create<AutoflowState>()(
       getFlowById: id => {
         return get().flows.find(flow => flow.id === id);
       },
+      pinChatPane: (pin: boolean) => set({ chatPanePinned: pin }),
+      pinNodePane: (pin: boolean) => set({ nodePanePinned: pin }),
     }),
     {
       name: 'autoflow-store',

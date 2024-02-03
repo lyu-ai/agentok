@@ -23,12 +23,16 @@ import Json from './Json';
 import { genId } from '@/utils/id';
 import ChatButton from './ChatButton';
 import { useTranslations } from 'next-intl';
-import { useFlow } from '@/hooks';
+import { useChats, useFlow } from '@/hooks';
 import { useRouter } from 'next/navigation';
 import { debounce } from 'lodash-es';
 import FlowTabs from './FlowTabs';
 import Link from 'next/link';
 import { RiArrowGoBackLine } from 'react-icons/ri';
+import ChatPane from './ChatPane';
+import useFlowStore from '@/store/flows';
+import NodePane from './NodePane';
+import { Chat as ChatType } from '@/store/chats';
 
 const Autoflow = ({ flowId }: any) => {
   const { flow, updateFlow, isUpdating, isLoading, isError } = useFlow(flowId);
@@ -41,6 +45,10 @@ const Autoflow = ({ flowId }: any) => {
   const { fitView, screenToFlowPosition, toObject } = useReactFlow();
   const t = useTranslations('component.Autoflow');
   const router = useRouter();
+  const chatPanePinned = useFlowStore(state => state.chatPanePinned);
+  const nodePanePinned = useFlowStore(state => state.nodePanePinned);
+  const { chats, createChat, isCreating } = useChats();
+  const [chat, setChat] = useState<ChatType | undefined>();
 
   // Suppress error code 002
   // https://github.com/xyflow/xyflow/issues/3243
@@ -60,6 +68,10 @@ const Autoflow = ({ flowId }: any) => {
     setEdges(flow?.flow?.edges ?? []);
     setIsDirty(false);
     // fitView({ padding: 0.2, maxZoom: 1 });
+    const existingChat = chats.findLast(chat => chat.sourceId === flow.id);
+    if (existingChat) {
+      setChat(existingChat);
+    }
   }, [flow]);
 
   const initialLoad = useRef(true);
@@ -199,6 +211,16 @@ const Autoflow = ({ flowId }: any) => {
     setNodes(nds => nds.concat(newNode));
   };
 
+  const onClickChat = async () => {
+    if (!flow) return;
+    const existingChat = chats.findLast(chat => chat.sourceId === flow.id);
+    if (existingChat) {
+      setChat(existingChat);
+      return;
+    }
+    await createChat(flow.id, 'flow').then(chat => setChat(chat));
+  };
+
   if (mode === 'python') {
     return (
       <div className="relative flex w-full h-full">
@@ -232,8 +254,16 @@ const Autoflow = ({ flowId }: any) => {
   if (!flow?.flow) return null;
 
   return (
-    <div className="relative w-full h-full overflow-hidden" ref={flowParent}>
-      <div className="relative flex flex-grow flex-col w-full h-full">
+    <div className="relative flex w-full h-full overflow-hidden">
+      {nodePanePinned && (
+        <div className="flex w-80 h-full pl-1 pb-1">
+          <NodePane onAddNode={onAddNode} />
+        </div>
+      )}
+      <div
+        className="relative flex flex-grow flex-col w-full h-full"
+        ref={flowParent}
+      >
         <ReactFlow
           nodes={nodes}
           onNodesChange={onNodesChange}
@@ -250,7 +280,7 @@ const Autoflow = ({ flowId }: any) => {
           selectionMode={SelectionMode.Partial}
           fitView
           fitViewOptions={{ maxZoom: 1 }}
-          attributionPosition="bottom-left"
+          attributionPosition="bottom-right"
         >
           <Background
             id="logo"
@@ -263,28 +293,42 @@ const Autoflow = ({ flowId }: any) => {
             fitViewOptions={{ maxZoom: 1 }}
             showInteractive={false}
             position="bottom-right"
+            className="flex"
           />
         </ReactFlow>
         <div className="absolute top-0 flex w-full items-center justify-between px-2">
           <div className="flex flex-grow items-center gap-2 overflow-x-auto">
             <Link
               href="/flows"
-              className="text-primary/60 hover:text-primary"
+              className="btn btn-ghost btn-sm btn-circle text-primary/60 hover:text-primary"
               data-tooltip-id="default-tooltip"
               data-tooltip-content={t('back-to-main')}
             >
-              <RiArrowGoBackLine className="w-5 h-5" />
+              <RiArrowGoBackLine className="w-4 h-4" />
             </Link>
             <FlowTabs className="hidden lg:flex flex-1 overflow-x-auto" />
           </div>
           <div className="flex flex-shrink-0 items-center gap-2">
             <ViewToggle mode={'python'} setMode={setMode} />
             <ViewToggle mode={'json'} setMode={setMode} />
-            <ChatButton flow={flow} />
           </div>
         </div>
-        <NodeButton onAddNode={onAddNode} className="absolute top-14 left-2" />
       </div>
+      {!nodePanePinned && (
+        <NodeButton onAddNode={onAddNode} className="absolute top-14 left-2" />
+      )}
+      {chatPanePinned ? (
+        <div className="text-sm w-96 lg:w-[480px] h-full pr-1 pb-1 shrink-0">
+          <ChatPane onStartChat={onClickChat} chatId={chat?.id ?? ''} />
+        </div>
+      ) : (
+        <ChatButton
+          flow={flow}
+          onStartChat={onClickChat}
+          chatId={chat?.id}
+          className="absolute top-12 right-2"
+        />
+      )}
     </div>
   );
 };

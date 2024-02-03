@@ -1,6 +1,5 @@
 import clsx from 'clsx';
-import React, { memo, useState } from 'react';
-import { LuSettings2 } from 'react-icons/lu';
+import React, { useState } from 'react';
 import { useReactFlow } from 'reactflow';
 import { getNodeLabel, setNodeData } from '../../utils/flow';
 import Toolbar from './Toolbar';
@@ -10,6 +9,7 @@ import FunctionConfig from '../function/Config';
 import { TbMathFunction } from 'react-icons/tb';
 import { useTranslations } from 'next-intl';
 import { isArray } from 'lodash-es';
+import { RiSettingsFill } from 'react-icons/ri';
 
 function Config({ id, data, selected }: any) {
   const [collapsed, setCollapsed] = useState(false);
@@ -48,7 +48,7 @@ function Config({ id, data, selected }: any) {
       <div className="flex flex-col w-full gap-2 text-sm">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <LuSettings2 className="w-5 h-5" />
+            <RiSettingsFill className="w-5 h-5" />
             <div className="text-sm font-bold">
               {getNodeLabel(data.label, tNodeMeta)}
             </div>
