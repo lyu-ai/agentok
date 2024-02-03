@@ -57,7 +57,7 @@ const FlowTabs = ({ className }: any) => {
           className={`${
             activeFlowId === id
               ? 'bg-primary/80 text-primary-content'
-              : 'bg-base-content/20 text-base-content'
+              : 'bg-base-content/80 text-base-100'
           } group relative flex flex-shrink-0 items-center gap-1 px-3 py-1 text-sm rounded-full hover:bg-primary/80 hover:text-primary-content`}
           href={`/flows/${id}`}
         >

@@ -84,7 +84,7 @@
     }
   },
   "component": {
-    "Chat": {
+    "ChatPane": {
       "thinking": "我正在努力思考...",
       "thinking-begin": "开始思考",
       "thinking-end": "思考结束",
@@ -98,7 +98,9 @@
       "message-loading": "正在加载聊天记录...",
       "message-empty": "尚无聊天记录。现在开始聊天！",
       "resend": "重新发送此消息",
-      "click-to-send": "点击发送此条示例消息"
+      "click-to-send": "点击发送此条示例消息",
+      "pin": "固定",
+      "unpin": "取消固定"
     },
     "ChatList": {
       "default-chat-title": "与 {source_name} 聊天",
@@ -142,9 +144,12 @@
       "publish-flow-tip": "将此工作流发布到 FlowGen 社区。您随时可以取消发布。"
     },
     "NodeButton": {
+      "add-node": "添加节点",
       "group-basic": "基本节点",
       "group-advanced": "高级节点",
-      "group-extensions": "扩展节点"
+      "group-extensions": "扩展节点",
+      "pin": "固定",
+      "unpin": "取消固定"
     },
     "TemplateList": {
       "template-empty": "尚无公开的工作流模板，你可以将一个工作流发布为模板。",

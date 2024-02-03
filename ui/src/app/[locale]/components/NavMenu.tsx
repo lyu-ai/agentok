@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { PiChatsCircle, PiChatsCircleFill } from 'react-icons/pi';
 import {
   RiRobot2Line,
-  RiAppsLine,
+  RiApps2Line,
   RiRobot2Fill,
-  RiAppsFill,
+  RiApps2Fill,
   RiSettingsFill,
   RiSettingsLine,
 } from 'react-icons/ri';
@@ -31,8 +31,8 @@ export const NAV_MENU_ITEMS = [
   {
     id: 'templates',
     label: 'Templates',
-    icon: RiAppsLine,
-    activeIcon: RiAppsFill,
+    icon: RiApps2Line,
+    activeIcon: RiApps2Fill,
     href: '/templates',
   },
   {

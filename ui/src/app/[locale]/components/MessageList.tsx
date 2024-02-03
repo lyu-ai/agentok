@@ -15,7 +15,7 @@ import pb from '@/utils/pocketbase/client';
 import { useChat } from '@/hooks';
 
 const MessageBlock = ({ chatId, message, onSend }: any) => {
-  const t = useTranslations('component.Chat');
+  const t = useTranslations('component.ChatPane');
   const { chatSource } = useChat(chatId);
   const userNodeName =
     chatSource?.flow?.nodes?.find(
@@ -157,7 +157,7 @@ const MessageBlock = ({ chatId, message, onSend }: any) => {
 };
 
 const MessageList = ({ chatId, messages, onSend }: any) => {
-  const t = useTranslations('component.Chat');
+  const t = useTranslations('component.ChatPane');
   return (
     <>
       {messages.length === 0 && (

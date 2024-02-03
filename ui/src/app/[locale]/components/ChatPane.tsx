@@ -15,9 +15,11 @@ import MessageList from './MessageList';
 import clsx from 'clsx';
 import Tip from './Tip';
 import { isArray } from 'lodash-es';
+import useFlowStore from '@/store/flows';
+import { RiPushpinLine, RiUnpinLine } from 'react-icons/ri';
 
 const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
-  const t = useTranslations('component.Chat');
+  const t = useTranslations('component.ChatPane');
   const [minimized, setMinimized] = useState(false);
   const config = flow?.nodes?.find((node: any) => node.type === 'config');
   if (!config?.data?.sample_messages || !isArray(config.data.sample_messages)) {
@@ -27,7 +29,7 @@ const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
   const onSelect = (msg: string) => {
     setMinimized(true);
     _onSelect && _onSelect(msg);
-  }
+  };
   return (
     <div className={clsx(className, 'flex flex-col items-end gap-1')}>
       <button
@@ -53,12 +55,14 @@ const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
   );
 };
 
-const Chat = ({
+const ChatPane = ({
   chatId,
   standalone,
+  onStartChat,
 }: {
   chatId: string;
   standalone?: boolean;
+  onStartChat?: () => void;
 }) => {
   const { chat, isLoading: isLoadingChat, isError, chatSource } = useChat(
     chatId
@@ -72,7 +76,8 @@ const Chat = ({
   const [cleaning, setCleaning] = useState(false);
   const isFirstRender = useRef(true);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const t = useTranslations('component.Chat');
+  const t = useTranslations('component.ChatPane');
+  const { pinChatPane, chatPanePinned } = useFlowStore();
 
   const fetchMessages = useCallback(async () => {
     return fetch(`/api/chats/${chatId}/messages`, {
@@ -197,6 +202,17 @@ const Chat = ({
     return true;
   };
 
+  // If the chat is not loaded yet, show a button to start the chat.
+  if (!chatId) {
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-full">
+        <button className="btn btn-primary" onClick={onStartChat}>
+          {t('start-chat')}
+        </button>
+      </div>
+    );
+  }
+
   if (loading || isLoadingChat) {
     return (
       <div className="flex flex-col items-center justify-center w-full h-full">
@@ -225,18 +241,18 @@ const Chat = ({
   }
 
   return (
-    <div className="flex flex-col w-full h-full ">
-      <div className="flex items-center justify-between w-full px-2 py-1">
+    <div className="flex flex-col w-full h-full z-10 shadow-box shadow-gray-700 rounded-xl bg-gray-700/80 text-base-content border border-gray-600">
+      <div className="flex items-center justify-between w-full p-2">
         <div className="flex items-center gap-2 text-sm">
           {standalone && (
             <button
-              className="btn btn-ghost btn-sm btn-circle"
+              className="btn btn-ghost btn-xs btn-square"
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
             >
               {sidebarCollapsed ? (
-                <TbArrowBarRight className="w-5 h-5" />
+                <TbArrowBarRight className="w-4 h-4" />
               ) : (
-                <TbArrowBarToLeft className="w-5 h-5" />
+                <TbArrowBarToLeft className="w-4 h-4" />
               )}
             </button>
           )}
@@ -249,10 +265,9 @@ const Chat = ({
         </div>
         <div className="flex items-center gap-2">
           <button
-            className="btn btn-sm btn-ghost btn-square"
+            className="btn btn-xs btn-ghost btn-square"
             data-tooltip-id="chat-tooltip"
             data-tooltip-content={t('clean-history')}
-            data-tooltip-place="bottom"
             onClick={onClean}
           >
             {cleaning ? (
@@ -263,15 +278,28 @@ const Chat = ({
           </button>
           {!standalone && (
             <a
-              className="btn btn-sm btn-ghost btn-square"
+              className="btn btn-xs btn-ghost btn-square"
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('open-in-new-window')}
-              data-tooltip-place="bottom"
               href={`/chats/${chat?.id}`}
               target="_blank"
             >
               <RxOpenInNewWindow className="w-4 h-4" />
             </a>
+          )}
+          {!standalone && chat?.sourceType === 'flow' && (
+            <button
+              className="btn btn-ghost btn-square btn-xs"
+              onClick={() => pinChatPane(!chatPanePinned)}
+              data-tooltip-content={chatPanePinned ? t('unpin') : t('pin')}
+              data-tooltip-id="chat-tooltip"
+            >
+              {chatPanePinned ? (
+                <RiUnpinLine className="w-4 h-4" />
+              ) : (
+                <RiPushpinLine className="w-4 h-4" />
+              )}
+            </button>
           )}
           {standalone && chat?.sourceType === 'flow' && (
             <a
@@ -325,4 +353,4 @@ const Chat = ({
   );
 };
 
-export default Chat;
+export default ChatPane;
