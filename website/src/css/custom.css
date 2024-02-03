@@ -26,6 +26,8 @@
   --ifm-color-primary-light: #b9eeac;
   --ifm-color-primary-lighter: #c6f1bc;
   --ifm-color-primary-lightest: #edfbea;
+
+  font-size: 15px;
 }
 
 .header-github-link:hover {
