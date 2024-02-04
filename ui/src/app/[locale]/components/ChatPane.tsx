@@ -16,7 +16,17 @@ import clsx from 'clsx';
 import Tip from './Tip';
 import { isArray } from 'lodash-es';
 import useFlowStore from '@/store/flows';
-import { RiPushpinLine, RiUnpinLine } from 'react-icons/ri';
+import {
+  RiAccountBoxLine,
+  RiAlertLine,
+  RiChatSmile2Line,
+  RiPushpinLine,
+  RiRidingLine,
+  RiSendPlaneLine,
+  RiStopLine,
+  RiTrophyLine,
+  RiUnpinLine,
+} from 'react-icons/ri';
 
 const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
   const t = useTranslations('component.ChatPane');
@@ -55,6 +65,41 @@ const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
   );
 };
 
+const StatusTag = ({ status }: { status: string }) => {
+  const t = useTranslations('component.ChatPane');
+  const statusMap: { [key: string]: { label: string; icon: any } } = {
+    ready: { label: t('ready'), icon: RiSendPlaneLine },
+    running: { label: t('running'), icon: RiRidingLine },
+    wait_for_human_input: {
+      label: t('wait-for-human-input'),
+      icon: RiChatSmile2Line,
+    },
+    completed: { label: t('completed'), icon: RiTrophyLine },
+    aborted: { label: t('aborted'), icon: RiStopLine },
+    failed: { label: t('failed'), icon: RiAlertLine },
+  };
+  const StatusIcon = statusMap[status].icon;
+  const label = statusMap[status].label || status;
+  return (
+    <span
+      className={clsx(
+        'flex items-center gap-1 text-xs py-0.5 px-2 border rounded-full',
+        {
+          'border-primary text-primary bg-primary/50 animate-pulse':
+            status === 'running',
+          'border-success text-success': status === 'completed',
+          'border-error text-error': status === 'failed',
+          'border-warning text-warning': status === 'wait_for_human_input',
+          'border-neutral text-neutral': status === 'ready',
+        }
+      )}
+    >
+      <StatusIcon className="w-4 h-4" />
+      {label}
+    </span>
+  );
+};
+
 const ChatPane = ({
   chatId,
   standalone,
@@ -68,6 +113,7 @@ const ChatPane = ({
     chatId
   );
   const { sidebarCollapsed, setSidebarCollapsed } = useChats();
+  const [status, setStatus] = useState('ready');
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [thinking, setThinking] = useState(false);
@@ -106,7 +152,8 @@ const ChatPane = ({
 
     extractHelp();
 
-    let unsubscribFunc: UnsubscribeFunc | undefined;
+    let unsubMessageFunc: UnsubscribeFunc | undefined;
+    let unsubChatFunc: UnsubscribeFunc | undefined;
     pb.collection('messages')
       .subscribe('*', payload => {
         // console.log('changes_event:', payload);
@@ -134,12 +181,24 @@ const ChatPane = ({
         }
       })
       .then(unsubFunc => {
-        unsubscribFunc = unsubFunc;
+        unsubMessageFunc = unsubFunc;
+      });
+
+    pb.collection('chats')
+      .subscribe('*', payload => {
+        if (payload.record.id !== chatId) return;
+        payload.record && setStatus(payload.record.status);
+      })
+      .then(unsubFunc => {
+        unsubChatFunc = unsubFunc;
       });
 
     return () => {
-      if (unsubscribFunc) {
-        unsubscribFunc();
+      if (unsubMessageFunc) {
+        unsubMessageFunc();
+      }
+      if (unsubChatFunc) {
+        unsubChatFunc();
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -202,6 +261,20 @@ const ChatPane = ({
     return true;
   };
 
+  const onAbort = async () => {
+    const res = await fetch(`/api/chats/${chatId}/abort`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    if (res.ok) {
+      setWaitForHumanInput(false);
+      setThinking(false);
+    }
+  };
+
   // If the chat is not loaded yet, show a button to start the chat.
   if (!chatId) {
     return (
@@ -220,8 +293,9 @@ const ChatPane = ({
             )}
           </button>
         </div>
-        <div className="flex items-center justify-center">
-          <button className="btn btn-primary" onClick={onStartChat}>
+        <div className="flex flex-col flex-grow w-full items-center justify-center">
+          <button className="btn btn-primary btn-outline" onClick={onStartChat}>
+            <RiChatSmile2Line className="w-5 h-5" />
             {t('start-chat')}
           </button>
         </div>
@@ -278,6 +352,7 @@ const ChatPane = ({
           {help && (
             <Tip content={help} className="mx-2" data-tooltip-place="bottom" />
           )}
+          {status && <StatusTag status={status} />}
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -294,7 +369,7 @@ const ChatPane = ({
           </button>
           {!standalone && (
             <a
-              className="btn btn-xs btn-ghost btn-square"
+              className="btn btn-xs btn-ghost btn-circle"
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('open-in-new-window')}
               href={`/chats/${chat?.id}`}
@@ -305,7 +380,7 @@ const ChatPane = ({
           )}
           {!standalone && chat?.sourceType === 'flow' && (
             <button
-              className="btn btn-ghost btn-square btn-xs"
+              className="btn btn-ghost btn-circle btn-xs"
               onClick={() => pinChatPane(!chatPanePinned)}
               data-tooltip-content={chatPanePinned ? t('unpin') : t('pin')}
               data-tooltip-id="chat-tooltip"
@@ -319,7 +394,7 @@ const ChatPane = ({
           )}
           {standalone && chat?.sourceType === 'flow' && (
             <a
-              className="btn btn-sm btn-ghost btn-square"
+              className="btn btn-sm btn-ghost btn-circle"
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('go-to-editor')}
               data-tooltip-place="bottom"
@@ -349,15 +424,9 @@ const ChatPane = ({
             }
           )}
           onSend={onSend}
+          status={status}
+          onAbort={onAbort}
         />
-        {thinking && !waitForHumanInput && (
-          <div className="absolute inset-1.5 rounded-md backdrop-blur-sm bg-primary/10">
-            <div className="flex w-full h-full items-center justify-center gap-2 text-primary">
-              <div className="loading loading-infinity loading-sm" />
-              <span className="text-sm">{t('thinking')}</span>
-            </div>
-          </div>
-        )}
         <SampleMessagePanel
           flow={chatSource?.flow}
           className="absolute bottom-full mb-2 right-2 z-20"

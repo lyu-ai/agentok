@@ -18,6 +18,10 @@ class ChatService:
         chats = self.pocketbase_client.get_chats(self.user)
         return chats
 
+    async def get_chat(self, chat_id: str):
+        chat = self.pocketbase_client.get_chat(self.user, chat_id)
+        return chat
+
     async def create_chat(self, chat: dict):
         """Create a new chat session"""
         new_chat = self.pocketbase_client.create_chat(self.user, chat)
@@ -50,6 +54,9 @@ class ChatService:
 
         # When it's time to run the assistant:
         return await self.chat_manager.run_assistant(chat_id, message.get('content', '\n'), source_path, on_message=on_message)
+
+    async def abort_chat(self, chat_id: str):
+        return await self.chat_manager.abort_assistant(chat_id)
 
     async def human_input(self, message: dict, chat_id: str):
         self.pocketbase_client.add_message(self.user, message)

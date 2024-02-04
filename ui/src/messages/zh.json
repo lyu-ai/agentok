@@ -88,8 +88,6 @@
       "thinking": "我正在努力思考...",
       "thinking-begin": "开始思考",
       "thinking-end": "思考结束",
-      "wait-for-human-input": "等待用户输入...",
-      "received-human-input": "收到用户输入。继续会话...",
       "start-chat": "开始聊天",
       "reload-history": "重新加载聊天记录",
       "clean-history": "清除聊天记录",
@@ -100,7 +98,14 @@
       "resend": "重新发送此消息",
       "click-to-send": "点击发送此条示例消息",
       "pin": "固定",
-      "unpin": "取消固定"
+      "unpin": "取消固定",
+      "ready": "准备就绪",
+      "running": "运行中",
+      "failed": "失败",
+      "completed": "已完成",
+      "aborted": "已中止",
+      "wait-for-human-input": "等待用户输入",
+      "received-human-input": "收到用户输入。继续会话..."
     },
     "ChatList": {
       "default-chat-title": "与 {source_name} 聊天",
@@ -120,6 +125,7 @@
       "from-template-tooltip": "从模板创建一个新的会话"
     },
     "ChatInput": {
+      "abort": "中止",
       "enter-message": "输入消息开始聊天..."
     },
     "Autoflow": {

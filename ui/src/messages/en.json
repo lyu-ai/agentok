@@ -88,8 +88,6 @@
       "thinking": "I am thinking hard ...",
       "thinking-begin": "Begin Thinking",
       "thinking-end": "End of Thinking",
-      "wait-for-human-input": "Wait for human input ...",
-      "received-human-input": "Received human input. Continue...",
       "start-chat": "Start Chat",
       "reload-history": "Reload chat history",
       "clean-history": "Clean chat history",
@@ -100,7 +98,14 @@
       "resend": "Resend this message",
       "click-to-send": "Click to send this sample message",
       "pin": "Pin",
-      "unpin": "Unpin"
+      "unpin": "Unpin",
+      "ready": "Ready",
+      "running": "Running",
+      "failed": "Failed",
+      "completed": "Completed",
+      "aborted": "Aborted",
+      "wait-for-human-input": "Wait for input",
+      "received-human-input": "Received input. Continue..."
     },
     "ChatList": {
       "default-chat-title": "Chat with {source_name}",
@@ -122,6 +127,7 @@
       "from-template-tooltip": "Create a new chat from template"
     },
     "ChatInput": {
+      "abort": "Abort",
       "enter-message": "Enter message to start chat ..."
     },
     "Autoflow": {

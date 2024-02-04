@@ -1,10 +1,21 @@
-import { GoImage, GoPaperAirplane } from 'react-icons/go';
 import { useState } from 'react';
 import clsx from 'clsx';
 import ImagePanel from './ImagePanel';
 import { useTranslations } from 'next-intl';
+import {
+  RiImageAddLine,
+  RiSendPlane2Line,
+  RiStopFill,
+  RiStopLine,
+} from 'react-icons/ri';
 
-const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
+const ChatInput = ({
+  onSend: _onSend,
+  onAbort,
+  status,
+  className,
+  ...props
+}: any) => {
   const [showImagePanel, setShowImagePanel] = useState(false);
   const [image, setImage] = useState('');
   const [message, setMessage] = useState('');
@@ -57,7 +68,7 @@ const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
               className="object-cover aspect-w-1 aspect-h-1 w-8 h-8 rounded"
             />
           ) : (
-            <GoImage className="w-6 h-6" />
+            <RiImageAddLine className="w-6 h-6" />
           )}
         </button>
         <input
@@ -67,10 +78,23 @@ const ChatInput = ({ onSend: _onSend, className, ...props }: any) => {
           autoFocus
           onKeyDown={onKeyDown}
           onChange={(e: any) => setMessage(e.target.value)}
+          disabled={status === 'running'}
         />
-        <button className="btn btn-sm btn-primary" onClick={onSend}>
-          <GoPaperAirplane className="w-5 h-5" />
-        </button>
+        {status === 'running' || status === 'wait_for_human_input' ? (
+          <button
+            className="btn btn-sm bg-red-400 hover:bg-red-500 border border-red-300 hover:border-red-400"
+            onClick={onAbort}
+            data-tooltip-id="chat-tooltip"
+            data-tooltip-content={t('abort')}
+            data-tooltip-place="left"
+          >
+            <RiStopFill className="w-5 h-5" />
+          </button>
+        ) : (
+          <button className="btn btn-sm btn-primary" onClick={onSend}>
+            <RiSendPlane2Line className="w-5 h-5" />
+          </button>
+        )}
       </div>
     </div>
   );

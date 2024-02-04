@@ -150,6 +150,21 @@ class PocketBaseClient:
         get_result = response.json()
         return get_result.get('items', [])
 
+    def get_chat(self, user: dict, chat_id: str) -> Dict:
+        response = self.session.get(
+            f'{self.base_url}/api/collections/chats/records/{chat_id}',
+            headers={"Authorization": f"Bearer {self.admin_auth['token']}"},
+        )
+        response.raise_for_status()
+        chat = response.json()
+        if not chat:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Chat not found",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        return chat
+
     def create_chat(self, user: dict, chat_to_create: dict) -> Dict:
         print('chat_to_create', chat_to_create)
         chat_to_create['owner'] = user.id
@@ -202,9 +217,9 @@ class PocketBaseClient:
             response.raise_for_status()
             return response.json()
 
-    def set_chat_status(self, chat_id: str, status: Literal['running', 'wait_for_human_input']):
+    def set_chat_status(self, chat_id: str, status: Literal['ready', 'running', 'wait_for_human_input', 'completed', 'aborted', 'failed']):
         print('set_chat_status', chat_id, status)
-        response = requests.patch(
+        response = self.session.patch(
             f'{self.base_url}/api/collections/chats/records/{chat_id}',
             headers={"Authorization": f"Bearer {self.admin_auth['token']}"},
             json={"status": status}
