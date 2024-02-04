@@ -2,7 +2,6 @@ import asyncio
 import os
 from asyncio import subprocess
 import signal
-from rsa import sign
 from termcolor import colored
 
 from .pocketbase_client import pocketbase_client
