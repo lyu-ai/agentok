@@ -31,7 +31,7 @@ const CopyButton = ({
       className={clsx(
         className,
         'cursor-pointer',
-        !minimal && 'btn btn-sm btn-ghost btn-square'
+        !minimal && 'btn btn-sm btn-ghost btn-circle'
       )}
       data-tooltip-id="default-tooltip"
       data-tooltip-content={tooltip}

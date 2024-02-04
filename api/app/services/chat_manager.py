@@ -1,9 +1,11 @@
 import asyncio
 import os
 from asyncio import subprocess
+import signal
+from rsa import sign
 from termcolor import colored
 
-from . import pocketbase_client
+from .pocketbase_client import pocketbase_client
 
 from .output_parser import OutputParser  # Assuming OutputParser is in `services/output_parser.py`
 
@@ -51,6 +53,8 @@ class ChatManager:
             # Wait for the process to terminate before moving on
             await old_process.wait()
 
+        pocketbase_client.set_chat_status(chat_id, 'running')
+
         # Start the subprocess with the provided command
         process = await asyncio.create_subprocess_exec(
             *command,
@@ -80,6 +84,10 @@ class ChatManager:
                         'type': 'assistant',
                         'content': self.strip_prefix(response_message, ('__STATUS_RECEIVED_HUMAN_INPUT__', '__STATUS_WAIT_FOR_HUMAN_INPUT__')),
                     })
+                    if '__STATUS_WAIT_FOR_HUMAN_INPUT__' in response_message:
+                        pocketbase_client.set_chat_status(chat_id, 'wait_for_human_input')
+                    else:
+                        pocketbase_client.set_chat_status(chat_id, 'running')
                 else:
                     output_parser.parse_line(response_message)
             else:
@@ -93,11 +101,19 @@ class ChatManager:
         self._subprocesses.pop(chat_id, None)
 
         # Check the exit code of the subprocess to see if there were errors
-        if process.returncode != 0:
+        if process.returncode == -signal.SIGTERM:
+            print(colored(text=f'Assistant process terminated by user', color='yellow'))
+            pocketbase_client.set_chat_status(chat_id, 'aborted')
+            on_message({
+                'type': 'assistant',
+                'content': '__STATUS_COMPLETED__ TERMINATED',
+            })
+        elif process.returncode != 0:
+            pocketbase_client.set_chat_status(chat_id, 'failed')
             # Read the error message from stderr (optional)
             err = await process.stderr.read()
             error_message = err.decode().strip()
-            print(f'Assistant process exited with return code {process.returncode} and error message: {error_message}')
+            print(colored(text=f'Assistant process exited with return code {process.returncode} and error message: {error_message}', color='red'))
             # You might want to handle the error or propagate it
             # Splits the message by lines and takes the last one
             last_line = error_message.splitlines()[-1]
@@ -106,6 +122,7 @@ class ChatManager:
                 'content': f'__STATUS_COMPLETED__ {process.returncode}: {last_line}',
             })
         else:
+            pocketbase_client.set_chat_status(chat_id, 'completed')
             on_message({
                 'type': 'assistant',
                 'content': '__STATUS_COMPLETED__ DONE',
@@ -121,7 +138,24 @@ class ChatManager:
             print('👤', user_input)
             proc_info["stdin"].write(user_input.encode() + b'\n')
             await proc_info["stdin"].drain()
+            pocketbase_client.set_chat_status(chat_id, 'running')
             return {"detail": "Input sent to assistant."}
+        except Exception as e:
+            return {"error": str(e)}
+
+    async def abort_assistant(self, chat_id: str):
+        proc_info = self._subprocesses.get(chat_id)
+        if not proc_info:
+            return {"error": f"No assistant found with that chat ID. {chat_id}"}
+
+        try:
+            # Terminate the process
+            proc_info["process"].terminate()
+            # Optionally, you can also use proc_info["process"].kill() if terminate is not forceful enough
+            await proc_info["process"].wait()
+            pocketbase_client.set_chat_status(chat_id, 'aborted')
+            self._subprocesses.pop(chat_id, None)
+            return {"detail": f"Assistant for chat {chat_id} terminated."}
         except Exception as e:
             return {"error": str(e)}
 

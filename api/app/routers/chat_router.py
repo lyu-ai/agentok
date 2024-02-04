@@ -29,3 +29,8 @@ async def start_chat(message: Message, chat_id: str, service: ChatService = Depe
              )
 async def send_human_input(message: Message, chat_id: str, service: ChatService = Depends(get_chat_service)):
     return await service.human_input(message.model_dump(), chat_id)
+
+@router.post('/{chat_id}/abort', summary="Abort a running chat")
+async def abort_chat(chat_id: str, service: ChatService = Depends(get_chat_service)):
+    print('abort_chat', chat_id)
+    return await service.abort_chat(chat_id)

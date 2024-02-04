@@ -22,7 +22,7 @@ const DownloadButton = ({ data, label, filename }: any) => {
 
   return (
     <button
-      className="btn btn-sm btn-square btn-ghost"
+      className="btn btn-sm btn-circle btn-ghost"
       onClick={onExport}
       data-tooltip-id="default-tooltip"
       data-tooltip-content={label}

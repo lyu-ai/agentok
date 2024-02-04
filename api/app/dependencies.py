@@ -18,7 +18,6 @@ async def get_current_user(
     api_key: str = Security(api_key_header),
     token: str = Depends(oauth2_scheme),
 ) -> User:
-    print('get_current_user: api_key & token', api_key, token)
     if token:
         # Here you would validate the bearer token
         user = await pocketbase_client.authenticate_with_bearer(token)
@@ -46,7 +45,6 @@ def get_chat_manager() -> ChatManager:
     return chat_manager
 
 def get_chat_service(user: User = Depends(get_current_user), pocketbase_client: PocketBaseClient = Depends(get_pocketbase_client)) -> ChatService:
-    print('get_chat_service', user)
     return ChatService(user=user, pocketbase_client=pocketbase_client)
 
 def get_admin_service(user: User = Depends(get_current_user)) -> AdminService:
