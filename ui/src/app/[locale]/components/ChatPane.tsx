@@ -95,7 +95,7 @@ const StatusTag = ({ status }: { status: string }) => {
       )}
     >
       <StatusIcon className="w-4 h-4" />
-      {label}
+      <span className="nowrap truncate">{label}</span>
     </span>
   );
 };
@@ -116,9 +116,7 @@ const ChatPane = ({
   const [status, setStatus] = useState('ready');
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [thinking, setThinking] = useState(false);
   const [help, setHelp] = useState('');
-  const [waitForHumanInput, setWaitForHumanInput] = useState(false);
   const [cleaning, setCleaning] = useState(false);
   const isFirstRender = useRef(true);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -126,7 +124,8 @@ const ChatPane = ({
   const { pinChatPane, chatPanePinned } = useFlowStore();
 
   const fetchMessages = useCallback(async () => {
-    return fetch(`/api/chats/${chatId}/messages`, {
+    setLoading(true);
+    await fetch(`/api/chats/${chatId}/messages`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -135,7 +134,11 @@ const ChatPane = ({
       .then(resp => resp.json())
       .then(json => {
         setMessages(json ? json : []);
-      });
+      })
+      .catch(err => {
+        console.error('Failed to fetch messages:', err);
+      })
+      .finally(() => setLoading(false));
   }, [setMessages, chatId]);
 
   const extractHelp = useCallback(() => {
@@ -148,7 +151,20 @@ const ChatPane = ({
   }, [chatSource]);
 
   useEffect(() => {
-    fetchMessages().finally(() => setLoading(false));
+    if (!chatId) return;
+    fetchMessages();
+
+    fetch(`/api/chats/${chatId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    })
+      .then(resp => resp.json())
+      .then((json: any) => {
+        setStatus(json.status);
+      });
 
     extractHelp();
 
@@ -156,7 +172,8 @@ const ChatPane = ({
     let unsubChatFunc: UnsubscribeFunc | undefined;
     pb.collection('messages')
       .subscribe('*', payload => {
-        // console.log('changes_event:', payload);
+        if (payload.record.chat !== chatId) return;
+        console.log('changes_event(messages):', payload);
         if (payload.record.type !== 'user') {
           // The user message was added when sending, no need to add it again.
           setMessages(msgs =>
@@ -164,20 +181,6 @@ const ChatPane = ({
               ? msgs
               : [...msgs, payload.record as any]
           ); // Avoid duplicate messages
-        }
-        const content = payload.record.content;
-        if (content.startsWith(StatusMessage.running)) {
-          // console.log('Begin thinking');
-          setThinking(true);
-        } else if (content.startsWith(StatusMessage.completed)) {
-          setThinking(false);
-          setWaitForHumanInput(false);
-          // console.log('End thinking');
-        } else if (content.startsWith(StatusMessage.waitForHumanInput)) {
-          setWaitForHumanInput(true);
-        } else if (content.startsWith(StatusMessage.receivedHumanInput)) {
-          // BUG: This does not happen as expected
-          setWaitForHumanInput(false);
         }
       })
       .then(unsubFunc => {
@@ -187,6 +190,7 @@ const ChatPane = ({
     pb.collection('chats')
       .subscribe('*', payload => {
         if (payload.record.id !== chatId) return;
+        console.log('changes_event(chats):', payload);
         payload.record && setStatus(payload.record.status);
       })
       .then(unsubFunc => {
@@ -239,9 +243,10 @@ const ChatPane = ({
       content: message ?? '\n', // If it's empty message, let's simulate a Enter key-press
     };
     setMessages(msgs => [...msgs, newMessage]);
-    setThinking(true); // Activate thinking immediately
     const res = await fetch(
-      `/api/chats/${chatId}/${waitForHumanInput ? 'input' : 'messages'}`,
+      `/api/chats/${chatId}/${
+        status === 'wait_for_human_input' ? 'input' : 'messages'
+      }`,
       {
         method: 'POST',
         body: JSON.stringify(newMessage),
@@ -269,10 +274,6 @@ const ChatPane = ({
       },
       credentials: 'include',
     });
-    if (res.ok) {
-      setWaitForHumanInput(false);
-      setThinking(false);
-    }
   };
 
   // If the chat is not loaded yet, show a button to start the chat.
@@ -321,7 +322,7 @@ const ChatPane = ({
   }
 
   let messagesToDisplay = [...messages];
-  if (!waitForHumanInput && thinking) {
+  if (status === 'running') {
     messagesToDisplay.push({
       id: genId(),
       type: 'assistant',
@@ -419,8 +420,9 @@ const ChatPane = ({
           className={clsx(
             'flex items-center p-1 w-full bg-base-100/70 border rounded-lg shadow-lg',
             {
-              'border-secondary bg-secondary/40': waitForHumanInput,
-              'border-primary ': !waitForHumanInput,
+              'border-secondary bg-secondary/40':
+                status === 'wait_for_human_input',
+              'border-primary ': status !== 'wait_for_human_input',
             }
           )}
           onSend={onSend}

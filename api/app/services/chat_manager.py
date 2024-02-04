@@ -77,7 +77,7 @@ class ChatManager:
         async for line in process.stdout:
             if line:  # Truthy if the line is not empty
                 response_message = line.decode().rstrip()  # Remove trailing newline/whitespace
-                print('🤖', response_message)
+                print('📺', response_message)
                 if any(status in response_message for status in ('__STATUS_RECEIVED_HUMAN_INPUT__', '__STATUS_WAIT_FOR_HUMAN_INPUT__')):
                     on_message({
                         'type': 'assistant',
@@ -148,12 +148,8 @@ class ChatManager:
             return {"error": f"No assistant found with that chat ID. {chat_id}"}
 
         try:
-            # Terminate the process
             proc_info["process"].terminate()
-            # Optionally, you can also use proc_info["process"].kill() if terminate is not forceful enough
             await proc_info["process"].wait()
-            pocketbase_client.set_chat_status(chat_id, 'aborted')
-            self._subprocesses.pop(chat_id, None)
             return {"detail": f"Assistant for chat {chat_id} terminated."}
         except Exception as e:
             return {"error": str(e)}
