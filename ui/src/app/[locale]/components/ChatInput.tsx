@@ -2,12 +2,7 @@ import { useState } from 'react';
 import clsx from 'clsx';
 import ImagePanel from './ImagePanel';
 import { useTranslations } from 'next-intl';
-import {
-  RiImageAddLine,
-  RiSendPlane2Line,
-  RiStopFill,
-  RiStopLine,
-} from 'react-icons/ri';
+import { RiImageAddLine, RiSendPlane2Line, RiStopFill } from 'react-icons/ri';
 
 const ChatInput = ({
   onSend: _onSend,
@@ -82,7 +77,7 @@ const ChatInput = ({
         />
         {status === 'running' || status === 'wait_for_human_input' ? (
           <button
-            className="btn btn-sm bg-red-400 hover:bg-red-500 border border-red-300 hover:border-red-400"
+            className="btn btn-sm bg-red-800 hover:bg-red-700 border border-red-700 hover:border-red-600"
             onClick={onAbort}
             data-tooltip-id="chat-tooltip"
             data-tooltip-content={t('abort')}
