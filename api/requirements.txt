@@ -7,6 +7,7 @@ click==8.1.7
 decorator==5.1.1
 diskcache==5.6.3
 distro==1.9.0
+docker==7.0.0
 executing==2.0.1
 fastapi==0.109.2
 FLAML==2.1.1
@@ -21,13 +22,14 @@ MarkupSafe==2.1.3
 matplotlib-inline==0.1.6
 numpy==1.26.3
 openai==1.6.1
+packaging==23.2
 parso==0.8.3
 pexpect==4.9.0
 pillow==10.2.0
 prompt-toolkit==3.0.43
 ptyprocess==0.7.0
 pure-eval==0.2.2
-pyautogen==0.2.9
+pyautogen==0.2.14
 pydantic==2.5.3
 pydantic_core==2.14.6
 Pygments==2.17.2
@@ -38,7 +40,7 @@ requests==2.31.0
 six==1.16.0
 sniffio==1.3.0
 stack-data==0.6.3
-starlette==0.36.2
+starlette==0.36.3
 termcolor==2.4.0
 tiktoken==0.5.2
 tqdm==4.66.1
