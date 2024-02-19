@@ -8,7 +8,7 @@ decorator==5.1.1
 diskcache==5.6.3
 distro==1.9.0
 executing==2.0.1
-fastapi==0.109.1
+fastapi==0.109.2
 FLAML==2.1.1
 h11==0.14.0
 httpcore==1.0.2
