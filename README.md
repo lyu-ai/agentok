@@ -17,6 +17,8 @@ FlowGen is a tool built for [AutoGen](https://microsoft.github.io/autogen/), a g
 
 We regard AutoGen as one of the best frontier technology for next-generation Multi-Agent Applications. FlowGen elevates this concept, providing intuitive visual tools that streamline the construction and oversight of complex agent-based workflows, thereby simplifying the entire process for creators and developers.
 
+Contributions (Issues, Pull Requests, even Typo-corrections) to this project are welcome! All contributors will be added to the Contribution Wall.
+
 ### Autoflow
 
 You can create an Autoflow from scratch, or fork from a template. The Autoflow is visualized as a graph, and you can drag and drop nodes to build agents in flow style.
