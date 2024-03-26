@@ -19,7 +19,7 @@
     "@uiw/react-codemirror": "^4.21.21",
     "clsx": "^2.1.0",
     "daisyui": "^4.6.0",
-    "katex": "^0.16.9",
+    "katex": "^0.16.10",
     "lodash-es": "^4.17.21",
     "lowlight": "^3.1.0",
     "next": "latest",
