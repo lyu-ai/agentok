@@ -25,7 +25,7 @@ openai==1.6.1
 packaging==23.2
 parso==0.8.3
 pexpect==4.9.0
-pillow==10.2.0
+pillow==10.3.0
 prompt-toolkit==3.0.43
 ptyprocess==0.7.0
 pure-eval==0.2.2
