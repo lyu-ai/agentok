@@ -6,7 +6,7 @@ import RemarkBreaks from 'remark-breaks';
 import RemarkGfm from 'remark-gfm';
 import RemarkMath from 'remark-math';
 import RehypeKatex from 'rehype-katex';
-import 'katex/dist/katex.min.css'; // import the KaTeX CSS
+import 'katex/dist/katex.min.css'; // Import the KaTeX CSS
 import './markdown.css';
 import CopyButton from '../CopyButton';
 import { common, createLowlight } from 'lowlight';
@@ -87,10 +87,10 @@ const Markdown = ({
 
   const markdownWithImages: string = preprocessImageTags(children as string);
 
-  const processedMarkdown = markdownWithImages.replace(
-    /\\\((.*?)\\\)/g,
-    (match, p1) => `$${p1}$`
-  );
+  // Ensure math delimiters are correctly formatted in the markdown
+  const processedMarkdown = markdownWithImages
+    .replace(/\\\((.*?)\\\)/g, (match, p1) => `$${p1}$`)
+    .replace(/\\\[(.*?)\\\]/gs, (match, p1) => `$$${p1}$$`);
 
   return (
     <ReactMarkdown

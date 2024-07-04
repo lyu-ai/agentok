@@ -91,7 +91,7 @@ const UserPanel = ({ user }: { user: any }) => {
         rel="noreferrer"
       >
         <img
-          src="https://dcbadge.vercel.app/api/server/xBQxwRSWfm?style=plastic"
+          src="https://dcbadge.vercel.app/api/server/xBQxwRSWfm"
           alt="discord"
         />
       </a>

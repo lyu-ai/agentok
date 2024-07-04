@@ -6,6 +6,14 @@ Run the service:
 uvicorn app.main:app --reload --port 5004
 ```
 
+If you need to run the service with network proxy, you can use the following command:
+
+```bash
+proxychains4 uvicorn app.main:app --reload --port 5004
+```
+
+You need to configure proxychains4 to make it work, which is out of the scope of this document.
+
 For convenience (assumed you have created a virtual environment named `venv`):
 
 ```bash

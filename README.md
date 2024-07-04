@@ -153,6 +153,8 @@ If you're interested in contributing to the development of this project or wish 
 
 `REPLICATE_API_TOKEN` is needed for LLaVa agent. If you need to use this agent, make sure to include this token in environment variables, such as the Environment Variables on Railway.app.
 
+**IMPORTANT**: For security reasons, the latest version of autogen requires Docker for code execution. So you need to install Docker on your local machine beforehand, or add `AUTOGEN_USE_DOCKER=False` to file `/api/.env`.
+
 3. **PocketBase:**
 
    - Switch to the PocketBase directory `cd pocketbase`.
