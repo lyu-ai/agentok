@@ -12,7 +12,6 @@ import { HiSparkles } from 'react-icons/hi2';
 const providers = [
   { id: 'github', name: 'GitHub', icon: FaGithub },
   { id: 'google', name: 'Google', icon: FcGoogle },
-  { id: 'twitter', name: 'X', icon: FaXTwitter },
 ];
 
 const LoginToast = () => {

@@ -112,7 +112,7 @@ const config: Config = {
     },
     footer: {
       style: 'light',
-      copyright: `© ${new Date().getFullYear()} Agentok Studio Team. Built with <a target="_blank" href="https://docusaurus.io">Docusaurus</a>.`,
+      copyright: `© ${new Date().getFullYear()} Agentok Team. Built with <a target="_blank" href="https://docusaurus.io">Docusaurus</a>.`,
     },
     prism: {
       theme: prismThemes.github,
