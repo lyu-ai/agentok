@@ -3,12 +3,12 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'FlowGen',
+  title: 'Agentok Studio',
   tagline: 'AutoGen Visualized - Visual Tools for Multi-Agent Development.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://docs.flowgen.app',
+  url: 'https://agentok.ai',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -16,8 +16,8 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'tiwater', // Usually your GitHub org/user name.
-  projectName: 'flowgen', // Usually your repo name.
+  organizationName: 'hughlv', // Usually your GitHub org/user name.
+  projectName: 'agentok', // Usually your repo name.
   deploymentBranch: 'gh-pages',
 
   onBrokenLinks: 'throw',
@@ -43,7 +43,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/tiwater/flowgen/edit/main/website',
+            'https://github.com/hughlv/agentok/edit/main/website',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -56,9 +56,9 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'FlowGen',
+      title: 'Agentok Studio',
       logo: {
-        alt: 'FlowGen Logo',
+        alt: 'Agentok Studio Logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -83,7 +83,7 @@ const config: Config = {
           position: 'left',
         },
         {
-          href: 'https://platform.flowgen.app/',
+          href: 'https://studio.agentok.ai/',
           position: 'right',
           html: `
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="50 50 300 300">
@@ -102,12 +102,12 @@ const config: Config = {
           `,
         },
         {
-          href: 'https://github.com/tiwater/flowgen/releases',
+          href: 'https://github.com/hughlv/agentok/releases',
           label: 'Changelog',
           position: 'right',
         },
         {
-          href: 'https://github.com/tiwater/flowgen',
+          href: 'https://github.com/hughlv/agentok',
           'aria-label': 'GitHub repository',
           className: 'header-github-link',
           position: 'right',
@@ -116,7 +116,7 @@ const config: Config = {
     },
     footer: {
       style: 'light',
-      copyright: `© ${new Date().getFullYear()} FlowGen Team. Built with <a target="_blank" href="https://docusaurus.io">Docusaurus</a>.`,
+      copyright: `© ${new Date().getFullYear()} Agentok Studio Team. Built with <a target="_blank" href="https://docusaurus.io">Docusaurus</a>.`,
     },
     prism: {
       theme: prismThemes.github,

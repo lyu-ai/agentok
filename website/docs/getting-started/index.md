@@ -4,17 +4,17 @@ position: 1
 
 # Getting Started
 
-## What is FlowGen
+## What is Agentok Studio
 
-FlowGen is a tool built for [AutoGen](https://microsoft.github.io/autogen/), a fantastic agent framework from Microsoft Research.
+Agentok Studio is a tool built for [AutoGen](https://microsoft.github.io/autogen/), a fantastic agent framework from Microsoft Research.
 
-AutoGen streamlines the process of creating multi-agent applications with its clear and user-friendly approach. FlowGen takes this accessibility a step further by offering visual tools that simplify the building and management of agent workflows.
+AutoGen streamlines the process of creating multi-agent applications with its clear and user-friendly approach. Agentok Studio takes this accessibility a step further by offering visual tools that simplify the building and management of agent workflows.
 
 ## Key Concepts
 
 ### Agent
 
-The **Agent** is the core concept in AutoGen and FlowGen. For applications, this usually means a **ConversableAgent**, which includes two types: **AssistantAgent** and **UserProxyAgent**.
+The **Agent** is the core concept in AutoGen and Agentok Studio. For applications, this usually means a **ConversableAgent**, which includes two types: **AssistantAgent** and **UserProxyAgent**.
 
 - **Assistant Agent**
 
@@ -24,31 +24,31 @@ The **Agent** is the core concept in AutoGen and FlowGen. For applications, this
 
   The **UserProxyAgent** enables interaction with the **AssistantAgent**. It can take the form of a chatbot, a code executor, or even a human—it's quite the versatile agent.
 
-### Autoflow
+### Workflow
 
-A **Autoflow** consists of a network of **Agents**. It's the foundation of any multi-agent application.
+A **Workflow** consists of a network of **Agents**. It's the foundation of any multi-agent application.
 
-A standard Autoflow usually includes one **UserProxyAgent** and one or several **AssistantAgents**. The **UserProxyAgent** is your direct line of interaction, while the **AssistantAgents** work behind the scenes, collaborating to build a robust multi-agent application.
+A standard Workflow usually includes one **UserProxyAgent** and one or several **AssistantAgents**. The **UserProxyAgent** is your direct line of interaction, while the **AssistantAgents** work behind the scenes, collaborating to build a robust multi-agent application.
 
 ### Chat
 
-Each Chat represents a live session that has been spun up from a Autoflow or a AutoflowTemplate.
+Each Chat represents a live session that has been spun up from a Workflow or a AutoflowTemplate.
 
-### Autoflow Template
+### Workflow Template
 
-Ready to launch a Autoflow? Publish it as a **AutoflowTemplate** in the [FlowGen Template](https://platform.flowgen.app/templates/)! Users can then deploy these templates to conjure up new Autoflows or strike up chats directly on the template itself.
+Ready to launch a Workflow? Publish it as a **AutoflowTemplate** in the [Agentok Studio Template](https://studio.agentok.ai/templates/)! Users can then deploy these templates to conjure up new Workflows or strike up chats directly on the template itself.
 
 ## "Hello World"
 
 Let's jump straight in and create a simple "Hello World" flow.
 
-### Initialize a New Autoflow
+### Initialize a New Workflow
 
-Head over to [FlowGen Login](https://platform.flowgen.app/auth/login) and tap **Login as Guest** for a test run without the need to sign up.
+Head over to [Agentok Studio Login](https://studio.agentok.ai/auth/login) and tap **Login as Guest** for a test run without the need to sign up.
 
 ![Login](./img/login.png)
 
-It's always a good practice to login with your own social ID and create your own Autoflow to play with.
+It's always a good practice to login with your own social ID and create your own Workflow to play with.
 
 :::warning
 
@@ -56,9 +56,9 @@ Guest mode means your data is an open book to other guests. Sign in with your Gi
 
 :::
 
-Once you're in, go to the [homepage](https://platform.flowgen.app) and hit the **Build from Scratch** button to weave a new Autoflow.
+Once you're in, go to the [homepage](https://studio.agentok.ai) and hit the **Build from Scratch** button to weave a new Workflow.
 
-### Build Your First Autoflow
+### Build Your First Workflow
 
 Get started by tidying up the canvas—scrap any sample nodes that are hanging about. Now, let's get crafting:
 
@@ -76,7 +76,7 @@ Some key points to note:
 
 - Set **Human Input Mode** to **ALWAYS**, so human (you) can always provide feedback.
 - Set **Max Consecutive Auto-Replies** to **1**, so that if AsssitantAgent provide some code to execute, you can simply press Enter and UserProxyAgent will help to execute the code and send back the result to AssitantAgent. This is exactly what means by **Multi-Agent Collaboration**.
-- A few **Sample Messages** are provided in Config node. This is a convenient feature for your target users to get started with your Autoflow.
+- A few **Sample Messages** are provided in Config node. This is a convenient feature for your target users to get started with your Workflow.
 
 ### Start Chat
 
@@ -102,15 +102,15 @@ In most cases, the generated code has few dependencies other than AutoGen. You c
 
 ### Publish as Template
 
-If you're happy with your flow, publish it as a template for others to use. On [Autoflow](https://platform.flowgen.app/flows) page you can find your Autoflow to publish:
+If you're happy with your flow, publish it as a template for others to use. On [Workflow](https://studio.agentok.ai/flows) page you can find your Workflow to publish:
 
 ![flows](./img/flow.png)
 
-hit the **Publish as Template** button at the bottom right of the Autoflow card:
+hit the **Publish as Template** button at the bottom right of the Workflow card:
 
 ![publish](./img/publish-as-template.png)
 
-And then you can find your template on [Template](https://platform.flowgen.app/templates) page:
+And then you can find your template on [Template](https://studio.agentok.ai/templates) page:
 
 ![template](./img/template.png)
 
@@ -118,7 +118,7 @@ By clicking on the template card, you can view the details of the template:
 
 ![template](./img/template.png)
 
-The URL of template page is static and public, so you can share it with others to start a chat directly. You can also click the **Fork** button to build your own Autoflow based on this template.
+The URL of template page is static and public, so you can share it with others to start a chat directly. You can also click the **Fork** button to build your own Workflow based on this template.
 
 ## Next Steps
 
@@ -128,10 +128,10 @@ Looking ahead, we plan to enhance the functionality, introducing additional feat
 
 ## More Readings
 
-Got a taste for FlowGen? Feast on these resources for seconds:
+Got a taste for Agentok Studio? Feast on these resources for seconds:
 
-- [FlowGen Template](https://platform.flowgen.app/templates/): Feast your eyes on a buffet of ready-to-serve templates.
-- [FlowGen Documentation](https://docs.flowgen.app/): The ultimate guide to becoming a FlowGen whiz.
-- [FlowGen GitHub](https://github.com/tiwater/flowgen): Peek under the hood at the source code.
+- [Agentok Studio Template](https://studio.agentok.ai/templates/): Feast your eyes on a buffet of ready-to-serve templates.
+- [Agentok Studio Documentation](https://docs.agentok.ai/): The ultimate guide to becoming a Agentok Studio whiz.
+- [Agentok Studio GitHub](https://github.com/hughlv/agentok): Peek under the hood at the source code.
 - [AutoGen Documentation](https://microsoft.github.io/autogen/): Master the art of AutoGen with this comprehensive tutorial.
 - [AutoGen Notebook](https://github.com/microsoft/autogen/tree/main/notebook): Dive into Jupyter notebooks showcasing AutoGen's prowess.

@@ -9,7 +9,7 @@ async def custom_redoc():
     <!DOCTYPE html>
     <html>
       <head>
-        <title>FlowGen API Docs</title>
+        <title>Agentok Studio API Docs</title>
         <link rel="icon" type="image/png" href="/static/favicon.ico"/>
         <style>
           body {

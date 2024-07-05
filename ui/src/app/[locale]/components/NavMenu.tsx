@@ -16,7 +16,7 @@ import { usePathname } from 'next/navigation';
 export const NAV_MENU_ITEMS = [
   {
     id: 'flows',
-    label: 'Autoflows',
+    label: 'Workflows',
     icon: RiRobot2Line,
     activeIcon: RiRobot2Fill,
     href: '/flows',

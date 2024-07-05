@@ -128,7 +128,7 @@
       "abort": "中止",
       "enter-message": "输入消息开始聊天..."
     },
-    "Autoflow": {
+    "Workflow": {
       "back-to-main": "回到工作流首页",
       "reset-default-tooltip": "重置为默认值",
       "save-flow": "上传到云端",
@@ -147,7 +147,7 @@
       "publish-flow-title": "发布工作流",
       "publish-flow-name": "名称",
       "publish-flow-description": "描述",
-      "publish-flow-tip": "将此工作流发布到 FlowGen 社区。您随时可以取消发布。"
+      "publish-flow-tip": "将此工作流发布到 Agentok Studio 社区。您随时可以取消发布。"
     },
     "NodeButton": {
       "add-node": "添加节点",
@@ -236,13 +236,13 @@
       "download": "下载 Python 代码到本地"
     },
     "Chat": {
-      "chat-tagline": "开始和 FlowGen 交谈",
+      "chat-tagline": "开始和 Agentok Studio 交谈",
       "start-chat": "开始聊天",
       "filter": "输入过滤词",
       "chat-sessions": "近期会话",
       "select-flow": "选择一个工作流开始对话"
     },
-    "Autoflow": {
+    "Workflow": {
       "flow-tagline": "以可视化方式构建 AutoGen 应用",
       "new-flow": "开始构建",
       "creating-flow": "创建工作流...",

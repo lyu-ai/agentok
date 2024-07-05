@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactFlowProvider } from 'reactflow';
-import Autoflow from '../../components/Flow';
+import Workflow from '../../components/Flow';
 import { useFlow, useFlows } from '@/hooks';
 import { useEffect } from 'react';
 
@@ -11,7 +11,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     if (flow?.name && typeof window !== 'undefined') {
-      document.title = `${flow.name} | FlowGen`;
+      document.title = `${flow.name} | Agentok Studio`;
     }
   }, [flow?.name]);
 
@@ -21,7 +21,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   return (
     <ReactFlowProvider key="reactflow-flow">
-      <Autoflow flowId={params.id} />
+      <Workflow flowId={params.id} />
     </ReactFlowProvider>
   );
 };

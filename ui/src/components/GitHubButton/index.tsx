@@ -2,7 +2,7 @@
 import { FaGithub } from 'react-icons/fa6';
 import { useCallback, useEffect, useState } from 'react';
 
-const GitHubButton = ({ user = 'tiwater', repo = 'flowgen' }: any) => {
+const GitHubButton = ({ user = 'tiwater', repo = 'agentok' }: any) => {
   const [stars, setStars] = useState(null);
   const [fetching, setFetching] = useState(false);
 
@@ -33,7 +33,7 @@ const GitHubButton = ({ user = 'tiwater', repo = 'flowgen' }: any) => {
     <a
       className="flex items-center btn btn-xs btn-ghost gap-2 font-normal rounded-md "
       target="_blank"
-      href="https://github.com/tiwater/flowgen"
+      href="https://github.com/hughlv/agentok"
     >
       <FaGithub className="w-4 h-4" />
       <span className="pl-2 border-l border-base-content/60">

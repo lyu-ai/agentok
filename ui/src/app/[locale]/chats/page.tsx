@@ -47,7 +47,7 @@ const ChatPage = () => {
 
   return (
     <div className="flex flex-col items-center w-full h-full p-2">
-      <title>Chat | FlowGen</title>
+      <title>Chat | Agentok Studio</title>
       <div className="flex flex-col items-center justify-center gap-2 text-sm p-2">
         <span className="text-5xl font-bold p-4">{t('chat-tagline')}</span>
         <span className="text-lg p-4">{t('select-chat')}</span>

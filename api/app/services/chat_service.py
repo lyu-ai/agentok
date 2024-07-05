@@ -2,7 +2,7 @@ from datetime import datetime
 import os
 import tempfile
 
-from ..models import Autoflow, User
+from ..models import Workflow, User
 
 from .dev_service import flow2py
 from .chat_manager import chat_manager
@@ -36,13 +36,13 @@ class ChatService:
         datetime_obj = datetime.strptime(source['updated'], '%Y-%m-%d %H:%M:%S.%fZ')
 
         source_file = f"{source['id']}-{datetime_obj.timestamp()}.py"
-        source_path = os.path.join(tempfile.gettempdir(), 'flowgen/generated/', source_file)
+        source_path = os.path.join(tempfile.gettempdir(), 'agentok/generated/', source_file)
 
         # Create the directory if it doesn't exist
         os.makedirs(os.path.dirname(source_path), exist_ok=True)
 
         if not os.path.exists(source_path):
-            generated_code = flow2py(Autoflow(**source))
+            generated_code = flow2py(Workflow(**source))
             with open(source_path, 'w', encoding='utf-8') as file:
                 file.write(generated_code)
 

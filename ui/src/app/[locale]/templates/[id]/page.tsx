@@ -19,7 +19,7 @@ const FlowViewer = ({ template, className }: any) => {
       if (code === '002') {
         return;
       }
-      console.warn('Autoflow warning:', code, message);
+      console.warn('Workflow warning:', code, message);
     };
   }
 
@@ -75,7 +75,7 @@ const GalleryDetailPage = ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="relative flex flex-col w-full h-full gap-2 p-4 overflow-y-auto items-center">
-      <title>Template | FlowGen</title>
+      <title>Template | Agentok Studio</title>
       <div className="flex flex-col items-center justify-center gap-2 text-sm p-2">
         <span className="text-5xl font-bold p-4">{template.name}</span>
         <span className="text-lg p-4 font-normal max-w-5xl">

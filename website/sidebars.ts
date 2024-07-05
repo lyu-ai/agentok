@@ -23,12 +23,12 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'category',
-          label: 'Build with FlowGen',
+          label: 'Build with Agentok Studio',
           items: ['guides/build/index'],
         },
         {
           type: 'category',
-          label: 'Using FlowGen',
+          label: 'Using Agentok Studio',
           items: ['guides/using/api/index', 'guides/using/embed/index'],
         },
       ],

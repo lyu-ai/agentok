@@ -85,8 +85,8 @@
       {
         "data": {
           "class": "Config",
-          "flow_description": "Sample Autoflow",
-          "flow_name": "Sample Autoflow 1",
+          "flow_description": "Sample Workflow",
+          "flow_name": "Sample Workflow 1",
           "label": "config",
           "max_tokens": 1024,
           "name": "Config",
@@ -115,7 +115,7 @@
     }
   },
   "id": "eqy8c5bdroyu199",
-  "name": "Sample Autoflow 1",
+  "name": "Sample Workflow 1",
   "owner": "l3xel8d8m26l87s",
   "updated": "2023-12-20 11:13:59.610Z"
 }

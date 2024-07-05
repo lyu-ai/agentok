@@ -1,6 +1,6 @@
 {
-  "name": "flowgen-ui",
-  "description": "FlowGen - AutoGen Visualized",
+  "name": "agentok-ui",
+  "description": "Agentok Studio - AutoGen Visualized",
   "private": true,
   "scripts": {
     "dev": "next dev -p 2855",

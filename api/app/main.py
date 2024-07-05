@@ -4,8 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from .routers import chat_router, dev_router, extension_router, message_router, doc_router, admin_router
 
-app = FastAPI(title="FlowGen API",
-              description="Specifications of FlowGen OpenAPI.",
+app = FastAPI(title="Agentok Studio API",
+              description="Specifications of Agentok Studio OpenAPI.",
               version="1.0.0")
 
 app.add_middleware(
@@ -31,8 +31,8 @@ async def root():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to FlowGen API Services</title>
-    <link rel="icon" href="https://platform.flowgen.app/favicon.ico" />
+    <title>Welcome to Agentok Studio API Services</title>
+    <link rel="icon" href="https://studio.agentok.ai/favicon.ico" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -75,11 +75,11 @@ async def root():
 </head>
 <body>
     <div class="container">
-        <img src="https://platform.flowgen.app/logo-full.png" alt="FlowGen Logo" style="width: 240px" />
-        <h1>Welcome to FlowGen APIs!</h1>
+        <img src="https://studio.agentok.ai/logo-full.png" alt="Agentok Studio Logo" style="width: 240px" />
+        <h1>Welcome to Agentok Studio APIs!</h1>
         <p>Check out our <a href="/api-docs">API Documentations</a>, 
-        <a target="_blank" href="https://github.com/tiwater/flowgen">GitHub Repo</a>, 
-        or <a target="_blank" href="https://platform.flowgen.app">Try FlowGen</a>.</p>
+        <a target="_blank" href="https://github.com/hughlv/agentok">GitHub Repo</a>, 
+        or <a target="_blank" href="https://studio.agentok.ai">Try Agentok Studio</a>.</p>
     </div>
 </body>
 </html>

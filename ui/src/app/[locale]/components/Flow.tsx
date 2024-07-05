@@ -34,7 +34,7 @@ import useFlowStore from '@/store/flows';
 import NodePane from './NodePane';
 import { Chat as ChatType } from '@/store/chats';
 
-const Autoflow = ({ flowId }: any) => {
+const Workflow = ({ flowId }: any) => {
   const { flow, updateFlow, isUpdating, isLoading, isError } = useFlow(flowId);
 
   const [mode, setMode] = useState<'main' | 'flow' | 'json' | 'python'>('flow');
@@ -43,7 +43,7 @@ const Autoflow = ({ flowId }: any) => {
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const flowParent = useRef<HTMLDivElement>(null);
   const { fitView, screenToFlowPosition, toObject } = useReactFlow();
-  const t = useTranslations('component.Autoflow');
+  const t = useTranslations('component.Workflow');
   const router = useRouter();
   const chatPanePinned = useFlowStore(state => state.chatPanePinned);
   const nodePanePinned = useFlowStore(state => state.nodePanePinned);
@@ -58,7 +58,7 @@ const Autoflow = ({ flowId }: any) => {
       if (code === '002') {
         return;
       }
-      console.warn('Autoflow warning:', code, message);
+      console.warn('Workflow warning:', code, message);
     };
   }
 
@@ -332,4 +332,4 @@ const Autoflow = ({ flowId }: any) => {
   );
 };
 
-export default Autoflow;
+export default Workflow;

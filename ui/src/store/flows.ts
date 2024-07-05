@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export interface Autoflow {
+export interface Workflow {
   id: string;
   name?: string;
   description?: string;
@@ -11,18 +11,18 @@ export interface Autoflow {
 }
 
 interface AutoflowState {
-  flows: Autoflow[];
+  flows: Workflow[];
   openFlowIds: string[];
   activeFlowId: string;
   chatPanePinned: boolean;
   nodePanePinned: boolean;
   // User flows
-  setFlows: (flows: Autoflow[]) => void;
+  setFlows: (flows: Workflow[]) => void;
   openFlow: (id: string) => void;
   closeFlow: (id: string) => void;
-  updateFlow: (id: string, flow: Autoflow) => void;
+  updateFlow: (id: string, flow: Workflow) => void;
   deleteFlow: (id: string) => void;
-  getFlowById: (id: string) => Autoflow | undefined;
+  getFlowById: (id: string) => Workflow | undefined;
   pinChatPane: (pin: boolean) => void; // pin/unpin chat pane
   pinNodePane: (pin: boolean) => void;
 }

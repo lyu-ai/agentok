@@ -1,26 +1,26 @@
 ---
 position: 1
 title: Concepts
-description: Key concepts should know before using FlowGen.
+description: Key concepts should know before using Agentok Studio.
 ---
 
 # Concepts
 
-This article introduces the concepts of AutoGen and FlowGen. Part of the content is from the [AutoGen documentation](https://microsoft.github.io/autogen/) just for convenience.
+This article introduces the concepts of AutoGen and Agentok Studio. Part of the content is from the [AutoGen documentation](https://microsoft.github.io/autogen/) just for convenience.
 
 Please read the paper for a big picture: [AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation Framework](https://arxiv.org/pdf/2308.08155.pdf). Qingyun Wu, Gagan Bansal, Jieyu Zhang, Yiran Wu, Shaokun Zhang, Erkang Zhu, Beibin Li, Li Jiang, Xiaoyun Zhang and Chi Wang. ArXiv 2023.
 
-## AutoGen and FlowGen
+## AutoGen and Agentok Studio
 
 AutoGen offers a unified multi-agent conversation framework as a high-level abstraction of using foundation models. It features capable, customizable and conversable agents which integrate LLMs, tools, and humans via automated agent chat. By automating chat among multiple capable agents, one can easily make them collectively perform tasks autonomously or with human feedback, including tasks that require using tools via code.
 
 This framework simplifies the orchestration, automation and optimization of a complex LLM workflow. It maximizes the performance of LLM models and overcome their weaknesses. It enables building next-gen LLM applications based on multi-agent conversations with minimal effort.
 
-FlowGen is a tool built for AutoGen, a great agent framework from Microsoft Research.
+Agentok Studio is a tool built for AutoGen, a great agent framework from Microsoft Research.
 
 ## Type of Agent
 
-This diagram shows the basic concepts of AutoGen, which were inherited in FlowGen.
+This diagram shows the basic concepts of AutoGen, which were inherited in Agentok Studio.
 
 ![Alt text](https://microsoft.github.io/autogen/assets/images/autogen_agents-b80434bcb15d46da0c6cbeed28115f38.png)
 

@@ -143,7 +143,7 @@ export const TemplateBlock = ({
         <img
           src={
             template.thumbnail ??
-            `https://docs.flowgen.app/img/${randomImage}.png`
+            `https://docs.agentok.ai/img/${randomImage}.png`
           }
           alt={template.name}
           className="rounded-t-md h-48 w-full object-cover"

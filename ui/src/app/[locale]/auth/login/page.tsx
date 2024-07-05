@@ -45,7 +45,7 @@ const Login = ({
       await pb
         .collection('users')
         .authWithPassword(
-          asGuest ? 'hi@flowgen.app' : email,
+          asGuest ? 'hi@agentok.ai' : email,
           asGuest ? '12345678' : password
         );
       setError('');
@@ -108,7 +108,7 @@ const Login = ({
   // fetched in a Server Component and passed down as a prop
   return (
     <div className="flex-1 flex flex-col w-full items-center px-8 justify-center gap-2">
-      <title>Sign In | FlowGen</title>
+      <title>Sign In | Agentok Studio</title>
       <div className="flex flex-col gap-3 w-96">
         <div className="flex w-full items-center gap-2">
           {providers.map(({ id, name, icon: Icon }) => (

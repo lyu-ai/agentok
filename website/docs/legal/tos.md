@@ -10,9 +10,9 @@ slug: /tos
 
 ## Introduction
 
-Welcome to FlowGen ("us", "we", or "our"). Our website, accessible at [https://platform.flowgen.app](https://platform.flowgen.app), provides an enhanced suite of visual tools designed to complement AutoGen, the advanced agent framework from Microsoft Research.
+Welcome to Agentok Studio ("us", "we", or "our"). Our website, accessible at [https://studio.agentok.ai](https://studio.agentok.ai), provides an enhanced suite of visual tools designed to complement AutoGen, the advanced agent framework from Microsoft Research.
 
-FlowGen builds on AutoGen's streamlined approach for creating multi-agent applications by offering an intuitive visual interface that simplifies the construction and administration of these complex agent workflows, making the power of AutoGen more accessible than ever.
+Agentok Studio builds on AutoGen's streamlined approach for creating multi-agent applications by offering an intuitive visual interface that simplifies the construction and administration of these complex agent workflows, making the power of AutoGen more accessible than ever.
 
 Your use of our Site and Service is subject to these Terms of Service ("Terms"). By accessing or using the Service, you agree to be bound by these Terms.
 
@@ -26,7 +26,7 @@ Our project is open source under Apache 2.0 with additional terms and conditions
 
 ## User Obligations
 
-By using FlowGen, you agree not to:
+By using Agentok Studio, you agree not to:
 
 - Misuse our services for any illegal or unauthorized purposes
 - Infringe upon the intellectual property rights of others

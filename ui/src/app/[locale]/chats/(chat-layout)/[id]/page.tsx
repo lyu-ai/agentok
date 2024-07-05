@@ -10,7 +10,7 @@ const Page = ({ params: { id } }: any) => {
   useEffect(() => {
     setActiveChat(id);
     if (chat?.name && typeof window !== 'undefined') {
-      document.title = `${chat.name} | FlowGen`;
+      document.title = `${chat.name} | Agentok Studio`;
     }
   }, [id, chat?.name, setActiveChat]);
 

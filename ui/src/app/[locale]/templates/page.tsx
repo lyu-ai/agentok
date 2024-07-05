@@ -8,7 +8,7 @@ const GalleryPage = () => {
   const t = useTranslations('page.Template');
   return (
     <div className="relative flex flex-col w-full h-full gap-2 p-2 overflow-y-auto">
-      <title>Template | FlowGen</title>
+      <title>Template | Agentok Studio</title>
       <div className="flex flex-col items-center justify-center gap-2 text-sm p-2">
         <span className="text-5xl font-bold p-4">
           {t('select-template-title')}

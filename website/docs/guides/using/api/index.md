@@ -1,12 +1,12 @@
 # API
 
-FlowGen provides a set of APIs to manage your chatbots and conversations. By using these APIs, you can integrate FlowGen service into your own applications.
+Agentok Studio provides a set of APIs to manage your chatbots and conversations. By using these APIs, you can integrate Agentok Studio service into your own applications.
 
-Here we introduce how to use FlowGen service via API.
+Here we introduce how to use Agentok Studio service via API.
 
 ## API Suite
 
-Access the suite of FlowGen APIs as follows:
+Access the suite of Agentok Studio APIs as follows:
 
 - **GET /chats**: Retrieve a list of current chat sessions.
 - **GET /chats/\{chat_id\}**: Fetch the status of a specific chat session.
@@ -16,7 +16,7 @@ Access the suite of FlowGen APIs as follows:
 - **GET /chats/\{chat_id\}/messages**: Retrieve the message history from a chat session.
 - **POST /chats/\{chat_id\}/input**: Convey a message to a chat session awaiting human input.
 
-These APIs are available through the `<flowgen-api-domain>/` endpoint. For instance, if utilizing FlowGen's online services, your endpoint would be `https://api.flowgen.app/`.
+These APIs are available through the `<agentok-api-domain>/` endpoint. For instance, if utilizing Agentok Studio's online services, your endpoint would be `https://api.agentok.ai/`.
 
 Refer to the [API Reference](/api-docs) for detailed specifications.
 
@@ -24,13 +24,13 @@ Refer to the [API Reference](/api-docs) for detailed specifications.
 
 The API endpoints outlined in this document are currently in a provisional state and may undergo changes.
 
-We welcome any feedback or issues you encounter via our [**GitHub Issue Tracker**](https://github.com/tiwater/flowgen/issues). Your contributions help us improve..
+We welcome any feedback or issues you encounter via our [**GitHub Issue Tracker**](https://github.com/hughlv/agentok/issues). Your contributions help us improve..
 
 :::
 
 ## Authentication Protocols
 
-FlowGen's APIs support authentication via OAuth2 Bearer Tokens and API Keys. For third-party application integrations, the provision of an API Key in the request header (X-API-KEY) is the recommended authentication method.
+Agentok Studio's APIs support authentication via OAuth2 Bearer Tokens and API Keys. For third-party application integrations, the provision of an API Key in the request header (X-API-KEY) is the recommended authentication method.
 
 Below are examples of how to apply the API Key within various platforms:
 
@@ -42,7 +42,7 @@ import TabItem from '@theme/TabItem';
 
 ```bash
 curl --request GET \
-    --url 'https://api.flowgen.app/chats' \
+    --url 'https://api.agentok.ai/chats' \
     --header 'X-API-KEY: <api-key>'
 ```
 
@@ -74,19 +74,19 @@ get_result = response.json()
   </TabItem>
 </Tabs>
 
-For additional information, please consult the [API Reference](https://api.flowgen.app/api-docs).
+For additional information, please consult the [API Reference](https://api.agentok.ai/api-docs).
 
 ## Managing API Keys
 
-To authenticate API requests, API Keys are mandatory. Create and oversee your API Keys through the [FlowGen Platform](https://platform.flowgen.app/admin/api-keys).
+To authenticate API requests, API Keys are mandatory. Create and oversee your API Keys through the [Agentok Studio Platform](https://studio.agentok.ai/admin/api-keys).
 
-[![API Keys](./img/api-keys.png)](https://platform.flowgen.app/admin/api-keys)
+[![API Keys](./img/api-keys.png)](https://studio.agentok.ai/admin/api-keys)
 
 API Keys can be uniquely generated for distinct operational environments, such as separate keys for development and production. They can be invalidated at any moment through deletion on the management interface.
 
 ## Implementation Example: Crafting a Chatbot
 
-Leverage the diverse capabilities of FlowGen's API suite to create a functional chatbot:
+Leverage the diverse capabilities of Agentok Studio's API suite to create a functional chatbot:
 
 ### Step 1: Chatbot Creation
 
@@ -94,7 +94,7 @@ First, create a chatbot by calling `POST /chats` API.
 
 ```bash
 curl --request POST \
-     --url 'https://api.flowgen.app/chats' \
+     --url 'https://api.agentok.ai/chats' \
      --header 'X-API-KEY: <api-key>'
      --header 'Content-Type: application/json' \
      --data-raw '{ \
@@ -110,11 +110,11 @@ Transmit a message to your chatbot utilizing the `POST /v1/chats/{chat_id}/messa
 
 ```bash
 curl --request POST \
-     --url 'https://api.flowgen.app/chats/{chat_id}/messages' \
+     --url 'https://api.agentok.ai/chats/{chat_id}/messages' \
      --header 'X-API-KEY: <api-key>' \
      --header 'Content-Type: application/json' \
       --data-raw '{
-          "message": "Hello, FlowGen!"
+          "message": "Hello, Agentok Studio!"
       }'
 ```
 
@@ -124,7 +124,7 @@ Given the potential delays introduced by multi-agent collaboration, verify your 
 
 ```bash
 curl --request GET \
-     --url 'https://api.flowgen.app/chats/{chat_id}' \
+     --url 'https://api.agentok.ai/chats/{chat_id}' \
      --header 'X-API-KEY: <api-key>'
 ```
 
@@ -142,7 +142,7 @@ Extract the communication archive via GET /chats/\{chat_id\}/messages:
 
 ```bash
 curl --request GET \
-     --url 'https://api.flowgen.app/chats/{chat_id}/messages' \
+     --url 'https://api.agentok.ai/chats/{chat_id}/messages' \
      --header 'X-API-KEY: <api-key>'
      --header 'Content-Type: application/json' \
 ```
@@ -161,11 +161,11 @@ If the chatbot is waiting for human input, you can send a message to the chatbot
 
 ```bash
 curl --request POST \
-     --url 'https://api.flowgen.app/chats/{chat_id}/input' \
+     --url 'https://api.agentok.ai/chats/{chat_id}/input' \
      --header 'X-API-KEY: <api-key>' \
       --header 'Content-Type: application/json' \
         --data-raw '{
-            "message": "Hello, FlowGen!"
+            "message": "Hello, Agentok Studio!"
         }'
 ```
 
@@ -175,10 +175,10 @@ Conclude and remove the chat session through a DELETE on the chats/\{chat_id\} e
 
 ```bash
 curl --request DELETE \
-     --url 'https://api.flowgen.app/chats/{chat_id}' \
+     --url 'https://api.agentok.ai/chats/{chat_id}' \
      --header 'X-API-KEY: <api-key>'
 ```
 
 ## Final Thoughts
 
-This primer has elucidated the methodology to utilize the FlowGen service via API. Harness these interfaces to embed FlowGen functionalities within bespoke applications or to enhance your existing digital services.
+This primer has elucidated the methodology to utilize the Agentok Studio service via API. Harness these interfaces to embed Agentok Studio functionalities within bespoke applications or to enhance your existing digital services.

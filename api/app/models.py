@@ -18,7 +18,7 @@ class FlowData(BaseModel):
   nodes: List[Node]
   edges: List[Edge]
 
-class Autoflow(BaseModel):
+class Workflow(BaseModel):
   id: str
   flow: FlowData
   owner: Optional[str] = None

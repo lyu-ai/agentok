@@ -1,18 +1,18 @@
 # Human in the Loop
 
-This tutorial provides step-by-step guidance on constructing a workflow that incorporates a human-in-the-loop approach. Utilizing the FlowGen template, [Human in the Loop](https://platform.flowgen.app/templates/4pbokrvi7zguv48), you can engage with it directly or fork it to tweak the flow to your specifications.
+This tutorial provides step-by-step guidance on constructing a workflow that incorporates a human-in-the-loop approach. Utilizing the Agentok Studio template, [Human in the Loop](https://studio.agentok.ai/templates/4pbokrvi7zguv48), you can engage with it directly or fork it to tweak the flow to your specifications.
 
 The tutorial leverages the official notebooks [Simple Chat](https://github.com/microsoft/autogen/blob/main/samples/simple_chat.py) and [Human Feedback](https://github.com/microsoft/autogen/blob/main/notebook/agentchat_human_feedback.ipynb) as its foundation.
 
 ## Prerequisites
 
-You’ll need access to FlowGen, which is accessible either [online](https://platform.flowgen.app) for immediate use or [locally on your machine](https://docs.flowgen.app/getting-started) for a more personalized setup. This guide will focus on utilizing the online version of FlowGen.
+You’ll need access to Agentok Studio, which is accessible either [online](https://studio.agentok.ai) for immediate use or [locally on your machine](https://docs.agentok.ai/getting-started) for a more personalized setup. This guide will focus on utilizing the online version of Agentok Studio.
 
 ## Steps to Create a New Workflow
 
-### Initialize a New Autoflow
+### Initialize a New Workflow
 
-Begin by signing into FlowGen. Once logged in, opt for the 'Build from Scratch' option to establish a new Autoflow.
+Begin by signing into Agentok Studio. Once logged in, opt for the 'Build from Scratch' option to establish a new Workflow.
 
 ### Orchestrating Your Workflow
 

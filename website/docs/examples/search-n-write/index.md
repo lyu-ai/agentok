@@ -1,24 +1,24 @@
 # Search and Write
 
-In this tutorial, we'll dive into the use of FlowGen's GroupChat and Functions features to develop an agent capable of searching for online news and crafting articles for you.
+In this tutorial, we'll dive into the use of Agentok Studio's GroupChat and Functions features to develop an agent capable of searching for online news and crafting articles for you.
 
-You can access this tutorial as a FlowGen template named [Search and Write](https://platform.flowgen.app/templates/udaciyj0xp325ye). Feel free to interact with it directly, or fork the flow to apply your custom modifications.
+You can access this tutorial as a Agentok Studio template named [Search and Write](https://studio.agentok.ai/templates/udaciyj0xp325ye). Feel free to interact with it directly, or fork the flow to apply your custom modifications.
 
 ## Prerequisites
 
-Before we begin, ensure you have access to FlowGen. You can explore FlowGen [online](https://platform.flowgen.app) or opt to [install it on your local system](https://github.com/tiwater/flowgen/).
+Before we begin, ensure you have access to Agentok Studio. You can explore Agentok Studio [online](https://studio.agentok.ai) or opt to [install it on your local system](https://github.com/hughlv/agentok/).
 
-This tutorial will utilize the online platform of FlowGen.
+This tutorial will utilize the online platform of Agentok Studio.
 
 ## Steps to Build Your Agent
 
-### Initiating a New Autoflow
+### Initiating a New Workflow
 
-After logging into FlowGen, you can kickstart your new flow by clicking on 'Build from Scratch'.
+After logging into Agentok Studio, you can kickstart your new flow by clicking on 'Build from Scratch'.
 
 ![Build from Scratch](./img/build-from-scratch.png)
 
-### Orchestrating the Autoflow
+### Orchestrating the Workflow
 
 Clear the deck by deleting any pre-existing sample nodes. Then, from the left panel, drag and drop the following nodes onto your workspace:
 
@@ -27,7 +27,7 @@ Clear the deck by deleting any pre-existing sample nodes. Then, from the left pa
 - `UserProxy Agent`, referred to as `UserProxy`.
 - `GroupChat`, with the `Involve User` option enabled.
 
-![Autoflow Diagram](./img/flow.png)
+![Workflow Diagram](./img/flow.png)
 
 ### Integrating the Search Function
 
@@ -84,7 +84,7 @@ Rest assured, all configurations are preserved automatically.
 
 ### Initiating the Chat
 
-Everything's set! Hit the `Start Chat` button situated on the canvas's top-right corner to engage with the Autoflow. Prompt the process with an entry like `search the latest news about Elon Musk and generate a detailed article on it.`
+Everything's set! Hit the `Start Chat` button situated on the canvas's top-right corner to engage with the Workflow. Prompt the process with an entry like `search the latest news about Elon Musk and generate a detailed article on it.`
 
 Consequently, the `Searcher` will retrieve a list of relevant links, after which the `Writer` expertly extracts information from these sources to fabricate a comprehensive article.
 

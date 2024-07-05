@@ -19,7 +19,7 @@ const Navbar = () => {
       </div>
       <div className="navbar-end flex items-center my-auto gap-4">
         <a
-          href="https://docs.flowgen.app/"
+          href="https://docs.agentok.ai/"
           target="_blank"
           rel="noreferrer"
           className="link link-hover text-xs"
@@ -27,12 +27,12 @@ const Navbar = () => {
           {t('docs')}
         </a>
         <a
-          href="https://github.com/tiwater/flowgen"
+          href="https://github.com/hughlv/agentok"
           aria-label="github"
           target="_blank"
         >
           <img
-            src="https://img.shields.io/github/stars/tiwater/flowgen?style=social"
+            src="https://img.shields.io/github/stars/hughlv/agentok?style=social"
             alt="github"
           />
         </a>

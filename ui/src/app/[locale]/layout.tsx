@@ -21,7 +21,7 @@ export default async function RootLayout({
   }
   return (
     <html data-theme="dim" suppressHydrationWarning lang={params.locale}>
-      <title>FlowGen</title>
+      <title>Agentok Studio</title>
       <body className={inter.className} suppressHydrationWarning>
         <div className="flex flex-col h-screen w-full items-center text-base-content">
           <NextIntlClientProvider locale={params.locale} messages={messages}>

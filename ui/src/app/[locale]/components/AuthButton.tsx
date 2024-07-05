@@ -63,7 +63,7 @@ const UserPanel = ({ user }: { user: any }) => {
       </span>
       <div className="flex items-center no-wrap my-2 gap-1">
         <a
-          href={'https://github.com/tiwater/flowgen/issues/new'}
+          href={'https://github.com/hughlv/agentok/issues/new'}
           target="_blank"
           className={clsx(
             'w-40 flex items-center justify-center p-4 gap-2 bg-base-content/20  rounded-l-full',
@@ -97,7 +97,7 @@ const UserPanel = ({ user }: { user: any }) => {
       </a>
       <div className="flex items-center justify-center text-xs w-full gap-2 mt-4">
         <Link
-          href="https://docs.flowgen.app/docs/privacy"
+          href="https://docs.agentok.ai/docs/privacy"
           target="_blank"
           className="link link-hover"
         >
@@ -105,7 +105,7 @@ const UserPanel = ({ user }: { user: any }) => {
         </Link>
         <span className="">•</span>
         <Link
-          href="https://docs.flowgen.app/docs/tos"
+          href="https://docs.agentok.ai/docs/tos"
           target="_blank"
           className="link link-hover"
         >

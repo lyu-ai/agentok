@@ -93,7 +93,7 @@ const Json = ({ data, setMode }: any) => {
           data={JSON.stringify(data, null, 2)}
           label={t('download')}
           filename={`${
-            data?.name ?? 'flowgen-data'
+            data?.name ?? 'agentok-data'
           }-${new Date().toLocaleString()}.json`}
         />
       </div>

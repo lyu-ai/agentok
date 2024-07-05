@@ -2,32 +2,32 @@
 
 ![flow-1](./website/static/img/screenshot-flow-1.png)
 
-# FlowGen - AutoGen Visualized
+# Agentok Studio - AutoGen Visualized
 
-[![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/tiwater/flowgen)
-[![Open in GitHub Codespaces](https://img.shields.io/badge/Codespaces-Open-blue?style=flat&logo=github)](https://codespaces.new/tiwater/flowgen)
+[![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/hughlv/agentok)
+[![Open in GitHub Codespaces](https://img.shields.io/badge/Codespaces-Open-blue?style=flat&logo=github)](https://codespaces.new/hughlv/agentok)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/tiwater/flowgen)
-[![GitHub star chart](https://img.shields.io/github/stars/tiwater/flowgen?style=social)](https://star-history.com/#tiwater/flowgen)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/hughlv/agentok)
+[![GitHub star chart](https://img.shields.io/github/stars/hughlv/agentok?style=social)](https://star-history.com/#tiwater/agentok)
 [![](https://dcbadge.vercel.app/api/server/xBQxwRSWfm?style=social)](https://discord.gg/xBQxwRSWfm)
 
-## 🤖 What is FlowGen
+## 🤖 What is Agentok Studio
 
-FlowGen is a tool built for [AutoGen](https://microsoft.github.io/autogen/), a great agent framework from Microsoft and [a lot of contributors](https://github.com/microsoft/autogen?tab=readme-ov-file#contributors-wall).
+Agentok Studio is a tool built for [AutoGen](https://microsoft.github.io/autogen/), a great agent framework from Microsoft and [a lot of contributors](https://github.com/microsoft/autogen?tab=readme-ov-file#contributors-wall).
 
-We regard AutoGen as one of the best frontier technology for next-generation Multi-Agent Applications. FlowGen elevates this concept, providing intuitive visual tools that streamline the construction and oversight of complex agent-based workflows, thereby simplifying the entire process for creators and developers.
+We regard AutoGen as one of the best frontier technology for next-generation Multi-Agent Applications. Agentok Studio elevates this concept, providing intuitive visual tools that streamline the construction and oversight of complex agent-based workflows, thereby simplifying the entire process for creators and developers.
 
 Contributions (Issues, Pull Requests, even Typo-corrections) to this project are welcome! All contributors will be added to the Contribution Wall.
 
-### Autoflow
+### Flow
 
-You can create an Autoflow from scratch, or fork from a template. The Autoflow is visualized as a graph, and you can drag and drop nodes to build agents in flow style.
+You can create an Workflow from scratch, or fork from a template. The Workflow is visualized as a graph, and you can drag and drop nodes to build agents in flow style.
 
 ![flow-1](./website/static/img/screenshot-flow-1.png)
 
 ### Chat
 
-You can launch an Autoflow or an Autoflow Template in a chat window, and chat with the agents.
+You can launch an Workflow or an Workflow Template in a chat window, and chat with the agents.
 
 ![chat-1](./website/static/img/screenshot-chat-1.png)
 
@@ -41,9 +41,9 @@ Place to share and discover flow templates.
 
 ## 💡 Quickstart
 
-To quickly explore what FlowGen has to offer, simply visit it [https://platform.flowgen.app](https://platform.flowgen.app).
+To quickly explore what Agentok Studio has to offer, simply visit it [https://studio.agentok.ai](https://studio.agentok.ai).
 
-For a more in-depth look at the platform, please refer to our [Getting Started](https://docs.flowgen.app/getting-started) and [other documents](https://docs.flowgen.app).
+For a more in-depth look at the platform, please refer to our [Getting Started](https://docs.agentok.ai/getting-started) and [other documents](https://docs.agentok.ai).
 
 ## Migration of Official Notebooks
 
@@ -56,10 +56,10 @@ We made tutorials based on the official notebooks from Autogen repository. You c
 
 | Example                                 | Status | Comments                                                                                                                                                             |
 | --------------------------------------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| simple_chat                             | ✅     | [Simple Chat](https://platform.flowgen.app/templates/yp0appx814q7na1)                                                                                                |
-| auto_feedback_from_code_execution       | ✅     | [Feedback from Code Execution](https://platform.flowgen.app/flows/)                                                                                                  |
-| ~~auto_build~~                          | ⭕     | This is a feature to be considered to add to flow generation. [#40](https://github.com/tiwater/flowgen/issues/40)                                                    |
-| chess                                   | 🔲     | This depends on the feature of importing custom Agent [#38](https://github.com/tiwater/flowgen/issues/38)                                                            |
+| simple_chat                             | ✅     | [Simple Chat](https://studio.agentok.ai/templates/yp0appx814q7na1)                                                                                                   |
+| auto_feedback_from_code_execution       | ✅     | [Feedback from Code Execution](https://studio.agentok.ai/flows/)                                                                                                     |
+| ~~auto_build~~                          | ⭕     | This is a feature to be considered to add to flow generation. [#40](https://github.com/hughlv/agentok/issues/40)                                                     |
+| chess                                   | 🔲     | This depends on the feature of importing custom Agent [#38](https://github.com/hughlv/agentok/issues/38)                                                             |
 | compression                             | ✅     |                                                                                                                                                                      |
 | dalle_and_gpt4v                         | ✅     | Supported with app.extensions                                                                                                                                        |
 | function_call_async                     | ✅     |                                                                                                                                                                      |
@@ -70,15 +70,15 @@ We made tutorials based on the official notebooks from Autogen repository. You c
 | groupchat_vis                           | ✅     |                                                                                                                                                                      |
 | groupchat                               | ✅     |                                                                                                                                                                      |
 | hierarchy_flow_using_select_speaker     | 🔲     |                                                                                                                                                                      |
-| human_feedback                          | ✅     | [Human in the Loop](https://platform.flowgen.app/templates/4pbokrvi7zguv48)                                                                                          |
+| human_feedback                          | ✅     | [Human in the Loop](https://studio.agentok.ai/templates/4pbokrvi7zguv48)                                                                                             |
 | inception_function                      | 🔲     |                                                                                                                                                                      |
 | ~~langchain~~                           | ⭕     | No plan to support                                                                                                                                                   |
 | lmm_gpt-4v                              | ✅     |                                                                                                                                                                      |
 | lmm_llava                               | ✅     | Depends on Replicate                                                                                                                                                 |
-| MathChat                                | ✅     | [Math Chat](https://platform.flowgen.app/templates/m337e85xr95omtv)                                                                                                  |
+| MathChat                                | ✅     | [Math Chat](https://studio.agentok.ai/templates/m337e85xr95omtv)                                                                                                     |
 | oai_assistant_function_call             | ✅     |                                                                                                                                                                      |
 | oai_assistant_groupchat                 | 🆘     | Very slow and not work well, sometimes not returning.                                                                                                                |
-| oai_assistant_retrieval                 | ✅     | [Retrieval (OAI)](https://platform.flowgen.app/templates/tgq6dxu32yzwcgg)                                                                                            |
+| oai_assistant_retrieval                 | ✅     | [Retrieval (OAI)](https://studio.agentok.ai/templates/tgq6dxu32yzwcgg)                                                                                               |
 | oai_assistant_twoagents_basic           | ✅     |                                                                                                                                                                      |
 | oai_code_interpreter                    | ✅     |                                                                                                                                                                      |
 | planning                                | ✅     | This sample works fine, but does not exit gracefully.                                                                                                                |
@@ -108,14 +108,14 @@ docker-compose up -d
 You can also build and run the ui and service separately with docker:
 
 ```bash
-docker build -t flowgen-api ./api
-docker run -d -p 5004:5004 flowgen-api
+docker build -t agentok-api ./api
+docker run -d -p 5004:5004 agentok-api
 
-docker build -t flowgen-ui ./ui
-docker run -d -p 2855:2855 flowgen-ui
+docker build -t agentok-ui ./ui
+docker run -d -p 2855:2855 agentok-ui
 
-docker build -t flowgen-db ./pocketbase
-docker run -d -p 7676:7676 flowgen-db
+docker build -t agentok-db ./pocketbase
+docker run -d -p 7676:7676 agentok-db
 ```
 
 (The default port number 2855 is the address of our first office.)
@@ -158,8 +158,8 @@ If you're interested in contributing to the development of this project or wish 
 3. **PocketBase:**
 
    - Switch to the PocketBase directory `cd pocketbase`.
-   - Build the container: `docker build -t flowgen-db .`
-   - Run the container: `docker run -it --rm -p 7676:7676 flowgen-db`
+   - Build the container: `docker build -t agentok-db .`
+   - Run the container: `docker run -it --rm -p 7676:7676 agentok-db`
 
 Each new commit to the main branch triggers an automatic deployment on [Railway.app](https://railway.app), ensuring you experience the latest version of the service.
 
@@ -187,7 +187,7 @@ This project welcomes contributions and suggestions. Please read our [Contributi
 
 If you are new to GitHub, [here](https://help.github.com/categories/collaborating-with-issues-and-pull-requests/) is a detailed help source on getting involved with development on GitHub.
 
-Please consider contributing to [AutoGen](https://github.com/microsoft/autogen), as FlowGen relies on a robust foundation to deliver its capabilities. Your contributions can help enhance the platform's core functionalities, ensuring a more seamless and efficient development experience for Multi-Agent Applications.
+Please consider contributing to [AutoGen](https://github.com/microsoft/autogen), as Agentok Studio relies on a robust foundation to deliver its capabilities. Your contributions can help enhance the platform's core functionalities, ensuring a more seamless and efficient development experience for Multi-Agent Applications.
 
 This project uses [📦🚀semantic-release](https://github.com/semantic-release/semantic-release) to manage versioning and releases. To avoid too frequent auto-releases, we make it a manual GitHub Action to trigger the release.
 
@@ -195,8 +195,8 @@ To follow the Semantic Release process, we enforced commit-lint convention on co
 
 ## Contributors Wall
 
-<a href="https://github.com/tiwater/flowgen/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=tiwater/flowgen" />
+<a href="https://github.com/hughlv/agentok/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=hughlv/agentok" />
 </a>
 
 ## 📝 License

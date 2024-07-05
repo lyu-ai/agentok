@@ -92,7 +92,7 @@
       "reload-history": "Reload chat history",
       "clean-history": "Clean chat history",
       "open-in-new-window": "Open this chat in new window",
-      "go-to-editor": "Go to Autoflow Editor",
+      "go-to-editor": "Go to Workflow Editor",
       "message-loading": "Loading chat history ...",
       "message-empty": "Start chat now!",
       "resend": "Resend this message",
@@ -121,8 +121,8 @@
     },
     "ChatListButton": {
       "new-chat": "New Chat",
-      "flow": "Autoflow",
-      "template": "Autoflow Template",
+      "flow": "Workflow",
+      "template": "Workflow Template",
       "new-chat-tooltip": "Create a new chat",
       "from-template-tooltip": "Create a new chat from template"
     },
@@ -130,8 +130,8 @@
       "abort": "Abort",
       "enter-message": "Enter message to start chat ..."
     },
-    "Autoflow": {
-      "back-to-main": "Back to Autoflow List",
+    "Workflow": {
+      "back-to-main": "Back to Workflow List",
       "reset-default-tooltip": "Reset to default",
       "save-flow": "Upload to Cloud",
       "save-success": "Successfully saved flow",
@@ -142,15 +142,15 @@
       "default-description": "This flow has {node_count} node(s) and {edge_count} edge(s).",
       "flow-empty": "No flow here yet. You can start from a sample flow.",
       "create-flow": "Start Build from Templates",
-      "edit-flow": "Edit Autoflow",
+      "edit-flow": "Edit Workflow",
       "start-chat": "Start Chat",
       "publish-flow": "Publish as AutoflowTemplate",
       "publish-flow-success": "Successfully published flow {flow_name}",
       "publish-flow-failed": "Failed to publish flow {flow_name}",
-      "publish-flow-title": "Publish Autoflow",
+      "publish-flow-title": "Publish Workflow",
       "publish-flow-name": "Name",
       "publish-flow-description": "Description",
-      "publish-flow-tip": "Publish this flow to the FlowGen community. You can unpublish at any time."
+      "publish-flow-tip": "Publish this flow to the Agentok Studio community. You can unpublish at any time."
     },
     "NodeButton": {
       "add-node": "Add Node",
@@ -175,7 +175,7 @@
       "image-url-placeholder": "Please enter the image URL to send with message"
     },
     "ViewToggle": {
-      "back-to-editor": "Back to Autoflow Editor"
+      "back-to-editor": "Back to Workflow Editor"
     },
     "CopyButton": {
       "copy": "Copy",
@@ -256,24 +256,24 @@
       "download": "Download Python souce code"
     },
     "Chat": {
-      "chat-tagline": "Start Chat with FlowGen",
+      "chat-tagline": "Start Chat with Agentok Studio",
       "start-chat": "Start Chat",
       "chat-sessions": "Chat Sessions",
       "filter": "Filter chats by keywords",
-      "your-flows": "Chat from Your Autoflows",
-      "select-chat": "Select a session to continue, or start a new one from Autoflow or AutoflowTemplate."
+      "your-flows": "Chat from Your Workflows",
+      "select-chat": "Select a session to continue, or start a new one from Workflow or AutoflowTemplate."
     },
-    "Autoflow": {
+    "Workflow": {
       "flow-tagline": "Build Multi-Agent Apps Visually.",
       "new-flow": "Build from Scratch",
-      "creating-flow": "Creating Autoflow ...",
-      "your-flows": "Chat from Your Autoflows",
+      "creating-flow": "Creating Workflow ...",
+      "your-flows": "Chat from Your Workflows",
       "start-from-template": "Start from AutoflowTemplate",
       "more-templates": "Dicover More Templates ..."
     },
     "Template": {
-      "select-template-title": "FlowGen Templates",
-      "select-flow": "Discover top FlowGen templates. Chat, or Fork to customize.",
+      "select-template-title": "Agentok Studio Templates",
+      "select-flow": "Discover top Agentok Studio templates. Chat, or Fork to customize.",
       "refresh": "Refresh"
     }
   },

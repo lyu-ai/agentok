@@ -179,7 +179,7 @@ const Page = () => {
 
   return (
     <>
-      <title>API Keys | FlowGen</title>
+      <title>API Keys | Agentok Studio</title>
       <div className="flex flex-col w-full gap-3 rounded-lg bg-base-content/5 p-4">
         <div className="flex items-center justify-between w-full gap-2 py-2">
           <h2 className="text-2xl font-bold">API Keys</h2>

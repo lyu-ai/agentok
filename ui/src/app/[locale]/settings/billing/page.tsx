@@ -3,7 +3,7 @@ import UnderConstruction from '@/components/UnderConstruction';
 const Page = () => {
   return (
     <>
-      <title>Billing | FlowGen</title>
+      <title>Billing | Agentok Studio</title>
       <UnderConstruction />
     </>
   );

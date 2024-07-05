@@ -1,6 +1,6 @@
 {
-  "name": "flowgen",
-  "description": "FlowGen - AutoGen Visualized.",
+  "name": "agentok",
+  "description": "Agentok Studio - AutoGen Visualized.",
   "private": true,
   "release": {
     "branches": [

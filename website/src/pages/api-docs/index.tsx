@@ -45,7 +45,7 @@ const RedocStandalone = ({ theme }) => {
   return (
     <redoc
       key={key}
-      spec-url="https://api.flowgen.app/openapi.json"
+      spec-url="https://api.agentok.ai/openapi.json"
       expand-responses="all"
       hide-download-button="true"
       scroll-y-offset="nav"

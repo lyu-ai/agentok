@@ -5,7 +5,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.ext import do
 from typing import Any, Dict, List, Union
 
-from ..models import Autoflow, Function
+from ..models import Workflow, Function
 
 # Set up the Jinja2 environment
 env = Environment(
@@ -14,7 +14,7 @@ env = Environment(
     extensions=[do]
 )
 
-def flow2py(flow: Autoflow) -> str:
+def flow2py(flow: Workflow) -> str:
   flow = flow.flow
   assistant_nodes = [node for node in flow.nodes if node['type'] == 'assistant']
   custom_conversable_nodes = [node for node in flow.nodes if node['type'] == 'custom_conversable']

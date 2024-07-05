@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Autoflow } from './flows';
+import { Workflow } from './flows';
 
 export interface AutoflowTemplate {
   id?: string;
   name: string; // AutoflowTemplate name is probably different with the name of the included flow
   description: string;
   thumbnail?: string; // image url
-  flow: Autoflow; // Complicated JSON object
+  flow: Workflow; // Complicated JSON object
   owner: string;
   created?: string;
 }

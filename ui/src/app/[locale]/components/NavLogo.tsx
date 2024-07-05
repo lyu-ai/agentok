@@ -4,15 +4,12 @@ import { useEffect, useState } from 'react';
 
 const Logo = () => {
   const { theme } = useTheme();
-  const [logo, setLogo] = useState('/logo-full-white.png');
-  const [miniLogo, setMiniLogo] = useState('/logo-white.svg');
+  const [logo, setLogo] = useState('/logo.svg');
   useEffect(() => {
     if (theme === 'dim') {
-      setLogo('/logo-full-white.png?231215');
-      setMiniLogo('/logo-white.svg');
+      setLogo('/logo-white.svg');
     } else {
-      setLogo('/logo-full.png?231215');
-      setMiniLogo('/logo.svg');
+      setLogo('/logo.svg');
     }
   }, [theme]);
   return (
@@ -22,15 +19,9 @@ const Logo = () => {
         height={128}
         alt="logo"
         src={logo}
-        className="hidden md:block h-6 w-auto object-contain aspect-w-1 aspect-h-1"
+        className="h-6 w-auto object-contain aspect-w-1 aspect-h-1"
       />
-      <img
-        width={48}
-        height={48}
-        alt="logo"
-        src={miniLogo}
-        className="md:hidden h-7 w-auto object-contain aspect-w-1 aspect-h-1"
-      />
+      <div className="md:hidden h-7 w-auto ">Agentok Studio</div>
     </a>
   );
 };

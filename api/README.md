@@ -1,4 +1,4 @@
-# Backend Service for FlowGen
+# Backend Service for Agentok Studio
 
 Run the service:
 
@@ -31,8 +31,8 @@ pip install "pyautogen[retrievechat]"
 ## Docker Build
 
 ```bash
-docker build -t flowgen-api ./api
-docker run -d -p 5004:5004 flowgen-api
+docker build -t agentok-api ./api
+docker run -d -p 5004:5004 agentok-api
 ```
 
 ## API Docs

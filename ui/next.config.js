@@ -10,7 +10,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'docs.flowgen.app',
+        hostname: 'docs.agentok.ai',
         port: '',
         pathname: '/img/**',
       },
