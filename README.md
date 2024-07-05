@@ -7,9 +7,9 @@ AutoGen Visualized - Visual Tools for Multi-Agent Development.
 [![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/hughlv/agentok)
 [![Open in GitHub Codespaces](https://img.shields.io/badge/Codespaces-Open-blue?style=flat&logo=github)](https://codespaces.new/hughlv/agentok)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/hughlv/agentok)
-[![GitHub star chart](https://img.shields.io/github/stars/hughlv/agentok?style=social)](https://star-history.com/#tiwater/agentok)
-[![](https://dcbadge.limes.pink/api/server/xBQxwRSWfm?style=social)](https://discord.gg/xBQxwRSWfm)
+![GitHub release](https://img.shields.io/github/v/release/hughlv/agentok)
+[![GitHub star](https://img.shields.io/github/stars/hughlv/agentok?style=social)](https://star-history.com/#tiwater/agentok)
+[![](https://dcbadge.limes.pink/api/server/xBQxwRSWfm?style=social&timestamp=20240705)](https://discord.gg/xBQxwRSWfm)
 
 ## 🤖 What is Agentok Studio
 
@@ -179,7 +179,7 @@ If your services are started successfully and running on the expected ports, you
 
 ## 👨‍💻 Contributing
 
-[![](https://dcbadge.limes.pink/api/server/xBQxwRSWfm)](https://discord.gg/xBQxwRSWfm)
+[![](https://dcbadge.limes.pink/api/server/xBQxwRSWfm?timestamp=20240705)](https://discord.gg/xBQxwRSWfm)
 
 Contributions are welcome! It's not limited to code, but also includes documentation and other aspects of the project. You can open a [GitHub Issue](https://github.com/hughlv/agentok/issues/new) or leave comments on our [Discord Server](https://discord.gg/xBQxwRSWfm).
 
