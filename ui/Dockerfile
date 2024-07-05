@@ -39,9 +39,9 @@ COPY --from=builder /app/public ./public
 USER nextjs
 
 EXPOSE 2855
-ENV NODE_ENV production
-ENV PORT 2855
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
+ENV PORT=2855
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
