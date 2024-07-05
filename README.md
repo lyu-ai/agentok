@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/hughlv/agentok)
 [![GitHub star chart](https://img.shields.io/github/stars/hughlv/agentok?style=social)](https://star-history.com/#tiwater/agentok)
-[![](https://dcbadge.vercel.app/api/server/xBQxwRSWfm?style=social)](https://discord.gg/xBQxwRSWfm)
+[![](https://dcbadge.limes.pink/api/server/xBQxwRSWfm?style=social)](https://discord.gg/xBQxwRSWfm)
 
 ## 🤖 What is Agentok Studio
 
@@ -179,9 +179,9 @@ If your services are started successfully and running on the expected ports, you
 
 ## 👨‍💻 Contributing
 
-[![](https://dcbadge.vercel.app/api/server/xBQxwRSWfm)](https://discord.gg/xBQxwRSWfm)
+[![](https://dcbadge.limes.pink/api/server/xBQxwRSWfm)](https://discord.gg/xBQxwRSWfm)
 
-Contributions are welcome! It's not limited to code, but also includes documentation and other aspects of the project. You can leave your comments on the [Discord Server](https://discord.gg/xBQxwRSWfm).
+Contributions are welcome! It's not limited to code, but also includes documentation and other aspects of the project. You can open a [GitHub Issue](https://github.com/hughlv/agentok/issues/new) or leave comments on our [Discord Server](https://discord.gg/xBQxwRSWfm).
 
 This project welcomes contributions and suggestions. Please read our [Contributing Guide](./CONTRIBUTING.md) first.
 
