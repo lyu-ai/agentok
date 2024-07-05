@@ -9,7 +9,7 @@ Agentok Studio can be used for commercial purposes for "backend-as-a-service" fo
 a. Multi-tenant SaaS service: Unless you have explicit written authorization from Agentok Studio, you may not utilize the Agentok Studio source code to operate a multi-tenant SaaS service that closely resembles the Agentok Studio cloud-based services.
 b. Logo and copyright information: While using Agentok Studio in commercial application, you are prohibited from removing or altering the LOGO or copyright information displayed in the Agentok Studio console and UI.
 
-For inquiries regarding licensing matters, please contact hi@tiwater.com via email.
+For inquiries regarding licensing matters, please contact hi@agentok.ai via email.
 
 Contributors are required to consent to the following terms related to their contributed code:
 

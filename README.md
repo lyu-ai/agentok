@@ -1,8 +1,8 @@
-<img src="./ui/public/logo-full.png" width="320" />
+<img src="./ui/public/logo.png" width="90" />
 
-![flow-1](./website/static/img/screenshot-flow-1.png)
+# Agentok Studio
 
-# Agentok Studio - AutoGen Visualized
+AutoGen Visualized - Visual Tools for Multi-Agent Development.
 
 [![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/hughlv/agentok)
 [![Open in GitHub Codespaces](https://img.shields.io/badge/Codespaces-Open-blue?style=flat&logo=github)](https://codespaces.new/hughlv/agentok)
@@ -19,7 +19,7 @@ We regard AutoGen as one of the best frontier technology for next-generation Mul
 
 Contributions (Issues, Pull Requests, even Typo-corrections) to this project are welcome! All contributors will be added to the Contribution Wall.
 
-### Flow
+### Workflow
 
 You can create an Workflow from scratch, or fork from a template. The Workflow is visualized as a graph, and you can drag and drop nodes to build agents in flow style.
 

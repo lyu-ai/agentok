@@ -55,7 +55,7 @@ Depending on your location, you may have certain rights under data protection la
 - The right to data portability.
 - The right to withdraw consent.
 
-Please contact us at [hi@tiwater.com](mailto:hi@tiwater.com) if you wish to exercise any of these rights.
+Please contact us at [hi@agentok.ai](mailto:hi@agentok.ai) if you wish to exercise any of these rights.
 
 ### Changes to This Privacy Policy
 
@@ -63,4 +63,4 @@ We may update our Privacy Policy from time to time. We will notify you of any ch
 
 ### Contact Us
 
-If you have questions or comments about this Privacy Policy, please contact us at [hi@tiwater.com](mailto:hi@tiwater.com).
+If you have questions or comments about this Privacy Policy, please contact us at [hi@agentok.ai](mailto:hi@agentok.ai).

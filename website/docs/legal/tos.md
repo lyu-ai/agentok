@@ -38,4 +38,4 @@ We reserve the right to modify these terms at any time, and we will notify you o
 
 ## Contact Us
 
-If you have any questions about these terms, please contact us at [hi@tiwater.com](mailto:hi@tiwater.com).
+If you have any questions about these terms, please contact us at [hi@agentok.ai](mailto:hi@agentok.ai).
