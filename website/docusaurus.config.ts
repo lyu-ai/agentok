@@ -37,11 +37,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          sidebarCollapsed: false,
-          routeBasePath: '',
           showLastUpdateTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/hughlv/agentok/edit/main/website',
         },
@@ -63,17 +59,17 @@ const config: Config = {
       },
       items: [
         {
-          to: '/getting-started',
+          to: '/docs/getting-started',
           label: 'Getting Started',
           position: 'left',
         },
         {
-          to: '/guides/using/api',
+          to: '/docs/guides/using/api',
           label: 'Guides',
           position: 'left',
         },
         {
-          to: '/examples/search-n-write/',
+          to: '/docs/examples/search-n-write/',
           label: 'Examples',
           position: 'left',
         },

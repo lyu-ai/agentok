@@ -142,8 +142,7 @@ export const TemplateBlock = ({
       <figure>
         <img
           src={
-            template.thumbnail ??
-            `https://docs.agentok.ai/img/${randomImage}.png`
+            template.thumbnail ?? `https://agentok.ai/img/${randomImage}.png`
           }
           alt={template.name}
           className="rounded-t-md h-48 w-full object-cover"

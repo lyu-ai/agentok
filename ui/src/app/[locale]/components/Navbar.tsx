@@ -19,7 +19,7 @@ const Navbar = () => {
       </div>
       <div className="navbar-end flex items-center my-auto gap-4">
         <a
-          href="https://docs.agentok.ai/"
+          href="https://agentok.ai/"
           target="_blank"
           rel="noreferrer"
           className="link link-hover text-xs"

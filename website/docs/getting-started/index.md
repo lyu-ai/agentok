@@ -131,7 +131,7 @@ Looking ahead, we plan to enhance the functionality, introducing additional feat
 Got a taste for Agentok Studio? Feast on these resources for seconds:
 
 - [Agentok Studio Template](https://studio.agentok.ai/templates/): Feast your eyes on a buffet of ready-to-serve templates.
-- [Agentok Studio Documentation](https://docs.agentok.ai/): The ultimate guide to becoming a Agentok Studio whiz.
+- [Agentok Studio Documentation](https://agentok.ai/): The ultimate guide to becoming a Agentok Studio whiz.
 - [Agentok Studio GitHub](https://github.com/hughlv/agentok): Peek under the hood at the source code.
 - [AutoGen Documentation](https://microsoft.github.io/autogen/): Master the art of AutoGen with this comprehensive tutorial.
 - [AutoGen Notebook](https://github.com/microsoft/autogen/tree/main/notebook): Dive into Jupyter notebooks showcasing AutoGen's prowess.

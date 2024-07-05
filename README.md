@@ -43,7 +43,7 @@ Place to share and discover flow templates.
 
 To quickly explore what Agentok Studio has to offer, simply visit it [https://studio.agentok.ai](https://studio.agentok.ai).
 
-For a more in-depth look at the platform, please refer to our [Getting Started](https://docs.agentok.ai/getting-started) and [other documents](https://docs.agentok.ai).
+For a more in-depth look at the platform, please refer to our [Getting Started](https://agentok.ai/getting-started) and [other documents](https://agentok.ai).
 
 ## Migration of Official Notebooks
 

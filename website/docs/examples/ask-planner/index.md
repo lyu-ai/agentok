@@ -6,7 +6,7 @@ This tutorial provides step-by-step guidance on constructing a workflow that sho
 
 ## Prerequisites
 
-You’ll need access to Agentok Studio, which is accessible either [online](https://studio.agentok.ai) for immediate use or [locally on your machine](https://docs.agentok.ai/getting-started) for a more personalized setup. This guide will focus on utilizing the online version of Agentok Studio.
+You’ll need access to Agentok Studio, which is accessible either [online](https://studio.agentok.ai) for immediate use or [locally on your machine](https://agentok.ai/getting-started) for a more personalized setup. This guide will focus on utilizing the online version of Agentok Studio.
 
 ## Steps to Create a New Workflow
 
