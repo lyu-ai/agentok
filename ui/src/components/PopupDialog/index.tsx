@@ -29,6 +29,7 @@ const PopupDialog = ({
           <div className="fixed inset-0 bg-black/40 backdrop-blur-md" />
 
           <Transition
+            show={true}
             enter="ease-out duration-500"
             enterFrom="opacity-0 scale-95"
             enterTo="opacity-100 scale-100"

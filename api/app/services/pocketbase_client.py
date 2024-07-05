@@ -64,7 +64,7 @@ class PocketBaseClient:
     async def authenticate_with_apikey(self, apikey: str) -> User:
         async with AsyncClient() as client:  # Use AsyncClient context manager for async operations
             response = await client.get(
-                f'{self.base_url}/api/collections/api_keys/records?filter=(key = \'{apikey}\')',
+                f'{self.base_url}/api/collections/api_keys/records?filter=(key=\'{apikey}\')',
                 headers={"Authorization": f"Bearer {self.admin_auth['token']}"},
             )
             if response.status_code == 200:
@@ -112,14 +112,14 @@ class PocketBaseClient:
 
     def verify_apikey(self, apikey: str, owner: str) -> Dict:
         response = self.session.get(
-            f'{self.base_url}/api/collections/api_keys/records/{apikey}?filter=(owner = \'{owner}\' && key = \'{apikey}\')',
+            f'{self.base_url}/api/collections/api_keys/records/{apikey}?filter=(owner=\'{owner}\'&&key=\'{apikey}\')',
         )
         response.raise_for_status()
         return response.json()
 
     def get_apikeys(self, owner: str) -> Dict:
         response = self.session.get(
-            f'{self.base_url}/api/collections/api_keys/records?filter=(owner = \'{owner}\')',
+            f'{self.base_url}/api/collections/api_keys/records?filter=(owner=\'{owner}\')',
             headers={"Authorization": f"Bearer {self.admin_auth['token']}"},
         )
         response.raise_for_status()
@@ -143,7 +143,7 @@ class PocketBaseClient:
 
     def get_chats(self, user: dict) -> Dict:
         response = self.session.get(
-            f'{self.base_url}/api/collections/chats/records?filter=(owner = \'{user.id}\')',
+            f'{self.base_url}/api/collections/chats/records?filter=(owner=\'{user.id}\')',
             headers={"Authorization": f"Bearer {self.admin_auth['token']}"},
         )
         response.raise_for_status()
