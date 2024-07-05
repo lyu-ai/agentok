@@ -93,6 +93,7 @@ const UserPanel = ({ user }: { user: any }) => {
         <img
           src="https://dcbadge.vercel.app/api/server/xBQxwRSWfm?timestamp=20240705"
           alt="discord"
+          className="rounded-lg"
         />
       </a>
       <div className="flex items-center justify-center text-xs w-full gap-2 mt-4">
