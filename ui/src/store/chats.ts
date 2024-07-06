@@ -5,7 +5,7 @@ export interface Chat {
   id: string;
   name: string;
   sourceId: string; // Binded flow
-  sourceType: 'flow' | 'template';
+  sourceType: 'project' | 'template';
   config: any; // Complicated JSON object
   created?: string;
 }

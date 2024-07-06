@@ -4,7 +4,7 @@ const inter = Inter({ subsets: ['latin'] });
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { PropsWithChildren } from 'react';
-import Navbar from './components/Navbar';
+import Navbar from './components/navbar/Navbar';
 import Providers from './providers';
 
 export default async function RootLayout({
@@ -27,7 +27,7 @@ export default async function RootLayout({
           <NextIntlClientProvider locale={params.locale} messages={messages}>
             <Providers>
               <Navbar />
-              <div className="flex flex-1 w-full overflow-y-auto">
+              <div className="flex flex-1 w-full p-2 overflow-y-auto">
                 {children}
               </div>
             </Providers>

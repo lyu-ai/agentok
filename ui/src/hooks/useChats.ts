@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { fetcher } from './fetcher';
 import pb from '@/utils/pocketbase/client';
 import { isEqual } from 'lodash-es';
-import useFlowStore from '@/store/flows';
+import useProjectStore from '@/store/projects';
 import useTemplateStore from '@/store/templates';
 
 export function useChats() {
@@ -16,16 +16,16 @@ export function useChats() {
   const deleteChat = useChatStore(state => state.deleteChat);
   const sidebarCollapsed = useChatStore(state => state.sidebarCollapsed);
   const setSidebarCollapsed = useChatStore(state => state.setSidebarCollapsed);
-  const flows = useFlowStore(state => state.flows);
+  const projects = useProjectStore(state => state.projects);
   const templates = useTemplateStore(state => state.templates);
 
   const getInitialName = (
     sourceId: string,
-    sourceType: 'flow' | 'template'
+    sourceType: 'project' | 'template'
   ) => {
     const source =
-      sourceType === 'flow'
-        ? flows.find(flow => flow.id === sourceId)
+      sourceType === 'project'
+        ? projects.find(project => project.id === sourceId)
         : templates.find(template => template.id === sourceId);
     return `Chat for ${source?.name || ''}`;
   };
@@ -57,7 +57,7 @@ export function useChats() {
   const [isCreating, setIsCreating] = useState(false);
   const handleCreateChat = async (
     sourceId: string,
-    sourceType: 'flow' | 'template'
+    sourceType: 'project' | 'template'
   ) => {
     setIsCreating(true);
     try {
@@ -65,7 +65,7 @@ export function useChats() {
         from_type: sourceType,
         name: getInitialName(sourceId, sourceType),
         owner: pb.authStore.model?.id,
-        ...(sourceType === 'flow'
+        ...(sourceType === 'project'
           ? { from_flow: sourceId }
           : { from_template: sourceId }),
       };

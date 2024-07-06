@@ -1,27 +1,27 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Workflow } from './flows';
+import { Project } from './projects';
 
-export interface AutoflowTemplate {
+export interface ProjectTemplate {
   id?: string;
-  name: string; // AutoflowTemplate name is probably different with the name of the included flow
+  name: string;
   description: string;
   thumbnail?: string; // image url
-  flow: Workflow; // Complicated JSON object
+  project: Project; // Complicated JSON object
   owner: string;
   created?: string;
 }
 
-interface AutoflowTemplateState {
-  templates: AutoflowTemplate[];
+interface ProjectTemplateState {
+  templates: ProjectTemplate[];
 
   // Public flows (do not support update operation)
-  setTemplates: (templates: AutoflowTemplate[]) => void;
+  setTemplates: (templates: ProjectTemplate[]) => void;
   deleteTemplate: (id: string) => void;
-  getTemplateById: (id: string) => AutoflowTemplate | undefined;
+  getTemplateById: (id: string) => ProjectTemplate | undefined;
 }
 
-const useTemplateStore = create<AutoflowTemplateState>()(
+const useTemplateStore = create<ProjectTemplateState>()(
   persist(
     (set, get) => ({
       // Public flows

@@ -1,4 +1,4 @@
-export * from './useFlows';
+export * from './useProjects';
 export * from './useTemplates';
 export * from './useChats';
 export * from './useChat';
