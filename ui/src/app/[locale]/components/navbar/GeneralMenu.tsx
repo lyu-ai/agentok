@@ -12,29 +12,32 @@ import {
 } from 'react-icons/ri';
 import { usePathname } from 'next/navigation';
 
-export const NAV_MENU_ITEMS = [
-  {
-    id: 'projects',
-    label: 'Projects',
-    icon: RiApps2Line,
-    activeIcon: RiApps2Fill,
-    href: '/projects',
-  },
-  {
-    id: 'chat',
-    label: 'Chat',
-    icon: RiRobot2Line,
-    activeIcon: RiRobot2Fill,
-    href: '/chat',
-  },
-  {
-    id: 'marketplace',
-    label: 'Marketplace',
-    icon: RiStore3Line,
-    activeIcon: RiStore3Fill,
-    href: '/marketplace',
-  },
-];
+export const getGeneralMenuItems = () => {
+  const NAV_MENU_ITEMS = [
+    {
+      id: 'projects',
+      label: 'Projects',
+      icon: RiApps2Line,
+      activeIcon: RiApps2Fill,
+      href: '/projects',
+    },
+    {
+      id: 'chat',
+      label: 'Chat',
+      icon: RiRobot2Line,
+      activeIcon: RiRobot2Fill,
+      href: '/chat',
+    },
+    {
+      id: 'marketplace',
+      label: 'Marketplace',
+      icon: RiStore3Line,
+      activeIcon: RiStore3Fill,
+      href: '/marketplace',
+    },
+  ];
+  return NAV_MENU_ITEMS;
+};
 
 const GeneralMenu = () => {
   const pathname = usePathname();
@@ -52,7 +55,7 @@ const GeneralMenu = () => {
 
   return (
     <>
-      {NAV_MENU_ITEMS.map(item => (
+      {getGeneralMenuItems().map(item => (
         <Link
           key={item.id}
           href={item.href}

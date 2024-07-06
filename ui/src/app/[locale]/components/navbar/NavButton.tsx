@@ -2,10 +2,13 @@
 import { HiMenuAlt2 } from 'react-icons/hi';
 import { Float } from '@headlessui-float/react';
 import { Popover } from '@headlessui/react';
-import { NAV_MENU_ITEMS } from './GeneralMenu';
-import Link from 'next/link';
+import { getGeneralMenuItems } from './GeneralMenu';
+import { getProjectNavbarItems } from './ProjectMenu';
 
-const NavButton = ({ className }: any) => {
+const NavButton = ({ projectId, className }: any) => {
+  const NAV_MENU_ITEMS = projectId
+    ? getProjectNavbarItems(projectId)
+    : getGeneralMenuItems();
   return (
     <Popover>
       <Float
@@ -18,7 +21,7 @@ const NavButton = ({ className }: any) => {
         leaveTo="transform scale-0 opacity-0"
       >
         <Popover.Button className={className}>
-          <HiMenuAlt2 className="w-7 h-7" />
+          <HiMenuAlt2 className="w-5 h-5" />
         </Popover.Button>
         <Popover.Panel className="origin-top-left absolute shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 overflow-auto max-h-[80vh]">
           {NAV_MENU_ITEMS.map(item => (
@@ -26,9 +29,9 @@ const NavButton = ({ className }: any) => {
               as="a"
               href={item.href}
               key={item.id}
-              className="group w-24 flex shrink-0 flex-col p-3 gap-2 items-center rounded-lg hover:bg-base-content/10 cursor-pointer"
+              className="group min-w-48 flex shrink-0 p-3 gap-2 items-center rounded-lg hover:bg-base-content/10 cursor-pointer"
             >
-              <item.icon className="h-7 w-7" />
+              <item.icon className="h-4 w-4" />
               {item.label}
             </Popover.Button>
           ))}

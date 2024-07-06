@@ -6,16 +6,17 @@ import {
   RiSettings3Line,
   RiBook3Line,
   RiBook3Fill,
-  RiToolsLine,
-  RiToolsFill,
   RiSwap3Line,
   RiSwap3Fill,
+  RiPuzzle2Line,
+  RiPuzzle2Fill,
+  RiBookMarkedLine,
+  RiBookMarkedFill,
 } from 'react-icons/ri';
 import clsx from 'clsx';
 import { pathToRegexp } from 'path-to-regexp';
-import ProjectPicker from './ProjectPicker';
 
-const ProjectNavbar = ({ projectId }: any) => {
+export const getProjectNavbarItems = (projectId: string) => {
   const NAV_MENU_ITEMS = [
     {
       id: 'flow',
@@ -27,25 +28,29 @@ const ProjectNavbar = ({ projectId }: any) => {
     {
       id: 'skills',
       label: 'Skills',
-      icon: RiToolsLine,
-      activeIcon: RiToolsFill,
+      icon: RiPuzzle2Line,
+      activeIcon: RiPuzzle2Fill,
       href: `/projects/${projectId}/skills`,
     },
     {
       id: 'knowledge',
       label: 'Knowledge',
-      icon: RiBook3Line,
-      activeIcon: RiBook3Fill,
+      icon: RiBookMarkedLine,
+      activeIcon: RiBookMarkedFill,
       href: `/projects/${projectId}/knowledge`,
     },
     {
       id: 'settings',
-      label: 'Project settings',
+      label: 'Settings',
       icon: RiSettings3Line,
       activeIcon: RiSettings3Fill,
       href: `/projects/${projectId}/settings`,
     },
   ];
+  return NAV_MENU_ITEMS;
+};
+
+const ProjectNavbar = ({ projectId }: any) => {
   const pathname = usePathname();
   const regexResult = pathToRegexp('/projects/:projectId{/:feature}?').exec(
     pathname
@@ -53,7 +58,7 @@ const ProjectNavbar = ({ projectId }: any) => {
 
   return (
     <>
-      {NAV_MENU_ITEMS.map(item => {
+      {getProjectNavbarItems(projectId).map(item => {
         const isActive =
           regexResult && regexResult.length >= 3 && regexResult[2] === item.id;
         return (

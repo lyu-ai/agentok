@@ -30,10 +30,13 @@ const ProjectPicker = ({ activeProjectId, className }: any) => {
       onChange={v => router.push(`/projects/${v?.id}/flow`)}
     >
       <ListboxButton
-        className={clsx('ml-2 flex gap-2 items-center', className)}
+        className={clsx(
+          'ml-2 flex gap-1 items-center bg-base-content/5',
+          className
+        )}
       >
         <RiApps2Line className="h-4 w-4" />
-        <span className="text-ellipsis overflow-hidden whitespace-nowrap">
+        <span className="text-ellipsis overflow-hidden whitespace-nowrap hidden lg:block">
           {activeProject?.name}
         </span>
         <RiArrowDownSLine className="h-4 w-4" />

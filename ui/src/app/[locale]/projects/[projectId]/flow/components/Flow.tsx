@@ -12,6 +12,7 @@ import ReactFlow, {
   useReactFlow,
   addEdge,
   ConnectionLineType,
+  ControlButton,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { nodeTypes, initialEdges, initialNodes } from '../utils/flow';
@@ -296,13 +297,17 @@ const Agentflow = ({ projectId }: any) => {
             showInteractive={false}
             position="bottom-left"
             className="flex"
-          />
+          >
+            <ControlButton>
+              <ViewToggle mode={'python'} setMode={setMode} />
+            </ControlButton>
+            <ControlButton>
+              <ViewToggle mode={'json'} setMode={setMode} />
+            </ControlButton>
+          </Controls>
         </ReactFlow>
-        <div className="absolute top-0 left-12 flex w-full items-center justify-end px-2">
-          <div className="flex flex-shrink-0 items-center gap-2">
-            <ViewToggle mode={'python'} setMode={setMode} />
-            <ViewToggle mode={'json'} setMode={setMode} />
-          </div>
+        <div className="absolute bottom-0 left-12 flex w-full items-center px-2">
+          <div className="flex flex-shrink-0 items-center gap-2"></div>
         </div>
       </div>
       {!nodePanePinned && (
@@ -317,7 +322,7 @@ const Agentflow = ({ projectId }: any) => {
           project={project}
           onStartChat={onClickChat}
           chatId={chat?.id}
-          className="absolute top-2 right-2"
+          className="absolute bottom-6 right-2"
         />
       )}
     </div>

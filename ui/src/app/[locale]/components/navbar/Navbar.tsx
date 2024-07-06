@@ -26,7 +26,7 @@ const Navbar = () => {
   return (
     <div className="z-50 navbar flex w-full items-center justify-between px-2">
       <div className="navbar-start gap-2 flex items-center justify-start">
-        <NavButton className="md:hidden" />
+        <NavButton projectId={projectId} className="md:hidden" />
         <NavLogo />
         {projectId && (
           <ProjectPicker
@@ -35,7 +35,7 @@ const Navbar = () => {
           />
         )}
       </div>
-      <div className="navbar-center gap-6 hidden md:flex">
+      <div className="navbar-center gap-4 hidden md:flex">
         <NavMenu projectId={projectId} />
       </div>
       <div className="navbar-end flex items-center my-auto gap-4">
