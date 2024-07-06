@@ -1,14 +1,14 @@
 {
-  "function": {
+  "skill": {
     "Config": {
-      "title": "功能",
-      "new-function": "新建功能",
-      "function-prompt": "功能可以扩展代理的技能。从左侧列表中选择现有功能，或点击“新建功能”创建自定义功能。",
+      "title": "技能",
+      "new-skill": "新建技能",
+      "skill-prompt": "可以扩展代理的技能。从左侧列表中选择现有功能，或点击“新建功能”创建自定义功能。",
       "reset": "重置",
       "reset-confirm": "确定要将所有设置重置为默认值吗？"
     },
     "Editor": {
-      "title": "功能编辑器",
+      "title": "技能代码编辑器",
       "generate-code": "生成代码",
       "generate-code-tooltip": "使用 AI 自动生成代码",
       "run-test": "运行测试"
@@ -55,7 +55,7 @@
       "temperature": "温度",
       "temperature-tooltip": "温度越高，生成的文本越随机。0 表示确定性。",
       "max-tokens": "最大标记数",
-      "function": "构建功能"
+      "skill": "构建功能"
     },
     "GroupChat": {
       "max-round": "最大轮数",

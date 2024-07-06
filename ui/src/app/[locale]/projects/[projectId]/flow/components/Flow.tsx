@@ -74,7 +74,6 @@ const Agentflow = ({ projectId }: any) => {
   const initialLoad = useRef(true);
 
   const debouncedUpdateFlow = debounce((currentFlow: any) => {
-    console.log('saving flow', currentFlow);
     updateProject({
       id: projectId,
       flow: currentFlow,

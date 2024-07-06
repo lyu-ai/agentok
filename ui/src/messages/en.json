@@ -1,14 +1,14 @@
 {
-  "function": {
+  "skill": {
     "Config": {
       "title": "Functions",
-      "new-function": "New Function",
-      "function-prompt": "Functions enable you to expand an Agent's skills. Select an existing function from the list on the left, or click 'New Function' to create a custom function.",
+      "new-skill": "New Skill",
+      "skill-prompt": "Functions enable you to expand an Agent's skills. Select an existing skill from the list on the left, or click 'New Skill' to create a custom skill.",
       "reset": "Reset",
       "reset-confirm": "Are you sure to reset all settings to default?"
     },
     "Editor": {
-      "title": "Function Editor",
+      "title": "Skill Editor",
       "generate-code": "Generate Code",
       "generate-code-tooltip": "Auto-generate code with AI",
       "run-test": "Run Test"
@@ -55,7 +55,7 @@
       "temperature": "Temperature",
       "temperature-tooltip": "The higher the temperature, the more random the generated text will be. 0 means deterministic.",
       "max-tokens": "Max Tokens",
-      "function": "Build Functions"
+      "skill": "Build Functions"
     },
     "GroupChat": {
       "max-round": "Max Round",
