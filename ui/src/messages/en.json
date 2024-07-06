@@ -55,7 +55,7 @@
       "temperature": "Temperature",
       "temperature-tooltip": "The higher the temperature, the more random the generated text will be. 0 means deterministic.",
       "max-tokens": "Max Tokens",
-      "skill": "Build Functions"
+      "function": "Build Functions"
     },
     "GroupChat": {
       "max-round": "Max Round",

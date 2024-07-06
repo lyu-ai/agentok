@@ -4,9 +4,7 @@ import { useReactFlow } from 'reactflow';
 import { getNodeLabel, setNodeData } from '../../utils/flow';
 import Toolbar from './Toolbar';
 import { BiCollapseVertical, BiExpandVertical } from 'react-icons/bi';
-import Tip from '../Tip';
-import FunctionConfig from '../function/Config';
-import { TbMathFunction } from 'react-icons/tb';
+import Tip from '@/components/Tip';
 import { useTranslations } from 'next-intl';
 import { isArray } from 'lodash-es';
 import { RiSettingsFill } from 'react-icons/ri';
@@ -151,21 +149,7 @@ function Config({ id, data, selected }: any) {
             }}
           />
         </div>
-        <button
-          className="w-full btn btn-sm btn-outline rounded"
-          onClick={() => setShowFunctionConfig(c => !c)}
-        >
-          <TbMathFunction className="w-4 h-4" />
-          <span>{t('function')}</span>
-        </button>
       </div>
-      <FunctionConfig
-        show={showFunctionConfig}
-        nodeId={id}
-        data={data}
-        onClose={() => setShowFunctionConfig(false)}
-        className="w-[80vw] h-[80vh]"
-      />
     </div>
   );
 }

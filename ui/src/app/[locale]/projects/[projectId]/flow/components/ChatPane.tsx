@@ -13,7 +13,7 @@ import { useChat, useChats } from '@/hooks';
 import { Tooltip } from 'react-tooltip';
 import MessageList from './MessageList';
 import clsx from 'clsx';
-import Tip from './Tip';
+import Tip from '@/components/Tip';
 import { isArray } from 'lodash-es';
 import useProjectStore from '@/store/projects';
 import {

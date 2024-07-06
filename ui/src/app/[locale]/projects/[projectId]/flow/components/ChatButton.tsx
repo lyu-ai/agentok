@@ -2,7 +2,7 @@ import { Float } from '@headlessui-float/react';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import clsx from 'clsx';
 import ChatPane from './ChatPane';
-import { RiChatSmile2Fill, RiChatSmile2Line } from 'react-icons/ri';
+import { RiRobot2Fill, RiRobot2Line } from 'react-icons/ri';
 import { useTranslations } from 'next-intl';
 
 const ChatButton = ({ className, onStartChat, chatId }: any) => {
@@ -30,8 +30,8 @@ const ChatButton = ({ className, onStartChat, chatId }: any) => {
           data-tooltip-content={t('start-chat-tooltip')}
         >
           <div className="relative">
-            <RiChatSmile2Line className="absolute left-0 animate-ping w-7 h-7" />
-            <RiChatSmile2Fill className="w-7 h-7" />
+            <RiRobot2Line className="absolute left-0 animate-ping w-7 h-7" />
+            <RiRobot2Fill className="w-7 h-7" />
           </div>
         </PopoverButton>
         <PopoverPanel className="origin-bottom-right shadow-box-lg shadow-gray-600 rounded-xl backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 w-[400px] md:w-96 h-[80vh] max-h-[75vh]">

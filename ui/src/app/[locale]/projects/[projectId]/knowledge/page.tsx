@@ -1,5 +1,11 @@
+import UnderConstruction from '@/components/UnderConstruction';
+
 const Page = () => {
-  return <>Knowledge</>;
+  return (
+    <>
+      <UnderConstruction />
+    </>
+  );
 };
 
 export default Page;

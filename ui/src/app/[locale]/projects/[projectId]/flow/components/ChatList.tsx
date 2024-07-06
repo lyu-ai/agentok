@@ -193,7 +193,7 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
               'join flex items-center border border-base-content/40 text-xs rounded ',
               {
                 'border-primary/40 text-primary/40 bg-primary/5':
-                  chat.sourceType === 'flow',
+                  chat.sourceType === 'project',
                 'border-secondary/40 text-secondary/40 bg-primary/5':
                   chat.sourceType === 'template',
               }
@@ -201,7 +201,7 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
           >
             <span
               className={clsx('join-item px-2 py-0.5 border-r ', {
-                'border-primary/40': chat.sourceType === 'flow',
+                'border-primary/40': chat.sourceType === 'project',
                 'border-secondary/40': chat.sourceType === 'template',
               })}
             >
@@ -248,7 +248,7 @@ const ChatList = ({
     activeChat,
   } = useChats();
   const { templates } = useTemplates();
-  const { flows } = useProjects();
+  const { projects } = useProjects();
   const chatListRef = useRef<HTMLDivElement | null>(null); // This ref should attach to the chat list container
 
   const autoScrollIntoView = (targetElement: any, containerElement: any) => {
@@ -291,14 +291,14 @@ const ChatList = ({
       const chatSource =
         chat.sourceType === 'template'
           ? templates?.find(t => t.id === chat.sourceId)
-          : flows?.find(f => f.id === chat.sourceId);
+          : projects?.find(p => p.id === chat.sourceId);
       return chatSource?.name?.toLowerCase().includes(filter.toLowerCase());
     });
     if (maxCount) {
       newChats = newChats.slice(0, maxCount);
     }
     setFilteredChats(newChats);
-  }, [chats, filter, setFilteredChats, maxCount, templates, flows]);
+  }, [chats, filter, setFilteredChats, maxCount, templates, projects]);
 
   if (isChatsError) {
     console.warn('Failed to load chats');

@@ -1,5 +1,5 @@
 import { Float } from '@headlessui-float/react';
-import { Popover } from '@headlessui/react';
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import clsx from 'clsx';
 import { GoPlus } from 'react-icons/go';
 import { useTranslations } from 'next-intl';
@@ -10,19 +10,19 @@ import { useRouter } from 'next/navigation';
 
 const ChatListPanel = ({ onAdd }: any) => {
   const t = useTranslations('component.ChatListButton');
-  const { flows, isLoading: isLoadingFlows } = useProjects();
+  const { projects, isLoading: isLoadingProjects } = useProjects();
   const { templates, isLoading: isLoadingTemplates } = useTemplates();
   const { createChat } = useChats();
   const router = useRouter();
   const chatSources: {
-    type: 'flow' | 'template';
+    type: 'project' | 'template';
     data: any[] | undefined;
     isLoading: boolean;
   }[] = [
     {
-      type: 'flow',
-      data: flows,
-      isLoading: isLoadingFlows,
+      type: 'project',
+      data: projects,
+      isLoading: isLoadingProjects,
     },
     {
       type: 'template',
@@ -95,7 +95,7 @@ const ChatListButton = ({ className }: any) => {
         leaveFrom="transform scale-100 opacity-100"
         leaveTo="transform scale-0 opacity-0"
       >
-        <Popover.Button>
+        <PopoverButton>
           <div
             className={clsx(
               className,
@@ -106,10 +106,10 @@ const ChatListButton = ({ className }: any) => {
           >
             <GoPlus className="w-4 h-4" />
           </div>
-        </Popover.Button>
-        <Popover.Panel className="origin-top-left w-[500px] h-[480px] overflow-y-auto shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/90 text-base-content border border-gray-600">
+        </PopoverButton>
+        <PopoverPanel className="origin-top-left w-[500px] h-[480px] overflow-y-auto shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/90 text-base-content border border-gray-600">
           <ChatListPanel />
-        </Popover.Panel>
+        </PopoverPanel>
       </Float>
       <Tooltip id="chatlist-tooltip" />
     </Popover>

@@ -1,4 +1,4 @@
-import { Popover } from '@headlessui/react';
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { Float } from '@headlessui-float/react';
 import clsx from 'clsx';
 import { GoPlus } from 'react-icons/go';
@@ -19,7 +19,7 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
         leaveFrom="transform scale-100 opacity-100"
         leaveTo="transform scale-0 opacity-0"
       >
-        <Popover.Button
+        <PopoverButton
           className={clsx(
             className,
             'h-10 w-10 flex items-center justify-center bg-primary text-primary-content rounded-full hover:shadow-box hover:shadow-primary/60 hover:bg-primary-focus hover:border-primary/50'
@@ -29,14 +29,14 @@ const NodeButton = ({ className, onAddNode, ...props }: any) => {
           data-tooltip-content={t('add-node')}
         >
           <GoPlus className="w-7 h-7" />
-        </Popover.Button>
-        <Popover.Panel id="agent-list" className="origin-top-left z-50 w-80">
+        </PopoverButton>
+        <PopoverPanel id="agent-list" className="origin-top-left z-50 w-80">
           <NodePane
             onAddNode={onAddNode}
             pinned={false}
             contentClassName="max-h-[70vh]"
           />
-        </Popover.Panel>
+        </PopoverPanel>
       </Float>
     </Popover>
   );

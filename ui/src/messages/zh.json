@@ -55,7 +55,7 @@
       "temperature": "温度",
       "temperature-tooltip": "温度越高，生成的文本越随机。0 表示确定性。",
       "max-tokens": "最大标记数",
-      "skill": "构建功能"
+      "function": "构建功能"
     },
     "GroupChat": {
       "max-round": "最大轮数",

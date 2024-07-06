@@ -298,10 +298,10 @@ const Agentflow = ({ projectId }: any) => {
             className="flex"
           >
             <ControlButton>
-              <ViewToggle mode={'python'} setMode={setMode} />
+              <ViewToggle flat mode={'python'} setMode={setMode} />
             </ControlButton>
             <ControlButton>
-              <ViewToggle mode={'json'} setMode={setMode} />
+              <ViewToggle flat mode={'json'} setMode={setMode} />
             </ControlButton>
           </Controls>
         </ReactFlow>

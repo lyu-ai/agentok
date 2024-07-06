@@ -92,7 +92,7 @@ const UserPanel = ({ user }: { user: any }) => {
           Settings
         </PopoverButton>
 
-        <div
+        <PopoverButton
           onClick={signOut}
           className={clsx(
             'flex w-40 items-center justify-center p-2 gap-2 bg-base-content/20  rounded-r-xl',
@@ -101,7 +101,7 @@ const UserPanel = ({ user }: { user: any }) => {
         >
           <RiLogoutBoxLine className="w-5 h-5" />
           Sign out
-        </div>
+        </PopoverButton>
       </div>
 
       <div className="flex items-center justify-center text-xs w-full gap-2">
