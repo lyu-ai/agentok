@@ -8,14 +8,14 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useProject } from '@/hooks';
 
-const CodeEditor = ({ projectId, skill, ...props }: any) => {
-  const t = useTranslations('skill.Editor');
+const CodeEditor = ({ projectId, tool, ...props }: any) => {
+  const t = useTranslations('tool.Editor');
   const [isGenerating, setIsGenerating] = useState(false);
   const { project, updateProject } = useProject(projectId);
   const onUpdateCode = (code: string) => {
     updateProject({
-      skills: project?.skills?.map((f: any) => {
-        if (f.id === skill.id) {
+      tools: project?.tools?.map((f: any) => {
+        if (f.id === tool.id) {
           return {
             ...f,
             code,
@@ -27,13 +27,13 @@ const CodeEditor = ({ projectId, skill, ...props }: any) => {
   };
   const onGenerateCode = async () => {
     setIsGenerating(true);
-    await fetch('/api/codegen/skill', {
+    await fetch('/api/codegen/tool', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
-      body: JSON.stringify(skill),
+      body: JSON.stringify(tool),
     })
       .then(async res => {
         if (res.ok) {
@@ -48,7 +48,7 @@ const CodeEditor = ({ projectId, skill, ...props }: any) => {
       <div className="rounded overflow-hidden border h-full border-base-content/20">
         <div className="w-full h-full relative group">
           <CodeMirror
-            value={skill?.code ?? ''}
+            value={tool?.code ?? ''}
             height="100%"
             theme={theme}
             extensions={[python()]}
@@ -57,26 +57,26 @@ const CodeEditor = ({ projectId, skill, ...props }: any) => {
           />
           <div
             className={clsx(
-              'absolute transition-all ease-linear duration-300',
+              'absolute transition-transform ease-linear duration-300',
               {
                 'right-2 bottom-2 translate-x-0 translate-y-0':
-                  skill?.code !== '',
-                'right-1/2 top-1/2 translate-x-1/2 -translate-y-1/2':
-                  skill?.code === '',
+                  tool?.code !== '',
+                'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2':
+                  tool?.code === '',
               }
             )}
           >
             <button
               className={clsx(
-                'btn btn-sm rounded btn-outline gap-1 p-2',
-                skill?.code ? '' : 'btn-primary'
+                'btn gap-1',
+                tool?.code ? 'btn-sm btn-outline' : 'btn-primary'
               )}
               data-tooltip-id="func-tooltip"
               data-tooltip-content={t('generate-code-tooltip')}
               onClick={onGenerateCode}
             >
               <RiMagicFill
-                className={clsx('w-4 h-4', { 'animate-spin': isGenerating })}
+                className={clsx('w-5 h-5', { 'animate-spin': isGenerating })}
               />
               <span>{t('generate-code')}</span>
             </button>

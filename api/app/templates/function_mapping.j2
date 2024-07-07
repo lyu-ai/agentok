@@ -1,9 +1,9 @@
 # register the functions
-{%- if functions|length > 0 %}
-user_proxy.register_function(
+{%- if tools|length > 0 %}
+node_{{first_converser['id']}}.register_function(
     function_map={
-      {%- for func in functions %}
-      "{{func.name}}": {{func.name}},
+      {%- for tool in tools %}
+      "{{tool.name}}": {{tool.name}},
       {%- endfor %}
     }
 )

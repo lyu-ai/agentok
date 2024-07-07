@@ -3,7 +3,7 @@ import { Handle, Position, useReactFlow } from 'reactflow';
 import { getNodeLabel, setNodeData } from '../../utils/flow';
 import Toolbar from './Toolbar';
 import { useTranslations } from 'next-intl';
-import { RiSettings3Line, RiUserVoiceFill } from 'react-icons/ri';
+import { RiSettings3Line, RiSpaceShipFill } from 'react-icons/ri';
 import Tip from '@/components/Tip';
 import { isArray } from 'lodash-es';
 import { useState } from 'react';
@@ -40,7 +40,7 @@ const Initializer = ({ id, selected, data }: any) => {
       </Toolbar>
       <div className="flex flex-col w-full gap-2 text-sm">
         <div className="flex items-center gap-2 text-primary">
-          <RiUserVoiceFill className="w-5 h-5" />
+          <RiSpaceShipFill className="w-5 h-5" />
           <div className="text-sm font-bold">
             {getNodeLabel(data.label, tNodeMeta)}
           </div>
@@ -67,38 +67,6 @@ const Initializer = ({ id, selected, data }: any) => {
             })
           }
         />
-        <div className="flex items-center justify-between text-sm gap-2 w-full">
-          <div className="whitespace-nowrap text-base-content/80">
-            {`${t('max-turns')} - [${data.max_turns ?? 'None'}]`}
-          </div>
-          <input
-            type="range"
-            min="0"
-            max="50"
-            step="1"
-            value={data.max_turns ?? 0}
-            onChange={e => {
-              setNodeData(instance, id, {
-                max_turns:
-                  e.target.valueAsNumber === 0 ? null : e.target.valueAsNumber,
-              });
-            }}
-            className="range nodrag nowheel range-xs w-full"
-          />
-        </div>
-        <div className="flex items-center justify-between text-base-content/60 gap-2">
-          <div className="text-base-content/80">{t('summary-method')}</div>
-          <select
-            className="select select-bordered select-sm bg-transparent rounded"
-            value={data.summary_method ?? 'last_msg'}
-            onChange={e => {
-              setNodeData(instance, id, { summary_method: e.target.value });
-            }}
-          >
-            <option value={'last_msg'}>Last Message</option>
-            <option value={'reflection_with_llm'}>Reflection with LLM</option>
-          </select>
-        </div>
       </div>
       <Handle
         type="source"

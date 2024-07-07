@@ -6,7 +6,7 @@ import { BsRobot } from 'react-icons/bs';
 import {
   getNodeLabel,
   basicNodes,
-  assistantNodes,
+  agentNodes,
   advancedNodes,
 } from '../utils/flow';
 import useProjectStore from '@/store/projects';
@@ -174,8 +174,8 @@ const NodePane = ({ pinned, onAddNode, contentClassName }: any) => {
           />
           <NodeGroup
             pinned={pinned}
-            name={t('group-assistant')}
-            nodes={assistantNodes}
+            name={t('group-agent')}
+            nodes={agentNodes}
             onAddNode={onAddNode}
             open
           />

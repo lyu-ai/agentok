@@ -15,7 +15,13 @@ import ReactFlow, {
   ControlButton,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { nodeTypes, initialEdges, initialNodes } from '../utils/flow';
+import {
+  nodeTypes,
+  edgeTypes,
+  initialEdges,
+  initialNodes,
+  isConversable,
+} from '../utils/flow';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import ViewToggle from './ViewToggle';
 import NodeButton from './NodeButton';
@@ -191,14 +197,21 @@ const Agentflow = ({ projectId }: any) => {
   );
 
   const onConnect = (params: any) => {
+    const sourceNode = nodes.find(nd => nd.id === params.source);
+    const targetNode = nodes.find(nd => nd.id === params.target);
+    const isRelation = isConversable(sourceNode) && isConversable(targetNode);
     setEdges((eds: any) => {
-      const newEdges = {
+      let newEdges = {
         ...params,
-        animated: true,
-        style: {
-          strokeWidth: 2,
-        },
+        strokeWidth: 2,
       };
+      if (isRelation) {
+        newEdges = {
+          ...newEdges,
+          animated: true,
+          type: 'converse',
+        };
+      }
       return addEdge(newEdges, eds);
     });
   };
@@ -274,9 +287,10 @@ const Agentflow = ({ projectId }: any) => {
           edges={edges}
           onEdgesChange={onEdgesChange}
           nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
           onConnect={onConnect}
-          connectionLineType={ConnectionLineType.SmoothStep}
-          connectionLineStyle={{ strokeWidth: 2, stroke: 'lightgreen' }}
+          connectionLineType={ConnectionLineType.Bezier}
+          connectionLineStyle={{ strokeWidth: 2, stroke: 'darkgreen' }}
           onDragOver={onDragOver}
           onDrop={onDrop}
           panOnScroll
