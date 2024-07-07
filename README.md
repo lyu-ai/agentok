@@ -1,3 +1,5 @@
+> **⚠️ NOTICE**: This project is currently under active development under branch v2, which introduced some breaking changes to backend pocketbase service. Please bear with us as we work to fix it.
+
 <img src="./ui/public/logo.png" width="90" />
 
 # Agentok Studio
