@@ -13,11 +13,10 @@ import { useChat, useChats } from '@/hooks';
 import { Tooltip } from 'react-tooltip';
 import MessageList from './MessageList';
 import clsx from 'clsx';
-import Tip from '../Tip';
+import Tip from '@/components/Tip';
 import { isArray } from 'lodash-es';
 import useProjectStore from '@/store/projects';
 import {
-  RiAccountBoxLine,
   RiAlertLine,
   RiChatSmile2Line,
   RiPushpinLine,
@@ -170,10 +169,10 @@ const ChatPane = ({
 
     let unsubMessageFunc: UnsubscribeFunc | undefined;
     let unsubChatFunc: UnsubscribeFunc | undefined;
-    pb.collection('messages')
+    pb.collection('chat_messages')
       .subscribe('*', payload => {
+        console.log('changes_event(chat_messages):', payload);
         if (payload.record.chat !== chatId) return;
-        console.log('changes_event(messages):', payload);
         if (payload.record.type !== 'user') {
           // The user message was added when sending, no need to add it again.
           setMessages(msgs =>

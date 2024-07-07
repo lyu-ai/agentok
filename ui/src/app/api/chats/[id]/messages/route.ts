@@ -11,7 +11,7 @@ export async function GET(
   const pb = await loadAuthFromCookie();
   try {
     const record = await pb
-      .collection('messages')
+      .collection('chat_messages')
       .getList(1, 50, { filter: `chat='${params.id}'`, sort: '-created' });
     // .getFullList();
     return new Response(JSON.stringify(record.items.reverse()));
@@ -59,11 +59,11 @@ export async function DELETE(
 
   try {
     const messages = await pb
-      .collection('messages')
+      .collection('chat_messages')
       .getFullList({ filter: `chat='${params.id}'` });
     for (const message of messages) {
       await pb
-        .collection('messages')
+        .collection('chat_messages')
         .delete(message.id, { $autoCancel: false });
     }
 

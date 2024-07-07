@@ -33,11 +33,11 @@ export function useChats() {
   useEffect(() => {
     if (data) {
       const normalizedChats = data.map((chatData: any) => {
-        const { from_template, from_flow, from_type, ...others } = chatData;
-        if (from_type === 'flow') {
+        const { from_template, from_project, from_type, ...others } = chatData;
+        if (from_type === 'project') {
           return {
             ...others,
-            sourceId: from_flow,
+            sourceId: from_project,
             sourceType: from_type,
           };
         } else {
@@ -66,7 +66,7 @@ export function useChats() {
         name: getInitialName(sourceId, sourceType),
         owner: pb.authStore.model?.id,
         ...(sourceType === 'project'
-          ? { from_flow: sourceId }
+          ? { from_project: sourceId }
           : { from_template: sourceId }),
       };
       const response = await fetch(`/api/chats`, {

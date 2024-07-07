@@ -50,8 +50,8 @@ class MessageCreate(MessageBase):
 
 class ChatCreate(BaseModel):
     name: str
-    from_type: Literal['flow', 'template']
-    from_flow: Optional[str] = None
+    from_type: Literal['project', 'template']
+    from_project: Optional[str] = None
     from_template: Optional[str] = None
     owner: str
 

@@ -172,16 +172,6 @@ export const initialNodes: Node[] = [
     position: { x: 150, y: 300 },
   },
   {
-    id: '1002',
-    type: 'summarizer',
-    data: {
-      name: 'Summarizer',
-      label: 'summarizer',
-      class: 'Summarizer',
-    },
-    position: { x: 750, y: 300 },
-  },
-  {
     id: '3',
     type: 'user',
     data: {

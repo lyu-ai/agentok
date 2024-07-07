@@ -13,7 +13,6 @@ const sampleImages = [
   'https://th.bing.com/th/id/OIP.29Mi2kJmcHHyQVGe_0NG7QHaEo?pid=ImgDet&rs=1',
   'https://th.bing.com/th/id/R.422068ce8af4e15b0634fe2540adea7a?rik=y4OcXBE%2fqutDOw&pid=ImgRaw&r=0',
   'https://fftai.github.io/concepts/static/about_gr1.png',
-  'https://assets.csn.chat/agentok/duck.jpg',
 ];
 
 const ImagePanel = (props: ImagePanelProps) => {

@@ -11,7 +11,8 @@ export function useChat(chatId: string) {
       ? projects &&
         projects.find((project: any) => project.id === chat.sourceId)
       : templates &&
-        templates.find((template: any) => template.id === chat?.sourceId);
+        templates.find((template: any) => template.id === chat?.sourceId)
+          ?.project;
 
   const handleUpdateChat = (chat: Partial<Chat>) => {
     updateChat(chatId, chat);
