@@ -26,7 +26,7 @@ export async function middleware(req: NextRequest) {
 
   if (
     pathToRegexp(
-      '/(auth|templates)/(.*)' // /auth/* or /templates/*
+      '/(auth|marketplace)/(.*)' // /auth/* or /templates/*
     ).test(req.nextUrl.pathname)
   ) {
     return res;

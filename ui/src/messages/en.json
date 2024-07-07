@@ -1,14 +1,14 @@
 {
-  "function": {
+  "skill": {
     "Config": {
       "title": "Functions",
-      "new-function": "New Function",
-      "function-prompt": "Functions enable you to expand an Agent's skills. Select an existing function from the list on the left, or click 'New Function' to create a custom function.",
+      "new-skill": "New Skill",
+      "skill-prompt": "Functions enable you to expand an Agent's skills. Select an existing skill from the list on the left, or click 'New Skill' to create a custom skill.",
       "reset": "Reset",
       "reset-confirm": "Are you sure to reset all settings to default?"
     },
     "Editor": {
-      "title": "Function Editor",
+      "title": "Skill Editor",
       "generate-code": "Generate Code",
       "generate-code-tooltip": "Auto-generate code with AI",
       "run-test": "Run Test"
@@ -61,7 +61,7 @@
       "max-round": "Max Round",
       "involve-user": "Involve User"
     },
-    "UserProxy": {
+    "User": {
       "name-edit-tooltip": "Edit node name (as variables)",
       "name-edit-done-tooltip": "Finish editing node name",
       "system-message": "System Message",
@@ -74,6 +74,14 @@
       "input-mode-always": "ALWAYS",
       "input-mode-terminate": "TERMINATE",
       "max-consecutive-auto-reply": "Max Consecutive Auto-Replies"
+    },
+    "Initializer": {
+      "options": "More Options",
+      "initializer-tooltip": "Start the conversation",
+      "sample-messages": "Sample Messages",
+      "sample-messages-tooltip": "Sample messages for new chat, will be shown and clickable above the Send button.\nPlease put each message on a separate line.",
+      "summary-method": "Summary Method",
+      "max-turns": "Max Turns"
     },
     "Note": {
       "note-placeholder": "Start to write about current agent flow",
@@ -155,6 +163,7 @@
     "NodeButton": {
       "add-node": "Add Node",
       "group-basic": "Basic Nodes",
+      "group-assistant": "Assistants",
       "group-advanced": "Advanced Nodes",
       "group-extensions": "Extensions",
       "pin": "Pin",
@@ -190,6 +199,22 @@
     }
   },
   "option": {
+    "InitializerConfig": {
+      "title": "More Options",
+      "support-retrieve": "Retrieve Support",
+      "code-execution": "Code Execution",
+      "work-dir": "Location",
+      "last-n-messages": "Last (n) Messages",
+      "use-docker": "Use Docker",
+      "task": "Task",
+      "task-code": "Code",
+      "chunk-token-size": "Chunk Token Size",
+      "docs-path": "Docs Path",
+      "custom-text-types": "Custom Text Types",
+      "get-or-create": "Get or Create",
+      "client": "Client",
+      "termination-msg": "Termination Keyword:"
+    },
     "UserConfig": {
       "title": "More Options",
       "support-retrieve": "Retrieve Support",
@@ -279,6 +304,8 @@
   },
   "meta": {
     "node": {
+      "initializer": "Initializer",
+      "initializer-description": "Initialize the flow",
       "config": "Config",
       "config-description": "Configure the node",
       "assistant": "Assistant",
@@ -287,22 +314,22 @@
       "compress-description": "Assistant with Compress",
       "gpt-assistant": "GPT Assistant",
       "gpt-assistant-description": "Enpowered by GPT Assistant API",
-      "user-proxy": "User Proxy",
-      "user-proxy-description": "Represent the user talks to Agents",
+      "user": "User",
+      "user-description": "Represent the user talks to Agents",
       "multimodal-assistant": "Multimodal Assistant",
       "multimodal-assistant-description": "Assistant can See",
       "llava": "LLaVA",
       "llava-description": "Assistant sees with LLaVA",
       "note": "Note",
       "note-description": "Place to write documents",
-      "groupchat": "Group Chat",
-      "groupchat-description": "Group agents for collaboration",
+      "groupchat": "Group",
+      "groupchat-description": "Group discussion among several agents",
       "retrieve-assistant": "Assistant for RAG",
       "retrieve-assistant-description": "Assistant supports RAG",
-      "math-user-proxy": "User Proxy for Math",
-      "math-user-proxy-description": "User Proxy with Math Expertise",
-      "retrieve-user-proxy": "User Proxy for RAG",
-      "retrieve-user-proxy-description": "User Proxy supports Retrieval"
+      "math-user": "User Proxy for Math",
+      "math-user-description": "User Proxy with Math Expertise",
+      "retrieve-user": "User Proxy for RAG",
+      "retrieve-user-description": "User Proxy supports Retrieval"
     }
   }
 }

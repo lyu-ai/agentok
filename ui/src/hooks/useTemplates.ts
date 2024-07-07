@@ -2,10 +2,10 @@ import useSWR from 'swr';
 import useTemplateStore from '@/store/templates';
 import { useEffect, useState } from 'react';
 import { fetcher } from './fetcher';
-import { AutoflowTemplate } from '@/store/templates';
+import { ProjectTemplate } from '@/store/templates';
 
 export function useTemplates() {
-  const { data, error, mutate } = useSWR<AutoflowTemplate[]>(
+  const { data, error, mutate } = useSWR<ProjectTemplate[]>(
     '/api/templates',
     fetcher
   );
@@ -39,7 +39,7 @@ export function useTemplates() {
   };
 
   const [isPublishing, setIsPublishing] = useState(false);
-  const publishTemplate = async (template: AutoflowTemplate) => {
+  const publishTemplate = async (template: ProjectTemplate) => {
     setIsPublishing(true);
     try {
       const res = await fetch(`/api/templates`, {

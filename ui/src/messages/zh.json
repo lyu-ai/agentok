@@ -1,14 +1,14 @@
 {
-  "function": {
+  "skill": {
     "Config": {
-      "title": "功能",
-      "new-function": "新建功能",
-      "function-prompt": "功能可以扩展代理的技能。从左侧列表中选择现有功能，或点击“新建功能”创建自定义功能。",
+      "title": "技能",
+      "new-skill": "新建技能",
+      "skill-prompt": "可以扩展代理的技能。从左侧列表中选择现有功能，或点击“新建功能”创建自定义功能。",
       "reset": "重置",
       "reset-confirm": "确定要将所有设置重置为默认值吗？"
     },
     "Editor": {
-      "title": "功能编辑器",
+      "title": "技能代码编辑器",
       "generate-code": "生成代码",
       "generate-code-tooltip": "使用 AI 自动生成代码",
       "run-test": "运行测试"
@@ -152,6 +152,7 @@
     "NodeButton": {
       "add-node": "添加节点",
       "group-basic": "基本节点",
+      "group-assistant": "智能体",
       "group-advanced": "高级节点",
       "group-extensions": "扩展节点",
       "pin": "固定",
@@ -280,8 +281,8 @@
       "compress-description": "带文本压缩功能的助手",
       "gpt-assistant": "GPT 助手",
       "gpt-assistant-description": "由 GPT 助手 API 提供支持",
-      "user-proxy": "用户代理",
-      "user-proxy-description": "代表用户与代理进行对话",
+      "user": "用户代理",
+      "user-description": "代表用户与代理进行对话",
       "multimodal-assistant": "多模型助手",
       "multimodal-assistant-description": "助手可以看到",
       "llava": "LLaVA",
@@ -292,10 +293,10 @@
       "groupchat-description": "用于协作的群代理",
       "retrieve-assistant": "助手（RAG）",
       "retrieve-assistant-description": "支持 RAG 的助手",
-      "math-user-proxy": "用户代理（数学）",
-      "math-user-proxy-description": "擅长做数学的用户代理",
-      "retrieve-user-proxy": "用户代理（RAG）",
-      "retrieve-user-proxy-description": "支持 RAG 的用户代理"
+      "math-user": "用户代理（数学）",
+      "math-user-description": "擅长做数学的用户代理",
+      "retrieve-user": "用户代理（RAG）",
+      "retrieve-user-description": "支持 RAG 的用户代理"
     }
   }
 }

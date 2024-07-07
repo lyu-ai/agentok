@@ -181,7 +181,7 @@ class PocketBaseClient:
         message_to_persist.pop('id', None)  # Should remove id for auto-generation
         message_to_persist['owner'] = user.id
         response = self.session.post(
-            f'{self.base_url}/api/collections/messages/records',
+            f'{self.base_url}/api/collections/chat_messages/records',
             headers={"Authorization": f"Bearer {self.admin_auth['token']}"},
             json=message_to_persist
         )
@@ -202,9 +202,9 @@ class PocketBaseClient:
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
-        if chat['from_type'] == 'flow':
+        if chat['from_type'] == 'project':
             response = requests.get(
-                f'{self.base_url}/api/collections/flows/records/{chat["from_flow"]}',
+                f'{self.base_url}/api/collections/projects/records/{chat["from_project"]}',
                 headers={"Authorization": f"Bearer {self.admin_auth['token']}"},
             )
             response.raise_for_status()
