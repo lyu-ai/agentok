@@ -13,7 +13,7 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
   const [editingName, setEditingName] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const instance = useReactFlow();
-  const t = useTranslations('node.UserProxy');
+  const t = useTranslations('node.User');
   const tNodeMeta = useTranslations('meta.node');
   return (
     <div

@@ -30,7 +30,7 @@ import {
 const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
   const t = useTranslations('component.ChatPane');
   const [minimized, setMinimized] = useState(false);
-  const config = flow?.nodes?.find((node: any) => node.type === 'config');
+  const config = flow?.nodes?.find((node: any) => node.type === 'initializer');
   if (!config?.data?.sample_messages || !isArray(config.data.sample_messages)) {
     return null;
   }
@@ -278,7 +278,7 @@ const ChatPane = ({
   // If the chat is not loaded yet, show a button to start the chat.
   if (!chatId) {
     return (
-      <div className="flex flex-col w-full h-full z-10 shadow-box shadow-gray-700 rounded-xl bg-gray-700/80 text-base-content border border-gray-600">
+      <div className="flex flex-col w-full h-full z-10 shadow-box rounded-xl bg-gray-700/80 text-base-content border border-gray-600">
         <div className="p-2 flex items-center justify-end">
           <button
             className="btn btn-ghost btn-square btn-xs"

@@ -1,7 +1,7 @@
 # Use a build stage to compile and build dependencies
 FROM python:3.11-slim as builder
 
-WORKDIR /app 
+WORKDIR /app
 
 # Copy requirements and install dependencies,
 # Utilize the cache unless requirements.txt has changed

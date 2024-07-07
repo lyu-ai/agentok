@@ -1,0 +1,10 @@
+[
+  {
+    "model": "gpt-4-vision-preview",
+    "api_key": "<openai_api_key>"
+  },
+  {
+    "model": "gpt-4-1106-preview",
+    "api_key": "<openai_api_key>"
+  }
+]

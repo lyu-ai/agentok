@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { memo, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaEye, FaMeta } from 'react-icons/fa6';
 import { GoGear } from 'react-icons/go';
 import { Handle, Position, useReactFlow } from 'reactflow';
@@ -14,7 +14,7 @@ import { useTranslations } from 'next-intl';
 import LLavaOptions from '../option/LLaVaOptions';
 import AssistantConfig from '../option/AssistantConfig';
 
-function AssistantNode({ id, data, selected }: any) {
+const AssistantNode = ({ id, data, selected }: any) => {
   const [editingName, setEditingName] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const instance = useReactFlow();
@@ -190,6 +190,6 @@ function AssistantNode({ id, data, selected }: any) {
       />
     </div>
   );
-}
+};
 
-export default memo(AssistantNode);
+export default AssistantNode;

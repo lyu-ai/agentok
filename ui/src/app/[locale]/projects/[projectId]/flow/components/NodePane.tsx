@@ -61,7 +61,6 @@ const NodeGroup = ({ pinned, name, nodes, open, onAddNode }: any) => {
               as="a"
               draggable
               onDragStart={event => {
-                console.log('onDragStart', event);
                 onDragStart(event, {
                   type,
                   name,
@@ -70,7 +69,6 @@ const NodeGroup = ({ pinned, name, nodes, open, onAddNode }: any) => {
                 });
               }}
               onDragEnd={event => {
-                console.log('onDragEnd', event);
                 const dragImage = document.querySelector(
                   `.${DRAGGING_NODE_NAME}`
                 );

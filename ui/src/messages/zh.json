@@ -281,8 +281,8 @@
       "compress-description": "带文本压缩功能的助手",
       "gpt-assistant": "GPT 助手",
       "gpt-assistant-description": "由 GPT 助手 API 提供支持",
-      "user-proxy": "用户代理",
-      "user-proxy-description": "代表用户与代理进行对话",
+      "user": "用户代理",
+      "user-description": "代表用户与代理进行对话",
       "multimodal-assistant": "多模型助手",
       "multimodal-assistant-description": "助手可以看到",
       "llava": "LLaVA",
@@ -293,10 +293,10 @@
       "groupchat-description": "用于协作的群代理",
       "retrieve-assistant": "助手（RAG）",
       "retrieve-assistant-description": "支持 RAG 的助手",
-      "math-user-proxy": "用户代理（数学）",
-      "math-user-proxy-description": "擅长做数学的用户代理",
-      "retrieve-user-proxy": "用户代理（RAG）",
-      "retrieve-user-proxy-description": "支持 RAG 的用户代理"
+      "math-user": "用户代理（数学）",
+      "math-user-description": "擅长做数学的用户代理",
+      "retrieve-user": "用户代理（RAG）",
+      "retrieve-user-description": "支持 RAG 的用户代理"
     }
   }
 }

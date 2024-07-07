@@ -146,6 +146,7 @@ If you're interested in contributing to the development of this project or wish 
 2. **API (Backend Services)**
 
    - Switch to the api service directory `cd api`.
+   - Rename `.env.sample` to `.env`, `OAI_CONFIG_LIST.sample` to `OAI_CONFIG_LIST`, and set the value of variables correctly.
    - Create virtual environment: `python3 -m venv venv`.
    - Activate virtual environment: `source venv/bin/activate`.
    - Install all required dependencies: `pip install -r requirements.txt`.

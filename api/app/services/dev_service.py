@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 import os
+from platform import node
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.ext import do
 from typing import Any, Dict, List, Union
@@ -40,11 +41,17 @@ def project2py(project: Project) -> str:
       edge['source'] == node['id'] and edge['target'] == group_chat_node['id'] for edge in flow.edges
     )]
   note_nodes = [node for node in flow.nodes if node['type'] == 'note']
+  
+  initializer_node = next((node for node in flow.nodes if node['type'] == 'initializer'), None)
+  initialize_options = {}
+  if initializer_node:
+    initialize_options = initializer_node.get('data', {})
 
   # Use the template for each node
   template = env.get_template("base.j2") # Main template
 
   code = template.render(project=project,
+                        initialize_options=initialize_options,
                         nodes=flow.nodes,
                         assistant_nodes=assistant_nodes,
                         custom_conversable_nodes=custom_conversable_nodes,

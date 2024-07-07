@@ -1,18 +1,16 @@
 import AssistantAgent from '../components/node/Assistant';
-import Config from '../components/node/Config';
 import UserProxyAgent from '../components/node/User';
 import GroupChat from '../components/node/GroupChat';
 import Note from '../components/node/Note';
 import {
-  RiChatSmile2Line,
   RiEyeLine,
   RiGroupLine,
   RiMetaLine,
   RiOpenaiFill,
   RiRobot2Line,
-  RiSettingsLine,
   RiStickyNoteLine,
   RiUser4Line,
+  RiUser5Line,
   RiUserSearchLine,
   RiUserVoiceLine,
 } from 'react-icons/ri';
@@ -26,7 +24,6 @@ export const nodeTypes = {
   initializer: Initializer,
   assistant: AssistantAgent,
   user: UserProxyAgent,
-  config: Config,
   groupchat: GroupChat,
   note: Note,
   custom_conversable: CustomConversable,
@@ -59,8 +56,8 @@ export const basicNodes: NodeMeta[] = [
   },
   {
     id: 'user',
-    icon: RiChatSmile2Line,
-    name: 'UserProxy',
+    icon: RiUser5Line,
+    name: 'User',
     label: 'user',
     type: 'user',
     class: 'UserProxyAgent',
@@ -80,14 +77,6 @@ export const basicNodes: NodeMeta[] = [
     label: 'note',
     type: 'note',
     class: 'Note',
-  },
-  {
-    id: 'config',
-    icon: RiSettingsLine,
-    name: 'Config',
-    label: 'config',
-    type: 'config',
-    class: 'Config',
   },
 ];
 
@@ -139,7 +128,7 @@ export const advancedNodes: NodeMeta[] = [
     id: 'retrieve_user_proxy',
     icon: RiUserSearchLine,
     name: 'RetrieveUserProxy',
-    label: 'retrieve-user-proxy',
+    label: 'retrieve-user',
     type: 'user',
     class: 'RetrieveUserProxyAgent',
   },
@@ -147,7 +136,7 @@ export const advancedNodes: NodeMeta[] = [
     id: 'math_user_proxy',
     icon: RiUser4Line,
     name: 'MathUserProxyAgent',
-    label: 'math-user-proxy',
+    label: 'math-user',
     type: 'user',
     class: 'MathUserProxyAgent',
   },
@@ -175,8 +164,8 @@ export const initialNodes: Node[] = [
     id: '3',
     type: 'user',
     data: {
-      name: 'UserProxy',
-      label: 'user-proxy',
+      name: 'User',
+      label: 'user',
       class: 'UserProxyAgent',
       human_input_mode: 'NEVER',
       max_consecutive_auto_reply: 0,
