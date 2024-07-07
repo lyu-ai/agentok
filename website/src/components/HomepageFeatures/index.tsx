@@ -11,12 +11,12 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: 'Multi-Agents',
-    image: '/img/rag.png',
+    image: '/img/knowledge-3.png',
     description: <>Built on the promising AutoGen framework from Microsoft.</>,
   },
   {
     title: 'Fully Visualized',
-    image: '/img/flow.png',
+    image: '/img/flow-3.png',
     description: (
       <>
         Visualize the Agents and Agent Workflow, further simplifies the building
@@ -26,7 +26,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Open with AI',
-    image: '/img/api.png',
+    image: '/img/api-3.png',
     description: (
       <>
         Extend or customize the flow with Python, and let AI write the Python
@@ -39,9 +39,9 @@ const FeatureList: FeatureItem[] = [
 function Feature({ title, image, description }: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
-      {/* <div className="text--center">
+      <div className="text--center">
         <img src={image} className={styles.featureImage} role="img" />
-      </div> */}
+      </div>
       <div className="text--center padding-horiz--md">
         <Heading as="h3" className="text--primary">
           {title}

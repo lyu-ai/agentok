@@ -22,8 +22,15 @@
   }
 }
 
+main {
+  padding: 2rem 0;
+  height: 100%;
+  ;
+}
+
 .buttons {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
 }

@@ -23,7 +23,13 @@ function HomepageHeader() {
             className="button button--primary button--outline button--lg"
             to="/docs/getting-started"
           >
-            Getting Started - 3min ⏱️
+            Getting Started
+          </Link>
+          <Link
+            className="button button--primary button--outline button--lg"
+            to="https://studio.agentok.ai/"
+          >
+            Start to Build
           </Link>
         </div>
       </div>
