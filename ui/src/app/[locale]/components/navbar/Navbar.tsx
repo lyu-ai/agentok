@@ -35,7 +35,7 @@ const Navbar = () => {
           />
         )}
       </div>
-      <div className="navbar-center gap-4 hidden md:flex">
+      <div className="navbar-center gap-6 hidden md:flex">
         <NavMenu projectId={projectId} />
       </div>
       <div className="navbar-end flex items-center my-auto gap-4">

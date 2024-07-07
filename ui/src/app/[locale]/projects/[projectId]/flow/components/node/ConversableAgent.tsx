@@ -1,18 +1,18 @@
 import EditButton from '@/components/EditButton';
 import EditableText from '@/components/EditableText';
 import clsx from 'clsx';
-import { IoExtensionPuzzleSharp } from 'react-icons/io5';
 import { Handle, Position, useReactFlow } from 'reactflow';
-import { setNodeData } from '../../utils/flow';
+import { getNodeLabel, setNodeData } from '../../utils/flow';
 import Toolbar from './Toolbar';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { RiRobotFill } from 'react-icons/ri';
 
-const CustomConversable = ({ id, data, selected }: any) => {
+const ConversableAgent = ({ id, data, selected }: any) => {
   const [editingName, setEditingName] = useState(false);
   const instance = useReactFlow();
-  const NodeIcon = IoExtensionPuzzleSharp;
-  const t = useTranslations('node.CustomConversable');
+  const t = useTranslations('node.ConversableAgent');
+  const tNodeMeta = useTranslations('meta.node');
 
   return (
     <div
@@ -26,7 +26,7 @@ const CustomConversable = ({ id, data, selected }: any) => {
       <Toolbar
         nodeId={id}
         selected={selected}
-        className="bg-sky-700 border-sky-600"
+        className="bg-sky-700 border-sky-500 p-1"
       >
         <EditButton
           editing={editingName}
@@ -38,8 +38,10 @@ const CustomConversable = ({ id, data, selected }: any) => {
       <div className="flex flex-col w-full gap-2 text-sm">
         <div className="w-full flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <NodeIcon className="w-5 h-5" />
-            <div className="text-sm font-bold">{data.label}</div>
+            <RiRobotFill className="w-5 h-5" />
+            <div className="text-sm font-bold">
+              {getNodeLabel(data.label, tNodeMeta)}
+            </div>
           </div>
           <EditableText
             text={data.name}
@@ -54,9 +56,7 @@ const CustomConversable = ({ id, data, selected }: any) => {
         </div>
         <div className="divider my-0" />
         <div className="flex items-center justify-between text-base-content/60 gap-2">
-          <div className="font-bold text-base-content/80">
-            {t('system-message')}
-          </div>
+          <div className="text-base-content/80">{t('system-message')}</div>
         </div>
         <div
           className={clsx(
@@ -73,15 +73,34 @@ const CustomConversable = ({ id, data, selected }: any) => {
             rows={2}
           />
         </div>
+        <div className="flex items-center justify-between text-base-content/60 gap-2">
+          <div className="text-base-content/80">{t('human-input-mode')}</div>
+          <select
+            className="select select-bordered select-sm bg-transparent rounded"
+            value={data.human_input_mode ?? 'NEVER'}
+            onChange={e => {
+              setNodeData(instance, id, { human_input_mode: e.target.value });
+            }}
+          >
+            <option value={'NEVER'}>NEVER</option>
+            <option value={'ALWAYS'}>ALWAYS</option>
+            <option value={'TERMINATE'}>TERMINATE</option>
+          </select>
+        </div>
       </div>
 
       <Handle
+        type="target"
+        position={Position.Left}
+        className="w-16 !bg-sky-700"
+      />
+      <Handle
         type="source"
         position={Position.Right}
-        className="w-16 !bg-green-600"
+        className="w-16 !bg-sky-700"
       />
     </div>
   );
 };
 
-export default CustomConversable;
+export default ConversableAgent;

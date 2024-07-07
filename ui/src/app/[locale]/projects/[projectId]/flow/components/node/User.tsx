@@ -85,22 +85,6 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
             }}
           />
         </div>
-        <div className="flex items-center justify-between text-base-content/60 gap-2">
-          <div className="font-bold text-base-content/80">
-            {t('human-input-mode')}
-          </div>
-          <select
-            className="select select-bordered select-sm bg-transparent rounded"
-            value={data.human_input_mode ?? 'NEVER'}
-            onChange={e => {
-              setNodeData(instance, id, { human_input_mode: e.target.value });
-            }}
-          >
-            <option value={'NEVER'}>NEVER</option>
-            <option value={'ALWAYS'}>ALWAYS</option>
-            <option value={'TERMINATE'}>TERMINATE</option>
-          </select>
-        </div>
         <div className="flex items-center text-sm justify-between gap-2">
           <div className="font-bold text-base-content/80">
             {t('max-consecutive-auto-reply')}

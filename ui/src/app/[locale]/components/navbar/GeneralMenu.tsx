@@ -60,7 +60,7 @@ const GeneralMenu = () => {
           key={item.id}
           href={item.href}
           className={clsx(
-            'flex items-center text-sm py-1 gap-1 hover:text-primary',
+            'flex items-center text-sm py-1 gap-2 hover:text-primary',
             {
               'text-primary/80 border-b border-primary/80': isActive(item.href),
             }

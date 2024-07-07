@@ -26,7 +26,7 @@ class Parameter(BaseModel):
   type: Literal['boolean', 'string', 'number']
   required: Optional[bool] = False
 
-class Skill(BaseModel):
+class Tool(BaseModel):
   id: str
   name: str
   description: Optional[str] = None
@@ -36,7 +36,7 @@ class Skill(BaseModel):
 class Project(BaseModel):
   id: str
   flow: Flow
-  skills: Optional[List[Skill]] = None
+  tools: Optional[List[Tool]] = None
   settings: Optional[Dict[str, Any]] = None
   owner: Optional[str] = None
   created: str

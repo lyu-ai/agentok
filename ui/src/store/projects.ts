@@ -6,7 +6,7 @@ export interface Project {
   name: string;
   description?: string;
   flow: any; // Complicated JSON object
-  skills?: any;
+  tools?: any;
   knowledge?: any;
   settings?: any;
   created?: string;

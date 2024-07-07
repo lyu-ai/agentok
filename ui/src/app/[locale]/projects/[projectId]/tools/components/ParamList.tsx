@@ -16,25 +16,25 @@ const ParamRow = ({ param, onDelete, onUpdate }: any) => {
 
   return (
     <tr className="group flex items-center w-full hover:bg-gray-700">
-      <td className="w-16 flex items-center px-1">
+      <td className="w-20 flex items-center px-1">
         <input
           type="checkbox"
           checked={param.required ?? false}
           onChange={e => onUpdate(param, 'required', e.target.checked)}
         />
       </td>
-      <td className="w-28 px-1">
+      <td className="w-36 px-1">
         <input
           type="text"
           value={name}
           onChange={e => setName(e.target.value)}
           onBlur={e => onUpdate(param, 'name', e.target.value)}
-          className="input input-xs input-bordered bg-transparent rounded w-full"
+          className="input input-sm input-bordered bg-transparent rounded w-full"
         />
       </td>
-      <td className="w-24 px-1">
+      <td className="w-32 px-1">
         <select
-          className="select select-xs select-bordered bg-transparent rounded w-full"
+          className="select select-sm select-bordered bg-transparent rounded w-full"
           value={param.type ?? 'string'}
           onChange={e => onUpdate(param, 'type', e.target.value)}
         >
@@ -43,19 +43,19 @@ const ParamRow = ({ param, onDelete, onUpdate }: any) => {
           <option value="boolean">boolean</option>
         </select>
       </td>
-      <td className="flex-grow px-0">
+      <td className="flex-grow px-1">
         <input
           type="text"
           value={description}
           onChange={e => setDescription(e.target.value)}
           onBlur={e => onUpdate(param, 'description', e.target.value)}
-          className="input input-xs input-bordered bg-transparent rounded w-full"
+          className="input input-sm input-bordered bg-transparent rounded w-full"
         />
       </td>
       <td className="w-12 flex text-right justify-end px-1">
         <div className="hidden group-hover:block w-full">
           <button
-            className="btn btn-xs btn-square btn-ghost hover:text-red-600"
+            className="btn btn-sm btn-square btn-ghost hover:text-red-600"
             onClick={() => onDelete(param)}
           >
             <GoTrash className="w-4 h-4" />
@@ -66,12 +66,12 @@ const ParamRow = ({ param, onDelete, onUpdate }: any) => {
   );
 };
 
-const ParamList = ({ projectId, skill, className, ...props }: any) => {
-  const t = useTranslations('skill.Params');
+const ParamList = ({ projectId, tool, className, ...props }: any) => {
+  const t = useTranslations('tool.Params');
   const { project, updateProject } = useProject(projectId);
   const onDelete = (param: any) => {
-    const newSkills = project?.skills?.map((s: any) => {
-      if (s.id === skill.id) {
+    const newTools = project?.tools?.map((s: any) => {
+      if (s.id === tool.id) {
         return {
           ...s,
           parameters: s.parameters.filter((p: any) => p.id !== param.id),
@@ -79,11 +79,11 @@ const ParamList = ({ projectId, skill, className, ...props }: any) => {
       }
       return s;
     });
-    updateProject({ skills: newSkills });
+    updateProject({ tools: newTools });
   };
   const onUpdate = (param: any, name: string, value: any) => {
-    const newSkills = project?.skills?.map((s: any) => {
-      if (s.id === skill.id) {
+    const newTools = project?.tools?.map((s: any) => {
+      if (s.id === tool.id) {
         const newParams = s.parameters?.map((p: any) => {
           if (param && param.id === p.id) {
             return {
@@ -100,11 +100,11 @@ const ParamList = ({ projectId, skill, className, ...props }: any) => {
       }
       return s;
     });
-    updateProject({ skills: newSkills });
+    updateProject({ tools: newTools });
   };
   const onAddParam = () => {
-    const newSkills = project?.skills?.map((s: any) => {
-      if (s.id === skill.id) {
+    const newTools = project?.tools?.map((s: any) => {
+      if (s.id === tool.id) {
         return {
           ...s,
           parameters: [
@@ -121,7 +121,7 @@ const ParamList = ({ projectId, skill, className, ...props }: any) => {
       }
       return s;
     });
-    updateProject({ skills: newSkills });
+    updateProject({ tools: newTools });
   };
 
   return (
@@ -141,18 +141,18 @@ const ParamList = ({ projectId, skill, className, ...props }: any) => {
           <span>{t('param-add')}</span>
         </button>
       </div>
-      <table className="table table-xs border-transparent">
+      <table className="table table-sm border-transparent">
         <thead>
           <tr className="flex items-center w-full">
-            <th className="w-16 px-0">{t('param-required')}</th>
-            <th className="w-28 px-1">{t('param-name')}</th>
-            <th className="w-24 px-1">{t('param-type')}</th>
+            <th className="w-20 px-1">{t('param-required')}</th>
+            <th className="w-36 px-1">{t('param-name')}</th>
+            <th className="w-32 px-1">{t('param-type')}</th>
             <th className="flex-grow px-1">{t('param-description')}</th>
             <th className="w-12 px-1 text-right">{t('param-actions')}</th>
           </tr>
         </thead>
         <tbody>
-          {skill?.parameters?.map((param: any, index: number) => (
+          {tool?.parameters?.map((param: any, index: number) => (
             <ParamRow
               param={param}
               key={index}

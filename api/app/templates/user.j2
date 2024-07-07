@@ -1,8 +1,9 @@
-# user_proxy.j2
-{% macro generate_main_user_proxy(node) %}
+# user.j2
+{% macro generate_users(user_nodes) %}
+{%- for node in user_nodes %}
 {%- set class_name = node['data']['class'] %}
 {%- set name = node['data']['name'] %}
-user_proxy = {{ class_name }}(
+node_{{ node.id }} = {{ class_name }}(
     name="{{ name }}",
     {%- if node['data'].get('system_message') %}
     system_message="{{ node['data']['system_message'] }}",
@@ -54,4 +55,5 @@ user_proxy = {{ class_name }}(
     {%- endif %}
     llm_config=llm_config,
 )
+{%- endfor %}
 {% endmacro %}
