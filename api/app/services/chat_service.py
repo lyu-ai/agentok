@@ -2,9 +2,9 @@ from datetime import datetime
 import os
 import tempfile
 
-from ..models import Workflow, User
+from ..models import Project, User
 
-from .dev_service import flow2py
+from .dev_service import project2py
 from .chat_manager import chat_manager
 from .pocketbase_client import PocketBaseClient  # Import your PocketBaseClient
 
@@ -42,7 +42,7 @@ class ChatService:
         os.makedirs(os.path.dirname(source_path), exist_ok=True)
 
         if not os.path.exists(source_path):
-            generated_code = flow2py(Workflow(**source))
+            generated_code = project2py(Project(**source))
             with open(source_path, 'w', encoding='utf-8') as file:
                 file.write(generated_code)
 

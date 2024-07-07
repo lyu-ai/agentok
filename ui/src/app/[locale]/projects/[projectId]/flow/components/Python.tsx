@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 import { GoAlertFill } from 'react-icons/go';
 import { useTranslations } from 'next-intl';
 import DownloadButton from '@/components/DownloadButton';
-import { toast } from 'react-toastify';
 
 const Python = ({ data, setMode }: any) => {
   const [loading, setLoading] = useState(true);
@@ -15,6 +14,7 @@ const Python = ({ data, setMode }: any) => {
     python?: string;
     message?: string;
   }>({ code: 0, python: '', message: '' });
+  const [errorDetail, setErrorDetail] = useState<string | null>(null);
   const t = useTranslations('page.Python');
 
   useEffect(() => {
@@ -27,18 +27,33 @@ const Python = ({ data, setMode }: any) => {
         'Content-Type': 'application/json',
       },
     })
-      .then(resp => resp.json())
+      .then(resp => {
+        // Check if the response status is not OK (200-299)
+        if (!resp.ok) {
+          // If the response is not OK, throw an error to be caught later
+          return resp.json().then(error => {
+            const errorDetail = error.detail
+              ? JSON.stringify(error.detail, null, 2)
+              : 'Unknown error';
+            throw new Error(
+              `Server responded with status ${resp.status}: ${errorDetail}`
+            );
+          });
+        }
+        // If the response is OK, parse the JSON
+        return resp.json();
+      })
       .then(json => {
         if (json.error) {
           setResult({ code: 400, message: json.error });
-          return;
         } else {
           setResult({ code: 200, python: json.code });
+          setErrorDetail(null); // Clear previous error details
         }
       })
       .catch(e => {
-        console.error(e);
-        toast.error(t('generate-fail') + ': ' + String(e));
+        console.warn(e);
+        setErrorDetail(e.message);
       })
       .finally(() => setLoading(false));
   }, [data, t]);
@@ -59,6 +74,11 @@ const Python = ({ data, setMode }: any) => {
             <GoAlertFill className="w-8 h-8" />
             <span className="font-bold">{t('generate-fail')}</span>
             <span>{result.message}</span>
+            {errorDetail && (
+              <pre className="text-xs text-left bg-yellow-400 p-2 rounded">
+                {errorDetail}
+              </pre>
+            )}
           </div>
         </div>
       ) : (

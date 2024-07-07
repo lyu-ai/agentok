@@ -152,6 +152,7 @@
     "NodeButton": {
       "add-node": "添加节点",
       "group-basic": "基本节点",
+      "group-assistant": "智能体",
       "group-advanced": "高级节点",
       "group-extensions": "扩展节点",
       "pin": "固定",

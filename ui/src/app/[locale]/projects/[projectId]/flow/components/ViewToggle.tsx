@@ -21,7 +21,11 @@ const ViewToggle = ({
       ? RiBracesLine
       : RiCodeSSlashLine;
   const tip =
-    mode === 'flow' ? t('back-to-editor') : mode === 'json' ? 'JSON' : 'Python';
+    mode === 'flow'
+      ? t('back-to-editor')
+      : mode === 'json'
+      ? 'Show in Json'
+      : 'Generate Python Code';
   const className = flat
     ? 'flex items-center justify-center w-5 h-5 rounded-sm cursor-pointer'
     : 'btn btn-circle btn-ghost btn-sm';

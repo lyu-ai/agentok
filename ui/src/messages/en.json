@@ -75,6 +75,13 @@
       "input-mode-terminate": "TERMINATE",
       "max-consecutive-auto-reply": "Max Consecutive Auto-Replies"
     },
+    "Initializer": {
+      "options": "More Options",
+      "initializer-tooltip": "Start the conversation",
+      "sample-messages": "Sample Message",
+      "sample-messages-tooltip": "Sample messages for new chat, will be shown and clickable above the Send button.\nPlease put each message on a separate line.",
+      "summary-method": "Summary Method"
+    },
     "Note": {
       "note-placeholder": "Start to write about current agent flow",
       "note-blank": "(Note is blank)"
@@ -155,6 +162,7 @@
     "NodeButton": {
       "add-node": "Add Node",
       "group-basic": "Basic Nodes",
+      "group-assistant": "Assistants",
       "group-advanced": "Advanced Nodes",
       "group-extensions": "Extensions",
       "pin": "Pin",
@@ -190,6 +198,22 @@
     }
   },
   "option": {
+    "InitializerConfig": {
+      "title": "More Options",
+      "support-retrieve": "Retrieve Support",
+      "code-execution": "Code Execution",
+      "work-dir": "Location",
+      "last-n-messages": "Last (n) Messages",
+      "use-docker": "Use Docker",
+      "task": "Task",
+      "task-code": "Code",
+      "chunk-token-size": "Chunk Token Size",
+      "docs-path": "Docs Path",
+      "custom-text-types": "Custom Text Types",
+      "get-or-create": "Get or Create",
+      "client": "Client",
+      "termination-msg": "Termination Keyword:"
+    },
     "UserConfig": {
       "title": "More Options",
       "support-retrieve": "Retrieve Support",
@@ -279,6 +303,8 @@
   },
   "meta": {
     "node": {
+      "initializer": "Initializer",
+      "initializer-description": "Initialize the flow",
       "config": "Config",
       "config-description": "Configure the node",
       "assistant": "Assistant",
@@ -287,7 +313,7 @@
       "compress-description": "Assistant with Compress",
       "gpt-assistant": "GPT Assistant",
       "gpt-assistant-description": "Enpowered by GPT Assistant API",
-      "user-proxy": "User Proxy",
+      "user-proxy": "User",
       "user-proxy-description": "Represent the user talks to Agents",
       "multimodal-assistant": "Multimodal Assistant",
       "multimodal-assistant-description": "Assistant can See",
@@ -295,8 +321,8 @@
       "llava-description": "Assistant sees with LLaVA",
       "note": "Note",
       "note-description": "Place to write documents",
-      "groupchat": "Group Chat",
-      "groupchat-description": "Group agents for collaboration",
+      "groupchat": "Group",
+      "groupchat-description": "Group discussion among several agents",
       "retrieve-assistant": "Assistant for RAG",
       "retrieve-assistant-description": "Assistant supports RAG",
       "math-user-proxy": "User Proxy for Math",

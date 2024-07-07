@@ -3,7 +3,12 @@ import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
 import { BsRobot } from 'react-icons/bs';
-import { getNodeLabel, basicNodes, advancedNodes } from '../utils/flow';
+import {
+  getNodeLabel,
+  basicNodes,
+  assistantNodes,
+  advancedNodes,
+} from '../utils/flow';
 import useProjectStore from '@/store/projects';
 import { RiPushpinLine, RiUnpinLine } from 'react-icons/ri';
 
@@ -166,6 +171,13 @@ const NodePane = ({ pinned, onAddNode, contentClassName }: any) => {
             pinned={pinned}
             name={t('group-basic')}
             nodes={basicNodes}
+            onAddNode={onAddNode}
+            open
+          />
+          <NodeGroup
+            pinned={pinned}
+            name={t('group-assistant')}
+            nodes={assistantNodes}
             onAddNode={onAddNode}
             open
           />

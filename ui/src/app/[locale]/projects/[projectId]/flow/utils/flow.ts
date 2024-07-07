@@ -1,6 +1,6 @@
 import AssistantAgent from '../components/node/Assistant';
 import Config from '../components/node/Config';
-import UserProxyAgent from '../components/node/UserProxy';
+import UserProxyAgent from '../components/node/User';
 import GroupChat from '../components/node/GroupChat';
 import Note from '../components/node/Note';
 import {
@@ -14,13 +14,16 @@ import {
   RiStickyNoteLine,
   RiUser4Line,
   RiUserSearchLine,
+  RiUserVoiceLine,
 } from 'react-icons/ri';
 import { Edge, Node, ReactFlowInstance } from 'reactflow';
 import { genId } from '@/utils/id';
 import CustomConversable from '../components/node/CustomConversable';
 import { ComponentType } from 'react';
+import Initializer from '../components/node/Initializer';
 
 export const nodeTypes = {
+  initializer: Initializer,
   assistant: AssistantAgent,
   user: UserProxyAgent,
   config: Config,
@@ -47,18 +50,18 @@ export type NodeMeta = {
 
 export const basicNodes: NodeMeta[] = [
   {
-    id: 'assistant',
-    icon: RiRobot2Line,
-    name: 'Assistant',
-    label: 'assistant',
-    type: 'assistant',
-    class: 'AssistantAgent',
+    id: 'initializer',
+    icon: RiUserVoiceLine,
+    name: 'Initializer',
+    label: 'initializer',
+    type: 'initializer',
+    class: 'Initializer',
   },
   {
-    id: 'user_proxy',
+    id: 'user',
     icon: RiChatSmile2Line,
     name: 'UserProxy',
-    label: 'user-proxy',
+    label: 'user',
     type: 'user',
     class: 'UserProxyAgent',
   },
@@ -85,6 +88,17 @@ export const basicNodes: NodeMeta[] = [
     label: 'config',
     type: 'config',
     class: 'Config',
+  },
+];
+
+export const assistantNodes: NodeMeta[] = [
+  {
+    id: 'assistant',
+    icon: RiRobot2Line,
+    name: 'Assistant',
+    label: 'assistant',
+    type: 'assistant',
+    class: 'AssistantAgent',
   },
 ];
 
@@ -148,16 +162,24 @@ export const getNodeLabel = (label: string, tNodeMeta: any) => {
 
 export const initialNodes: Node[] = [
   {
-    id: '1',
-    type: 'assistant',
+    id: '1001',
+    type: 'initializer',
     data: {
-      name: 'Image',
-      type: 'assistant',
-      label: 'multimodal-assistant',
-      class: 'MultimodalConversableAgent',
-      max_consecutive_auto_reply: 10,
+      name: 'Initializer',
+      label: 'initializer',
+      class: 'Initializer',
     },
-    position: { x: 145, y: 360 },
+    position: { x: 150, y: 300 },
+  },
+  {
+    id: '1002',
+    type: 'summarizer',
+    data: {
+      name: 'Summarizer',
+      label: 'summarizer',
+      class: 'Summarizer',
+    },
+    position: { x: 750, y: 300 },
   },
   {
     id: '3',
@@ -170,6 +192,18 @@ export const initialNodes: Node[] = [
       max_consecutive_auto_reply: 0,
     },
     position: { x: 550, y: 300 },
+  },
+  {
+    id: '1',
+    type: 'assistant',
+    data: {
+      name: 'Image',
+      type: 'assistant',
+      label: 'multimodal-assistant',
+      class: 'MultimodalConversableAgent',
+      max_consecutive_auto_reply: 10,
+    },
+    position: { x: 145, y: 360 },
   },
   {
     id: '998',

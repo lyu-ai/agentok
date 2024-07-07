@@ -14,16 +14,10 @@ class Message(BaseModel):
 
 Node = Dict[str, Any]
 Edge = Dict[str, Any]
-class FlowData(BaseModel):
+
+class Flow(BaseModel):
   nodes: List[Node]
   edges: List[Edge]
-
-class Workflow(BaseModel):
-  id: str
-  flow: FlowData
-  owner: Optional[str] = None
-  created: str
-  updated: str
 
 class Parameter(BaseModel):
   id: str
@@ -32,14 +26,21 @@ class Parameter(BaseModel):
   type: Literal['boolean', 'string', 'number']
   required: Optional[bool] = False
 
-class Function(BaseModel):
+class Skill(BaseModel):
   id: str
   name: str
   description: Optional[str] = None
   parameters: List[Parameter]
+  code: Optional[str] = None
 
-from pydantic import BaseModel
-from typing import List, Optional
+class Project(BaseModel):
+  id: str
+  flow: Flow
+  skills: Optional[List[Skill]] = None
+  settings: Optional[Dict[str, Any]] = None
+  owner: Optional[str] = None
+  created: str
+  updated: str
 
 class MessageBase(BaseModel):
     message: str

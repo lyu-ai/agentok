@@ -61,8 +61,10 @@ const Agentflow = ({ projectId }: any) => {
   }
 
   useEffect(() => {
-    setNodes(project?.flow?.nodes ?? []);
-    setEdges(project?.flow?.edges ?? []);
+    if (project?.flow) {
+      setNodes(project.flow.nodes);
+      setEdges(project.flow.edges);
+    }
     setIsDirty(false);
     // fitView({ padding: 0.2, maxZoom: 1 });
     const existingChat = chats.findLast(chat => chat.sourceId === project?.id);
@@ -297,10 +299,10 @@ const Agentflow = ({ projectId }: any) => {
             position="bottom-left"
             className="flex"
           >
-            <ControlButton>
+            <ControlButton title="python">
               <ViewToggle flat mode={'python'} setMode={setMode} />
             </ControlButton>
-            <ControlButton>
+            <ControlButton title="json">
               <ViewToggle flat mode={'json'} setMode={setMode} />
             </ControlButton>
           </Controls>

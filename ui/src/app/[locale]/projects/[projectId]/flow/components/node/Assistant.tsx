@@ -176,8 +176,8 @@ function AssistantNode({ id, data, selected }: any) {
       </div>
 
       <Handle
-        type="source"
-        position={Position.Right}
+        type="target"
+        position={Position.Left}
         className="w-16 !bg-green-600"
       />
 

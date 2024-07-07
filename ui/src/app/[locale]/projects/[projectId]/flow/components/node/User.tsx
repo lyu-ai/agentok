@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { RiChatSmile2Fill } from 'react-icons/ri';
+import { RiSettings3Line, RiUser5Fill } from 'react-icons/ri';
 import { Handle, Position, useReactFlow } from 'reactflow';
 import { getNodeLabel, setNodeData } from '../../utils/flow';
 import Toolbar from './Toolbar';
@@ -7,7 +7,6 @@ import { useState } from 'react';
 import EditButton from '@/components/EditButton';
 import EditableText from '@/components/EditableText';
 import UserConfig from '../option/UserConfig';
-import { GoGear } from 'react-icons/go';
 import { useTranslations } from 'next-intl';
 
 const UserProxyAgent = ({ id, selected, data }: any) => {
@@ -28,7 +27,7 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
       <div className="flex flex-col w-full gap-2 text-sm">
         <div className="w-full flex items-center justify-between gap-2 text-primary">
           <div className="flex items-center gap-2 ">
-            <RiChatSmile2Fill className="w-5 h-5" />
+            <RiUser5Fill className="w-5 h-5" />
             <div className="text-sm font-bold">
               {getNodeLabel(data.label, tNodeMeta)}
             </div>
@@ -56,7 +55,7 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
             data-tooltip-id="default-tooltip"
             data-tooltip-place="top"
           >
-            <GoGear className="w-4 h-4" />
+            <RiSettings3Line className="w-4 h-4" />
           </div>
           <EditButton
             editing={editingName}
@@ -117,13 +116,6 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
             }}
           />
         </div>
-        <button
-          className="btn btn-outline btn-sm flex items-center gap-2 rounded"
-          onClick={() => setShowOptions(o => !o)}
-        >
-          <GoGear className="w-4 h-4" />
-          <span>{t('options')}</span>
-        </button>
       </div>
 
       <Handle
