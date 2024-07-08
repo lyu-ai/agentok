@@ -14,9 +14,9 @@ import ProjectPicker from './ProjectPicker';
 
 const Navbar = () => {
   const pathname = usePathname();
-  const regexResult = pathToRegexp('/projects/:projectId{/:feature}?').exec(
-    pathname
-  );
+  const regexResult = pathToRegexp(
+    '/projects/:projectId{/:feature}?{/:sub}?'
+  ).exec(pathname);
   const projectId =
     regexResult && regexResult.length >= 2 ? regexResult[1] : null;
 
@@ -35,7 +35,7 @@ const Navbar = () => {
           />
         )}
       </div>
-      <div className="navbar-center gap-6 hidden md:flex">
+      <div className="navbar-center gap-4 hidden md:flex">
         <NavMenu projectId={projectId} />
       </div>
       <div className="navbar-end flex items-center my-auto gap-4">

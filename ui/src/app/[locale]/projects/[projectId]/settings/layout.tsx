@@ -1,13 +1,19 @@
 import SidebarLayout from '@/components/SidebarLayout';
 import { PropsWithChildren } from 'react';
-import { settingList } from './settings';
+import { settingList } from './project-settings';
 
 const Layout = ({
   children,
   params,
 }: PropsWithChildren<{ params: { projectId: string } }>) => {
-  console.log('params', params);
-  return <SidebarLayout sidebarItems={settingList}>{children}</SidebarLayout>;
+  return (
+    <SidebarLayout
+      pathPrefix={`/projects/${params.projectId}`}
+      sidebarItems={settingList}
+    >
+      {children}
+    </SidebarLayout>
+  );
 };
 
 export default Layout;
