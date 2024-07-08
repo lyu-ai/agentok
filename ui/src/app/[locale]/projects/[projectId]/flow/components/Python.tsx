@@ -27,25 +27,10 @@ const Python = ({ data, setMode }: any) => {
         'Content-Type': 'application/json',
       },
     })
-      .then(resp => {
-        // Check if the response status is not OK (200-299)
-        if (!resp.ok) {
-          // If the response is not OK, throw an error to be caught later
-          return resp.json().then(error => {
-            const errorDetail = error.detail
-              ? JSON.stringify(error.detail, null, 2)
-              : 'Unknown error';
-            throw new Error(
-              `Server responded with status ${resp.status}: ${errorDetail}`
-            );
-          });
-        }
-        // If the response is OK, parse the JSON
-        return resp.json();
-      })
+      .then(resp => resp.json())
       .then(json => {
         if (json.error) {
-          setResult({ code: 400, message: json.error });
+          setErrorDetail(json.error.detail);
         } else {
           setResult({ code: 200, python: json.code });
           setErrorDetail(null); // Clear previous error details

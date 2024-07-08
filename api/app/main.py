@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from .routers import chat_router, dev_router, extension_router, message_router, doc_router, admin_router
@@ -22,6 +22,13 @@ app.include_router(dev_router.router, prefix="/dev", tags=["Dev"])
 app.include_router(extension_router.router, prefix="/extensions", tags=["Extension"])
 app.include_router(doc_router.router, include_in_schema=False)
 app.include_router(admin_router.router, prefix="/admin", include_in_schema=False)
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc: Exception):
+    return JSONResponse(
+        status_code=400,
+        content={"status_code": 400, "error": {"message": "Internal Server Error", "detail": str(exc)}}
+    )
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def root():
