@@ -17,8 +17,7 @@ const Page = ({ params }: { params: { projectId: string } }) => {
     fetchSettings(project);
   }, [project]);
   const onApplyChanges = async () => {
-    if (!project) return;
-    const updatedProject = await updateProject({
+    await updateProject({
       name,
       description,
     });
@@ -49,12 +48,6 @@ const Page = ({ params }: { params: { projectId: string } }) => {
         <div className="flex items-center gap-2 ">
           <button className="btn btn-sm btn-primary" onClick={onApplyChanges}>
             Apply Changes
-          </button>
-          <button
-            className="btn btn-sm btn-outline"
-            onClick={() => fetchSettings(project)}
-          >
-            Revert
           </button>
         </div>
       </div>

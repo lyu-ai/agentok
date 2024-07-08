@@ -38,7 +38,7 @@ const useTemplateStore = create<ProjectTemplateState>()(
       },
     }),
     {
-      name: 'template-storage',
+      name: 'agentok-templates',
     }
   )
 );

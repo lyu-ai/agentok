@@ -31,7 +31,7 @@ const Sidebar = ({ pathPrefix, items }: SidebarProps) => {
           <Link
             key={item.name}
             className={clsx(
-              'flex items-center px-2 md:px-4 py-2 gap-1  text-sm rounded-lg hover:bg-base-content/5',
+              'flex items-center px-2 md:px-4 py-2 gap-1.5  text-sm rounded-lg hover:bg-base-content/5',
               {
                 'bg-base-100/50 dark:bg-base-content/20 shadow text-primary': isActive,
                 'tooltip tooltip-right': isMedium,

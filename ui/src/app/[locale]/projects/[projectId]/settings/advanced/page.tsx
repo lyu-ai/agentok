@@ -34,18 +34,13 @@ const Page = ({ params }: { params: { projectId: string } }) => {
             The operations in this section requires professional knowledge and
             might cause irrrevocable damages.
           </div>
-          <div className="flex flex-col p-4 gap-4  text-error border-red-200/40 border rounded-lg bg-red-200/20">
-            <div className="text-red-600 font-bold">Delete Project</div>
+          <div className="flex flex-col p-4 gap-4   border-red-200/40 border rounded-lg bg-red-500/20">
+            <div className="font-bold">Delete Project</div>
             <p className="text-sm">
               This action will result in the irrevocable deletion of all data
-              associated with the project{' '}
-              <span className="font-bold text-error">
-                {project.name} [ID: {project.id}]
-              </span>
-              . Please ensure that you have reviewed all related information and
-              have taken any necessary backup measures before confirming this
-              action. This is a non-reversible operation and once executed, the
-              project and all its data will be permanently erased.
+              associated with the project. Please ensure that you have reviewed
+              all related information and have taken any necessary backup
+              measures.
             </p>
             <p className="text-sm font-bold">
               Are you absolutely certain you wish to continue with this
@@ -53,7 +48,7 @@ const Page = ({ params }: { params: { projectId: string } }) => {
             </p>
             <div className="flex items-center gap-2 mt-4">
               <button
-                className="btn btn-sm bg-red-800 px-6 border-red-700 hover:bg-red-600 hover:border-red-500 text-white rounded"
+                className="btn btn-sm bg-red-800 px-6 border-red-500 hover:bg-red-600 hover:border-red-400 text-white rounded"
                 onClick={() => setShowPrompt(true)}
               >
                 Delete [{project.name}]
