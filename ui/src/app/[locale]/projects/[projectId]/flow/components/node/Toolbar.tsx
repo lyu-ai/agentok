@@ -1,6 +1,11 @@
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { GoTrash } from 'react-icons/go';
+import {
+  RiDeleteBin3Fill,
+  RiDeleteBin3Line,
+  RiDeleteBin4Line,
+} from 'react-icons/ri';
 import { Position, NodeToolbar, useReactFlow } from 'reactflow';
 
 const Toolbar = ({
@@ -28,24 +33,19 @@ const Toolbar = ({
       isVisible={selected}
       position={Position.Top}
       align="end"
-      className={clsx(
-        className,
-        'flex items-center gap-3 p-1 rounded bg-gray-600/90 border border-gray-500'
-      )}
+      className={clsx(className, 'flex items-center gap-3 p-1 rounded')}
     >
       {children}
       {!hideDelete && (
-        <button
-          type="button"
-          aria-label="delete"
-          className="flex items-center justify-center hover:text-red-600"
+        <div
+          className="cursor-pointer hover:text-white"
           data-tooltip-content={t('delete-node-tooltip')}
           data-tooltip-id="default-tooltip"
           data-tooltip-place="top"
           onClick={onDelete}
         >
-          <GoTrash className="w-4 h-4" />
-        </button>
+          <RiDeleteBin4Line className="w-4 h-4" />
+        </div>
       )}
     </NodeToolbar>
   );

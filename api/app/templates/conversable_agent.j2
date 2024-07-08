@@ -1,0 +1,16 @@
+# conversable_agents.j2
+{% macro generate_conversable_agents(conversable_nodes) %}
+# Conversable Agents
+{% for node in conversable_nodes %}
+node_{{ node.id }} = {{ node.data.class }}(
+    name="{{ node.data.name }}",
+    {%- if node.data.system_message %}
+    system_message="""{{ node.data.system_message }}""",
+    {%- endif %}
+    {%- if node.data.human_input_mode %}
+    human_input_mode="{{ node.data.human_input_mode }}",
+    {%- endif %}
+    llm_config=llm_config,
+)
+{% endfor %}
+{% endmacro %}

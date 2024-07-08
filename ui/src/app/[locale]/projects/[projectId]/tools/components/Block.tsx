@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import { GoTrash } from 'react-icons/go';
-import { TbMathFunction } from 'react-icons/tb';
+import { RiFormula } from 'react-icons/ri';
 
-const SkillBlock = ({
+const ToolBlock = ({
   nodeId,
   func,
   onDelete: _onDelete,
@@ -25,7 +25,7 @@ const SkillBlock = ({
       {...props}
     >
       <div className="flex items-center gap-2">
-        <TbMathFunction className="w-5 h-5 flex-shrink-0" />
+        <RiFormula className="w-5 h-5 flex-shrink-0" />
         <div className="text-base font-bold">{func.name}</div>
       </div>
       <div className="text-sm text-base-content/50 w-full line-clamp-2">
@@ -43,4 +43,4 @@ const SkillBlock = ({
   );
 };
 
-export default SkillBlock;
+export default ToolBlock;

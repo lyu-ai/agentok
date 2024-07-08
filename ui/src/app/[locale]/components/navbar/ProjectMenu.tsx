@@ -26,11 +26,11 @@ export const getProjectNavbarItems = (projectId: string) => {
       href: `/projects/${projectId}/flow`,
     },
     {
-      id: 'skills',
-      label: 'Skills',
+      id: 'tools',
+      label: 'Tools',
       icon: RiPuzzle2Line,
       activeIcon: RiPuzzle2Fill,
-      href: `/projects/${projectId}/skills`,
+      href: `/projects/${projectId}/tools`,
     },
     {
       id: 'knowledge',
@@ -66,7 +66,7 @@ const ProjectNavbar = ({ projectId }: any) => {
             key={item.id}
             href={item.href}
             className={clsx(
-              'flex items-center text-sm py-1 gap-1 border-b  hover:text-primary/80',
+              'flex items-center text-sm py-1 gap-2 border-b  hover:text-primary/80',
               {
                 'text-primary border-primary': isActive,
                 'border-transparent': !isActive,

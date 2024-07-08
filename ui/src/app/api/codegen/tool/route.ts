@@ -7,7 +7,7 @@ const NEXT_PUBLIC_BACKEND_URL =
 export async function POST(request: NextRequest) {
   const pb = await loadAuthFromCookie();
   const data = await request.json();
-  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/dev/codegen/function`, {
+  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/dev/codegen/tool`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
   });
   const code = await res.json();
   if (res.status !== 200) {
-    console.warn('Codegen(function) failed:', code);
+    console.warn('Codegen(tool) failed:', code);
   }
   return new Response(JSON.stringify(code), { status: res.status });
 }

@@ -1,9 +1,9 @@
 {
-  "skill": {
+  "tool": {
     "Config": {
       "title": "技能",
-      "new-skill": "新建技能",
-      "skill-prompt": "可以扩展代理的技能。从左侧列表中选择现有功能，或点击“新建功能”创建自定义功能。",
+      "new-tool": "新建技能",
+      "tool-prompt": "可以扩展代理的技能。从左侧列表中选择现有功能，或点击“新建功能”创建自定义功能。",
       "reset": "重置",
       "reset-confirm": "确定要将所有设置重置为默认值吗？"
     },
@@ -152,7 +152,7 @@
     "NodeButton": {
       "add-node": "添加节点",
       "group-basic": "基本节点",
-      "group-assistant": "智能体",
+      "group-agent": "智能体",
       "group-advanced": "高级节点",
       "group-extensions": "扩展节点",
       "pin": "固定",

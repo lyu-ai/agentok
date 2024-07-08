@@ -1,0 +1,40 @@
+# Start the conversation
+
+{% if initial_chat_targets | length > 1 %}
+# Sequential Chats
+# TODO: The input messsage is ignored, I guess it should be in the first element?
+chat_result = node_{{ first_converser['id'] }}.initiate_chats(
+    [
+      {%- for target in initial_chat_targets %}
+      {
+        "recipient": node_{{ target['node']['id'] }},
+        {%- if target['chat_options'].message %}
+        "message": "{{ target.chat_options.message }}",
+        {%- endif %}
+        {%- if target['chat_options'].max_turns %}
+        "max_turns": {{ target.chat_options.max_turns }},
+        {%- endif %}
+        {%- if target['chat_options'].summary_method %}
+        "summary_method": "{{ target.chat_options.summary_method }}",
+        {%- endif %}
+      }{% if not loop.last %},{% endif %}
+      {%- endfor %}
+    ]
+)
+{%- else %}
+# Talk to one single agent
+chat_result = node_{{ first_converser['id'] }}.initiate_chat(
+    node_{{ first_converser['id'] }},
+    {%- if first_converser.data.class in ['RetrieveUserProxyAgent', 'MathUserProxyAgent']  %}
+    problem=args.message,
+    {%- else %}
+    message=args.message,
+    {%- endif %}
+    {%- if initial_chat_targets[0]['chat_options'].max_turns %}
+    max_turns={{ initial_chat_targets[0]['chat_options'].max_turns }},
+    {%- endif %}
+    {%- if initial_chat_targets[0]['chat_options'].summary_method %}
+    summary_method="{{ initial_chat_targets[0]['chat_options'].summary_method }}",
+    {%- endif %}
+)
+{% endif %}

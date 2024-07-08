@@ -1,5 +1,5 @@
 # agents.j2
-{% macro generate_agents(assistant_nodes) %}
+{% macro generate_assistants(assistant_nodes) %}
 {%- for node in assistant_nodes %}
 {%- set class_name = node.data.class %}
 {%- set name = node.data.name %}

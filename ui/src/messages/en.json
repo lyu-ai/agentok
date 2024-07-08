@@ -1,14 +1,14 @@
 {
-  "skill": {
+  "tool": {
     "Config": {
       "title": "Functions",
-      "new-skill": "New Skill",
-      "skill-prompt": "Functions enable you to expand an Agent's skills. Select an existing skill from the list on the left, or click 'New Skill' to create a custom skill.",
+      "new-tool": "New Tool",
+      "tool-prompt": "Functions enable you to expand an Agent's tools. Select an existing tool from the list on the left, or click 'New Tool' to create a custom tool.",
       "reset": "Reset",
       "reset-confirm": "Are you sure to reset all settings to default?"
     },
     "Editor": {
-      "title": "Skill Editor",
+      "title": "Tool Editor",
       "generate-code": "Generate Code",
       "generate-code-tooltip": "Auto-generate code with AI",
       "run-test": "Run Test"
@@ -37,11 +37,15 @@
       "llava-url": "LLaVa URL",
       "options": "More Options"
     },
-    "CustomConversable": {
+    "ConversableAgent": {
       "name-edit-tooltip": "Edit node name (as variables)",
       "name-edit-done-tooltip": "Finish editing node name",
       "system-message": "System Message",
-      "system-message-placeholder": "Enter system message here"
+      "system-message-placeholder": "Enter system message here",
+      "human-input-mode": "Human Input Mode",
+      "input-mode-never": "NEVER",
+      "input-mode-always": "ALWAYS",
+      "input-mode-terminate": "TERMINATE"
     },
     "Config": {
       "flow-name": "Name",
@@ -69,19 +73,13 @@
       "start-chat": "Start Chat",
       "start-chat-tooltip": "After build the flow, click",
       "options": "More Options",
-      "human-input-mode": "Human Input Mode",
-      "input-mode-never": "NEVER",
-      "input-mode-always": "ALWAYS",
-      "input-mode-terminate": "TERMINATE",
       "max-consecutive-auto-reply": "Max Consecutive Auto-Replies"
     },
     "Initializer": {
       "options": "More Options",
       "initializer-tooltip": "Start the conversation",
       "sample-messages": "Sample Messages",
-      "sample-messages-tooltip": "Sample messages for new chat, will be shown and clickable above the Send button.\nPlease put each message on a separate line.",
-      "summary-method": "Summary Method",
-      "max-turns": "Max Turns"
+      "sample-messages-tooltip": "Sample messages for new chat, will be shown and clickable above the Send button.\nPlease put each message on a separate line."
     },
     "Note": {
       "note-placeholder": "Start to write about current agent flow",
@@ -162,8 +160,8 @@
     },
     "NodeButton": {
       "add-node": "Add Node",
-      "group-basic": "Basic Nodes",
-      "group-assistant": "Assistants",
+      "group-basic": "Basic",
+      "group-agent": "Agents",
       "group-advanced": "Advanced Nodes",
       "group-extensions": "Extensions",
       "pin": "Pin",
@@ -243,6 +241,13 @@
       "code_interpreter": "Code Interpreter",
       "file_ids": "File IDs",
       "assistant_id": "Assistant ID"
+    },
+    "ConverseConfig": {
+      "title": "Converse Settings",
+      "description": "Configure how the two connected agents collaborate.",
+      "message": "Message",
+      "summary-method": "Summary Method",
+      "max-turns": "Max Turns"
     }
   },
   "page": {
@@ -309,13 +314,15 @@
       "config": "Config",
       "config-description": "Configure the node",
       "assistant": "Assistant",
-      "assistant-description": "General-purpose Assistant",
+      "assistant-description": "Assistant agent, designed to solve a task with LLM.",
       "compress": "Compress",
       "compress-description": "Assistant with Compress",
       "gpt-assistant": "GPT Assistant",
       "gpt-assistant-description": "Enpowered by GPT Assistant API",
       "user": "User",
-      "user-description": "Represent the user talks to Agents",
+      "user-description": "A proxy agent for the user, that can execute code and provide feedback to the other agents.",
+      "conversable-agent": "Conversable Agent",
+      "conversable-agent-description": "Agent can talk to other agents",
       "multimodal-assistant": "Multimodal Assistant",
       "multimodal-assistant-description": "Assistant can See",
       "llava": "LLaVA",

@@ -8,17 +8,19 @@ import {
   RiMetaLine,
   RiOpenaiFill,
   RiRobot2Line,
+  RiRobotLine,
   RiStickyNoteLine,
   RiUser4Line,
   RiUser5Line,
   RiUserSearchLine,
-  RiUserVoiceLine,
+  RiSpaceShipLine,
 } from 'react-icons/ri';
 import { Edge, Node, ReactFlowInstance } from 'reactflow';
 import { genId } from '@/utils/id';
-import CustomConversable from '../components/node/CustomConversable';
+import ConversableAgent from '../components/node/ConversableAgent';
 import { ComponentType } from 'react';
 import Initializer from '../components/node/Initializer';
+import ConverseEdge from '../components/edge/ConverseEdge';
 
 export const nodeTypes = {
   initializer: Initializer,
@@ -26,8 +28,15 @@ export const nodeTypes = {
   user: UserProxyAgent,
   groupchat: GroupChat,
   note: Note,
-  custom_conversable: CustomConversable,
+  conversable: ConversableAgent,
 };
+
+export const edgeTypes = {
+  converse: ConverseEdge,
+};
+
+export const isConversable = (node?: Node) =>
+  node?.type && ['assistant', 'user', 'conversable'].includes(node.type);
 
 // Fields of Node Meta:
 // - name: To be used as variable name in generated code
@@ -48,19 +57,11 @@ export type NodeMeta = {
 export const basicNodes: NodeMeta[] = [
   {
     id: 'initializer',
-    icon: RiUserVoiceLine,
+    icon: RiSpaceShipLine,
     name: 'Initializer',
     label: 'initializer',
     type: 'initializer',
     class: 'Initializer',
-  },
-  {
-    id: 'user',
-    icon: RiUser5Line,
-    name: 'User',
-    label: 'user',
-    type: 'user',
-    class: 'UserProxyAgent',
   },
   {
     id: 'groupchat',
@@ -80,7 +81,15 @@ export const basicNodes: NodeMeta[] = [
   },
 ];
 
-export const assistantNodes: NodeMeta[] = [
+export const agentNodes: NodeMeta[] = [
+  {
+    id: 'user',
+    icon: RiUser5Line,
+    name: 'User',
+    label: 'user',
+    type: 'user',
+    class: 'UserProxyAgent',
+  },
   {
     id: 'assistant',
     icon: RiRobot2Line,
@@ -88,6 +97,14 @@ export const assistantNodes: NodeMeta[] = [
     label: 'assistant',
     type: 'assistant',
     class: 'AssistantAgent',
+  },
+  {
+    id: 'conversable_agent',
+    icon: RiRobotLine,
+    name: 'ConversableAgent',
+    label: 'conversable-agent',
+    type: 'conversable',
+    class: 'ConversableAgent',
   },
 ];
 
@@ -242,6 +259,28 @@ export const setNodeData = (
         } else node.data = { ...node.data, ...dataset };
       }
       return node;
+    })
+  );
+};
+
+export const setEdgeData = (
+  instance: ReactFlowInstance,
+  id: string,
+  dataset: { [key: string]: any },
+  scope: string = ''
+) => {
+  const edges = instance.getEdges();
+  instance.setEdges(
+    edges.map((edge: any) => {
+      if (edge.id === id) {
+        if (scope) {
+          edge.data = {
+            ...edge.data,
+            [scope]: { ...edge.data[scope], ...dataset },
+          };
+        } else edge.data = { ...edge.data, ...dataset };
+      }
+      return edge;
     })
   );
 };

@@ -1,4 +1,4 @@
-import { GoCheck, GoPencil } from 'react-icons/go';
+import { RiCheckLine, RiEdit2Line } from 'react-icons/ri';
 
 const EditButton = ({
   editing,
@@ -15,9 +15,9 @@ const EditButton = ({
       data-tooltip-place="top"
     >
       {editing ? (
-        <GoCheck className="w-4 h-4" />
+        <RiCheckLine className="w-4 h-4" />
       ) : (
-        <GoPencil className="w-4 h-4" />
+        <RiEdit2Line className="w-4 h-4" />
       )}
     </div>
   );
