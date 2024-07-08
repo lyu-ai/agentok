@@ -15,9 +15,9 @@ export async function POST(request: NextRequest) {
     },
     body: JSON.stringify(data),
   });
-  const code = await res.json();
-  if (res.status !== 200) {
-    console.warn('Codegen failed:', code);
+  const json = await res.json();
+  if (!res.ok) {
+    console.warn('Codegen failed:', res.status, res.statusText, json);
   }
-  return new Response(JSON.stringify(code), { status: res.status });
+  return new Response(JSON.stringify(json), { status: res.status });
 }
