@@ -136,10 +136,14 @@ const Page = () => {
     })
       .then(resp => resp.json())
       .then(json => {
+        if (json.error) {
+          toast.error(json.error);
+          throw new Error(json.error);
+        }
         setKeys(json);
       })
       .catch(e => {
-        console.error(e);
+        console.error(JSON.stringify(e));
       })
       .finally(() => setLoading(false));
   };

@@ -9,6 +9,9 @@ from fastapi import HTTPException, status
 from typing import Dict, Literal
 from dotenv import load_dotenv
 from termcolor import colored
+import logging
+
+logger = logging.getLogger(__name__)
 
 from ..models import User
 load_dotenv()  # This will load all environment variables from .env
@@ -43,6 +46,7 @@ class PocketBaseClient:
 
 
     async def authenticate_with_bearer(self, token: str) -> User:
+      try:
         async with AsyncClient() as client:  # Use AsyncClient context manager for async operations
             payload = jwt.decode(token, options={"verify_signature": False})
             print('payload', payload)
@@ -60,9 +64,18 @@ class PocketBaseClient:
                 print(colored(f"Failed to retrieve user for the provided token {response.status_code} {response.text}", 'red'))
 
             return None
+      except httpx.RequestError as exc:
+        logger.error(f"An error occurred while requesting {exc.request.url!r}: {exc}")
+        raise
+      except httpx.HTTPStatusError as exc:
+          logger.error(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}: {exc}")
+          raise
+      except anyio.EndOfStream as exc:
+          logger.error("Unexpected end of stream during TLS handshake")
+          raise
 
     async def authenticate_with_apikey(self, apikey: str) -> User:
-        async with AsyncClient() as client:  # Use AsyncClient context manager for async operations
+        async with AsyncClient(timeout=httpx.Timeout(10.0, read=30.0)) as client:  # Use AsyncClient context manager for async operations
             response = await client.get(
                 f'{self.base_url}/api/collections/api_keys/records?filter=(key=\'{apikey}\')',
                 headers={"Authorization": f"Bearer {self.admin_auth['token']}"},

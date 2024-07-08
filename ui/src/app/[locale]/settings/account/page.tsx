@@ -15,7 +15,6 @@ const AccountPage = () => {
         const userData = (
           await pb.collection('users').authRefresh({ requestKey: null })
         ).record;
-        console.log(userData);
         setUser(userData);
         setAvatar(getAvatarUrl(userData));
         setLoading(false);

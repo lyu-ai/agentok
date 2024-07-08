@@ -45,13 +45,16 @@ def project2py(project: Project) -> str:
       for node in flow.nodes if any(edge['source'] == first_converser['id'] and edge['target'] == node['id'] for edge in flow.edges)
   ]
   
-  # TODO: This assumption is not right. We should find the group chat node and group the nodes based on that
+  print('initial_chat_targets:', initial_chat_targets)
+  
+  # TODO: This assumption is not right. There would be more than one group chat node
   group_chat_node = next((node for node in flow.nodes if node['type'] == 'groupchat'), None)
   grouped_nodes = []
   if group_chat_node:
-    grouped_nodes = [node for node in flow.nodes if any(
-      edge['source'] == node['id'] and edge['target'] == group_chat_node['id'] for edge in flow.edges
-    )]
+        grouped_nodes = [node for node in flow.nodes if node.get('parentId') == group_chat_node['id']]
+  
+  print('grouped_nodes:', grouped_nodes)
+
   note_nodes = [node for node in flow.nodes if node['type'] == 'note']
 
   # Use the template for each node

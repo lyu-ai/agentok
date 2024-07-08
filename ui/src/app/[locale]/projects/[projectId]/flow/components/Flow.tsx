@@ -13,6 +13,7 @@ import ReactFlow, {
   addEdge,
   ConnectionLineType,
   ControlButton,
+  XYPosition,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import {
@@ -111,6 +112,16 @@ const Agentflow = ({ projectId }: any) => {
     debouncedUpdateFlow,
   ]);
 
+  // Helper function to check if a position is inside a node
+  const isPositionInsideNode = (position: XYPosition, node: Node) => {
+    return (
+      position.x > node.position.x &&
+      position.x < node.position.x + (node.width || 0) &&
+      position.y > node.position.y &&
+      position.y < node.position.y + (node.height || 0)
+    );
+  };
+
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
       if (
@@ -119,7 +130,65 @@ const Agentflow = ({ projectId }: any) => {
       ) {
         setIsDirty(true); // Ignore the dragging and selection events
       }
-      setNodes(nds => applyNodeChanges(changes, nds));
+
+      setNodes(nds => {
+        let newNodes = applyNodeChanges(changes, nds);
+
+        // Handle parent-child relationships for group nodes
+        changes.forEach(change => {
+          if (
+            change.type === 'position' &&
+            change.dragging &&
+            change.position
+          ) {
+            const draggedNode = newNodes.find(n => n.id === change.id);
+            if (draggedNode) {
+              // Check if the node is being dragged over a group node
+              const groupNode = newNodes.find(
+                n =>
+                  n.type === 'groupchat' &&
+                  isPositionInsideNode(change.position as XYPosition, n)
+              );
+
+              if (groupNode) {
+                // Set the parent of the dragged node to the group node
+                draggedNode.parentId = groupNode.id;
+                // Adjust the position to be relative to the group node
+                draggedNode.position = {
+                  x: (change.position.x as number) - groupNode.position.x,
+                  y: (change.position.y as number) - groupNode.position.y,
+                };
+              } else if (draggedNode.parentId) {
+                // If not over a group node and it was previously in a group, remove the parent
+                delete draggedNode.parentId;
+                // Adjust position to be absolute
+                const parentNode = newNodes.find(
+                  n => n.id === draggedNode.parentId
+                );
+                if (parentNode) {
+                  draggedNode.position = {
+                    x: draggedNode.position.x + parentNode.position.x,
+                    y: draggedNode.position.y + parentNode.position.y,
+                  };
+                }
+              }
+            }
+          }
+        });
+
+        // // Ensure group nodes are ahead of their child nodes in the array
+        // newNodes = newNodes.sort((a, b) => {
+        //   if (a.type === 'groupchat' && b.parentId === a.id) {
+        //     return -1; // a is the group, b is the child
+        //   } else if (b.type === 'groupchat' && a.parentId === b.id) {
+        //     return 1; // b is the group, a is the child
+        //   } else {
+        //     return 0;
+        //   }
+        // });
+
+        return newNodes;
+      });
     },
     [setNodes]
   );

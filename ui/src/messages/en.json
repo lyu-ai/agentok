@@ -42,6 +42,8 @@
       "name-edit-done-tooltip": "Finish editing node name",
       "system-message": "System Message",
       "system-message-placeholder": "Enter system message here",
+      "description": "Description",
+      "description-placeholder": "Description of this agent",
       "human-input-mode": "Human Input Mode",
       "input-mode-never": "NEVER",
       "input-mode-always": "ALWAYS",
@@ -63,7 +65,8 @@
     },
     "GroupChat": {
       "max-round": "Max Round",
-      "involve-user": "Involve User"
+      "involve-user": "Involve User",
+      "options": "More Options"
     },
     "User": {
       "name-edit-tooltip": "Edit node name (as variables)",
@@ -248,6 +251,10 @@
       "message": "Message",
       "summary-method": "Summary Method",
       "max-turns": "Max Turns"
+    },
+    "GroupChatConfig": {
+      "title": "Group Chat Settings",
+      "speaker-selection-method": "Speaker Selection Method"
     }
   },
   "page": {

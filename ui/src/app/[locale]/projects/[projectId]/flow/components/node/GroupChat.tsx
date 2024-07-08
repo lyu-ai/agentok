@@ -1,71 +1,89 @@
+import { useCallback, useState } from 'react';
+import {
+  Handle,
+  Position,
+  useReactFlow,
+  NodeProps,
+  NodeResizer,
+  NodeResizeControl,
+} from 'reactflow';
 import clsx from 'clsx';
-import { Handle, Position, useReactFlow } from 'reactflow';
-import { getNodeLabel, setNodeData } from '../../utils/flow';
-import { FaUserGroup } from 'react-icons/fa6';
-import Toolbar from './Toolbar';
 import { useTranslations } from 'next-intl';
+import Toolbar from './Toolbar';
+import GroupChatConfig from '../option/GroupChatConfig';
+import { RiGroup3Fill, RiSettings3Line } from 'react-icons/ri';
+import { getNodeLabel } from '../../utils/flow';
+import ResizeIcon from '@/components/ResizeIcon';
 
-const GroupChatManager = ({ id, selected, data }: any) => {
+const GroupChatManager = ({ id, selected, data }: NodeProps) => {
   const instance = useReactFlow();
   const t = useTranslations('node.GroupChat');
   const tNodeMeta = useTranslations('meta.node');
+  const [showOptions, setShowOptions] = useState(false);
+  const controlStyle = {
+    background: 'transparent',
+    border: 'none',
+  };
+
   return (
-    <div
-      className={clsx(
-        'p-2 rounded-md border min-w-[160px] backdrop-blur-sm',
-        selected
-          ? 'shadow-box shadow-gray-700/80 border-gray-600/90 bg-gray-700/90'
-          : 'border-gray-600/80 bg-gray-700/80'
-      )}
-    >
-      <Toolbar
-        nodeId={id}
-        selected={selected}
-        className="border-gray-600/90 bg-gray-700/90"
-      />
-      <div className="flex flex-col w-full gap-2 text-sm">
-        <div className="flex items-center gap-2 text-primary">
-          <FaUserGroup className="w-5 h-5" />
-          <div className="text-sm font-bold">
-            {getNodeLabel(data.label, tNodeMeta)}
+    <>
+      <NodeResizer isVisible={selected} minWidth={100} minHeight={30} />
+      <div
+        data-node-id={id}
+        className={clsx(
+          'flex w-full h-full p-2 rounded-md border min-w-[160px] min-h-[80px] backdrop-blur-sm relative',
+          selected
+            ? 'shadow-box shadow-primary/80 border-primary/80 bg-primary/20'
+            : 'border-primary/60 bg-primary/10'
+        )}
+      >
+        <Toolbar
+          nodeId={id}
+          selected={selected}
+          className="border-gray-600/90 bg-gray-700/90"
+        >
+          <div
+            className="cursor-pointer hover:text-white"
+            onClick={() => setShowOptions(show => !show)}
+            data-tooltip-content={t('options')}
+            data-tooltip-id="default-tooltip"
+            data-tooltip-place="top"
+          >
+            <RiSettings3Line className="w-4 h-4" />
+          </div>
+        </Toolbar>
+        <div className="flex flex-col w-full gap-2 text-sm">
+          <div className="flex items-center gap-2">
+            <RiGroup3Fill className="w-5 h-5" />
+            <div className="text-sm font-bold">
+              {data.name || getNodeLabel(data.label, tNodeMeta)}
+            </div>
           </div>
         </div>
-        <div className="divider my-0" />
-        <div className="flex items-center justify-between text-base-content/60 gap-2">
-          <div className="font-bold text-base-content/80">{t('max-round')}</div>
-          <input
-            type="number"
-            className="input input-sm input-bordered w-20 bg-transparent rounded"
-            value={data.max_round ?? 20}
-            onChange={e =>
-              setNodeData(instance, id, { max_round: e.target.valueAsNumber })
-            }
-          />
-        </div>
-        <div className="flex items-center justify-between cursor-pointer label gap-2 px-0">
-          <span className="label-text">{t('involve-user')}</span>
-          <input
-            id="involve_user"
-            type="checkbox"
-            className="checkbox checkbox-xs bg-transparent rounded"
-            checked={data.involve_user}
-            onChange={e => {
-              setNodeData(instance, id, { involve_user: e.target.checked });
-            }}
-          />
-        </div>
+        <Handle
+          type="target"
+          position={Position.Left}
+          className="w-16 !bg-primary"
+        />
+        {selected && (
+          <NodeResizeControl
+            className="custom-resize-handle"
+            style={controlStyle}
+            minWidth={100}
+            minHeight={50}
+          >
+            <ResizeIcon />
+          </NodeResizeControl>
+        )}
       </div>
-      <Handle
-        type="target"
-        position={Position.Left}
-        className="w-16 !bg-primary"
+      <GroupChatConfig
+        show={showOptions}
+        onClose={() => setShowOptions(false)}
+        nodeId={id}
+        data={data}
+        className="flex shrink-0 w-[480px] min-h-[240px] max-w-[80vw] max-h-[90vh]"
       />
-      <Handle
-        type="source"
-        position={Position.Right}
-        className="w-16 !bg-primary"
-      />
-    </div>
+    </>
   );
 };
 
