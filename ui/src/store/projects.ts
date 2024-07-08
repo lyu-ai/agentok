@@ -57,7 +57,7 @@ const useProjectStore = create<ProjectState>()(
       pinNodePane: (pin: boolean) => set({ nodePanePinned: pin }),
     }),
     {
-      name: 'autoProject-store',
+      name: 'agentok-projects',
     }
   )
 );

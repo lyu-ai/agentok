@@ -56,7 +56,7 @@ const useChatStore = create<ChatState>()(
       },
     }),
     {
-      name: 'chat-storage',
+      name: 'agentok-chats',
     }
   )
 );

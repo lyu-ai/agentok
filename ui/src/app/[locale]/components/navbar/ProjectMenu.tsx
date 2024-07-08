@@ -52,9 +52,9 @@ export const getProjectNavbarItems = (projectId: string) => {
 
 const ProjectNavbar = ({ projectId }: any) => {
   const pathname = usePathname();
-  const regexResult = pathToRegexp('/projects/:projectId{/:feature}?').exec(
-    pathname
-  );
+  const regexResult = pathToRegexp(
+    '/projects/:projectId{/:feature}?{/:sub}?'
+  ).exec(pathname);
 
   return (
     <>
@@ -66,7 +66,7 @@ const ProjectNavbar = ({ projectId }: any) => {
             key={item.id}
             href={item.href}
             className={clsx(
-              'flex items-center text-sm py-1 gap-2 border-b  hover:text-primary/80',
+              'flex items-center text-sm py-1 gap-1.5 border-b  hover:text-primary/80',
               {
                 'text-primary border-primary': isActive,
                 'border-transparent': !isActive,
