@@ -35,6 +35,6 @@ Notes:
 {%- include 'functions.j2' -%}
 {%- include 'function_mapping.j2' -%}
 {%- if group_chat_node %}
-{{- generate_group_chat(group_chat_node, assistant_nodes, user_proxies) }}
+{{- generate_group_chat(group_chat_node, grouped_nodes) }}
 {%- endif %}
 {% include 'initiate_chat.j2' %}

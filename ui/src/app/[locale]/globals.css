@@ -102,3 +102,13 @@ input-sm[type="number"] {
   padding-left: 0.25rem;
   padding-right: 0% !important;
 }
+
+/* Hide default resize handles */
+.react-flow__resize-control.handle:not(.custom-resize-handle) {
+  display: none;
+}
+
+/* Hide default selection bounding box */
+.react-flow__resize-control.line {
+  display: none;
+}

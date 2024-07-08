@@ -56,6 +56,24 @@ const ConversableAgent = ({ id, data, selected }: any) => {
         </div>
         <div className="divider my-0" />
         <div className="flex items-center justify-between text-base-content/60 gap-2">
+          <div className="text-base-content/80">{t('description')}</div>
+        </div>
+        <div
+          className={clsx(
+            'text-sm text-base-content/60 transition-all ease-in-out'
+          )}
+        >
+          <textarea
+            value={data.description ?? ''}
+            onChange={e => {
+              setNodeData(instance, id, { description: e.target.value });
+            }}
+            placeholder={t('description-placeholder')}
+            className="nodrag nowheel textarea textarea-bordered w-full p-1 bg-transparent rounded"
+            rows={1}
+          />
+        </div>
+        <div className="flex items-center justify-between text-base-content/60 gap-2">
           <div className="text-base-content/80">{t('system-message')}</div>
         </div>
         <div

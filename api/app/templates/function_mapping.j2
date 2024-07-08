@@ -1,10 +1,12 @@
 # register the functions
-{%- if tools|length > 0 %}
-node_{{first_converser['id']}}.register_function(
-    function_map={
-      {%- for tool in tools %}
-      "{{tool.name}}": {{tool.name}},
-      {%- endfor %}
-    }
-)
+{% if tools %}
+  {%- if tools|length > 0 %}
+  node_{{first_converser['id']}}.register_function(
+      function_map={
+        {%- for tool in tools %}
+        "{{tool.name}}": {{tool.name}},
+        {%- endfor %}
+      }
+  )
+  {%- endif %}
 {%- endif %}

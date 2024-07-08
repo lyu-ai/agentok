@@ -21,11 +21,11 @@ chat_result = node_{{ first_converser['id'] }}.initiate_chats(
       {%- endfor %}
     ]
 )
-{%- else %}
+{%- elif initial_chat_targets | length == 1 %}
 # Talk to one single agent
 chat_result = node_{{ first_converser['id'] }}.initiate_chat(
-    node_{{ first_converser['id'] }},
-    {%- if first_converser.data.class in ['RetrieveUserProxyAgent', 'MathUserProxyAgent']  %}
+    node_{{ initial_chat_targets[0].node['id'] }},
+    {%- if initial_chat_targets and initial_chat_targets[0] and 'data' in initial_chat_targets[0] and initial_chat_targets[0]['data'].class in ['RetrieveUserProxyAgent', 'MathUserProxyAgent']  %}
     problem=args.message,
     {%- else %}
     message=args.message,

@@ -27,19 +27,21 @@ export const ProjectEmpty = () => {
 export const ProjectLoading = () => {
   return (
     <div className="flex w-full flex-wrap justify-center gap-4">
-      {[...Array(3)].map((_, i) => (
+      {[...Array(4)].map((_, i) => (
         <div
           key={i}
-          className="card w-80 h-96 flex flex-col bg-base-content/10 overflow-hidden gap-3"
+          className="card w-80 h-48 flex flex-col overflow-hidden gap-2 bg-base-content/10 border border-base-content/10"
         >
-          <div className="skeleton w-full h-48 rounded-none shrink-0" />
-          <div className="card-body">
-            <div className="flex items-center gap-2 p-3 ">
-              <div className="skeleton w-6 h-6 rounded-full shrink-0 " />
+          <div className="card-body p-4 gap-2">
+            <div className="skeleton h-8 w-full" />
+            <div className="flex flex-col gap-2 h-full">
+              <div className="skeleton h-4 w-1/2" />
+              <div className="skeleton h-3 w-full" />
               <div className="skeleton h-4 w-1/2" />
             </div>
-            <div className="skeleton h-3 w-full p-3 " />
-            <div className="skeleton h-3 w-1/2 p-3 " />
+            <div className="flex items-center justify-end gap-1 text-xs text-base-content/60">
+              <div className="skeleton h-5 w-20 p-2"></div>
+            </div>
           </div>
         </div>
       ))}

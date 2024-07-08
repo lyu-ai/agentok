@@ -1,6 +1,7 @@
 'use client';
 import { useSettings, LlmModel } from '@/hooks/useSettings';
 import { useState } from 'react';
+import { RiBrainFill } from 'react-icons/ri';
 
 const ModelCard = ({ model }: { model: LlmModel }) => {
   const { settings, updateSettings } = useSettings();
@@ -9,6 +10,7 @@ const ModelCard = ({ model }: { model: LlmModel }) => {
   const [apiKey, setApiKey] = useState(model.apiKey || '');
   const [baseUrl, setBaseUrl] = useState(model.baseUrl || '');
   const [apiVersion, setApiVersion] = useState(model.apiVersion || '');
+  const [expanded, setExpanded] = useState(true);
 
   const onSave = () => {
     const updatedModel = {
@@ -31,9 +33,17 @@ const ModelCard = ({ model }: { model: LlmModel }) => {
   };
 
   return (
-    <div className="collapse collapse-arrow gap-2 border rounded-lg border-base-content/20 bg-base-content/20">
-      <input type="checkbox" className="peer" />
-      <h1 className="collapse-title text-lg font-bold">{name}</h1>
+    <div className="collapse collapse-arrow border rounded-lg border-base-content/20 bg-base-content/20">
+      <input
+        type="checkbox"
+        checked={expanded}
+        onChange={v => setExpanded(v.target.checked)}
+        className="peer"
+      />
+      <div className="collapse-title flex gap-2 items-center">
+        <RiBrainFill className="w-5 h-5" />
+        <h1 className="font-bold">Model: {name}</h1>
+      </div>
       <div className="collapse-content">
         <div className="grid grid-cols-2 gap-2">
           <label className="flex flex-col gap-1">
@@ -78,7 +88,7 @@ const ModelCard = ({ model }: { model: LlmModel }) => {
           </label>
         </div>
         <button className="btn btn-sm btn-outline mt-4" onClick={onSave}>
-          Save
+          Save Model
         </button>
       </div>
     </div>
@@ -120,7 +130,7 @@ const Page = () => {
           Add Model
         </button>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
         {settings ? (
           settings.models?.map((model: LlmModel, index: number) => (
             <ModelCard model={model} key={index} />
