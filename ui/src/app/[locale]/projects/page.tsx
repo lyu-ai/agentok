@@ -26,8 +26,8 @@ const Page = () => {
     <div className="flex flex-col w-full gap-2">
       <title>Projects | Agentok Studio</title>
       <div className="flex flex-col items-center justify-center gap-2 text-sm p-2">
-        <span className="text-5xl font-bold p-4">{t('tagline')}</span>
-        <span className="text-lg p-4">{t('projects-description')}</span>
+        <span className="text-5xl font-bold p-4">{t('title')}</span>
+        <span className="text-lg p-4">{t('description')}</span>
         <button onClick={onCreateProject} className="btn btn-lg btn-primary">
           <RiSwap3Line className="w-7 h-7" />
           {t('create-project')}
