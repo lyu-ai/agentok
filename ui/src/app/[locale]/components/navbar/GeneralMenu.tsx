@@ -5,10 +5,10 @@ import Link from 'next/link';
 import {
   RiApps2Line,
   RiApps2Fill,
-  RiStore3Line,
-  RiStore3Fill,
   RiRobot2Line,
   RiRobot2Fill,
+  RiShoppingBag4Fill,
+  RiShoppingBag4Line,
 } from 'react-icons/ri';
 import { usePathname } from 'next/navigation';
 
@@ -31,8 +31,8 @@ export const getGeneralMenuItems = () => {
     {
       id: 'marketplace',
       label: 'Marketplace',
-      icon: RiStore3Line,
-      activeIcon: RiStore3Fill,
+      icon: RiShoppingBag4Line,
+      activeIcon: RiShoppingBag4Fill,
       href: '/marketplace',
     },
   ];

@@ -1,19 +1,18 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { BsInboxes } from 'react-icons/bs';
-import { GoRepoForked, GoTrash } from 'react-icons/go';
-import { useChats, useProjects, useTemplates } from '@/hooks';
+import { useChats, useProjects } from '@/hooks';
 import clsx from 'clsx';
-import pb, { getAvatarUrl } from '@/utils/pocketbase/client';
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
-import { PiChatCircleDotsBold } from 'react-icons/pi';
 import Markdown from '@/components/Markdown';
+import { RiShare2Line, RiEdit2Line, RiWechat2Line } from 'react-icons/ri';
+import ProjectPublish from './ProjectPublish';
+import { useState } from 'react';
 
 export const ProjectEmpty = () => {
-  const t = useTranslations('component.TemplateList');
+  const t = useTranslations('component.ProjectList');
   return (
     <div className="flex items-center justify-center w-full h-full">
       <div className="flex flex-col gap-2 items-center text-base-content/60">
@@ -49,23 +48,19 @@ export const ProjectLoading = () => {
   );
 };
 
-export const ProjectBlock = ({ project, index, className }: any) => {
-  const t = useTranslations('component.TemplateList');
-  const { deleteProject, isDeleting } = useProjects();
+export const ProjectBlock = ({ project, className }: any) => {
+  const t = useTranslations('component.ProjectList');
   const { createChat, isCreating } = useChats();
+  const [showPublishDialog, setShowPublishDialog] = useState(false);
   const router = useRouter();
-  const onDelete = (e: any) => {
-    e.stopPropagation();
-    e.preventDefault();
-    deleteProject(project.id);
-  };
+
   const onChat = async (e: any) => {
     e.stopPropagation();
     e.preventDefault();
     await createChat(project.id, 'project')
       .then(chat => {
         if (chat) {
-          router.push(`/chats/${chat.id}`);
+          router.push(`/chat?id=${chat.id}`);
         }
       })
       .catch(e => {
@@ -74,13 +69,12 @@ export const ProjectBlock = ({ project, index, className }: any) => {
       });
   };
   return (
-    <Link
+    <div
       className={clsx(
         'group card w-80 bg-base-content/10 border border-base-content/10',
         className,
-        'hover:shadow-box hover:shadow-primary/40 hover:border-primary/40'
+        'hover:shadow-box hover:border-primary/40'
       )}
-      href={`/projects/${project.id}/flow`}
     >
       <div className="card-body p-4 gap-2 font-normal">
         <h2 className="card-title  group-hover:text-primary line-clamp-1">
@@ -92,23 +86,50 @@ export const ProjectBlock = ({ project, index, className }: any) => {
         <Markdown className="text-left text-sm h-20 break-word word-wrap line-clamp-2">
           {project.description}
         </Markdown>
-        <div className="relative card-actions justify-end gap-1 text-xs text-base-content/60">
+        <div className="relative card-actions flex justify-between gap-1 text-xs text-base-content/60">
           <button
-            className="btn btn-xs rounded btn-outline group-hover:bg-primary group-hover:text-primary-content gap-1 group-hover:animate-pulse"
+            className="btn btn-xs rounded btn-ghost group-hover:bg-primary group-hover:text-primary-content gap-1 group-hover:animate-pulse"
             onClick={onChat}
             data-tooltip-id="default-tooltip"
             data-tooltip-content={t('start-chat-tooltip')}
           >
-            <PiChatCircleDotsBold
+            <RiWechat2Line
               className={clsx('w-4 h-4', {
                 'animate-spin': isCreating,
               })}
             />
             {t('start-chat')}
           </button>
+          <div className="flex items-center gap-2">
+            <button
+              className="btn btn-xs rounded btn-ghost gap-1"
+              onClick={() => setShowPublishDialog(v => !v)}
+              data-tooltip-id="default-tooltip"
+              data-tooltip-content={t('publish-project-tooltip')}
+            >
+              <RiShare2Line className={clsx('w-4 h-4')} />
+              {t('publish-project')}
+            </button>
+            <Link
+              href={`/projects/${project.id}/flow`}
+              className="btn btn-xs rounded btn-ghost gap-1"
+              data-tooltip-id="default-tooltip"
+              data-tooltip-content={t('edit-project-tooltip')}
+            >
+              <RiEdit2Line className="w-4 h-4" />
+              {t('edit-project')}
+            </Link>
+          </div>
         </div>
       </div>
-    </Link>
+      {showPublishDialog && (
+        <ProjectPublish
+          show={showPublishDialog}
+          projectId={project.id}
+          onClose={() => setShowPublishDialog(false)}
+        />
+      )}
+    </div>
   );
 };
 

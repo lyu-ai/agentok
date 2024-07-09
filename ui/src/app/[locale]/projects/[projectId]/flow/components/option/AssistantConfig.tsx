@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import { useReactFlow } from 'reactflow';
 import { setNodeData } from '../../utils/flow';
 import { useTranslations } from 'next-intl';
-import { set } from 'lodash-es';
 
 const CompressConfig = ({ data, setCompressOption, ...props }: any) => {
   const t = useTranslations('option.AssistantConfig');

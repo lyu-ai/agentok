@@ -23,13 +23,13 @@ const FlowViewer = ({ template, className }: any) => {
     };
   }
 
-  if (!template?.flow?.nodes) return null;
+  if (!template?.project?.flow?.nodes) return null;
 
   return (
     <div className={clsx('relative w-full h-full', className)}>
       <ReactFlow
-        nodes={template.flow.nodes}
-        edges={template.flow.edges}
+        nodes={template.project.flow.nodes}
+        edges={template.project.flow.edges}
         nodeTypes={nodeTypes}
         fitView
         proOptions={{ hideAttribution: true }}
@@ -39,7 +39,7 @@ const FlowViewer = ({ template, className }: any) => {
   );
 };
 
-const GalleryDetailPage = ({ params }: { params: { id: string } }) => {
+const Page = ({ params }: { params: { id: string } }) => {
   const t = useTranslations('page.Template');
   const { templates, isLoading, isError } = useTemplates();
   const [template, setTemplate] = useState<any>();
@@ -100,4 +100,4 @@ const GalleryDetailPage = ({ params }: { params: { id: string } }) => {
   );
 };
 
-export default GalleryDetailPage;
+export default Page;

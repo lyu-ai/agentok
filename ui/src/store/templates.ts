@@ -8,7 +8,7 @@ export interface ProjectTemplate {
   description: string;
   thumbnail?: string; // image url
   project: Project; // Complicated JSON object
-  owner: string;
+  owner?: string;
   created?: string;
 }
 

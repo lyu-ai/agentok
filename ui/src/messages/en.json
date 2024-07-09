@@ -3,7 +3,7 @@
     "Config": {
       "title": "Functions",
       "new-tool": "New Tool",
-      "tool-prompt": "Functions enable you to expand an Agent's tools. Select an existing tool from the list on the left, or click 'New Tool' to create a custom tool.",
+      "tool-prompt": "Tools enable you to expand an Agent's skills. Select an existing tool from the list on the left, or click 'New Tool' to build a custom tool.",
       "reset": "Reset",
       "reset-confirm": "Are you sure to reset all settings to default?"
     },
@@ -146,20 +146,16 @@
       "save-success": "Successfully saved flow",
       "flow-load-failed": "Failed to load flow"
     },
-    "FlowList": {
-      "delete-flow": "Delete ",
-      "default-description": "This flow has {node_count} node(s) and {edge_count} edge(s).",
-      "flow-empty": "No flow here yet. You can start from a sample flow.",
-      "create-flow": "Start Build from Templates",
-      "edit-flow": "Edit Workflow",
-      "start-chat": "Start Chat",
-      "publish-flow": "Publish as AutoflowTemplate",
-      "publish-flow-success": "Successfully published flow {flow_name}",
-      "publish-flow-failed": "Failed to publish flow {flow_name}",
-      "publish-flow-title": "Publish Workflow",
-      "publish-flow-name": "Name",
-      "publish-flow-description": "Description",
-      "publish-flow-tip": "Publish this flow to the Agentok Studio community. You can unpublish at any time."
+    "ProjectList": {
+      "default-description": "This project has {node_count} node(s) and {edge_count} edge(s).",
+      "project-empty": "No project here yet. You can start from a sample project.",
+      "create-project": "Start Build from Templates",
+      "edit-project": "Edit",
+      "edit-project-tooltip": "Edit project in Agentok Studio.",
+      "start-chat": "Chat",
+      "start-chat-tooltip": "Start a conversation to this agent.",
+      "publish-project": "Publish",
+      "publish-project-tooltip": "Share this project on Agentok community. You can unpublish at any time."
     },
     "NodeButton": {
       "add-node": "Add Node",
@@ -255,6 +251,16 @@
     "GroupChatConfig": {
       "title": "Group Chat Settings",
       "speaker-selection-method": "Speaker Selection Method"
+    },
+    "PublishConfig": {
+      "title": "Publish Project",
+      "description": "You're going to share project {project_name} with the Agentok community.",
+      "publish-name": "Name",
+      "publish-description": "Description",
+      "publish": "Publish",
+      "cancel": "Cancel",
+      "publish-success": "Successfully published project {project_name}",
+      "publish-failed": "Failed to publish project {project_name}"
     }
   },
   "page": {
@@ -309,8 +315,8 @@
       "more-templates": "Dicover More Templates ..."
     },
     "Marketplace": {
-      "select-template-title": "Agentok Templates",
-      "select-project": "Discover top Agentok templates. Chat, or Fork to customize.",
+      "select-template-title": "Agentok Marketplace",
+      "select-project": "Discover top project templates. Chat, or Fork to build your own custom agentic app.",
       "refresh": "Refresh"
     }
   },
