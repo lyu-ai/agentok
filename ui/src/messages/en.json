@@ -306,13 +306,12 @@
       "your-flows": "Chat from Your Workflows",
       "select-chat": "Select a session to continue, or start a new one from Workflow or AutoflowTemplate."
     },
-    "Workflow": {
-      "flow-tagline": "Build Multi-Agent Apps Visually.",
-      "new-flow": "Build from Scratch",
-      "creating-flow": "Creating Workflow ...",
-      "your-flows": "Chat from Your Workflows",
-      "start-from-template": "Start from AutoflowTemplate",
-      "more-templates": "Dicover More Templates ..."
+    "Projects": {
+      "tagline": "Build Agentic Apps Visually.",
+      "create-project": "Build from Scratch",
+      "projects-title": "Projects",
+      "start-from-template": "Start from Template",
+      "discover-marketplace": "Dicover More on Marketplace"
     },
     "Marketplace": {
       "select-template-title": "Agentok Marketplace",
