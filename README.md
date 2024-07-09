@@ -40,7 +40,9 @@ We made tutorials based on the official notebooks from Autogen repository. You c
 🆘 With Issues
 ⭕ Out of Scope
 
-> [!WARNING] This table is to be migrated.
+> [!WARNING]
+>
+> Due to data format incompatibility, the current results have been wiped and need to be re-migrated.
 
 | Example                                 | Status | Comments                                                                                                                                                             |
 | --------------------------------------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
