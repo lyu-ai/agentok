@@ -2,7 +2,7 @@ from base64 import b64decode
 from io import BytesIO
 import json
 import os
-from httpx import AsyncClient, RequestError, HTTPStatusError
+from httpx import AsyncClient, RequestError, HTTPStatusError, Timeout
 from anyio import EndOfStream
 import jwt
 import requests
@@ -76,7 +76,7 @@ class PocketBaseClient:
           raise
 
     async def authenticate_with_apikey(self, apikey: str) -> User:
-        async with AsyncClient(timeout=httpx.Timeout(10.0, read=30.0)) as client:  # Use AsyncClient context manager for async operations
+        async with AsyncClient(timeout=Timeout(10.0, read=30.0)) as client:  # Use AsyncClient context manager for async operations
             response = await client.get(
                 f'{self.base_url}/api/collections/api_keys/records?filter=(key=\'{apikey}\')',
                 headers={"Authorization": f"Bearer {self.admin_auth['token']}"},
@@ -154,6 +154,15 @@ class PocketBaseClient:
         )
         response.raise_for_status()
         return { "message": f"Successfully deleted {apikey_id}" }
+
+    # Account level settings include models, etc. Project settings should be retrieved from the project itself
+    def get_settings(self, user: dict) -> Dict:
+        response = self.session.get(
+            f'{self.base_url}/api/collections/users/records/{user.id}',
+            headers={"Authorization": f"Bearer {self.admin_auth['token']}"},
+        )
+        response.raise_for_status()
+        return response.json().get('settings', None)
 
     def get_chats(self, user: dict) -> Dict:
         response = self.session.get(

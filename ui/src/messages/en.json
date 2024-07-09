@@ -192,7 +192,8 @@
     },
     "Navbar": {
       "getting-started": "Getting Started",
-      "docs": "Docs"
+      "docs": "Docs",
+      "changelogs": "Changelogs"
     }
   },
   "option": {
@@ -311,7 +312,7 @@
       "description": "Simplifying the Creation of Multi-Agent Apps with Agentok Studio.",
       "create-project": "Build from Scratch",
       "start-from-template": "Start from Template",
-      "discover-marketplace": "Dicover More on Marketplace"
+      "discover-marketplace": "Discover More in Marketplace"
     },
     "Marketplace": {
       "select-template-title": "Agentok Marketplace",

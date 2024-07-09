@@ -19,17 +19,17 @@ We consider AutoGen to be at the forefront of next-generation Multi-Agent Applic
 
 ![studio-1](./website/static/img/screenshot-studio-1.png)
 
-We strive to create a user-friendly tool that generates native Python code. This code can be executed anywhere with minimal dependencies, relying only on `pyautogen`.
+We strive to create a user-friendly tool that generates native Python code with minimal dependencies. Simply put, Agentok Studio is a diagram-based code generator for autogen. The generated code is self-contained and can be executed anywhere as a normal Python program, relying solely on the official `pyautogen` library.
 
 ![codegen-1](./website/static/img/screenshot-codegen-1.png)
 
-Contributions (Issues, Pull Requests, even Typo-corrections) to this project are welcome! All contributors will be added to the Contribution Wall.
+Contributions (Issues, Pull Requests, Documentation, even Typo-corrections) to this project are welcome! All contributors will be added to the Contribution Wall.
 
 ## 💡 Quickstart
 
-To quickly explore what Agentok Studio has to offer, simply visit it [https://studio.agentok.ai](https://studio.agentok.ai).
+To quickly explore the features of Agentok Studio, visit [https://studio.agentok.ai](https://studio.agentok.ai). While we offer an online deployment of this project, please note that it is not intended for production use. The service level agreement is not guaranteed, and stored data may be wiped due to breaking changes.
 
-For a more in-depth look at the platform, please refer to [Getting Started](https://agentok.ai/getting-started).
+For a more in-depth look at the project, please refer to [Getting Started](https://agentok.ai/getting-started).
 
 ## Migration of Official Notebooks
 
@@ -46,7 +46,7 @@ We made tutorials based on the official notebooks from Autogen repository. You c
 
 | Example                                 | Status | Comments                                                                                                                                                             |
 | --------------------------------------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| simple_chat                             | ✅     | [Simple Chat](https://studio.agentok.ai/templates/yp0appx814q7na1)                                                                                                   |
+| simple_chat                             | ✅     | [Simple Chat](https://studio.agentok.ai/marketplace/yp0appx814q7na1)                                                                                                 |
 | auto_feedback_from_code_execution       | ✅     | [Feedback from Code Execution](https://studio.agentok.ai/flows/)                                                                                                     |
 | ~~auto_build~~                          | ⭕     | This is a feature to be considered to add to flow generation. [#40](https://github.com/hughlv/agentok/issues/40)                                                     |
 | chess                                   | 🔲     | This depends on the feature of importing custom Agent [#38](https://github.com/hughlv/agentok/issues/38)                                                             |

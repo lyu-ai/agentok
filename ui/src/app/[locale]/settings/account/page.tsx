@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import pb, { getAvatarUrl } from '@/utils/pocketbase/client'; // Adjust the import path as necessary
 import { AuthModel } from 'pocketbase';
+import Loading from '@/components/Loading';
 
 const AccountPage = () => {
   const [user, setUser] = useState<AuthModel | undefined>(undefined);
@@ -27,13 +28,13 @@ const AccountPage = () => {
     fetchUserData();
   }, []);
 
-  if (loading || !user) return <div>Loading...</div>;
+  if (loading || !user) return <Loading />;
   if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="w-full p-2">
       <h1 className="text-xl font-bold mb-4">Account</h1>
-      <div className="flex flex-col gap-6 border rounded-lg p-6 w-full border-base-content/20">
+      <div className="flex flex-col gap-6 border rounded-lg p-6 w-full border-base-content/20 bg-gradient-to-r from-transparent to-base-content/20">
         <div className="avatar">
           <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
             <img src={avatar} alt="User avatar" />

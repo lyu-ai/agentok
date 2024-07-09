@@ -68,6 +68,7 @@ const Python = ({ data, setMode }: any) => {
         </div>
       ) : (
         <SyntaxHighlighter
+          showLineNumbers
           language="python"
           style={style}
           className="h-full text-xs text-base-content"

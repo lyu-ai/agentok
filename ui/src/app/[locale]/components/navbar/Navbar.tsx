@@ -28,12 +28,10 @@ const Navbar = () => {
       <div className="navbar-start gap-2 flex items-center justify-start">
         <NavButton projectId={projectId} className="md:hidden" />
         <NavLogo />
-        {projectId && (
-          <ProjectPicker
-            activeProjectId={projectId}
-            className="py-1 px-2 text-sm border border-base-content/20 hover:border-base-content/50 rounded"
-          />
-        )}
+        <ProjectPicker
+          activeProjectId={projectId}
+          className="py-1 px-2 text-sm border border-base-content/20 hover:border-base-content/50 rounded"
+        />
       </div>
       <div className="navbar-center gap-4 hidden md:flex">
         <NavMenu projectId={projectId} />
@@ -43,14 +41,23 @@ const Navbar = () => {
           href="https://agentok.ai/"
           target="_blank"
           rel="noreferrer"
-          className="link link-hover text-xs"
+          className="link link-hover text-xs hidden md:block"
         >
           {t('docs')}
         </a>
         <a
+          href="https://github.com/hughlv/agentok/releases/"
+          target="_blank"
+          rel="noreferrer"
+          className="link link-hover text-xs hidden md:block"
+        >
+          {t('changelogs')}
+        </a>{' '}
+        <a
           href="https://github.com/hughlv/agentok"
           aria-label="github"
           target="_blank"
+          className="hidden md:block"
         >
           <img
             src="https://img.shields.io/github/stars/hughlv/agentok?style=social"

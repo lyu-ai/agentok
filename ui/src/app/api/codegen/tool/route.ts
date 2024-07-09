@@ -7,7 +7,7 @@ const NEXT_PUBLIC_BACKEND_URL =
 export async function POST(request: NextRequest) {
   const pb = await loadAuthFromCookie();
   const data = await request.json();
-  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/dev/codegen/tool`, {
+  const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/codegen/tool`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

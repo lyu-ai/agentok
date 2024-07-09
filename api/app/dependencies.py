@@ -5,6 +5,7 @@ from .models import User
 
 from .services.chat_manager import chat_manager, ChatManager
 from .services.chat_service import ChatService
+from .services.codegen_service import CodegenService
 from .services.pocketbase_client import PocketBaseClient, pocketbase_client
 from .services.extension_service import ExtensionService
 from .services.admin_service import AdminService
@@ -44,8 +45,11 @@ def get_pocketbase_client():
 def get_chat_manager() -> ChatManager:
     return chat_manager
 
-def get_chat_service(user: User = Depends(get_current_user), pocketbase_client: PocketBaseClient = Depends(get_pocketbase_client)) -> ChatService:
-    return ChatService(user=user, pocketbase_client=pocketbase_client)
+def get_codegen_service(user: User = Depends(get_current_user)) -> CodegenService:
+    return CodegenService(user=user, pocketbase_client=pocketbase_client)
+
+def get_chat_service(user: User = Depends(get_current_user), codegen_service: CodegenService = Depends(get_codegen_service), pocketbase_client: PocketBaseClient = Depends(get_pocketbase_client)) -> ChatService:
+    return ChatService(user=user, codegen_service=codegen_service, pocketbase_client=pocketbase_client)
 
 def get_admin_service(user: User = Depends(get_current_user)) -> AdminService:
     return AdminService(user=user)
