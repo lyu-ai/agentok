@@ -36,7 +36,8 @@ export const edgeTypes = {
 };
 
 export const isConversable = (node?: Node) =>
-  node?.type && ['assistant', 'user', 'conversable'].includes(node.type);
+  node?.type &&
+  ['assistant', 'user', 'conversable', 'groupchat'].includes(node.type);
 
 // Fields of Node Meta:
 // - name: To be used as variable name in generated code

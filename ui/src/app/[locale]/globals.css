@@ -103,6 +103,10 @@ input-sm[type="number"] {
   padding-right: 0% !important;
 }
 
+.textarea {
+  line-height: 1.2rem;
+}
+
 /* Hide default resize handles */
 .react-flow__resize-control.handle:not(.custom-resize-handle) {
   display: none;

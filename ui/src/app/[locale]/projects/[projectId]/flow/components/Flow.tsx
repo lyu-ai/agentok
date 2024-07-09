@@ -14,6 +14,7 @@ import ReactFlow, {
   ConnectionLineType,
   ControlButton,
   XYPosition,
+  Panel,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import {
@@ -381,14 +382,11 @@ const Agentflow = ({ projectId }: any) => {
             showInteractive={false}
             position="bottom-left"
             className="flex"
-          >
-            <ControlButton title="python">
-              <ViewToggle flat mode={'python'} setMode={setMode} />
-            </ControlButton>
-            <ControlButton title="json">
-              <ViewToggle flat mode={'json'} setMode={setMode} />
-            </ControlButton>
-          </Controls>
+          />
+          <Panel position="top-right" className="flex p-1 gap-2">
+            <ViewToggle mode={'json'} setMode={setMode} />
+            <ViewToggle mode={'python'} setMode={setMode} />
+          </Panel>
         </ReactFlow>
         <div className="absolute bottom-0 left-12 flex w-full items-center px-2">
           <div className="flex flex-shrink-0 items-center gap-2"></div>
