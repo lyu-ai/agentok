@@ -1,12 +1,7 @@
 
-import asyncio
-import subprocess
-
 from fastapi import APIRouter, BackgroundTasks, Depends, WebSocket, WebSocketDisconnect
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.ext import do
-from ..models import Message, Project
-from ..services.dev_service import project2py
 from ..dependencies import oauth2_scheme
 connected_websockets = set()
 

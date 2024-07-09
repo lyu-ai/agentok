@@ -1,13 +1,13 @@
-# Function template content generator
+# Function generator
 {% if tools %}
-    {% for tool in tools %}
-        {% if tool.async %}async {% endif %}def {{ tool.name }}({% for param in tool.parameters %}{{ param.name }}{% if not loop.last %},{% endif %}{% endfor %}):
-        {%- if tool.code %}
-            {%- for line in tool.code.split('\n') %}
-                {{ line }}
-            {%- endfor %}
-        {% else %}
-            pass
-        {%- endif %}
-    {% endfor %}
+{% for tool in tools %}
+{% if tool.async %}async {% endif %}def {{ tool.name }}({% for param in tool.parameters %}{{ param.name }}{% if not loop.last %},{% endif %}{% endfor %}):
+{%- if tool.code %}
+{%- for line in tool.code.split('\n') %}
+{{ line }}
+{%- endfor %}
+{% else %}
+    pass
+{%- endif %}
+{% endfor %}
 {% endif %}

@@ -5,11 +5,12 @@ import { useProject } from './useProjects';
 
 export interface LlmModel {
   id: string;
-  name: string;
+  model: string;
   description: string;
-  apiKey: string;
-  baseUrl?: string; // This is usually needed for OpenAI-compliant API providers such as Azure and Qwen
-  apiVersion?: string;
+  api_key: string;
+  base_url?: string; // This is usually needed for OpenAI-compliant API providers such as Azure and Qwen
+  api_version?: string;
+  tags?: string;
 }
 
 export interface Settings {
@@ -21,10 +22,10 @@ export function useSettings() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [settings, setSettings] = useState<Settings>({ models: [] });
   useEffect(() => {
-    if (data) {
+    if (data && JSON.stringify(data) !== JSON.stringify(settings)) {
       setSettings(data);
     }
-  }, [data]);
+  }, [data, settings]);
   const handleUpdateSettings = async (newSettings: Settings) => {
     setIsUpdating(true);
     try {

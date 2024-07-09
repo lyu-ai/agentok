@@ -2,15 +2,15 @@ from datetime import datetime
 import os
 import tempfile
 
+from .codegen_service import CodegenService
 from ..models import Project, User
-
-from .dev_service import project2py
 from .chat_manager import chat_manager
 from .pocketbase_client import PocketBaseClient  # Import your PocketBaseClient
 
 class ChatService:
-    def __init__(self, user: User, pocketbase_client: PocketBaseClient):
+    def __init__(self, user: User, codegen_service: CodegenService, pocketbase_client: PocketBaseClient):
         self.user = user
+        self.codegen_service = codegen_service  # Injecting CodegenService instance
         self.pocketbase_client = pocketbase_client  # Keep an instance of PocketBaseClient
         self.chat_manager = chat_manager  # Injecting PocketBaseClient instance
 
@@ -42,7 +42,7 @@ class ChatService:
         os.makedirs(os.path.dirname(source_path), exist_ok=True)
 
         if not os.path.exists(source_path):
-            generated_code = project2py(Project(**source))
+            generated_code = self.codegen_service.project2py(Project(**source))
             with open(source_path, 'w', encoding='utf-8') as file:
                 file.write(generated_code)
 

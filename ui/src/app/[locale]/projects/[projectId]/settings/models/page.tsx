@@ -8,7 +8,7 @@ import { RiAlertLine } from 'react-icons/ri';
 const ModelCard = ({ model }: { model: LlmModel }) => {
   return (
     <div className="flex flex-col p-4 gap-2 border rounded-lg border-base-content/20">
-      <h1 className="text-lg font-bold">{model.name}</h1>
+      <h1 className="text-lg font-bold">{model.model}</h1>
       <p>{model.description}</p>
     </div>
   );
@@ -99,7 +99,7 @@ const Page = ({ params }: { params: { projectId: string } }) => {
         <div className="flex flex-col gap-4">
           {globalSettings?.models ? (
             globalSettings.models.map((model: LlmModel) => (
-              <ModelCard model={model} key={model.name} />
+              <ModelCard model={model} key={model.model} />
             ))
           ) : (
             <div>

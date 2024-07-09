@@ -4,15 +4,10 @@ import { Popover, PopoverPanel, PopoverButton } from '@headlessui/react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { GoBug, GoPersonFill, GoSignOut } from 'react-icons/go';
-import { PiGithubLogo } from 'react-icons/pi';
+import { GoPersonFill } from 'react-icons/go';
 import clsx from 'clsx';
 import pb, { getAvatarUrl } from '@/utils/pocketbase/client';
-import {
-  RiLogoutBoxLine,
-  RiQuestionLine,
-  RiSettings3Line,
-} from 'react-icons/ri';
+import { RiBrainLine, RiLogoutBoxLine, RiSettings3Line } from 'react-icons/ri';
 
 const UserImage = ({ user, className }: any) => {
   // State to handle image load error
@@ -80,7 +75,17 @@ const UserPanel = ({ user }: { user: any }) => {
           className="rounded-lg"
         />
       </a>
-      <div className="flex items-center no-wrap gap-1 mt-8 w-full">
+      <PopoverButton
+        onClick={() => router.push('/settings/models')}
+        className={clsx(
+          'flex w-full items-center justify-start py-2 px-6 gap-2 bg-base-content/20 mt-8  rounded-xl',
+          'hover:bg-base-content/30'
+        )}
+      >
+        <RiBrainLine className="w-5 h-5" />
+        Manage Shared LLM Models
+      </PopoverButton>
+      <div className="flex items-center no-wrap gap-1 w-full">
         <PopoverButton
           onClick={() => router.push('/settings')}
           className={clsx(

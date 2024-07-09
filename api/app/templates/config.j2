@@ -1,14 +1,27 @@
 # configs.j2
 
 {%- macro generate_config(project) %}
+{%- if settings and settings.get('models') %}
+config_list = {{ settings['models'] }}
+{%- else %}
 config_list = autogen.config_list_from_json(
-    "OAI_CONFIG_LIST",
-    {%- if project['settings'].filter_dict %}
-    filter_dict={
-        "model": {{ project['settings'].filter_dict.split(',') }},
-    },
-    {%- endif %}
+    config_file="OAI_CONFIG_LIST",
 )
+{%- endif %}
+
+{%- if project['settings'].filters %}
+config_list = autogen.filter_config(
+    config_list,
+    filter_dict={
+        {%- if project['settings'].filters.get('name') %}
+        "model": {{ project['settings'].filters.get('name').split(',') }},
+        {%- endif %}
+        {%- if project['settings'].filters.get('tags') %}
+        "tags": {{ project['settings'].filters.get('tags').split(',') }},
+        {%- endif %}
+    },
+)
+{%- endif %}
 
 llm_config = {
     {%- if tools %}

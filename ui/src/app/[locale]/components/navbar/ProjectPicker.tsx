@@ -53,7 +53,7 @@ const ProjectPicker = ({ activeProjectId, className }: any) => {
         >
           <RiApps2Line className="h-4 w-4" />
           <span className="text-ellipsis overflow-hidden whitespace-nowrap hidden lg:block">
-            {activeProject?.name}
+            {activeProject?.name || 'Select Project'}
           </span>
           <RiArrowDownSLine className="h-4 w-4" />
         </ListboxButton>
