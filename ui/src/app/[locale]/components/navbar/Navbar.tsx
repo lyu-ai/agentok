@@ -51,7 +51,7 @@ const Navbar = () => {
           rel="noreferrer"
           className="link link-hover text-xs hidden md:block"
         >
-          {t('changelogs')}
+          {t('changelog')}
         </a>{' '}
         <a
           href="https://github.com/hughlv/agentok"
