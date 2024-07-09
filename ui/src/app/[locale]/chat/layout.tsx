@@ -59,7 +59,7 @@ const LayoutPage = ({ children }: PropsWithChildren) => {
   return (
     <div className="flex w-full h-full">
       <title>Chat | Agentok Studio</title>
-      <div className="flex gap-2 text-sm w-full h-full p-2">
+      <div className="flex gap-2 text-sm w-full h-full">
         <div
           className={clsx(
             'z-20 gap-1 text-sm rounded-xl bg-gray-700/80 text-base-content border border-gray-600',

@@ -2,7 +2,8 @@ from base64 import b64decode
 from io import BytesIO
 import json
 import os
-from httpx import AsyncClient
+from httpx import AsyncClient, RequestError, HTTPStatusError
+from anyio import EndOfStream
 import jwt
 import requests
 from fastapi import HTTPException, status
@@ -64,13 +65,13 @@ class PocketBaseClient:
                 print(colored(f"Failed to retrieve user for the provided token {response.status_code} {response.text}", 'red'))
 
             return None
-      except httpx.RequestError as exc:
+      except RequestError as exc:
         logger.error(f"An error occurred while requesting {exc.request.url!r}: {exc}")
         raise
-      except httpx.HTTPStatusError as exc:
+      except HTTPStatusError as exc:
           logger.error(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}: {exc}")
           raise
-      except anyio.EndOfStream as exc:
+      except EndOfStream as exc:
           logger.error("Unexpected end of stream during TLS handshake")
           raise
 

@@ -396,7 +396,7 @@ const Agentflow = ({ projectId }: any) => {
         <NodeButton onAddNode={onAddNode} className="absolute top-2 left-2" />
       )}
       {chatPanePinned ? (
-        <div className="text-sm w-96 lg:w-[480px] h-full pr-1 pb-1 shrink-0">
+        <div className="text-sm w-96 lg:w-[480px] h-full shrink-0">
           <ChatPane onStartChat={onClickChat} chatId={chat?.id ?? ''} />
         </div>
       ) : (

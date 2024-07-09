@@ -130,8 +130,8 @@
     },
     "ChatListButton": {
       "new-chat": "New Chat",
-      "flow": "Workflow",
-      "template": "Workflow Template",
+      "project": "Project",
+      "template": "Marketplace",
       "new-chat-tooltip": "Create a new chat",
       "from-template-tooltip": "Create a new chat from template"
     },
@@ -308,9 +308,9 @@
       "start-from-template": "Start from AutoflowTemplate",
       "more-templates": "Dicover More Templates ..."
     },
-    "Template": {
-      "select-template-title": "Agentok Studio Templates",
-      "select-flow": "Discover top Agentok Studio templates. Chat, or Fork to customize.",
+    "Marketplace": {
+      "select-template-title": "Agentok Templates",
+      "select-project": "Discover top Agentok templates. Chat, or Fork to customize.",
       "refresh": "Refresh"
     }
   },

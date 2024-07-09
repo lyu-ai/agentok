@@ -1,10 +1,8 @@
-> **⚠️ NOTICE**: This project is currently under active development under branch v2, which introduced some breaking changes to backend pocketbase service. Please bear with us as we work to fix it.
-
 <img src="./ui/public/logo.png" width="90" />
 
 # Agentok Studio
 
-AutoGen Visualized - Visual Tools for Multi-Agent Development.
+# AutoGen Visualized - Build Agentic Apps in Seconds
 
 [![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/hughlv/agentok)
 [![Open in GitHub Codespaces](https://img.shields.io/badge/Codespaces-Open-blue?style=flat&logo=github)](https://codespaces.new/hughlv/agentok)
@@ -13,39 +11,25 @@ AutoGen Visualized - Visual Tools for Multi-Agent Development.
 [![GitHub star](https://img.shields.io/github/stars/hughlv/agentok?style=social)](https://star-history.com/#tiwater/agentok)
 [![](https://dcbadge.limes.pink/api/server/xBQxwRSWfm?style=social&timestamp=20240705)](https://discord.gg/xBQxwRSWfm)
 
-## 🤖 What is Agentok Studio
+## 🌟 What is Agentok Studio
 
-Agentok Studio is a tool built for [AutoGen](https://microsoft.github.io/autogen/), a great agent framework from Microsoft and [a lot of contributors](https://github.com/microsoft/autogen?tab=readme-ov-file#contributors-wall).
+Agentok Studio is a tool built upon [AutoGen](https://microsoft.github.io/autogen/), a powerful agent framework from Microsoft and [a vibrant community of contributors](https://github.com/microsoft/autogen?tab=readme-ov-file#contributors-wall).
 
-We regard AutoGen as one of the best frontier technology for next-generation Multi-Agent Applications. Agentok Studio elevates this concept, providing intuitive visual tools that streamline the construction and oversight of complex agent-based workflows, thereby simplifying the entire process for creators and developers.
+We consider AutoGen to be at the forefront of next-generation Multi-Agent Applications technology. Agentok Studio takes this concept to the next level by offering intuitive visual tools that streamline the creation and management of complex agent-based workflows. This simplifies the entire process for creators and developers.
+
+![studio-1](./website/static/img/screenshot-studio-1.png)
+
+We strive to create a user-friendly tool that generates native Python code. This code can be executed anywhere with minimal dependencies, relying only on `pyautogen`.
+
+![codegen-1](./website/static/img/screenshot-codegen-1.png)
 
 Contributions (Issues, Pull Requests, even Typo-corrections) to this project are welcome! All contributors will be added to the Contribution Wall.
-
-### Workflow
-
-You can create an Workflow from scratch, or fork from a template. The Workflow is visualized as a graph, and you can drag and drop nodes to build agents in flow style.
-
-![flow-1](./website/static/img/screenshot-flow-1.png)
-
-### Chat
-
-You can launch an Workflow or an Workflow Template in a chat window, and chat with the agents.
-
-![chat-1](./website/static/img/screenshot-chat-1.png)
-
-![chat-2](./website/static/img/screenshot-chat-dalle3.png)
-
-### Template
-
-Place to share and discover flow templates.
-
-![template-1](./website/static/img/screenshot-template-1.png)
 
 ## 💡 Quickstart
 
 To quickly explore what Agentok Studio has to offer, simply visit it [https://studio.agentok.ai](https://studio.agentok.ai).
 
-For a more in-depth look at the platform, please refer to our [Getting Started](https://agentok.ai/getting-started) and [other documents](https://agentok.ai).
+For a more in-depth look at the platform, please refer to [Getting Started](https://agentok.ai/getting-started).
 
 ## Migration of Official Notebooks
 
@@ -55,6 +39,8 @@ We made tutorials based on the official notebooks from Autogen repository. You c
 ✅ Completed
 🆘 With Issues
 ⭕ Out of Scope
+
+> [!WARNING] This table is to be migrated.
 
 | Example                                 | Status | Comments                                                                                                                                                             |
 | --------------------------------------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

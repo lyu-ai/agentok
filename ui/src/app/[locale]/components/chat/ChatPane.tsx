@@ -26,6 +26,7 @@ import {
   RiTrophyLine,
   RiUnpinLine,
 } from 'react-icons/ri';
+import Loading from '@/components/Loading';
 
 const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
   const t = useTranslations('component.ChatPane');
@@ -303,13 +304,6 @@ const ChatPane = ({
     );
   }
 
-  if (loading || isLoadingChat) {
-    return (
-      <div className="flex flex-col items-center justify-center w-full h-full">
-        <div className="loading loading-bars loading-sm" />
-      </div>
-    );
-  }
   if (isError) {
     return (
       <div className="flex flex-col items-center justify-center w-full h-full">
@@ -398,7 +392,7 @@ const ChatPane = ({
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('go-to-editor')}
               data-tooltip-place="bottom"
-              href={`/flows/${chat.sourceId}`}
+              href={`/projects/${chat.sourceId}/flow`}
               target="_blank"
             >
               <GoPencil className="w-4 h-4" />
@@ -407,11 +401,15 @@ const ChatPane = ({
         </div>
       </div>
       <div className="relative flex mx-auto w-full flex-grow flex-col overflow-y-auto p-1 font-normal">
-        <MessageList
-          chatId={chatId}
-          messages={messagesToDisplay}
-          onSend={onSend}
-        />
+        {loading ? (
+          <Loading />
+        ) : (
+          <MessageList
+            chatId={chatId}
+            messages={messagesToDisplay}
+            onSend={onSend}
+          />
+        )}
         <div ref={messagesEndRef} id="chat-messages-bottom"></div>
       </div>
       <div className="relative justify-center w-full p-1 font-normal">

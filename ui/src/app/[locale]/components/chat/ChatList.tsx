@@ -3,12 +3,13 @@ import { BsInboxes } from 'react-icons/bs';
 import { useChat, useChats, useProjects, useTemplates } from '@/hooks';
 import clsx from 'clsx';
 import { Float } from '@headlessui-float/react';
-import { Popover } from '@headlessui/react';
-import { PiChatsCircle, PiChatsCircleFill } from 'react-icons/pi';
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { GoTrash, GoPencil, GoKebabHorizontal } from 'react-icons/go';
 import EditableText from '@/components/EditableText';
 import { useState, useEffect, useRef, createRef, forwardRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { RiWechat2Fill, RiWechat2Line } from 'react-icons/ri';
+import { getGeneralMenuItems } from '../navbar/GeneralMenu';
 
 export const ChatEmpty = () => {
   const t = useTranslations('component.ChatList');
@@ -61,13 +62,13 @@ const ContextButton = ({ className, onDelete, onEdit }: any) => {
         leaveFrom="transform scale-100 opacity-100"
         leaveTo="transform scale-0 opacity-0"
       >
-        <Popover.Button
+        <PopoverButton
           onClick={e => e.stopPropagation()}
-          className={clsx('btn btn-xs btn-circle', className)}
+          className={clsx('btn btn-xs btn-circle btn-ghost', className)}
         >
           <GoKebabHorizontal className="w-4 h-4" />
-        </Popover.Button>
-        <Popover.Panel className="origin-top-right w-40 shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-600/80 text-base-content border border-gray-500 max-h-[80vh]">
+        </PopoverButton>
+        <PopoverPanel className="origin-top-right w-40 shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-600/80 text-base-content border border-gray-500 max-h-[80vh]">
           {[
             {
               label: t('edit-chat-name'),
@@ -81,7 +82,7 @@ const ContextButton = ({ className, onDelete, onEdit }: any) => {
               className: 'text-red-500',
             },
           ].map(({ label, icon: Icon, className, onClick }) => (
-            <Popover.Button
+            <PopoverButton
               key={label}
               className={clsx(
                 'flex items-center w-full p-2 gap-2 rounded-md hover:bg-base-content/20 cursor-pointer',
@@ -91,9 +92,9 @@ const ContextButton = ({ className, onDelete, onEdit }: any) => {
             >
               <Icon className="w-4 h-4" />
               <span className="font-normal">{label}</span>
-            </Popover.Button>
+            </PopoverButton>
           ))}
-        </Popover.Panel>
+        </PopoverPanel>
       </Float>
     </Popover>
   );
@@ -147,10 +148,14 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
       }
       setActiveChat(nextChatId);
       await deleteChat(chat.id);
-      router.replace(`/chats/${nextChatId}`); // It's fine if nextChatId is empty
+      router.replace(`/chat?id=${nextChatId}`); // It's fine if nextChatId is empty
     };
 
     if (!chat || isLoading) return <ChatLoading />;
+    const ChatIcon = selected ? RiWechat2Fill : RiWechat2Line;
+    const ChatTypeIcon = getGeneralMenuItems()[
+      chat.sourceType === 'project' ? 0 : 2
+    ].icon;
 
     return (
       <div
@@ -167,12 +172,12 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
         )}
         onClick={() => {
           setActiveChat(chat.id);
-          router.push(`/chats/${chat.id}`);
+          router.push(`/chat?id=${chat.id}`);
         }}
       >
         <div className="relative flex flex-col w-full gap-2 justify-between items-start">
           <div className="flex items-center gap-1">
-            <PiChatsCircleFill className="w-7 h-7 flex-0" />
+            <ChatIcon className="w-7 h-7 flex-0" />
             <div className="flex flex-col items-start">
               <EditableText
                 className="font-bold nowrap line-clamp-1 truncate w-64"
@@ -184,9 +189,6 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
                 {chat.created && new Date(chat.created).toLocaleString()}
               </div>
             </div>
-          </div>
-          <div className="text-sm text-base-content/80 h-10 line-clamp-2">
-            {chatSource?.description}
           </div>
           <div
             className={clsx(
@@ -200,19 +202,19 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
             )}
           >
             <span
-              className={clsx('join-item px-2 py-0.5 border-r ', {
+              className={clsx('join-item px-1 py-0.5 border-r ', {
                 'border-primary/40': chat.sourceType === 'project',
                 'border-secondary/40': chat.sourceType === 'template',
               })}
             >
-              {chat.sourceType}
+              <ChatTypeIcon className="w-4 h-4" />
             </span>
             <span className="join-item line-clamp-1 px-2 py-0.5">
               {chatSource?.name ?? ''}
             </span>
           </div>
           {selected && (
-            <div className="absolute top-0 right-0">
+            <div className="absolute bottom-0 right-0">
               <ContextButton
                 chat={chat}
                 onEdit={onEditStarted}
