@@ -1,5 +1,7 @@
 'use client';
-import { useSettings, LlmModel } from '@/hooks/useSettings';
+import Loading from '@/components/Loading';
+import { Settings, useSettings, LlmModel } from '@/hooks/useSettings';
+import { genId } from '@/utils/id';
 import { useState } from 'react';
 import { RiBrainFill } from 'react-icons/ri';
 
@@ -11,8 +13,11 @@ const ModelCard = ({ model }: { model: LlmModel }) => {
   const [baseUrl, setBaseUrl] = useState(model.baseUrl || '');
   const [apiVersion, setApiVersion] = useState(model.apiVersion || '');
   const [expanded, setExpanded] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  const onSave = () => {
+  const onSave = async () => {
+    setIsSaving(true);
     const updatedModel = {
       ...model,
       name,
@@ -23,13 +28,27 @@ const ModelCard = ({ model }: { model: LlmModel }) => {
     };
 
     const newModels = settings?.models?.map((m: LlmModel) =>
-      m.name === model.name ? updatedModel : m
+      m.id === model.id ? updatedModel : m
     );
 
-    updateSettings({
+    await updateSettings({
       ...settings,
       models: newModels,
-    } as any);
+    });
+    setIsSaving(false);
+  };
+
+  const onDelete = async () => {
+    setIsDeleting(true);
+    const newModels = settings?.models?.filter(
+      (m: LlmModel) => m.id !== model.id
+    );
+
+    await updateSettings({
+      ...settings,
+      models: newModels,
+    });
+    setIsDeleting(false);
   };
 
   return (
@@ -87,9 +106,19 @@ const ModelCard = ({ model }: { model: LlmModel }) => {
             />
           </label>
         </div>
-        <button className="btn btn-sm btn-outline mt-4" onClick={onSave}>
-          Save Model
-        </button>
+        <div className="flex justify-between gap-4 mt-4">
+          <button className="btn btn-sm btn-outline" onClick={onSave}>
+            {isSaving && <div className="loading loading-xs"></div>}
+            Save Model
+          </button>
+          <button
+            className="btn btn-sm btn-outline btn-error"
+            onClick={onDelete}
+          >
+            {isDeleting && <div className="loading loading-xs"></div>}
+            Delete Model
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -97,27 +126,32 @@ const ModelCard = ({ model }: { model: LlmModel }) => {
 
 const Page = () => {
   const { settings, isLoading, isError, updateSettings } = useSettings();
+  const [isCreating, setIsCreating] = useState(false);
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
   if (isError) {
     return <div>Error loading settings</div>;
   }
-  const onAddModel = () => {
+  const onAddModel = async () => {
     // Add your add model logic here
     console.log('Add model');
-    updateSettings({
+    setIsCreating(true);
+    await updateSettings({
       ...settings,
       models: [
         ...(settings?.models || []),
         {
+          id: `llm-${genId()}`, // Add a unique id here, e.g. `genId()
           name: 'llm-model1',
           description: 'New Model Description',
           apiKey: 'Please input your api-key here',
         },
       ],
-    } as any);
+    });
+    setIsCreating(false);
   };
+  console.log(settings);
   return (
     <div className="flex flex-col w-full gap-2 text-sm">
       <h1 className="text-lg font-bold">Models</h1>
@@ -125,15 +159,17 @@ const Page = () => {
         Manage the LLM model configurations. The models configured here will be
         shared by all projects.
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-end gap-2">
         <button className="btn btn-sm btn-primary" onClick={onAddModel}>
-          Add Model
+          {!isCreating && <RiBrainFill className="w-4 h-4" />}
+          {isCreating && <div className="loading loading-xs"></div>}
+          New Model
         </button>
       </div>
       <div className="flex flex-col gap-2">
         {settings ? (
           settings.models?.map((model: LlmModel, index: number) => (
-            <ModelCard model={model} key={index} />
+            <ModelCard model={model} key={model.id} />
           ))
         ) : (
           <div>No models found</div>

@@ -20,7 +20,7 @@ const Page = () => {
       return;
     }
     toast.success('Project created. Now jumping to project page.');
-    router.push(`/projects/${project.id}`);
+    router.push(`/projects/${project.id}/flow`);
   };
   return (
     <div className="flex flex-col w-full gap-2">

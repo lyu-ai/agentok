@@ -1,6 +1,8 @@
 'use client';
-import { useSettings, LlmModel } from '@/hooks/useSettings';
+import Loading from '@/components/Loading';
+import { useSettings, LlmModel, useProjectSettings } from '@/hooks/useSettings';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { RiAlertLine } from 'react-icons/ri';
 
 const ModelCard = ({ model }: { model: LlmModel }) => {
@@ -12,10 +14,37 @@ const ModelCard = ({ model }: { model: LlmModel }) => {
   );
 };
 
-const Page = () => {
-  const { settings, isLoading, isError } = useSettings();
+const Page = ({ params }: { params: { projectId: string } }) => {
+  const { settings, isLoading, isError, updateSettings } = useProjectSettings(
+    params.projectId
+  );
+  const { settings: globalSettings } = useSettings();
+  const [filters, setFilters] = useState<{ [key: string]: string }>({});
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    if (settings?.filters) {
+      setFilters(settings.filters);
+    }
+  }, [settings?.filters]);
+
+  const onFilterChange = (key: string, value: string) => {
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      [key]: value,
+    }));
+  };
+  const onFilterBlur = async () => {
+    setIsSaving(true);
+    await updateSettings({
+      ...settings,
+      filters: filters,
+    });
+    setIsSaving(false);
+  };
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
   if (isError) {
     return <div>Error loading settings</div>;
@@ -35,18 +64,50 @@ const Page = () => {
           , which will be shared by all projects.
         </p>
       </div>
-      {settings ? (
-        <>
-          <div className="flex items-center gap-2">Existing Models</div>
-          <div className="flex flex-col gap-4">
-            {settings.models.map((model: LlmModel) => (
+      <h1 className="text-lg font-bold">Filters</h1>
+      <div>
+        The provided list of LLM models might be too long to use. Here we can
+        use filters to focus on the models we are interested in.
+      </div>
+      <div className="flex flex-col gap-2">
+        <div className="font-bold">
+          Filter by model names (use comma to separate)
+        </div>
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="gpt4,gpt-3.5"
+            value={filters?.name || ''}
+            onChange={e => onFilterChange('name', e.target.value)}
+            onBlur={onFilterBlur}
+            className="input input-sm rounded min-w-2xl"
+          />
+          {isSaving && <div className="loading loading-xs" />}
+        </div>
+      </div>
+      <>
+        <div className="text-lg font-bold">Global Models</div>
+        <div>
+          These models are created in{' '}
+          <span>
+            <Link href="/settings/models" className="link-primary link">
+              Account Settings
+            </Link>
+          </span>
+          , and shared across all projects.
+        </div>
+        <div className="flex flex-col gap-4">
+          {globalSettings?.models ? (
+            globalSettings.models.map((model: LlmModel) => (
               <ModelCard model={model} key={model.name} />
-            ))}
-          </div>
-        </>
-      ) : (
-        <div>No models found</div>
-      )}
+            ))
+          ) : (
+            <div>
+              No global models found. The builtin model list will be used.
+            </div>
+          )}
+        </div>
+      </>
     </div>
   );
 };
