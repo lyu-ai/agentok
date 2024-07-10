@@ -86,7 +86,10 @@ const ChatInput = ({
             <RiStopFill className="w-5 h-5" />
           </button>
         ) : (
-          <button className="btn btn-sm btn-primary" onClick={onSend}>
+          <button
+            className="btn btn-sm btn-primary rounded-lg"
+            onClick={onSend}
+          >
             <RiSendPlane2Line className="w-5 h-5" />
           </button>
         )}

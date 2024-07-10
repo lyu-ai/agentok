@@ -47,7 +47,9 @@
       "human-input-mode": "Human Input Mode",
       "input-mode-never": "NEVER",
       "input-mode-always": "ALWAYS",
-      "input-mode-terminate": "TERMINATE"
+      "input-mode-terminate": "TERMINATE",
+      "max-consecutive-auto-reply": "Max Consecutive Auto-Replies",
+      "termination-msg": "Termination Message"
     },
     "Config": {
       "flow-name": "Name",

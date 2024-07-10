@@ -105,6 +105,34 @@ const ConversableAgent = ({ id, data, selected }: any) => {
             <option value={'TERMINATE'}>TERMINATE</option>
           </select>
         </div>
+        <div className="flex items-center text-sm justify-between gap-2">
+          <div className="text-base-content/80">
+            {t('max-consecutive-auto-reply')}
+          </div>
+          <input
+            type="number"
+            className="nodrag nowheel input input-bordered input-sm w-24 bg-transparent rounded"
+            value={data.max_consecutive_auto_reply ?? 0}
+            onChange={e => {
+              setNodeData(instance, id, {
+                max_consecutive_auto_reply: e.target.valueAsNumber,
+              });
+            }}
+          />
+        </div>
+        <div className="flex items-center text-sm justify-between gap-2">
+          <div className="text-base-content/80">{t('termination-msg')}</div>
+          <input
+            type="text"
+            className="nodrag nowheel input input-bordered input-sm bg-transparent rounded"
+            value={data.termination_msg ?? ''}
+            onChange={e => {
+              setNodeData(instance, id, {
+                termination_msg: e.target.value,
+              });
+            }}
+          />
+        </div>
       </div>
 
       <Handle
