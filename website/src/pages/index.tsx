@@ -12,7 +12,7 @@ function HomepageHeader() {
   const Svg = require('@site/static/img/logo.svg').default;
   return (
     <header className={clsx('hero', styles.heroBanner)}>
-      <div className="container">
+      <div className={styles.container}>
         <Svg className={styles.heroLogo} role="img" />
         <Heading as="h1" className="hero__title text--primary">
           {siteConfig.title}
@@ -32,6 +32,11 @@ function HomepageHeader() {
             Start to Build
           </Link>
         </div>
+        <img
+          src="/img/screenshot-studio-1.png"
+          className={styles.heroImage}
+          alt="hero"
+        />
       </div>
     </header>
   );

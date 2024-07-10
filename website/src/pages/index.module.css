@@ -16,6 +16,13 @@
   margin: 32px auto;
 }
 
+.heroImage {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin: 4rem auto;
+}
+
 @media screen and (max-width: 996px) {
   .heroBanner {
     padding: 2rem;
@@ -33,4 +40,12 @@ main {
   align-items: center;
   justify-content: center;
   gap: 1rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
