@@ -1,12 +1,29 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+export type ToolParameter = {
+  id: string;
+  name: string;
+  description: string;
+  type: 'string' | 'number' | 'boolean' | 'object';
+};
+
+export type Tool = {
+  id: string;
+  name: string;
+  description: string;
+  async?: boolean;
+  parameters: ToolParameter[];
+  code?: string;
+  assigned?: [{ agent: string; scene: 'execution' | 'llm' }];
+};
+
 export interface Project {
   id: string;
   name: string;
   description?: string;
   flow: any; // Complicated JSON object
-  tools?: any;
+  tools?: Tool[];
   knowledge?: any;
   settings?: any;
   created?: string;

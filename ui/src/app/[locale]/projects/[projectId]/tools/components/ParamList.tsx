@@ -5,6 +5,12 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { useProject } from '@/hooks';
+import {
+  RiAddLargeLine,
+  RiCloseLargeLine,
+  RiCloseLine,
+  RiCrossLine,
+} from 'react-icons/ri';
 
 const ParamRow = ({ param, onDelete, onUpdate }: any) => {
   const [name, setName] = useState(param.name ?? '');
@@ -35,12 +41,13 @@ const ParamRow = ({ param, onDelete, onUpdate }: any) => {
       <td className="w-32 px-1">
         <select
           className="select select-sm select-bordered bg-transparent rounded w-full"
-          value={param.type ?? 'string'}
+          value={param.type ?? 'str'}
           onChange={e => onUpdate(param, 'type', e.target.value)}
         >
-          <option value="string">string</option>
-          <option value="number">number</option>
-          <option value="boolean">boolean</option>
+          <option value="str">str</option>
+          <option value="int">int</option>
+          <option value="float">float</option>
+          <option value="bool">bool</option>
         </select>
       </td>
       <td className="flex-grow px-1">
@@ -53,12 +60,12 @@ const ParamRow = ({ param, onDelete, onUpdate }: any) => {
         />
       </td>
       <td className="w-12 flex text-right justify-end px-1">
-        <div className="hidden group-hover:block w-full">
+        <div className="w-full">
           <button
-            className="btn btn-sm btn-square btn-ghost hover:text-red-600"
+            className="btn btn-xs btn-square rounded hover:text-red-600"
             onClick={() => onDelete(param)}
           >
-            <GoTrash className="w-4 h-4" />
+            <RiCloseLine className="w-4 h-4" />
           </button>
         </div>
       </td>
@@ -137,11 +144,11 @@ const ParamList = ({ projectId, tool, className, ...props }: any) => {
           className="btn btn-sm btn-outline btn-ghost rounded"
           onClick={onAddParam}
         >
-          <MdOutlineAdd className="w-4 h-4" />
+          <RiAddLargeLine className="w-4 h-4" />
           <span>{t('param-add')}</span>
         </button>
       </div>
-      <table className="table table-sm border-transparent">
+      <table className="table table-xs border-transparent">
         <thead>
           <tr className="flex items-center w-full">
             <th className="w-20 px-1">{t('param-required')}</th>

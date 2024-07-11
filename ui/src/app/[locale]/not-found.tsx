@@ -1,7 +1,6 @@
 'use client';
 import Link from 'next/link';
 import React from 'react';
-import { RiHome2Line } from 'react-icons/ri';
 
 const NotFound = () => {
   return (

@@ -24,34 +24,6 @@ config_list = autogen.filter_config(
 {%- endif %}
 
 llm_config = {
-    {%- if tools %}
-    "functions": [
-        {%- for tool in tools %}
-        {
-            "name": "{{ tool.name }}",
-            "description": "{{ tool.description }}",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    {%- for param in tool.parameters %}
-                    "{{ param.name }}": {
-                        "type": "{{ param.type }}",
-                        "description": "{{ param.description }}"
-                    }{% if not loop.last %},{% endif %}
-                    {%- endfor %}
-                },
-                "required": [
-                  {%- for param in tool.parameters %}
-                  {%- if param.required %}
-                  "{{ param.name }}" {% if not loop.last %}, {% endif %}
-                  {%- endif %}
-                  {%- endfor %}
-                ]
-            }
-        }{% if not loop.last %},{% endif %}
-        {%- endfor %}
-    ],
-    {%- endif %}
     "config_list": config_list,
     {%- if project['settings'] is not none and project['settings'].get('timeout') is not none %}
     "timeout": {{ project['settings'].timeout }},
@@ -63,20 +35,5 @@ llm_config = {
     "max_tokens": {{ project['settings'].get('max_tokens') }},
     {%- endif %}
 }
-
-{%- if group_chat_node %}
-group_llm_config={
-    "config_list": config_list,
-    {%- if project['settings'] is not none and project['settings'].get('timeout') is not none %}
-    "timeout": {{ project['settings'].timeout }},
-    {%- endif %}
-    {%- if project['settings'] is not none and project['settings'].get('temperature') is not none %}
-    "temperature": {{ project['settings'].get('temperature') }},
-    {%- endif %}
-    {%- if project['settings'] is not none and project['settings'].get('max_tokens') is not none %}
-    "max_tokens": {{ project['settings'].get('max_tokens') }},
-    {%- endif %}
-}
-{%- endif %}
 
 {%- endmacro %}

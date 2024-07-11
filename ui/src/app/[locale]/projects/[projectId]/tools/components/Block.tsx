@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { GoTrash } from 'react-icons/go';
-import { RiFormula } from 'react-icons/ri';
+import { RiFormula, RiDeleteBin4Line } from 'react-icons/ri';
 
 const ToolBlock = ({
   nodeId,
@@ -36,7 +36,7 @@ const ToolBlock = ({
           className="btn btn-xs btn-square btn-ghost hover:text-red-600"
           onClick={onDeleteFunc}
         >
-          <GoTrash className="w-4 h-4" />
+          <RiDeleteBin4Line className="w-4 h-4" />
         </button>
       </div>
     </div>

@@ -6,11 +6,8 @@ import { useTranslations } from 'next-intl';
 import { RiSettings3Line, RiSpaceShipFill } from 'react-icons/ri';
 import Tip from '@/components/Tip';
 import { isArray } from 'lodash-es';
-import { useState } from 'react';
-import InitializerConfig from '../option/IntializerConfig';
 
 const Initializer = ({ id, selected, data }: any) => {
-  const [showOptions, setShowOptions] = useState(false);
   const instance = useReactFlow();
   const t = useTranslations('node.Initializer');
   const tNodeMeta = useTranslations('meta.node');
@@ -27,17 +24,7 @@ const Initializer = ({ id, selected, data }: any) => {
         nodeId={id}
         selected={selected}
         className="shadow-box shadow-gray-700/80 border-gray-600/90 bg-gray-700/90"
-      >
-        <div
-          className="cursor-pointer hover:text-white"
-          onClick={() => setShowOptions(show => !show)}
-          data-tooltip-content={t('options')}
-          data-tooltip-id="default-tooltip"
-          data-tooltip-place="top"
-        >
-          <RiSettings3Line className="w-4 h-4" />
-        </div>
-      </Toolbar>
+      />
       <div className="flex flex-col w-full gap-2 text-sm">
         <div className="flex items-center gap-2 text-primary">
           <RiSpaceShipFill className="w-5 h-5" />
@@ -72,13 +59,6 @@ const Initializer = ({ id, selected, data }: any) => {
         type="source"
         position={Position.Right}
         className="w-16 !bg-primary"
-      />
-      <InitializerConfig
-        show={showOptions}
-        nodeId={id}
-        data={data}
-        onClose={() => setShowOptions(false)}
-        className="flex shrink-0 w-[640px] max-w-[80vw] max-h-[90vh]"
       />
     </div>
   );

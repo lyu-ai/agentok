@@ -61,23 +61,20 @@ const ProjectNavbar = ({ projectId }: any) => {
       {getProjectNavbarItems(projectId).map(item => {
         const isActive =
           regexResult && regexResult.length >= 3 && regexResult[2] === item.id;
+        const ItemIcon = isActive ? item.activeIcon : item.icon;
         return (
           <Link
             key={item.id}
             href={item.href}
             className={clsx(
-              'flex items-center text-sm py-1 gap-1.5 border-b  hover:text-primary/80',
+              'group flex items-center text-sm py-1 gap-1.5 border-b  hover:text-primary/80',
               {
                 'text-primary border-primary': isActive,
                 'border-transparent': !isActive,
               }
             )}
           >
-            {isActive ? (
-              <item.activeIcon className="h-4 w-4" />
-            ) : (
-              <item.icon className="h-4 w-4" />
-            )}
+            <ItemIcon className="h-4 w-4 group-hover:scale-125 transform transition duration-700 ease-in-out" />
             {item.label}
           </Link>
         );

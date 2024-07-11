@@ -49,7 +49,8 @@
       "input-mode-always": "ALWAYS",
       "input-mode-terminate": "TERMINATE",
       "max-consecutive-auto-reply": "Max Consecutive Auto-Replies",
-      "termination-msg": "Termination Message"
+      "termination-msg": "Termination Message",
+      "options": "More Options"
     },
     "Config": {
       "flow-name": "Name",
@@ -243,6 +244,17 @@
       "code_interpreter": "Code Interpreter",
       "file_ids": "File IDs",
       "assistant_id": "Assistant ID"
+    },
+    "ConversableAgentConfig": {
+      "title": "ConversableAgent Settings",
+      "available-tools": "Available Tools",
+      "available-tools-tooltip": "Drag and drop tools to the right to enable them for this agent",
+      "tools-for-execution": "Tools for Execution",
+      "tools-for-execution-tooltip": "Select tools to be executed in this agent",
+      "tools-for-execution-placeholder": "Select tools for execution",
+      "tools-for-llm": "Tools for LLM",
+      "tools-for-llm-tooltip": "Select tools to be used in LLM",
+      "tools-for-llm-placeholder": "Select tools for LLM"
     },
     "ConverseConfig": {
       "title": "Converse Settings",

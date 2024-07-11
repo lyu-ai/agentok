@@ -1,4 +1,5 @@
 'use client';
+import { ProjectProvider } from '@/context/ProjectContext';
 import { useProject } from '@/hooks';
 import { PropsWithChildren, useEffect } from 'react';
 
@@ -13,5 +14,9 @@ export default function Layout({
       document.title = `${project.name} | Agentok Studio`;
     }
   }, [project?.name]);
-  return <div className="flex-1 w-full overflow-y-auto">{children}</div>;
+  return (
+    <div className="flex-1 w-full overflow-y-auto">
+      <ProjectProvider projectId={params.projectId}>{children}</ProjectProvider>
+    </div>
+  );
 }

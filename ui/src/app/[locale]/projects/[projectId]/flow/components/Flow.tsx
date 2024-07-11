@@ -215,6 +215,11 @@ const Agentflow = ({ projectId }: any) => {
     (event: React.DragEvent) => {
       event.preventDefault();
 
+      if (!event.dataTransfer.getData('json')) {
+        // To filter out unexpected drop operation
+        return;
+      }
+
       if (!flowParent.current) {
         console.warn(
           'Unexpected null value of flowParent, drag & drop failed.'

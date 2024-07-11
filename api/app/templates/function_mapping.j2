@@ -1,12 +1,17 @@
-# register the functions
-{% if tools %}
+{%- if tools %}
 {%- if tools|length > 0 %}
-node_{{first_converser['id']}}.register_function(
-    function_map={
-        {%- for tool in tools %}
-        "{{tool.name}}": {{tool.name}},
-        {%- endfor %}
-    }
-)
+# Register the functions to agents
+{%- for tool in tools %}
+{%- if tool.assigned and tool.assigned | length > 0 %}
+{%- for assign in tool.assigned %}
+node_{{ assign['agent']}}.register_for_{{assign['scene']}}(
+  name="{{ tool.name }}",
+  {%- if assign['scene'] == 'llm' %}
+  description="{{ tool.description }}", # This field is only required when registering to LLM
+  {%- endif %}
+)({{ tool.name }})
+{%- endfor %}
 {%- endif %}
+{%- endfor %}
 {%- endif %}
+{% endif %}

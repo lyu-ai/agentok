@@ -176,10 +176,10 @@ export const initialNodes: Node[] = [
       label: 'initializer',
       class: 'Initializer',
     },
-    position: { x: 150, y: 300 },
+    position: { x: -133, y: 246 },
   },
   {
-    id: '3',
+    id: '1',
     type: 'user',
     data: {
       name: 'User',
@@ -188,19 +188,19 @@ export const initialNodes: Node[] = [
       human_input_mode: 'NEVER',
       max_consecutive_auto_reply: 0,
     },
-    position: { x: 550, y: 300 },
+    position: { x: 271, y: 222 },
   },
   {
-    id: '1',
+    id: '2',
     type: 'assistant',
     data: {
-      name: 'Image',
+      name: 'Assitant',
       type: 'assistant',
-      label: 'multimodal-assistant',
-      class: 'MultimodalConversableAgent',
+      label: 'assistant',
+      class: 'AssistantAgent',
       max_consecutive_auto_reply: 10,
     },
-    position: { x: 145, y: 360 },
+    position: { x: 811, y: 216 },
   },
   {
     id: '998',
@@ -212,33 +212,22 @@ export const initialNodes: Node[] = [
       content:
         'Click **Start Chat** and select a sample picture and then enter: What is this?',
     },
-    position: { x: 150, y: 700 },
-  },
-  {
-    id: '999',
-    type: 'config',
-    data: {
-      name: 'Config',
-      label: 'config',
-      flow_name: 'sample-flow1',
-      flow_description: 'Sample Workflow',
-      class: 'Config',
-      max_tokens: 1024,
-      temperature: 0.5,
-    },
-    position: { x: -200, y: 560 },
+    position: { x: 87, y: 740 },
   },
 ];
 
 export const initialEdges: Edge[] = [
   {
-    id: '1-3',
+    id: '1001-1',
+    source: '1001',
+    target: '1',
+  },
+  {
+    id: '1-2',
     source: '1',
-    target: '3',
+    target: '2',
     animated: true,
-    style: {
-      strokeWidth: 2,
-    },
+    type: 'converse',
   },
 ];
 

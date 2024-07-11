@@ -14,7 +14,8 @@ const Page = ({ params }: { params: { projectId: string } }) => {
   const { project, updateProject } = useProject(params.projectId);
   const [selectedTool, setSelectedTool] = useState(-1);
   useEffect(() => {
-    if (project?.tools?.length > 0 && selectedTool === -1) setSelectedTool(0);
+    if (project?.tools && project?.tools?.length > 0 && selectedTool === -1)
+      setSelectedTool(0);
   }, [project?.tools?.length, selectedTool, setSelectedTool]);
   const onAdd = () => {
     updateProject({
@@ -39,7 +40,8 @@ const Page = ({ params }: { params: { projectId: string } }) => {
     setSelectedTool(0); // select the new added tool
   };
   const onDelete = (func: any) => {
-    const updatedTools = project?.tools?.filter((f: any) => f.id !== func.id);
+    const updatedTools =
+      project?.tools?.filter((f: any) => f.id !== func.id) ?? [];
     updateProject({ tools: updatedTools });
     if (selectedTool > updatedTools.length - 1)
       setSelectedTool(selectedTool - 1); // either select the last one or -1

@@ -72,8 +72,11 @@ class CodegenService:
                 del model['description']
         # Use the template for each node
         template = self.env.get_template("main.j2")  # Main template
+        
+        print('tools', project.tools)
 
         code = template.render(project=project,
+                               user=self.user,
                                settings=settings, # Account level settings include models, etc.
                                nodes=flow.nodes,
                                first_converser=first_converser,

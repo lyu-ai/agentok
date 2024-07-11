@@ -23,8 +23,12 @@ class Parameter(BaseModel):
   id: str
   name: str
   description: str
-  type: Literal['boolean', 'string', 'number']
+  type: Literal['bool', 'str', 'int', 'float']
   required: Optional[bool] = False
+
+class ToolAssign(BaseModel):
+  agent: str
+  scene: str
 
 class Tool(BaseModel):
   id: str
@@ -32,9 +36,12 @@ class Tool(BaseModel):
   description: Optional[str] = None
   parameters: List[Parameter]
   code: Optional[str] = None
+  assigned: Optional[List[ToolAssign]] = None
 
 class Project(BaseModel):
   id: str
+  name: str
+  description: Optional[str] = None
   flow: Flow
   tools: Optional[List[Tool]] = None
   settings: Optional[Dict[str, Any]] = None

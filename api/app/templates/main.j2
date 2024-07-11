@@ -9,18 +9,18 @@
 # Last generated: {{ generation_date }}
 #
 # Project Name: {{ project['name'] }}
-# Updated At: {{ project['updated'] }}
+# Owner: {{ user['name'] }}
+# Updated: {{ project['updated'] }}
 {%- if project['description'] -%}
 # Description:
 """
 {{ project['description'] }}
 """
-#
 {%- endif -%}
 
 {% if note_nodes %}
+# Notes
 """
-Notes:
 {% for node in note_nodes %}
 {{ node['data']['content'] }}
 {%- endfor %}

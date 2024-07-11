@@ -6,7 +6,10 @@ import { useTemplates } from '@/hooks';
 import { useEffect, useState } from 'react';
 import ReactFlow, { ReactFlowProvider, useStoreApi } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { nodeTypes } from '../../projects/[projectId]/flow/utils/flow';
+import {
+  edgeTypes,
+  nodeTypes,
+} from '../../projects/[projectId]/flow/utils/flow';
 import Markdown from '@/components/Markdown';
 import clsx from 'clsx';
 
@@ -31,6 +34,7 @@ const FlowViewer = ({ template, className }: any) => {
         nodes={template.project.flow.nodes}
         edges={template.project.flow.edges}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         fitView
         proOptions={{ hideAttribution: true }}
       />

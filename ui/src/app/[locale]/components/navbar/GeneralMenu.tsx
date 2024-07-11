@@ -55,25 +55,26 @@ const GeneralMenu = () => {
 
   return (
     <>
-      {getGeneralMenuItems().map(item => (
-        <Link
-          key={item.id}
-          href={item.href}
-          className={clsx(
-            'flex items-center text-sm py-1 gap-1.5 hover:text-primary',
-            {
-              'text-primary/80 border-b border-primary/80': isActive(item.href),
-            }
-          )}
-        >
-          {isActive(item.href) ? (
-            <item.activeIcon className="h-4 w-4" />
-          ) : (
-            <item.icon className="h-4 w-4" />
-          )}
-          {item.label}
-        </Link>
-      ))}
+      {getGeneralMenuItems().map(item => {
+        const ItemIcon = isActive(item.href) ? item.activeIcon : item.icon;
+        return (
+          <Link
+            key={item.id}
+            href={item.href}
+            className={clsx(
+              'group flex items-center text-sm py-1 gap-1.5 hover:text-primary',
+              {
+                'text-primary/80 border-b border-primary/80': isActive(
+                  item.href
+                ),
+              }
+            )}
+          >
+            <ItemIcon className="h-4 w-4 group-hover:scale-125 transform transition duration-700 ease-in-out" />
+            {item.label}
+          </Link>
+        );
+      })}
     </>
   );
 };

@@ -6,9 +6,11 @@ import { getNodeLabel, setNodeData } from '../../utils/flow';
 import Toolbar from './Toolbar';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { RiRobotFill } from 'react-icons/ri';
+import { RiRobotFill, RiSettings3Line } from 'react-icons/ri';
+import ConversableAgentConfig from '../option/ConversableAgentConfig';
 
 const ConversableAgent = ({ id, data, selected }: any) => {
+  const [showOptions, setShowOptions] = useState(false);
   const [editingName, setEditingName] = useState(false);
   const instance = useReactFlow();
   const t = useTranslations('node.ConversableAgent');
@@ -28,6 +30,15 @@ const ConversableAgent = ({ id, data, selected }: any) => {
         selected={selected}
         className="bg-sky-700 border-sky-500 p-1"
       >
+        <div
+          className="cursor-pointer hover:text-white"
+          onClick={() => setShowOptions(show => !show)}
+          data-tooltip-content={t('options')}
+          data-tooltip-id="default-tooltip"
+          data-tooltip-place="top"
+        >
+          <RiSettings3Line className="w-4 h-4" />
+        </div>
         <EditButton
           editing={editingName}
           setEditing={setEditingName}
@@ -144,6 +155,13 @@ const ConversableAgent = ({ id, data, selected }: any) => {
         type="source"
         position={Position.Right}
         className="w-16 !bg-sky-700"
+      />
+      <ConversableAgentConfig
+        show={showOptions}
+        nodeId={id}
+        data={data}
+        onClose={() => setShowOptions(false)}
+        className="flex shrink-0 w-[640px] max-w-[80vw] max-h-[90vh]"
       />
     </div>
   );
