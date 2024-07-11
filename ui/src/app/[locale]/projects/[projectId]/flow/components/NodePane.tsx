@@ -30,7 +30,13 @@ const NodeGroup = ({ pinned, name, nodes, open, onAddNode }: any) => {
       'backdrop-blur-sm',
       DRAGGING_NODE_NAME
     );
-    document.body.appendChild(dragImage);
+    // Create an off-screen container for the drag image
+    let offScreenContainer = document.createElement('div');
+    offScreenContainer.style.position = 'fixed';
+    offScreenContainer.style.top = '-9999px';
+    offScreenContainer.style.left = '-9999px';
+    document.body.appendChild(offScreenContainer);
+    offScreenContainer.appendChild(dragImage);
     // Offset the drag image to the position of the original element, otherwise will be shown at the cursor position
     const offsetX =
       event.clientX - event.currentTarget.getBoundingClientRect().left;
@@ -40,6 +46,16 @@ const NodeGroup = ({ pinned, name, nodes, open, onAddNode }: any) => {
     event.dataTransfer.setData(
       'json',
       JSON.stringify({ ...data, offsetX, offsetY })
+    );
+    // Clean up the off-screen container after the drag operation ends
+    event.currentTarget.addEventListener(
+      'dragend',
+      () => {
+        if (offScreenContainer) {
+          document.body.removeChild(offScreenContainer);
+        }
+      },
+      { once: true }
     );
   };
   const ButtonType = pinned ? Popover.Button : 'button';

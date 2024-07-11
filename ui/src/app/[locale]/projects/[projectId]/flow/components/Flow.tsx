@@ -49,7 +49,7 @@ const Agentflow = ({ projectId }: any) => {
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const flowParent = useRef<HTMLDivElement>(null);
-  const { fitView, screenToFlowPosition, toObject } = useReactFlow();
+  const { screenToFlowPosition, toObject } = useReactFlow();
   const t = useTranslations('component.Flow');
   const chatPanePinned = useProjectStore(state => state.chatPanePinned);
   const nodePanePinned = useProjectStore(state => state.nodePanePinned);
@@ -305,10 +305,19 @@ const Agentflow = ({ projectId }: any) => {
     const randInt = (max: number) =>
       Math.floor(Math.random() * Math.floor(max));
 
+    // Calculate the center of the viewport or a desired position
+    const viewportCenter = screenToFlowPosition({
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+    });
+
     const newNode: Node = {
       id: newId,
       type,
-      position: { x: 150 + randInt(100), y: 50 + randInt(50) },
+      position: {
+        x: viewportCenter.x - 50 + randInt(100),
+        y: viewportCenter.y - 100 + randInt(200),
+      },
       data,
     };
     setNodes(nds => nds.concat(newNode));

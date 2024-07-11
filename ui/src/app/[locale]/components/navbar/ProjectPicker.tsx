@@ -10,12 +10,7 @@ import {
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import {
-  RiAddCircleLine,
-  RiAddLine,
-  RiApps2Line,
-  RiArrowDownSLine,
-} from 'react-icons/ri';
+import { RiAddLine, RiApps2Line, RiArrowDownSLine } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
 const ProjectPicker = ({ activeProjectId, className }: any) => {
@@ -52,7 +47,7 @@ const ProjectPicker = ({ activeProjectId, className }: any) => {
           )}
         >
           <RiApps2Line className="h-4 w-4" />
-          <span className="text-ellipsis overflow-hidden whitespace-nowrap hidden lg:block">
+          <span className="text-ellipsis overflow-hidden whitespace-nowrap max-w-24">
             {activeProject?.name || 'Select Project'}
           </span>
           <RiArrowDownSLine className="h-4 w-4" />

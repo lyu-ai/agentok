@@ -26,14 +26,14 @@ const Navbar = () => {
   return (
     <div className="z-50 navbar flex w-full items-center justify-between px-2">
       <div className="navbar-start gap-2 flex items-center justify-start">
-        <NavButton projectId={projectId} className="md:hidden" />
+        <NavButton projectId={projectId} className="lg:hidden" />
         <NavLogo />
         <ProjectPicker
           activeProjectId={projectId}
           className="py-1 px-2 text-sm border border-base-content/20 hover:border-base-content/50 rounded"
         />
       </div>
-      <div className="navbar-center gap-4 hidden md:flex">
+      <div className="navbar-center gap-4 hidden lg:flex">
         <NavMenu projectId={projectId} />
       </div>
       <div className="navbar-end flex items-center my-auto gap-4">
