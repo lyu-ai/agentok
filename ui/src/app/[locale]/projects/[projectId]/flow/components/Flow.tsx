@@ -178,13 +178,10 @@ const Agentflow = ({ projectId }: any) => {
         });
 
         // Ensure group nodes are ahead of their child nodes in the array
-        console.log('sorting', newNodes);
         newNodes = newNodes.sort((a, b) => {
           if (a.type === 'groupchat' && b.parentId === a.id) {
-            console.log('a is the group, b is the child', a, b);
             return -1; // a is the group, b is the child
           } else if (b.type === 'groupchat' && a.parentId === b.id) {
-            console.log('b is the group, a is the child', a, b);
             return 1; // b is the group, a is the child
           } else {
             return 0;
