@@ -50,7 +50,7 @@ const Agentflow = ({ projectId }: any) => {
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const flowParent = useRef<HTMLDivElement>(null);
   const { fitView, screenToFlowPosition, toObject } = useReactFlow();
-  const t = useTranslations('component.Workflow');
+  const t = useTranslations('component.Flow');
   const chatPanePinned = useProjectStore(state => state.chatPanePinned);
   const nodePanePinned = useProjectStore(state => state.nodePanePinned);
   const { chats, createChat, isCreating } = useChats();
@@ -112,17 +112,6 @@ const Agentflow = ({ projectId }: any) => {
     toObject,
     debouncedUpdateFlow,
   ]);
-
-  // Helper function to check if a position is inside a node
-  const isPositionInsideNode = (position: XYPosition, node: Node) => {
-    return (
-      position.x > node.position.x &&
-      position.x < node.position.x + (node.width || 0) &&
-      position.y > node.position.y &&
-      position.y < node.position.y + (node.height || 0)
-    );
-  };
-
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
       if (
@@ -137,41 +126,51 @@ const Agentflow = ({ projectId }: any) => {
 
         // Handle parent-child relationships for group nodes
         changes.forEach(change => {
-          if (
-            change.type === 'position' &&
-            change.dragging &&
-            change.position
-          ) {
+          if (change.type === 'position' && !change.dragging) {
             const draggedNode = newNodes.find(n => n.id === change.id);
             if (draggedNode) {
-              // Check if the node is being dragged over a group node
-              const groupNode = newNodes.find(
-                n =>
-                  n.type === 'groupchat' &&
-                  isPositionInsideNode(change.position as XYPosition, n)
+              const nodePosition = draggedNode.position;
+
+              // Find the last group node containing the dragged node
+              const groupNode = newNodes.reduce(
+                (foundGroup: Node | null, currentNode: Node) => {
+                  if (
+                    currentNode.type === 'groupchat' &&
+                    currentNode.id !== draggedNode.id &&
+                    isPositionInsideNode(nodePosition, currentNode)
+                  ) {
+                    return currentNode;
+                  }
+                  return foundGroup;
+                },
+                null
               );
 
               if (groupNode) {
-                // Set the parent of the dragged node to the group node
-                draggedNode.parentId = groupNode.id;
-                // Adjust the position to be relative to the group node
-                draggedNode.position = {
-                  x: (change.position.x as number) - groupNode.position.x,
-                  y: (change.position.y as number) - groupNode.position.y,
-                };
+                if (draggedNode.parentId !== groupNode.id) {
+                  // Node is entering a new group
+                  const newRelativePosition = {
+                    x: nodePosition.x - groupNode.position.x,
+                    y: nodePosition.y - groupNode.position.y,
+                  };
+                  draggedNode.parentId = groupNode.id;
+                  draggedNode.position = newRelativePosition;
+                }
+                // If it's already a child, position is handled by React Flow
               } else if (draggedNode.parentId) {
-                // If not over a group node and it was previously in a group, remove the parent
-                delete draggedNode.parentId;
-                // Adjust position to be absolute
+                // Node is not over any group
                 const parentNode = newNodes.find(
                   n => n.id === draggedNode.parentId
                 );
                 if (parentNode) {
-                  draggedNode.position = {
-                    x: draggedNode.position.x + parentNode.position.x,
-                    y: draggedNode.position.y + parentNode.position.y,
+                  // Convert to absolute position before detaching from the group
+                  const newAbsolutePosition = {
+                    x: nodePosition.x + parentNode.position.x,
+                    y: nodePosition.y + parentNode.position.y,
                   };
+                  draggedNode.position = newAbsolutePosition;
                 }
+                delete draggedNode.parentId;
               }
             }
           }
@@ -193,6 +192,16 @@ const Agentflow = ({ projectId }: any) => {
     },
     [setNodes]
   );
+
+  // Helper function to check if a position is inside a node
+  const isPositionInsideNode = (position: XYPosition, node: Node) => {
+    return (
+      position.x > node.position.x &&
+      position.x < node.position.x + (node.width ?? 0) &&
+      position.y > node.position.y &&
+      position.y < node.position.y + (node.height ?? 0)
+    );
+  };
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
       if (

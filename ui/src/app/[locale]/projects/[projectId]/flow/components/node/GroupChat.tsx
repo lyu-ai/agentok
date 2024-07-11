@@ -33,15 +33,11 @@ const GroupChatManager = ({ id, selected, data }: NodeProps) => {
         className={clsx(
           'flex w-full h-full p-2 rounded-md border min-w-[480px] min-h-[600px] backdrop-blur-sm relative',
           selected
-            ? 'shadow-box shadow-primary/80 border-primary/80 bg-primary/20'
+            ? 'shadow shadow-primary/80 border-primary/80 bg-primary/20'
             : 'border-primary/60 bg-primary/10'
         )}
       >
-        <Toolbar
-          nodeId={id}
-          selected={selected}
-          className="border-gray-600/90 bg-gray-700/90"
-        >
+        <Toolbar nodeId={id} selected={selected} className="bg-primary/20">
           <div
             className="cursor-pointer hover:text-white"
             onClick={() => setShowOptions(show => !show)}
@@ -53,7 +49,7 @@ const GroupChatManager = ({ id, selected, data }: NodeProps) => {
           </div>
         </Toolbar>
         <div className="flex flex-col w-full gap-2 text-sm">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 text-primary">
             <NodeIcon className="w-5 h-5" />
             <div className="text-sm font-bold">
               {data.name || getNodeLabel(data.label, tNodeMeta)}

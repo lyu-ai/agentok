@@ -142,12 +142,9 @@
       "abort": "Abort",
       "enter-message": "Enter message to start chat ..."
     },
-    "Workflow": {
-      "back-to-main": "Back to Workflow List",
-      "reset-default-tooltip": "Reset to default",
-      "save-flow": "Upload to Cloud",
+    "Flow": {
       "save-success": "Successfully saved flow",
-      "flow-load-failed": "Failed to load flow"
+      "project-load-failed": "Failed to load flow"
     },
     "ProjectList": {
       "default-description": "This project has {node_count} node(s) and {edge_count} edge(s).",

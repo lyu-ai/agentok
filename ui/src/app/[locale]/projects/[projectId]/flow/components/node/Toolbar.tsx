@@ -28,7 +28,7 @@ const Toolbar = ({
       isVisible={selected}
       position={Position.Top}
       align="end"
-      className={clsx(className, 'flex items-center gap-3 p-1 rounded')}
+      className={clsx(className, 'flex items-center gap-3 py-1 px-2 rounded')}
     >
       {children}
       {!hideDelete && (

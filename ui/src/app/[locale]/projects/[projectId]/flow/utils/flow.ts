@@ -37,7 +37,7 @@ export const nodeTypes = {
   initializer: Initializer,
   assistant: AssistantAgent,
   user: UserProxyAgent,
-  groupchat: GroupChat,
+  groupchat: GroupChat, // DO NOT change the type to 'group', as it's a builtin type of react-flow
   note: Note,
   conversable: ConversableAgent,
 };
@@ -82,7 +82,7 @@ export const basicNodes: NodeMeta[] = [
     icon: RiTeamLine,
     activeIcon: RiTeamFill,
     type: 'groupchat',
-    name: 'GroupChat',
+    name: 'Group',
     label: 'groupchat',
     class: 'GroupChat',
   },
