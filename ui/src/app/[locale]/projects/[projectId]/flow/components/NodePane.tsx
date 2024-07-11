@@ -82,7 +82,7 @@ const NodeGroup = ({ pinned, name, nodes, open, onAddNode }: any) => {
               }
               className="group min-w-64 flex p-2 items-center rounded-lg bg-base-content/5 hover:bg-base-content/10 cursor-pointer"
             >
-              <Icon className="flex-shrink-0 w-6 h-6 mx-1 group-hover:text-white" />
+              <Icon className="flex-shrink-0 w-6 h-6 mx-1 group-hover:text-white group-hover:scale-125 transform transition duration-300 ease-in-out" />
               <div className="ml-3 flex flex-col items-start gap-1">
                 <div className="text-sm font-bold group-hover:text-white">
                   {type === 'custom_conversable'
@@ -179,7 +179,7 @@ const NodePane = ({ pinned, onAddNode, contentClassName }: any) => {
             onAddNode={onAddNode}
             open
           />
-          <NodeGroup
+          {/* <NodeGroup
             pinned={pinned}
             name={t('group-advanced')}
             nodes={advancedNodes}
@@ -192,7 +192,7 @@ const NodePane = ({ pinned, onAddNode, contentClassName }: any) => {
               nodes={customAgents}
               onAddNode={onAddNode}
             />
-          )}
+          )} */}
         </div>
       </div>
     </div>

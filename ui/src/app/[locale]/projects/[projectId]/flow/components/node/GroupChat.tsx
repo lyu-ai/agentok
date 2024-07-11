@@ -11,12 +11,11 @@ import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import Toolbar from './Toolbar';
 import GroupChatConfig from '../option/GroupChatConfig';
-import { RiGroup3Fill, RiSettings3Line } from 'react-icons/ri';
-import { getNodeLabel } from '../../utils/flow';
+import { RiSettings3Line } from 'react-icons/ri';
+import { getNodeIcon, getNodeLabel } from '../../utils/flow';
 import ResizeIcon from '@/components/ResizeIcon';
 
 const GroupChatManager = ({ id, selected, data }: NodeProps) => {
-  const instance = useReactFlow();
   const t = useTranslations('node.GroupChat');
   const tNodeMeta = useTranslations('meta.node');
   const [showOptions, setShowOptions] = useState(false);
@@ -24,6 +23,7 @@ const GroupChatManager = ({ id, selected, data }: NodeProps) => {
     background: 'transparent',
     border: 'none',
   };
+  const NodeIcon = getNodeIcon(data.type, selected);
 
   return (
     <>
@@ -31,7 +31,7 @@ const GroupChatManager = ({ id, selected, data }: NodeProps) => {
       <div
         data-node-id={id}
         className={clsx(
-          'flex w-full h-full p-2 rounded-md border min-w-[160px] min-h-[80px] backdrop-blur-sm relative',
+          'flex w-full h-full p-2 rounded-md border min-w-[480px] min-h-[600px] backdrop-blur-sm relative',
           selected
             ? 'shadow-box shadow-primary/80 border-primary/80 bg-primary/20'
             : 'border-primary/60 bg-primary/10'
@@ -54,7 +54,7 @@ const GroupChatManager = ({ id, selected, data }: NodeProps) => {
         </Toolbar>
         <div className="flex flex-col w-full gap-2 text-sm">
           <div className="flex items-center gap-2">
-            <RiGroup3Fill className="w-5 h-5" />
+            <NodeIcon className="w-5 h-5" />
             <div className="text-sm font-bold">
               {data.name || getNodeLabel(data.label, tNodeMeta)}
             </div>

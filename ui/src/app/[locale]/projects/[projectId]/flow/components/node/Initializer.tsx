@@ -1,9 +1,8 @@
 import clsx from 'clsx';
 import { Handle, Position, useReactFlow } from 'reactflow';
-import { getNodeLabel, setNodeData } from '../../utils/flow';
+import { getNodeIcon, getNodeLabel, setNodeData } from '../../utils/flow';
 import Toolbar from './Toolbar';
 import { useTranslations } from 'next-intl';
-import { RiSettings3Line, RiSpaceShipFill } from 'react-icons/ri';
 import Tip from '@/components/Tip';
 import { isArray } from 'lodash-es';
 
@@ -11,6 +10,7 @@ const Initializer = ({ id, selected, data }: any) => {
   const instance = useReactFlow();
   const t = useTranslations('node.Initializer');
   const tNodeMeta = useTranslations('meta.node');
+  const NodeIcon = getNodeIcon(data.type, selected);
   return (
     <div
       className={clsx(
@@ -27,7 +27,7 @@ const Initializer = ({ id, selected, data }: any) => {
       />
       <div className="flex flex-col w-full gap-2 text-sm">
         <div className="flex items-center gap-2 text-primary">
-          <RiSpaceShipFill className="w-5 h-5" />
+          <NodeIcon className="w-5 h-5" />
           <div className="text-sm font-bold">
             {getNodeLabel(data.label, tNodeMeta)}
           </div>

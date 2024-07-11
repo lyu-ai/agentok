@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { RiSettings3Line, RiUser5Fill } from 'react-icons/ri';
 import { Handle, Position, useReactFlow } from 'reactflow';
-import { getNodeLabel, setNodeData } from '../../utils/flow';
+import { getNodeIcon, getNodeLabel, setNodeData } from '../../utils/flow';
 import Toolbar from './Toolbar';
 import { useState } from 'react';
 import EditButton from '@/components/EditButton';
@@ -15,6 +15,7 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
   const instance = useReactFlow();
   const t = useTranslations('node.User');
   const tNodeMeta = useTranslations('meta.node');
+  const NodeIcon = getNodeIcon(data.type, selected);
   return (
     <div
       className={clsx(
@@ -27,7 +28,7 @@ const UserProxyAgent = ({ id, selected, data }: any) => {
       <div className="flex flex-col w-full gap-2 text-sm">
         <div className="w-full flex items-center justify-between gap-2 text-primary">
           <div className="flex items-center gap-2 ">
-            <RiUser5Fill className="w-5 h-5" />
+            <NodeIcon className="w-5 h-5" />
             <div className="text-sm font-bold">
               {getNodeLabel(data.label, tNodeMeta)}
             </div>

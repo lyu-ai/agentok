@@ -2,7 +2,7 @@ import EditButton from '@/components/EditButton';
 import EditableText from '@/components/EditableText';
 import clsx from 'clsx';
 import { Handle, Position, useReactFlow } from 'reactflow';
-import { getNodeLabel, setNodeData } from '../../utils/flow';
+import { getNodeIcon, getNodeLabel, setNodeData } from '../../utils/flow';
 import Toolbar from './Toolbar';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
@@ -15,6 +15,7 @@ const ConversableAgent = ({ id, data, selected }: any) => {
   const instance = useReactFlow();
   const t = useTranslations('node.ConversableAgent');
   const tNodeMeta = useTranslations('meta.node');
+  const NodeIcon = getNodeIcon(data.type, selected);
 
   return (
     <div
@@ -49,7 +50,7 @@ const ConversableAgent = ({ id, data, selected }: any) => {
       <div className="flex flex-col w-full gap-2 text-sm">
         <div className="w-full flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <RiRobotFill className="w-5 h-5" />
+            <NodeIcon className="w-5 h-5" />
             <div className="text-sm font-bold">
               {getNodeLabel(data.label, tNodeMeta)}
             </div>

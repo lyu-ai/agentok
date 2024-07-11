@@ -4,16 +4,27 @@ import GroupChat from '../components/node/GroupChat';
 import Note from '../components/node/Note';
 import {
   RiEyeLine,
-  RiGroupLine,
   RiMetaLine,
   RiOpenaiFill,
   RiRobot2Line,
   RiRobotLine,
   RiStickyNoteLine,
   RiUser4Line,
-  RiUser5Line,
   RiUserSearchLine,
   RiSpaceShipLine,
+  RiUserVoiceLine,
+  RiTeamLine,
+  RiSpaceShipFill,
+  RiStickyNoteFill,
+  RiRobot2Fill,
+  RiUserVoiceFill,
+  RiOpenaiLine,
+  RiMetaFill,
+  RiEyeFill,
+  RiUserSearchFill,
+  RiUser4Fill,
+  RiTeamFill,
+  RiQuestionLine,
 } from 'react-icons/ri';
 import { Edge, Node, ReactFlowInstance } from 'reactflow';
 import { genId } from '@/utils/id';
@@ -42,7 +53,7 @@ export const isConversable = (node?: Node) =>
 // Fields of Node Meta:
 // - name: To be used as variable name in generated code
 // - label: Shown on UI, the value is the key for i18n
-// - type: 'assistant' | 'user' | 'group', indicates the classes for code generation
+// - type: 'conversable' | 'assistant' | 'user' | 'group', indicates the classes for code generation
 // - class: The class to be choosen during code generation
 // - (description): UI will look for value of label + '-description', for example 'assistant-description'
 export type NodeMeta = {
@@ -50,6 +61,7 @@ export type NodeMeta = {
   name: string;
   description?: string;
   icon?: ComponentType;
+  activeIcon?: ComponentType;
   type: string;
   label: string;
   class: string;
@@ -59,6 +71,7 @@ export const basicNodes: NodeMeta[] = [
   {
     id: 'initializer',
     icon: RiSpaceShipLine,
+    activeIcon: RiSpaceShipFill,
     name: 'Initializer',
     label: 'initializer',
     type: 'initializer',
@@ -66,7 +79,8 @@ export const basicNodes: NodeMeta[] = [
   },
   {
     id: 'groupchat',
-    icon: RiGroupLine,
+    icon: RiTeamLine,
+    activeIcon: RiTeamFill,
     type: 'groupchat',
     name: 'GroupChat',
     label: 'groupchat',
@@ -75,6 +89,7 @@ export const basicNodes: NodeMeta[] = [
   {
     id: 'note',
     icon: RiStickyNoteLine,
+    activeIcon: RiStickyNoteFill,
     name: 'Note',
     label: 'note',
     type: 'note',
@@ -84,8 +99,18 @@ export const basicNodes: NodeMeta[] = [
 
 export const agentNodes: NodeMeta[] = [
   {
+    id: 'conversable',
+    icon: RiRobot2Line,
+    activeIcon: RiRobot2Fill,
+    name: 'Agent',
+    label: 'conversable',
+    type: 'conversable',
+    class: 'ConversableAgent',
+  },
+  {
     id: 'user',
-    icon: RiUser5Line,
+    icon: RiUserVoiceLine,
+    activeIcon: RiUserVoiceFill,
     name: 'User',
     label: 'user',
     type: 'user',
@@ -93,26 +118,20 @@ export const agentNodes: NodeMeta[] = [
   },
   {
     id: 'assistant',
-    icon: RiRobot2Line,
+    icon: RiRobotLine,
+    activeIcon: RiRobot2Fill,
     name: 'Assistant',
     label: 'assistant',
     type: 'assistant',
     class: 'AssistantAgent',
-  },
-  {
-    id: 'conversable_agent',
-    icon: RiRobotLine,
-    name: 'ConversableAgent',
-    label: 'conversable-agent',
-    type: 'conversable',
-    class: 'ConversableAgent',
   },
 ];
 
 export const advancedNodes: NodeMeta[] = [
   {
     id: 'gpt_assistant',
-    icon: RiOpenaiFill,
+    icon: RiOpenaiLine,
+    activeIcon: RiOpenaiFill,
     name: 'GPTAssistant',
     label: 'gpt-assistant',
     type: 'assistant',
@@ -121,6 +140,7 @@ export const advancedNodes: NodeMeta[] = [
   {
     id: 'multimodal',
     icon: RiEyeLine,
+    activeIcon: RiEyeFill,
     name: 'MultimodalAssistant',
     label: 'multimodal-assistant',
     type: 'assistant',
@@ -129,6 +149,7 @@ export const advancedNodes: NodeMeta[] = [
   {
     id: 'llava',
     icon: RiMetaLine,
+    activeIcon: RiMetaFill,
     name: 'LLaVA',
     label: 'llava',
     type: 'assistant',
@@ -137,6 +158,7 @@ export const advancedNodes: NodeMeta[] = [
   {
     id: 'retrieve_assistant',
     icon: RiRobot2Line,
+    activeIcon: RiRobot2Fill,
     name: 'RetrieveAssistant',
     label: 'retrieve-assistant',
     type: 'assistant',
@@ -145,6 +167,7 @@ export const advancedNodes: NodeMeta[] = [
   {
     id: 'retrieve_user_proxy',
     icon: RiUserSearchLine,
+    activeIcon: RiUserSearchFill,
     name: 'RetrieveUserProxy',
     label: 'retrieve-user',
     type: 'user',
@@ -153,6 +176,7 @@ export const advancedNodes: NodeMeta[] = [
   {
     id: 'math_user_proxy',
     icon: RiUser4Line,
+    activeIcon: RiUser4Fill,
     name: 'MathUserProxyAgent',
     label: 'math-user',
     type: 'user',
@@ -163,6 +187,13 @@ export const advancedNodes: NodeMeta[] = [
 export const getNodeLabel = (label: string, tNodeMeta: any) => {
   // t() function is hook-based, so here the caller from component should pass in the function
   return tNodeMeta && label ? tNodeMeta(label) : label;
+};
+
+const allNodes = [...basicNodes, ...agentNodes, ...advancedNodes];
+
+export const getNodeIcon = (nodeId: string, active?: boolean) => {
+  const nodeMeta = allNodes.find(node => node.id === nodeId);
+  return (active ? nodeMeta?.activeIcon : nodeMeta?.icon) || RiQuestionLine;
 };
 
 // ---------------------

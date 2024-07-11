@@ -1,11 +1,6 @@
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
-import { GoTrash } from 'react-icons/go';
-import {
-  RiDeleteBin3Fill,
-  RiDeleteBin3Line,
-  RiDeleteBin4Line,
-} from 'react-icons/ri';
+import { RiDeleteBin4Line } from 'react-icons/ri';
 import { Position, NodeToolbar, useReactFlow } from 'reactflow';
 
 const Toolbar = ({

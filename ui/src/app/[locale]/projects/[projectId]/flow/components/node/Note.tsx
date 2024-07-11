@@ -4,8 +4,7 @@ import Toolbar from './Toolbar';
 import { GoCheck, GoPencil, GoX } from 'react-icons/go';
 import { NodeResizeControl, useReactFlow } from 'reactflow';
 import Markdown from '@/components/Markdown';
-import { getNodeLabel, setNodeData } from '../../utils/flow';
-import { FaNoteSticky } from 'react-icons/fa6';
+import { getNodeIcon, getNodeLabel, setNodeData } from '../../utils/flow';
 import CopyButton from '@/components/CopyButton';
 import { useTranslations } from 'next-intl';
 
@@ -38,6 +37,7 @@ function Note({ id, data, selected, ...props }: any) {
   const [content, setContent] = useState(data.content);
   const t = useTranslations('node.Note');
   const tNodeMeta = useTranslations('meta.node');
+  const NodeIcon = getNodeIcon(data.type, selected);
 
   useEffect(() => setContent(data.content), [data.content]);
 
@@ -66,7 +66,7 @@ function Note({ id, data, selected, ...props }: any) {
         <div className="flex items-center gap-2 p-2 justify-between">
           <div className="flex items-center gap-2">
             <div className="flex justify-center items-center">
-              <FaNoteSticky className="w-5 h-5" />
+              <NodeIcon className="w-5 h-5" />
             </div>
             <div className="text-sm font-bold">
               {getNodeLabel(data.label, tNodeMeta)}
