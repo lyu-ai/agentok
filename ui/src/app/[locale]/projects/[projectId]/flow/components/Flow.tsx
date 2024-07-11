@@ -34,13 +34,17 @@ import { useTranslations } from 'next-intl';
 import { useChats, useProject } from '@/hooks';
 import { debounce } from 'lodash-es';
 import ChatPane from '../../../../components/chat/ChatPane';
-import useProjectStore from '@/store/projects';
+import useProjectStore, { Project } from '@/store/projects';
 import NodePane from './NodePane';
 import { Chat as ChatType } from '@/store/chats';
 
 const DEBOUNCE_DELAY = 500; // Adjust this value as needed
 
-const useDebouncedUpdate = (projectId, updateProject, toObject) => {
+const useDebouncedUpdate = (
+  projectId: string,
+  updateProject: any,
+  toObject: any
+) => {
   const [isDirty, setIsDirty] = useState(false);
   const initialLoad = useRef(true);
 
@@ -71,7 +75,7 @@ const useDebouncedUpdate = (projectId, updateProject, toObject) => {
   return { setIsDirty, debouncedUpdate };
 };
 
-const Agentflow = ({ projectId }) => {
+const Agentflow = ({ projectId }: { projectId: string }) => {
   const { project, updateProject, isLoading, isError } = useProject(projectId);
   const { screenToFlowPosition, toObject } = useReactFlow();
   const { setIsDirty } = useDebouncedUpdate(projectId, updateProject, toObject);
