@@ -12,7 +12,6 @@ import ReactFlow, {
   useReactFlow,
   addEdge,
   ConnectionLineType,
-  ControlButton,
   XYPosition,
   Panel,
 } from 'reactflow';
@@ -39,57 +38,21 @@ import useProjectStore from '@/store/projects';
 import NodePane from './NodePane';
 import { Chat as ChatType } from '@/store/chats';
 
-const Agentflow = ({ projectId }: any) => {
-  const { project, updateProject, isUpdating, isLoading, isError } = useProject(
-    projectId
-  );
+const DEBOUNCE_DELAY = 500; // Adjust this value as needed
 
-  const [mode, setMode] = useState<'main' | 'flow' | 'json' | 'python'>('flow');
-  const [nodes, setNodes] = useState<Node[]>(initialNodes);
-  const [edges, setEdges] = useState<Edge[]>(initialEdges);
-  const [isDirty, setIsDirty] = useState<boolean>(false);
-  const flowParent = useRef<HTMLDivElement>(null);
-  const { screenToFlowPosition, toObject } = useReactFlow();
-  const t = useTranslations('component.Flow');
-  const chatPanePinned = useProjectStore(state => state.chatPanePinned);
-  const nodePanePinned = useProjectStore(state => state.nodePanePinned);
-  const { chats, createChat, isCreating } = useChats();
-  const [chat, setChat] = useState<ChatType | undefined>();
-
-  // Suppress error code 002
-  // https://github.com/xyflow/xyflow/issues/3243
-  const store = useStoreApi();
-  if (process.env.NODE_ENV === 'development') {
-    store.getState().onError = (code, message) => {
-      if (code === '002') {
-        return;
-      }
-      console.warn('Workflow warning:', code, message);
-    };
-  }
-
-  useEffect(() => {
-    if (project?.flow) {
-      setNodes(project.flow.nodes);
-      setEdges(project.flow.edges);
-    }
-    setIsDirty(false);
-    // fitView({ padding: 0.2, maxZoom: 1 });
-    const existingChat = chats.findLast(chat => chat.sourceId === project?.id);
-    if (existingChat) {
-      setChat(existingChat);
-    }
-  }, [project]);
-
+const useDebouncedUpdate = (projectId, updateProject, toObject) => {
+  const [isDirty, setIsDirty] = useState(false);
   const initialLoad = useRef(true);
 
-  const debouncedUpdateFlow = debounce((currentFlow: any) => {
-    updateProject({
-      id: projectId,
-      flow: currentFlow,
-    });
-    setIsDirty(false);
-  }, 1000);
+  const debouncedUpdate = useRef(
+    debounce(currentFlow => {
+      updateProject({
+        id: projectId,
+        flow: currentFlow,
+      });
+      setIsDirty(false);
+    }, DEBOUNCE_DELAY)
+  ).current;
 
   useEffect(() => {
     if (initialLoad.current) {
@@ -97,28 +60,66 @@ const Agentflow = ({ projectId }: any) => {
       return;
     }
     if (isDirty) {
-      debouncedUpdateFlow(toObject());
+      debouncedUpdate(toObject());
     }
 
     return () => {
-      debouncedUpdateFlow.cancel();
+      debouncedUpdate.cancel();
     };
-  }, [
-    project,
-    nodes,
-    edges,
-    isDirty,
-    projectId,
-    toObject,
-    debouncedUpdateFlow,
-  ]);
+  }, [isDirty, toObject, debouncedUpdate]);
+
+  return { setIsDirty, debouncedUpdate };
+};
+
+const Agentflow = ({ projectId }) => {
+  const { project, updateProject, isLoading, isError } = useProject(projectId);
+  const { screenToFlowPosition, toObject } = useReactFlow();
+  const { setIsDirty } = useDebouncedUpdate(projectId, updateProject, toObject);
+  const { chats, createChat } = useChats();
+  const [nodes, setNodes] = useState<Node[]>(initialNodes);
+  const [edges, setEdges] = useState<Edge[]>(initialEdges);
+  const [mode, setMode] = useState<'main' | 'flow' | 'json' | 'python'>('flow');
+  const flowParent = useRef<HTMLDivElement>(null);
+  const chatPanePinned = useProjectStore(state => state.chatPanePinned);
+  const nodePanePinned = useProjectStore(state => state.nodePanePinned);
+  const [chat, setChat] = useState<ChatType | undefined>();
+  const t = useTranslations('component.Flow');
+
+  // Suppress error code 002
+  const store = useStoreApi();
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      store.getState().onError = (code, message) => {
+        if (code === '002') {
+          return;
+        }
+        console.warn('Workflow warning:', code, message);
+      };
+    }
+  }, [store]);
+
+  useEffect(() => {
+    const initializeProjectFlow = () => {
+      if (project?.flow) {
+        setNodes(project.flow.nodes);
+        setEdges(project.flow.edges);
+        setIsDirty(false);
+      }
+      const existingChat = chats.findLast(
+        chat => chat.sourceId === project?.id
+      );
+      if (existingChat) {
+        setChat(existingChat);
+      }
+    };
+
+    initializeProjectFlow();
+  }, [projectId]);
+
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
-      if (
-        !initialLoad.current &&
-        changes.some(change => change.type !== 'select')
-      ) {
-        setIsDirty(true); // Ignore the dragging and selection events
+      if (changes.some(change => change.type !== 'select')) {
+        setIsDirty(true);
       }
 
       setNodes(nds => {
@@ -202,17 +203,15 @@ const Agentflow = ({ projectId }: any) => {
       position.y < node.position.y + (node.height ?? 0)
     );
   };
+
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
-      if (
-        !initialLoad.current &&
-        changes.some(change => change.type !== 'select')
-      ) {
+      if (changes.some(change => change.type !== 'select')) {
         setIsDirty(true);
       }
       setEdges(eds => applyEdgeChanges(changes, eds));
     },
-    [setEdges]
+    [setIsDirty]
   );
 
   const onDragOver = useCallback((event: React.DragEvent) => {
@@ -225,7 +224,6 @@ const Agentflow = ({ projectId }: any) => {
       event.preventDefault();
 
       if (!event.dataTransfer.getData('json')) {
-        // To filter out unexpected drop operation
         return;
       }
 
@@ -236,13 +234,8 @@ const Agentflow = ({ projectId }: any) => {
         return;
       }
 
-      // Get the current bounds of the ReactFlow wrapper element
       const flowBounds = flowParent.current.getBoundingClientRect();
-
-      // Extract the data from the drag event and parse it as a JSON object
       const data = JSON.parse(event.dataTransfer.getData('json'));
-
-      // Calculate the position where the node should be created
       const position = screenToFlowPosition({
         x: event.clientX - flowBounds.left - data.offsetX,
         y: event.clientY - flowBounds.top - data.offsetY,
@@ -256,10 +249,7 @@ const Agentflow = ({ projectId }: any) => {
         );
       }
 
-      // It's not necessary to keep the offsetX/Y as they are only for drap/drop
       const { offsetX, offsetY, ...cleanedData } = data;
-
-      // Generate a unique node ID
       const newId = genId();
 
       const newNode: Node = {
@@ -270,21 +260,31 @@ const Agentflow = ({ projectId }: any) => {
         data: cleanedData,
       };
 
-      // Add the new node to the list of nodes in state
-      // And clean the previous selections
+      // Handle parent-child relationships for group nodes immediately after drop
+      const groupNode = nodes.find(
+        n => n.type === 'groupchat' && isPositionInsideNode(position, n)
+      );
+
+      if (groupNode) {
+        newNode.parentId = groupNode.id;
+        newNode.position = {
+          x: position.x - groupNode.position.x,
+          y: position.y - groupNode.position.y,
+        };
+      }
+
       setNodes(nds =>
         nds.map(nd => ({ ...nd, selected: false } as Node)).concat(newNode)
       );
     },
-    // Specify dependencies for useCallback
-    [screenToFlowPosition, setNodes, flowParent]
+    [nodes, screenToFlowPosition, setNodes, flowParent]
   );
 
   const onConnect = (params: any) => {
     const sourceNode = nodes.find(nd => nd.id === params.source);
     const targetNode = nodes.find(nd => nd.id === params.target);
     const isRelation = isConversable(sourceNode) && isConversable(targetNode);
-    setEdges((eds: any) => {
+    setEdges(eds => {
       let newEdges = {
         ...params,
         strokeWidth: 2,
@@ -304,8 +304,6 @@ const Agentflow = ({ projectId }: any) => {
     const newId = genId();
     const randInt = (max: number) =>
       Math.floor(Math.random() * Math.floor(max));
-
-    // Calculate the center of the viewport or a desired position
     const viewportCenter = screenToFlowPosition({
       x: window.innerWidth / 2,
       y: window.innerHeight / 2,

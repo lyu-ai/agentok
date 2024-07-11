@@ -5,7 +5,7 @@ export type ToolParameter = {
   id: string;
   name: string;
   description: string;
-  type: 'string' | 'number' | 'boolean' | 'object';
+  type: 'str' | 'int' | 'bool' | 'float';
 };
 
 export type Tool = {
@@ -34,12 +34,11 @@ interface ProjectState {
   projects: Project[];
   chatPanePinned: boolean;
   nodePanePinned: boolean;
-  // User Projects
-  setProjects: (Projects: Project[]) => void;
+  setProjects: (projects: Project[]) => void;
   updateProject: (id: string, project: Partial<Project>) => void;
   deleteProject: (id: string) => void;
   getProjectById: (id: string) => Project | undefined;
-  pinChatPane: (pin: boolean) => void; // pin/unpin chat pane
+  pinChatPane: (pin: boolean) => void;
   pinNodePane: (pin: boolean) => void;
 }
 
@@ -62,19 +61,16 @@ const useProjectStore = create<ProjectState>()(
           return { projects };
         }),
       deleteProject: id =>
-        set(state => {
-          return {
-            projects: state.projects.filter(project => project.id !== id),
-          };
-        }),
-      getProjectById: id => {
-        return get().projects.find(project => project.id === id);
-      },
+        set(state => ({
+          projects: state.projects.filter(project => project.id !== id),
+        })),
+      getProjectById: id => get().projects.find(project => project.id === id),
       pinChatPane: (pin: boolean) => set({ chatPanePinned: pin }),
       pinNodePane: (pin: boolean) => set({ nodePanePinned: pin }),
     }),
     {
       name: 'agentok-projects',
+      getStorage: () => localStorage, // Use localStorage to persist the state
     }
   )
 );
