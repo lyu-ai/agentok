@@ -1,5 +1,5 @@
+'use client';
 import clsx from 'clsx';
-import { GoTrash } from 'react-icons/go';
 import { RiFormula, RiDeleteBin4Line } from 'react-icons/ri';
 
 const ToolBlock = ({

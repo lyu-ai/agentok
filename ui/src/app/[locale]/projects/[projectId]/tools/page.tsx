@@ -1,4 +1,4 @@
-'use client';
+'use client'; // Ensures this file is treated as a client component
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import ToolDetail from './components/Detail';
@@ -13,10 +13,17 @@ const Page = ({ params }: { params: { projectId: string } }) => {
   const t = useTranslations('tool.Config');
   const { project, updateProject } = useProject(params.projectId);
   const [selectedTool, setSelectedTool] = useState(-1);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
   useEffect(() => {
     if (project?.tools && project?.tools?.length > 0 && selectedTool === -1)
       setSelectedTool(0);
-  }, [project?.tools?.length, selectedTool, setSelectedTool]);
+  }, [project?.tools?.length, selectedTool]);
+
   const onAdd = () => {
     updateProject({
       tools: [
@@ -29,7 +36,7 @@ const Page = ({ params }: { params: { projectId: string } }) => {
             {
               id: 'param-' + genId(),
               name: 'message',
-              type: 'string',
+              type: 'str',
               description: 'The message to be printed.',
             },
           ],
@@ -39,6 +46,7 @@ const Page = ({ params }: { params: { projectId: string } }) => {
     });
     setSelectedTool(0); // select the new added tool
   };
+
   const onDelete = (func: any) => {
     const updatedTools =
       project?.tools?.filter((f: any) => f.id !== func.id) ?? [];
@@ -46,6 +54,11 @@ const Page = ({ params }: { params: { projectId: string } }) => {
     if (selectedTool > updatedTools.length - 1)
       setSelectedTool(selectedTool - 1); // either select the last one or -1
   };
+
+  if (!isHydrated) {
+    return null; // Return null during SSR to avoid mismatches
+  }
+
   return (
     <div className={clsx('flex w-full h-full')}>
       <div className="flex flex-col w-80 h-full border-r p-2 gap-2 border-base-content/10">

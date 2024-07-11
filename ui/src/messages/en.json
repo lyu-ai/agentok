@@ -262,7 +262,9 @@
     },
     "GroupChatConfig": {
       "title": "Group Chat Settings",
-      "speaker-selection-method": "Speaker Selection Method"
+      "speaker-selection-method": "Speaker Selection Method",
+      "max-round": "Max Round",
+      "send-introductions": "Send Introductions"
     },
     "PublishConfig": {
       "title": "Publish Project",

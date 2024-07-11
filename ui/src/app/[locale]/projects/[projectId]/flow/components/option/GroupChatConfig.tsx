@@ -24,24 +24,60 @@ const GroupChatConfig = ({ nodeId, data, className, ...props }: any) => {
       classNameBody="flex flex-grow flex-col w-full h-full p-2 gap-2 text-sm overflow-y-auto"
       {...props}
     >
-      <div className="flex items-center justify-between">
-        <span>{t('speaker-selection-method')}</span>
+      <div className="flex flex-col w-full gap-2">
         <div className="flex items-center gap-2">
-          <select
-            className="select select-bordered select-sm bg-transparent rounded"
-            value={data.speaker_selection_method ?? 'auto'}
+          <span>{t('speaker-selection-method')}</span>
+          <div className="flex items-center gap-2">
+            <select
+              className="select select-bordered select-sm bg-transparent rounded"
+              value={data.speaker_selection_method ?? 'auto'}
+              onChange={e => {
+                setNodeData(instance, nodeId, {
+                  speaker_selection_method: e.target.value,
+                });
+              }}
+            >
+              <option value={'auto'}>Auto</option>
+              <option value={'manual'}>Manual</option>
+              <option value={'random'}>Random</option>
+              <option value={'round_robin'}>Round Robin</option>
+            </select>
+          </div>
+        </div>
+        <div className="flex items-center text-sm gap-2 w-full">
+          <div className="whitespace-nowrap text-base-content/80 w-48">
+            {`${t('max-round')} - [${data?.max_round ?? 'None'}]`}
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="50"
+            step="1"
+            value={data?.max_round ?? 0}
             onChange={e => {
               setNodeData(instance, nodeId, {
-                speaker_selection_method: e.target.value,
+                max_round:
+                  e.target.valueAsNumber === 0 ? null : e.target.valueAsNumber,
               });
             }}
-          >
-            <option value={'auto'}>Auto</option>
-            <option value={'manual'}>Manual</option>
-            <option value={'random'}>Random</option>
-            <option value={'round_robin'}>Round Robin</option>
-          </select>
+            className="range range-xs w-full nodrag"
+          />
         </div>
+        <label className="label flex items-center justify-start gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={data?.send_introductions}
+            onChange={e =>
+              setNodeData(instance, nodeId, {
+                send_introductions: e.target.checked,
+              })
+            }
+            className="checkbox checkbox-xs rounded"
+          />
+          <div className="whitespace-nowrap text-base-content/80">
+            {`${t('send-introductions')}`}
+          </div>
+        </label>
       </div>
     </PopupDialog>
   );
