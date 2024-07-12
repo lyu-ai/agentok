@@ -70,7 +70,6 @@ const useProjectStore = create<ProjectState>()(
     }),
     {
       name: 'agentok-projects',
-      getStorage: () => localStorage, // Use localStorage to persist the state
     }
   )
 );
