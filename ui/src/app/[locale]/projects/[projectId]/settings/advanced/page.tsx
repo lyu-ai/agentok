@@ -1,16 +1,20 @@
 'use client';
 import PopupDialog from '@/components/PopupDialog';
-import { useProject } from '@/hooks';
+import { useProject, useProjects } from '@/hooks';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { RiSkull2Line } from 'react-icons/ri';
 
 const Page = ({ params }: { params: { projectId: string } }) => {
   const [showPrompt, setShowPrompt] = useState(false);
   const { project, isLoading } = useProject(params.projectId);
+  const { deleteProject, isDeleting } = useProjects();
+  const router = useRouter();
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     // Add your delete project logic here
-    console.log('Project deleted');
+    await deleteProject(params.projectId);
+    router.replace('/projects');
   };
 
   if (isLoading) {
@@ -58,30 +62,39 @@ const Page = ({ params }: { params: { projectId: string } }) => {
         </div>
       </div>
 
-      <PopupDialog show={showPrompt}>
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h3 className="text-xl font-bold">Are you sure?</h3>
-          <p className="mt-2">
-            This action cannot be undone. This will permanently delete the
-            project.
-          </p>
-          <div className="mt-4 flex justify-end">
-            <button
-              className="btn btn-sm btn-secondary mr-2"
-              onClick={() => setShowPrompt(false)}
-            >
-              I changed my mind
-            </button>
-            <button
-              className="btn btn-sm bg-red-600 text-white hover:bg-red-400 border-red-500 hover:border-red-400"
-              onClick={() => {
-                handleDelete();
-                setShowPrompt(false);
-              }}
-            >
-              Delete Project
-            </button>
+      <PopupDialog
+        show={showPrompt}
+        onClose={() => setShowPrompt(false)}
+        title={
+          <div className="flex items-center gap-2">
+            <RiSkull2Line className="w-5 h-5" />
+            Are you sure?
           </div>
+        }
+        classNameBody="flex flex-col p-4 gap-4"
+      >
+        <p className="">
+          This will permanently delete the project{' '}
+          <span className="font-bold">{project.name}</span>.
+        </p>
+        <p>This action cannot be undone. </p>
+        <div className="mt-4 flex gap-4 justify-end">
+          <button
+            className="btn btn-sm rounded"
+            onClick={() => setShowPrompt(false)}
+          >
+            I changed my mind
+          </button>
+          <button
+            className="btn px-4 btn-sm border-red-600 bg-red-500 text-white hover:bg-red-500 hover:border-red-400 rounded"
+            onClick={() => {
+              handleDelete();
+              setShowPrompt(false);
+            }}
+          >
+            {isDeleting && 'Deleting...'}
+            {!isDeleting && 'Delete Project'}
+          </button>
         </div>
       </PopupDialog>
     </>

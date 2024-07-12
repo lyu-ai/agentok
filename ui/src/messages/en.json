@@ -324,7 +324,7 @@
     "Projects": {
       "title": "Agentok Projects",
       "description": "Simplifying the Creation of Multi-Agent Apps with Agentok Studio.",
-      "create-project": "Build from Scratch",
+      "create-project": "Create New Project",
       "start-from-template": "Start from Template",
       "discover-marketplace": "Discover More in Marketplace"
     },

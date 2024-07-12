@@ -11,18 +11,6 @@ import { RiShare2Line, RiEdit2Line, RiWechat2Line } from 'react-icons/ri';
 import ProjectPublish from './ProjectPublish';
 import { useState } from 'react';
 
-export const ProjectEmpty = () => {
-  const t = useTranslations('component.ProjectList');
-  return (
-    <div className="flex items-center justify-center w-full h-full">
-      <div className="flex flex-col gap-2 items-center text-base-content/60">
-        <BsInboxes className="w-12 h-12" />
-        <div className="mt-2 text-sm">{t('project-empty')}</div>
-      </div>
-    </div>
-  );
-};
-
 export const ProjectLoading = () => {
   return (
     <div className="flex w-full flex-wrap justify-center gap-4">
@@ -141,7 +129,7 @@ const ProjectList = ({ maxCount }: any) => {
     console.warn('Failed to load template');
   }
   if (isLoading) return <ProjectLoading />;
-  if (!projects || projects.length === 0) return <ProjectEmpty />;
+  if (!projects || projects.length === 0) return null;
 
   return (
     <div className="flex flex-wrap justify-center gap-4 p-2">

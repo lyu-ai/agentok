@@ -28,12 +28,12 @@ const Page = () => {
       <div className="flex flex-col items-center justify-center gap-2 text-sm p-2">
         <span className="text-5xl font-bold p-4">{t('title')}</span>
         <span className="text-lg p-4">{t('description')}</span>
+        <ProjectList />
         <button onClick={onCreateProject} className="btn btn-lg btn-primary">
           <RiSwap3Line className="w-7 h-7" />
           {t('create-project')}
         </button>
       </div>
-      <ProjectList />
       <div className="divider text-2xl">Or</div>
       <div className="flex flex-col items-center justify-center gap-2 text-sm py-8 mb-12">
         <RiShoppingBag4Line className="w-12 h-12" />
