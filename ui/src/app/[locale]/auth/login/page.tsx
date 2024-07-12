@@ -123,7 +123,13 @@ const Login = ({
           ))}
         </div>
 
-        <div className="flex flex-col w-full justify-center border border-base-content/20 bg-base-content/10 rounded-md p-4 gap-2 text-foreground">
+        <form
+          className="flex flex-col w-full justify-center border border-base-content/20 bg-base-content/10 rounded-md p-4 gap-2 text-foreground"
+          onSubmit={e => {
+            e.preventDefault();
+            signIn();
+          }}
+        >
           <label className="text-md" htmlFor="email">
             {t('email')}
           </label>
@@ -133,6 +139,7 @@ const Login = ({
             value={email}
             onChange={e => setEmail(e.target.value)}
             placeholder={t('email-placeholder')}
+            autoComplete="email"
             required
           />
           <label className="text-md" htmlFor="password">
@@ -145,12 +152,13 @@ const Login = ({
             value={password}
             onChange={e => setPassword(e.target.value)}
             placeholder={t('password-placeholder')}
+            autoComplete="current-password"
             required
           />
           {error && (
             <p className="p-2 text-error text-center w-full">{error}</p>
           )}
-          <button className="btn btn-primary rounded" onClick={() => signIn()}>
+          <button className="btn btn-primary rounded" type="submit">
             {t('sign-in')}
           </button>
           <div className="mt-2 flex items-center justify-between text-sm">
@@ -168,7 +176,7 @@ const Login = ({
               {t('sign-in-as-guest')}
             </button>
           </div>
-        </div>
+        </form>
       </div>
       {authenticating && <LoginToast />}
     </div>
