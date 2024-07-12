@@ -1,17 +1,14 @@
 'use client';
 import clsx from 'clsx';
+import { useState } from 'react';
 import { RiFormula, RiDeleteBin4Line } from 'react-icons/ri';
 
-const ToolBlock = ({
-  nodeId,
-  func,
-  onDelete: _onDelete,
-  selected,
-  ...props
-}: any) => {
-  const onDeleteFunc = (e: any) => {
+const ToolBlock = ({ nodeId, tool, onDelete, selected, ...props }: any) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const onHandleDelete = async (e: any) => {
     e.stopPropagation();
-    _onDelete && _onDelete(func);
+    setIsDeleting(true);
+    onDelete && (await onDelete(tool).finally(() => setIsDeleting(false)));
   };
 
   return (
@@ -26,17 +23,21 @@ const ToolBlock = ({
     >
       <div className="flex items-center gap-2">
         <RiFormula className="w-5 h-5 flex-shrink-0" />
-        <div className="text-base font-bold">{func.name}</div>
+        <div className="text-base font-bold">{tool.name}</div>
       </div>
       <div className="text-sm text-base-content/50 w-full line-clamp-2">
-        {func.description}
+        {tool.description}
       </div>
       <div className="absolute bottom-1 right-1 hidden group-hover:block">
         <button
           className="btn btn-xs btn-square btn-ghost hover:text-red-600"
-          onClick={onDeleteFunc}
+          onClick={onHandleDelete}
         >
-          <RiDeleteBin4Line className="w-4 h-4" />
+          {isDeleting ? (
+            <div className="loading loading-xs" />
+          ) : (
+            <RiDeleteBin4Line className="w-4 h-4" />
+          )}
         </button>
       </div>
     </div>

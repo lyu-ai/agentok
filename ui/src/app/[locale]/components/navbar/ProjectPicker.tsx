@@ -17,14 +17,13 @@ const ProjectPicker = ({ activeProjectId, className }: any) => {
   const router = useRouter();
   const { projects, createProject, isCreating } = useProjects();
   const { project } = useProject(activeProjectId);
-  const [activeProject, setActiveProject] = useState<
-    Project | null | undefined
-  >(null);
-  const [availableProjects, setAvailableProjects] = useState<Project[]>([]);
+  const [activeProject, setActiveProject] = useState<Project | undefined>(
+    undefined
+  );
   useEffect(() => {
     setActiveProject(project);
-    setAvailableProjects(projects);
-  }, [project, projects]);
+  }, [project]);
+
   const onCreateProject = async () => {
     const newProject = await createProject();
     if (!newProject) {
@@ -34,6 +33,7 @@ const ProjectPicker = ({ activeProjectId, className }: any) => {
     toast.success('Project created. Now jumping to project page.');
     router.push(`/projects/${newProject.id}/flow`);
   };
+
   return (
     <div className="ml-2 flex items-center gap-0.5">
       <Listbox
@@ -56,15 +56,16 @@ const ProjectPicker = ({ activeProjectId, className }: any) => {
           anchor="bottom start"
           className="flex flex-col p-2 bg-base-200 dark:bg-gray-700 rounded mt-1 min-w-48 gap-1 shadow dark:border dark:border-gray-600"
         >
-          {availableProjects.map(project => (
-            <ListboxOption
-              key={project.id}
-              value={project}
-              className="group flex gap-2 text-sm rounded px-4 py-2 data-[selected]:border data-[selected]:border-base-content/20 data-[focus]:bg-base-content/10 cursor-pointer"
-            >
-              {project.name}
-            </ListboxOption>
-          ))}
+          {projects.length > 0 &&
+            projects.map(project => (
+              <ListboxOption
+                key={project.id}
+                value={project}
+                className="group flex gap-2 text-sm rounded px-4 py-2 data-[selected]:border data-[selected]:border-base-content/20 data-[focus]:bg-base-content/10 cursor-pointer"
+              >
+                {project.name}
+              </ListboxOption>
+            ))}
         </ListboxOptions>
       </Listbox>
       <button

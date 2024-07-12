@@ -8,24 +8,26 @@ import { Tooltip } from 'react-tooltip';
 import { useTranslations } from 'next-intl';
 import { useProject } from '@/hooks';
 import { RiAddFill, RiFormula } from 'react-icons/ri';
+import { Tool } from '@/store/projects';
 
 const Page = ({ params }: { params: { projectId: string } }) => {
   const t = useTranslations('tool.Config');
   const { project, updateProject } = useProject(params.projectId);
   const [selectedTool, setSelectedTool] = useState(-1);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [tools, setTools] = useState<Tool[]>([]);
 
   useEffect(() => {
-    setIsHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (project?.tools && project?.tools?.length > 0 && selectedTool === -1)
+    console.log(project?.tools, selectedTool);
+    if (project?.tools && project?.tools.length > 0) {
+      setTools(project.tools);
       setSelectedTool(0);
-  }, [project?.tools?.length, selectedTool]);
+    }
+  }, [project]);
 
-  const onAdd = () => {
-    updateProject({
+  const onAdd = async () => {
+    setIsCreating(true);
+    await updateProject({
       tools: [
         {
           id: 'tool-' + genId(),
@@ -41,41 +43,46 @@ const Page = ({ params }: { params: { projectId: string } }) => {
             },
           ],
         },
-        ...(project?.tools || []),
+        ...tools,
       ],
-    });
+    }).finally(() => setIsCreating(false));
     setSelectedTool(0); // select the new added tool
   };
 
-  const onDelete = (func: any) => {
-    const updatedTools =
-      project?.tools?.filter((f: any) => f.id !== func.id) ?? [];
-    updateProject({ tools: updatedTools });
+  const onDelete = async (tool: any) => {
+    const updatedTools = tools.filter((t: any) => t.id !== tool.id) ?? [];
+    await updateProject({ tools: updatedTools });
     if (selectedTool > updatedTools.length - 1)
-      setSelectedTool(selectedTool - 1); // either select the last one or -1
+      setSelectedTool(updatedTools.length - 1); // either select the last one or -1
   };
-
-  if (!isHydrated) {
-    return null; // Return null during SSR to avoid mismatches
-  }
 
   return (
     <div className={clsx('flex w-full h-full')}>
       <div className="flex flex-col w-80 h-full border-r p-2 gap-2 border-base-content/10">
         <button className="btn btn-sm btn-primary" onClick={onAdd}>
-          <RiAddFill className="w-5 h-5" />
+          {isCreating ? (
+            <div className="loading loading-xs" />
+          ) : (
+            <RiAddFill className="w-5 h-5" />
+          )}
           <span>{t('new-tool')}</span>
         </button>
         <div className="flex flex-col gap-2 w-full h-full overflow-y-hidden">
-          {project?.tools?.map((func: any, index: any) => (
-            <ToolBlock
-              selected={selectedTool === index}
-              func={func}
-              key={index}
-              onDelete={() => onDelete(func)}
-              onClick={() => setSelectedTool(index)}
-            />
-          ))}
+          {tools.length > 0 ? (
+            tools.map((tool: any, index: any) => (
+              <ToolBlock
+                selected={selectedTool === index}
+                tool={tool}
+                key={index}
+                onDelete={() => onDelete(tool)}
+                onClick={() => setSelectedTool(index)}
+              />
+            ))
+          ) : (
+            <div className="flex items-center justify-center h-full text-base-content/50">
+              {t('no-tools')}
+            </div>
+          )}
         </div>
       </div>
       <div className="flex flex-col w-full gap-2 p-2 flex-grow h-full overflow-y-auto">
@@ -93,7 +100,7 @@ const Page = ({ params }: { params: { projectId: string } }) => {
           />
         )}
       </div>
-      <Tooltip id="func-tooltip" place="bottom" />
+      <Tooltip id="tool-tooltip" place="bottom" />
     </div>
   );
 };

@@ -3,6 +3,7 @@
     "Config": {
       "title": "Functions",
       "new-tool": "New Tool",
+      "no-tools": "No tool yet.",
       "tool-prompt": "Tools enable you to expand an Agent's skills. Select an existing tool from the list on the left, or click 'New Tool' to build a custom tool.",
       "reset": "Reset",
       "reset-confirm": "Are you sure to reset all settings to default?"

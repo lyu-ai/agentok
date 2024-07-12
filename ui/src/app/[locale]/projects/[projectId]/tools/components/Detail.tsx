@@ -21,7 +21,10 @@ const ToolDetail = ({ projectId, tool, ...props }: any) => {
     });
   };
   return (
-    <div className="relative flex flex-col w-full gap-2 p-2 h-full overflow-y-auto">
+    <div
+      className="relative flex flex-col w-full gap-2 p-2 h-full overflow-y-auto"
+      {...props}
+    >
       <div className="flex items-center gap-1">
         <RiFormula className="w-7 h-7" />
         <div className="flex items-center w-full justify-between">

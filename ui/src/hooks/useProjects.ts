@@ -1,9 +1,8 @@
 import useSWR from 'swr';
 import useProjectStore, { Project } from '@/store/projects';
-import { useEffect, useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { fetcher } from './fetcher';
 import pb from '@/utils/pocketbase/client';
-import { isEqual } from 'lodash-es';
 import { ProjectTemplate } from '@/store/templates';
 
 export function useProjects() {
@@ -15,12 +14,6 @@ export function useProjects() {
   const deleteProject = useProjectStore(state => state.deleteProject);
   const updateProject = useProjectStore(state => state.updateProject);
   const getProjectById = useProjectStore(state => state.getProjectById);
-
-  useEffect(() => {
-    if (data && !isEqual(data, projects)) {
-      setProjects(data);
-    }
-  }, [data, projects, setProjects]);
 
   const [isCreating, setIsCreating] = useState(false);
   const handleCreateProject = useCallback(async (): Promise<
@@ -43,26 +36,27 @@ export function useProjects() {
       if (!response.ok) throw new Error(await response.text());
       const newProject = await response.json();
       setProjects([newProject, ...projects]);
+      mutate(); // Revalidate the SWR cache
       return newProject;
     } catch (error) {
       console.error('Failed to create project:', error);
     } finally {
       setIsCreating(false);
     }
-  }, [projects, setProjects]);
+  }, [setProjects, mutate]);
 
   const [isDeleting, setIsDeleting] = useState(false);
   const handleDeleteProject = useCallback(
     async (id: string) => {
       setIsDeleting(true);
-      const previousProjects = [...projects];
+      const previousProjects = [...data];
       deleteProject(id);
       try {
         await fetch(`/api/projects/${id}`, {
           method: 'DELETE',
           credentials: 'include',
         });
-        mutate();
+        mutate(); // Revalidate the SWR cache
       } catch (error) {
         console.error('Failed to delete project:', error);
         setProjects(previousProjects);
@@ -70,7 +64,7 @@ export function useProjects() {
         setIsDeleting(false);
       }
     },
-    [projects, deleteProject, setProjects, mutate]
+    [data, deleteProject, setProjects, mutate]
   );
 
   const [isUpdating, setIsUpdating] = useState(false);
@@ -79,7 +73,6 @@ export function useProjects() {
       setIsUpdating(true);
       const previousProject = projects.find(p => p.id === id);
       if (!previousProject) return;
-
       updateProject(id, project);
       try {
         const response = await fetch(`/api/projects/${id}`, {
@@ -93,6 +86,7 @@ export function useProjects() {
         if (!response.ok) throw new Error(await response.text());
         const updatedProject = await response.json();
         updateProject(id, updatedProject);
+        mutate(); // Revalidate the SWR cache
       } catch (error) {
         console.error('Failed to update project:', error);
         updateProject(id, previousProject);
@@ -100,7 +94,7 @@ export function useProjects() {
         setIsUpdating(false);
       }
     },
-    [projects, updateProject]
+    [data, updateProject, mutate]
   );
 
   const [isForking, setIsForking] = useState(false);
@@ -124,6 +118,7 @@ export function useProjects() {
         if (!response.ok) throw new Error(response.statusText);
         const forkedProject = await response.json();
         setProjects([forkedProject, ...projects]);
+        mutate(); // Revalidate the SWR cache
         return forkedProject;
       } catch (error) {
         console.error('Failed to fork project:', error);
@@ -131,11 +126,11 @@ export function useProjects() {
         setIsForking(false);
       }
     },
-    [projects, setProjects]
+    [setProjects, mutate]
   );
 
   return {
-    projects,
+    projects: (data as Project[]) ?? [],
     isLoading: !error && !data,
     isError: error,
     refresh: mutate,
