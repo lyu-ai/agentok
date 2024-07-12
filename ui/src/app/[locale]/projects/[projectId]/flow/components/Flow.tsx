@@ -100,7 +100,7 @@ const Agentflow = ({ projectId }: { projectId: string }) => {
         console.warn('Workflow warning:', code, message);
       };
     }
-  }, [store]);
+  }, []);
 
   useEffect(() => {
     const initializeProjectFlow = () => {

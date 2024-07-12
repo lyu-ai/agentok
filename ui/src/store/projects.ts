@@ -64,7 +64,8 @@ const useProjectStore = create<ProjectState>()(
         set(state => ({
           projects: state.projects.filter(project => project.id !== id),
         })),
-      getProjectById: id => get().projects.find(project => project.id === id),
+      getProjectById: id =>
+        id ? get().projects.find(project => project.id === id) : undefined,
       pinChatPane: (pin: boolean) => set({ chatPanePinned: pin }),
       pinNodePane: (pin: boolean) => set({ nodePanePinned: pin }),
     }),

@@ -17,7 +17,7 @@ export const ProjectEmpty = () => {
     <div className="flex items-center justify-center w-full h-full">
       <div className="flex flex-col gap-2 items-center text-base-content/60">
         <BsInboxes className="w-12 h-12" />
-        <div className="mt-2 text-sm">{t('template-empty')}</div>
+        <div className="mt-2 text-sm">{t('project-empty')}</div>
       </div>
     </div>
   );
