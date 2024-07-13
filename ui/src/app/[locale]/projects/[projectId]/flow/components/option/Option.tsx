@@ -1,38 +1,68 @@
 import TextOption from './Text';
 import NumberOption from './Number';
 import OptionGroup from './OptionGroup';
-import { OptionType } from './types';
+import { setNodeData } from '../../utils/flow';
+import { useReactFlow } from 'reactflow';
+import RangeOption from './Range';
+import SelectOption from './Select';
 
-type Option = {
-  type: string;
-  value: string;
+export type OptionType = {
+  type: string; // text, number, group ...
+  label: string; // Displayed label, key in the i18n json
+  description?: string; // Displayed description, key in the i18n json
+  name: string; // Key in the node data
+  onChange?: (key: string, value: any) => void;
 };
 
-type OptionProps = {
-  option: OptionType;
-  onChange: (option: Partial<OptionType>) => void;
-};
+export type OptionProps = {
+  reactflowInstance?: any;
+  nodeId: string;
+  data?: any;
+  compact?: boolean;
+} & OptionType &
+  React.HTMLAttributes<HTMLDivElement> &
+  Record<string, any>; // Allow arbitrary attributes;
 
 type OptionDict = {
   [key: string]: React.ComponentType<any>;
 };
 
-const Option = ({ ...props }: OptionProps) => {
-  const { option, onChange } = props;
-  const { type } = option;
+const UnsupportedOption = ({ type }: { type: string }) => {
+  return (
+    <div className="flex items-center justify-center w-full rounded-sm p-4 border border-error text-error bg-error/10">
+      <p>
+        Option type <span className="font-bold">{type}</span> is not supported
+        yet
+      </p>
+    </div>
+  );
+};
+
+const GenericOption = ({ type, onChange, ...props }: OptionProps) => {
   const optionDict: OptionDict = {
     text: TextOption,
     number: NumberOption,
+    range: RangeOption,
+    select: SelectOption,
     group: OptionGroup,
+  };
+  const instance = useReactFlow();
+  const handleChange = (name: string, value: any) => {
+    if (onChange) {
+      onChange(name, value);
+    } else {
+      // Default onChange
+      setNodeData(instance, props.nodeId, { [name]: value });
+    }
   };
 
   const OptionComponent = optionDict[type];
   if (!OptionComponent) {
     console.warn(`Option type ${type} is not supported`);
-    return null;
+    return <UnsupportedOption type={type} />;
   }
 
-  return <OptionComponent option={option} onChange={onChange} />;
+  return <OptionComponent onChange={handleChange} {...props} />;
 };
 
-export default Option;
+export default GenericOption;

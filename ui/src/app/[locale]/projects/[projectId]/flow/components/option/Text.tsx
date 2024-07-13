@@ -1,19 +1,49 @@
-import { OptionType } from './types';
+import clsx from 'clsx';
+import { OptionProps, OptionType } from './Option';
+import { useState } from 'react';
 
 type TextOptionProps = {
-  option: OptionType;
-  onChange: (option: { type: string; value: string }) => void;
-  compact?: boolean; // Show title and value on the same line
-};
+  rows?: number;
+} & OptionProps;
 
-const TextOption = ({ option, onChange, compact = false }: TextOptionProps) => {
+const TextOption = ({
+  data,
+  label,
+  placeholder,
+  name,
+  rows,
+  onChange,
+  compact = false,
+}: TextOptionProps) => {
+  const [value, setValue] = useState(data?.[name] ?? '');
+
   return (
-    <div>
-      <input
-        type="text"
-        value={option.value}
-        onChange={e => onChange({ ...option, value: e.target.value })}
-      />
+    <div
+      className={clsx('flex text-sm', {
+        'flex-col gap-1 ': !compact,
+        'items-center justify-between gap-2': compact,
+      })}
+    >
+      <span className="whitespace-nowrap">{label}</span>
+      {rows && rows > 1 ? (
+        <textarea
+          value={value}
+          placeholder={placeholder}
+          onChange={e => setValue(e.target.value)}
+          onBlur={() => onChange && onChange(name, value)}
+          rows={rows}
+          className="textarea textarea-bordered focus:textarea-primary p-1 rounded bg-transparent w-full"
+        />
+      ) : (
+        <input
+          type="text"
+          value={value}
+          placeholder={placeholder}
+          onChange={e => setValue(e.target.value)}
+          onBlur={e => onChange && onChange(name, e.target.value)}
+          className="input input-xs input-bordered focus:input-primary p-1 rounded bg-transparent w-full"
+        />
+      )}
     </div>
   );
 };

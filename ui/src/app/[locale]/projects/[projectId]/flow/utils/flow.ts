@@ -25,6 +25,8 @@ import {
   RiUser4Fill,
   RiTeamFill,
   RiQuestionLine,
+  RiParentLine,
+  RiParentFill,
 } from 'react-icons/ri';
 import { Edge, Node, ReactFlowInstance } from 'reactflow';
 import { genId } from '@/utils/id';
@@ -32,6 +34,7 @@ import ConversableAgent from '../components/node/ConversableAgent';
 import { ComponentType } from 'react';
 import Initializer from '../components/node/Initializer';
 import ConverseEdge from '../components/edge/ConverseEdge';
+import NestedChat from '../components/node/NestedChat';
 
 export const nodeTypes = {
   initializer: Initializer,
@@ -40,6 +43,7 @@ export const nodeTypes = {
   groupchat: GroupChat, // DO NOT change the type to 'group', as it's a builtin type of react-flow
   note: Note,
   conversable: ConversableAgent,
+  nestedchat: NestedChat,
 };
 
 export const edgeTypes = {
@@ -85,6 +89,15 @@ export const basicNodes: NodeMeta[] = [
     name: 'Group',
     label: 'groupchat',
     class: 'GroupChat',
+  },
+  {
+    id: 'nestedchat',
+    icon: RiParentLine,
+    activeIcon: RiParentFill,
+    name: 'Nested Chat',
+    label: 'nestedchat',
+    type: 'nestedchat',
+    class: 'NestedChat',
   },
   {
     id: 'note',
@@ -279,6 +292,7 @@ export const setNodeData = (
           };
         } else node.data = { ...node.data, ...dataset };
       }
+      console.log('node', node);
       return node;
     })
   );

@@ -25,9 +25,26 @@
     }
   },
   "node": {
+    "Generic": {
+      "delete-node-tooltip": "Delete node",
+      "name-edit-tooltip": "Edit node name",
+      "name-edit-done-tooltip": "Finish editing",
+      "description": "Description",
+      "description-placeholder": "Description of this agent",
+      "system-message": "System Message",
+      "system-message-placeholder": "Enter system message here",
+      "instructions": "Instructions",
+      "instructions-use-defaults": "Use defaults",
+      "instructions-placeholder": "Enter instructions here",
+      "human-input-mode": "Human Input Mode",
+      "input-mode-never": "NEVER",
+      "input-mode-always": "ALWAYS",
+      "input-mode-terminate": "TERMINATE",
+      "max-consecutive-auto-reply": "Max Consecutive Auto-Replies",
+      "termination-msg": "Termination Message",
+      "options": "More Options"
+    },
     "Assistant": {
-      "name-edit-tooltip": "Edit node name (as variables)",
-      "name-edit-done-tooltip": "Finish editing node name",
       "system-message": "System Message",
       "system-message-placeholder": "Enter system message here",
       "enable-system-message": "Enable",
@@ -39,8 +56,6 @@
       "options": "More Options"
     },
     "ConversableAgent": {
-      "name-edit-tooltip": "Edit node name (as variables)",
-      "name-edit-done-tooltip": "Finish editing node name",
       "system-message": "System Message",
       "system-message-placeholder": "Enter system message here",
       "description": "Description",
@@ -72,11 +87,10 @@
       "involve-user": "Involve User",
       "options": "More Options"
     },
+    "NestedChat": {
+      "options": "More Options"
+    },
     "User": {
-      "name-edit-tooltip": "Edit node name (as variables)",
-      "name-edit-done-tooltip": "Finish editing node name",
-      "system-message": "System Message",
-      "system-message-placeholder": "Enter system message here",
       "start-chat": "Start Chat",
       "start-chat-tooltip": "After build the flow, click",
       "options": "More Options",
@@ -342,6 +356,8 @@
       "groupchat-description": "Group discussion among several agents",
       "config": "Config",
       "config-description": "Configure the node",
+      "nestedchat": "Nested Chat",
+      "nestedchat-description": "Nested chat acts as composite node",
       "note": "Note",
       "note-description": "Place to write documents",
       "assistant": "Assistant",
