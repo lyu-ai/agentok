@@ -1,0 +1,21 @@
+.react-flow__controls-button {
+  @apply bg-gray-800 hover:bg-gray-700 text-base-content border-gray-800 shadow !important;
+}
+
+.react-flow__controls svg {
+  fill: currentColor;
+}
+
+.react-flow__attribution {
+  @apply bg-transparent !important;
+}
+
+/* Hide default resize handles */
+.react-flow__resize-control.handle:not(.custom-resize-handle) {
+  display: none;
+}
+
+/* Hide default selection bounding box */
+.react-flow__resize-control.line {
+  display: none;
+}

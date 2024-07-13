@@ -1,4 +1,5 @@
-{%- if tools and tools | length > 0 %}
+# Tools
+{% if tools and tools | length > 0 %}
 # Function for tools
 {%- for tool in tools %}
 def {{ tool.name }}(
@@ -14,4 +15,4 @@ def {{ tool.name }}(
     pass
 {%- endif %}
 {%- endfor %}
-{%- endif %}
+{% endif %}

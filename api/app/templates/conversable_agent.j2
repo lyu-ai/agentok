@@ -19,7 +19,11 @@ node_{{ node.id }} = {{ node.data.class }}(
     {%- if node.data.human_input_mode %}
     human_input_mode="{{ node.data.human_input_mode }}",
     {%- endif %}
+    {%- if node.data.human_input_mode == 'ALWAYS' %}
+    llm_config=False,
+    {% else %}
     llm_config=llm_config,
+    {%- endif %}
 )
-{% endfor %}
+{%- endfor %}
 {% endmacro %}

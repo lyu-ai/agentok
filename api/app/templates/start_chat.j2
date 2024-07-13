@@ -22,6 +22,12 @@ chat_result = node_{{ first_converser['id'] }}.initiate_chats(
     ]
 )
 {%- elif initial_chat_targets | length == 1 %}
+{%- if initial_chat_targets[0].node['type'] == 'nestedchat' %}
+# Nested Chat
+reply =  node_{{ first_converser['id'] }}.generate_reply(
+    messages=[{"role": "user", "content": args.message}]
+)
+{%- else %}
 # Talk to one single agent
 chat_result = node_{{ first_converser['id'] }}.initiate_chat(
     node_{{ initial_chat_targets[0].node['id'] }},
@@ -37,4 +43,5 @@ chat_result = node_{{ first_converser['id'] }}.initiate_chat(
     summary_method="{{ initial_chat_targets[0]['chat_options'].summary_method }}",
     {%- endif %}
 )
+{%- endif %}
 {% endif %}

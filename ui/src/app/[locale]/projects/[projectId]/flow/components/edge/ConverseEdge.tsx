@@ -4,7 +4,7 @@ import {
   getBezierPath,
   Position,
 } from 'reactflow';
-import RelationConfig from './ConverseConfig';
+import ConverseConfig from './ConverseConfig';
 
 export default function ConverseEdge({
   id,
@@ -38,7 +38,7 @@ export default function ConverseEdge({
         }}
       />
       <EdgeLabelRenderer>
-        <RelationConfig
+        <ConverseConfig
           edgeId={id}
           data={data}
           style={{

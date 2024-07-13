@@ -25,6 +25,8 @@ import {
   RiUser4Fill,
   RiTeamFill,
   RiQuestionLine,
+  RiParentLine,
+  RiParentFill,
 } from 'react-icons/ri';
 import { Edge, Node, ReactFlowInstance } from 'reactflow';
 import { genId } from '@/utils/id';
@@ -32,6 +34,7 @@ import ConversableAgent from '../components/node/ConversableAgent';
 import { ComponentType } from 'react';
 import Initializer from '../components/node/Initializer';
 import ConverseEdge from '../components/edge/ConverseEdge';
+import NestedChat from '../components/node/NestedChat';
 
 export const nodeTypes = {
   initializer: Initializer,
@@ -40,6 +43,7 @@ export const nodeTypes = {
   groupchat: GroupChat, // DO NOT change the type to 'group', as it's a builtin type of react-flow
   note: Note,
   conversable: ConversableAgent,
+  nestedchat: NestedChat,
 };
 
 export const edgeTypes = {
@@ -48,7 +52,9 @@ export const edgeTypes = {
 
 export const isConversable = (node?: Node) =>
   node?.type &&
-  ['assistant', 'user', 'conversable', 'groupchat'].includes(node.type);
+  ['assistant', 'user', 'conversable', 'groupchat', 'nestedchat'].includes(
+    node.type
+  );
 
 // Fields of Node Meta:
 // - name: To be used as variable name in generated code
@@ -85,6 +91,15 @@ export const basicNodes: NodeMeta[] = [
     name: 'Group',
     label: 'groupchat',
     class: 'GroupChat',
+  },
+  {
+    id: 'nestedchat',
+    icon: RiParentLine,
+    activeIcon: RiParentFill,
+    name: 'Nested Chat',
+    label: 'nestedchat',
+    type: 'nestedchat',
+    class: 'NestedChat',
   },
   {
     id: 'note',
@@ -279,6 +294,7 @@ export const setNodeData = (
           };
         } else node.data = { ...node.data, ...dataset };
       }
+      console.log('node', node);
       return node;
     })
   );
@@ -358,4 +374,12 @@ export function deepEqual(obj1: any, obj2: any, ignoreKeys: string[] = []) {
 
 function isObject(object: any) {
   return object != null && typeof object === 'object';
+}
+
+export function formatData(data: any) {
+  let markdown = '| Key | Value |\n| --- | --- |\n';
+  Object.entries(data).map(
+    ([key, value]) => (markdown += `| ${key} | ${value} |\n`)
+  );
+  return markdown;
 }

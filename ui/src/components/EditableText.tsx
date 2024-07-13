@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
-import { GoPencil, GoCheck, GoX } from 'react-icons/go'; // You can get this from `react-icons` package
+import { RiCheckLine, RiCloseLine, RiEdit2Line } from 'react-icons/ri';
 
 const EditableText = ({
   text,
@@ -29,12 +29,16 @@ const EditableText = ({
     }
   };
 
-  const onApplyChanges = () => {
+  const onApplyChange = () => {
     _onChange && _onChange(inputValue);
     setIsEditing(false);
     onModeChange && onModeChange(false);
   };
 
+  const onDiscardChange = () => {
+    setIsEditing(false);
+    setInputValue(text);
+  };
   return (
     <div className="relative flex items-center gap-1">
       {isEditing ? (
@@ -47,7 +51,7 @@ const EditableText = ({
           className={clsx(
             className,
             { 'text-right': alignRight },
-            'nodrag nowheel input input-sm input-bordered bg-transparent rounded'
+            'nodrag nowheel input input-xs p-1 input-bordered bg-transparent rounded-sm'
           )}
         />
       ) : (
@@ -55,7 +59,7 @@ const EditableText = ({
           className={clsx(
             className,
             { 'justify-end': alignRight },
-            'flex items-center gap-1 px-2 py-1'
+            'flex items-center p-1'
           )}
         >
           {text}
@@ -64,25 +68,25 @@ const EditableText = ({
       {showButtons && isEditing && (
         <div className="flex items-center gap-1">
           <button
-            className="btn btn-square btn-xs btn-ghost text-red-800 hover:text-red-700"
-            onClick={() => setIsEditing(false)}
+            className="btn btn-square btn-xs btn-ghost rounded"
+            onClick={onApplyChange}
           >
-            <GoX className="w-4 h-4" />
+            <RiCheckLine className="w-4 h-4" />
           </button>
           <button
-            className="btn btn-square btn-xs btn-ghost text-green-800 hover:text-green-700"
-            onClick={onApplyChanges}
+            className="btn btn-square btn-xs btn-ghost rounded text-red-800 hover:text-red-700"
+            onClick={onDiscardChange}
           >
-            <GoCheck className="w-4 h-4" />
+            <RiCloseLine className="w-4 h-4" />
           </button>
         </div>
       )}
       {showButtons && !isEditing && (
         <button
-          className="btn btn-square btn-xs btn-ghost"
+          className="btn btn-square btn-xs btn-ghost rounded"
           onClick={() => setIsEditing(true)}
         >
-          <GoPencil className="w-4 h-4" />
+          <RiEdit2Line className="w-4 h-4" />
         </button>
       )}
     </div>

@@ -29,18 +29,6 @@ input-sm[type="number"] {
   background-color: transparent;
 }
 
-.react-flow__controls-button {
-  @apply bg-gray-800 hover:bg-gray-700 text-base-content border-gray-800 shadow !important;
-}
-
-.react-flow__controls svg {
-  fill: currentColor;
-}
-
-.react-flow__attribution {
-  @apply bg-transparent !important;
-}
-
 .engraved-bg::after {
   content: "";
   background-image: url('/logo-bg.svg');
@@ -107,12 +95,35 @@ input-sm[type="number"] {
   line-height: 1.2rem;
 }
 
-/* Hide default resize handles */
-.react-flow__resize-control.handle:not(.custom-resize-handle) {
-  display: none;
+/* Predefined node styles */
+.node-general {
+  @apply bg-base-content/5 border-base-content/10;
 }
 
-/* Hide default selection bounding box */
-.react-flow__resize-control.line {
-  display: none;
+.node-general-selected {
+  @apply bg-base-content/20 border-base-content/30 shadow-base-content/40 shadow-box;
+}
+
+.node-agent {
+  @apply bg-sky-600/20 text-sky-300 border-sky-600/30;
+}
+
+.node-agent-selected {
+  @apply bg-sky-400/50 text-sky-100 border-sky-400/70 shadow-sky-300/50 shadow-box;
+}
+
+.node-group {
+  @apply bg-green-600/10 text-green-300 border-green-600/30;
+}
+
+.node-group-selected {
+  @apply bg-green-600/20 text-green-100 border-green-600/50 shadow-green-600/20 shadow-box;
+}
+
+.node-note {
+  @apply bg-yellow-600/50 text-yellow-300 border-yellow-600/30;
+}
+
+.node-note-selected {
+  @apply bg-yellow-600/70 text-yellow-100 border-yellow-600/50 shadow-yellow-600/20 shadow-box;
 }
