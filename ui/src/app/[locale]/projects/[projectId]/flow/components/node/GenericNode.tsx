@@ -13,12 +13,14 @@ import {
   useReactFlow,
   NodeToolbar,
 } from 'reactflow';
-import { getNodeIcon, setNodeData } from '../../utils/flow';
+import { formatData, getNodeIcon, setNodeData } from '../../utils/flow';
 import EditableText from '@/components/EditableText';
 import { useTranslations } from 'next-intl';
 import { RiDeleteBin4Line, RiSettings3Line } from 'react-icons/ri';
 import ResizeIcon from '@/components/ResizeIcon';
 import Option from '../option/Option';
+import { useSettings } from '@/hooks';
+import Tip from '@/components/Tip';
 
 type Props = {
   id: string;
@@ -35,7 +37,8 @@ type Props = {
   ConfigDialog?: any;
   selected: boolean;
   className?: string;
-} & NodeProps;
+} & NodeProps &
+  React.HTMLAttributes<HTMLDivElement>;
 
 const GenericNode = ({
   id,
@@ -62,6 +65,7 @@ const GenericNode = ({
     border: 'none',
   };
   const instance = useReactFlow();
+  const { spyModeEnabled } = useSettings();
   let NodeIcon;
   if (selected && activeIcon) {
     NodeIcon = activeIcon;
@@ -198,19 +202,24 @@ const GenericNode = ({
         )}
       </NodeToolbar>
       <div className="relative flex flex-col w-full gap-2 text-sm">
-        <div className="w-full flex items-center gap-1">
-          <NodeIcon className="w-5 h-5" />
-          <EditableText
-            text={data.name}
-            onChange={(name: any) => {
-              setEditingName(false);
-              setNodeData(instance, id, { name: name });
-            }}
-            onModeChange={(editing: any) => setEditingName(editing)}
-            editing={editingName}
-            showButtons={nameEditable}
-            className="text-sm font-bold"
-          />
+        <div className="flex items-center gap-1 justify-between">
+          <div className="w-full flex items-center gap-1">
+            <NodeIcon className="w-5 h-5" />
+            <EditableText
+              text={data.name}
+              onChange={(name: any) => {
+                setEditingName(false);
+                setNodeData(instance, id, { name: name });
+              }}
+              onModeChange={(editing: any) => setEditingName(editing)}
+              editing={editingName}
+              showButtons={nameEditable}
+              className="text-sm font-bold"
+            />
+          </div>
+          {spyModeEnabled && (
+            <Tip icon={<span>{id}</span>} content={formatData(data)} />
+          )}
         </div>
         {options.map((option, index) => {
           const commonOption = COMMON_OPTIONS.find(o => o.name === option);

@@ -10,7 +10,13 @@ const Initializer = ({ id, data, ...props }: any) => {
   const instance = useReactFlow();
   const t = useTranslations('node.Initializer');
   return (
-    <GenericNode id={id} data={data} nodeClass="general" {...props}>
+    <GenericNode
+      id={id}
+      data={data}
+      nodeClass="general"
+      ports={[{ type: 'output', name: '' }]}
+      {...props}
+    >
       <div className="py-1 text-sm">{t('initializer-tooltip')}</div>
       <div className="divider my-0" />
       <div className="text-base-content/80 flex items-center gap-1">

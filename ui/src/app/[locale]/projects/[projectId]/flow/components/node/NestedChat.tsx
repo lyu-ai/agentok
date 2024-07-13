@@ -11,14 +11,15 @@ const NestedChat = ({ id, data, ...props }: NodeProps) => {
       data={data}
       {...props}
       nodeClass="group"
-      nameEditable
-      resizable
       ports={[
         { type: 'input', name: '' },
         { type: 'output', name: '' },
       ]}
       ConfigDialog={GroupChatConfig}
-    ></GenericNode>
+      style={{ width: 200, height: 200 }}
+    >
+      <div className="text-base-content/80">{t('nested-chat-hint')}</div>
+    </GenericNode>
   );
 };
 

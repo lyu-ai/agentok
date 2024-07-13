@@ -15,6 +15,7 @@ export interface LlmModel {
 
 export interface Settings {
   models?: LlmModel[];
+  spyModeEnabled?: boolean;
 }
 
 export function useSettings() {
@@ -57,6 +58,9 @@ export function useSettings() {
     refresh: mutate,
     updateSettings: handleUpdateSettings,
     isUpdating,
+    enableSpyMode: (enable: boolean) =>
+      handleUpdateSettings({ spyModeEnabled: enable }),
+    spyModeEnabled: settings.spyModeEnabled,
   };
 }
 

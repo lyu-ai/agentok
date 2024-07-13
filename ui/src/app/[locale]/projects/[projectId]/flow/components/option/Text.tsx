@@ -32,7 +32,7 @@ const TextOption = ({
           onChange={e => setValue(e.target.value)}
           onBlur={() => onChange && onChange(name, value)}
           rows={rows}
-          className="textarea textarea-bordered focus:textarea-primary p-1 rounded bg-transparent w-full"
+          className="textarea textarea-bordered focus:textarea-primary p-1 rounded bg-transparent w-full nodrag nowheel"
         />
       ) : (
         <input
@@ -41,7 +41,7 @@ const TextOption = ({
           placeholder={placeholder}
           onChange={e => setValue(e.target.value)}
           onBlur={e => onChange && onChange(name, e.target.value)}
-          className="input input-xs input-bordered focus:input-primary p-1 rounded bg-transparent w-full"
+          className="input input-xs input-bordered focus:input-primary p-1 rounded bg-transparent w-full nodrag nowheel"
         />
       )}
     </div>

@@ -88,6 +88,7 @@
       "options": "More Options"
     },
     "NestedChat": {
+      "nested-chat-hint": "Group of agents and groups, act as composite node.",
       "options": "More Options"
     },
     "User": {

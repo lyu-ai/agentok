@@ -27,12 +27,14 @@ import Json from './Json';
 import { genId } from '@/utils/id';
 import ChatButton from '../../../../components/chat/ChatButton';
 import { useTranslations } from 'next-intl';
-import { useChats, useProject } from '@/hooks';
+import { useChats, useProject, useSettings } from '@/hooks';
 import { debounce } from 'lodash-es';
 import ChatPane from '../../../../components/chat/ChatPane';
 import useProjectStore from '@/store/projects';
 import NodePane from './NodePane';
 import { Chat as ChatType } from '@/store/chats';
+import { RiSpyLine } from 'react-icons/ri';
+import clsx from 'clsx';
 
 const DEBOUNCE_DELAY = 500; // Adjust this value as needed
 
@@ -75,6 +77,7 @@ const Agentflow = ({ projectId }: { projectId: string }) => {
   const flowParent = useRef<HTMLDivElement>(null);
   const chatPanePinned = useProjectStore(state => state.chatPanePinned);
   const nodePanePinned = useProjectStore(state => state.nodePanePinned);
+  const { spyModeEnabled, enableSpyMode } = useSettings();
   const [chat, setChat] = useState<ChatType | undefined>();
   const t = useTranslations('component.Flow');
 
@@ -279,13 +282,14 @@ const Agentflow = ({ projectId }: { projectId: string }) => {
   const onConnect = (params: any) => {
     const sourceNode = nodes.find(nd => nd.id === params.source);
     const targetNode = nodes.find(nd => nd.id === params.target);
-    const isRelation = isConversable(sourceNode) && isConversable(targetNode);
+    const isConverseEdge =
+      isConversable(sourceNode) && isConversable(targetNode);
     setEdges(eds => {
       let newEdges = {
         ...params,
         strokeWidth: 2,
       };
-      if (isRelation) {
+      if (isConverseEdge) {
         newEdges = {
           ...newEdges,
           animated: true,
@@ -403,6 +407,19 @@ const Agentflow = ({ projectId }: { projectId: string }) => {
           <Panel position="top-right" className="flex p-1 gap-2">
             <ViewToggle mode={'json'} setMode={setMode} />
             <ViewToggle mode={'python'} setMode={setMode} />
+            <button
+              type="button"
+              className={clsx('btn btn-sm btn-circle btn-ghost', {
+                'text-secondary': spyModeEnabled,
+              })}
+              data-tooltip-id="default-tooltip"
+              data-tooltip-content={`Spy mode ${
+                spyModeEnabled ? 'enabled' : 'disabled'
+              }`}
+              onClick={() => enableSpyMode(!spyModeEnabled)}
+            >
+              <RiSpyLine className="w-4 h-4" />
+            </button>
           </Panel>
         </ReactFlow>
         <div className="absolute bottom-0 left-12 flex w-full items-center px-2">

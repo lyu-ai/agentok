@@ -52,7 +52,9 @@ export const edgeTypes = {
 
 export const isConversable = (node?: Node) =>
   node?.type &&
-  ['assistant', 'user', 'conversable', 'groupchat'].includes(node.type);
+  ['assistant', 'user', 'conversable', 'groupchat', 'nestedchat'].includes(
+    node.type
+  );
 
 // Fields of Node Meta:
 // - name: To be used as variable name in generated code
@@ -372,4 +374,12 @@ export function deepEqual(obj1: any, obj2: any, ignoreKeys: string[] = []) {
 
 function isObject(object: any) {
   return object != null && typeof object === 'object';
+}
+
+export function formatData(data: any) {
+  let markdown = '| Key | Value |\n| --- | --- |\n';
+  Object.entries(data).map(
+    ([key, value]) => (markdown += `| ${key} | ${value} |\n`)
+  );
+  return markdown;
 }
