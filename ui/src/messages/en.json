@@ -273,6 +273,7 @@
       "title": "Converse Settings",
       "description": "Configure how the two connected agents collaborate.",
       "message": "Message",
+      "summary-prompt": "Summary Prompt",
       "summary-method": "Summary Method",
       "max-turns": "Max Turns"
     },

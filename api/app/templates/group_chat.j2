@@ -1,19 +1,19 @@
-# group_chat.j2
-{% macro generate_group_chat(group_chat_node, grouped_nodes, user_proxies) %}
-# group chat
-groupchat_{{ group_chat_node['id'] }} = GroupChat(
-    agents=[{%- for node in grouped_nodes %}node_{{ node['id'] }}{% if not loop.last %},{% endif %}{%- endfor %}],
+# Group Chats
+{% for group_data in group_nodes %}
+groupchat_{{ group_data.group_node.id }} = GroupChat(
+    agents=[{%- for node in group_data.children %}node_{{ node['id'] }}{% if not loop.last %},{% endif %}{%- endfor %}],
     messages=[],
-    {%- if group_chat_node.data.max_round %}
-    max_round={{ group_chat_node.data.max_round }},
+    {%- if group_data.group_node.data.max_round is defined %}
+    max_round={{ group_data.group_node.data.max_round }},
     {%- endif %}
-    {%- if group_chat_node.data.send_introductions %}
-    send_introductions=True,
+    {%- if group_data.group_node.data.send_introductions is defined %}
+    send_introductions={{ 'True' if group_data.group_node.data.send_introductions else 'False' }},
     {%- endif %}
-    {%- if group_chat_node.data.speaker_selection_method %}
-    speaker_selection_method="{{ group_chat_node.data.speaker_selection_method }}",
+    {%- if group_data.group_node.data.speaker_selection_method is defined %}
+    speaker_selection_method="{{ group_data.group_node.data.speaker_selection_method }}",
     {%- endif %}
 )
 
-node_{{ group_chat_node['id'] }} = GroupChatManager(groupchat=groupchat_{{ group_chat_node['id'] }}, llm_config=group_llm_config)
-{% endmacro %}
+node_{{ group_data.group_node.id }} = GroupChatManager(groupchat=groupchat_{{ group_data.group_node.id }}, llm_config=llm_config)
+
+{% endfor %}

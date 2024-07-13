@@ -8,19 +8,26 @@ const ConversePanel = ({ edgeId, data, ...props }: any) => {
   const t = useTranslations('option.ConverseConfig');
   const instance = useReactFlow();
   return (
-    <div className="flex flex-col gap-2 w-full h-full nodrag nowheel">
+    <div className="z-50 flex flex-col gap-2 w-full h-full nodrag nowheel text-sm">
       <div className="flex items-center gap-2">
         <RiChatSettingsFill className="w-5 h-5" />
-        <div className="text-lg font-bold">{t('title')}</div>
+        <div className="font-bold">{t('title')}</div>
       </div>
-      <div className="text-sm">{t('description')}</div>
-      <div className="divider my-0" />
+      <div className="text-xs">{t('description')}</div>
       <div className="text-sm font-bold">{t('message')}</div>
       <textarea
         className="textarea textarea-bordered textarea-xs rounded w-full"
         value={data?.message ?? ''}
         onChange={e => {
           setEdgeData(instance, edgeId, { message: e.target.value });
+        }}
+      />
+      <div className="text-sm font-bold">{t('summary-prompt')}</div>
+      <textarea
+        className="textarea textarea-bordered textarea-xs rounded w-full"
+        value={data?.summary_prompt ?? ''}
+        onChange={e => {
+          setEdgeData(instance, edgeId, { summary_prompt: e.target.value });
         }}
       />
       <div className="flex items-center justify-between text-sm gap-2 w-full">

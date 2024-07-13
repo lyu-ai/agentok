@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import useProjectStore, { Project } from '@/store/projects';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { fetcher } from './fetcher';
 import pb from '@/utils/pocketbase/client';
 import { ProjectTemplate } from '@/store/templates';
@@ -14,12 +14,14 @@ export function useProjects() {
   const deleteProject = useProjectStore(state => state.deleteProject);
   const updateProject = useProjectStore(state => state.updateProject);
   const getProjectById = useProjectStore(state => state.getProjectById);
-
+  const prevDataRef = useRef(data);
   useEffect(() => {
-    if (data && !error) {
+    if (data && !error && data !== prevDataRef.current) {
+      console.log('Projects:', data);
       setProjects(data);
+      prevDataRef.current = data;
     }
-  }, [data, error, setProjects]);
+  }, [data, error, setProjects, projects]);
 
   const [isCreating, setIsCreating] = useState(false);
   const handleCreateProject = useCallback(async (): Promise<

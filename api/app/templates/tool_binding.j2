@@ -1,6 +1,7 @@
-{%- if tools %}
+# Tool Binding
+{% if tools %}
 {%- if tools|length > 0 %}
-# Register the functions to agents
+# Register the tools to agents
 {%- for tool in tools %}
 {%- if tool.assigned and tool.assigned | length > 0 %}
 {%- for assign in tool.assigned %}

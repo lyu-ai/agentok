@@ -1,0 +1,31 @@
+# Nested Chats
+{% for nested_chat in nested_chats %}
+nested_chat_{{ nested_chat.nested_chat_node['id'] }} = [
+    {%- for recipient in nested_chat.recipients %}
+    {
+        "recipient": node_{{ recipient.node['id'] }},
+        {%- if recipient.chat_options.get('summary_method') %}
+        "summary_method": "{{ recipient.chat_options.get('summary_method') }}",
+        {%- endif %}
+        {%- if recipient.chat_options.get('summary_prompt') %}
+        "summary_prompt": "{{ recipient.chat_options.get('summary_prompt') }}",
+        {%- endif %}
+        {%- if recipient.chat_options.get('message') %}
+        "message": "{{ recipient.chat_options.get('message') }}",
+        {%- endif %}
+        {%- if recipient.chat_options.get('max_turns') is not none %}
+        "max_turns": {{ recipient.chat_options.get('max_turns') }},
+        {%- endif %}
+    },
+    {%- endfor %}
+]
+
+node_{{ nested_chat.sender['id'] }}.register_nested_chats(
+    nested_chat_{{ nested_chat.nested_chat_node['id'] }},
+    trigger=lambda sender: sender not in [
+        {%- for recipient in nested_chat.recipients %}
+        node_{{ recipient.node['id'] }},
+        {%- endfor %}
+    ],
+)
+{% endfor %}

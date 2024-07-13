@@ -57,10 +57,41 @@ class CodegenService:
             for node in flow.nodes if any(edge['source'] == first_converser['id'] and edge['target'] == node['id'] for edge in flow.edges)
         ]
 
-        group_chat_node = next((node for node in flow.nodes if node['type'] == 'groupchat'), None)
-        grouped_nodes = []
-        if group_chat_node:
-            grouped_nodes = [node for node in flow.nodes if node.get('parentId') == group_chat_node['id']]
+        # Handle group chat nodes
+        group_nodes = []
+        for node in flow.nodes:
+            if node['type'] == 'groupchat':
+                group_nodes.append({'group_node': node, 'children': [n for n in flow.nodes if n.get('parentId') == node['id']]})
+        print('group_nodes', group_nodes  )
+
+        # Prepare nested chats data
+        nested_chats = []
+        for node in flow.nodes:
+            if node['type'] == 'nestedchat':
+                sender_nodes = [n for n in flow.nodes if any(edge['source'] == n['id'] and edge['target'] == node['id'] for edge in flow.edges)]
+
+                # Check if there is exactly one upstream node
+                if len(sender_nodes) != 1:
+                    raise Exception(f'Nested chat node {node["id"]} must have exactly one upstream node, found {len(sender_nodes)}.')
+
+                sender_node = sender_nodes[0]
+
+                if not sender_node:
+                    raise Exception(f'Nested chat node {node["id"]} must have exactly one upstream sender node.')
+
+                recipient_nodes_with_options = [
+                    {
+                        'node': recipient_node,
+                        'chat_options': next((edge['data'] for edge in flow.edges if edge['source'] == node['id'] and edge['target'] == recipient_node['id']), {})
+                    }
+                    for recipient_node in flow.nodes if any(edge['source'] == node['id'] and edge['target'] == recipient_node['id'] for edge in flow.edges)
+                ]
+
+                nested_chats.append({
+                    'nested_chat_node': node,
+                    'sender': sender_node,
+                    'recipients': recipient_nodes_with_options
+                })
 
         note_nodes = [node for node in flow.nodes if node['type'] == 'note']
 
@@ -72,8 +103,6 @@ class CodegenService:
                 del model['description']
         # Use the template for each node
         template = self.env.get_template("main.j2")  # Main template
-        
-        print('tools', project.tools)
 
         code = template.render(project=project,
                                user=self.user,
@@ -87,8 +116,8 @@ class CodegenService:
                                generation_date=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                                note_nodes=note_nodes,
                                tools=project.tools,
-                               group_chat_node=group_chat_node,
-                               grouped_nodes=grouped_nodes)
+                               group_nodes=group_nodes,
+                               nested_chats=nested_chats,)
 
         return code
 
@@ -132,7 +161,7 @@ class CodegenService:
                 response_format={"type": "json_object"},
                 model="gpt-4o",
             )
-            
+
             # Print the generated code
             generated_code = response.choices[0].message.content
             print(generated_code)
