@@ -10,6 +10,7 @@ const UserProxyAgent = ({ id, selected, data, ...props }: any) => {
       nodeClass="agent"
       nameEditable
       options={['description', 'system_message', 'max_consecutive_auto_reply']}
+      ports={[{ type: 'input' }, { type: 'output' }]}
       ConfigDialog={UserConfig}
       {...props}
     />

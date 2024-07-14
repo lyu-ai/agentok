@@ -43,6 +43,7 @@ const AssistantNode = ({ id, data, selected, ...props }: any) => {
       selected={selected}
       nameEditable
       options={['desription', 'system_message', 'max_consecutive_auto_reply']}
+      ports={[{ type: 'input' }, { type: 'output' }]}
       ConfigDialog={AssistantConfig}
       {...props}
     >
