@@ -7,7 +7,13 @@ import { useEffect, useState } from 'react';
 import { GoPersonFill } from 'react-icons/go';
 import clsx from 'clsx';
 import pb, { getAvatarUrl } from '@/utils/pocketbase/client';
-import { RiBrainLine, RiLogoutBoxLine, RiSettings3Line } from 'react-icons/ri';
+import {
+  RiBrainLine,
+  RiGithubLine,
+  RiLogoutCircleRLine,
+  RiSettings3Line,
+  RiVerifiedBadgeLine,
+} from 'react-icons/ri';
 
 const UserImage = ({ user, className }: any) => {
   // State to handle image load error
@@ -47,18 +53,18 @@ const UserPanel = ({ user }: { user: any }) => {
   };
 
   return (
-    <div className="flex flex-col items-center w-80 p-4 gap-3 text-sm">
+    <div className="flex flex-col items-center w-96 p-4 gap-2 text-sm">
       <UserImage
         user={user}
-        className="w-16 h-16 rounded-full bg-primary/20 text-primary overflow-hidden"
+        className="mt-8 w-16 h-16 rounded-full bg-primary/20 text-primary overflow-hidden"
       />
       <span className="text-lg font-bold">
         {user.name ?? user.email?.match(/^([^@]+)/)?.[1] ?? '(No Name)'}
       </span>
-      <span className="">
+      <span className="flex flex-col items-center gap-2">
         {user.email}
         {user.verified ? (
-          <span className="text-green-500"> (verified)</span>
+          <RiVerifiedBadgeLine className="text-green-600 w-5 h-5" />
         ) : (
           <span className="text-red-500"> (unverified)</span>
         )}
@@ -70,26 +76,40 @@ const UserPanel = ({ user }: { user: any }) => {
         rel="noreferrer"
       >
         <img
-          src="https://dcbadge.vercel.app/api/server/xBQxwRSWfm?timestamp=20240705"
+          src="https://dcbadge.vercel.app/api/server/xBQxwRSWfm?timestamp=20240714"
           alt="discord"
           className="rounded-lg"
         />
       </a>
-      <PopoverButton
-        onClick={() => router.push('/settings/models')}
-        className={clsx(
-          'flex w-full items-center justify-start py-2 px-6 gap-2 bg-base-content/20 mt-8  rounded-xl',
-          'hover:bg-base-content/30'
-        )}
-      >
-        <RiBrainLine className="w-5 h-5" />
-        Manage Shared LLM Models
-      </PopoverButton>
+      <div className="flex items-center no-wrap gap-1 mt-8 w-full">
+        <PopoverButton
+          onClick={() => router.push('/settings/models')}
+          className={clsx(
+            'flex w-64 items-center justify-start py-2 px-4 gap-1.5 bg-base-content/20 rounded-r-sm rounded-l-lg',
+            'hover:bg-base-content/30'
+          )}
+        >
+          <RiBrainLine className="w-5 h-5" />
+          Models
+        </PopoverButton>
+        <PopoverButton
+          onClick={() =>
+            router.push('https://github.com/hughlv/agentok/issues')
+          }
+          className={clsx(
+            'flex w-64 items-center justify-start py-2 px-4 gap-1.5 bg-base-content/20 rounded-l-sm rounded-r-lg',
+            'hover:bg-base-content/30'
+          )}
+        >
+          <RiGithubLine className="h-5 w-5" />
+          Open Issues
+        </PopoverButton>
+      </div>
       <div className="flex items-center no-wrap gap-1 w-full">
         <PopoverButton
           onClick={() => router.push('/settings')}
           className={clsx(
-            'flex w-40 items-center justify-start py-2 px-6 gap-2 bg-base-content/20  rounded-l-xl',
+            'flex w-64 items-center justify-start py-2 px-4 gap-1.5 bg-base-content/20 rounded-r-sm rounded-l-lg',
             'hover:bg-base-content/30'
           )}
         >
@@ -100,16 +120,15 @@ const UserPanel = ({ user }: { user: any }) => {
         <PopoverButton
           onClick={signOut}
           className={clsx(
-            'flex w-40 items-center justify-center p-2 gap-2 bg-base-content/20  rounded-r-xl',
+            'flex w-64 items-center justify-start py-2 px-4 gap-1.5 bg-base-content/20 rounded-l-sm rounded-r-lg',
             'hover:bg-base-content/30'
           )}
         >
-          <RiLogoutBoxLine className="w-5 h-5" />
+          <RiLogoutCircleRLine className="w-5 h-5" />
           Sign out
         </PopoverButton>
       </div>
-
-      <div className="flex items-center justify-center text-xs w-full gap-2">
+      <div className="flex items-center justify-center text-xs w-full gap-1">
         <Link
           href="https://agentok.ai/docs/privacy"
           target="_blank"

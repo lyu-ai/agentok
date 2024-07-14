@@ -7,7 +7,7 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace('/settings/api-keys');
+    router.replace('/settings/account');
   }, [router]);
 
   return null; // or a loading indicator if preferred

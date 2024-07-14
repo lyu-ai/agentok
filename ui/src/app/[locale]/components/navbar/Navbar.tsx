@@ -60,7 +60,8 @@ const Navbar = () => {
           className="hidden md:block"
         >
           <img
-            src="https://img.shields.io/github/stars/hughlv/agentok?style=social"
+            src="https://img.shields.io/github/stars/hughlv/agentok?style=flat&label=Star%20on%20GitHub
+"
             alt="github"
           />
         </a>
