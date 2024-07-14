@@ -1,5 +1,9 @@
 # conversable_agents.j2
 {% macro generate_conversable_agents(conversable_nodes) %}
+
+import tempfile
+temp_dir = tempfile.gettempdir()
+
 # Conversable Agents
 {% for node in conversable_nodes %}
 node_{{ node.id }} = {{ node.data.class }}(
@@ -19,10 +23,13 @@ node_{{ node.id }} = {{ node.data.class }}(
     {%- if node.data.human_input_mode %}
     human_input_mode="{{ node.data.human_input_mode }}",
     {%- endif %}
-    {%- if node.data.human_input_mode == 'ALWAYS' %}
+    {%- if node.data.disable_llm %}
     llm_config=False,
-    {% else %}
+    {%- else %}
     llm_config=llm_config,
+    {%- endif %}
+    {%- if node.data.enable_code_execution %}
+    code_execution_config={"use_docker": False, "work_dir": temp_dir}, # Simplified setting for code execution
     {%- endif %}
 )
 {%- endfor %}

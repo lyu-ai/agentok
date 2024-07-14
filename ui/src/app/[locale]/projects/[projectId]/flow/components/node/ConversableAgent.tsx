@@ -13,6 +13,7 @@ const ConversableAgent = ({ id, data, selected, ...props }: any) => {
         'human_input_mode',
         'max_consecutive_auto_reply',
         'termination_msg',
+        'disable_llm',
       ]}
       ports={[
         { type: 'input', name: 'input' },

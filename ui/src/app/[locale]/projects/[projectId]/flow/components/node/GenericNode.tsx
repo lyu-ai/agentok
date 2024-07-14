@@ -112,6 +112,11 @@ const GenericNode = ({
       name: 'max_consecutive_auto_reply',
       label: t('max-consecutive-auto-reply'),
     },
+    {
+      type: 'check',
+      name: 'disable_llm',
+      label: t('disable-llm'),
+    },
   ];
 
   useEffect(() => {

@@ -42,6 +42,8 @@
       "input-mode-terminate": "TERMINATE",
       "max-consecutive-auto-reply": "Max Consecutive Auto-Replies",
       "termination-msg": "Termination Message",
+      "disable-llm": "Disable LLM",
+      "enable-code-execution": "Enable Code Execution",
       "options": "More Options"
     },
     "Assistant": {
@@ -260,14 +262,19 @@
     },
     "ConversableAgentConfig": {
       "title": "Agent Settings",
+      "general": "General",
+      "disable-llm": "Disable LLM",
+      "tools": "Tools",
+      "no-tools": "No tools available",
+      "create-tool": "Create Tool",
       "available-tools": "Available Tools",
       "available-tools-tooltip": "Drag and drop tools to the right to enable them for this agent",
       "tools-for-execution": "Tools for Execution",
       "tools-for-execution-tooltip": "Select tools to be executed in this agent",
-      "tools-for-execution-placeholder": "Select tools for execution",
+      "tools-for-execution-placeholder": "Drag and drop tools here for execution",
       "tools-for-llm": "Tools for LLM",
       "tools-for-llm-tooltip": "Select tools to be used in LLM",
-      "tools-for-llm-placeholder": "Select tools for LLM"
+      "tools-for-llm-placeholder": "Drag and drop tools here for LLM"
     },
     "ConverseConfig": {
       "title": "Converse Settings",

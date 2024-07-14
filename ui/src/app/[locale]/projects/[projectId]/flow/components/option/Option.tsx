@@ -5,6 +5,7 @@ import { setNodeData } from '../../utils/flow';
 import { useReactFlow } from 'reactflow';
 import RangeOption from './Range';
 import SelectOption from './Select';
+import CheckOption from './Check';
 
 export type OptionType = {
   type: string; // text, number, group ...
@@ -44,6 +45,7 @@ const GenericOption = ({ type, onChange, ...props }: OptionProps) => {
     number: NumberOption,
     range: RangeOption,
     select: SelectOption,
+    check: CheckOption,
     group: OptionGroup,
   };
   const instance = useReactFlow();

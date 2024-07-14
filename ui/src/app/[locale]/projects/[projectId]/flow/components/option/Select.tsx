@@ -27,7 +27,7 @@ const SelectOption = ({
       <select
         value={options[selectedIndex].value}
         onChange={e => onChange && onChange(name, e.target.value)}
-        className="select select-xs select-bordered bg-transparent nodrag focus:range-primary w-full rounded"
+        className="select select-xs select-bordered bg-transparent nodrag focus:range-primary rounded"
       >
         {options.map((o, i) => (
           <option key={i} value={o.value}>
