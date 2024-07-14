@@ -110,7 +110,13 @@ const DropZone = ({ onDrop, placeholder, children }: any) => {
   );
 };
 
-const ConversableAgentConfig = ({ nodeId, data, className, ...props }: any) => {
+const ConversableAgentConfig = ({
+  nodeId,
+  data,
+  optionsDisabled,
+  className,
+  ...props
+}: any) => {
   const t = useTranslations('option.ConversableAgentConfig');
   const tGeneric = useTranslations('node.Generic');
   const { projectId } = useProjectId();
@@ -305,9 +311,16 @@ const ConversableAgentConfig = ({ nodeId, data, className, ...props }: any) => {
     ];
     return (
       <div className="flex flex-col gap-2 w-full h-full">
-        {GENERAL_OPTIONS.map((options, index) => (
-          <GenericOption key={index} nodeId={nodeId} data={data} {...options} />
-        ))}
+        {GENERAL_OPTIONS.filter(o => !optionsDisabled.includes(o.name)).map(
+          (options, index) => (
+            <GenericOption
+              key={index}
+              nodeId={nodeId}
+              data={data}
+              {...options}
+            />
+          )
+        )}
       </div>
     );
   };

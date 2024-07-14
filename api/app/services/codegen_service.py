@@ -45,8 +45,9 @@ class CodegenService:
         if first_converser['type'] not in {'conversable', 'user', 'assistant'}:
             raise Exception('The first converser node should be the conversable, user, or assistant node.')
 
-        assistant_nodes = [node for node in flow.nodes if node['type'] == 'assistant']
         conversable_nodes = [node for node in flow.nodes if node['type'] == 'conversable']
+        assistant_nodes = [node for node in flow.nodes if node['type'] == 'assistant']
+        gpt_assistant_nodes = [node for node in flow.nodes if node['type'] == 'gpt_assistant']
         user_nodes = [node for node in flow.nodes if node['type'] == 'user']
 
         initial_chat_targets = [
@@ -110,14 +111,15 @@ class CodegenService:
                                nodes=flow.nodes,
                                first_converser=first_converser,
                                initial_chat_targets=initial_chat_targets,
-                               assistant_nodes=assistant_nodes,
                                conversable_nodes=conversable_nodes,
+                               assistant_nodes=assistant_nodes,
+                               gpt_assistant_nodes=gpt_assistant_nodes,
                                user_nodes=user_nodes,
+                               group_nodes=group_nodes,
+                               nested_chats=nested_chats,
                                generation_date=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                                note_nodes=note_nodes,
-                               tools=project.tools,
-                               group_nodes=group_nodes,
-                               nested_chats=nested_chats,)
+                               tools=project.tools,)
 
         return code
 

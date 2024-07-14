@@ -29,6 +29,12 @@ node_{{ node.id }} = {{ class_name }}(
       "use_docker": {{ node.data.code_execution_config.use_docker }},
       {%- endif %}
     },
+    {%- else %}
+    code_execution_config={ # Make code excution always available for user_proxy nodes
+        "last_n_messages": 2,
+        "work_dir": "user_code",
+        "use_docker": False,
+    },
     {%- endif %}
     {%- if node.data.retrieve_config %}
     retrieve_config={

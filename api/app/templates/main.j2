@@ -1,6 +1,7 @@
 {%- from 'import_mapping.j2' import get_imports with context -%}
 {%- from 'config.j2' import generate_config with context -%}
 {%- from 'assistant.j2' import generate_assistants with context -%}
+{%- from 'gpt_assistant.j2' import generate_gpt_assistants with context -%}
 {%- from 'conversable_agent.j2' import generate_conversable_agents with context -%}
 {%- from 'user.j2' import generate_users with context -%}
 {%- from 'user.j2' import generate_user with context -%}
@@ -28,8 +29,9 @@
 
 {{- get_imports(nodes) }}
 {{- generate_config(project) }}
-{{- generate_assistants(assistant_nodes) }}
 {{- generate_conversable_agents(conversable_nodes) }}
+{{- generate_assistants(assistant_nodes) }}
+{{- generate_gpt_assistants(gpt_assistant_nodes) }}
 {{- generate_users(user_nodes) }}
 {% include "group_chat.j2" %}
 {% include "nested_chat.j2" %}

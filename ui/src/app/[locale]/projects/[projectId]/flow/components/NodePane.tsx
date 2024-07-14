@@ -195,13 +195,13 @@ const NodePane = ({ pinned, onAddNode, contentClassName }: any) => {
             onAddNode={onAddNode}
             open
           />
-          {/* <NodeGroup
+          <NodeGroup
             pinned={pinned}
             name={t('group-advanced')}
             nodes={advancedNodes}
             onAddNode={onAddNode}
           />
-          {customAgents?.length > 0 && (
+          {/*  {customAgents?.length > 0 && (
             <NodeGroup
               pinned={pinned}
               name={t('group-extensions')}

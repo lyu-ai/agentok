@@ -13,7 +13,7 @@ const CheckOption = ({ data, label, name, onChange }: NumberOptionProps) => {
         checked={value}
         onChange={e => setValue(e.target.checked)}
         onBlur={e => onChange && onChange(name, e.target.checked)}
-        className="checkbox checkbox-xs w-24 bg-transparent rounded"
+        className="checkbox checkbox-xs bg-transparent rounded"
       />
       <span>{label}</span>
     </label>

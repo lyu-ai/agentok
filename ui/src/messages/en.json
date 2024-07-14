@@ -50,9 +50,6 @@
       "system-message": "System Message",
       "system-message-placeholder": "Enter system message here",
       "enable-system-message": "Enable",
-      "instructions": "Instructions",
-      "instructions-use-defaults": "Use defaults",
-      "instructions-placeholder": "Enter instructions here",
       "max-consecutive-auto-reply": "Max Consecutive Auto-Replies",
       "llava-url": "LLaVa URL",
       "options": "More Options"
@@ -69,6 +66,12 @@
       "max-consecutive-auto-reply": "Max Consecutive Auto-Replies",
       "termination-msg": "Termination Message",
       "options": "More Options"
+    },
+    "GPTAssistant": {
+      "use-default-instructions": "Use Default Instructions",
+      "instructions": "Instructions",
+      "instructions-use-defaults": "Use defaults",
+      "instructions-placeholder": "Enter instructions here"
     },
     "Config": {
       "flow-name": "Name",

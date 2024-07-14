@@ -32,7 +32,8 @@ type Props = {
   deletable?: boolean;
   resizable?: boolean;
   toolbarButtons?: ReactNode[];
-  options?: any[];
+  options?: string[];
+  optionsDisabled?: string[];
   ports?: any[];
   ConfigDialog?: any;
   selected: boolean;
@@ -52,6 +53,7 @@ const GenericNode = ({
   resizable,
   toolbarButtons,
   options = [], // a list of common options
+  optionsDisabled = [], // a list of common options that should be disabled
   ports = [], // a list of common ports [{ type: 'input', name: '' }, { type: 'output', name: 'handle1' }, ...]
   ConfigDialog,
   className,
@@ -258,6 +260,7 @@ const GenericNode = ({
           show={showOptions}
           nodeId={id}
           data={data}
+          optionsDisabled={optionsDisabled}
           onClose={() => setShowOptions(false)}
           className="flex shrink-0 w-[640px] max-w-[80vw] max-h-[90vh]"
         />

@@ -1,4 +1,4 @@
-import UserConfig from '../config/User';
+import ConversableAgentConfig from '../config/ConversableAgent';
 import GenericNode from './GenericNode';
 
 const UserProxyAgent = ({ id, selected, data, ...props }: any) => {
@@ -9,9 +9,15 @@ const UserProxyAgent = ({ id, selected, data, ...props }: any) => {
       selected={selected}
       nodeClass="agent"
       nameEditable
-      options={['description', 'system_message', 'max_consecutive_auto_reply']}
+      options={[
+        'description',
+        'system_message',
+        'human_input_mode',
+        'max_consecutive_auto_reply',
+      ]}
+      optionsDisabled={['disable_llm']}
       ports={[{ type: 'input' }, { type: 'output' }]}
-      ConfigDialog={UserConfig}
+      ConfigDialog={ConversableAgentConfig}
       {...props}
     />
   );

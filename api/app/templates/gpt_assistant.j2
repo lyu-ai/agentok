@@ -1,0 +1,29 @@
+# gpt_assistant.j2
+{% macro generate_gpt_assistants(gpt_assistant_nodes) %}
+{%- for node in gpt_assistant_nodes %}
+{%- set class_name = node.data.class %}
+{%- set name = node.data.name %}
+
+node_{{ node.id }} = {{ class_name }}(
+    name="{{ name }}",
+    {%- if node.data.use_default_instructions %}
+    instructions=AssistantAgent.DEFAULT_SYSTEM_MESSAGE,
+    {%- elif node.data.instructions %}
+    instructions="""{{ node.data.instructions }}""",
+    {%- endif %}
+    llm_config={
+        **llm_config,
+        {%- if node.data.tools %}
+        "tools": {{ node.data.tools }},
+        {%- endif %}
+        {%- if node.data.file_ids %}
+        "file_ids": {{ node.data.file_ids }},
+        {%- endif %}
+        {%- if node.data.assistant_id %}
+        "assistant_id": "{{ node.data.assistant_id }}",
+        {%- endif %}
+    }
+)
+
+{%- endfor %}
+{% endmacro %}

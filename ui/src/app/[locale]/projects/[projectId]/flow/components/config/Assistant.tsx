@@ -194,63 +194,7 @@ const AssistantConfig = ({ nodeId, data, className, ...props }: any) => {
       classNameTitle="border-b border-base-content/10"
       classNameBody="flex flex-grow flex-col w-full h-full p-2 gap-2 text-sm overflow-y-auto"
       {...props}
-    >
-      {data.class !== 'GPTAssistantAgent' && (
-        <>
-          <label className="flex items-center justify-start cursor-pointer label gap-2">
-            <input
-              checked={data.compress_config !== undefined}
-              onChange={e => onEnableCompress(e.target.checked ?? false)}
-              type="checkbox"
-              className="checkbox checkbox-sm rounded"
-            />
-            <span className="font-bold">{t('support_compress')}</span>
-          </label>
-          <CompressConfig data={data} setCompressOption={setCompressOption} />
-        </>
-      )}
-      {data.class === 'GPTAssistantAgent' && (
-        <>
-          <label className="flex items-center justify-start cursor-pointer label gap-2">
-            <input
-              checked={data.tools !== undefined}
-              disabled={data.class !== 'GPTAssistantAgent'}
-              onChange={e => onEnableTool(e.target.checked ?? false)}
-              type="checkbox"
-              className="checkbox checkbox-sm rounded"
-            />
-            <span className="font-bold">{t('enable_tools')}</span>
-          </label>
-          <ToolConfig data={data} setToolOption={setToolOption} />
-          <label className="flex items-center justify-start cursor-pointer label gap-2">
-            <span className="font-bold shrink-0">{t('assistant_id')}</span>
-            <input
-              type="text"
-              value={data.assistant_id ?? ''}
-              onChange={e =>
-                setNodeData(instance, nodeId, {
-                  assistant_id: e.target.value,
-                })
-              }
-              className="input input-sm input-bordered rounded w-full"
-            />
-          </label>
-          <label className="flex w-full items-start label gap-2">
-            <span className="font-bold shrink-0">{t('file_ids')}</span>
-            <textarea
-              value={data.file_ids?.join('\n') ?? ''}
-              onChange={e =>
-                setNodeData(instance, nodeId, {
-                  file_ids: e.target.value.split('\n'),
-                })
-              }
-              rows={4}
-              className="textarea textarea-sm textarea-bordered w-full rounded"
-            />
-          </label>
-        </>
-      )}
-    </PopupDialog>
+    ></PopupDialog>
   );
 };
 

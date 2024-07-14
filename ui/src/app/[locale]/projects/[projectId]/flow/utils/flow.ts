@@ -35,6 +35,7 @@ import { ComponentType } from 'react';
 import Initializer from '../components/node/Initializer';
 import ConverseEdge from '../components/edge/ConverseEdge';
 import NestedChat from '../components/node/NestedChat';
+import GPTAssistantNode from '../components/node/GPTAssistant';
 
 export const nodeTypes = {
   initializer: Initializer,
@@ -44,6 +45,7 @@ export const nodeTypes = {
   note: Note,
   conversable: ConversableAgent,
   nestedchat: NestedChat,
+  gpt_assistant: GPTAssistantNode,
 };
 
 export const edgeTypes = {
@@ -52,9 +54,14 @@ export const edgeTypes = {
 
 export const isConversable = (node?: Node) =>
   node?.type &&
-  ['assistant', 'user', 'conversable', 'groupchat', 'nestedchat'].includes(
-    node.type
-  );
+  [
+    'assistant',
+    'user',
+    'conversable',
+    'groupchat',
+    'nestedchat',
+    'gpt_assistant',
+  ].includes(node.type);
 
 // Fields of Node Meta:
 // - name: To be used as variable name in generated code
@@ -149,54 +156,54 @@ export const advancedNodes: NodeMeta[] = [
     activeIcon: RiOpenaiFill,
     name: 'GPTAssistant',
     label: 'gpt-assistant',
-    type: 'assistant',
+    type: 'gpt_assistant',
     class: 'GPTAssistantAgent',
   },
-  {
-    id: 'multimodal',
-    icon: RiEyeLine,
-    activeIcon: RiEyeFill,
-    name: 'MultimodalAssistant',
-    label: 'multimodal-assistant',
-    type: 'assistant',
-    class: 'MultimodalConversableAgent',
-  },
-  {
-    id: 'llava',
-    icon: RiMetaLine,
-    activeIcon: RiMetaFill,
-    name: 'LLaVA',
-    label: 'llava',
-    type: 'assistant',
-    class: 'LLaVAAgent',
-  },
-  {
-    id: 'retrieve_assistant',
-    icon: RiRobot2Line,
-    activeIcon: RiRobot2Fill,
-    name: 'RetrieveAssistant',
-    label: 'retrieve-assistant',
-    type: 'assistant',
-    class: 'RetrieveAssistantAgent',
-  },
-  {
-    id: 'retrieve_user_proxy',
-    icon: RiUserSearchLine,
-    activeIcon: RiUserSearchFill,
-    name: 'RetrieveUserProxy',
-    label: 'retrieve-user',
-    type: 'user',
-    class: 'RetrieveUserProxyAgent',
-  },
-  {
-    id: 'math_user_proxy',
-    icon: RiUser4Line,
-    activeIcon: RiUser4Fill,
-    name: 'MathUserProxyAgent',
-    label: 'math-user',
-    type: 'user',
-    class: 'MathUserProxyAgent',
-  },
+  // {
+  //   id: 'multimodal',
+  //   icon: RiEyeLine,
+  //   activeIcon: RiEyeFill,
+  //   name: 'MultimodalAssistant',
+  //   label: 'multimodal-assistant',
+  //   type: 'mm_assistant',
+  //   class: 'MultimodalConversableAgent',
+  // },
+  // {
+  //   id: 'llava',
+  //   icon: RiMetaLine,
+  //   activeIcon: RiMetaFill,
+  //   name: 'LLaVA',
+  //   label: 'llava',
+  //   type: 'assistant',
+  //   class: 'LLaVAAgent',
+  // },
+  // {
+  //   id: 'retrieve_assistant',
+  //   icon: RiRobot2Line,
+  //   activeIcon: RiRobot2Fill,
+  //   name: 'RetrieveAssistant',
+  //   label: 'retrieve-assistant',
+  //   type: 'assistant',
+  //   class: 'RetrieveAssistantAgent',
+  // },
+  // {
+  //   id: 'retrieve_user_proxy',
+  //   icon: RiUserSearchLine,
+  //   activeIcon: RiUserSearchFill,
+  //   name: 'RetrieveUserProxy',
+  //   label: 'retrieve-user',
+  //   type: 'user',
+  //   class: 'RetrieveUserProxyAgent',
+  // },
+  // {
+  //   id: 'math_user_proxy',
+  //   icon: RiUser4Line,
+  //   activeIcon: RiUser4Fill,
+  //   name: 'MathUserProxyAgent',
+  //   label: 'math-user',
+  //   type: 'user',
+  //   class: 'MathUserProxyAgent',
+  // },
 ];
 
 export const getNodeLabel = (label: string, tNodeMeta: any) => {
@@ -206,8 +213,8 @@ export const getNodeLabel = (label: string, tNodeMeta: any) => {
 
 const allNodes = [...basicNodes, ...agentNodes, ...advancedNodes];
 
-export const getNodeIcon = (nodeId: string, active?: boolean) => {
-  const nodeMeta = allNodes.find(node => node.id === nodeId);
+export const getNodeIcon = (type: string, active?: boolean) => {
+  const nodeMeta = allNodes.find(node => node.type === type);
   return (active ? nodeMeta?.activeIcon : nodeMeta?.icon) || RiQuestionLine;
 };
 
