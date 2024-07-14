@@ -92,6 +92,8 @@ The project contains Frontend (Built with Next.js) and Backend service (Built wi
 The easiest way to run on local is using docker-compose:
 
 ```bash
+cp ui/.env.example ui/.env
+rm ui/.env.production
 docker-compose up -d
 ```
 
