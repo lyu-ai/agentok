@@ -17,7 +17,6 @@ export function useProjects() {
   const prevDataRef = useRef(data);
   useEffect(() => {
     if (data && !error && data !== prevDataRef.current) {
-      console.log('Projects:', data);
       setProjects(data);
       prevDataRef.current = data;
     }
