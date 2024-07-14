@@ -4,8 +4,6 @@ import Link from 'next/link';
 import {
   RiSettings3Fill,
   RiSettings3Line,
-  RiBook3Line,
-  RiBook3Fill,
   RiSwap3Line,
   RiSwap3Fill,
   RiPuzzle2Line,

@@ -10,6 +10,7 @@ import { Tool } from '@/store/projects';
 import {
   RiCloseLine,
   RiDraggable,
+  RiPuzzle2Line,
   RiSettings3Line,
   RiToolsLine,
 } from 'react-icons/ri';
@@ -176,13 +177,10 @@ const ConversableAgentConfig = ({ nodeId, data, className, ...props }: any) => {
       <div className="flex h-full w-full gap-2">
         <div className="flex w-64">
           <div className="flex flex-col gap-2 w-full h-full">
-            <div className="flex items-center flex-0 justify-between w-full">
+            <div className="flex items-center flex-0 gap-1 w-full">
               {t('available-tools')}
-              <Link
-                href={`/projects/${projectId}/tools`}
-                className="hover:text-primary"
-              >
-                <RiSettings3Line className="w-5 h-5" />
+              <Link href={`/projects/${projectId}/tools`} className="link">
+                <RiSettings3Line className="w-4 h-4" />
               </Link>
             </div>
 
@@ -196,12 +194,6 @@ const ConversableAgentConfig = ({ nodeId, data, className, ...props }: any) => {
                   <div className="flex flex-col gap-2 w-full h-full justify-center items-center">
                     <RiToolsLine className="w-10 h-10 opacity-40" />
                     <span className=" opacity-40">{t('no-tools')}</span>
-                    <Link
-                      href={`/projects/${projectId}/tools`}
-                      className="btn btn-sm btn-primary btn-outline rounded mt-4"
-                    >
-                      {t('create-tools')}
-                    </Link>
                   </div>
                 )}
               </div>

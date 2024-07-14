@@ -91,6 +91,7 @@
     },
     "NestedChat": {
       "nested-chat-hint": "Group of agents and groups, act as composite node.",
+      "delete-node-tooltip": "Delete node",
       "options": "More Options"
     },
     "User": {
@@ -266,9 +267,9 @@
       "disable-llm": "Disable LLM",
       "tools": "Tools",
       "no-tools": "No tools available",
-      "create-tool": "Create Tool",
+      "build-tool": "Build Tool",
       "available-tools": "Available Tools",
-      "available-tools-tooltip": "Drag and drop tools to the right to enable them for this agent",
+      "available-tools-tooltip": "Drag and drop tools to the right zones to enable them for different purposes.",
       "tools-for-execution": "Tools for Execution",
       "tools-for-execution-tooltip": "Select tools to be executed in this agent",
       "tools-for-execution-placeholder": "Drag and drop tools here for execution",
