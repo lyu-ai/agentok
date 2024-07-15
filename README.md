@@ -29,6 +29,12 @@ Contributions (Issues, Pull Requests, Documentation, even Typo-corrections) to t
 
 To quickly explore the features of Agentok Studio, visit [https://studio.agentok.ai](https://studio.agentok.ai). While we offer an online deployment of this project, please note that it is not intended for production use. The service level agreement is not guaranteed, and stored data may be wiped due to breaking changes.
 
+After login as Guest or with your OAuth2 account, you can click the **Create New Project** button to create a new project. The new project comes with a sample workflow. You can click the robot icon flashing on the right bottom to start the conversation.
+
+![studio-2](./website/static/img/screenshot-studio-2.png)
+
+Due to the limitations of GPT-4 and AutoGen, this simple workflow may not work as expected, but it's a good starting point to understand the basic concepts of Agentic App and Agentok Studio.
+
 For a more in-depth look at the project, please refer to [Getting Started](https://agentok.ai/getting-started).
 
 ## Migration of Official Notebooks
