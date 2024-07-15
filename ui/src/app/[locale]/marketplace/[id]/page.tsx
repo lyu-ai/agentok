@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { TemplateBlock } from '../../components/TemplateList';
+import { TemplateCard } from '../../components/TemplateList';
 import { useTemplates } from '@/hooks';
 import { useEffect, useState } from 'react';
 import ReactFlow, { ReactFlowProvider, useStoreApi } from 'reactflow';
@@ -87,7 +87,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         </span>
       </div>
       <div className="flex flex-col md:flex-row items-center justify-center w-full gap-2 text-sm">
-        <TemplateBlock
+        <TemplateCard
           template={template}
           index={index}
           suppressLink
