@@ -1,6 +1,6 @@
 import { stripMatch } from '@/utils/re';
 import { StatusMessage } from '@/utils/chat';
-import { RiRobot2Line, RiRobot2Fill } from 'react-icons/ri';
+import { RiRobot2Line, RiRobot2Fill, RiUserVoiceLine } from 'react-icons/ri';
 import {
   GoCheckCircle,
   GoAlert,
@@ -108,7 +108,7 @@ const MessageBlock = ({ chatId, message, onSend }: any) => {
           {message.sender}
           {message.receiver && (
             <>
-              <GoMegaphone className="w-3 h-3 inline-block mx-1" />
+              <RiUserVoiceLine className="w-3 h-3 inline-block mx-1" />
               <span className=" text-base-content/50">{message.receiver}</span>
             </>
           )}
@@ -131,7 +131,7 @@ const MessageBlock = ({ chatId, message, onSend }: any) => {
       </div>
       {messageHeader}
       <div
-        className={`relative group chat-bubble rounded-md p-2 ${messageClass} break-word word-wrap`}
+        className={`relative group chat-bubble rounded-md p-2 ${messageClass} break-word word-wrap overflow-x-hidden`}
         style={{ maxWidth: '100%' }}
       >
         {message.content ? (

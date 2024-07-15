@@ -19,9 +19,12 @@ export async function POST(request: NextRequest) {
   const project = await request.json();
   try {
     let res;
-    if (project.id) {
+    if (project.id && project.id !== '') {
+      // empty string means new project
       res = await pb.collection('projects').update(project.id, project);
     } else {
+      delete project.id;
+      console.log('POST /projects', project);
       res = await pb.collection('projects').create(project);
     }
     return new Response(JSON.stringify(res));

@@ -12,10 +12,78 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { RiAddLine, RiApps2Line, RiArrowDownSLine } from 'react-icons/ri';
 import { toast } from 'react-toastify';
+import { Node, Edge } from 'reactflow';
 
+export const initialNodes: Node[] = [
+  {
+    id: '1001',
+    type: 'initializer',
+    data: {
+      name: 'Initializer',
+      label: 'initializer',
+      class: 'Initializer',
+      sample_messages: [
+        'Write a poem based on recent headlines about Vancouver.',
+      ],
+    },
+    position: { x: -133, y: 246 },
+  },
+  {
+    id: '1',
+    type: 'user',
+    data: {
+      name: 'User',
+      label: 'user',
+      class: 'UserProxyAgent',
+      human_input_mode: 'NEVER',
+      enable_code_execution: true,
+      max_consecutive_auto_reply: 10,
+    },
+    position: { x: 271, y: 222 },
+  },
+  {
+    id: '2',
+    type: 'assistant',
+    data: {
+      name: 'Assistant',
+      type: 'assistant',
+      label: 'assistant',
+      class: 'AssistantAgent',
+      max_consecutive_auto_reply: 10,
+    },
+    position: { x: 811, y: 216 },
+  },
+  {
+    id: '998',
+    type: 'note',
+    data: {
+      name: 'Note',
+      label: 'note',
+      class: 'Note',
+      content:
+        'Click **Start Chat** to show the chat pane, and in chat pane, select a sample question to start the conversation.',
+    },
+    position: { x: 87, y: 740 },
+  },
+];
+
+export const initialEdges: Edge[] = [
+  {
+    id: '1001-1',
+    source: '1001',
+    target: '1',
+  },
+  {
+    id: '1-2',
+    source: '1',
+    target: '2',
+    animated: true,
+    type: 'converse',
+  },
+];
 const ProjectPicker = ({ activeProjectId, className }: any) => {
   const router = useRouter();
-  const { projects, createProject, isCreating } = useProjects();
+  const { projects, createProject, isCreating, updateProject } = useProjects();
   const { project } = useProject(activeProjectId);
   const [activeProject, setActiveProject] = useState<Project | undefined>(
     undefined
@@ -25,11 +93,27 @@ const ProjectPicker = ({ activeProjectId, className }: any) => {
   }, [project]);
 
   const onCreateProject = async () => {
-    const newProject = await createProject();
+    const newProject = await createProject({
+      id: '', // Will be replaced by actual id from server side
+      name: 'New Project',
+      description: 'A new project with sample flow.',
+      flow: JSON.stringify({
+        nodes: initialNodes,
+        edges: initialEdges,
+      }),
+    });
     if (!newProject) {
       toast.error('Failed to create project');
       return;
     }
+    // Initialize the project with sample workflow
+    await updateProject(newProject.id, {
+      flow: JSON.stringify({
+        nodes: initialNodes,
+        edges: initialEdges,
+      }),
+    });
+
     toast.success('Project created. Now jumping to project page.');
     router.push(`/projects/${newProject.id}/flow`);
   };

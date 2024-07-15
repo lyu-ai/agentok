@@ -11,8 +11,8 @@ node_{{ node.id }} = {{ class_name }}(
     {%- if node['data'].get('human_input_mode') %}
     human_input_mode="{{ node['data']['human_input_mode'] }}",
     {%- endif %}
-    {%- if node['data'].get('is_termination_msg') %}
-    is_termination_msg={{ node['data']['is_termination_msg'] }},
+    {%- if node.data.termination_msg %}
+    is_termination_msg=lambda msg: msg["content"] is not None and "{{ node['data']['termination_msg'] | lower }}" in msg["content"].lower(),
     {%- endif %}
     {%- if node['data'].get('max_consecutive_auto_reply') is not none %}
     max_consecutive_auto_reply={{ node['data']['max_consecutive_auto_reply'] }},

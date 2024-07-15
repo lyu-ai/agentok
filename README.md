@@ -2,7 +2,7 @@
 
 # Agentok Studio
 
-# AutoGen Visualized - Build Agentic Apps in Seconds
+**AutoGen Visualized - Build Multi-Agent Apps with Drag-and-Drop Simplicity.**
 
 [![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/hughlv/agentok)
 [![Open in GitHub Codespaces](https://img.shields.io/badge/Codespaces-Open-blue?style=flat&logo=github)](https://codespaces.new/hughlv/agentok)

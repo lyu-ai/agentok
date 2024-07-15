@@ -33,6 +33,7 @@ class ChatManager:
         # If on_message is None, fallback to default print
         if on_message is None:
             on_message = self._print_message
+
         command = ["python3", source_path, message]
         print(colored(text=f'Running {" ".join(command)}', color='green'))
 
@@ -40,7 +41,7 @@ class ChatManager:
         env['PYTHONPATH'] = os.getcwd()
 
         # Check if there is already a subprocess for given chat_id
-        if self._subprocesses.get(chat_id):
+        if chat_id in self._subprocesses:
             print(colored(text=f'Found existing subprocess for chat_id {chat_id}. Terminating...', color='yellow'))
             old_process_info = self._subprocesses[chat_id]
             old_process = old_process_info['process']
@@ -57,7 +58,7 @@ class ChatManager:
         # Start the subprocess with the provided command
         process = await asyncio.create_subprocess_exec(
             *command,
-            env=env, # This is crucial when need to import local code such as app.extensions.dalle_agent
+            env=env,  # This is crucial when need to import local code such as app.extensions.dalle_agent
             stdout=subprocess.PIPE,
             stdin=subprocess.PIPE,
             stderr=subprocess.PIPE  # Capture stderr too, if you need to handle errors
@@ -89,8 +90,6 @@ class ChatManager:
                         pocketbase_client.set_chat_status(chat_id, 'running')
                 else:
                     output_parser.parse_line(response_message)
-            else:
-                break  # No more output, terminate loop
 
         # Wait for the subprocess to finish if it hasn't already
         await process.wait()

@@ -28,7 +28,7 @@ import {
   RiParentLine,
   RiParentFill,
 } from 'react-icons/ri';
-import { Edge, Node, ReactFlowInstance } from 'reactflow';
+import { Node, ReactFlowInstance } from 'reactflow';
 import { genId } from '@/utils/id';
 import ConversableAgent from '../components/node/ConversableAgent';
 import { ComponentType } from 'react';
@@ -219,70 +219,6 @@ export const getNodeIcon = (type: string, active?: boolean) => {
 };
 
 // ---------------------
-
-export const initialNodes: Node[] = [
-  {
-    id: '1001',
-    type: 'initializer',
-    data: {
-      name: 'Initializer',
-      label: 'initializer',
-      class: 'Initializer',
-    },
-    position: { x: -133, y: 246 },
-  },
-  {
-    id: '1',
-    type: 'user',
-    data: {
-      name: 'User',
-      label: 'user',
-      class: 'UserProxyAgent',
-      human_input_mode: 'NEVER',
-      max_consecutive_auto_reply: 0,
-    },
-    position: { x: 271, y: 222 },
-  },
-  {
-    id: '2',
-    type: 'assistant',
-    data: {
-      name: 'Assitant',
-      type: 'assistant',
-      label: 'assistant',
-      class: 'AssistantAgent',
-      max_consecutive_auto_reply: 10,
-    },
-    position: { x: 811, y: 216 },
-  },
-  {
-    id: '998',
-    type: 'note',
-    data: {
-      name: 'Note',
-      label: 'note',
-      class: 'Note',
-      content:
-        'Click **Start Chat** and select a sample picture and then enter: What is this?',
-    },
-    position: { x: 87, y: 740 },
-  },
-];
-
-export const initialEdges: Edge[] = [
-  {
-    id: '1001-1',
-    source: '1001',
-    target: '1',
-  },
-  {
-    id: '1-2',
-    source: '1',
-    target: '2',
-    animated: true,
-    type: 'converse',
-  },
-];
 
 export const setNodeData = (
   instance: ReactFlowInstance,

@@ -23,34 +23,37 @@ export function useProjects() {
   }, [data, error, setProjects, projects]);
 
   const [isCreating, setIsCreating] = useState(false);
-  const handleCreateProject = useCallback(async (): Promise<
-    Project | undefined
-  > => {
-    setIsCreating(true);
-    try {
-      const response = await fetch(`/api/projects`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          name: 'New Project',
-          project: {},
-          owner: pb.authStore.model?.id,
-        }),
-      });
-      if (!response.ok) throw new Error(await response.text());
-      const newProject = await response.json();
-      setProjects([newProject, ...projects]);
-      mutate(); // Revalidate the SWR cache
-      return newProject;
-    } catch (error) {
-      console.error('Failed to create project:', error);
-    } finally {
-      setIsCreating(false);
-    }
-  }, [setProjects, mutate]);
+  const handleCreateProject = useCallback(
+    async (project?: Project): Promise<Project | undefined> => {
+      setIsCreating(true);
+      try {
+        const response = await fetch(`/api/projects`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            name: project?.name ?? 'New Project',
+            description:
+              project?.description ?? 'A new project with sample nodes.',
+            flow: project?.flow ?? {},
+            owner: pb.authStore.model?.id,
+          }),
+        });
+        if (!response.ok) throw new Error(await response.text());
+        const newProject = await response.json();
+        setProjects([newProject, ...projects]);
+        mutate(); // Revalidate the SWR cache
+        return newProject;
+      } catch (error) {
+        console.error('Failed to create project:', error);
+      } finally {
+        setIsCreating(false);
+      }
+    },
+    [setProjects, mutate]
+  );
 
   const [isDeleting, setIsDeleting] = useState(false);
   const handleDeleteProject = useCallback(
