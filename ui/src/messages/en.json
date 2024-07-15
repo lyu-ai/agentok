@@ -349,8 +349,8 @@
       "select-chat": "Select a session to continue, or start a new one from Workflow or AutoflowTemplate."
     },
     "Projects": {
-      "title": "Agentok Projects",
-      "description": "Simplifying the Creation of Multi-Agent Apps with Agentok Studio.",
+      "title": "Agentok Studio",
+      "description": "Build Multi-Agent Apps with Drag-and-Drop Simplicity.",
       "create-project": "Create New Project",
       "start-from-template": "Start from Template",
       "discover-marketplace": "Discover More in Marketplace"

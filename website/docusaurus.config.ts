@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'Agentok Studio',
-  tagline: 'AutoGen Visualized - Visual Tools for Multi-Agent Development.',
+  tagline: 'AutoGen Visualized - Build Multi-Agent Apps with Drag-and-Drop Simplicity.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
