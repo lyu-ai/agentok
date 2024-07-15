@@ -366,7 +366,7 @@ const ChatPane = ({
               className="btn btn-xs btn-ghost btn-circle"
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('open-in-new-window')}
-              href={`/chats/${chat?.id}`}
+              href={`/chat?id=${chat?.id}`}
               target="_blank"
             >
               <RxOpenInNewWindow className="w-4 h-4" />
