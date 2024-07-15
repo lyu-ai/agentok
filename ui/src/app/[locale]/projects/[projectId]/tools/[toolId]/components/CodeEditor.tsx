@@ -32,26 +32,26 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     if (tool?.code !== code) setCode(tool?.code);
   }, [tool]);
 
-  // const debouncedUpdateProject = useCallback(
-  //   debounce((updatedCode: string) => {
-  //     updateProject({
-  //       tools: project?.tools?.map((f: any) => {
-  //         if (f.id === tool.id) {
-  //           return {
-  //             ...f,
-  //             code: updatedCode,
-  //           };
-  //         }
-  //         return f;
-  //       }),
-  //     });
-  //   }, 500),
-  //   [project, tool.id, updateProject]
-  // );
+  const debouncedUpdateProject = useCallback(
+    debounce((updatedCode: string) => {
+      updateProject({
+        tools: project?.tools?.map((f: any) => {
+          if (f.id === tool.id) {
+            return {
+              ...f,
+              code: updatedCode,
+            };
+          }
+          return f;
+        }),
+      });
+    }, 500),
+    [project, tool.id, updateProject]
+  );
 
   useEffect(() => {
     if (code !== undefined) {
-      //debouncedUpdateProject(code);
+      debouncedUpdateProject(code);
     }
   }, [code]);
 

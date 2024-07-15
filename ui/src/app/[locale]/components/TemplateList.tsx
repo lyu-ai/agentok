@@ -46,7 +46,7 @@ export const TemplateLoading = () => {
   );
 };
 
-export const TemplateBlock = ({
+export const TemplateCard = ({
   template,
   index,
   className,
@@ -235,7 +235,7 @@ const TemplateList = ({ maxCount }: any) => {
   return (
     <div className="flex flex-wrap justify-center gap-4 p-2">
       {slicedTemplates.map((template: any, index: number) => (
-        <TemplateBlock key={template.id} template={template} index={index} />
+        <TemplateCard key={template.id} template={template} index={index} />
       ))}
     </div>
   );

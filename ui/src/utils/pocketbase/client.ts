@@ -31,6 +31,9 @@ export const getRecordFileUrl = (
 
 export const getAssetFileUrl = (pocketbase: PocketBase) =>
   getRecordFileUrl(client, 'file');
+
 export const getAvatarUrl = getRecordFileUrl(client, 'avatar');
+
+export const getIconUrl = getRecordFileUrl(client, 'icon');
 
 export default client;

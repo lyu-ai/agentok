@@ -1,5 +1,6 @@
+'use client';
 import React, { useEffect } from 'react';
-import { GoQuestion } from 'react-icons/go';
+import { RiQuestionLine } from 'react-icons/ri';
 import Markdown from '@/components/Markdown';
 import { createRoot } from 'react-dom/client';
 import clsx from 'clsx';
@@ -49,7 +50,7 @@ const Tip = ({ content, icon, className, classNameContent, ...props }: any) => {
       className={clsx(className, 'cursor-pointer')}
       {...props}
     >
-      {icon ?? <GoQuestion className="w-4 h-4" />}
+      {icon ?? <RiQuestionLine className="w-4 h-4" />}
     </div>
   );
 };
