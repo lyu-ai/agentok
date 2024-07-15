@@ -36,6 +36,7 @@ export const initialNodes: Node[] = [
       label: 'user',
       class: 'UserProxyAgent',
       human_input_mode: 'NEVER',
+      termination_msg: 'TERMINATE',
       enable_code_execution: true,
       max_consecutive_auto_reply: 10,
     },
