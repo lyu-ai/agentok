@@ -18,14 +18,15 @@ export const settingList = [
   },
   {
     name: 'Models',
-    description: 'View and manage robot action records',
+    description: 'View and manage robot action records.',
     icon: RiBrainLine,
     activeIcon: RiBrainFill,
     path: '/settings/models',
   },
   {
-    name: 'Advanced',
-    description: 'Advanced settings, including danger zone',
+    name: 'Danger Zone',
+    description:
+      'Danger zone, sentitive operations including permanent deletion of the project.',
     icon: RiFireLine,
     activeIcon: RiFireFill,
     path: '/settings/advanced',

@@ -20,7 +20,7 @@ const SidebarLayout = ({
       )}
     >
       <Sidebar items={sidebarItems} pathPrefix={pathPrefix} />
-      <div className="flex flex-1 w-full h-full overflow-y-auto bg-base-100/50 dark:bg-base-content/10 rounded-lg p-2 shadow">
+      <div className="flex flex-1 w-full h-full overflow-y-auto bg-base-100/50 dark:bg-base-content/10 rounded-lg p-4 shadow">
         {children}
       </div>
     </div>

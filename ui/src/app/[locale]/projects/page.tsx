@@ -50,7 +50,7 @@ const Page = () => {
         <TemplateList maxCount={3} />
         <Link
           href="/marketplace"
-          className="flex flex-col items-center link link-lg link-primary py-8 gap-4 text-2xl"
+          className="flex flex-col items-center link link-lg link-primary py-8 gap-4"
         >
           {t('discover-marketplace')}
         </Link>
