@@ -237,7 +237,6 @@ export const setNodeData = (
           };
         } else node.data = { ...node.data, ...dataset };
       }
-      console.log('node', node);
       return node;
     })
   );

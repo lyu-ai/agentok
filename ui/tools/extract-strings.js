@@ -4,7 +4,6 @@ const fs = require('fs');
 async function extractStrings() {
   const regex = /<\w+(?:\s+[^<>"]+)*?>([\u4e00-\u9fff]+)<\/\w+>/g;
   const tsxFiles = await glob('src/**/*.tsx', {});
-  console.log('Found', tsxFiles.length, 'tsx files');
 
   tsxFiles.forEach(file => {
     const content = fs.readFileSync(file, 'utf8');

@@ -6,8 +6,8 @@ import {
   RiSettings3Line,
   RiSwap3Line,
   RiSwap3Fill,
-  RiPuzzle2Line,
-  RiPuzzle2Fill,
+  RiBriefcase4Line,
+  RiBriefcase4Fill,
   RiBookMarkedLine,
   RiBookMarkedFill,
 } from 'react-icons/ri';
@@ -26,8 +26,8 @@ export const getProjectNavbarItems = (projectId: string) => {
     {
       id: 'tools',
       label: 'Tools',
-      icon: RiPuzzle2Line,
-      activeIcon: RiPuzzle2Fill,
+      icon: RiBriefcase4Line,
+      activeIcon: RiBriefcase4Fill,
       href: `/projects/${projectId}/tools`,
     },
     {

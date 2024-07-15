@@ -24,7 +24,6 @@ export async function POST(request: NextRequest) {
       res = await pb.collection('projects').update(project.id, project);
     } else {
       delete project.id;
-      console.log('POST /projects', project);
       res = await pb.collection('projects').create(project);
     }
     return new Response(JSON.stringify(res));
