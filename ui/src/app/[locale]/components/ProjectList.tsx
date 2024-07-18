@@ -69,7 +69,7 @@ export const ProjectBlock = ({ project, className }: any) => {
           {project.name}
         </h2>
         <div className="text-xs text-base-content/40">
-          {new Date(project.created).toLocaleString()}
+          {new Date(project.created_at).toLocaleString()}
         </div>
         <Markdown className="text-left text-sm h-20 break-word word-wrap line-clamp-2">
           {project.description}

@@ -4,7 +4,7 @@ from asyncio import subprocess
 import signal
 from termcolor import colored
 
-from .pocketbase_client import pocketbase_client
+from .supabase_client import supabase_client
 
 from .output_parser import OutputParser  # Assuming OutputParser is in `services/output_parser.py`
 
@@ -53,7 +53,7 @@ class ChatManager:
             # Wait for the process to terminate before moving on
             await old_process.wait()
 
-        pocketbase_client.set_chat_status(chat_id, 'running')
+        supabase_client.set_chat_status(chat_id, 'running')
 
         # Start the subprocess with the provided command
         process = await asyncio.create_subprocess_exec(
@@ -85,9 +85,9 @@ class ChatManager:
                         'content': self.strip_prefix(response_message, ('__STATUS_RECEIVED_HUMAN_INPUT__', '__STATUS_WAIT_FOR_HUMAN_INPUT__')),
                     })
                     if '__STATUS_WAIT_FOR_HUMAN_INPUT__' in response_message:
-                        pocketbase_client.set_chat_status(chat_id, 'wait_for_human_input')
+                        supabase_client.set_chat_status(chat_id, 'wait_for_human_input')
                     else:
-                        pocketbase_client.set_chat_status(chat_id, 'running')
+                        supabase_client.set_chat_status(chat_id, 'running')
                 else:
                     output_parser.parse_line(response_message)
 
@@ -101,13 +101,13 @@ class ChatManager:
         # Check the exit code of the subprocess to see if there were errors
         if process.returncode == -signal.SIGTERM:
             print(colored(text=f'Assistant process terminated by user', color='yellow'))
-            pocketbase_client.set_chat_status(chat_id, 'aborted')
+            supabase_client.set_chat_status(chat_id, 'aborted')
             on_message({
                 'type': 'assistant',
                 'content': '__STATUS_COMPLETED__ TERMINATED',
             })
         elif process.returncode != 0:
-            pocketbase_client.set_chat_status(chat_id, 'failed')
+            supabase_client.set_chat_status(chat_id, 'failed')
             # Read the error message from stderr (optional)
             err = await process.stderr.read()
             error_message = err.decode().strip()
@@ -120,7 +120,7 @@ class ChatManager:
                 'content': f'__STATUS_COMPLETED__ {process.returncode}: {last_line}',
             })
         else:
-            pocketbase_client.set_chat_status(chat_id, 'completed')
+            supabase_client.set_chat_status(chat_id, 'completed')
             on_message({
                 'type': 'assistant',
                 'content': '__STATUS_COMPLETED__ DONE',
@@ -136,7 +136,7 @@ class ChatManager:
             print('👤', user_input)
             proc_info["stdin"].write(user_input.encode() + b'\n')
             await proc_info["stdin"].drain()
-            pocketbase_client.set_chat_status(chat_id, 'running')
+            supabase_client.set_chat_status(chat_id, 'running')
             return {"detail": "Input sent to assistant."}
         except Exception as e:
             return {"error": str(e)}

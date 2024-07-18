@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import useProjectStore, { Project } from '@/store/projects';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { fetcher } from './fetcher';
-import pb from '@/utils/pocketbase/client';
+import supabase from '@/utils/supabase/client';
 import { ProjectTemplate } from '@/store/templates';
 
 export function useProjects() {
@@ -22,6 +22,19 @@ export function useProjects() {
     }
   }, [data, error, setProjects, projects]);
 
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUserId(user?.id || null);
+    };
+
+    fetchUserId();
+  }, []);
+
   const [isCreating, setIsCreating] = useState(false);
   const handleCreateProject = useCallback(
     async (project?: Project): Promise<Project | undefined> => {
@@ -38,7 +51,7 @@ export function useProjects() {
             description:
               project?.description ?? 'A new project with sample nodes.',
             flow: project?.flow ?? {},
-            owner: pb.authStore.model?.id,
+            user_id: userId,
           }),
         });
         if (!response.ok) throw new Error(await response.text());
@@ -57,7 +70,7 @@ export function useProjects() {
 
   const [isDeleting, setIsDeleting] = useState(false);
   const handleDeleteProject = useCallback(
-    async (id: string) => {
+    async (id: number) => {
       setIsDeleting(true);
       const previousProjects = [...data];
       deleteProject(id);
@@ -79,7 +92,7 @@ export function useProjects() {
 
   const [isUpdating, setIsUpdating] = useState(false);
   const handleUpdateProject = useCallback(
-    async (id: string, project: Partial<Project>) => {
+    async (id: number, project: Partial<Project>) => {
       setIsUpdating(true);
       const previousProject = projects.find(p => p.id === id);
       if (!previousProject) return;
@@ -122,7 +135,7 @@ export function useProjects() {
             name: template.name,
             description: template.description,
             project: template.project,
-            owner: pb.authStore.model?.id,
+            user_id: userId,
           }),
         });
         if (!response.ok) throw new Error(response.statusText);
@@ -156,7 +169,7 @@ export function useProjects() {
   };
 }
 
-export function useProject(id: string) {
+export function useProject(id: number) {
   const {
     isLoading,
     isError,

@@ -35,7 +35,9 @@ import { ComponentType } from 'react';
 import Initializer from '../components/node/Initializer';
 import ConverseEdge from '../components/edge/ConverseEdge';
 import NestedChat from '../components/node/NestedChat';
-import GPTAssistantNode from '../components/node/GPTAssistant';
+import GPTAssistant from '../components/node/GPTAssistant';
+import RetrieveUserProxyAgent from '../components/node/RetrieveUser';
+import RetrieveAssistant from '../components/node/RetrieveAssistant';
 
 export const nodeTypes = {
   initializer: Initializer,
@@ -45,7 +47,9 @@ export const nodeTypes = {
   note: Note,
   conversable: ConversableAgent,
   nestedchat: NestedChat,
-  gpt_assistant: GPTAssistantNode,
+  gpt_assistant: GPTAssistant,
+  retrieve_user: RetrieveUserProxyAgent,
+  retrieve_assistant: RetrieveAssistant,
 };
 
 export const edgeTypes = {
@@ -61,6 +65,8 @@ export const isConversable = (node?: Node) =>
     'groupchat',
     'nestedchat',
     'gpt_assistant',
+    'retrieve_assistant',
+    'retrieve_user',
   ].includes(node.type);
 
 // Fields of Node Meta:
@@ -151,6 +157,24 @@ export const agentNodes: NodeMeta[] = [
 
 export const advancedNodes: NodeMeta[] = [
   {
+    id: 'retrieve_assistant',
+    icon: RiRobot2Line,
+    activeIcon: RiRobot2Fill,
+    name: 'RetrieveAssistant',
+    label: 'retrieve-assistant',
+    type: 'assistant',
+    class: 'RetrieveAssistantAgent',
+  },
+  {
+    id: 'retrieve_user',
+    icon: RiUserSearchLine,
+    activeIcon: RiUserSearchFill,
+    name: 'RetrieveUserProxy',
+    label: 'retrieve-user',
+    type: 'user',
+    class: 'RetrieveUserProxyAgent',
+  },
+  {
     id: 'gpt_assistant',
     icon: RiOpenaiLine,
     activeIcon: RiOpenaiFill,
@@ -176,24 +200,6 @@ export const advancedNodes: NodeMeta[] = [
   //   label: 'llava',
   //   type: 'assistant',
   //   class: 'LLaVAAgent',
-  // },
-  // {
-  //   id: 'retrieve_assistant',
-  //   icon: RiRobot2Line,
-  //   activeIcon: RiRobot2Fill,
-  //   name: 'RetrieveAssistant',
-  //   label: 'retrieve-assistant',
-  //   type: 'assistant',
-  //   class: 'RetrieveAssistantAgent',
-  // },
-  // {
-  //   id: 'retrieve_user_proxy',
-  //   icon: RiUserSearchLine,
-  //   activeIcon: RiUserSearchFill,
-  //   name: 'RetrieveUserProxy',
-  //   label: 'retrieve-user',
-  //   type: 'user',
-  //   class: 'RetrieveUserProxyAgent',
   // },
   // {
   //   id: 'math_user_proxy',

@@ -9,7 +9,7 @@ class Message(BaseModel):
   content: str
   chat: str
   type: Literal['user', 'assistant']
-  owner: str
+  user_id: str
   created: Optional[str] = None
 
 Node = Dict[str, Any]
@@ -45,7 +45,7 @@ class Project(BaseModel):
   flow: Flow
   tools: Optional[List[Tool]] = None
   settings: Optional[Dict[str, Any]] = None
-  owner: Optional[str] = None
+  user_id: Optional[str] = None
   created: str
   updated: str
 
@@ -60,7 +60,7 @@ class ChatCreate(BaseModel):
     from_type: Literal['project', 'template']
     from_project: Optional[str] = None
     from_template: Optional[str] = None
-    owner: str
+    user_id: str
 
 class Chat(ChatCreate):
     id: str
@@ -82,7 +82,7 @@ class ApiKeyCreate(BaseModel):
 class ApiKey(ApiKeyCreate):
     id: str
     key: str
-    owner: str
+    user_id: str
     created: str
     updated: str
 

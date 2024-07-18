@@ -4,12 +4,14 @@ import Link from 'next/link';
 import {
   RiSettings3Fill,
   RiSettings3Line,
-  RiSwap3Line,
-  RiSwap3Fill,
   RiBriefcase4Line,
   RiBriefcase4Fill,
-  RiBookMarkedLine,
-  RiBookMarkedFill,
+  RiShuffleLine,
+  RiShuffleFill,
+  RiBook3Fill,
+  RiBook3Line,
+  RiBookOpenFill,
+  RiBookOpenLine,
 } from 'react-icons/ri';
 import clsx from 'clsx';
 import { pathToRegexp } from 'path-to-regexp';
@@ -19,8 +21,8 @@ export const getProjectNavbarItems = (projectId: string) => {
     {
       id: 'flow',
       label: 'Flow',
-      icon: RiSwap3Line,
-      activeIcon: RiSwap3Fill,
+      icon: RiShuffleLine,
+      activeIcon: RiShuffleFill,
       href: `/projects/${projectId}/flow`,
     },
     {
@@ -31,11 +33,11 @@ export const getProjectNavbarItems = (projectId: string) => {
       href: `/projects/${projectId}/tools`,
     },
     {
-      id: 'knowledge',
+      id: 'datasets',
       label: 'Knowledge',
-      icon: RiBookMarkedLine,
-      activeIcon: RiBookMarkedFill,
-      href: `/projects/${projectId}/knowledge`,
+      icon: RiBookOpenLine,
+      activeIcon: RiBookOpenFill,
+      href: `/projects/${projectId}/datasets`,
     },
     {
       id: 'settings',

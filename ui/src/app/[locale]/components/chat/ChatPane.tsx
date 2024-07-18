@@ -1,11 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { GoArrowDown, GoArrowUp, GoPencil } from 'react-icons/go';
+import {
+  RiArrowDownLine,
+  RiArrowUpLine,
+  RiPencilLine,
+  RiWindowLine,
+} from 'react-icons/ri';
 import { MdOutlineCleaningServices } from 'react-icons/md';
-import { RxOpenInNewWindow } from 'react-icons/rx';
 import ChatInput from './ChatInput';
 import { genId } from '@/utils/id';
-import { UnsubscribeFunc } from 'pocketbase';
-import pb from '@/utils/pocketbase/client';
+import supabase from '@/utils/supabase/client';
+import {
+  RealtimeChannel,
+  RealtimePostgresChangesPayload,
+  RealtimePostgresInsertPayload,
+  RealtimePostgresUpdatePayload,
+} from '@supabase/supabase-js';
 import { StatusMessage } from '@/utils/chat';
 import { TbArrowBarToLeft, TbArrowBarRight } from 'react-icons/tb';
 import { useTranslations } from 'next-intl';
@@ -27,6 +36,7 @@ import {
   RiUnpinLine,
 } from 'react-icons/ri';
 import Loading from '@/components/Loading';
+import { Chat, ChatMessage } from '@/store/chats';
 
 const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
   const t = useTranslations('component.ChatPane');
@@ -46,7 +56,7 @@ const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
         className="btn btn-primary btn-outline btn-xs btn-circle"
         onClick={() => setMinimized(!minimized)}
       >
-        {minimized ? <GoArrowUp /> : <GoArrowDown />}
+        {minimized ? <RiArrowUpLine /> : <RiArrowDownLine />}
       </button>
       {!minimized &&
         sampleMessages.map((msg, i) => (
@@ -105,7 +115,7 @@ const ChatPane = ({
   standalone,
   onStartChat,
 }: {
-  chatId: string;
+  chatId: number;
   standalone?: boolean;
   onStartChat?: () => void;
 }) => {
@@ -152,60 +162,81 @@ const ChatPane = ({
 
   useEffect(() => {
     if (!chatId) return;
+
     fetchMessages();
 
-    fetch(`/api/chats/${chatId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    })
-      .then(resp => resp.json())
-      .then((json: any) => {
-        setStatus(json.status);
-      });
+    // Fetch chat status
+    const fetchChatStatus = async () => {
+      const { data, error } = await supabase
+        .from('chats')
+        .select('status')
+        .eq('id', chatId)
+        .single();
+
+      if (error) {
+        console.error('Error fetching chat status:', error);
+      } else if (data) {
+        setStatus(data.status);
+      }
+    };
+
+    fetchChatStatus();
 
     extractHelp();
 
-    let unsubMessageFunc: UnsubscribeFunc | undefined;
-    let unsubChatFunc: UnsubscribeFunc | undefined;
-    pb.collection('chat_messages')
-      .subscribe('*', payload => {
-        console.log('changes_event(chat_messages):', payload);
-        if (payload.record.chat !== chatId) return;
-        if (payload.record.type !== 'user') {
-          // The user message was added when sending, no need to add it again.
-          setMessages(msgs =>
-            msgs.some(m => m.id === payload.record.id)
-              ? msgs
-              : [...msgs, payload.record as any]
-          ); // Avoid duplicate messages
+    // Subscribe to chat_messages
+    const messagesChannel: RealtimeChannel = supabase
+      .channel('chat_messages')
+      .on<ChatMessage>(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'chat_messages',
+          filter: `chat=eq.${chatId}`,
+        },
+        (
+          payload:
+            | RealtimePostgresInsertPayload<ChatMessage>
+            | RealtimePostgresUpdatePayload<ChatMessage>
+        ) => {
+          console.log('changes_event(chat_messages):', payload);
+          if (payload.new && payload.new.type !== 'user') {
+            setMessages(msgs =>
+              msgs.some(m => m.id === payload.new.id)
+                ? msgs
+                : [...msgs, payload.new]
+            );
+          }
         }
-      })
-      .then(unsubFunc => {
-        unsubMessageFunc = unsubFunc;
-      });
+      )
+      .subscribe();
 
-    pb.collection('chats')
-      .subscribe('*', payload => {
-        if (payload.record.id !== chatId) return;
-        console.log('changes_event(chats):', payload);
-        payload.record && setStatus(payload.record.status);
-      })
-      .then(unsubFunc => {
-        unsubChatFunc = unsubFunc;
-      });
+    // Subscribe to chats
+    const chatsChannel: RealtimeChannel = supabase
+      .channel('chats')
+      .on<Chat>(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'chats',
+          filter: `id=eq.${chatId}`,
+        },
+        (payload: RealtimePostgresChangesPayload<Chat>) => {
+          console.log('changes_event(chats):', payload);
+          if (payload.new) {
+            setStatus(payload.new.status);
+          }
+        }
+      )
+      .subscribe();
 
+    // Cleanup function
     return () => {
-      if (unsubMessageFunc) {
-        unsubMessageFunc();
-      }
-      if (unsubChatFunc) {
-        unsubChatFunc();
-      }
+      if (messagesChannel) supabase.removeChannel(messagesChannel);
+      if (chatsChannel) supabase.removeChannel(chatsChannel);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatId]);
 
   // This is to make sure that the scroll is at the bottom when the messages are updated, such as when
@@ -369,7 +400,7 @@ const ChatPane = ({
               href={`/chat?id=${chat?.id}`}
               target="_blank"
             >
-              <RxOpenInNewWindow className="w-4 h-4" />
+              <RiWindowLine className="w-4 h-4" />
             </a>
           )}
           {!standalone && chat?.sourceType === 'project' && (
@@ -395,7 +426,7 @@ const ChatPane = ({
               href={`/projects/${chat.sourceId}/flow`}
               target="_blank"
             >
-              <GoPencil className="w-4 h-4" />
+              <RiPencilLine className="w-4 h-4" />
             </a>
           )}
         </div>

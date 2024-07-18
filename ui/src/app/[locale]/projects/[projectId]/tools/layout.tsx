@@ -19,10 +19,11 @@ const Layout = ({
   children,
   params,
 }: PropsWithChildren<{ params: { projectId: string } }>) => {
+  const projectId = parseInt(params.projectId, 10);
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations('tool.Config');
-  const { project, updateProject } = useProject(params.projectId);
+  const { project, updateProject } = useProject(projectId);
   const [isCreating, setIsCreating] = useState(false);
   const [tools, setTools] = useState<Tool[]>([]);
 
@@ -37,13 +38,13 @@ const Layout = ({
     await updateProject({
       tools: [
         {
-          id: 't' + genId(),
+          id: genId(),
           name: 'hello',
-          description: 'Print hello world message.',
+          description: 'Send hello world message.',
           code: '',
           parameters: [
             {
-              id: 'param-' + genId(),
+              id: genId(),
               name: 'message',
               type: 'str',
               description: 'The message to be printed.',

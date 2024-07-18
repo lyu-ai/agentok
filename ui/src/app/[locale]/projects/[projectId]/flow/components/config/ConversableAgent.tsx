@@ -122,7 +122,7 @@ const ConversableAgentConfig = ({
   const { projectId } = useProjectId();
   const { project, updateProject } = useProject(projectId);
 
-  const handleDrop = async (toolId: string, scene: 'execution' | 'llm') => {
+  const handleDrop = async (toolId: number, scene: 'execution' | 'llm') => {
     if (!project) {
       return;
     }
@@ -149,7 +149,7 @@ const ConversableAgentConfig = ({
     });
   };
 
-  const handleRemove = async (toolId: string, scene: 'execution' | 'llm') => {
+  const handleRemove = async (toolId: number, scene: 'execution' | 'llm') => {
     if (!project) {
       return;
     }
@@ -213,7 +213,7 @@ const ConversableAgentConfig = ({
           </div>
           <DropZone
             placeholder={t('tools-for-execution-placeholder')}
-            onDrop={(toolId: string) => handleDrop(toolId, 'execution')}
+            onDrop={(toolId: number) => handleDrop(toolId, 'execution')}
           >
             {project?.tools &&
               project.tools
@@ -237,7 +237,7 @@ const ConversableAgentConfig = ({
           </div>
           <DropZone
             placeholder={t('tools-for-llm-placeholder')}
-            onDrop={(toolId: string) => handleDrop(toolId, 'llm')}
+            onDrop={(toolId: number) => handleDrop(toolId, 'llm')}
           >
             {project?.tools &&
               project.tools

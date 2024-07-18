@@ -2,14 +2,14 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export type ToolParameter = {
-  id: string;
+  id: number;
   name: string;
   description: string;
   type: 'str' | 'int' | 'bool' | 'float';
 };
 
 export type Tool = {
-  id: string;
+  id: number;
   name: string;
   description: string;
   async?: boolean;
@@ -19,12 +19,12 @@ export type Tool = {
 };
 
 export interface Project {
-  id: string;
+  id: number;
   name: string;
   description?: string;
   flow: any; // Complicated JSON object
   tools?: Tool[];
-  knowledge?: any;
+  datasets?: any;
   settings?: any;
   created?: string;
   updated?: string;
@@ -35,9 +35,9 @@ interface ProjectState {
   chatPanePinned: boolean;
   nodePanePinned: boolean;
   setProjects: (projects: Project[]) => void;
-  updateProject: (id: string, project: Partial<Project>) => void;
-  deleteProject: (id: string) => void;
-  getProjectById: (id: string) => Project | undefined;
+  updateProject: (id: number, project: Partial<Project>) => void;
+  deleteProject: (id: number) => void;
+  getProjectById: (id: number) => Project | undefined;
   pinChatPane: (pin: boolean) => void;
   pinNodePane: (pin: boolean) => void;
 }

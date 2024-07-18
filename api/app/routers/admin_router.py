@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from ..models import ApiKey, ApiKeyCreate
 from ..services.admin_service import AdminService
-from ..dependencies import oauth2_scheme, get_admin_service
+from ..dependencies import get_admin_service
 
 router = APIRouter()
 

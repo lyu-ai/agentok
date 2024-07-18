@@ -4,7 +4,7 @@ export const fetcher = async (url: string) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    credentials: 'include',
+    credentials: 'same-origin',
   });
   if (!response.ok) {
     console.error(`Failed fetcher ${url}:`, response.statusText);

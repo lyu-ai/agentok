@@ -1,6 +1,6 @@
 'use client';
 
-import pb from '@/utils/pocketbase/client';
+import supabase from '@/utils/supabase/client';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -41,12 +41,10 @@ const Login = ({
   const signIn = async (asGuest?: boolean) => {
     try {
       setAuthenticating(true);
-      await pb
-        .collection('users')
-        .authWithPassword(
-          asGuest ? 'hi@agentok.ai' : email,
-          asGuest ? '12345678' : password
-        );
+      await supabase.auth.signInWithPassword({
+        email: asGuest ? 'hi@agentok.ai' : email,
+        password: asGuest ? '12345678' : password,
+      });
       setError('');
       router.push(redirectTo ?? '/');
     } catch (e) {
@@ -59,28 +57,42 @@ const Login = ({
   const signInWithOAuth = async (provider: any) => {
     try {
       setAuthenticating(true);
-      const authData = await pb.collection('users').authWithOAuth2({
+      const authData = await supabase.auth.signInWithOAuth({
         provider,
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
       setError('');
-      // Update the avatar and name
-      // PocketBase will update email/verified automatically!
-      // console.log(authData);
-      // console.log(pb.authStore);
-      // Different OAuth2 will be merged to the same user record, so need to update the user and avatar every time
-      if (authData.meta?.name || authData.meta?.avatarUrl) {
-        const formData = new FormData();
-        if (!authData.meta?.name) {
-          formData.append('name', authData.meta?.name);
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user?.user_metadata.name || user?.user_metadata.avatarUrl) {
+        const updates: Partial<{
+          name: string;
+          avatar_url: string;
+        }> = {};
+        if (user.user_metadata.name) {
+          updates['name'] = user.user_metadata.name;
         }
-        if (authData.meta?.avatarUrl) {
-          const avatarResp = await fetch(authData.meta?.avatarUrl).then(resp =>
-            resp.blob()
-          );
-          formData.append('avatar', avatarResp);
+        if (user.user_metadata.avatar_url) {
+          updates['avatar_url'] = user.user_metadata.avatar_url;
+        }
+        if (user.user_metadata.name) {
+          updates['name'] = user.user_metadata.name;
+        }
+        if (user.user_metadata.avatar_url) {
+          updates['avatar_url'] = user.user_metadata.avatar_url;
         }
 
-        await pb.collection('users').update(authData.record.id, formData);
+        if (Object.keys(updates).length > 0) {
+          const { error } = await supabase
+            .from('users')
+            .update(updates)
+            .eq('id', user.id);
+
+          if (error) throw error;
+        }
       }
       router.push(redirectTo ?? '/');
     } catch (e) {
@@ -92,14 +104,28 @@ const Login = ({
 
   const signUp = async () => {
     try {
-      const authData = await pb.collection('users').create({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        passwordConfirm: password,
       });
-      setError('');
+
+      if (error) throw error;
+
+      if (data.user) {
+        setError('');
+        // Optionally, you can add additional user data to a custom table
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert({ id: data.user.id, email: data.user.email });
+
+        if (profileError) throw profileError;
+
+        // Handle successful sign up
+        console.log('Sign up successful', data.user);
+        // You might want to redirect the user or show a success message
+      }
     } catch (e) {
-      setError(`Sign up failed. ${e}`);
+      setError(`Sign up failed. ${(e as any).message}`);
     }
   };
 

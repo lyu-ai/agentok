@@ -35,7 +35,7 @@ const Page = () => {
           alt="logo"
           className="mt-8"
         />
-        <span className="text-5xl font-bold p-4">{t('title')}</span>
+        <span className="text-5xl font-bold font-arial p-4">{t('title')}</span>
         <span className="text-lg p-4">{t('description')}</span>
         <ProjectList />
         <button onClick={onCreateProject} className="btn btn-lg btn-primary">

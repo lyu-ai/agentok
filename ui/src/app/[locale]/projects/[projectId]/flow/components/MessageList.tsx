@@ -10,8 +10,8 @@ import {
 import { IoReload } from 'react-icons/io5';
 import Markdown from '@/components/Markdown';
 import { useTranslations } from 'next-intl';
-import { getAvatarUrl } from '@/utils/pocketbase/client';
-import pb from '@/utils/pocketbase/client';
+import { getAvatarUrl } from '@/utils/supabase/client';
+import pb from '@/utils/supabase/client';
 import { useChat } from '@/hooks';
 
 const MessageBlock = ({ chatId, message, onSend }: any) => {

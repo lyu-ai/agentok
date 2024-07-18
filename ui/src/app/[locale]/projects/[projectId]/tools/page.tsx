@@ -8,8 +8,9 @@ import { useProject, useSharedTools } from '@/hooks';
 import { toast } from 'react-toastify';
 
 const Page = ({ params }: { params: { projectId: string } }) => {
+  const projectId = parseInt(params.projectId, 10);
   const t = useTranslations('tool.Config');
-  const { project, updateProject } = useProject(params.projectId);
+  const { project, updateProject } = useProject(projectId);
   const { tools: sharedTools } = useSharedTools();
   const router = useRouter();
 
@@ -20,7 +21,7 @@ const Page = ({ params }: { params: { projectId: string } }) => {
       console.error(`Shared tool ${sharedToolId} not found.`);
       return;
     }
-    const newToolId = 't' + genId();
+    const newToolId = genId();
     await updateProject({
       tools: [
         {

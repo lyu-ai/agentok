@@ -95,13 +95,13 @@ const ProjectPicker = ({ activeProjectId, className }: any) => {
 
   const onCreateProject = async () => {
     const newProject = await createProject({
-      id: '', // Will be replaced by actual id from server side
+      id: -1, // Will be replaced by actual id from server side
       name: 'New Project',
       description: 'A new project with sample flow.',
-      flow: JSON.stringify({
+      flow: {
         nodes: initialNodes,
         edges: initialEdges,
-      }),
+      },
     });
     if (!newProject) {
       toast.error('Failed to create project');
@@ -122,7 +122,7 @@ const ProjectPicker = ({ activeProjectId, className }: any) => {
   return (
     <div className="ml-2 flex items-center gap-0.5">
       <Listbox
-        value={activeProject || { id: '', name: 'Select Project' }}
+        value={activeProject || { id: -1, name: 'Select Project' }}
         onChange={v => router.push(`/projects/${v?.id}/flow`)}
       >
         <ListboxButton

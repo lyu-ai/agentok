@@ -8,7 +8,7 @@ export type SharedTool = {
   icon: string;
   description: string;
   tool: Tool; // tool id
-  owner: string;
+  user_id: string;
 };
 
 export function useSharedTools() {

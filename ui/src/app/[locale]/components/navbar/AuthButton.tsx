@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { GoPersonFill } from 'react-icons/go';
 import clsx from 'clsx';
-import pb, { getAvatarUrl } from '@/utils/pocketbase/client';
+import supabase, { getAvatarUrl } from '@/utils/supabase/client';
 import {
   RiBrainLine,
   RiGithubLine,
@@ -14,6 +14,7 @@ import {
   RiSettings3Line,
   RiVerifiedBadgeLine,
 } from 'react-icons/ri';
+import { useUser } from '@/hooks/useUser';
 
 const UserImage = ({ user, className }: any) => {
   // State to handle image load error
@@ -48,7 +49,7 @@ const UserPanel = ({ user }: { user: any }) => {
   const router = useRouter();
 
   const signOut = async () => {
-    pb.authStore.clear();
+    await supabase.auth.signOut();
     router.replace('/auth/login');
   };
 
@@ -175,15 +176,8 @@ const UserAvatar = ({ user }: any) => {
 };
 
 const AuthButton = () => {
-  const [user, setUser] = useState<any>(null);
+  const { user } = useUser();
   const pathname = usePathname();
-  useEffect(() => {
-    setUser(pb.authStore.model);
-    const unsubsribe = pb.authStore.onChange(() => {
-      setUser(pb.authStore.model);
-    });
-    return unsubsribe;
-  }, []);
 
   if (pathname.includes('/auth')) {
     return null; // don't show auth button on login page

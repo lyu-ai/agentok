@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import pb, { getAvatarUrl } from '@/utils/pocketbase/client'; // Adjust the import path as necessary
+import pb, { getAvatarUrl } from '@/utils/supabase/client'; // Adjust the import path as necessary
 import { AuthModel } from 'pocketbase';
 import Loading from '@/components/Loading';
 

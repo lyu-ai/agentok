@@ -19,7 +19,7 @@ export function useTemplates() {
   }, [data, setTemplates]);
 
   const [isDeleting, setIsDeleting] = useState(false);
-  const handleDeleteTemplate = async (id: string) => {
+  const handleDeleteTemplate = async (id: number) => {
     setIsDeleting(true);
     // Optimistically remove the template from the local state
     deleteTemplate(id);

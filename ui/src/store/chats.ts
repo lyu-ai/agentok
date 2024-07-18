@@ -1,10 +1,20 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+export interface ChatMessage {
+  id: number;
+  chat: string; // chat session id
+  sender: string;
+  receiver: string;
+  content: string;
+  type: string;
+  created: string;
+}
+
 export interface Chat {
-  id: string;
+  id: number;
   name: string;
-  sourceId: string; // Binded flow
+  sourceId: number; // Binded project or template
   sourceType: 'project' | 'template';
   config: any; // Complicated JSON object
   created?: string;
@@ -13,14 +23,14 @@ export interface Chat {
 interface ChatState {
   chats: Chat[];
   sidebarCollapsed: boolean;
-  activeChat: string;
+  activeChat: number;
   // User Chats
   setChats: (chats: Chat[]) => void;
-  setActiveChat: (chatId: string) => void;
+  setActiveChat: (chatId: number) => void;
   setSidebarCollapsed: (collapsed: boolean) => void;
-  updateChat: (id: string, chat: Partial<Chat>) => void;
-  deleteChat: (id: string) => void;
-  getChatById: (id: string) => Chat | undefined;
+  updateChat: (id: number, chat: Partial<Chat>) => void;
+  deleteChat: (id: number) => void;
+  getChatById: (id: number) => Chat | undefined;
 }
 
 const useChatStore = create<ChatState>()(
@@ -29,9 +39,9 @@ const useChatStore = create<ChatState>()(
       // User Chats
       chats: [],
       sidebarCollapsed: false,
-      activeChat: '',
+      activeChat: -1,
       setChats: chats => set({ chats }),
-      setActiveChat: (chatId: string) => set({ activeChat: chatId }),
+      setActiveChat: (chatId: number) => set({ activeChat: chatId }),
       setSidebarCollapsed: (collapsed: boolean) =>
         set({ sidebarCollapsed: collapsed }),
       updateChat: (id, newChat) =>

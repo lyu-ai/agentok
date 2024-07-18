@@ -3,13 +3,13 @@ import { persist } from 'zustand/middleware';
 import { Project } from './projects';
 
 export interface ProjectTemplate {
-  id?: string;
+  id?: number;
   name: string;
   description: string;
   thumbnail?: string; // image url
   project: Project; // Complicated JSON object
-  owner?: string;
-  created?: string;
+  user_id?: string;
+  created_at?: string;
 }
 
 interface ProjectTemplateState {
@@ -17,8 +17,8 @@ interface ProjectTemplateState {
 
   // Public flows (do not support update operation)
   setTemplates: (templates: ProjectTemplate[]) => void;
-  deleteTemplate: (id: string) => void;
-  getTemplateById: (id: string) => ProjectTemplate | undefined;
+  deleteTemplate: (id: number) => void;
+  getTemplateById: (id: number) => ProjectTemplate | undefined;
 }
 
 const useTemplateStore = create<ProjectTemplateState>()(
@@ -30,7 +30,7 @@ const useTemplateStore = create<ProjectTemplateState>()(
       deleteTemplate: id =>
         set(state => {
           return {
-            templates: state.templates.filter(flow => flow.id !== id),
+            templates: state.templates.filter(template => template.id !== id),
           };
         }),
       getTemplateById: id => {

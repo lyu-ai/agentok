@@ -13,6 +13,7 @@ export default async function RootLayout({
 }: PropsWithChildren<{
   params: { locale: string };
 }>) {
+  console.log('params', params);
   let messages;
   try {
     messages = (await import(`@/messages/${params.locale}.json`)).default;

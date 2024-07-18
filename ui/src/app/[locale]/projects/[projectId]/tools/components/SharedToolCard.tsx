@@ -1,4 +1,4 @@
-import { getAvatarUrl, getIconUrl } from '@/utils/pocketbase/client';
+import { getAvatarUrl, getIconUrl } from '@/utils/supabase/client';
 import { useState } from 'react';
 import { RiGitForkLine } from 'react-icons/ri';
 
@@ -10,7 +10,7 @@ const SharedTool = ({ tool, onFork }: any) => {
   };
   const iconUrl = getIconUrl(tool);
   return (
-    <div className="group card shadow flex flex-col items-start max-w-sm bg-base-content/10 border border-base-content/20 hover:border-primary/50 p-4 gap-2">
+    <div className="group card shadow flex flex-col items-start w-80 bg-base-content/10 border border-base-content/20 hover:border-primary/50 p-4 gap-2">
       <div className="flex items-center gap-2">
         <img src={iconUrl} alt="icon" width={64} height={64} />
         <div className="flex flex-col items-start gap-3">
@@ -29,7 +29,7 @@ const SharedTool = ({ tool, onFork }: any) => {
           </div>
         </div>
       </div>
-      <p className="text-sm text-base-content/80 line-clamp-3">
+      <p className="flex-1 text-sm text-base-content/80 line-clamp-3 text-left">
         {tool.description}
       </p>
       <div className="card-actions flex w-full justify-end mt-4">

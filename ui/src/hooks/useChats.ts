@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import useChatStore, { Chat } from '@/store/chats';
 import { useEffect, useState } from 'react';
 import { fetcher } from './fetcher';
-import pb from '@/utils/pocketbase/client';
+import supabase from '@/utils/supabase/client';
 import { isEqual } from 'lodash-es';
 import useProjectStore from '@/store/projects';
 import useTemplateStore from '@/store/templates';
@@ -18,9 +18,21 @@ export function useChats() {
   const setSidebarCollapsed = useChatStore(state => state.setSidebarCollapsed);
   const projects = useProjectStore(state => state.projects);
   const templates = useTemplateStore(state => state.templates);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUserId(user?.id || null);
+    };
+
+    fetchUserId();
+  }, []);
 
   const getInitialName = (
-    sourceId: string,
+    sourceId: number,
     sourceType: 'project' | 'template'
   ) => {
     const source =
@@ -56,7 +68,7 @@ export function useChats() {
 
   const [isCreating, setIsCreating] = useState(false);
   const handleCreateChat = async (
-    sourceId: string,
+    sourceId: number,
     sourceType: 'project' | 'template'
   ) => {
     setIsCreating(true);
@@ -64,7 +76,7 @@ export function useChats() {
       const body = {
         from_type: sourceType,
         name: getInitialName(sourceId, sourceType),
-        owner: pb.authStore.model?.id,
+        user_id: userId,
         ...(sourceType === 'project'
           ? { from_project: sourceId }
           : { from_template: sourceId }),
@@ -94,7 +106,7 @@ export function useChats() {
   };
 
   const [isDeleting, setIsDeleting] = useState(false);
-  const handleDeleteChat = async (id: string) => {
+  const handleDeleteChat = async (id: number) => {
     setIsDeleting(true);
     // Optimistically remove the flow from the local state
     deleteChat(id);
@@ -115,7 +127,7 @@ export function useChats() {
 
   const updateChat = useChatStore(state => state.updateChat);
   const [isUpdating, setIsUpdating] = useState(false);
-  const handleUpdateChat = async (id: string, chat: Partial<Chat>) => {
+  const handleUpdateChat = async (id: number, chat: Partial<Chat>) => {
     setIsUpdating(true);
     // Optimistically update the chat to the local state
     updateChat(id, chat);

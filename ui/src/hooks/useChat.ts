@@ -1,7 +1,7 @@
 import { Chat } from '@/store/chats';
 import { useProjects, useTemplates, useChats } from '.';
 
-export function useChat(chatId: string) {
+export function useChat(chatId: number) {
   const { chats, updateChat, isUpdating, isLoading, isError } = useChats();
   const { projects } = useProjects();
   const { templates } = useTemplates();
@@ -9,10 +9,10 @@ export function useChat(chatId: string) {
   const chatSource =
     chat?.sourceType === 'project'
       ? projects &&
-        projects.find((project: any) => project.id === chat.sourceId)
+      projects.find((project: any) => project.id === chat.sourceId)
       : templates &&
-        templates.find((template: any) => template.id === chat?.sourceId)
-          ?.project;
+      templates.find((template: any) => template.id === chat?.sourceId)
+        ?.project;
 
   const handleUpdateChat = (chat: Partial<Chat>) => {
     updateChat(chatId, chat);

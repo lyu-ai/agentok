@@ -21,12 +21,6 @@ export interface Settings {
 export function useSettings() {
   const { data, error, mutate } = useSWR('/api/settings', fetcher);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [settings, setSettings] = useState<Settings>({ models: [] });
-  useEffect(() => {
-    if (data && JSON.stringify(data) !== JSON.stringify(settings)) {
-      setSettings(data);
-    }
-  }, [data, settings]);
   const handleUpdateSettings = async (newSettings: Settings) => {
     setIsUpdating(true);
     try {
@@ -40,7 +34,6 @@ export function useSettings() {
       });
       if (!response.ok) throw new Error(await response.text());
       const updatedSettings = await response.json();
-      setSettings(updatedSettings);
       await mutate(); // Revalidate the SWR cache
       return updatedSettings;
     } catch (error) {
@@ -52,7 +45,7 @@ export function useSettings() {
   };
 
   return {
-    settings,
+    settings: data ?? {},
     isLoading: !error && !data,
     isError: error,
     refresh: mutate,
@@ -60,7 +53,7 @@ export function useSettings() {
     isUpdating,
     enableSpyMode: (enable: boolean) =>
       handleUpdateSettings({ spyModeEnabled: enable }),
-    spyModeEnabled: settings.spyModeEnabled,
+    spyModeEnabled: data?.spyModeEnabled,
   };
 }
 
@@ -71,7 +64,7 @@ export type ProjectSettings = {
   models?: LlmModel[];
 };
 
-export function useProjectSettings(projectId: string) {
+export function useProjectSettings(projectId: number) {
   const { project, updateProject } = useProject(projectId);
   const { data, error, mutate } = useSWR(`/api/projects/${projectId}`, fetcher);
   const [isUpdating, setIsUpdating] = useState(false);

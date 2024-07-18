@@ -5,7 +5,7 @@ from openai import OpenAI
 from typing import Dict, Union, Optional, List
 import PIL
 
-from ..dependencies import get_pocketbase_client
+from ..dependencies import get_supabase_client
 from ..utils.img_utils import get_image_data, _to_pil
 from termcolor import colored
 import random
@@ -143,7 +143,7 @@ class DALLEAgent(ConversableAgent):
         # The img_data is a temporary file so we need to persist it and return the persisted one instead
         # Retrieve the img_data and upload to pocketbase
         img_data = get_image_data(img_url)
-        status_code, upload_result = get_pocketbase_client().upload_image(extracted_filename, img_data, "", "dalle", {})
+        status_code, upload_result = get_supabase_client().upload_image(extracted_filename, img_data, "", "dalle", {})
         if status_code != 200:
             print(colored(f"Failed to upload image to pocketbase: {upload_result}", "red"))
             return False, "Failed to upload image"

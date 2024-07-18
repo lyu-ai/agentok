@@ -38,7 +38,7 @@ import clsx from 'clsx';
 
 const DEBOUNCE_DELAY = 500; // Adjust this value as needed
 
-const useDebouncedUpdate = (projectId: string) => {
+const useDebouncedUpdate = (projectId: number) => {
   const [isDirty, setIsDirty] = useState(false);
   const { updateProject } = useProject(projectId);
   const { toObject } = useReactFlow();
@@ -66,7 +66,7 @@ const useDebouncedUpdate = (projectId: string) => {
   return { setIsDirty, debouncedUpdate };
 };
 
-const Agentflow = ({ projectId }: { projectId: string }) => {
+const Agentflow = ({ projectId }: { projectId: number }) => {
   const { project, isLoading, isError } = useProject(projectId);
   const { screenToFlowPosition } = useReactFlow();
   const [nodes, setNodes] = useNodesState([]);
@@ -252,7 +252,7 @@ const Agentflow = ({ projectId }: { projectId: string }) => {
       const newId = genId();
 
       const newNode: Node = {
-        id: newId,
+        id: `node-${data.type}-${newId}`,
         type: data.type,
         position,
         selected: true,
@@ -310,7 +310,7 @@ const Agentflow = ({ projectId }: { projectId: string }) => {
     });
 
     const newNode: Node = {
-      id: newId,
+      id: `node-${type}-${newId}`,
       type,
       position: {
         x: viewportCenter.x - 50 + randInt(100),
@@ -431,7 +431,7 @@ const Agentflow = ({ projectId }: { projectId: string }) => {
       )}
       {chatPanePinned ? (
         <div className="text-sm w-96 lg:w-[480px] h-full shrink-0">
-          <ChatPane onStartChat={onClickChat} chatId={chat?.id ?? ''} />
+          <ChatPane onStartChat={onClickChat} chatId={chat?.id ?? -1} />
         </div>
       ) : (
         <ChatButton

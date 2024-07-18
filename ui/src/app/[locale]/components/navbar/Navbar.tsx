@@ -18,7 +18,7 @@ const Navbar = () => {
     '/projects/:projectId{/:feature}?{/:sub}?'
   ).exec(pathname);
   const projectId =
-    regexResult && regexResult.length >= 2 ? regexResult[1] : null;
+    regexResult && regexResult.length >= 2 ? parseInt(regexResult[1], 10) : null;
 
   const NavMenu = projectId ? ProjectMenu : GeneralMenu;
 

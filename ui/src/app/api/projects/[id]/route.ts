@@ -1,17 +1,27 @@
-import { NextRequest } from 'next/server';
-import loadAuthFromCookie from '@/utils/pocketbase/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient, getSupabaseSession } from '@/utils/supabase/server';
+import { parse } from 'path';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const pb = await loadAuthFromCookie();
-    const project = await pb.collection('projects').getOne(params.id);
-    return new Response(JSON.stringify(project));
+    const supabase = createClient();
+    await getSupabaseSession(); // Ensure user is authenticated
+
+    const { data: project, error } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('id', params.id)
+      .single();
+
+    if (error) throw error;
+
+    return NextResponse.json(project);
   } catch (e) {
     console.error(`Failed GET /projects/${params.id}: ${e}`);
-    return new Response((e as any).message, { status: 400 });
+    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
 
@@ -19,14 +29,25 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const project = await request.json();
+  const id = parseInt(params.id, 10);
   try {
-    const pb = await loadAuthFromCookie();
-    const res = await pb.collection('projects').update(params.id, project);
-    return new Response(JSON.stringify(res));
+    const supabase = createClient();
+    await getSupabaseSession(); // Ensure user is authenticated
+    const project = await request.json();
+
+    const { data, error } = await supabase
+      .from('projects')
+      .update(project)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return NextResponse.json(data);
   } catch (e) {
     console.error(`Failed POST /projects/${params.id}: ${e}`);
-    return new Response((e as any).message, { status: 400 });
+    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
 
@@ -35,11 +56,19 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const pb = await loadAuthFromCookie();
-    const res = await pb.collection('projects').delete(params.id);
-    return new Response(JSON.stringify({ result: res }));
+    const supabase = createClient();
+    await getSupabaseSession(); // Ensure user is authenticated
+
+    const { error } = await supabase
+      .from('projects')
+      .delete()
+      .eq('id', params.id);
+
+    if (error) throw error;
+
+    return NextResponse.json({ result: 'success' });
   } catch (e) {
     console.error(`Failed DELETE /projects/${params.id}: ${e}`);
-    return new Response((e as any).message, { status: 400 });
+    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }

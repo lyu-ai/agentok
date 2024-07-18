@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 const Page = ({ params }: { params: { projectId: string } }) => {
-  const { project, isLoading, updateProject } = useProject(params.projectId);
+  const projectId = parseInt(params.projectId, 10);
+  const { project, isLoading, updateProject } = useProject(projectId);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const fetchSettings = (project?: Project) => {

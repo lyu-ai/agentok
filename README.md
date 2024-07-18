@@ -112,8 +112,6 @@ docker run -d -p 5004:5004 agentok-api
 docker build -t agentok-ui ./ui
 docker run -d -p 2855:2855 agentok-ui
 
-docker build -t agentok-db ./pocketbase
-docker run -d -p 7676:7676 agentok-db
 ```
 
 (The default port number 2855 is the address of our first office.)
@@ -154,25 +152,14 @@ If you're interested in contributing to the development of this project or wish 
 
 **IMPORTANT**: For security reasons, the latest version of autogen requires Docker for code execution. So you need to install Docker on your local machine beforehand, or add `AUTOGEN_USE_DOCKER=False` to file `/api/.env`.
 
-3. **PocketBase:**
+3. **Supabase:**
 
-   - Switch to the PocketBase directory `cd pocketbase`.
-   - Build the container: `docker build -t agentok-db .`
-   - Run the container: `docker run -it --rm -p 7676:7676 agentok-db`
-
-Each new commit to the main branch triggers an automatic deployment on [Railway.app](https://railway.app), ensuring you experience the latest version of the service.
-
-> [!WARNING]
->
-> Changes to Pocketbase project will cause the rebuild and redeployment of all instances, which will swipe all the data.
->
-> Please do not use it for production purpose, and make sure you export flows in time.
+This project relies on Supabase for user authentication and data storage. You need to create a Supabase project on https://supabase.com/ and set the environment variables in the `.env` file. You can of course deploy your own Supabase instance, which is out of the scope of this document.
 
 Once you've started both the ui and api services by following the steps previously outlined, you can access the application by opening your web browser and navigating to:
 
 - ui: http://localhost:2855
 - api: http://localhost:5004 (OpenAPI docs served at http://localhost:5004/redoc)
-- pocketbase: http://localhost:7676
 
 If your services are started successfully and running on the expected ports, you should see the user interface or receive responses from the api services via this URL.
 

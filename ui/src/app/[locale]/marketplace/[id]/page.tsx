@@ -44,7 +44,7 @@ const FlowViewer = ({ template, className }: any) => {
 };
 
 const Page = ({ params }: { params: { id: string } }) => {
-  const t = useTranslations('page.Template');
+  const t = useTranslations('page.Marketplace');
   const { templates, isLoading, isError } = useTemplates();
   const [template, setTemplate] = useState<any>();
   const [index, setIndex] = useState<number>(0);

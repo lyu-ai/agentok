@@ -1,23 +1,33 @@
-import { NextRequest } from 'next/server';
-import loadAuthFromCookie from '@/utils/pocketbase/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { getSupabaseSession } from '@/utils/supabase/server';
 
 const NEXT_PUBLIC_BACKEND_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5004';
 
 export async function GET(request: NextRequest) {
-  const pb = await loadAuthFromCookie();
   try {
+    const session = await getSupabaseSession();
+
+    if (!session || !session.access_token) {
+      throw new Error('No session or access token found');
+    }
+
     const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/admin/api-keys`, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${pb.authStore.token}`,
+        Authorization: `Bearer ${session.access_token}`,
       },
     });
-    const chat = await res.json();
-    return new Response(JSON.stringify(chat));
+
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+
+    const apiKeys = await res.json();
+    return NextResponse.json(apiKeys);
   } catch (e) {
-    console.error(`Failed GET /api-keys:`, (e as any).message);
-    return new Response((e as any).message, { status: 400 });
+    console.error(`Failed GET /api-keys:`, (e as Error).message);
+    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
 
@@ -33,21 +43,27 @@ type NewApiResponse = {
 };
 
 export async function POST(request: NextRequest) {
-  const pb = await loadAuthFromCookie();
-  const data = await request.json();
   try {
+    const session = await getSupabaseSession();
+    const data: NewApiKeyParams = await request.json();
+
     const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/admin/api-keys`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${pb.authStore.token}`,
+        Authorization: `Bearer ${session.access_token}`,
       },
       body: JSON.stringify(data),
     });
-    const chat = await res.json();
-    return new Response(JSON.stringify(chat));
+
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+
+    const newApiKey: NewApiResponse = await res.json();
+    return NextResponse.json(newApiKey);
   } catch (e) {
-    console.error(`Failed POST /api-keys:`, (e as any).message);
-    return new Response((e as any).message, { status: 400 });
+    console.error(`Failed POST /api-keys:`, (e as Error).message);
+    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }

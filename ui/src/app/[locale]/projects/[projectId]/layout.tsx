@@ -7,7 +7,8 @@ export default function Layout({
   children,
   params,
 }: PropsWithChildren<{ params: { projectId: string } }>) {
-  const { project } = useProject(params.projectId);
+  const projectId = parseInt(params.projectId, 10);
+  const { project } = useProject(projectId);
 
   useEffect(() => {
     if (project?.name && typeof window !== 'undefined') {
@@ -16,7 +17,7 @@ export default function Layout({
   }, [project?.name]);
   return (
     <div className="flex-1 w-full overflow-y-auto">
-      <ProjectProvider projectId={params.projectId}>{children}</ProjectProvider>
+      <ProjectProvider projectId={projectId}>{children}</ProjectProvider>
     </div>
   );
 }

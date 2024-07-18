@@ -359,6 +359,11 @@
       "select-template-title": "Agentok Marketplace",
       "select-project": "Discover top project templates. Chat, or Fork to build your own custom agentic app.",
       "refresh": "Refresh"
+    },
+    "Datasets": {
+      "title": "Datasets",
+      "new-dataset": "New Dataset",
+      "description": "Explore and use datasets in your projects."
     }
   },
   "meta": {

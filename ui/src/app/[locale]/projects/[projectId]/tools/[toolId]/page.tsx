@@ -7,11 +7,18 @@ const Page = ({
 }: {
   params: { projectId: string; toolId: string };
 }) => {
-  const { project } = useProject(params.projectId);
+  const projectId = parseInt(params.projectId, 10);
+  const toolId = parseInt(params.toolId, 10);
+  const { project } = useProject(projectId);
+
+  const tool = project?.tools?.find(t => t.id === toolId);
+  if (!tool) {
+    return null;
+  }
   return (
     <ToolDetail
       projectId={params.projectId}
-      tool={project?.tools?.find(t => t.id === params.toolId)}
+      tool={tool}
     />
   );
 };

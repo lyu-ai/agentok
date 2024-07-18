@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Union
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.ext import do
 
-from .pocketbase_client import PocketBaseClient
+from .supabase_client import SupabaseClient
 
 # Import models
 from ..models import Project, Tool, User
@@ -19,14 +19,14 @@ env = Environment(
 )
 
 class CodegenService:
-    def __init__(self, user: User, pocketbase_client: PocketBaseClient):
+    def __init__(self, user: User, supabase_client: SupabaseClient):
         self.env = Environment(
             loader=FileSystemLoader(searchpath=os.path.join(os.getcwd(), "app/", "templates")),
             autoescape=select_autoescape(),
             extensions=[do]
         )
         self.user = user
-        self.pocketbase_client = pocketbase_client  # Keep an instance of PocketBaseClient
+        self.supabase_client = supabase_client  # Keep an instance of SupabaseClient
 
     def project2py(self, project: Project) -> str:
         flow = project.flow
@@ -96,7 +96,7 @@ class CodegenService:
 
         note_nodes = [node for node in flow.nodes if node['type'] == 'note']
 
-        settings = self.pocketbase_client.get_settings(self.user)
+        settings = self.supabase_client.get_settings(self.user)
         for model in settings.get('models', []):
             if 'id' in model:
                 del model['id']

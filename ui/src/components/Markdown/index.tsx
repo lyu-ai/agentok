@@ -70,6 +70,7 @@ const Markdown = ({
   children,
   ...props
 }: any) => {
+  if (!children) return null;
   // This function is for image format in autogen
   function preprocessImageTags(content: string): string {
     // Regex to find <img> tags with the assumed format

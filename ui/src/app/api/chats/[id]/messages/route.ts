@@ -1,76 +1,58 @@
-import { NextRequest } from 'next/server';
-import loadAuthFromCookie from '@/utils/pocketbase/server';
+import { createServerClient } from '@supabase/ssr';
+import { NextResponse, type NextRequest } from 'next/server';
+import { match } from 'path-to-regexp';
 
-const NEXT_PUBLIC_BACKEND_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL || 'https://localhost:5004';
+const locales = ['en', 'zh']; // Add all your supported locales here
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const pb = await loadAuthFromCookie();
-  try {
-    const record = await pb
-      .collection('chat_messages')
-      .getList(1, 50, { filter: `chat='${params.id}'`, sort: '-created' });
-    // .getFullList();
-    return new Response(JSON.stringify(record.items.reverse()));
-  } catch (e) {
-    console.error(`Failed GET /chats/${params.id}/messages: ${e}`);
-    return new Response((e as any).message, { status: 400 });
-  }
-}
+// Create matchers for various path patterns
+const loginMatcher = match('/:locale?/login');
+const authMatcher = match('/:locale?/auth(.*)');
+const localeMatcher = match('/:locale(en|zh)(.*)');
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const pb = await loadAuthFromCookie();
-  let message = await request.json();
-  message = {
-    ...message,
-    owner: pb.authStore.model?.id,
-  };
+export async function updateSession(request: NextRequest) {
+  let supabaseResponse = NextResponse.next({
+    request,
+  });
 
-  const res = await fetch(
-    `${NEXT_PUBLIC_BACKEND_URL}/chats/${params.id}/messages`,
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${pb.authStore.token}`,
+      cookies: {
+        getAll() {
+          return request.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
+          supabaseResponse = NextResponse.next({
+            request,
+          })
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
+          )
+        },
       },
-      body: JSON.stringify(message),
     }
   );
-  if (!res.ok) {
-    console.error('Error', await res.text());
-    return new Response(res.statusText, { status: res.status });
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const pathname = request.nextUrl.pathname;
+
+  // Check if the path is a login or auth path
+  const isLoginPath = loginMatcher(pathname);
+  const isAuthPath = authMatcher(pathname);
+
+  if (!user && !isLoginPath && !isAuthPath) {
+    // Redirect to login page, preserving the current locale if present
+    const url = request.nextUrl.clone();
+    const localeMatch = localeMatcher(pathname);
+    const currentLocale = localeMatch ? localeMatch.params.locale : '';
+    url.pathname = currentLocale ? `/${currentLocale}/login` : '/login';
+    return NextResponse.redirect(url);
   }
-  const messages = await res.json();
-  return new Response(JSON.stringify(messages));
-}
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const pb = await loadAuthFromCookie();
-
-  try {
-    const messages = await pb
-      .collection('chat_messages')
-      .getFullList({ filter: `chat='${params.id}'` });
-    for (const message of messages) {
-      await pb
-        .collection('chat_messages')
-        .delete(message.id, { $autoCancel: false });
-    }
-
-    let message = 'Deleted ${messages.length} messages';
-    return new Response(message, { status: 200 });
-  } catch (e) {
-    console.error(`Failed DELETE /chats/${params.id}/messages: ${e}`);
-    return new Response((e as any).message, { status: 400 });
-  }
+  return supabaseResponse;
 }

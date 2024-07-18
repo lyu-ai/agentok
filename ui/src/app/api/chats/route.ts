@@ -1,16 +1,16 @@
 import { NextRequest } from 'next/server';
-import loadAuthFromCookie from '@/utils/pocketbase/server';
+import { getSupabaseSession } from '@/utils/supabase/server';
 
 const NEXT_PUBLIC_BACKEND_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5004';
 
 export async function GET(request: NextRequest) {
-  const pb = await loadAuthFromCookie();
+  const session = await getSupabaseSession();
   try {
     const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/chats`, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${pb.authStore.token}`,
+        Authorization: `Bearer ${session.access_token}`,
       },
     });
     if (!res.ok) {
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const pb = await loadAuthFromCookie();
+  const session = await getSupabaseSession();
   const data = await request.json();
   try {
     console.log('POST /chats data', data);
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${pb.authStore.token}`,
+        Authorization: `Bearer ${session.access_token}`,
       },
       body: JSON.stringify(data),
     });

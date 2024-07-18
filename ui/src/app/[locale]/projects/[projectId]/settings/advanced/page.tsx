@@ -6,14 +6,15 @@ import { useRouter } from 'next/navigation';
 import { RiSkull2Line } from 'react-icons/ri';
 
 const Page = ({ params }: { params: { projectId: string } }) => {
+  const projectId = parseInt(params.projectId, 10);
   const [showPrompt, setShowPrompt] = useState(false);
-  const { project, isLoading } = useProject(params.projectId);
+  const { project, isLoading } = useProject(projectId);
   const { deleteProject, isDeleting } = useProjects();
   const router = useRouter();
 
   const handleDelete = async () => {
     // Add your delete project logic here
-    await deleteProject(params.projectId);
+    await deleteProject(projectId);
     router.replace('/projects');
   };
 

@@ -1,1 +1,5 @@
-export const genId = () => Math.random().toString(36).substring(2, 15);
+export const genId = (): number => {
+  const timestamp = Math.floor(Date.now() / 1000); // Unix timestamp (seconds)
+  const random = Math.floor(Math.random() * 100000); // 5-digit random number
+  return timestamp * 100000 + random;
+};

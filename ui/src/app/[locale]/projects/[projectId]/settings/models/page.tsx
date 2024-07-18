@@ -15,8 +15,9 @@ const ModelCard = ({ model }: { model: LlmModel }) => {
 };
 
 const Page = ({ params }: { params: { projectId: string } }) => {
+  const projectId = parseInt(params.projectId, 10);
   const { settings, isLoading, isError, updateSettings } = useProjectSettings(
-    params.projectId
+    projectId
   );
   const { settings: globalSettings } = useSettings();
   const [filters, setFilters] = useState<{ [key: string]: string }>({});

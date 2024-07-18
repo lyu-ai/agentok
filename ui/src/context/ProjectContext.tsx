@@ -1,12 +1,12 @@
 'use client';
 import { createContext, PropsWithChildren, useContext } from 'react';
 
-const ProjectContext = createContext<{ projectId: string }>({ projectId: '' });
+const ProjectContext = createContext<{ projectId: number }>({ projectId: -1 });
 
 export const ProjectProvider = ({
   projectId,
   children,
-}: PropsWithChildren<{ projectId: string }>) => {
+}: PropsWithChildren<{ projectId: number }>) => {
   return (
     <ProjectContext.Provider value={{ projectId }}>
       {children}

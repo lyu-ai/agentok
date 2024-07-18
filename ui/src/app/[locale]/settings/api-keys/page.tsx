@@ -6,7 +6,7 @@ import PopupDialog from '@/components/PopupDialog';
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
-import { GoEye, GoEyeClosed } from 'react-icons/go';
+import { RiKeyFill, RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
 const ApiKeyText = ({ apikey }: { apikey: string }) => {
@@ -41,9 +41,9 @@ const ApiKeyText = ({ apikey }: { apikey: string }) => {
         data-tooltip-content={t('show-apikey')}
       >
         {isShowing ? (
-          <GoEyeClosed className="w-4 h-4 text-yellow-600" />
+          <RiEyeCloseLine className="w-4 h-4 text-yellow-600" />
         ) : (
-          <GoEye className="w-4 h-4 text-green-600" />
+          <RiEyeLine className="w-4 h-4 text-green-600" />
         )}
       </button>
       <CopyButton content={apikey} tooltip="Copy" />
@@ -188,9 +188,10 @@ const Page = () => {
         <div className="flex items-center justify-between w-full gap-2 py-2">
           <h2 className="text-2xl font-bold">API Keys</h2>
           <button
-            className="btn btn-primary"
+            className="btn btn-sm btn-primary"
             onClick={() => setShowCreateKeyDialog(true)}
           >
+            <RiKeyFill className="w-5 h-5" />
             {t('create-apikey')}
           </button>
         </div>

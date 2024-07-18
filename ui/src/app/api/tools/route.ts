@@ -1,28 +1,51 @@
-import { NextRequest } from 'next/server';
-import loadAuthFromCookie from '@/utils/pocketbase/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient, getSupabaseSession } from '@/utils/supabase/server';
 
 export async function GET(request: NextRequest) {
-  const pb = await loadAuthFromCookie();
-  let templates = await pb
-    .collection('tools')
-    .getFullList({ sort: '-created', expand: 'owner' });
+  try {
+    const supabase = createClient();
+    await getSupabaseSession(); // Ensure user is authenticated
 
-  return new Response(JSON.stringify(templates));
+    const { data: tools, error } = await supabase
+      .from('tools')
+      .select(`*`)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    return NextResponse.json(tools);
+  } catch (e) {
+    console.error(`Failed GET /tools:`, (e as Error).message);
+    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
+  }
 }
 
 export async function POST(request: NextRequest) {
-  const template = await request.json();
-  const pb = await loadAuthFromCookie();
-  const toolWithOwner = {
-    ...template,
-    owner: pb.authStore.model?.id,
-  };
-  const res = await pb.collection('tools').create(toolWithOwner);
-  if (!res) {
-    console.error(`Failed POST /tools:`, toolWithOwner);
-    return new Response(`Failed POST /tools: ${toolWithOwner.id}`, {
-      status: 400,
-    });
+  try {
+    const supabase = createClient();
+    const session = await getSupabaseSession();
+
+    const tool = await request.json();
+    const toolWithOwner = {
+      ...tool,
+      user_id: session.user.id,
+    };
+
+    const { data, error } = await supabase
+      .from('tools')
+      .insert(toolWithOwner)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    if (!data) {
+      throw new Error('Failed to create tool');
+    }
+
+    return NextResponse.json(data);
+  } catch (e) {
+    console.error(`Failed POST /tools:`, (e as Error).message);
+    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
-  return new Response(JSON.stringify(res));
 }

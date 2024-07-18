@@ -1,34 +1,42 @@
-import { NextRequest } from 'next/server';
-import loadAuthFromCookie from '@/utils/pocketbase/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient, getSupabaseSession } from '@/utils/supabase/server';
 
 export async function GET(request: NextRequest) {
-  const pb = await loadAuthFromCookie();
   try {
-    const flows = await pb
-      .collection('projects')
-      .getFullList({ sort: '-created' });
-    return new Response(JSON.stringify(flows), { status: 200 });
+    const supabase = createClient();
+
+    const { data: projects, error } = await supabase
+      .from('projects')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    return NextResponse.json(projects);
   } catch (e) {
-    console.error(`Failed GET /projects:`, (e as any).message);
-    return new Response((e as any).message, { status: 400 });
+    console.error(`Failed GET /projects:`, (e as Error).message);
+    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
 
 export async function POST(request: NextRequest) {
-  const pb = await loadAuthFromCookie();
-  const project = await request.json();
   try {
-    let res;
-    if (project.id && project.id !== '') {
-      // empty string means new project
-      res = await pb.collection('projects').update(project.id, project);
-    } else {
+    const supabase = createClient();
+    const project = await request.json();
+
+    // Use upsert to handle both insert and update
+    if (project.id === -1) {
       delete project.id;
-      res = await pb.collection('projects').create(project);
     }
-    return new Response(JSON.stringify(res));
+    const { data, error } = await supabase
+      .from('projects')
+      .upsert(project);
+
+    if (error) throw error;
+
+    return NextResponse.json(data);
   } catch (e) {
-    console.error(`Failed POST /projects:`, (e as any).message);
-    return new Response((e as any).message, { status: 400 });
+    console.error(`Failed POST /projects:`, JSON.stringify((e as Error).message));
+    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
