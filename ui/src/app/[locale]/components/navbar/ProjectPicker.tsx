@@ -120,7 +120,7 @@ const ProjectPicker = ({ activeProjectId, className }: any) => {
   };
 
   return (
-    <div className="ml-2 flex items-center gap-0.5">
+    <div className="ml-2 flex items-center gap-0.5 z-40">
       <Listbox
         value={activeProject || { id: -1, name: 'Select Project' }}
         onChange={v => router.push(`/projects/${v?.id}/flow`)}

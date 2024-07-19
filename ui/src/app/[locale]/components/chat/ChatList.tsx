@@ -26,7 +26,7 @@ export const ChatEmpty = () => {
 export const ChatLoading = () => {
   return (
     <>
-      {[...Array(6)].map((_, i) => (
+      {[...Array(3)].map((_, i) => (
         <div
           key={i}
           className="flex flex-col w-80 h-28 bg-base-content/10 rounded-md p-3 gap-2"
@@ -138,7 +138,7 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
         console.warn('Chat not found', chat.id);
         return;
       }
-      let nextChatId = '';
+      let nextChatId = -1;
       if (currentIndex < chats.length - 1) {
         // Has next one
         nextChatId = chats[currentIndex + 1].id;
@@ -186,7 +186,7 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
                 text={chat.name ?? chatSource?.name ?? 'Untitled ' + chat.id}
               />
               <div className="text-xs text-base-content/60 px-2">
-                {chat.created && new Date(chat.created).toLocaleString()}
+                {chat.createdAt && new Date(chat.createdAt).toLocaleString()}
               </div>
             </div>
           </div>

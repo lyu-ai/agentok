@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { RiImageAddLine, RiSendPlane2Line, RiStopFill } from 'react-icons/ri';
 
 const ChatInput = ({
-  onSend: _onSend,
+  onSend,
   onAbort,
   status,
   className,
@@ -16,15 +16,15 @@ const ChatInput = ({
   const [message, setMessage] = useState('');
   const t = useTranslations('component.ChatInput');
 
-  const onSend = async () => {
+  const handleSend = async () => {
     setShowImagePanel(false);
     setMessage(''); // clear input only when sent successfully
     setImage(''); // clear image only when sent successfully
-    if (_onSend) {
-      await _onSend(image ? `${message} <img ${image}>` : message);
+    if (onSend) {
+      await onSend(image ? `${message} <img ${image}>` : message);
     }
   };
-  const onKeyDown = (event: any) => {
+  const handleKeyDown = (event: any) => {
     // event.nativeEvent.isComposing === true when the user is typing in a CJK IME.
     if (
       event.key === 'Enter' &&
@@ -32,7 +32,7 @@ const ChatInput = ({
       !event.nativeEvent.isComposing
     ) {
       event.preventDefault();
-      onSend();
+      handleSend();
     }
   };
   const panelTransitionStyle =
@@ -71,7 +71,7 @@ const ChatInput = ({
           placeholder={t('enter-message')}
           value={message}
           autoFocus
-          onKeyDown={onKeyDown}
+          onKeyDown={handleKeyDown}
           onChange={(e: any) => setMessage(e.target.value)}
           disabled={status === 'running'}
         />
@@ -88,7 +88,7 @@ const ChatInput = ({
         ) : (
           <button
             className="btn btn-sm btn-primary rounded-lg"
-            onClick={onSend}
+            onClick={handleSend}
           >
             <RiSendPlane2Line className="w-5 h-5" />
           </button>

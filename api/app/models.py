@@ -2,74 +2,70 @@
 from pydantic import BaseModel
 from typing import Any, Dict, List, Literal, Optional, Union
 
-class Message(BaseModel):
-  id: Optional[str] = None # No need to provide for new message
-  sender: Optional[str] = None
-  receiver: Optional[str] = None
-  content: str
-  chat: str
-  type: Literal['user', 'assistant']
-  user_id: str
-  created: Optional[str] = None
-
 Node = Dict[str, Any]
 Edge = Dict[str, Any]
 
 class Flow(BaseModel):
-  nodes: List[Node]
-  edges: List[Edge]
+    nodes: List[Node]
+    edges: List[Edge]
 
 class Parameter(BaseModel):
-  id: str
-  name: str
-  description: str
-  type: Literal['bool', 'str', 'int', 'float']
-  required: Optional[bool] = False
+    id: int
+    name: str
+    description: str
+    type: Literal['bool', 'str', 'int', 'float']
+    required: Optional[bool] = False
 
 class ToolAssign(BaseModel):
-  agent: str
-  scene: str
+    agent: str
+    scene: str
 
 class Tool(BaseModel):
-  id: str
-  name: str
-  description: Optional[str] = None
-  parameters: List[Parameter]
-  code: Optional[str] = None
-  assigned: Optional[List[ToolAssign]] = None
+    id: int
+    name: str
+    description: Optional[str] = None
+    parameters: List[Parameter]
+    code: Optional[str] = None
+    assigned: Optional[List[ToolAssign]] = None
 
 class Project(BaseModel):
-  id: str
-  name: str
-  description: Optional[str] = None
-  flow: Flow
-  tools: Optional[List[Tool]] = None
-  settings: Optional[Dict[str, Any]] = None
-  user_id: Optional[str] = None
-  created: str
-  updated: str
+    id: int
+    name: str
+    description: Optional[str] = None
+    flow: Flow
+    tools: Optional[List[Tool]] = None
+    settings: Optional[Dict[str, Any]] = None
+    user_id: Optional[str] = None
+    created_at: str
+    updated_at: str
 
-class MessageBase(BaseModel):
-    message: str
+class MessageCreate(BaseModel):
+    type: Literal['user', 'assistant']
+    content: str
+    sender: Optional[str] = None
+    receiver: Optional[str] = None
 
-class MessageCreate(MessageBase):
-    pass
+class Message(MessageCreate):
+    id: Optional[int] = None # No need to provide for new message
+    chat_id: int
+    user_id: str
+    created_at: Optional[str] = None
 
 class ChatCreate(BaseModel):
     name: str
     from_type: Literal['project', 'template']
-    from_project: Optional[str] = None
-    from_template: Optional[str] = None
+    from_project: Optional[int] = None
+    from_template: Optional[int] = None
     user_id: str
 
 class Chat(ChatCreate):
-    id: str
-    status: str
-    created: str
-    updated: str
+    id: int
+    status: Optional[str] = None
+    created_at: str
+    updated_at: str
 
 class ExtendedAgent(BaseModel):
-    id: str
+    id: int
     name: str
     description: str
     type: str
@@ -78,20 +74,9 @@ class ExtendedAgent(BaseModel):
 
 class ApiKeyCreate(BaseModel):
     name: str
+    key: str
 
 class ApiKey(ApiKeyCreate):
-    id: str
-    key: str
+    id: int
     user_id: str
-    created: str
-    updated: str
-
-class User(BaseModel):
-    id: str
-    name: str
-    email: str
-    emailVisibility: bool
-    avatar: str
-    created: str
-    updated: str
-    verified: bool
+    created_at: str

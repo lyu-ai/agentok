@@ -1,39 +1,39 @@
 from datetime import datetime
 import os
 import tempfile
+from typing import List
 
 from .codegen_service import CodegenService
-from ..models import Project, User
-from .chat_manager import chat_manager
+from ..models import Chat, ChatCreate, MessageCreate, Message, Project
+from .chat_manager import ChatManager
 from .supabase_client import SupabaseClient  # Import your SupabaseClient
 
 class ChatService:
-    def __init__(self, user: User, codegen_service: CodegenService, supabase_client: SupabaseClient):
-        self.user = user
+    def __init__(self, supabase: SupabaseClient, codegen_service: CodegenService):
         self.codegen_service = codegen_service  # Injecting CodegenService instance
-        self.supabase_client = supabase_client  # Keep an instance of SupabaseClient
-        self.chat_manager = chat_manager  # Injecting SupabaseClient instance
+        self.supabase = supabase  # Keep an instance of SupabaseClient
+        self.chat_manager = ChatManager(supabase)  # Injecting SupabaseClient instance
 
-    async def get_chats(self):
-        chats = self.supabase_client.get_chats(self.user)
+    async def get_chats(self) -> List[Chat]:
+        chats = self.supabase.get_chats()
         return chats
 
-    async def get_chat(self, chat_id: str):
-        chat = self.supabase_client.get_chat(self.user, chat_id)
+    async def get_chat(self, chat_id: str) -> Chat:
+        chat = self.supabase.get_chat(chat_id)
         return chat
 
-    async def create_chat(self, chat: dict):
+    async def create_chat(self, chat: ChatCreate) -> Chat:
         """Create a new chat session"""
-        new_chat = self.supabase_client.create_chat(self.user, chat)
+        new_chat = self.supabase.create_chat(chat)
         return new_chat
 
-    async def start_chat(self, message: dict, chat_id: str):
+    async def start_chat(self, message: MessageCreate, chat_id: str):
         # No matter what happnes next, persist the message to the database beforehand
-        self.supabase_client.add_message(self.user, message)
+        self.supabase.add_message(message, chat_id)
 
         # Check the existence of latest code
-        source = self.supabase_client.get_source_metadata(chat_id)
-        datetime_obj = datetime.strptime(source['updated'], '%Y-%m-%d %H:%M:%S.%fZ')
+        source = self.supabase.get_source_metadata(chat_id)
+        datetime_obj = datetime.fromisoformat(source['updated_at'])
 
         source_file = f"{source['id']}-{datetime_obj.timestamp()}.py"
         source_path = os.path.join(tempfile.gettempdir(), 'agentok/generated/', source_file)
@@ -48,18 +48,16 @@ class ChatService:
 
         # Launch the agent instance and intialize the chat
         def on_message(assistant_message):
-            assistant_message['chat'] = chat_id
-            assistant_message['user_id'] = message.get('user_id', None)
-            self.supabase_client.add_message(self.user, assistant_message)
+            self.supabase.add_message(MessageCreate(**assistant_message), chat_id)
 
         # When it's time to run the assistant:
-        return await self.chat_manager.run_assistant(chat_id, message.get('content', '\n'), source_path, on_message=on_message)
+        return await self.chat_manager.run_assistant(chat_id, message.content or '\n', source_path, on_message)
 
     async def abort_chat(self, chat_id: str):
         return await self.chat_manager.abort_assistant(chat_id)
 
-    async def human_input(self, message: dict, chat_id: str):
-        self.supabase_client.add_message(self.user, message)
+    async def human_input(self, message: MessageCreate, chat_id: str):
+        self.supabase.add_message(message, chat_id)
 
         # Then send human input to the running assistant
-        return await self.chat_manager.send_human_input(chat_id, message.get('content', '\n'))
+        return await self.chat_manager.send_human_input(chat_id, message.content or '\n')

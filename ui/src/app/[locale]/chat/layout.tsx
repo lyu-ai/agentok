@@ -62,13 +62,13 @@ const LayoutPage = ({ children }: PropsWithChildren) => {
       <div className="flex gap-2 text-sm w-full h-full">
         <div
           className={clsx(
-            'z-20 gap-1 text-sm rounded-xl bg-gray-700/80 text-base-content border border-gray-600',
+            'gap-1 text-sm rounded-xl bg-gray-700/80 text-base-content border border-gray-600',
             sidebarCollapsed ? 'hidden' : 'md:flex'
           )}
         >
           <ChatListPane />
         </div>
-        <div className="z-10 flex flex-1">{children}</div>
+        <div className="flex flex-1">{children}</div>
       </div>
     </div>
   );

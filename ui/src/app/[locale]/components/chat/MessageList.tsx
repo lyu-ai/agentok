@@ -1,20 +1,11 @@
 import { stripMatch } from '@/utils/re';
 import { StatusMessage } from '@/utils/chat';
-import { RiRobot2Line, RiRobot2Fill, RiUserVoiceLine } from 'react-icons/ri';
-import {
-  GoCheckCircle,
-  GoAlert,
-  GoPersonFill,
-  GoMegaphone,
-} from 'react-icons/go';
-import { IoReload } from 'react-icons/io5';
+import { RiRobot2Line, RiRobot2Fill, RiUserVoiceLine, RiCheckLine, RiAlertLine, RiUser2Line, RiRefreshLine, RiUser2Fill } from 'react-icons/ri';
 import Markdown from '@/components/Markdown';
 import { useTranslations } from 'next-intl';
-import { getAvatarUrl } from '@/utils/supabase/client';
-import pb from '@/utils/supabase/client';
 import { useChat } from '@/hooks';
 
-const MessageBlock = ({ chatId, message, onSend }: any) => {
+const MessageBubble = ({ chatId, message, onSend }: any) => {
   const t = useTranslations('component.ChatPane');
   const { chatSource } = useChat(chatId);
   const userNodeName =
@@ -32,7 +23,7 @@ const MessageBlock = ({ chatId, message, onSend }: any) => {
       StatusMessage.completed
     );
     const success = found && text.startsWith('DONE');
-    const ResultIcon = success ? GoCheckCircle : GoAlert;
+    const ResultIcon = success ? RiCheckLine : RiAlertLine;
     const resultClass = success ? 'text-green-500' : 'text-red-500/50';
 
     return (
@@ -78,22 +69,23 @@ const MessageBlock = ({ chatId, message, onSend }: any) => {
   const messageClass = waitForHumanInput
     ? 'bg-yellow-600/20 text-yellow-600'
     : message.type === 'assistant'
-    ? 'bg-base-content/20 text-base-content'
-    : 'bg-primary/80 text-white';
+      ? 'bg-base-content/20 text-base-content'
+      : 'bg-primary/80 text-white';
 
   let avatarIcon = <RiRobot2Fill className="w-5 h-5" />;
   if (message.type === 'user') {
-    avatarIcon = pb.authStore.model?.avatar ? (
-      <img
-        alt="avatar"
-        src={getAvatarUrl(pb.authStore.model as any)}
-        className="w-full h-full object-cover rounded-full"
-      />
-    ) : (
-      <GoPersonFill className="w-5 h-5" />
-    );
+    // avatarIcon = pb.authStore.model?.avatar ? (
+    //   <img
+    //     alt="avatar"
+    //     src={getAvatarUrl(pb.authStore.model as any)}
+    //     className="w-full h-full object-cover rounded-full"
+    //   />
+    // ) : (
+    //   <RiUser2Line className="w-5 h-5" />
+    // );
+    avatarIcon = <RiUser2Line className="w-5 h-5" />;
   } else if (message.sender === userNodeName) {
-    avatarIcon = <GoPersonFill className="w-5 h-5" />;
+    avatarIcon = <RiUser2Fill className="w-5 h-5" />;
   }
 
   let messageHeader = null;
@@ -114,7 +106,7 @@ const MessageBlock = ({ chatId, message, onSend }: any) => {
           )}
         </div>
         <div className="text-base-content/20 text-xs">
-          {new Date(message.created).toLocaleString()}
+          {new Date(message.created_at).toLocaleString()}
         </div>
       </div>
     );
@@ -147,7 +139,7 @@ const MessageBlock = ({ chatId, message, onSend }: any) => {
               data-tooltip-id="chat-tooltip"
               onClick={() => onSend(message.content)}
             >
-              <IoReload className="w-4 h-4 text-gray-200/20 group-hover:text-gray-200" />
+              <RiRefreshLine className="w-4 h-4 text-gray-200/20 group-hover:text-gray-200" />
             </button>
           </div>
         )}
@@ -169,7 +161,7 @@ const MessageList = ({ chatId, messages, onSend }: any) => {
         </div>
       )}
       {messages.map((message: any) => (
-        <MessageBlock
+        <MessageBubble
           key={message.id}
           chatId={chatId}
           message={message}

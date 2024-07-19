@@ -32,7 +32,7 @@ node_{{ node.id }} = {{ class_name }}(
     {%- else %}
     code_execution_config={ # Make code excution always available for user_proxy nodes
         "last_n_messages": 2,
-        "work_dir": "user_code",
+        "work_dir": os.path.join(temp_dir, "user_code"),
         "use_docker": False,
     },
     {%- endif %}

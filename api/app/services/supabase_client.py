@@ -3,16 +3,17 @@ from io import BytesIO
 import json
 import os
 import logging
-import jwt
+import requests
 from dotenv import load_dotenv
 from supabase import create_client, Client
-from fastapi import HTTPException, requests, status
+from gotrue import User
+from fastapi import HTTPException, status, Request
 from typing import Dict, List, Literal, Optional
 from termcolor import colored
 
 logger = logging.getLogger(__name__)
 
-from ..models import User
+from ..models import ApiKey, ApiKeyCreate, Chat, ChatCreate, Message, MessageCreate
 
 load_dotenv()  # Load environment variables from .env
 
@@ -21,56 +22,59 @@ class SupabaseClient:
         self.supabase_url = os.environ.get("SUPABASE_URL")
         self.supabase_key = os.environ.get("SUPABASE_KEY")
         self.supabase: Client = create_client(self.supabase_url, self.supabase_key)
+        self.user_id = None
 
-    async def authenticate_with_bearer(self, token: str) -> User:
+    def get_user(self) -> User:
         try:
-            response = self.supabase.auth.get_user(token)
-            if response.user:
-                return response.user
+            user_data = self.supabase.auth.get_user()
+            if user_data:
+                return user_data.user
             else:
-                print(colored(f"Failed to retrieve user: {response.error}", 'red'))
-                raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication failed")
+                return None
         except Exception as exc:
             logger.error(f"An error occurred: {exc}")
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
-    async def authenticate_with_apikey(self, apikey: str) -> User:
+    # Load the user from the cookie. This is for the situation where the user is already logged in on client side.
+    # The request should be called with credentials: 'include'
+    def authenticate_with_tokens(self, access_token: str, refresh_token: Optional[str] = "dummy_refresh_token") -> User:
         try:
-            response = self.supabase.table("api_keys").select("*").eq("key", apikey).execute()
-            if response.status_code == 200 and response.data:
-                user_id = response.data[0].get("user_id")
-                if user_id:
-                    response = self.supabase.table("users").select("*").eq("id", user_id).execute()
-                    if response.status_code == 200 and response.data:
-                        user_data = response.data[0]
-                        user = User(**user_data)
-                        print(colored(f"Authenticated with user {user}", 'green'))
-                        return user
+            # Set the session in Supabase
+            self.supabase.auth.set_session(access_token=access_token, refresh_token=refresh_token)
+            user_data = self.supabase.auth.get_user()
+            if user_data:
+                self.user_id = user_data.user.id
+                return user_data.user
             else:
-                print(colored(f"Failed to authenticate with apikey {apikey}", 'red'))
-            return None
+                print(colored(f"Failed to retrieve user", 'red'))
+                raise Exception(status_code=status.HTTP_401_UNAUTHORIZED, detail="Failed to retrieve user from token")
         except Exception as exc:
             logger.error(f"An error occurred: {exc}")
-            raise
 
-    def authenticate_with_session(self, session_token: str) -> User:
+    def authenticate_with_apikey(self, apikey: str) -> User:
         try:
-            response = self.supabase.auth.get_user(token=session_token)
-            if response.user:
-                user_data = response.user
+            response = (self.supabase.table("api_keys")
+                        .select("users:user_id(*)")
+                        .eq("key", apikey)
+                        .execute())
+
+            if response.data and response.data[0].get('users'):
+                user_data = response.data[0]['users']
                 user = User(**user_data)
-                print(colored(f"Retrieved user {user}", 'green'))
+                print(colored(f"Authenticated with user {user}", 'green'))
                 return user
             else:
-                print(colored(f"Failed to retrieve user: {response.error}", 'red'))
+                print(colored(f"Failed to authenticate with apikey {apikey}", 'red'))
                 return None
         except Exception as exc:
             logger.error(f"An error occurred: {exc}")
             raise
 
-    def save_apikey(self, key_to_create: dict) -> Dict:
+    def save_apikey(self, key_to_create: ApiKeyCreate) -> ApiKey:
         try:
-            response = self.supabase.table("api_keys").insert(key_to_create).execute()
+            # Create a new instance with the user_id
+            chat_data = key_to_create.model_dump()
+            chat_data['user_id'] = self.user_id
+            response = self.supabase.table("api_keys").insert(chat_data).execute()
             if response.data:
                 return response.data[0]
             else:
@@ -79,33 +83,23 @@ class SupabaseClient:
             logger.error(f"An error occurred: {exc}")
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Failed to create API key")
 
-    def verify_apikey(self, apikey: str, user_id: str) -> Optional[Dict]:
+    def get_apikeys(self) -> List[ApiKey]:
         try:
-            response = self.supabase.table("api_keys").select("*").eq("key", apikey).eq("user_id", user_id).execute()
+            response = self.supabase.table("api_keys").select("*").eq("user_id", self.user_id).execute()
+            print(colored(f"Retrieved api keys: {response.data} for {self.user_id}", 'blue'))
             if response.data:
-                return response.data[0]
-            else:
-                return None
-        except Exception as exc:
-            logger.error(f"An error occurred: {exc}")
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid API key")
-
-    def get_apikeys(self, user_id: str) -> List[Dict]:
-        try:
-            response = self.supabase.table("api_keys").select("*").eq("user_id", user_id).execute()
-            if response.data:
-                return response.data
+                return [ApiKey(**item) for item in response.data]
             else:
                 return []
         except Exception as exc:
             logger.error(f"An error occurred: {exc}")
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Failed to retrieve API keys")
 
-    def get_apikey(self, apikey_id: str) -> Optional[Dict]:
+    def get_apikey(self, apikey_id: str) -> Optional[ApiKey]:
         try:
-            response = self.supabase.table("api_keys").select("*").eq("id", apikey_id).execute()
+            response = self.supabase.table("api_keys").select("*").eq("id", apikey_id).eq("user_id", self.user_id).execute()
             if response.data:
-                return response.data[0]
+                return ApiKey(**response.data[0])
             else:
                 return None
         except Exception as exc:
@@ -114,7 +108,7 @@ class SupabaseClient:
 
     def delete_apikey(self, apikey_id: str) -> Dict:
         try:
-            response = self.supabase.table("api_keys").delete().eq("id", apikey_id).execute()
+            response = self.supabase.table("api_keys").delete().eq("id", apikey_id).eq("user_id", self.user_id).execute()
             if response.data:
                 return {"message": f"Successfully deleted {apikey_id}"}
             else:
@@ -123,88 +117,119 @@ class SupabaseClient:
             logger.error(f"An error occurred: {exc}")
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Failed to delete API key")
 
-    def get_settings(self, user: User) -> Dict:
-        response = self.supabase.table('users').select('settings').eq('id', user.id).single()
-        if response.error:
+    def get_settings(self) -> Dict:
+        try:
+            response = self.supabase.table('users').select('settings').execute()
+            if response.data:
+                return response.data[0]
+            else:
+                return {}
+        except Exception as exc:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"User settings not found: {response.error['message']}",
+                detail=f"User settings not found: {exc}",
             )
-        return response['data']['settings']
 
-    def get_chats(self, user: User) -> Dict:
+    def get_chats(self) -> List[Chat]:
         try:
             response = self.supabase.table('chats').select('*').execute()
             if response.data:
-              return response.data
+              return [Chat(**item) for item in response.data]
             else:
               return []
         except Exception as exc:
             logger.error(f"An error occurred: {exc}")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Failed to get chats for user {user.id}: {exc}",
+                detail=f"Failed to get chats for user {self.user_id}: {exc}",
             )
 
-    def get_chat(self, user: User, chat_id: str) -> Dict:
-        response = self.supabase.table('chats').select('*').eq('id', chat_id).single()
-        if response.error:
+    def get_chat(self, chat_id: str) -> Chat:
+        try:
+            response = self.supabase.table('chats').select('*').eq('id', chat_id).execute()
+            if response.data:
+                return Chat(**response.data[0])
+            else:
+                return None
+        except Exception as exc:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Chat not found: {response['error']['message']}",
+                detail=f"Chat not found: {exc}",
             )
-        return response['data']
 
-    def create_chat(self, user: User, chat_to_create: dict) -> Dict:
-        chat_to_create['user_id'] = user.id
-        response = self.supabase.table('chats').insert(chat_to_create).single()
-        if response.error:
+    def create_chat(self, chat_to_create: ChatCreate) -> Chat:
+        try:
+            # Create a new instance with the user_id
+            chat_data = chat_to_create.model_dump(exclude={"id"})
+            chat_data['user_id'] = self.user_id
+            response = self.supabase.table('chats').insert(chat_data).execute()
+
+            if response.data:
+                return Chat(**response.data[0])
+            else:
+                print(colored(f"Insertion failed: {response}", 'red'))
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Failed to create chat"
+                )
+        except Exception as exc:
+            print(colored(f"Failed to create chat: {exc}", 'red'))
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Failed to create chat: {response['error']['message']}",
+                detail=f"Failed to create chat: {exc}",
             )
-        return response['data']
 
-    def add_message(self, user: User, message: dict) -> Dict:
-        message_to_persist = message.copy()
-        message_to_persist.pop('id', None)
-        message_to_persist['user_id'] = user.id
-        response = self.supabase.table('chat_messages').insert(message_to_persist).single()
-        if response.error:
+    def add_message(self, message: MessageCreate, chat_id: str) -> Message:
+        try:
+            # Convert the message to a dictionary while excluding the 'id' field
+            message_dict = message.model_dump(exclude={"id"})
+            message_dict['user_id'] = self.user_id
+            message_dict['chat_id'] = int(chat_id)
+            print(colored(f"Adding message: {message_dict}", 'green'))
+            response = self.supabase.table('chat_messages').insert(message_dict).execute()
+            if response.data:
+                return Message(**response.data[0])
+            else:
+                return None
+        except Exception as exc:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Failed to add message: {response['error']['message']}",
+                detail=f"Failed to add message: {exc}",
             )
-        return response['data']
 
     def get_source_metadata(self, chat_id: str) -> Dict:
-        response = self.supabase.table('chats').select('*').eq('id', chat_id).single()
-        if response.error:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Chat not found: {response['error']['message']}",
-            )
-        chat = response['data']
+        try:
+            response = self.supabase.table('chats').select('*').eq('id', int(chat_id)).execute()
+            if response.data:
+                chat = response.data[0]
 
-        if chat['from_type'] == 'project':
-            response = self.supabase.table('projects').select('*').eq('id', chat['from_project']).single()
-        elif chat['from_type'] == 'template':
-            response = self.supabase.table('templates').select('*').eq('id', chat['from_template']).single()
-        if response.error:
+                if chat['from_type'] == 'project':
+                    response = self.supabase.table('projects').select('*').eq('id', chat['from_project']).execute()
+                elif chat['from_type'] == 'template':
+                    response = self.supabase.table('templates').select('*').eq('id', chat['from_template']).execute()
+
+                if response.data:
+                    return response.data[0]
+                else:
+                    return None
+        except Exception as exc:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Source metadata not found: {response['error']['message']}",
+                detail=f"Source metadata not found: {exc}",
             )
-        return response['data']
 
     def set_chat_status(self, chat_id: str, status: Literal['ready', 'running', 'wait_for_human_input', 'completed', 'aborted', 'failed']):
-        response = self.supabase.table('chats').update({'status': status}).eq('id', chat_id).single()
-        if response.error:
+        try:
+          response = self.supabase.table('chats').update({'status': status}).eq('id', chat_id).execute()
+          if response.data:
+            return response.data
+          else:
+            return None
+        except Exception as exc:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Failed to set chat status: {response['error']['message']}",
+                detail=f"Failed to set chat status: {exc}",
             )
-        return response['data']
 
     def upload_image(self, name, file, user_id, tags, metadata):
         files = {}
@@ -245,5 +270,5 @@ class SupabaseClient:
         else:
             return response.status_code, response.json()
 
-# A single reusable client instance
-supabase_client = SupabaseClient()
+def create_supabase_client():
+    return SupabaseClient()

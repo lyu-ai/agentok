@@ -1,20 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, getSupabaseSession } from '@/utils/supabase/server';
+import { createClient } from '@/utils/supabase/server';
 
 export async function GET(request: NextRequest) {
   try {
     const supabase = createClient();
 
-    const { data: projects, error } = await supabase
-      .from('projects')
+    const { data: user, error } = await supabase
+      .from('users')
       .select('*')
-      .order('created_at', { ascending: false });
+      .single();
 
     if (error) throw error;
 
-    return NextResponse.json(projects);
+    return NextResponse.json(user);
   } catch (e) {
-    console.error(`Failed GET /projects:`, (e as Error).message);
+    console.error(`Failed GET /user:`, (e as Error).message);
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
@@ -22,21 +22,17 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const supabase = createClient();
-    const project = await request.json();
+    const user = await request.json();
 
-    // Use upsert to handle both insert and update
-    if (project.id === -1) {
-      delete project.id;
-    }
     const { data, error } = await supabase
-      .from('projects')
-      .insert(project);
+      .from('users')
+      .upsert(user);
 
     if (error) throw error;
 
     return NextResponse.json(data);
   } catch (e) {
-    console.error(`Failed POST /projects:`, JSON.stringify((e as Error).message));
+    console.error(`Failed POST /user:`, JSON.stringify((e as Error).message));
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }

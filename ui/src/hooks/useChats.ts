@@ -2,10 +2,11 @@ import useSWR from 'swr';
 import useChatStore, { Chat } from '@/store/chats';
 import { useEffect, useState } from 'react';
 import { fetcher } from './fetcher';
-import supabase from '@/utils/supabase/client';
 import { isEqual } from 'lodash-es';
 import useProjectStore from '@/store/projects';
 import useTemplateStore from '@/store/templates';
+import { useProjects } from './useProjects';
+import { useTemplates } from './useTemplates';
 
 export function useChats() {
   const { data, error, mutate } = useSWR('/api/chats', fetcher);
@@ -18,18 +19,6 @@ export function useChats() {
   const setSidebarCollapsed = useChatStore(state => state.setSidebarCollapsed);
   const projects = useProjectStore(state => state.projects);
   const templates = useTemplateStore(state => state.templates);
-  const [userId, setUserId] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchUserId = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUserId(user?.id || null);
-    };
-
-    fetchUserId();
-  }, []);
 
   const getInitialName = (
     sourceId: number,
@@ -45,18 +34,20 @@ export function useChats() {
   useEffect(() => {
     if (data) {
       const normalizedChats = data.map((chatData: any) => {
-        const { from_template, from_project, from_type, ...others } = chatData;
+        const { from_template, from_project, from_type, created_at, ...others } = chatData;
         if (from_type === 'project') {
           return {
             ...others,
             sourceId: from_project,
             sourceType: from_type,
+            createdAt: new Date(created_at),
           };
         } else {
           return {
             ...others,
             sourceId: from_template,
             sourceType: from_type,
+            createdAt: new Date(created_at),
           };
         }
       });
@@ -76,7 +67,6 @@ export function useChats() {
       const body = {
         from_type: sourceType,
         name: getInitialName(sourceId, sourceType),
-        user_id: userId,
         ...(sourceType === 'project'
           ? { from_project: sourceId }
           : { from_template: sourceId }),
@@ -161,5 +151,31 @@ export function useChats() {
     isUpdating,
     deleteChat: handleDeleteChat,
     isDeleting,
+  };
+}
+
+export function useChat(chatId: number) {
+  const { chats, updateChat, isUpdating, isLoading, isError } = useChats();
+  const { projects } = useProjects();
+  const { templates } = useTemplates();
+  const chat = chatId === -1 ? undefined : chats.find(chat => chat.id === chatId);
+  const chatSource = chatId === -1 ? undefined :
+    chat?.sourceType === 'project'
+      ? projects &&
+      projects.find((project: any) => project.id === chat.sourceId)
+      : templates &&
+      templates.find((template: any) => template.id === chat?.sourceId)
+        ?.project;
+
+  const handleUpdateChat = (chat: Partial<Chat>) => {
+    updateChat(chatId, chat);
+  };
+  return {
+    chat,
+    chatSource,
+    updateChat: handleUpdateChat,
+    isUpdating,
+    isLoading,
+    isError,
   };
 }

@@ -61,7 +61,7 @@ const CreateKeyDialog = ({ show, onClose }: any) => {
     setLoading(true);
     fetch('/api/api-keys', {
       method: 'POST',
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ name, key: '<to_be_generated>' }),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -214,8 +214,8 @@ const Page = () => {
                   <td className="flex flex-grow lg:min-w-80">
                     <ApiKeyText apikey={key.key} />
                   </td>
-                  <td className="w-40 hidden lg:flex">
-                    {new Date(key.created).toLocaleString()}
+                  <td className="hidden lg:flex">
+                    {new Date(key.created_at).toLocaleString()}
                   </td>
                   <td className="items-center justify-center gap-2 w-28 hidden lg:flex">
                     <DeleteButton

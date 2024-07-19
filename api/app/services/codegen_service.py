@@ -9,7 +9,8 @@ from jinja2.ext import do
 from .supabase_client import SupabaseClient
 
 # Import models
-from ..models import Project, Tool, User
+from ..models import Project, Tool
+from gotrue import User
 
 # Set up the Jinja2 environment
 env = Environment(
@@ -19,14 +20,13 @@ env = Environment(
 )
 
 class CodegenService:
-    def __init__(self, user: User, supabase_client: SupabaseClient):
+    def __init__(self, supabase: SupabaseClient):
         self.env = Environment(
             loader=FileSystemLoader(searchpath=os.path.join(os.getcwd(), "app/", "templates")),
             autoescape=select_autoescape(),
             extensions=[do]
         )
-        self.user = user
-        self.supabase_client = supabase_client  # Keep an instance of SupabaseClient
+        self.supabase = supabase  # Keep an instance of SupabaseClient
 
     def project2py(self, project: Project) -> str:
         flow = project.flow
@@ -96,7 +96,7 @@ class CodegenService:
 
         note_nodes = [node for node in flow.nodes if node['type'] == 'note']
 
-        settings = self.supabase_client.get_settings(self.user)
+        settings = self.supabase.get_settings()
         for model in settings.get('models', []):
             if 'id' in model:
                 del model['id']
@@ -106,7 +106,7 @@ class CodegenService:
         template = self.env.get_template("main.j2")  # Main template
 
         code = template.render(project=project,
-                               user=self.user,
+                               user=self.supabase.get_user(),
                                settings=settings, # Account level settings include models, etc.
                                nodes=flow.nodes,
                                first_converser=first_converser,

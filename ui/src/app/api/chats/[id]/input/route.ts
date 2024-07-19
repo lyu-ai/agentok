@@ -1,57 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/utils/supabase/server';
+import { createClient, getSupabaseSession } from '@/utils/supabase/server';
+
+const NEXT_PUBLIC_BACKEND_URL =
+  process.env.NEXT_PUBLIC_BACKEND_URL || 'https://localhost:5004';
 
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const supabase = await createClient();
+  const session = await getSupabaseSession();
 
-  // Get the authenticated user
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
-
-  if (userError || !user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!session || !session.access_token) {
+    throw new Error('No session or access token found');
   }
 
-  let message = await request.json();
-  message = {
-    ...message,
-    user_id: user.id,
-    chat: params.id,
-  };
+  const message = await request.json();
 
   try {
-    // Insert the new message
-    const { data: newMessage, error: insertError } = await supabase
-      .from('chat_messages')
-      .insert(message)
-      .select()
-      .single();
+    const res = await fetch(
+      `${NEXT_PUBLIC_BACKEND_URL}/chats/${params.id}/input`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify(message),
+      }
+    );
 
-    if (insertError) throw insertError;
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error('Error', errorText);
+      return NextResponse.json({ error: res.statusText }, { status: res.status });
+    }
 
-    // Here, you would typically add the logic that was previously on your backend
-    // For example, processing the message, generating a response, etc.
-    // This is a placeholder for that logic:
-    const processedMessage = await processMessage(newMessage, supabase);
-
-    return NextResponse.json(processedMessage);
+    const messages = await res.json();
+    return NextResponse.json(messages);
   } catch (e) {
     console.error('Error', e);
-    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
+    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
   }
-}
-
-// This function is a placeholder for the logic that was previously on your backend
-async function processMessage(message: any, supabase: any) {
-  // Implement your message processing logic here
-  // This might involve:
-  // 1. Analyzing the message
-  // 2. Generating a response
-  // 3. Inserting the response into the database
-  // 4. Returning the processed message and response
-
-  // For now, we'll just return the original message
-  return message;
 }

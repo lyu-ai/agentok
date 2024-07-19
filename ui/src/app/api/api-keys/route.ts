@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${session.access_token}`,
-      },
+      }
     });
 
     if (!res.ok) {
@@ -31,21 +31,11 @@ export async function GET(request: NextRequest) {
   }
 }
 
-type NewApiKeyParams = {
-  name: string;
-  expireSeconds: number;
-};
-
-type NewApiResponse = {
-  token: string;
-  token_sig: string;
-  expire_at: number;
-};
-
 export async function POST(request: NextRequest) {
   try {
     const session = await getSupabaseSession();
-    const data: NewApiKeyParams = await request.json();
+    const data = await request.json();
+    console.log('POST /api-keys data', data);
 
     const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/admin/api-keys`, {
       method: 'POST',
@@ -60,7 +50,7 @@ export async function POST(request: NextRequest) {
       throw new Error(`HTTP error! status: ${res.status}`);
     }
 
-    const newApiKey: NewApiResponse = await res.json();
+    const newApiKey = await res.json();
     return NextResponse.json(newApiKey);
   } catch (e) {
     console.error(`Failed POST /api-keys:`, (e as Error).message);

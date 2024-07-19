@@ -8,7 +8,7 @@ export interface ChatMessage {
   receiver: string;
   content: string;
   type: string;
-  created: string;
+  createdAt: string;
 }
 
 export interface Chat {
@@ -17,7 +17,8 @@ export interface Chat {
   sourceId: number; // Binded project or template
   sourceType: 'project' | 'template';
   config: any; // Complicated JSON object
-  created?: string;
+  status: string;
+  createdAt?: string;
 }
 
 interface ChatState {

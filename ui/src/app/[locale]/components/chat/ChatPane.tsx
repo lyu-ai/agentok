@@ -36,7 +36,7 @@ import {
   RiUnpinLine,
 } from 'react-icons/ri';
 import Loading from '@/components/Loading';
-import { Chat, ChatMessage } from '@/store/chats';
+import { useUser } from '@/hooks/useUser';
 
 const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
   const t = useTranslations('component.ChatPane');
@@ -132,6 +132,7 @@ const ChatPane = ({
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const t = useTranslations('component.ChatPane');
   const { pinChatPane, chatPanePinned } = useProjectStore();
+  const { user } = useUser();
 
   const fetchMessages = useCallback(async () => {
     setLoading(true);
@@ -151,6 +152,21 @@ const ChatPane = ({
       .finally(() => setLoading(false));
   }, [setMessages, chatId]);
 
+  // Fetch chat status
+  const fetchChatStatus = useCallback(async () => {
+    const { data, error } = await supabase
+      .from('chats')
+      .select('status')
+      .eq('id', chatId)
+      .single();
+
+    if (error) {
+      console.error('Error fetching chat status:', error);
+    } else if (data) {
+      setStatus(data.status);
+    }
+  }, [setStatus, chatId]);
+
   const extractHelp = useCallback(() => {
     const noteNode = chatSource?.flow?.nodes?.find(
       (node: any) => node.type === 'note'
@@ -161,45 +177,19 @@ const ChatPane = ({
   }, [chatSource]);
 
   useEffect(() => {
-    if (!chatId) return;
+    if (chatId === -1) return;
 
     fetchMessages();
-
-    // Fetch chat status
-    const fetchChatStatus = async () => {
-      const { data, error } = await supabase
-        .from('chats')
-        .select('status')
-        .eq('id', chatId)
-        .single();
-
-      if (error) {
-        console.error('Error fetching chat status:', error);
-      } else if (data) {
-        setStatus(data.status);
-      }
-    };
-
     fetchChatStatus();
-
     extractHelp();
 
     // Subscribe to chat_messages
     const messagesChannel: RealtimeChannel = supabase
-      .channel('chat_messages')
-      .on<ChatMessage>(
+      .channel(`chat_messasges_${genId()}`)
+      .on(
         'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'chat_messages',
-          filter: `chat=eq.${chatId}`,
-        },
-        (
-          payload:
-            | RealtimePostgresInsertPayload<ChatMessage>
-            | RealtimePostgresUpdatePayload<ChatMessage>
-        ) => {
+        { event: 'INSERT', schema: 'public', table: 'chat_messages', filter: `chat_id=eq.${chatId}` },
+        payload => {
           console.log('changes_event(chat_messages):', payload);
           if (payload.new && payload.new.type !== 'user') {
             setMessages(msgs =>
@@ -214,18 +204,18 @@ const ChatPane = ({
 
     // Subscribe to chats
     const chatsChannel: RealtimeChannel = supabase
-      .channel('chats')
-      .on<Chat>(
+      .channel(`chats_${genId()}`)
+      .on(
         'postgres_changes',
         {
-          event: '*',
+          event: 'UPDATE',
           schema: 'public',
           table: 'chats',
           filter: `id=eq.${chatId}`,
         },
-        (payload: RealtimePostgresChangesPayload<Chat>) => {
+        payload => {
           console.log('changes_event(chats):', payload);
-          if (payload.new) {
+          if (payload.new && 'status' in payload.new) {
             setStatus(payload.new.status);
           }
         }
@@ -251,7 +241,7 @@ const ChatPane = ({
     }
   }, [messages]);
 
-  const onClean = () => {
+  const handleClean = () => {
     setCleaning(true);
     fetch(`/api/chats/${chatId}/messages`, {
       method: 'DELETE',
@@ -266,17 +256,17 @@ const ChatPane = ({
       .finally(() => setCleaning(false));
   };
 
-  const onSend = async (message: string): Promise<boolean> => {
+  const handleSend = async (message: string): Promise<boolean> => {
     const newMessage = {
-      type: 'user',
       id: genId(),
-      chat: chatId,
+      type: 'user',
+      sender: user?.id,
       content: message ?? '\n', // If it's empty message, let's simulate a Enter key-press
+      created_at: new Date().toISOString(),
     };
     setMessages(msgs => [...msgs, newMessage]);
     const res = await fetch(
-      `/api/chats/${chatId}/${
-        status === 'wait_for_human_input' ? 'input' : 'messages'
+      `/api/chats/${chatId}/${status === 'wait_for_human_input' ? 'input' : 'messages'
       }`,
       {
         method: 'POST',
@@ -297,7 +287,7 @@ const ChatPane = ({
     return true;
   };
 
-  const onAbort = async () => {
+  const handleAbort = async () => {
     const res = await fetch(`/api/chats/${chatId}/abort`, {
       method: 'POST',
       headers: {
@@ -308,9 +298,9 @@ const ChatPane = ({
   };
 
   // If the chat is not loaded yet, show a button to start the chat.
-  if (!chatId) {
+  if (chatId === -1 || isLoadingChat) {
     return (
-      <div className="flex flex-col w-full h-full z-10 shadow-box rounded-xl bg-gray-700/80 text-base-content border border-gray-600">
+      <div className="flex flex-col w-full h-full shadow-box rounded-xl bg-gray-700/80 text-base-content border border-gray-600">
         <div className="p-2 flex items-center justify-end">
           <button
             className="btn btn-ghost btn-square btn-xs"
@@ -325,11 +315,9 @@ const ChatPane = ({
             )}
           </button>
         </div>
-        <div className="flex flex-col flex-grow w-full items-center justify-center">
-          <button className="btn btn-primary btn-outline" onClick={onStartChat}>
-            <RiChatSmile2Line className="w-5 h-5" />
-            {t('start-chat')}
-          </button>
+        <div className="flex flex-grow w-full gap-2 items-center justify-center">
+          <RiChatSmile2Line className="w-5 h-5" />
+          {t('start-chat')}
         </div>
       </div>
     );
@@ -350,8 +338,9 @@ const ChatPane = ({
     messagesToDisplay.push({
       id: genId(),
       type: 'assistant',
-      chat: chatId,
+      chat_id: chatId,
       content: t('thinking'),
+      created_at: new Date().toISOString(),
     });
   }
 
@@ -371,9 +360,8 @@ const ChatPane = ({
               )}
             </button>
           )}
-          <span className="line-clamp-1 font-bold">{`${
-            chat?.name ?? 'Untitled ' + chatId
-          } ${chatSource?.name ? ' | ' + chatSource?.name : ''}`}</span>
+          <span className="line-clamp-1 font-bold">{`${chat?.name ?? 'Untitled ' + chatId
+            } ${chatSource?.name ? ' | ' + chatSource?.name : ''}`}</span>
           {help && (
             <Tip content={help} className="mx-2" data-tooltip-place="bottom" />
           )}
@@ -384,7 +372,7 @@ const ChatPane = ({
             className="btn btn-xs btn-ghost btn-square"
             data-tooltip-id="chat-tooltip"
             data-tooltip-content={t('clean-history')}
-            onClick={onClean}
+            onClick={handleClean}
           >
             {cleaning ? (
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
@@ -438,7 +426,7 @@ const ChatPane = ({
           <MessageList
             chatId={chatId}
             messages={messagesToDisplay}
-            onSend={onSend}
+            onSend={handleSend}
           />
         )}
         <div ref={messagesEndRef} id="chat-messages-bottom"></div>
@@ -453,14 +441,14 @@ const ChatPane = ({
               'border-primary ': status !== 'wait_for_human_input',
             }
           )}
-          onSend={onSend}
+          onSend={handleSend}
           status={status}
-          onAbort={onAbort}
+          onAbort={handleAbort}
         />
         <SampleMessagePanel
           flow={chatSource?.flow}
           className="absolute bottom-full mb-2 right-2 z-20"
-          onSelect={onSend}
+          onSelect={handleSend}
         />
       </div>
       <Tooltip id="chat-tooltip" className="max-w-md" />

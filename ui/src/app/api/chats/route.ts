@@ -1,49 +1,45 @@
-import { NextRequest } from 'next/server';
-import { getSupabaseSession } from '@/utils/supabase/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient, getSupabaseSession } from '@/utils/supabase/server';
 
 const NEXT_PUBLIC_BACKEND_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5004';
 
 export async function GET(request: NextRequest) {
-  const session = await getSupabaseSession();
   try {
-    const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/chats`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.access_token}`,
-      },
-    });
-    if (!res.ok) {
-      console.error(`Failed GET /chats:`, res.statusText);
-      return new Response(`Failed GET /chats: ${res.statusText}`, {
-        status: res.status,
-      });
-    }
-    const chat = await res.json();
-    return new Response(JSON.stringify(chat));
+    const supabase = createClient();
+
+    const { data: chats, error } = await supabase
+      .from('chats')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    return NextResponse.json(chats);
   } catch (e) {
-    console.error(`Failed GET /chats:`, (e as any).message);
-    return new Response((e as any).message, { status: 400 });
+    console.error(`Failed GET /chats:`, (e as Error).message);
+    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
 
 export async function POST(request: NextRequest) {
-  const session = await getSupabaseSession();
-  const data = await request.json();
   try {
-    console.log('POST /chats data', data);
-    const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/chats`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.access_token}`,
-      },
-      body: JSON.stringify(data),
-    });
-    const chat = await res.json();
-    return new Response(JSON.stringify(chat));
+    const supabase = createClient();
+    const chat = await request.json();
+
+    // Use upsert to handle both insert and update
+    if (chat.id === -1) {
+      delete chat.id;
+    }
+    const { data, error } = await supabase
+      .from('chat')
+      .upsert(chat);
+
+    if (error) throw error;
+
+    return NextResponse.json(data);
   } catch (e) {
-    console.error(`Failed POST /chats:`, (e as any).message);
-    return new Response((e as any).message, { status: 400 });
+    console.error(`Failed POST /chats:`, JSON.stringify((e as Error).message));
+    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }

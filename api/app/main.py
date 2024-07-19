@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from .routers import chat_router, codegen_router, extension_router, message_router, doc_router, admin_router
+from .routers import chat_router, codegen_router, extension_router, doc_router, admin_router
 
 app = FastAPI(title="Agentok API",
               description="OpenAPI Specifications of Agentok APIs.",
@@ -18,7 +18,6 @@ app.add_middleware(
 )
 
 app.include_router(chat_router.router, prefix="/chats", tags=["Chat"])
-app.include_router(message_router.router, prefix="/messages", tags=["Message"])
 app.include_router(codegen_router.router, prefix="/codegen", tags=["Codegen"])
 app.include_router(extension_router.router, prefix="/extensions", tags=["Extension"])
 app.include_router(doc_router.router, include_in_schema=False)

@@ -1,5 +1,5 @@
 import { Float } from '@headlessui-float/react';
-import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
+import { Popover, PopoverButton, PopoverPanel, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import clsx from 'clsx';
 import { GoPlus } from 'react-icons/go';
 import { useTranslations } from 'next-intl';
@@ -19,20 +19,20 @@ const ChatListPanel = ({ onAdd }: any) => {
     data: any[] | undefined;
     isLoading: boolean;
   }[] = [
-    {
-      type: 'project',
-      data: projects,
-      isLoading: isLoadingProjects,
-    },
-    {
-      type: 'template',
-      data: templates,
-      isLoading: isLoadingTemplates,
-    },
-  ];
+      {
+        type: 'project',
+        data: projects,
+        isLoading: isLoadingProjects,
+      },
+      {
+        type: 'template',
+        data: templates,
+        isLoading: isLoadingTemplates,
+      },
+    ];
   return (
-    <Tab.Group>
-      <Tab.List className="tabs tabs-bordered flex rounded-xl p-1 flex-0">
+    <TabGroup>
+      <TabList className="tabs tabs-bordered flex rounded-xl p-1 flex-0">
         {chatSources.map(({ type }) => (
           <Tab
             key={type}
@@ -46,21 +46,21 @@ const ChatListPanel = ({ onAdd }: any) => {
             {t(type)}
           </Tab>
         ))}
-      </Tab.List>
-      <Tab.Panels className="flex flex-col flex-1 w-full">
+      </TabList>
+      <TabPanels className="flex flex-col flex-1 w-full">
         {chatSources.map(({ type, data, isLoading }) => (
-          <Tab.Panel
+          <TabPanel
             key={type}
             className={clsx(
               'flex flex-wrap justify-center rounded-xl p-2 gap-2 '
             )}
           >
             {data?.map((sourceItem: any) => (
-              <Popover.Button
+              <PopoverButton
                 key={`${type}-${sourceItem.id}`}
                 onClick={() =>
                   createChat(sourceItem.id, type).then(chat =>
-                    router.push(`/chats/${chat.id}`)
+                    router.push(`/chat?id=${chat.id}`)
                   )
                 }
                 className="w-56 flex flex-col items-start gap-2 text-sm rounded p-2 border backdrop-blur-md border-base-content/5 bg-base-content/10 hover:shadow-box hover:bg-base-content/40 hover:border-base-content/30"
@@ -71,12 +71,12 @@ const ChatListPanel = ({ onAdd }: any) => {
                 <span className="h-8 line-clamp-2 text-xs text-left text-base-content/60 font-normal break-all">
                   {sourceItem.description || '(No description)'}
                 </span>
-              </Popover.Button>
+              </PopoverButton>
             ))}
-          </Tab.Panel>
+          </TabPanel>
         ))}
-      </Tab.Panels>
-    </Tab.Group>
+      </TabPanels>
+    </TabGroup>
   );
 };
 

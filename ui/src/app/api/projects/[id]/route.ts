@@ -35,6 +35,8 @@ export async function POST(
     await getSupabaseSession(); // Ensure user is authenticated
     const project = await request.json();
 
+    console.log('POST /projects', id, project);
+
     const { data, error } = await supabase
       .from('projects')
       .update(project)
