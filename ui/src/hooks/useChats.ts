@@ -32,28 +32,8 @@ export function useChats() {
   };
 
   useEffect(() => {
-    if (data) {
-      const normalizedChats = data.map((chatData: any) => {
-        const { from_template, from_project, from_type, created_at, ...others } = chatData;
-        if (from_type === 'project') {
-          return {
-            ...others,
-            sourceId: from_project,
-            sourceType: from_type,
-            createdAt: new Date(created_at),
-          };
-        } else {
-          return {
-            ...others,
-            sourceId: from_template,
-            sourceType: from_type,
-            createdAt: new Date(created_at),
-          };
-        }
-      });
-      if (!isEqual(normalizedChats, chats)) {
-        setChats(normalizedChats);
-      }
+    if (data && !isEqual(data, chats)) {
+      setChats(data);
     }
   }, [data, chats, setChats]);
 
@@ -160,11 +140,11 @@ export function useChat(chatId: number) {
   const { templates } = useTemplates();
   const chat = chatId === -1 ? undefined : chats.find(chat => chat.id === chatId);
   const chatSource = chatId === -1 ? undefined :
-    chat?.sourceType === 'project'
+    chat?.source_type === 'project'
       ? projects &&
-      projects.find((project: any) => project.id === chat.sourceId)
+      projects.find((project: any) => project.id === chat.from_project)
       : templates &&
-      templates.find((template: any) => template.id === chat?.sourceId)
+      templates.find((template: any) => template.id === chat?.from_template)
         ?.project;
 
   const handleUpdateChat = (chat: Partial<Chat>) => {

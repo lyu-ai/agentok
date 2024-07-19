@@ -154,7 +154,7 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
     if (!chat || isLoading) return <ChatLoading />;
     const ChatIcon = selected ? RiWechat2Fill : RiWechat2Line;
     const ChatTypeIcon = getGeneralMenuItems()[
-      chat.sourceType === 'project' ? 0 : 2
+      chat.source_type === 'project' ? 0 : 2
     ].icon;
 
     return (
@@ -186,7 +186,7 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
                 text={chat.name ?? chatSource?.name ?? 'Untitled ' + chat.id}
               />
               <div className="text-xs text-base-content/60 px-2">
-                {chat.createdAt && new Date(chat.createdAt).toLocaleString()}
+                {chat.created_at && new Date(chat.created_at).toLocaleString()}
               </div>
             </div>
           </div>
@@ -195,16 +195,16 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
               'join flex items-center border border-base-content/40 text-xs rounded ',
               {
                 'border-primary/40 text-primary/40 bg-primary/5':
-                  chat.sourceType === 'project',
+                  chat.source_type === 'project',
                 'border-secondary/40 text-secondary/40 bg-primary/5':
-                  chat.sourceType === 'template',
+                  chat.source_type === 'template',
               }
             )}
           >
             <span
               className={clsx('join-item px-1 py-0.5 border-r ', {
-                'border-primary/40': chat.sourceType === 'project',
-                'border-secondary/40': chat.sourceType === 'template',
+                'border-primary/40': chat.source_type === 'project',
+                'border-secondary/40': chat.source_type === 'template',
               })}
             >
               <ChatTypeIcon className="w-4 h-4" />

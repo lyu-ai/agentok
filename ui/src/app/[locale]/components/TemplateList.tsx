@@ -167,7 +167,7 @@ export const TemplateCard = ({
           {template.expand?.owner?.name ?? template.expand?.owner?.email ?? ''}
         </div>
         <div className="text-xs text-base-content/40">
-          {new Date(template.created).toLocaleString()}
+          {new Date(template.created_at).toLocaleString()}
         </div>
         <Markdown
           suppressLink={!suppressLink}

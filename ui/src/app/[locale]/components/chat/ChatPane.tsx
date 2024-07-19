@@ -11,9 +11,6 @@ import { genId } from '@/utils/id';
 import supabase from '@/utils/supabase/client';
 import {
   RealtimeChannel,
-  RealtimePostgresChangesPayload,
-  RealtimePostgresInsertPayload,
-  RealtimePostgresUpdatePayload,
 } from '@supabase/supabase-js';
 import { StatusMessage } from '@/utils/chat';
 import { TbArrowBarToLeft, TbArrowBarRight } from 'react-icons/tb';
@@ -391,7 +388,7 @@ const ChatPane = ({
               <RiWindowLine className="w-4 h-4" />
             </a>
           )}
-          {!standalone && chat?.sourceType === 'project' && (
+          {!standalone && chat?.source_type === 'project' && (
             <button
               className="btn btn-ghost btn-circle btn-xs"
               onClick={() => pinChatPane(!chatPanePinned)}
@@ -405,13 +402,13 @@ const ChatPane = ({
               )}
             </button>
           )}
-          {standalone && chat?.sourceType === 'project' && (
+          {standalone && chat?.source_type === 'project' && (
             <a
               className="btn btn-sm btn-ghost btn-circle"
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('go-to-editor')}
               data-tooltip-place="bottom"
-              href={`/projects/${chat.sourceId}/flow`}
+              href={`/projects/${chat.from_project}/flow`}
               target="_blank"
             >
               <RiPencilLine className="w-4 h-4" />

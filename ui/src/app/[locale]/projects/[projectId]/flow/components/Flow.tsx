@@ -102,7 +102,7 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
         setIsDirty(false);
       }
       const existingChat = chats.findLast(
-        chat => chat.sourceId === project?.id
+        chat => chat.from_project === project?.id
       );
       if (existingChat) {
         setChat(existingChat);
@@ -323,7 +323,7 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
 
   const onClickChat = async () => {
     if (!project) return;
-    const existingChat = chats.findLast(chat => chat.sourceId === project.id);
+    const existingChat = chats.findLast(chat => chat.from_project === project.id);
     if (existingChat) {
       setChat(existingChat);
       return;
@@ -413,9 +413,8 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
                 'text-secondary': spyModeEnabled,
               })}
               data-tooltip-id="default-tooltip"
-              data-tooltip-content={`Spy mode ${
-                spyModeEnabled ? 'enabled' : 'disabled'
-              }`}
+              data-tooltip-content={`Spy mode ${spyModeEnabled ? 'enabled' : 'disabled'
+                }`}
               onClick={() => enableSpyMode(!spyModeEnabled)}
             >
               <RiSpyLine className="w-4 h-4" />

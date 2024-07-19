@@ -3,22 +3,23 @@ import { persist } from 'zustand/middleware';
 
 export interface ChatMessage {
   id: number;
-  chat: string; // chat session id
+  chat_id: number; // chat session id
   sender: string;
   receiver: string;
   content: string;
   type: string;
-  createdAt: string;
+  created_at: string;
 }
 
 export interface Chat {
   id: number;
   name: string;
-  sourceId: number; // Binded project or template
-  sourceType: 'project' | 'template';
+  from_project: number; // Binded project
+  from_template: number; // Binded template
+  source_type: 'project' | 'template';
   config: any; // Complicated JSON object
   status: string;
-  createdAt?: string;
+  created_at?: string;
 }
 
 interface ChatState {
