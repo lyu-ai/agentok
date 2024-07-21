@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/extensions/agent`, {
+    const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/v1/extensions/agent`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

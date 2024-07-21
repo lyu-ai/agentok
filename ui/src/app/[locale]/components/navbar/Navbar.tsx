@@ -12,6 +12,8 @@ import NavButton from './NavButton';
 import { useTranslations } from 'next-intl';
 import ProjectPicker from './ProjectPicker';
 
+const apiEndpoint = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://localhost:5004';
+
 const Navbar = () => {
   const pathname = usePathname();
   const regexResult = pathToRegexp(
@@ -46,12 +48,12 @@ const Navbar = () => {
           {t('docs')}
         </a>
         <a
-          href="https://github.com/hughlv/agentok/releases/"
+          href={apiEndpoint}
           target="_blank"
           rel="noreferrer"
           className="link link-hover text-xs hidden md:block"
         >
-          {t('changelog')}
+          API
         </a>{' '}
         <a
           href="https://github.com/hughlv/agentok"
@@ -60,7 +62,7 @@ const Navbar = () => {
           className="hidden md:block"
         >
           <img
-            src="https://img.shields.io/github/stars/hughlv/agentok?style=flat&label=Star%20on%20GitHub
+            src="https://img.shields.io/github/stars/hughlv/agentok?style=social
 "
             alt="github"
           />

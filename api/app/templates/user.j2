@@ -41,9 +41,6 @@ node_{{ node.id }} = {{ class_name }}(
       {%- if node.data.retrieve_config.task %}
       "task": "{{ node.data.retrieve_config.task }}",
       {%- endif %}
-      {%- if node.data.retrieve_config.docs_path %}
-      "docs_path": {{ node.data.retrieve_config.docs_path }},
-      {%- endif %}
       {%- if node.data.retrieve_config.custom_text_types %}
       "custom_text_types": {{ node.data.retrieve_config.custom_text_types }},
       {%- endif %}

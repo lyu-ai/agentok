@@ -64,14 +64,6 @@ class Chat(ChatCreate):
     created_at: str
     updated_at: str
 
-class ExtendedAgent(BaseModel):
-    id: int
-    name: str
-    description: str
-    type: str
-    label: str
-    class_type: str
-
 class ApiKeyCreate(BaseModel):
     name: str
     key: str
@@ -80,3 +72,36 @@ class ApiKey(ApiKeyCreate):
     id: int
     user_id: str
     created_at: str
+
+class DatasetCreate(BaseModel):
+    name: str
+
+class Dataset(BaseModel):
+    id: int
+    name: str
+    user_id: str
+
+class Query(BaseModel):
+    query: str
+
+class DocumentCreate(BaseModel):
+    dataset_id: int
+    name: str
+    path: str
+
+class Document(BaseModel):
+    id: int
+    name: str
+    user_id: str
+    created_at: str
+    updated_at: Optional[str] = None
+
+class ChunkCreate(BaseModel):
+    document_id: int
+    content: str
+
+class Chunk(ChunkCreate):
+    id: int
+    user_id: str
+    created_at: str
+    updated_at: str

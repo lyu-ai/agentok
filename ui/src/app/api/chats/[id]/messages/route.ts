@@ -33,7 +33,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
   try {
     console.log('POST /chats data', data);
     data.user_id = user?.id;
-    const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/chats/${params.id}/messages`, {
+    const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/v1/chats/${params.id}/messages`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
       throw new Error('No session or access token found');
     }
 
-    const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/admin/api-keys`, {
+    const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/v1/admin/api-keys`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${session.access_token}`,
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     const data = await request.json();
     console.log('POST /api-keys data', data);
 
-    const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/admin/api-keys`, {
+    const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/v1/admin/api-keys`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

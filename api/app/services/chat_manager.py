@@ -58,7 +58,7 @@ class ChatManager:
         # Start the subprocess with the provided command
         process = await asyncio.create_subprocess_exec(
             *command,
-            env=env,  # This is crucial when need to import local code such as app.extensions.dalle_agent
+            env=env,
             stdout=subprocess.PIPE,
             stdin=subprocess.PIPE,
             stderr=subprocess.PIPE  # Capture stderr too, if you need to handle errors
@@ -75,21 +75,22 @@ class ChatManager:
         })
 
         # Process the subprocess output until it terminates
-        async for line in process.stdout:
-            if line:  # Truthy if the line is not empty
-                response_message = line.decode().rstrip()  # Remove trailing newline/whitespace
-                print('📺', response_message)
-                if any(status in response_message for status in ('__STATUS_RECEIVED_HUMAN_INPUT__', '__STATUS_WAIT_FOR_HUMAN_INPUT__')):
-                    on_message({
-                        'type': 'assistant',
-                        'content': self.strip_prefix(response_message, ('__STATUS_RECEIVED_HUMAN_INPUT__', '__STATUS_WAIT_FOR_HUMAN_INPUT__')),
-                    })
-                    if '__STATUS_WAIT_FOR_HUMAN_INPUT__' in response_message:
-                        self.supabase.set_chat_status(chat_id, 'wait_for_human_input')
+        if process.stdout is not None:
+            async for line in process.stdout:
+                if line:  # Truthy if the line is not empty
+                    response_message = line.decode().rstrip()  # Remove trailing newline/whitespace
+                    print('📺', response_message)
+                    if any(status in response_message for status in ('__STATUS_RECEIVED_HUMAN_INPUT__', '__STATUS_WAIT_FOR_HUMAN_INPUT__')):
+                        on_message({
+                            'type': 'assistant',
+                            'content': self.strip_prefix(response_message, ('__STATUS_RECEIVED_HUMAN_INPUT__', '__STATUS_WAIT_FOR_HUMAN_INPUT__')),
+                        })
+                        if '__STATUS_WAIT_FOR_HUMAN_INPUT__' in response_message:
+                            self.supabase.set_chat_status(chat_id, 'wait_for_human_input')
+                        else:
+                            self.supabase.set_chat_status(chat_id, 'running')
                     else:
-                        self.supabase.set_chat_status(chat_id, 'running')
-                else:
-                    output_parser.parse_line(response_message)
+                        output_parser.parse_line(response_message)
 
         # Wait for the subprocess to finish if it hasn't already
         await process.wait()
@@ -109,16 +110,17 @@ class ChatManager:
         elif process.returncode != 0:
             self.supabase.set_chat_status(chat_id, 'failed')
             # Read the error message from stderr (optional)
-            err = await process.stderr.read()
-            error_message = err.decode().strip()
-            print(colored(text=f'Assistant process exited with return code {process.returncode} and error message: {error_message}', color='red'))
-            # You might want to handle the error or propagate it
-            # Splits the message by lines and takes the last one
-            last_line = error_message.splitlines()[-1]
-            on_message({
-                'type': 'assistant',
-                'content': f'__STATUS_COMPLETED__ {process.returncode}: {last_line}',
-            })
+            if process.stderr is not None:
+                err = await process.stderr.read()
+                error_message = err.decode().strip()
+                print(colored(text=f'Assistant process exited with return code {process.returncode} and error message: {error_message}', color='red'))
+                # You might want to handle the error or propagate it
+                # Splits the message by lines and takes the last one
+                last_line = error_message.splitlines()[-1]
+                on_message({
+                    'type': 'assistant',
+                    'content': f'__STATUS_COMPLETED__ {process.returncode}: {last_line}',
+                })
         else:
             self.supabase.set_chat_status(chat_id, 'completed')
             on_message({

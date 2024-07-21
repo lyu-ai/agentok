@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import { RiBracesLine, RiCodeSSlashLine } from 'react-icons/ri';
+import { RiArrowGoBackLine, RiBracesLine, RiCodeSSlashLine } from 'react-icons/ri';
 import { GoHome } from 'react-icons/go';
 
 type modeType = 'main' | 'flow' | 'json' | 'python';
@@ -16,16 +16,16 @@ const ViewToggle = ({
   const t = useTranslations('component.ViewToggle');
   const ModeIcon =
     mode === 'flow'
-      ? GoHome
+      ? RiArrowGoBackLine
       : mode === 'json'
-      ? RiBracesLine
-      : RiCodeSSlashLine;
+        ? RiBracesLine
+        : RiCodeSSlashLine;
   const tip =
     mode === 'flow'
       ? t('back-to-editor')
       : mode === 'json'
-      ? 'Show in Json'
-      : 'Generate Python Code';
+        ? 'Show in Json'
+        : 'Generate Python Code';
   const className = flat
     ? 'flex items-center justify-center w-5 h-5 rounded-sm cursor-pointer'
     : 'btn btn-circle btn-ghost btn-sm';

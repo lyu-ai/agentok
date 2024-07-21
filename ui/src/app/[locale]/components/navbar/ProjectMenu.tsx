@@ -33,13 +33,6 @@ export const getProjectNavbarItems = (projectId: string) => {
       href: `/projects/${projectId}/tools`,
     },
     {
-      id: 'datasets',
-      label: 'Knowledge',
-      icon: RiBookOpenLine,
-      activeIcon: RiBookOpenFill,
-      href: `/projects/${projectId}/datasets`,
-    },
-    {
       id: 'settings',
       label: 'Settings',
       icon: RiSettings3Line,

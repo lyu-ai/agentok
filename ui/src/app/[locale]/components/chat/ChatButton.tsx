@@ -5,7 +5,7 @@ import ChatPane from './ChatPane';
 import { RiRobot2Fill, RiRobot2Line } from 'react-icons/ri';
 import { useTranslations } from 'next-intl';
 
-const ChatButton = ({ className, onStartChat, chatId }: any) => {
+const ChatButton = ({ className, onStartChat, chat }: any) => {
   const t = useTranslations('component.ChatButton');
 
   return (
@@ -35,7 +35,7 @@ const ChatButton = ({ className, onStartChat, chatId }: any) => {
           </div>
         </PopoverButton>
         <PopoverPanel className="origin-bottom-right shadow-box-lg shadow-gray-600 rounded-xl backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 w-[400px] md:w-96 h-[80vh] max-h-[75vh]">
-          <ChatPane chatId={chatId} onStartChat={onStartChat} />
+          {chat && <ChatPane chat={chat} onStartChat={onStartChat} />}
         </PopoverPanel>
       </Float>
     </Popover>

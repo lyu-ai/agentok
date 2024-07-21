@@ -125,7 +125,7 @@ export const TemplateCard = ({
       return <div className={className}>{children}</div>;
     } else {
       return (
-        <Link href={`/marketplace/${template.id}`} className={className}>
+        <Link href={`/discover/${template.id}`} className={className}>
           {children}
         </Link>
       );

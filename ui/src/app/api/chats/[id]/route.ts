@@ -51,13 +51,20 @@ export async function DELETE(
 ) {
   const supabase = await createClient();
   try {
+    const chatId = parseInt(params.id, 10);
     const { error } = await supabase
       .from('chats')
       .delete()
-      .eq('id', params.id);
+      .eq('id', chatId);
 
-    if (error) throw error;
+    if (error?.code === 'PGRST004') {
+      return NextResponse.json({ error: 'Chat not found' }, { status: 404 });
+    }
 
+    if (error) {
+      console.warn(`Failed DELETE /chats/${params.id}:`, error);
+      throw error;
+    }
     return NextResponse.json({ result: 'success' });
   } catch (e) {
     console.error(`Failed DELETE /chats/${params.id}: ${e}`);

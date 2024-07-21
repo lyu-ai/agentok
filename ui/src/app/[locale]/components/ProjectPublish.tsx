@@ -36,7 +36,7 @@ const PublishConfig = ({ projectId, className, ...props }: any) => {
     })
       .then(template => {
         toast.success(t('publish-success', { project_name: project.name }));
-        router.push(`/marketplace/${template.id}`);
+        router.push(`/discover/${template.id}`);
       })
       .catch(() => {
         toast.error(t('publish-failed', { project_name: project.name }));

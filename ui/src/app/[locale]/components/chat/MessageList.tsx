@@ -5,9 +5,9 @@ import Markdown from '@/components/Markdown';
 import { useTranslations } from 'next-intl';
 import { useChat } from '@/hooks';
 
-const MessageBubble = ({ chatId, message, onSend }: any) => {
+const MessageBubble = ({ chat, message, onSend }: any) => {
   const t = useTranslations('component.ChatPane');
-  const { chatSource } = useChat(chatId);
+  const { chatSource } = useChat(chat.id);
   const userNodeName =
     chatSource?.flow?.nodes?.find(
       (node: any) =>
@@ -148,7 +148,7 @@ const MessageBubble = ({ chatId, message, onSend }: any) => {
   );
 };
 
-const MessageList = ({ chatId, messages, onSend }: any) => {
+const MessageList = ({ chat, messages, onSend }: any) => {
   const t = useTranslations('component.ChatPane');
   return (
     <>
@@ -163,7 +163,7 @@ const MessageList = ({ chatId, messages, onSend }: any) => {
       {messages.map((message: any) => (
         <MessageBubble
           key={message.id}
-          chatId={chatId}
+          chat={chat}
           message={message}
           onSend={onSend}
         />

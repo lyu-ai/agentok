@@ -12,7 +12,7 @@ export async function DELETE(
     const session = await getSupabaseSession();
 
     const res = await fetch(
-      `${NEXT_PUBLIC_BACKEND_URL}/admin/api-keys/${params.id}`,
+      `${NEXT_PUBLIC_BACKEND_URL}/v1/admin/api-keys/${params.id}`,
       {
         method: 'DELETE',
         headers: {

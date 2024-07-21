@@ -78,8 +78,8 @@ const MessageBlock = ({ chatId, message, onSend }: any) => {
   const messageClass = waitForHumanInput
     ? 'bg-yellow-600/20 text-yellow-600'
     : message.type === 'assistant'
-    ? 'bg-base-content/20 text-base-content'
-    : 'bg-primary/80 text-white';
+      ? 'bg-base-content/20 text-base-content'
+      : 'bg-primary/80 text-white';
 
   let avatarIcon = <RiRobot2Fill className="w-5 h-5" />;
   if (message.type === 'user') {

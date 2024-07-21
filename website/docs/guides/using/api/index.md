@@ -50,7 +50,7 @@ curl --request GET \
   <TabItem value="typescript" label="TypeScript">
 
 ```ts
-const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/chats`, {
+const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/v1/chats`, {
   headers: {
     'Content-Type': 'application/json',
     'X-API-KEY': `${token}`,

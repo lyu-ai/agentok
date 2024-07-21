@@ -5,11 +5,12 @@ from typing import Any, Dict, List, Union
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.ext import do
+from storage3 import create_client
 
-from .supabase_client import SupabaseClient
+from .supabase_client import SupabaseClient, create_supabase_client
 
 # Import models
-from ..models import Project, Tool
+from ..models import Parameter, Project, Tool
 from gotrue import User
 
 # Set up the Jinja2 environment
@@ -96,7 +97,7 @@ class CodegenService:
 
         note_nodes = [node for node in flow.nodes if node['type'] == 'note']
 
-        settings = self.supabase.get_settings()
+        settings = self.supabase.fetch_settings()
         for model in settings.get('models', []):
             if 'id' in model:
                 del model['id']
@@ -123,7 +124,7 @@ class CodegenService:
 
         return code
 
-    def tool2py(self, tool: Tool) -> json:
+    def tool2py(self, tool: Tool):
         """Generate code based on the provided function meta information.
 
         Args:
@@ -166,27 +167,33 @@ class CodegenService:
 
             # Print the generated code
             generated_code = response.choices[0].message.content
+            if not generated_code:
+                raise Exception("No code generated")
             print(generated_code)
 
             return json.loads(generated_code)
         except openai.APIStatusError as e:
             print(f"Error: {e}")
+            raise
 
 # Example usage
 if __name__ == '__main__':
-    service = CodegenService()
+    supabase = create_supabase_client()
+    service = CodegenService(supabase)
 
-    tool_data = {
-        'name': 'run_python',
-        'description': 'run the provided python code with ipython',
-        'parameters': [
-            {
-                'name': 'code',
-                'description': 'the python code to be run',
-                'type': 'string',
-            }
+    tool_data = Tool(
+        id=1,
+        name='run_python',
+        description='run the provided python code with ipython',
+        parameters=[
+            Parameter(
+                id=1,
+                name='code',
+                description='the python code to be run',
+                type='str',
+            ),
         ],
-    }
+    )
 
     generated_code = service.tool2py(tool_data)
     print(generated_code)

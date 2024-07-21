@@ -4,7 +4,7 @@ import { createServerClient } from '@supabase/ssr';
 import { pathToRegexp } from 'path-to-regexp';
 
 // Utility function to match authentication paths
-const publicMatcher = pathToRegexp('/(auth|marketplace)/(.*)');
+const publicMatcher = pathToRegexp('/(auth|discover)/(.*)');
 
 export async function updateSession(request: NextRequest) {
   const supabaseResponse = NextResponse.next();

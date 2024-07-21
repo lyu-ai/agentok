@@ -26,7 +26,11 @@ const Page = () => {
     }
   }, [id, chat?.name, setActiveChat]);
 
-  return <ChatPane chatId={id} standalone />;
+  if (!chat) {
+    return null;
+  }
+
+  return <ChatPane chat={chat} standalone />;
 };
 
 export default Page;

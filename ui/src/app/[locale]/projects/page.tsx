@@ -38,7 +38,7 @@ const Page = () => {
         <span className="text-5xl font-bold font-arial p-4">{t('title')}</span>
         <span className="text-lg p-4">{t('description')}</span>
         <ProjectList />
-        <button onClick={onCreateProject} className="btn btn-lg btn-primary">
+        <button onClick={onCreateProject} className="btn btn-primary">
           <RiSwap3Line className="w-7 h-7" />
           {t('create-project')}
         </button>
@@ -49,10 +49,10 @@ const Page = () => {
         <span className="text-2xl p-4">{t('start-from-template')}</span>
         <TemplateList maxCount={3} />
         <Link
-          href="/marketplace"
+          href="/discover"
           className="flex flex-col items-center link link-lg link-primary py-8 gap-4"
         >
-          {t('discover-marketplace')}
+          {t('discover')}
         </Link>
       </div>
     </div>

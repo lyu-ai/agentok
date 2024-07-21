@@ -1,18 +1,19 @@
-from distutils.command import upload
 import os
-from autogen import Agent, ConversableAgent
+import re
+from autogen import ConversableAgent
+from numpy import size
 from openai import OpenAI
-from typing import Dict, Union, Optional, List
-import PIL
+from typing import Dict, Literal, Union, Optional, List
+from PIL import Image as PIL
 
-from ..dependencies import get_supabase_client
+from ..common.base_classes import ExtendedConversableAgent
+from ..services.supabase_client import create_supabase_client
 from ..utils.img_utils import get_image_data, _to_pil
 from termcolor import colored
-import random
 
 from diskcache import Cache
 
-def dalle_call(client: OpenAI, model: str, prompt: str, size: str, quality: str, n: int) -> str:
+def dalle_call(client: OpenAI, model: str, prompt: str, size: Literal['256x256', '512x512', '1024x1024', '1792x1024', '1024x1792'] | None, quality: Literal['standard', 'hd'], n: int) -> Optional[bytes]:
     """
     Generate an image using OpenAI's DALL-E model and cache the result.
 
@@ -36,28 +37,41 @@ def dalle_call(client: OpenAI, model: str, prompt: str, size: str, quality: str,
     - The function uses a tuple of (model, prompt, size, quality, n) as the key for caching.
     - The image data is obtained by making a secondary request to the URL provided by the DALL-E API response.
     """
-    # Function implementation...
-    cache = Cache('.cache/')  # Create a cache directory
+    # Create a cache directory
+    cache = Cache('.cache/')
     key = (model, prompt, size, quality, n)
+
+    # Check if the result is in cache
     if key in cache:
-        return cache[key]
+        cached_data = cache[key]
+        if isinstance(cached_data, bytes):
+            return cached_data
 
     # If not in cache, compute and store the result
     response = client.images.generate(
-          model=model,
-          prompt=prompt,
-          size=size,
-          quality=quality,
-          n=n,
-        )
+        model=model,
+        prompt=prompt,
+        size=size,
+        quality=quality,
+        n=n,
+    )
+
+    # Assuming the response contains URLs to the generated images
+    if len(response.data) == 0:
+        return None
     image_url = response.data[0].url
-    # img_data = get_image_data(image_url)
-    # cache[key] = img_data
+    if image_url is None:
+        return None
 
-    # return img_data
-    return image_url
+    # Fetch the image data from the URL
+    img_data = get_image_data(image_url)
 
-def extract_img(agent: Agent) -> PIL.Image:
+    # Store the result in the cache
+    cache[key] = img_data
+
+    return img_data
+
+def extract_img(agent: ConversableAgent):
     """
     Extracts an image from the last message of an agent and converts it to a PIL image.
 
@@ -78,17 +92,19 @@ def extract_img(agent: Agent) -> PIL.Image:
     - If no <img> tag is found, or if the image data is not correctly formatted, the function may raise an error.
     """
     # Function implementation...
-    img_data = re.findall("<img (.*)>", agent.last_message()["content"])[0]
+    message = agent.last_message()
+    if message is None:
+        return None
+    img_data = re.findall("<img (.*)>", message['content'])[0]
     pil_img = _to_pil(img_data)
     return pil_img
 
-class DALLEAgent(ConversableAgent):
+class DALLEAgent(ExtendedConversableAgent):
     metadata = {
-        'id': 'dalle_agent',
         'name': 'DALLEAgent',
         "description": "An agent that uses OpenAI's DALL-E model to generate images.",
         "type": "custom_conversable",
-        "label": "DALLE",
+        "label": "dalle",
         "class_type": "DALLEAgent", # Assumed the path is always "app.extensions.*"
     }
     def __init__(self, name, llm_config: dict, **kwargs):
@@ -101,53 +117,55 @@ class DALLEAgent(ConversableAgent):
             print("Unable to fetch API Key, because", e)
             api_key = os.getenv('OPENAI_API_KEY')
         self.client = OpenAI(api_key=api_key)
-        self.register_reply([Agent, None], DALLEAgent.generate_dalle_reply)
+        self.register_reply([ConversableAgent, None], DALLEAgent.generate_dalle_reply)
 
     def send(
         self,
         message: Union[Dict, str],
-        recipient: Agent,
+        recipient: ConversableAgent,
         request_reply: Optional[bool] = None,
         silent: Optional[bool] = False,
     ):
         super().send(message, recipient, request_reply, silent)
 
-    def generate_dalle_reply(self, messages: Optional[List[Dict]], sender: "Agent", config):
+    def generate_dalle_reply(self, messages: Optional[List[Dict]], sender: "ConversableAgent", config):
         """Generate a reply using OpenAI DALLE call."""
         client = self.client if config is None else config
         if client is None:
-            return False, None
+            return False, "Client configuration is missing"
         if messages is None:
             messages = self._oai_messages[sender]
 
         prompt = messages[-1]["content"]
-        # TODO: integrate with autogen.oai. For instance, with caching for the API call
-        img_url = dalle_call(
-            client=self.client,
+
+        # Generate image using DALL-E
+        img_data = dalle_call(
+            client=client,
             model="dall-e-3",
             prompt=prompt,
-            size="1024x1024", # TODO: the size should be flexible, deciding landscape, square, or portrait mode.
+            size="1024x1024",  # TODO: the size should be flexible, deciding landscape, square, or portrait mode.
             quality="standard",
             n=1,
         )
-        print(f'Result of dalle prompt "{prompt}":', img_url)
-        # Remove the query string part of the URL if it exists
-        base_url = img_url.split('?')[0]
 
-        # Split the URL by "/"
-        parts = base_url.split("/")
+        if img_data is None:
+            return False, "Failed to generate image with DALL-E"
 
-        # Extract the desired part of the URL (assuming the structure is known)
-        extracted_filename = '/'.join(parts[-2:])  # Joins the last two parts of the split URL
+        # Generate a unique filename for the image
+        filename = f"{prompt.replace(' ', '_')}.png"
 
-        # The img_data is a temporary file so we need to persist it and return the persisted one instead
-        # Retrieve the img_data and upload to pocketbase
-        img_data = get_image_data(img_url)
-        status_code, upload_result = get_supabase_client().upload_image(extracted_filename, img_data, "", "dalle", {})
-        if status_code != 200:
-            print(colored(f"Failed to upload image to pocketbase: {upload_result}", "red"))
+        # Upload the image data to Supabase or another storage service
+        supabase = create_supabase_client()
+        if supabase is None:
+            return False, "Supabase client is not available"
+        upload_response = supabase.upload_image(filename, img_data)
+
+        if upload_response.status_code != 200:
+            print(colored(f"Failed to upload image to Supabase: {upload_response.reason_phrase}", "red"))
             return False, "Failed to upload image"
 
-        out_message = f"![img]({upload_result['access_url']})"
-        return True, out_message
+        upload_result = upload_response.json()
 
+        # Generate the response message with the URL of the uploaded image
+        out_message = f"![img]({upload_result['Location']})"
+        return True, out_message

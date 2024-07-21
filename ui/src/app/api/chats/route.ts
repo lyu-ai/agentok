@@ -31,8 +31,15 @@ export async function POST(request: NextRequest) {
     if (chat.id === -1) {
       delete chat.id;
     }
+
+    // Get the authenticated user
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError) throw new Error('Failed to authenticate');
+    if (!user) throw new Error('Not authenticated');
+
+    chat.user_id = user.id;
     const { data, error } = await supabase
-      .from('chat')
+      .from('chats')
       .upsert(chat);
 
     if (error) throw error;

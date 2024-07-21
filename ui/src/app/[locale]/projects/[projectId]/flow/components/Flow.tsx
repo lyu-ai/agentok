@@ -78,7 +78,7 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
   const chatPanePinned = useProjectStore(state => state.chatPanePinned);
   const nodePanePinned = useProjectStore(state => state.nodePanePinned);
   const { spyModeEnabled, enableSpyMode } = useSettings();
-  const [chat, setChat] = useState<ChatType | undefined>();
+  const [activeChat, setActiveChat] = useState<ChatType | undefined>();
   const t = useTranslations('component.Flow');
 
   // Suppress error code 002
@@ -105,7 +105,7 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
         chat => chat.from_project === project?.id
       );
       if (existingChat) {
-        setChat(existingChat);
+        setActiveChat(existingChat);
       }
     };
 
@@ -252,7 +252,7 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
       const newId = genId();
 
       const newNode: Node = {
-        id: `node-${data.type}-${newId}`,
+        id: `${newId}`,
         type: data.type,
         position,
         selected: true,
@@ -321,14 +321,18 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
     setNodes(nds => nds.concat(newNode));
   };
 
-  const onClickChat = async () => {
-    if (!project) return;
-    const existingChat = chats.findLast(chat => chat.from_project === project.id);
-    if (existingChat) {
-      setChat(existingChat);
+  const handleStartChat = async () => {
+    if (!project) {
+      console.warn('Project not found');
       return;
     }
-    await createChat(project.id, 'project').then(chat => setChat(chat));
+    const existingChat = chats.findLast(chat => chat.from_project === project.id);
+    console.log('existingChat', existingChat);
+    if (existingChat) {
+      setActiveChat(existingChat);
+      return;
+    }
+    await createChat(project.id, 'project').then(chat => setActiveChat(chat));
   };
 
   if (mode === 'python') {
@@ -428,15 +432,15 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
       {!nodePanePinned && (
         <NodeButton onAddNode={onAddNode} className="absolute top-2 left-2" />
       )}
-      {chatPanePinned ? (
+      {chatPanePinned && activeChat ? (
         <div className="text-sm w-96 lg:w-[480px] h-full shrink-0">
-          <ChatPane onStartChat={onClickChat} chatId={chat?.id ?? -1} />
+          <ChatPane onStartChat={handleStartChat} chat={activeChat} />
         </div>
       ) : (
         <ChatButton
           project={project}
-          onStartChat={onClickChat}
-          chatId={chat?.id}
+          onStartChat={handleStartChat}
+          chat={activeChat}
           className="absolute bottom-6 right-2"
         />
       )}

@@ -2,13 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 from ..services.extension_service import ExtensionService
 from ..dependencies import get_extension_service
-from ..models import ExtendedAgent
+from ..models import AgentMetadata
 
 router = APIRouter()
 
 @router.get('/agent',
             status_code=status.HTTP_200_OK,
-            response_model=List[ExtendedAgent],
+            response_model=List[AgentMetadata],
             responses={
                 status.HTTP_200_OK: {
                     "description": "Successfully retrieved the list of extensions.",

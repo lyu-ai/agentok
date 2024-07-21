@@ -15,11 +15,11 @@ class ChatService:
         self.chat_manager = ChatManager(supabase)  # Injecting SupabaseClient instance
 
     async def get_chats(self) -> List[Chat]:
-        chats = self.supabase.get_chats()
+        chats = self.supabase.fetch_chats()
         return chats
 
     async def get_chat(self, chat_id: str) -> Chat:
-        chat = self.supabase.get_chat(chat_id)
+        chat = self.supabase.fetch_chat(chat_id)
         return chat
 
     async def create_chat(self, chat: ChatCreate) -> Chat:
@@ -32,7 +32,7 @@ class ChatService:
         self.supabase.add_message(message, chat_id)
 
         # Check the existence of latest code
-        source = self.supabase.get_source_metadata(chat_id)
+        source = self.supabase.fetch_source_metadata(chat_id)
         datetime_obj = datetime.fromisoformat(source['updated_at'])
 
         source_file = f"{source['id']}-{datetime_obj.timestamp()}.py"
@@ -41,10 +41,9 @@ class ChatService:
         # Create the directory if it doesn't exist
         os.makedirs(os.path.dirname(source_path), exist_ok=True)
 
-        if not os.path.exists(source_path):
-            generated_code = self.codegen_service.project2py(Project(**source))
-            with open(source_path, 'w', encoding='utf-8') as file:
-                file.write(generated_code)
+        generated_code = self.codegen_service.project2py(Project(**source))
+        with open(source_path, 'w', encoding='utf-8') as file:
+            file.write(generated_code)
 
         # Launch the agent instance and intialize the chat
         def on_message(assistant_message):

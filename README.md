@@ -37,69 +37,23 @@ Due to the limitations of GPT-4 and AutoGen, this simple workflow may not work a
 
 For a more in-depth look at the project, please refer to [Getting Started](https://agentok.ai/getting-started).
 
-## Migration of Official Notebooks
-
-We made tutorials based on the official notebooks from Autogen repository. You can refer to the original notebook [here](https://github.com/microsoft/autogen/blob/main/notebook/).
-
-🔲 Planned/Working
-✅ Completed
-🆘 With Issues
-⭕ Out of Scope
-
-> [!WARNING]
->
-> Due to data format incompatibility, the current results have been wiped and need to be re-migrated.
-
-| Example                                 | Status | Comments                                                                                                                                                             |
-| --------------------------------------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| simple_chat                             | ✅     | [Simple Chat](https://studio.agentok.ai/marketplace/yp0appx814q7na1)                                                                                                 |
-| auto_feedback_from_code_execution       | ✅     | [Feedback from Code Execution](https://studio.agentok.ai/flows/)                                                                                                     |
-| ~~auto_build~~                          | ⭕     | This is a feature to be considered to add to flow generation. [#40](https://github.com/hughlv/agentok/issues/40)                                                     |
-| chess                                   | 🔲     | This depends on the feature of importing custom Agent [#38](https://github.com/hughlv/agentok/issues/38)                                                             |
-| compression                             | ✅     |                                                                                                                                                                      |
-| dalle_and_gpt4v                         | ✅     | Supported with app.extensions                                                                                                                                        |
-| function_call_async                     | ✅     |                                                                                                                                                                      |
-| function_call                           | ✅     |                                                                                                                                                                      |
-| graph_modelling_language                | ⭕     | This is out of project scope. Open an issue if necessary                                                                                                             |
-| group_chat_RAG                          | 🆘     | This notebook does not work                                                                                                                                          |
-| groupchat_research                      | ✅     |                                                                                                                                                                      |
-| groupchat_vis                           | ✅     |                                                                                                                                                                      |
-| groupchat                               | ✅     |                                                                                                                                                                      |
-| hierarchy_flow_using_select_speaker     | 🔲     |                                                                                                                                                                      |
-| human_feedback                          | ✅     | [Human in the Loop](https://studio.agentok.ai/templates/4pbokrvi7zguv48)                                                                                             |
-| inception_function                      | 🔲     |                                                                                                                                                                      |
-| ~~langchain~~                           | ⭕     | No plan to support                                                                                                                                                   |
-| lmm_gpt-4v                              | ✅     |                                                                                                                                                                      |
-| lmm_llava                               | ✅     | Depends on Replicate                                                                                                                                                 |
-| MathChat                                | ✅     | [Math Chat](https://studio.agentok.ai/templates/m337e85xr95omtv)                                                                                                     |
-| oai_assistant_function_call             | ✅     |                                                                                                                                                                      |
-| oai_assistant_groupchat                 | 🆘     | Very slow and not work well, sometimes not returning.                                                                                                                |
-| oai_assistant_retrieval                 | ✅     | [Retrieval (OAI)](https://studio.agentok.ai/templates/tgq6dxu32yzwcgg)                                                                                               |
-| oai_assistant_twoagents_basic           | ✅     |                                                                                                                                                                      |
-| oai_code_interpreter                    | ✅     |                                                                                                                                                                      |
-| planning                                | ✅     | This sample works fine, but does not exit gracefully.                                                                                                                |
-| qdrant_RetrieveChat                     | 🔲     |                                                                                                                                                                      |
-| RetrieveChat                            | 🔲     |                                                                                                                                                                      |
-| stream                                  | 🔲     |                                                                                                                                                                      |
-| teachability                            | 🔲     |                                                                                                                                                                      |
-| teaching                                | 🔲     |                                                                                                                                                                      |
-| two_users                               | ✅     | The response will be very long and should set a large max_tokens.                                                                                                    |
-| video_transcript_translate_with_whisper | ✅     | Depends on ffmpeg lib, should `brew install ffmpeg` and export IMAGEIO_FFMPEG_EXE. Since ffmpeg occupies too much space, the online version has removed the support. |
-| web_info                                | ✅     |                                                                                                                                                                      |
-| cq_math                                 | ⭕     | This example is quite irrelevant to autogen, why not just use OpenAI API?                                                                                            |
-| Async_human_input                       | ⭕     | Need scenario.                                                                                                                                                       |
-| oai_chatgpt_gpt4                        | ⭕     | Fine-tuning, out of project scope                                                                                                                                    |
-| oai_completion                          | ⭕     | Fine-tuning, out of project scope                                                                                                                                    |
-
 ## 🐳 Run on Local (with Docker)
 
-The project contains Frontend (Built with Next.js) and Backend service (Built with Flask in Python), and have been fully dockerized.
+The project contains Frontend (Built with Next.js) and Backend service (Built with FastAPI in Python), and have been fully dockerized.
+
+Before running the project, you need to create a `.env` file in the `ui` abd `api` directory and set environment variables.
+
+```bash
+cp ui/.env.sample ui/.env
+cp api/.env.sample api/.env
+cp api/OAI_CONFIG_LIST.sample api/OAI_CONFIG_LIST
+```
+
+Please be aware that Supabase provides both **anon** key and **service_role** key for each project. Please be sure to set anon key to `NEXT_PUBLIC_SUPABASE_ANON_KEY` for frontend(ui), and service role key to `SUPABASE_SERVICE_KEY` for backend(api).
 
 The easiest way to run on local is using docker-compose:
 
 ```bash
-cp ui/.env.example ui/.env
-rm ui/.env.production
 docker-compose up -d
 ```
 
@@ -132,14 +86,14 @@ Railway.app supports the deployment of applications in Dockers. By clicking the 
 
 If you're interested in contributing to the development of this project or wish to run it from the source code, you have the option to run the ui and service independently. Here's how you can do that:
 
-1. **UI (Frontend)**
+### **UI (Frontend)**
 
    - Navigate to the ui directory `cd ui`.
    - Rename `.env.sample` to `.env.local` and set the value of variables correctly.
    - Install the necessary dependencies using the appropriate package manager command (e.g., `pnpm install` or `yarn`).
    - Run the ui service using the start-up script provided (e.g., `pnpm dev` or `yarn dev`).
 
-2. **API (Backend Services)**
+### **API (Backend Services)**
 
    - Switch to the api service directory `cd api`.
    - Rename `.env.sample` to `.env`, `OAI_CONFIG_LIST.sample` to `OAI_CONFIG_LIST`, and set the value of variables correctly.
@@ -148,13 +102,18 @@ If you're interested in contributing to the development of this project or wish 
    - Install all required dependencies: `pip install -r requirements.txt`.
    - Launch the api service using command `uvicorn app.main:app --reload --port 5004`.
 
-`REPLICATE_API_TOKEN` is needed for LLaVa agent. If you need to use this agent, make sure to include this token in environment variables, such as the Environment Variables on Railway.app.
+`REPLICATE_API_TOKEN` is needed for LLaVa agent. If you need to use this agent, make sure to include this token in environment variables.
 
-**IMPORTANT**: For security reasons, the latest version of autogen requires Docker for code execution. So you need to install Docker on your local machine beforehand, or add `AUTOGEN_USE_DOCKER=False` to file `/api/.env`.
+**IMPORTANT**: The latest version of Autogen requires Docker for code execution by default. To proceed, you must either:
 
-3. **Supabase:**
+1. Install Docker on your local machine, **OR**
+1. Disable this requirement by setting `AUTOGEN_USE_DOCKER=False` in the `api/.env` file.
 
-This project relies on Supabase for user authentication and data storage. You need to create a Supabase project on https://supabase.com/ and set the environment variables in the `.env` file. You can of course deploy your own Supabase instance, which is out of the scope of this document.
+Note: This requirement is disabled by default since the default deployment of this project already uses Docker.
+
+### **Supabase (Database Services)**
+
+This project relies on Supabase for user authentication and data storage. To get started, create a Supabase project on https://supabase.com/ and set the environment variables (with SUPABSE in the variable name) in the `.env` file. If you prefer, you can deploy your own Supabase instance, but that is beyond the scope of this document.
 
 Once you've started both the ui and api services by following the steps previously outlined, you can access the application by opening your web browser and navigating to:
 

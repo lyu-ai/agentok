@@ -1,19 +1,28 @@
 import base64
-import mimetypes
 import re
 from io import BytesIO
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import List, Tuple, Union
 
 import requests
 from PIL import Image
 
 
 def get_image_data(image_file: str, use_b64=True) -> bytes:
+    """
+    Fetch image data from a URL, base64 string, or local file.
+
+    Args:
+        image_file (str): The image source, which can be a URL, base64 string, or local file path.
+        use_b64 (bool): Whether to return the data as a base64-encoded string.
+
+    Returns:
+        bytes: The image data, either as raw bytes or base64-encoded string.
+    """
     if image_file.startswith("http://") or image_file.startswith("https://"):
         response = requests.get(image_file)
         content = response.content
-    elif re.match(r"data:image/(?:png|jpeg);base64,", image_file):
-        return re.sub(r"data:image/(?:png|jpeg);base64,", "", image_file)
+    elif re.match(r"^data:image/(png|jpeg);base64,", image_file):
+        content = base64.b64decode(re.sub(r"^data:image/(png|jpeg);base64,", "", image_file))
     else:
         image = Image.open(image_file).convert("RGB")
         buffered = BytesIO()
@@ -21,7 +30,7 @@ def get_image_data(image_file: str, use_b64=True) -> bytes:
         content = buffered.getvalue()
 
     if use_b64:
-        return base64.b64encode(content).decode("utf-8")
+        return base64.b64encode(content)
     else:
         return content
 

@@ -16,7 +16,7 @@ export async function POST(
 
   try {
     const res = await fetch(
-      `${NEXT_PUBLIC_BACKEND_URL}/chats/${params.id}/abort`,
+      `${NEXT_PUBLIC_BACKEND_URL}/v1/chats/${params.id}/abort`,
       {
         method: 'POST',
         headers: {

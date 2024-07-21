@@ -7,8 +7,10 @@ import {
   RiApps2Fill,
   RiRobot2Line,
   RiRobot2Fill,
-  RiShoppingBag4Fill,
-  RiShoppingBag4Line,
+  RiCompassFill,
+  RiCompassLine,
+  RiBankFill,
+  RiBankLine,
 } from 'react-icons/ri';
 import { usePathname } from 'next/navigation';
 
@@ -29,11 +31,18 @@ export const getGeneralMenuItems = () => {
       href: '/chat',
     },
     {
-      id: 'marketplace',
-      label: 'Marketplace',
-      icon: RiShoppingBag4Line,
-      activeIcon: RiShoppingBag4Fill,
-      href: '/marketplace',
+      id: 'datasets',
+      label: 'Knowledge',
+      icon: RiBankLine,
+      activeIcon: RiBankFill,
+      href: `/datasets`,
+    },
+    {
+      id: 'discover',
+      label: 'Discover',
+      icon: RiCompassLine,
+      activeIcon: RiCompassFill,
+      href: '/discover',
     },
   ];
   return NAV_MENU_ITEMS;

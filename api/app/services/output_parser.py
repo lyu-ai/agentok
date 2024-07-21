@@ -57,12 +57,15 @@ class OutputParser:
 
     def _handle_chat_state(self, line):
         if self.meta_pattern.match(line):
-            self.current_message['meta'] = self.meta_pattern.match(line).group(1)
+            match = self.meta_pattern.match(line)
+            if match:
+                self.current_message['meta'] = match.group(1)
         elif self.from_to_pattern.match(line):
             match = self.from_to_pattern.match(line)
-            self.current_message['sender'] = match.group(1)
-            self.current_message['receiver'] = match.group(2)
-            self.state = self.STATE_CONTENT
+            if match:
+                self.current_message['sender'] = match.group(1)
+                self.current_message['receiver'] = match.group(2)
+                self.state = self.STATE_CONTENT
         elif self.end_pattern.match(line):
             self._end_of_message()
 

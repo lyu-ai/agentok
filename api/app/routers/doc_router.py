@@ -9,8 +9,8 @@ async def custom_redoc():
     <!DOCTYPE html>
     <html>
       <head>
-        <title>Agentok Studio API Docs</title>
-        <link rel="icon" type="image/png" href="/static/favicon.ico"/>
+        <title>Agentok APIs</title>
+        <link rel="icon" type="image/x-icon" href="/static/favicon.ico"/>
         <style>
           body {
             margin: 0;
@@ -19,7 +19,7 @@ async def custom_redoc():
         </style>
       </head>
       <body>
-        <redoc spec-url="/openapi.json"></redoc>
+        <redoc spec-url="/v1/openapi.json"></redoc>
         <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
       </body>
     </html>

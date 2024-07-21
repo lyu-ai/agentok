@@ -156,7 +156,7 @@
     "ChatListButton": {
       "new-chat": "New Chat",
       "project": "Project",
-      "template": "Marketplace",
+      "template": "Discover",
       "new-chat-tooltip": "Create a new chat",
       "from-template-tooltip": "Create a new chat from template"
     },
@@ -353,10 +353,10 @@
       "description": "Build Multi-Agent Apps with Drag-and-Drop Simplicity.",
       "create-project": "Create New Project",
       "start-from-template": "Start from Template",
-      "discover-marketplace": "Discover More in Marketplace"
+      "discover": "Find more templates"
     },
-    "Marketplace": {
-      "select-template-title": "Agentok Marketplace",
+    "Discover": {
+      "select-template-title": "Agentok Community",
       "select-project": "Discover top project templates. Chat, or Fork to build your own custom agentic app.",
       "refresh": "Refresh"
     },

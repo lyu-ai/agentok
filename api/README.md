@@ -1,5 +1,11 @@
 # Backend Service for Agentok Studio
 
+This project is the backend service for Agentok Studio. It is built with FastAPI, a modern web framework for building APIs with Python 3.6+ based on standard Python type hints.
+
+This project uses Supabase as the database and authentication service. Supabase is an open-source Firebase alternative. It provides a set of tools to build modern web and mobile applications.
+
+In this project, we use the Service Role Key to access the database and authentication service. The Service Role Key is a secret key that allows you to access the Supabase API. It is used to authenticate requests to the Supabase API.
+
 Run the service:
 
 ```bash
@@ -39,4 +45,4 @@ docker run -d -p 5004:5004 agentok-api
 
 By default, when you create a FastAPI application, it automatically generates OpenAPI schemas for all your routes and serves them under /docs and /redoc paths.
 
-You can visit `/redoc` or `/docs`, such as [http://localhost:5004/redoc](http://localhost:5004/redoc) or [http://localhost:5004/docs](http://localhost:5004/docs) to see the API docs.
+You can visit `/api-docs` such as [http://localhost:5004/api-docs](http://localhost:5004/api-docs) to read the API docs, or `/docs`, such as [http://localhost:5004/docs](http://localhost:5004/docs) to test the APIs on Swagger UI.
