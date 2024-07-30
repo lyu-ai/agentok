@@ -72,7 +72,7 @@ docker run -d -p 2855:2855 agentok-ui
 
 ## 🚀 Deployment
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/templates/NCoZBC?referralCode=5I-BUc)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/5k5N_g?referralCode=5I-BUc)
 
 Railway.app supports the deployment of applications in Dockers. By clicking the "Deploy on Railway" button, you'll streamline the setup and deployment of your application on Railway platform:
 
@@ -88,19 +88,19 @@ If you're interested in contributing to the development of this project or wish 
 
 ### **UI (Frontend)**
 
-   - Navigate to the ui directory `cd ui`.
-   - Rename `.env.sample` to `.env.local` and set the value of variables correctly.
-   - Install the necessary dependencies using the appropriate package manager command (e.g., `pnpm install` or `yarn`).
-   - Run the ui service using the start-up script provided (e.g., `pnpm dev` or `yarn dev`).
+- Navigate to the ui directory `cd ui`.
+- Rename `.env.sample` to `.env.local` and set the value of variables correctly.
+- Install the necessary dependencies using the appropriate package manager command (e.g., `pnpm install` or `yarn`).
+- Run the ui service using the start-up script provided (e.g., `pnpm dev` or `yarn dev`).
 
 ### **API (Backend Services)**
 
-   - Switch to the api service directory `cd api`.
-   - Rename `.env.sample` to `.env`, `OAI_CONFIG_LIST.sample` to `OAI_CONFIG_LIST`, and set the value of variables correctly.
-   - Create virtual environment: `python3 -m venv venv`.
-   - Activate virtual environment: `source venv/bin/activate`.
-   - Install all required dependencies: `pip install -r requirements.txt`.
-   - Launch the api service using command `uvicorn app.main:app --reload --port 5004`.
+- Switch to the api service directory `cd api`.
+- Rename `.env.sample` to `.env`, `OAI_CONFIG_LIST.sample` to `OAI_CONFIG_LIST`, and set the value of variables correctly.
+- Create virtual environment: `python3 -m venv venv`.
+- Activate virtual environment: `source venv/bin/activate`.
+- Install all required dependencies: `pip install -r requirements.txt`.
+- Launch the api service using command `uvicorn app.main:app --reload --port 5004`.
 
 `REPLICATE_API_TOKEN` is needed for LLaVa agent. If you need to use this agent, make sure to include this token in environment variables.
 
