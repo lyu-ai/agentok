@@ -6,7 +6,7 @@ const NEXT_PUBLIC_BACKEND_URL =
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { documentId: string; } }
+  { params }: { params: { datasetId: string; documentId: string; } }
 ) {
   try {
     const supabase = createClient();
@@ -23,24 +23,24 @@ export async function GET(
 
     return NextResponse.json(project);
   } catch (e) {
-    console.error(`Failed GET /projects/${params.documentId}/datasets: ${e}`);
+    console.error(`Failed GET /datasets/${params.datasetId}/documents/${params.documentId}/chunks: ${e}`);
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { projectId: string; datasetId: string } }
+  { params }: { params: { datasetId: string; documentId: string } }
 ) {
   try {
     const session = await getSupabaseSession(); // Ensure user is authenticated
     const formData = await request.formData();
-    const projectId = parseInt(params.projectId, 10);
     const datasetId = parseInt(params.datasetId, 10);
+    const documentId = parseInt(params.documentId, 10);
 
-    console.log(`POST /projects/${projectId}/datasets/${datasetId}/documents`, formData);
+    console.log(`POST /datasets/${datasetId}/documents/${documentId}/chunks`, formData);
 
-    const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/v1/datasets/${datasetId}/documents`, {
+    const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/v1/datasets/${datasetId}/documents/${documentId}/chunks`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export async function POST(
     const data = await res.json();
     return NextResponse.json(data);
   } catch (e) {
-    console.error(`Failed POST /projects/${params.projectId}/datasets/${params.datasetId}/documents: ${e}`);
+    console.error(`Failed POST /datasets/${params.datasetId}/documents/${params.documentId}/chunks: ${e}`);
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }

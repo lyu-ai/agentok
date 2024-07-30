@@ -38,13 +38,13 @@ const Page = ({ params }: { params: { projectId: string } }) => {
   };
   return (
     <div className="flex flex-col w-full gap-4 p-2 flex-grow h-full overflow-y-auto">
-      <div className="flex flex-col items-center gap-3 w-full text-center">
+      <div className="flex flex-col items-center gap-3 w-full h-full text-center justify-center">
         <RiFormula className="w-16 h-16 text-primary" />
         {t('tool-prompt')}
-        <SharedToolList onFork={onFork} />
+        {/* <SharedToolList onFork={onFork} /> */}
       </div>
     </div>
   );
-};
+}
 
 export default Page;

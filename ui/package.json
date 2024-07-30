@@ -3,7 +3,7 @@
   "description": "Agentok Studio - AutoGen Visualized",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 2855",
+    "dev": "next dev -p 2855 --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

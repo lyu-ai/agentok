@@ -68,7 +68,7 @@ export async function DELETE(
     const chunkId = parseInt(params.chunkId, 10);
 
     const { error } = await supabase
-      .from('datasets')
+      .from('chunks')
       .delete()
       .eq('id', chunkId)
       .eq('document_id', documentId);

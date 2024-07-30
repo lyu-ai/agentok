@@ -3,40 +3,35 @@ import { createClient, getSupabaseSession } from '@/utils/supabase/server';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { projectId: string } }
 ) {
   try {
     const supabase = createClient();
     await getSupabaseSession(); // Ensure user is authenticated
-    const projectId = parseInt(params.projectId, 10);
 
     const { data: dataset, error } = await supabase
       .from('datasets')
-      .select('*')
-      .eq('project_id', projectId);
+      .select('*');
 
-    console.log('GET /datasets', projectId, dataset);
+    console.log('GET /datasets', dataset);
 
     if (error) throw error;
 
     return NextResponse.json(dataset);
   } catch (e) {
-    console.error(`Failed GET /projects/${params.projectId}/datasets: ${e}`);
+    console.error(`Failed GET /datasets: ${e}`);
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { projectId: string } }
 ) {
   try {
     const supabase = createClient();
     await getSupabaseSession(); // Ensure user is authenticated
     const dataset = await request.json();
-    const projectId = parseInt(params.projectId, 10);
 
-    console.log(`POST /projects/${projectId}/datasets`, dataset);
+    console.log(`POST /datasets`, dataset);
 
     const { data, error } = await supabase
       .from('datasets')
@@ -46,7 +41,7 @@ export async function POST(
 
     return NextResponse.json(data);
   } catch (e) {
-    console.error(`Failed POST /projects/${params.projectId}: ${e}`);
+    console.error(`Failed POST /datasets: ${e}`);
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }

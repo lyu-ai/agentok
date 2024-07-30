@@ -6,18 +6,16 @@ const NEXT_PUBLIC_BACKEND_URL =
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { projectId: string; datasetId: string } }
+  { params }: { params: { datasetId: string } }
 ) {
   try {
     const supabase = createClient();
     await getSupabaseSession(); // Ensure user is authenticated
-    const projectId = parseInt(params.projectId, 10);
     const datasetId = parseInt(params.datasetId, 10);
 
     const { data: project, error } = await supabase
       .from('documents')
       .select('*')
-      .eq('project_id', projectId)
       .eq('dataset_id', datasetId)
       .single();
 
@@ -25,22 +23,21 @@ export async function GET(
 
     return NextResponse.json(project);
   } catch (e) {
-    console.error(`Failed GET /projects/${params.projectId}/datasets: ${e}`);
+    console.error(`Failed GET /datasets/${params.datasetId}/documents: ${e}`);
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { projectId: string; datasetId: string } }
+  { params }: { params: { datasetId: string } }
 ) {
   try {
     const session = await getSupabaseSession(); // Ensure user is authenticated
     const formData = await request.formData();
-    const projectId = parseInt(params.projectId, 10);
     const datasetId = parseInt(params.datasetId, 10);
 
-    console.log(`POST /projects/${projectId}/datasets/${datasetId}/documents`, formData);
+    console.log(`POST /datasets/${datasetId}/documents`, formData);
 
     const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/v1/datasets/${datasetId}/documents`, {
       method: 'POST',
@@ -58,7 +55,7 @@ export async function POST(
     const data = await res.json();
     return NextResponse.json(data);
   } catch (e) {
-    console.error(`Failed POST /projects/${params.projectId}/datasets/${params.datasetId}/documents: ${e}`);
+    console.error(`Failed POST /datasets/${params.datasetId}/documents: ${e}`);
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
