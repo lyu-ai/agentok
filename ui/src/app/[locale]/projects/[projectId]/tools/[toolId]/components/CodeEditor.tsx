@@ -18,25 +18,22 @@ interface CodeEditorProps {
   [key: string]: any;
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = ({
-  projectId,
-  tool,
-  ...props
-}) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({ params }: any) => {
   const t = useTranslations('tool.Editor');
   const [isGenerating, setIsGenerating] = useState(false);
+  const projectId = parseInt(params.projectId, 10);
   const { project, updateProject } = useProject(projectId);
-  const [code, setCode] = useState<string | undefined>(tool?.code);
+  const [code, setCode] = useState<string | undefined>(params.tool?.code);
 
   useEffect(() => {
-    if (tool?.code !== code) setCode(tool?.code);
-  }, [tool]);
+    if (params.tool?.code !== code) setCode(params.tool?.code);
+  }, [params.tool]);
 
   const debouncedUpdateProject = useCallback(
     debounce((updatedCode: string) => {
       updateProject({
         tools: project?.tools?.map((f: any) => {
-          if (f.id === tool.id) {
+          if (f.id === params.tool.id) {
             return {
               ...f,
               code: updatedCode,
@@ -46,7 +43,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         }),
       });
     }, 500),
-    [project, tool.id, updateProject]
+    [project, params.tool.id, updateProject]
   );
 
   useEffect(() => {
@@ -64,7 +61,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(tool),
+        body: JSON.stringify(params.tool),
       });
 
       if (res.ok) {
@@ -97,16 +94,16 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
               'absolute transition-transform ease-linear duration-300',
               {
                 'right-2 bottom-2 translate-x-0 translate-y-0':
-                  tool?.code !== '',
+                  params.tool?.code !== '',
                 'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2':
-                  tool?.code === '',
+                  params.tool?.code === '',
               }
             )}
           >
             <button
               className={clsx(
                 'btn gap-1',
-                tool?.code ? 'btn-sm btn-outline' : 'btn-primary'
+                params.tool?.code ? 'btn-sm btn-outline' : 'btn-primary'
               )}
               data-tooltip-id="func-tooltip"
               data-tooltip-content={t('generate-code-tooltip')}

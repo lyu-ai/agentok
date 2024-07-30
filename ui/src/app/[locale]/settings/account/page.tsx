@@ -1,28 +1,25 @@
 'use client';
 import { useEffect, useState } from 'react';
-import pb, { getAvatarUrl } from '@/utils/supabase/client'; // Adjust the import path as necessary
-import { AuthModel } from 'pocketbase';
+import supabase from '@/utils/supabase/client'; // Adjust the import path as necessary
 import Loading from '@/components/Loading';
+import { User } from '@supabase/supabase-js';
 
 const AccountPage = () => {
-  const [user, setUser] = useState<AuthModel | undefined>(undefined);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [avatar, setAvatar] = useState('');
 
   useEffect(() => {
     const fetchUserData = async () => {
-      try {
-        const userData = (
-          await pb.collection('users').authRefresh({ requestKey: null })
-        ).record;
-        setUser(userData);
-        setAvatar(getAvatarUrl(userData));
+      await supabase.auth.getUser().then(resp => {
+        const user = resp.data?.user;
+        setUser(user);
+      }).catch(err => {
+        setError(err.message);
+      }).finally(() => {
         setLoading(false);
-      } catch (err) {
-        setError((err as any).message);
-        setLoading(false);
-      }
+      });
     };
 
     fetchUserData();
@@ -42,14 +39,14 @@ const AccountPage = () => {
         </div>
         <div className="flex-grow">
           <div className="mb-4">
-            <span className="font-bold">Name:</span> {user.name}
+            <span className="font-bold">Name:</span> {user.email}
           </div>
           <div className="mb-4">
             <span className="font-bold">Email:</span> {user.email}
           </div>
           <div>
             <span className="font-bold">Created:</span>{' '}
-            {new Date(user.created).toLocaleDateString()}
+            {new Date(user.created_at).toLocaleDateString()}
           </div>
         </div>
       </div>

@@ -11,7 +11,7 @@ import { IoReload } from 'react-icons/io5';
 import Markdown from '@/components/Markdown';
 import { useTranslations } from 'next-intl';
 import { getAvatarUrl } from '@/utils/supabase/client';
-import pb from '@/utils/supabase/client';
+import supabase from '@/utils/supabase/client';
 import { useChat } from '@/hooks';
 
 const MessageBlock = ({ chatId, message, onSend }: any) => {
@@ -83,13 +83,7 @@ const MessageBlock = ({ chatId, message, onSend }: any) => {
 
   let avatarIcon = <RiRobot2Fill className="w-5 h-5" />;
   if (message.type === 'user') {
-    avatarIcon = pb.authStore.model?.avatar ? (
-      <img
-        alt="avatar"
-        src={getAvatarUrl(pb.authStore.model as any)}
-        className="w-full h-full object-cover rounded-full"
-      />
-    ) : (
+    avatarIcon = (
       <GoPersonFill className="w-5 h-5" />
     );
   } else if (message.sender === userNodeName) {

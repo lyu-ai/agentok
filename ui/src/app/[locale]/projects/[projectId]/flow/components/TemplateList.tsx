@@ -3,7 +3,7 @@ import { BsInboxes } from 'react-icons/bs';
 import { GoRepoForked, GoTrash } from 'react-icons/go';
 import { useChats, useProjects, useTemplates } from '@/hooks';
 import clsx from 'clsx';
-import pb, { getAvatarUrl } from '@/utils/supabase/client';
+import supabase, { getAvatarUrl } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -74,8 +74,11 @@ export const TemplateCard = ({
     });
   }
   useEffect(() => {
-    setIsAuthed(!!pb.authStore.model);
-    setIsOwned(template.owner === pb.authStore.model?.id);
+    supabase.auth.getUser().then(resp => {
+      const user = resp.data?.user;
+      setIsAuthed(!!user);
+      setIsOwned(template.owner === user?.id);
+    });
   }, [template]);
   const onDelete = (e: any) => {
     e.stopPropagation();

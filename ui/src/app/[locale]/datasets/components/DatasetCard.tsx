@@ -4,8 +4,8 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import { RiFormula, RiDeleteBin4Line } from 'react-icons/ri';
 
-const DatasetCard = ({ projectId, datasetId, onDelete, selected, ...props }: any) => {
-  const { dataset, isError, isLoading } = useDataset(projectId, datasetId);
+const DatasetCard = ({ datasetId, onDelete, selected, ...props }: any) => {
+  const { dataset, isError, isLoading } = useDataset(datasetId);
   const [isDeleting, setIsDeleting] = useState(false);
   const handleDelete = async (e: any) => {
     e.stopPropagation();

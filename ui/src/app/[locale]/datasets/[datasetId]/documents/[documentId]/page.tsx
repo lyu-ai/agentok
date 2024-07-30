@@ -1,3 +1,4 @@
+'use client';
 import { useChunks } from "@/hooks";
 import { useTranslations } from "next-intl";
 import ChunkCard from "./components/ChunkCard";
@@ -18,3 +19,5 @@ const Page = ({ params }: { params: { datasetId: string; documentId: string } })
     </div>
   );
 }
+
+export default Page;
