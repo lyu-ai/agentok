@@ -134,7 +134,7 @@ export function useProjects() {
           body: JSON.stringify({
             name: template.name,
             description: template.description,
-            project: template.project,
+            flow: template.project.flow,
             user_id: userId,
           }),
         });

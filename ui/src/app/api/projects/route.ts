@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
     const { data, error } = await supabase
       .from('projects')
-      .insert(project);
+      .insert(project).select('*').single();
 
     if (error) throw error;
 

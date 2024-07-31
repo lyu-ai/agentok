@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     chat.user_id = user.id;
     const { data, error } = await supabase
       .from('chats')
-      .upsert(chat);
+      .upsert(chat).select('*').single();
 
     if (error) throw error;
 

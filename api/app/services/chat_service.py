@@ -8,6 +8,7 @@ from ..models import Chat, ChatCreate, MessageCreate, Message, Project
 from .chat_manager import ChatManager
 from .supabase_client import SupabaseClient  # Import your SupabaseClient
 
+
 class ChatService:
     def __init__(self, supabase: SupabaseClient, codegen_service: CodegenService):
         self.codegen_service = codegen_service  # Injecting CodegenService instance
@@ -33,16 +34,19 @@ class ChatService:
 
         # Check the existence of latest code
         source = self.supabase.fetch_source_metadata(chat_id)
-        datetime_obj = datetime.fromisoformat(source['updated_at'])
+        print("source", source)
+        datetime_obj = datetime.fromisoformat(source["updated_at"])
 
         source_file = f"{source['id']}-{datetime_obj.timestamp()}.py"
-        source_path = os.path.join(tempfile.gettempdir(), 'agentok/generated/', source_file)
+        source_path = os.path.join(
+            tempfile.gettempdir(), "agentok/generated/", source_file
+        )
 
         # Create the directory if it doesn't exist
         os.makedirs(os.path.dirname(source_path), exist_ok=True)
 
         generated_code = self.codegen_service.project2py(Project(**source))
-        with open(source_path, 'w', encoding='utf-8') as file:
+        with open(source_path, "w", encoding="utf-8") as file:
             file.write(generated_code)
 
         # Launch the agent instance and intialize the chat
@@ -50,7 +54,9 @@ class ChatService:
             self.supabase.add_message(MessageCreate(**assistant_message), chat_id)
 
         # When it's time to run the assistant:
-        return await self.chat_manager.run_assistant(chat_id, message.content or '\n', source_path, on_message)
+        return await self.chat_manager.run_assistant(
+            chat_id, message.content or "\n", source_path, on_message
+        )
 
     async def abort_chat(self, chat_id: str):
         return await self.chat_manager.abort_assistant(chat_id)
@@ -59,4 +65,6 @@ class ChatService:
         self.supabase.add_message(message, chat_id)
 
         # Then send human input to the running assistant
-        return await self.chat_manager.send_human_input(chat_id, message.content or '\n')
+        return await self.chat_manager.send_human_input(
+            chat_id, message.content or "\n"
+        )

@@ -35,7 +35,7 @@ export async function POST(
 
     const { data, error } = await supabase
       .from('datasets')
-      .insert(dataset);
+      .insert(dataset).select('*').single();
 
     if (error) throw error;
 

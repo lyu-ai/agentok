@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     // Use upsert to insert or update the user's settings
     const { data, error } = await supabase
       .from('users')
-      .upsert({ user_id: user.id, settings }, { onConflict: 'user_id' });
+      .upsert({ user_id: user.id, settings }, { onConflict: 'user_id' }).select('*').single();
 
     if (error) throw error;
 

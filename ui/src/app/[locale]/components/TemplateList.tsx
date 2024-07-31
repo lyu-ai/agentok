@@ -8,9 +8,9 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
-import { PiChatCircleDotsBold } from 'react-icons/pi';
 import Markdown from '@/components/Markdown';
 import { useUserId } from '@/hooks/useUser';
+import { RiRobot2Line } from 'react-icons/ri';
 
 export const TemplateEmpty = () => {
   const t = useTranslations('component.TemplateList');
@@ -81,13 +81,13 @@ export const TemplateCard = ({
     setIsAuthed(userId !== null);
     setIsOwned(template.user_id === userId);
     getAvatarUrl().then(setOwnerAvatar);
-  }, [template]);
-  const onDelete = (e: any) => {
+  }, [template, userId]);
+  const handleDelete = (e: any) => {
     e.stopPropagation();
     e.preventDefault();
     deleteTemplate(template.id);
   };
-  const onFork = async (e: any) => {
+  const handleFork = async (e: any) => {
     e.stopPropagation();
     e.preventDefault();
     const forkedProject = await forkProject(template);
@@ -95,7 +95,7 @@ export const TemplateCard = ({
       router.push(`/projects/${forkedProject.id}/flow`);
     }
   };
-  const onChat = async (e: any) => {
+  const handleChat = async (e: any) => {
     e.stopPropagation();
     e.preventDefault();
     await createChat(template.id, 'template')
@@ -179,14 +179,14 @@ export const TemplateCard = ({
           {templateDescription}
         </Markdown>
         {isAuthed && (
-          <div className="relative card-actions justify-end gap-1 text-xs text-base-content/60">
+          <div className="relative card-actions justify-end gap-2 text-xs text-base-content/60">
             <button
-              className="btn btn-xs rounded btn-outline group-hover:bg-primary group-hover:text-primary-content gap-1 group-hover:animate-pulse"
-              onClick={onChat}
+              className="btn btn-xs btn-ghost gap-1"
+              onClick={handleChat}
               data-tooltip-id="default-tooltip"
               data-tooltip-content={t('start-chat-tooltip')}
             >
-              <PiChatCircleDotsBold
+              <RiRobot2Line
                 className={clsx('w-4 h-4', {
                   'animate-spin': isCreating,
                 })}
@@ -194,8 +194,8 @@ export const TemplateCard = ({
               {t('start-chat')}
             </button>
             <button
-              className="btn btn-xs btn-outline rounded group-hover:btn-primary gap-1"
-              onClick={onFork}
+              className="btn btn-xs btn-ghost gap-1"
+              onClick={handleFork}
               data-tooltip-id="default-tooltip"
               data-tooltip-content={t('fork-tooltip')}
             >
@@ -209,7 +209,7 @@ export const TemplateCard = ({
                 className="absolute left-0 btn btn-xs btn-ghost btn-square group-hover:text-red-400"
                 data-tooltip-id="default-tooltip"
                 data-tooltip-content={t('unpublish-tooltip')}
-                onClick={onDelete}
+                onClick={handleDelete}
               >
                 <GoTrash
                   className={clsx('w-4 h-4', {

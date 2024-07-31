@@ -44,7 +44,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     const chat = await res.json();
     return new Response(JSON.stringify(chat));
   } catch (e) {
-    console.error(`Failed POST /chats:`, (e as any).message);
+    console.error(`Failed POST /chats/${params.id}/messages:`, (e as any).message);
     return new Response((e as any).message, { status: 400 });
   }
 }
