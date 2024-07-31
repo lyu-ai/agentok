@@ -11,6 +11,7 @@ export default function AuthCallback() {
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event: AuthChangeEvent, session: Session | null) => {
+        console.log('auth-change', event, session);
         if (event === 'SIGNED_IN') {
           router.push('/'); // or wherever you want to redirect after sign in
         }

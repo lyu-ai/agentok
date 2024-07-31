@@ -18,12 +18,11 @@ import { useUser } from '@/hooks/useUser';
 
 const UserImage = ({ user, className }: any) => {
   // State to handle image load error
-  const [imgLoadError, setImgLoadError] = useState(false);
+  const [imgUrl, setImgUrl] = useState<string>('/logo-spaced.png');
+  useEffect(() => {
+    getAvatarUrl().then(setImgUrl);
+  }, [user]);
 
-  const handleError = () => {
-    console.warn('Failed to load avatar image', user.user_metadata?.avatar_url);
-    setImgLoadError(true);
-  };
   return (
     <div
       className={
@@ -31,11 +30,10 @@ const UserImage = ({ user, className }: any) => {
         'w-8 h-8 rounded-full bg-primary/10 text-primary/80 hover:text-primary hover:bg-primary/20 overflow-hidden'
       }
     >
-      {user.avatar && !imgLoadError ? (
+      {imgUrl ? (
         <img
           alt="avatar"
-          src={getAvatarUrl(user)}
-          onError={handleError}
+          src={imgUrl}
           className="w-full h-full object-cover rounded-full"
         />
       ) : (
@@ -60,11 +58,11 @@ const UserPanel = ({ user }: { user: any }) => {
         className="mt-8 w-16 h-16 rounded-full bg-primary/20 text-primary overflow-hidden"
       />
       <span className="text-lg font-bold">
-        {user.name ?? user.email?.match(/^([^@]+)/)?.[1] ?? '(No Name)'}
+        {user.user_metadata.name ?? user.email?.match(/^([^@]+)/)?.[1] ?? '(No Name)'}
       </span>
       <span className="flex flex-col items-center gap-2">
         {user.email}
-        {user.verified ? (
+        {user.confirmed_at ? (
           <RiVerifiedBadgeLine className="text-green-600 w-5 h-5" />
         ) : (
           <span className="text-red-500"> (unverified)</span>

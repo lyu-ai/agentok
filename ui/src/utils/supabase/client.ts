@@ -22,6 +22,11 @@ export const getRecordFileUrl = (
 export const getAssetFileUrl = (supabase: SupabaseClient) =>
   getRecordFileUrl(supabase, 'file');
 
-export const getAvatarUrl = getRecordFileUrl(supabase, 'avatar');
+export const getAvatarUrl = async () => {
+  const resp = await supabase.auth.getUser();
+  const user = resp.data.user;
+  if (!user) return null;
+  return user.user_metadata?.avatar_url;
+}
 
 export const getIconUrl = getRecordFileUrl(supabase, 'icon');

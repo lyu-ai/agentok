@@ -3,7 +3,7 @@ import { BsInboxes } from 'react-icons/bs';
 import { GoRepoForked, GoTrash } from 'react-icons/go';
 import { useChats, useProjects, useTemplates } from '@/hooks';
 import clsx from 'clsx';
-import supabase, { getAvatarUrl } from '@/utils/supabase/client';
+import { getAvatarUrl } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -54,6 +54,8 @@ export const TemplateCard = ({
   suppressLink,
 }: any) => {
   const { userId } = useUserId();
+  const [ownerName, setOwnerName] = useState('');
+  const [ownerAvatar, setOwnerAvatar] = useState('');
   const [isOwned, setIsOwned] = useState(false);
   const [isAuthed, setIsAuthed] = useState(false);
   const t = useTranslations('component.TemplateList');
@@ -78,6 +80,7 @@ export const TemplateCard = ({
   useEffect(() => {
     setIsAuthed(userId !== null);
     setIsOwned(template.user_id === userId);
+    getAvatarUrl().then(setOwnerAvatar);
   }, [template]);
   const onDelete = (e: any) => {
     e.stopPropagation();
@@ -157,7 +160,7 @@ export const TemplateCard = ({
         <div className="flex gap-2 items-center text-xs text-base-content/60">
           {template.expand?.owner?.avatar && (
             <img
-              src={getAvatarUrl(template.expand?.owner)}
+              src={ownerAvatar}
               height={24}
               width={24}
               alt="owner"
