@@ -140,7 +140,7 @@ export function useChat(chatId: number) {
   const { templates } = useTemplates();
   const chat = chatId === -1 ? undefined : chats.find(chat => chat.id === chatId);
   const chatSource = chatId === -1 ? undefined :
-    chat?.source_type === 'project'
+    chat?.from_type === 'project'
       ? projects &&
       projects.find((project: any) => project.id === chat.from_project)
       : templates &&

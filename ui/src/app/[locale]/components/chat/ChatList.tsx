@@ -154,7 +154,7 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
     if (!chat || isLoading) return <ChatLoading />;
     const ChatIcon = selected ? RiWechat2Fill : RiWechat2Line;
     const ChatTypeIcon = getGeneralMenuItems()[
-      chat.source_type === 'project' ? 0 : 2
+      chat.from_type === 'project' ? 0 : 2
     ].icon;
 
     return (
@@ -195,16 +195,16 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
               'join flex items-center border border-base-content/40 text-xs rounded ',
               {
                 'border-primary/40 text-primary/40 bg-primary/5':
-                  chat.source_type === 'project',
+                  chat.from_type === 'project',
                 'border-secondary/40 text-secondary/40 bg-primary/5':
-                  chat.source_type === 'template',
+                  chat.from_type === 'template',
               }
             )}
           >
             <span
               className={clsx('join-item px-1 py-0.5 border-r ', {
-                'border-primary/40': chat.source_type === 'project',
-                'border-secondary/40': chat.source_type === 'template',
+                'border-primary/40': chat.from_type === 'project',
+                'border-secondary/40': chat.from_type === 'template',
               })}
             >
               <ChatTypeIcon className="w-4 h-4" />

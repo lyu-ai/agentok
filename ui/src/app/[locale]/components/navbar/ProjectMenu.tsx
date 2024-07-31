@@ -8,10 +8,6 @@ import {
   RiBriefcase4Fill,
   RiShuffleLine,
   RiShuffleFill,
-  RiBook3Fill,
-  RiBook3Line,
-  RiBookOpenFill,
-  RiBookOpenLine,
 } from 'react-icons/ri';
 import clsx from 'clsx';
 import { pathToRegexp } from 'path-to-regexp';

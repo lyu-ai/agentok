@@ -16,7 +16,7 @@ export interface Chat {
   name: string;
   from_project: number; // Binded project
   from_template: number; // Binded template
-  source_type: 'project' | 'template';
+  from_type: 'project' | 'template';
   config: any; // Complicated JSON object
   status: string;
   created_at?: string;

@@ -3,10 +3,12 @@ import {
   RiArrowDownLine,
   RiArrowUpLine,
   RiCheckboxCircleLine,
-  RiPencilLine,
+  RiContractLeftLine,
+  RiContractRightLine,
+  RiEraserLine,
+  RiShuffleLine,
   RiWindowLine,
 } from 'react-icons/ri';
-import { MdOutlineCleaningServices } from 'react-icons/md';
 import ChatInput from './ChatInput';
 import { genId } from '@/utils/id';
 import supabase from '@/utils/supabase/client';
@@ -14,7 +16,6 @@ import {
   RealtimeChannel,
 } from '@supabase/supabase-js';
 import { StatusMessage } from '@/utils/chat';
-import { TbArrowBarToLeft, TbArrowBarRight } from 'react-icons/tb';
 import { useTranslations } from 'next-intl';
 import { useChat, useChats } from '@/hooks';
 import { Tooltip } from 'react-tooltip';
@@ -332,6 +333,8 @@ const ChatPane = ({
     });
   }
 
+  console.log('chat:', chat);
+
   return (
     <div className="flex flex-col w-full h-full z-10 shadow-box shadow-gray-700 rounded-xl bg-gray-700/80 text-base-content border border-gray-600">
       <div className="flex items-center justify-between w-full p-2">
@@ -342,9 +345,9 @@ const ChatPane = ({
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
             >
               {sidebarCollapsed ? (
-                <TbArrowBarRight className="w-4 h-4" />
+                <RiContractRightLine className="w-4 h-4" />
               ) : (
-                <TbArrowBarToLeft className="w-4 h-4" />
+                <RiContractLeftLine className="w-4 h-4" />
               )}
             </button>
           )}
@@ -363,14 +366,14 @@ const ChatPane = ({
             onClick={handleClean}
           >
             {cleaning ? (
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+              <div className="animate-spin h-4 w-4 border-b-2 border-white" />
             ) : (
-              <MdOutlineCleaningServices className="w-4 h-4" />
+              <RiEraserLine className="w-4 h-4" />
             )}
           </button>
           {!standalone && (
             <a
-              className="btn btn-xs btn-ghost btn-circle"
+              className="btn btn-xs btn-ghost btn-square"
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('open-in-new-window')}
               href={`/chat?id=${chat?.id}`}
@@ -379,9 +382,9 @@ const ChatPane = ({
               <RiWindowLine className="w-4 h-4" />
             </a>
           )}
-          {!standalone && chat?.source_type === 'project' && (
+          {!standalone && chat?.from_type === 'project' && (
             <button
-              className="btn btn-ghost btn-circle btn-xs"
+              className="btn btn-ghost btn-square btn-xs"
               onClick={() => pinChatPane(!chatPanePinned)}
               data-tooltip-content={chatPanePinned ? t('unpin') : t('pin')}
               data-tooltip-id="chat-tooltip"
@@ -393,16 +396,16 @@ const ChatPane = ({
               )}
             </button>
           )}
-          {standalone && chat?.source_type === 'project' && (
+          {standalone && chat?.from_type === 'project' && (
             <a
-              className="btn btn-sm btn-ghost btn-circle"
+              className="btn btn-xs btn-ghost btn-square"
               data-tooltip-id="chat-tooltip"
               data-tooltip-content={t('go-to-editor')}
               data-tooltip-place="bottom"
               href={`/projects/${chat.from_project}/flow`}
               target="_blank"
             >
-              <RiPencilLine className="w-4 h-4" />
+              <RiShuffleLine className="w-4 h-4" />
             </a>
           )}
         </div>

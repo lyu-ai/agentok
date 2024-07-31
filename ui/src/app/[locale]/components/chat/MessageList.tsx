@@ -1,6 +1,6 @@
 import { stripMatch } from '@/utils/re';
 import { StatusMessage } from '@/utils/chat';
-import { RiRobot2Line, RiRobot2Fill, RiUserVoiceLine, RiCheckLine, RiAlertLine, RiUser2Line, RiRefreshLine, RiUser2Fill } from 'react-icons/ri';
+import { RiRobot2Line, RiRobot2Fill, RiUserVoiceLine, RiCheckLine, RiAlertLine, RiUser2Line, RiRefreshLine, RiUser2Fill, RiSpeakLine, RiUserVoiceFill } from 'react-icons/ri';
 import Markdown from '@/components/Markdown';
 import { useTranslations } from 'next-intl';
 import { useChat, useUser } from '@/hooks';
@@ -13,7 +13,8 @@ const MessageBubble = ({ chat, message, onSend }: any) => {
     chatSource?.flow?.nodes?.find(
       (node: any) =>
         node.data.class === 'UserProxyAgent' ||
-        node.data.class === 'RetrieveUserProxyAgent'
+        node.data.class === 'RetrieveUserProxyAgent' ||
+        node.data.name.includes('User')
     )?.data?.name ?? '';
   let waitForHumanInput = false;
 
@@ -79,13 +80,13 @@ const MessageBubble = ({ chat, message, onSend }: any) => {
       <img
         alt="avatar"
         src={user.user_metadata.avatar_url}
-        className="w-full h-full object-cover rounded-full"
+        className="w-full h-full object-cover rounded-full p-0.5"
       />
     ) : (
-      <RiUser2Line className="w-5 h-5" />
+      <RiUserVoiceLine className="w-5 h-5" />
     );
   } else if (message.sender === userNodeName) {
-    avatarIcon = <RiUser2Fill className="w-5 h-5" />;
+    avatarIcon = <RiUserVoiceFill className="w-5 h-5" />;
   }
 
   let messageHeader = null;
@@ -100,8 +101,8 @@ const MessageBubble = ({ chat, message, onSend }: any) => {
           {message.sender}
           {message.receiver && (
             <>
-              <RiUserVoiceLine className="w-3 h-3 inline-block mx-1" />
-              <span className=" text-base-content/50">{message.receiver}</span>
+              <RiSpeakLine className="w-4 h-4 inline-block mx-1" />
+              <span className="">{message.receiver}</span>
             </>
           )}
         </div>
