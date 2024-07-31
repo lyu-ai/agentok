@@ -74,8 +74,9 @@ const ConverseConfig = ({ edgeId, data, className, style, ...props }: any) => {
     <Popover className="relative nodrag nowheel">
       <PopoverButton style={style} className={className}>
         <div
-          className="tooltip btn btn-sm btn-circle btn-primary flex items-center gap-2"
-          data-tip={'Config the conversation between two agents'}
+          className="btn btn-sm btn-circle btn-primary flex items-center gap-2"
+          data-tooltip-id='default-tooltip'
+          data-tooltip-content={'Config the conversation between two agents'}
         >
           <RiChatSettingsLine className="w-5 h-5" />
         </div>
