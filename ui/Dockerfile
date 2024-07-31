@@ -15,6 +15,7 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=base /app/node_modules ./node_modules
 COPY . .
+ENV NEXT_PUBLIC_BACKEND_URL=https://api.agentok.ai
 ENV NEXT_PUBLIC_SUPABASE_URL=https://lhwgegscthoigipqtczi.supabase.co
 ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxod2dlZ3NjdGhvaWdpcHF0Y3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDEwNjkxNDgsImV4cCI6MjAxNjY0NTE0OH0.cnVAWt3e2DjnpXZfNNs4cl_H1buBg8Y8R2lHWeOHnd4
 

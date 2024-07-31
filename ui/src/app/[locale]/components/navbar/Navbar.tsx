@@ -54,7 +54,7 @@ const Navbar = () => {
           className="link link-hover text-xs hidden md:block"
         >
           API
-        </a>{' '}
+        </a>
         <a
           href="https://github.com/hughlv/agentok"
           aria-label="github"
