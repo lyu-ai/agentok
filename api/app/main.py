@@ -3,38 +3,53 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from .routers import chat_router, codegen_router, dataset_router, extension_router, doc_router, admin_router
+from .routers import (
+    chat_router,
+    codegen_router,
+    dataset_router,
+    extension_router,
+    doc_router,
+    admin_router,
+)
 
-main_app = FastAPI(title="Agentok APIs",
-              description="OpenAPI Specifications of Agentok APIs. To test out the APIs, you need to prepare an [API Key](https://studio.agentok.ai/settings/api-keys) and put it in field 'X-API-KEY' of HTTP headers.",
-              version="1.0.0",
-              swagger_ui_parameters={"persistAuthorization": True},
-              )
+main_app = FastAPI(
+    title="Agentok APIs",
+    description="OpenAPI Specifications of Agentok APIs. To test out the APIs, you need to prepare an [API Key](https://studio.agentok.ai/settings/api-keys) and put it in field 'X-API-KEY' of HTTP headers.",
+    version="1.0.0",
+    swagger_ui_parameters={"persistAuthorization": True},
+)
 
 main_app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
 
 main_app.include_router(chat_router.router, prefix="/chats", tags=["Chat"])
 main_app.include_router(dataset_router.router, prefix="/datasets", tags=["Datasets"])
 main_app.include_router(codegen_router.router, prefix="/codegen", tags=["Codegen"])
-main_app.include_router(extension_router.router, prefix="/extensions", tags=["Extension"])
+main_app.include_router(
+    extension_router.router, prefix="/extensions", tags=["Extension"]
+)
 main_app.include_router(admin_router.router, prefix="/admin", include_in_schema=False)
 
 app = FastAPI()
 app.mount("/v1", main_app)
 app.include_router(doc_router.router, include_in_schema=False)
 
+
 @app.exception_handler(Exception)
 async def global_exception_handler(request, exc: Exception):
     return JSONResponse(
         status_code=400,
-        content={"status_code": 400, "error": {"message": "Internal Server Error", "detail": str(exc)}}
+        content={
+            "status_code": 400,
+            "error": {"message": "Internal Server Error", "detail": str(exc)},
+        },
     )
+
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def root():
@@ -100,6 +115,6 @@ async def root():
     """
     return HTMLResponse(content=html_content)
 
+
 # Mount the static directory to serve favicon file
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
