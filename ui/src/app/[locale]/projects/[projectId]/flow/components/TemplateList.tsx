@@ -156,7 +156,7 @@ export const TemplateCard = ({
           {template.name}
         </h2>
         <div className="flex gap-2 items-center text-xs text-base-content/60">
-          {template.expand?.owner?.avatar && (
+          {/* {template.expand?.owner?.avatar && (
             <img
               src={getAvatarUrl(template.expand?.owner)}
               height={24}
@@ -165,7 +165,7 @@ export const TemplateCard = ({
               className="w-6 h-6 rounded-full"
             />
           )}
-          {template.expand?.owner?.name ?? template.expand?.owner?.email ?? ''}
+          {template.expand?.owner?.name ?? template.expand?.owner?.email ?? ''} */}
         </div>
         <div className="text-xs text-base-content/40">
           {new Date(template.created).toLocaleString()}

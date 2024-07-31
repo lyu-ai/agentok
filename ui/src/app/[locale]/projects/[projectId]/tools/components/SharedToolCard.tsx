@@ -16,7 +16,7 @@ const SharedTool = ({ tool, onFork }: any) => {
         <div className="flex flex-col items-start gap-3">
           <div className="text-lg font-bold">{tool.name}</div>
           <div className="flex gap-2 items-center text-xs text-base-content/60">
-            {tool.expand?.owner?.avatar && (
+            {/* {tool.expand?.owner?.avatar && (
               <img
                 src={getAvatarUrl(tool.expand?.owner)}
                 height={24}
@@ -25,7 +25,7 @@ const SharedTool = ({ tool, onFork }: any) => {
                 className="w-6 h-6 rounded-full"
               />
             )}
-            {tool.expand?.owner?.name ?? tool.expand?.owner?.email ?? ''}
+            {tool.expand?.owner?.name ?? tool.expand?.owner?.email ?? ''} */}
           </div>
         </div>
       </div>
