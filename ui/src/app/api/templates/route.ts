@@ -5,9 +5,8 @@ export async function GET(request: NextRequest) {
   try {
     const supabase = createClient();
     const { data: templates, error } = await supabase
-      .from('templates')
-      .select(`
-        *`)
+      .from('public_templates')
+      .select(`*`)
       .order('created_at', { ascending: false });
 
     if (error) throw error;

@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     if (!user) throw new Error('Not authenticated');
 
     const { data, error } = await supabase
-      .from('users')
+      .from('user_settings')
       .select('settings')
       .eq('user_id', user.id)
       .single();

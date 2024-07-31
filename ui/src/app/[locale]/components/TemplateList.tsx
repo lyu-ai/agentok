@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import Link from 'next/link';
 import Markdown from '@/components/Markdown';
 import { useUserId } from '@/hooks/useUser';
-import { RiRobot2Line } from 'react-icons/ri';
+import { RiRobot2Line, RiUserHeartLine } from 'react-icons/ri';
 
 export const TemplateEmpty = () => {
   const t = useTranslations('component.TemplateList');
@@ -153,21 +153,24 @@ export const TemplateCard = ({
           className="rounded-t-md h-48 w-full object-cover"
         />
       </figure>
-      <div className="card-body p-4 gap-2 font-normal">
+      <div className="card-body p-4 gap-2 font-normal h-64">
         <h2 className="card-title  group-hover:text-primary line-clamp-1">
           {template.name}
         </h2>
-        <div className="flex gap-2 items-center text-xs text-base-content/60">
-          {template.expand?.owner?.avatar && (
+        <div className="flex gap-2 h-8 items-center text-xs text-base-content/60">
+          {template.avatar_url ? (
             <img
-              src={ownerAvatar}
+              src={template.avatar_url ?? '/logo-spaced.png'}
               height={24}
               width={24}
               alt="owner"
               className="w-6 h-6 rounded-full"
-            />
+            />) : (
+            <div className="w-6 h-6 rounded-full shrink-0 bg-base-content/20 flex items-center justify-center">
+              <RiUserHeartLine className='w-4 h-4 text-base-content' />
+            </div>
           )}
-          {template.expand?.owner?.name ?? template.expand?.owner?.email ?? ''}
+          {template.full_name ?? template.email ?? ''}
         </div>
         <div className="text-xs text-base-content/40">
           {new Date(template.created_at).toLocaleString()}

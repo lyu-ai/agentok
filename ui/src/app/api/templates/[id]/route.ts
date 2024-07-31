@@ -10,7 +10,7 @@ export async function GET(
     await getSupabaseSession(); // Ensure user is authenticated
 
     const { data: template, error } = await supabase
-      .from('templates')
+      .from('public_templates')
       .select('*')
       .eq('id', params.id)
       .single();

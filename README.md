@@ -8,7 +8,7 @@
 [![Open in GitHub Codespaces](https://img.shields.io/badge/Codespaces-Open-blue?style=flat&logo=github)](https://codespaces.new/hughlv/agentok)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![GitHub release](https://img.shields.io/github/v/release/hughlv/agentok)
-[![GitHub star](https://img.shields.io/github/stars/hughlv/agentok?style=social)](https://star-history.com/#tiwater/agentok)
+[![GitHub star](https://img.shields.io/github/stars/hughlv/agentok?style=flat&logo=github&color=black&labelColor=gray)](https://star-history.com/#hughlv/agentok)
 [![](https://dcbadge.limes.pink/api/server/xBQxwRSWfm?style=social&timestamp=20240705)](https://discord.gg/xBQxwRSWfm)
 
 ## 🌟 What is Agentok Studio

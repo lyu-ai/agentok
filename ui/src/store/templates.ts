@@ -8,6 +8,8 @@ export interface ProjectTemplate {
   description: string;
   thumbnail?: string; // image url
   project: Project; // Complicated JSON object
+  avatar_url?: string; // image url
+  full_name?: string;
   user_id?: string;
   created_at?: string;
 }

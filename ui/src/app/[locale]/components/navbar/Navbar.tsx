@@ -62,9 +62,9 @@ const Navbar = () => {
           className="hidden md:block"
         >
           <img
-            src="https://img.shields.io/github/stars/hughlv/agentok?style=social
-"
+            src="https://img.shields.io/github/stars/hughlv/agentok?style=flat&logo=github&color=black&labelColor=gray&label=Stars"
             alt="github"
+            className="rounded h-5"
           />
         </a>
         {/* <ThemeSwitcher /> */}
