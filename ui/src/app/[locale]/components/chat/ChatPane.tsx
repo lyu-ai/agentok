@@ -258,7 +258,7 @@ const ChatPane = ({
     const newMessage = {
       id: genId(),
       type: 'user',
-      sender: user?.id,
+      sender: user?.user_metadata.full_name ?? 'User',
       content: message ?? '\n', // If it's empty message, let's simulate a Enter key-press
       created_at: new Date().toISOString(),
     };

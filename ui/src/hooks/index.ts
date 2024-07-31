@@ -5,3 +5,4 @@ export * from './useTools';
 export * from './useChats';
 export * from './useMediaQuery';
 export * from './useSettings';
+export * from './useUser';

@@ -117,9 +117,9 @@ const ParamList = ({ projectId, tool, className, ...props }: any) => {
           parameters: [
             ...(s.parameters || []),
             {
-              id: 'param-' + genId(),
+              id: genId(),
               name: 'newParam',
-              type: 'string',
+              type: 'str',
               description: 'new param description',
               required: true,
             },

@@ -3,11 +3,12 @@ import { StatusMessage } from '@/utils/chat';
 import { RiRobot2Line, RiRobot2Fill, RiUserVoiceLine, RiCheckLine, RiAlertLine, RiUser2Line, RiRefreshLine, RiUser2Fill } from 'react-icons/ri';
 import Markdown from '@/components/Markdown';
 import { useTranslations } from 'next-intl';
-import { useChat } from '@/hooks';
+import { useChat, useUser } from '@/hooks';
 
 const MessageBubble = ({ chat, message, onSend }: any) => {
   const t = useTranslations('component.ChatPane');
   const { chatSource } = useChat(chat.id);
+  const { user } = useUser();
   const userNodeName =
     chatSource?.flow?.nodes?.find(
       (node: any) =>
@@ -74,16 +75,15 @@ const MessageBubble = ({ chat, message, onSend }: any) => {
 
   let avatarIcon = <RiRobot2Fill className="w-5 h-5" />;
   if (message.type === 'user') {
-    // avatarIcon = pb.authStore.model?.avatar ? (
-    //   <img
-    //     alt="avatar"
-    //     src={getAvatarUrl(pb.authStore.model as any)}
-    //     className="w-full h-full object-cover rounded-full"
-    //   />
-    // ) : (
-    //   <RiUser2Line className="w-5 h-5" />
-    // );
-    avatarIcon = <RiUser2Line className="w-5 h-5" />;
+    avatarIcon = user?.user_metadata.avatar_url ? (
+      <img
+        alt="avatar"
+        src={user.user_metadata.avatar_url}
+        className="w-full h-full object-cover rounded-full"
+      />
+    ) : (
+      <RiUser2Line className="w-5 h-5" />
+    );
   } else if (message.sender === userNodeName) {
     avatarIcon = <RiUser2Fill className="w-5 h-5" />;
   }

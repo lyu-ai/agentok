@@ -209,7 +209,7 @@ class SupabaseClient:
     def fetch_settings(self) -> Dict:
         try:
             response = (
-                self.supabase.table("users")
+                self.supabase.table("user_settings")
                 .select("settings")
                 .eq("user_id", self.user_id)
                 .execute()

@@ -60,9 +60,9 @@ const Python = ({ data, setMode }: any) => {
             <span className="font-bold">{t('generate-fail')}</span>
             <span>{result.message}</span>
             {errorDetail && (
-              <pre className="text-xs text-left bg-yellow-400 p-2 rounded">
+              <div className="text-xs text-left bg-yellow-400 p-2 rounded">
                 {errorDetail}
-              </pre>
+              </div>
             )}
           </div>
         </div>

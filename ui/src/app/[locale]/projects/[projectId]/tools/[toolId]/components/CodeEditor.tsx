@@ -10,7 +10,7 @@ import { debounce } from 'lodash-es';
 import { deepEqual } from 'assert';
 
 interface CodeEditorProps {
-  projectId: string;
+  projectId: number;
   tool: {
     id: string;
     code: string;
@@ -18,11 +18,10 @@ interface CodeEditorProps {
   [key: string]: any;
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ params }: any) => {
+const CodeEditor: React.FC<CodeEditorProps> = (params: any) => {
   const t = useTranslations('tool.Editor');
   const [isGenerating, setIsGenerating] = useState(false);
-  const projectId = parseInt(params.projectId, 10);
-  const { project, updateProject } = useProject(projectId);
+  const { project, updateProject } = useProject(params.projectId);
   const [code, setCode] = useState<string | undefined>(params.tool?.code);
 
   useEffect(() => {

@@ -17,7 +17,7 @@ const Page = ({
   }
   return (
     <ToolDetail
-      projectId={params.projectId}
+      projectId={projectId}
       tool={tool}
     />
   );
