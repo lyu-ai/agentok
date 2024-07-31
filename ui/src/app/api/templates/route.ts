@@ -4,8 +4,6 @@ import { createClient, getSupabaseSession } from '@/utils/supabase/server';
 export async function GET(request: NextRequest) {
   try {
     const supabase = createClient();
-    await getSupabaseSession(); // Ensure user is authenticated
-
     const { data: templates, error } = await supabase
       .from('templates')
       .select(`
