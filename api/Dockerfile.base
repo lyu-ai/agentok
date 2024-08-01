@@ -1,6 +1,7 @@
 # Base image Dockerfile
 FROM --platform=$BUILDPLATFORM python:3.12-slim AS builder
 
+# Set the working directory
 WORKDIR /app
 
 # Install build dependencies
@@ -14,11 +15,23 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Set environment variables
-ENV UVICORN_WORKERS=3 \
-  UVICORN_PORT=5004 \
-  UVICORN_HOST=0.0.0.0 \
-  UVICORN_LOG_LEVEL=debug
+# Start a new stage to create a lean runtime image
+FROM --platform=$BUILDPLATFORM python:3.12-slim
 
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
+
+# Copy installed packages from builder stage
+COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+  PYTHONDONTWRITEBYTECODE=1
+
+# Add a non-root user
+RUN useradd -m myuser
+USER myuser
+
+# Command to run when the container starts
+CMD ["/bin/bash"]
