@@ -71,7 +71,7 @@ export const ProjectBlock = ({ project, className }: any) => {
         <div className="text-xs text-base-content/40">
           {new Date(project.created_at).toLocaleString()}
         </div>
-        <Markdown className="text-left text-sm h-20 break-word word-wrap line-clamp-2">
+        <Markdown className="text-left text-sm h-20 break-word word-wrap line-clamp-4">
           {project.description}
         </Markdown>
         <div className="relative card-actions flex justify-between gap-1 text-xs text-base-content/60">
