@@ -1,5 +1,5 @@
 # Use the amd64 version of the base image
-FROM --platform=linux/amd64 hughlv/agentok-api-base:v1.0
+FROM hughlv/agentok-api-base:v1.0
 
 # Set the working directory
 WORKDIR /app
