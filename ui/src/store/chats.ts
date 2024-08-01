@@ -25,10 +25,10 @@ export interface Chat {
 interface ChatState {
   chats: Chat[];
   sidebarCollapsed: boolean;
-  activeChat: number;
+  activeChatId: number;
   // User Chats
   setChats: (chats: Chat[]) => void;
-  setActiveChat: (chatId: number) => void;
+  setActiveChatId: (chatId: number) => void;
   setSidebarCollapsed: (collapsed: boolean) => void;
   updateChat: (id: number, chat: Partial<Chat>) => void;
   deleteChat: (id: number) => void;
@@ -41,9 +41,9 @@ const useChatStore = create<ChatState>()(
       // User Chats
       chats: [],
       sidebarCollapsed: false,
-      activeChat: -1,
+      activeChatId: -1,
       setChats: chats => set({ chats }),
-      setActiveChat: (chatId: number) => set({ activeChat: chatId }),
+      setActiveChatId: (chatId: number) => set({ activeChatId: chatId }),
       setSidebarCollapsed: (collapsed: boolean) =>
         set({ sidebarCollapsed: collapsed }),
       updateChat: (id, newChat) =>

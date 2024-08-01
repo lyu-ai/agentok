@@ -27,9 +27,9 @@ const LoginToast = () => {
 };
 
 const Login = ({
-  searchParams: { redirectTo },
+  searchParams: { redirect },
 }: {
-  searchParams: { redirectTo: string };
+  searchParams: { redirect: string };
 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -46,7 +46,7 @@ const Login = ({
         password: asGuest ? '12345678' : password,
       });
       setError('');
-      router.push(redirectTo ?? '/');
+      router.push(redirect ?? '/');
     } catch (e) {
       setError((e as any).message ?? `Sign in failed. ${e}`);
     } finally {
@@ -57,45 +57,16 @@ const Login = ({
   const signInWithOAuth = async (provider: any) => {
     try {
       setAuthenticating(true);
-      const authData = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(redirect ?? '/')}`,
         },
       });
-      setError('');
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user?.user_metadata.name || user?.user_metadata.avatarUrl) {
-        const updates: Partial<{
-          name: string;
-          avatar_url: string;
-        }> = {};
-        if (user.user_metadata.name) {
-          updates['name'] = user.user_metadata.name;
-        }
-        if (user.user_metadata.avatar_url) {
-          updates['avatar_url'] = user.user_metadata.avatar_url;
-        }
-        if (user.user_metadata.name) {
-          updates['name'] = user.user_metadata.name;
-        }
-        if (user.user_metadata.avatar_url) {
-          updates['avatar_url'] = user.user_metadata.avatar_url;
-        }
-
-        if (Object.keys(updates).length > 0) {
-          const { error } = await supabase
-            .from('users')
-            .update(updates)
-            .eq('id', user.id);
-
-          if (error) throw error;
-        }
-      }
-      router.push(redirectTo ?? '/');
+      if (error) throw error;
+      router.push(redirect ?? '/');
     } catch (e) {
+      console.error(error);
       setError(`Auth with ${provider} failed. ${e}`);
     } finally {
       setAuthenticating(false);

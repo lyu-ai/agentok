@@ -21,7 +21,6 @@ import { useChat, useChats } from '@/hooks';
 import { Tooltip } from 'react-tooltip';
 import MessageList from './MessageList';
 import clsx from 'clsx';
-import Tip from '@/components/Tip';
 import { isArray } from 'lodash-es';
 import useProjectStore from '@/store/projects';
 import {
@@ -99,7 +98,7 @@ const StatusTag = ({ status }: { status: string }) => {
           'border-success text-success': status === 'completed',
           'border-error text-error': status === 'failed',
           'border-warning text-warning': status === 'wait_for_human_input',
-          'border-neutral text-neutral': status === 'ready',
+          'border-base-content text-base-content': status === 'ready',
         }
       )}
     >
@@ -349,12 +348,9 @@ const ChatPane = ({
               )}
             </button>
           )}
-          {status && <StatusTag status={status} />}
           <span className="line-clamp-1 font-bold">{`${chat?.name ?? 'Untitled ' + chat.id
             } ${chatSource?.name ? ' | ' + chatSource?.name : ''}`}</span>
-          {help && (
-            <Tip content={help} className="mx-2" data-tooltip-place="bottom" />
-          )}
+          {status && <StatusTag status={status} />}
         </div>
         <div className="flex items-center gap-2">
           <button

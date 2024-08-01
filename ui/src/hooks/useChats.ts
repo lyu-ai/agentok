@@ -12,8 +12,8 @@ export function useChats() {
   const { data, error, mutate } = useSWR('/api/chats', fetcher);
   const chats = useChatStore(state => state.chats);
   const setChats = useChatStore(state => state.setChats);
-  const activeChat = useChatStore(state => state.activeChat);
-  const setActiveChat = useChatStore(state => state.setActiveChat);
+  const activeChatId = useChatStore(state => state.activeChatId);
+  const setActiveChatId = useChatStore(state => state.setActiveChatId);
   const deleteChat = useChatStore(state => state.deleteChat);
   const sidebarCollapsed = useChatStore(state => state.sidebarCollapsed);
   const setSidebarCollapsed = useChatStore(state => state.setSidebarCollapsed);
@@ -121,8 +121,8 @@ export function useChats() {
     isLoading: !error && !data,
     isError: error,
     refresh: mutate,
-    activeChat,
-    setActiveChat,
+    activeChatId,
+    setActiveChatId,
     sidebarCollapsed,
     setSidebarCollapsed,
     createChat: handleCreateChat,

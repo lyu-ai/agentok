@@ -64,7 +64,7 @@ const ContextButton = ({ className, onDelete, onEdit }: any) => {
       >
         <PopoverButton
           onClick={e => e.stopPropagation()}
-          className={clsx('btn btn-xs btn-circle btn-ghost', className)}
+          className={clsx('btn btn-xs btn-square btn-ghost', className)}
         >
           <GoKebabHorizontal className="w-4 h-4" />
         </PopoverButton>
@@ -101,25 +101,25 @@ const ContextButton = ({ className, onDelete, onEdit }: any) => {
 };
 
 interface ChatBlockProps {
-  chatId: string;
+  chatId: number;
   disableSelection: boolean;
   className?: string;
   // ... any other props
 }
 
 const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
-  ({ chatId, className, disableSelection }: any, ref) => {
+  ({ chatId, className, disableSelection }: ChatBlockProps, ref) => {
     const router = useRouter();
     const [isEditing, setIsEditing] = useState(false);
     const { chat, isLoading, chatSource } = useChat(chatId);
     const {
       chats,
-      setActiveChat,
-      activeChat,
+      setActiveChatId,
+      activeChatId,
       updateChat,
       deleteChat,
     } = useChats();
-    const selected = activeChat === chatId && !disableSelection;
+    const selected = activeChatId === chatId && !disableSelection;
 
     const onEditStarted = () => {
       setIsEditing(true);
@@ -146,7 +146,7 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
         // The current selection is the last and has previous one
         nextChatId = chats[currentIndex - 1].id;
       }
-      setActiveChat(nextChatId);
+      setActiveChatId(nextChatId);
       await deleteChat(chat.id);
       router.replace(`/chat?id=${nextChatId}`); // It's fine if nextChatId is empty
     };
@@ -162,16 +162,15 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
         key={chat.id}
         ref={ref}
         className={clsx(
-          'group flex flex-col w-80 justify-center gap-2 text-sm rounded p-2 border cursor-pointer',
-          'hover:shadow-box hover:bg-base-content/40 hover:text-base-content hover:border-base-content/30',
+          'group flex flex-col w-80 justify-center gap-2 text-sm rounded p-1 border cursor-pointer',
+          'hover:shadow-box hover:bg-base-content/10 hover:text-primary hover:border-base-content/30',
           {
-            'border-base-content/20 bg-base-content/30 shadow-box shadow-base-content/20': selected,
-            'border-base-content/5 bg-base-content/10': !selected,
+            'text-primary/80 border-base-content/50 bg-base-content/20 shadow-box shadow-base-content/20': selected,
+            'border-base-content/5 bg-base-content/5': !selected,
           },
           className
         )}
         onClick={() => {
-          setActiveChat(chat.id);
           router.push(`/chat?id=${chat.id}`);
         }}
       >
@@ -192,24 +191,14 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
           </div>
           <div
             className={clsx(
-              'join flex items-center border border-base-content/40 text-xs rounded ',
-              {
-                'border-primary/40 text-primary/40 bg-primary/5':
-                  chat.from_type === 'project',
-                'border-secondary/40 text-secondary/40 bg-primary/5':
-                  chat.from_type === 'template',
-              }
-            )}
+              'join flex items-center border border-base-content/40 text-base-content/40 text-xs rounded-sm py-0.5 gap-0.5')}
           >
             <span
-              className={clsx('join-item px-1 py-0.5 border-r ', {
-                'border-primary/40': chat.from_type === 'project',
-                'border-secondary/40': chat.from_type === 'template',
-              })}
+              className={clsx('join-item px-0.5')}
             >
-              <ChatTypeIcon className="w-4 h-4" />
+              <ChatTypeIcon className="w-3 h-3" />
             </span>
-            <span className="join-item line-clamp-1 px-2 py-0.5">
+            <span className="join-item line-clamp-1 px-0.5">
               {chatSource?.name ?? ''}
             </span>
           </div>
@@ -247,7 +236,7 @@ const ChatList = ({
     chats,
     isLoading: isLoadingChats,
     isError: isChatsError,
-    activeChat,
+    activeChatId,
   } = useChats();
   const { templates } = useTemplates();
   const { projects } = useProjects();
@@ -270,18 +259,18 @@ const ChatList = ({
     if (!chatListRef.current) return;
     if (isLoadingChats) return;
     if (
-      activeChat &&
-      chatRefs.has(activeChat) &&
+      activeChatId &&
+      chatRefs.has(activeChatId) &&
       chatRefs.size === chats.length
     ) {
-      const activeChatRef = chatRefs.get(activeChat);
+      const activeChatRef = chatRefs.get(activeChatId);
       if (!activeChatRef.current) {
         console.warn('Active chat ref not found');
         return;
       }
       autoScrollIntoView(activeChatRef.current, chatListRef.current);
     }
-  }, [isLoadingChats, activeChat, chatRefs, chats]);
+  }, [isLoadingChats, activeChatId, chatRefs, chats]);
   useEffect(() => {
     if (!chats) return;
     if (!filter) {
@@ -313,7 +302,7 @@ const ChatList = ({
       ref={chatListRef}
       className={clsx(
         'flex w-full h-full',
-        horitontal ? 'flex-wrap justify-center gap-4' : 'flex-col gap-1'
+        horitontal ? 'flex-wrap justify-center gap-4' : 'flex-col gap-0.5'
       )}
     >
       {filteredChats.map((chat: any) => {

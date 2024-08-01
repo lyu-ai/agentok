@@ -10,20 +10,20 @@ import { useTranslations } from 'next-intl';
 import ChatList from '../components/chat/ChatList';
 import clsx from 'clsx';
 import { useEffect, PropsWithChildren, useState } from 'react';
-import { GoFilter, GoX } from 'react-icons/go';
+import { RiCloseLargeLine, RiFilterLine } from 'react-icons/ri';
 
 const ChatListPane = () => {
   const t = useTranslations('page.Chat');
   const [filter, setFilter] = useState('');
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center gap-1">
       <div className="flex items-center w-80 justify-between p-2 gap-2">
         <span className="font-bold">{t('chat-sessions')}</span>
         <ChatListButton />
       </div>
       <div className="relative flex items-center w-full px-2 gap-1">
-        <GoFilter className="w-5 h-5" />
+        <RiFilterLine className="w-5 h-5" />
         <input
           className="flex-1 input input-sm input-bordered rounded font-normal"
           placeholder={t('filter')}
@@ -31,14 +31,14 @@ const ChatListPane = () => {
           autoFocus
           onChange={e => setFilter(e.target.value)}
         />
-        <button
+        {filter && <button
           className="absolute right-3 btn btn-xs btn-square btn-ghost"
           onClick={() => setFilter('')}
         >
-          <GoX className="w-4 h-4" />
-        </button>
+          <RiCloseLargeLine className="w-4 h-4" />
+        </button>}
       </div>
-      <div className="flex flex-col w-full h-full p-1 gap-1 overflow-y-auto overflow-x-hidden">
+      <div className="flex flex-col w-full h-full p-1 overflow-y-auto overflow-x-hidden">
         <ChatList filter={filter} />
       </div>
     </div>
@@ -59,7 +59,7 @@ const LayoutPage = ({ children }: PropsWithChildren) => {
   return (
     <div className="flex w-full h-full">
       <title>Chat | Agentok Studio</title>
-      <div className="flex gap-2 text-sm w-full h-full">
+      <div className="flex gap-1 text-sm w-full h-full p-1">
         <div
           className={clsx(
             'gap-1 text-sm rounded-xl bg-gray-700/80 text-base-content border border-gray-600',

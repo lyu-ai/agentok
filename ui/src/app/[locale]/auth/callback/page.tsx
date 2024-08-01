@@ -1,27 +1,26 @@
 'use client';
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import supabase from '@/utils/supabase/client';
-import { AuthChangeEvent, Session } from '@supabase/supabase-js';
-import Loading from '@/components/Loading';
 
 export default function AuthCallback() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event: AuthChangeEvent, session: Session | null) => {
-        console.log('auth-change', event, session);
-        if (event === 'SIGNED_IN') {
-          router.push('/'); // or wherever you want to redirect after sign in
-        }
-      }
-    );
+    const handleAuthCallback = async () => {
+      const { error } = await supabase.auth.getSession();
+      if (error) console.error('Error:', error);
 
-    return () => {
-      authListener.subscription.unsubscribe();
+      // Get the intended redirect URL from the query parameters
+      const redirectTo = searchParams.get('redirect') || '/';
+
+      // Redirect to the intended page
+      router.push(decodeURIComponent(redirectTo));
     };
-  }, [router]);
 
-  return <Loading />;
+    handleAuthCallback();
+  }, [router, supabase.auth]);
+
+  return <div>Loading...</div>;
 }

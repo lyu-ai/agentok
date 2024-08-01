@@ -140,7 +140,7 @@ export const TemplateCard = ({
         'group card w-80 bg-base-content/10 border border-base-content/10',
         className,
         {
-          'hover:shadow-box hover:shadow-primary/40 hover:border-primary/40': !suppressLink,
+          'hover:shadow-box hover:shadow-base-content/20 hover:border-base-content/20': !suppressLink,
         }
       )}
     >
@@ -177,7 +177,7 @@ export const TemplateCard = ({
         </div>
         <Markdown
           suppressLink={!suppressLink}
-          className="text-left text-sm h-20 break-word word-wrap line-clamp-2"
+          className="text-left text-sm h-20 break-word word-wrap line-clamp-4"
         >
           {templateDescription}
         </Markdown>

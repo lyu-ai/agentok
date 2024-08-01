@@ -8,23 +8,21 @@ import { useEffect } from 'react';
 const Page = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const id = parseInt(searchParams.get('id') ?? '-1'); // Extract id from query parameters
+  const chatId = parseInt(searchParams.get('id') ?? '-1'); // Extract chatId from query parameters
 
-  const { activeChat, setActiveChat } = useChats();
-  const { chat } = useChat(id);
+  const { activeChatId, setActiveChatId } = useChats();
+  const { chat } = useChat(chatId);
 
   useEffect(() => {
-    if (chat?.name) {
-      if (id && id !== activeChat) {
-        setActiveChat(id);
-      } else if (activeChat !== -1) {
-        router.replace(`/chat?id=${activeChat}`);
-      }
-      if (chat?.name && typeof window !== 'undefined') {
-        document.title = `${chat?.name || 'Chat'} | Agentok Studio`;
-      }
+    if (chatId !== -1) {
+      setActiveChatId(chatId);
+    } else if (activeChatId !== -1) {
+      router.replace(`/chat?id=${activeChatId}`);
     }
-  }, [id, chat?.name, setActiveChat]);
+    if (chat?.name && typeof window !== 'undefined') {
+      document.title = `${chat?.name || 'Chat'} | Agentok Studio`;
+    }
+  }, [chatId, activeChatId]);
 
   if (!chat) {
     return null;

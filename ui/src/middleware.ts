@@ -32,16 +32,20 @@ export async function middleware(req: NextRequest) {
     return res;
   }
 
+  console.log('middleware: req.nextUrl.pathname', req.nextUrl.pathname, req.nextUrl.searchParams.toString());
+
 
   const supabase = createClient();
 
   // Ensure user is authenticated
-  const { data: session } = await supabase.auth.getSession();
+  const { data } = await supabase.auth.getSession();
+  const session = data?.session;
   if (!session) {
     // Redirect to login page
     const url = req.nextUrl.clone();
-    const redirectTo = req.nextUrl.pathname;
-    url.pathname = `/auth/login?redirectTo=${redirectTo}`;
+    const redirect = req.nextUrl.pathname;
+    url.pathname = `/auth/login`;
+    url.searchParams.set('redirect', redirect);
     return NextResponse.redirect(url);
   }
 

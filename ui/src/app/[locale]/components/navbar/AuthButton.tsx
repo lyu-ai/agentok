@@ -48,7 +48,7 @@ const UserPanel = ({ user }: { user: any }) => {
 
   const signOut = async () => {
     await supabase.auth.signOut();
-    router.replace('/auth/login');
+    router.push('/auth/login');
   };
 
   return (

@@ -78,7 +78,7 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
   const chatPanePinned = useProjectStore(state => state.chatPanePinned);
   const nodePanePinned = useProjectStore(state => state.nodePanePinned);
   const { spyModeEnabled, enableSpyMode } = useSettings();
-  const [activeChat, setActiveChat] = useState<ChatType | undefined>();
+  const [activeChatId, setActiveChatId] = useState<ChatType | undefined>();
   const t = useTranslations('component.Flow');
 
   // Suppress error code 002
@@ -105,7 +105,7 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
         chat => chat.from_project === project?.id
       );
       if (existingChat) {
-        setActiveChat(existingChat);
+        setActiveChatId(existingChat);
       }
     };
 
@@ -329,10 +329,10 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
     const existingChat = chats.findLast(chat => chat.from_project === project.id);
     console.log('existingChat', existingChat);
     if (existingChat) {
-      setActiveChat(existingChat);
+      setActiveChatId(existingChat);
       return;
     }
-    await createChat(project.id, 'project').then(chat => setActiveChat(chat));
+    await createChat(project.id, 'project').then(chat => setActiveChatId(chat));
   };
 
   if (mode === 'python') {
@@ -432,15 +432,15 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
       {!nodePanePinned && (
         <NodeButton onAddNode={onAddNode} className="absolute top-2 left-2" />
       )}
-      {chatPanePinned && activeChat ? (
+      {chatPanePinned && activeChatId ? (
         <div className="text-sm w-96 lg:w-[480px] h-full shrink-0">
-          <ChatPane onStartChat={handleStartChat} chat={activeChat} />
+          <ChatPane onStartChat={handleStartChat} chat={activeChatId} />
         </div>
       ) : (
         <ChatButton
           project={project}
           onStartChat={handleStartChat}
-          chat={activeChat}
+          chat={activeChatId}
           className="absolute bottom-6 right-2"
         />
       )}
