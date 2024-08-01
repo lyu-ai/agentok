@@ -28,6 +28,7 @@ export async function POST(request: NextRequest) {
     if (project.id === -1) {
       delete project.id;
     }
+    project.user_id = (await getSupabaseSession()).user.id;
     const { data, error } = await supabase
       .from('projects')
       .insert(project).select('*').single();
