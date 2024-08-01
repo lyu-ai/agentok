@@ -305,12 +305,12 @@ class SupabaseClient:
                 detail=f"Failed fetching datasets: {exc}",
             )
 
-    def create_dataset(self, dataset_name: DatasetCreate) -> Dataset:
-        dataset_data = dataset_name.model_dump(exclude={"id"})
+    def create_dataset(self, dataset_to_create: DatasetCreate) -> Dataset:
+        dataset_data = dataset_to_create.model_dump(exclude={"id"})
         dataset_data["user_id"] = self.user_id
         response = self.supabase.table("datasets").insert(dataset_data).execute()
         if not response.data or len(response.data) == 0:
-            print(colored(f"Error creating dataset", "red"))
+            print(colored(f"Error creating dataset {dataset_to_create.name}", "red"))
             raise Exception("Error creating dataset")
         return Dataset(**response.data[0])
 
@@ -513,6 +513,29 @@ class SupabaseClient:
             return response.data[0]
         else:
             raise Exception("Chunk not found")
+
+    def update_chunk(self, chunk_to_update):
+        chunk_data = chunk_to_update.model_dump()
+        chunk_id = chunk_data.pop("id")
+        if not chunk_id:
+            raise Exception("Invalid chunk_id")
+        response = (
+            self.supabase.table("chunks")
+            .update(chunk_data)
+            .eq("id", chunk_id)
+            .execute()
+        )
+        if response.data:
+            return response.data[0]
+        else:
+            raise Exception("Chunk not found")
+
+    def delete_chunk(self, chunk_id):
+        response = self.supabase.table("chunks").delete().eq("id", chunk_id).execute()
+        if response.data:
+            return {"message": f"Chunk {chunk_id} deleted successfully"}
+        else:
+            raise Exception(f"Error deleting chunk {chunk_id}")
 
     def add_message(self, message: MessageCreate, chat_id: str) -> Message:
         try:

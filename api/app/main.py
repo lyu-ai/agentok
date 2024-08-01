@@ -14,7 +14,7 @@ from .routers import (
 
 main_app = FastAPI(
     title="Agentok APIs",
-    description="OpenAPI Specifications of Agentok APIs. To test out the APIs, you need to prepare an [API Key](https://studio.agentok.ai/settings/api-keys) and put it in field 'X-API-KEY' of HTTP headers.",
+    description="Specification of Agentok APIs. To test out the APIs. you need to [create an API Key](https://studio.agentok.ai/settings/api-keys) and send it in field 'X-API-Key' of HTTP headers.",
     version="1.0.0",
     swagger_ui_parameters={"persistAuthorization": True},
 )
@@ -28,8 +28,8 @@ main_app.add_middleware(
 )
 
 main_app.include_router(chat_router.router, prefix="/chats", tags=["Chat"])
-main_app.include_router(dataset_router.router, prefix="/datasets", tags=["Datasets"])
-main_app.include_router(codegen_router.router, prefix="/codegen", tags=["Codegen"])
+main_app.include_router(dataset_router.router, prefix="/datasets", tags=["Knowledge"])
+main_app.include_router(codegen_router.router, prefix="/codegen", tags=["Tool"])
 main_app.include_router(
     extension_router.router, prefix="/extensions", tags=["Extension"]
 )
@@ -107,7 +107,7 @@ async def root():
     <div class="container">
         <img src="https://agentok.ai/img/logo.svg" alt="Agentok Studio Logo" style="width: 120px" />
         <h1>Welcome to Agentok APIs!</h1>
-        <p>Check out the <a href="/api-docs">API Docs</a>, or try out the APIs in <a href="/v1/docs">Swagger UI</a> (need to create an <a target="_blank" href="https://studio.agentok.ai/settings/api-keys">API Key</a> in <a target="_blank" href="https://studio.agentok.ai">Agentok Studio</a> beforehand).</p>
+        <p>Check out the <a href="/api-docs">API Docs</a>, or try out the APIs in <a href="/v1/docs">Swagger UI</a> (need to <a target="_blank" href="https://studio.agentok.ai/settings/api-keys">create an API Key</a> beforehand).</p>
         <p>If you like this project, please consider to support us by giving a <a target="_blank" href="https://github.com/hughlv/agentok">Star on GitHub</a>.</p>
     </div>
 </body>
