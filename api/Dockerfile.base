@@ -1,0 +1,31 @@
+# Base image Dockerfile
+FROM python:3.12-slim as builder
+
+WORKDIR /app
+
+# Copy requirements and install dependencies
+COPY requirements.txt .
+RUN pip3 wheel --no-cache-dir --no-deps --wheel-dir /wheels -r requirements.txt
+
+# Begin the final stage
+FROM python:3.12-slim
+
+# Copy wheels and requirements from builder stage
+COPY --from=builder /wheels /wheels
+COPY --from=builder /app/requirements.txt .
+
+# Install the python dependencies
+RUN pip3 install --no-cache /wheels/*
+
+# Clean up
+RUN rm -rf /wheels
+RUN rm -rf /root/.cache/pip/*
+
+# Set environment variables
+ENV UVICORN_WORKERS=3 \
+  UVICORN_PORT=5004 \
+  UVICORN_HOST=0.0.0.0 \
+  UVICORN_LOG_LEVEL=debug
+
+# Set the working directory in the container
+WORKDIR /app

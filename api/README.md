@@ -28,16 +28,29 @@ For convenience (assumed you have created a virtual environment named `venv`):
 
 ## Deps
 
-For retrieve related agents, should install pyautogen[retrievechat]:
+For retrieve related agents, should install pyautogen[retrievechat-pgvector]:
 
 ```bash
-pip install "pyautogen[retrievechat]"
+pip install "pyautogen[retrievechat-pgvector]"
 ```
 
 ## Docker Build
 
+We've separated the Dockerfile to base image and app image for better caching. You can build the image with the following commands:
+
+### Base Image
+
 ```bash
-docker build -t agentok-api ./api
+docker build -t yourname/agentok-api-base:v1.0 -f Dockerfile.base .
+docker push yourname/agentok-api-base:v1.0
+```
+
+Normally you don't need to do this, because we have put [a base image on Docker Hub](https://hub.docker.com/repository/docker/hughlv/agentok-api-base), you can build the app image directly.
+
+### App Image
+
+```bash
+docker build -t agentok-api .
 docker run -d -p 5004:5004 agentok-api
 ```
 
