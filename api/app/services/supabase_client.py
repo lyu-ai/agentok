@@ -537,6 +537,25 @@ class SupabaseClient:
         else:
             raise Exception(f"Error deleting chunk {chunk_id}")
 
+    def fetch_messages(self, chat_id: str) -> List[Message]:
+        try:
+            response = (
+                self.supabase.table("chat_messages")
+                .select("*")
+                .eq("chat_id", int(chat_id))
+                .execute()
+            )
+            if response.data:
+                return [Message(**item) for item in response.data]
+            else:
+                return []
+        except Exception as exc:
+            logger.error(f"An error occurred: {exc}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Failed fetching messages: {exc}",
+            )
+
     def add_message(self, message: MessageCreate, chat_id: str) -> Message:
         try:
             # Convert the message to a dictionary while excluding the 'id' field

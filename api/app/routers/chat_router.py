@@ -26,6 +26,14 @@ async def get_chat(chat_id: str, service: ChatService = Depends(get_chat_service
     return await service.get_chat(chat_id)
 
 
+@router.get("/{chat_id}/messages", summary="Get messages of one chat session")
+async def get_messages(
+    chat_id: str,
+    service: ChatService = Depends(get_chat_service),
+):
+    return await service.get_messages(chat_id)
+
+
 @router.post("/{chat_id}/messages", summary="Start chat")
 async def start_chat(
     message: MessageCreate,

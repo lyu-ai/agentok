@@ -28,6 +28,10 @@ class ChatService:
         new_chat = self.supabase.create_chat(chat)
         return new_chat
 
+    async def get_messages(self, chat_id: str) -> List[Message]:
+        messages = self.supabase.fetch_messages(chat_id)
+        return messages
+
     async def start_chat(self, message: MessageCreate, chat_id: str):
         # No matter what happnes next, persist the message to the database beforehand
         self.supabase.add_message(message, chat_id)
