@@ -1,5 +1,5 @@
 # Use a build stage to compile and build dependencies
-FROM hughlv/agentok-api-base:v1.0
+FROM --platform=$BUILDPLATFORM hughlv/agentok-api-base:v1.0
 
 # Copy the code into the container
 COPY . .

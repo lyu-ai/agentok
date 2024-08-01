@@ -41,8 +41,7 @@ We've separated the Dockerfile to base image and app image for better caching. Y
 ### Base Image
 
 ```bash
-docker build -t yourname/agentok-api-base:v1.0 -f Dockerfile.base .
-docker push yourname/agentok-api-base:v1.0
+docker buildx build --platform linux/amd64,linux/arm64 -t hughlv/agentok-api-base:v1.0 -f Dockerfile.base . --push
 ```
 
 Normally you don't need to do this, because we have put [a base image on Docker Hub](https://hub.docker.com/repository/docker/hughlv/agentok-api-base), you can build the app image directly.
