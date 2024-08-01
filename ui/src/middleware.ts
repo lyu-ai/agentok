@@ -32,9 +32,6 @@ export async function middleware(req: NextRequest) {
     return res;
   }
 
-  console.log('middleware: req.nextUrl.pathname', req.nextUrl.pathname, req.nextUrl.searchParams.toString());
-
-
   const supabase = createClient();
 
   // Ensure user is authenticated
