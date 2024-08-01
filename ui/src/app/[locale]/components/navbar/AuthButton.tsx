@@ -15,6 +15,7 @@ import {
   RiVerifiedBadgeLine,
 } from 'react-icons/ri';
 import { useUser } from '@/hooks/useUser';
+import useUserStore from '@/store/user';
 
 const UserImage = ({ user, className }: any) => {
   // State to handle image load error
@@ -48,6 +49,8 @@ const UserPanel = ({ user }: { user: any }) => {
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    useUserStore.getState().setUser(null);
+    useUserStore.persist.clearStorage();
     router.push('/auth/login');
   };
 

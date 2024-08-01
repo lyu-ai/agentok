@@ -3,13 +3,12 @@ import { BsInboxes } from 'react-icons/bs';
 import { GoRepoForked, GoTrash } from 'react-icons/go';
 import { useChats, useProjects, useTemplates } from '@/hooks';
 import clsx from 'clsx';
-import { getAvatarUrl } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
 import Markdown from '@/components/Markdown';
-import { useUserId } from '@/hooks/useUser';
+import { useUser } from '@/hooks/useUser';
 import { RiRobot2Line, RiUserHeartLine } from 'react-icons/ri';
 
 export const TemplateEmpty = () => {
@@ -53,9 +52,7 @@ export const TemplateCard = ({
   className,
   suppressLink,
 }: any) => {
-  const { userId } = useUserId();
-  const [ownerName, setOwnerName] = useState('');
-  const [ownerAvatar, setOwnerAvatar] = useState('');
+  const { userId } = useUser();
   const [isOwned, setIsOwned] = useState(false);
   const [isAuthed, setIsAuthed] = useState(false);
   const t = useTranslations('component.TemplateList');
@@ -80,7 +77,6 @@ export const TemplateCard = ({
   useEffect(() => {
     setIsAuthed(userId !== null);
     setIsOwned(template.user_id === userId);
-    getAvatarUrl().then(setOwnerAvatar);
   }, [template, userId]);
   const handleDelete = (e: any) => {
     e.stopPropagation();
@@ -177,7 +173,7 @@ export const TemplateCard = ({
         </div>
         <Markdown
           suppressLink={!suppressLink}
-          className="text-left text-sm h-20 break-word word-wrap line-clamp-4"
+          className="text-left text-sm h-20 break-word word-wrap line-clamp-4 flex-1"
         >
           {templateDescription}
         </Markdown>
