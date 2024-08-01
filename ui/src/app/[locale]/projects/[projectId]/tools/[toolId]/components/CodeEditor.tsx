@@ -22,11 +22,11 @@ const CodeEditor: React.FC<CodeEditorProps> = (params: any) => {
   const t = useTranslations('tool.Editor');
   const [isGenerating, setIsGenerating] = useState(false);
   const { project, updateProject } = useProject(params.projectId);
-  const [code, setCode] = useState<string | undefined>(params.tool?.code);
+  const [code, setCode] = useState<string | undefined>('');
 
   useEffect(() => {
     if (params.tool?.code !== code) setCode(params.tool?.code);
-  }, [params.tool]);
+  }, []);
 
   const debouncedUpdateProject = useCallback(
     debounce((updatedCode: string) => {
@@ -46,7 +46,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (params: any) => {
   );
 
   useEffect(() => {
-    if (code !== undefined) {
+    if (code) {
       debouncedUpdateProject(code);
     }
   }, [code]);

@@ -92,9 +92,9 @@ const StatusTag = ({ status }: { status: string }) => {
   return (
     <span
       className={clsx(
-        'flex items-center gap-0.5 text-xs py-0.5 px-2 rounded',
+        'flex items-center justify-center text-xs rounded-lg h-6 w-6',
         {
-          'border-primary text-primary bg-primary/50 animate-pulse':
+          'border-primary text-primary bg-blue-600 animate-pulse':
             status === 'running',
           'border-success text-success': status === 'completed',
           'border-error text-error': status === 'failed',
@@ -333,8 +333,6 @@ const ChatPane = ({
     });
   }
 
-  console.log('chat:', chat);
-
   return (
     <div className="flex flex-col w-full h-full z-10 shadow-box shadow-gray-700 rounded-xl bg-gray-700/80 text-base-content border border-gray-600">
       <div className="flex items-center justify-between w-full p-2">
@@ -351,12 +349,12 @@ const ChatPane = ({
               )}
             </button>
           )}
+          {status && <StatusTag status={status} />}
           <span className="line-clamp-1 font-bold">{`${chat?.name ?? 'Untitled ' + chat.id
             } ${chatSource?.name ? ' | ' + chatSource?.name : ''}`}</span>
           {help && (
             <Tip content={help} className="mx-2" data-tooltip-place="bottom" />
           )}
-          {status && <StatusTag status={status} />}
         </div>
         <div className="flex items-center gap-2">
           <button
