@@ -17,7 +17,7 @@ COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Start a new stage to create a lean runtime image
-FROM --platform=$TARGETPLATFORM python:3.12-slim
+FROM python:3.12-slim
 
 # Set the working directory
 WORKDIR /app
@@ -27,20 +27,27 @@ RUN apt-get update && apt-get install -y \
   curl \
   && rm -rf /var/lib/apt/lists/*
 
-# Copy installed packages from builder stage
-COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
-COPY --from=builder /usr/local/bin /usr/local/bin
+# Copy Python installation from builder stage
+COPY --from=builder /usr/local /usr/local
+COPY --from=builder /usr/lib /usr/lib
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
-  PYTHONDONTWRITEBYTECODE=1
+  PYTHONDONTWRITEBYTECODE=1 \
+  PATH="/usr/local/bin:/usr/local/lib/python3.12/site-packages:${PATH}"
+
+# Copy app code and requirements
+COPY . .
+
+# Install runtime dependencies if needed, e.g., for FastAPI and Uvicorn
+RUN /usr/local/bin/python3 -m pip install --no-cache-dir uvicorn fastapi
+
+# Verify Python and Uvicorn installation
+RUN /usr/local/bin/python3 --version && /usr/local/bin/python3 -m pip show uvicorn && /usr/local/bin/python3 -m pip show fastapi
 
 # Add a non-root user
 RUN useradd -m myuser
 USER myuser
 
-# Verify Python and Uvicorn installation
-RUN python --version && pip show uvicorn
-
 # Command to run when the container starts
-CMD ["/bin/bash"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

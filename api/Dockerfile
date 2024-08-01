@@ -1,4 +1,4 @@
-FROM hughlv/agentok-api-base:v1.1
+FROM hughlv/agentok-api-base:v1.2
 
 WORKDIR /app
 
