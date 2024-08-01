@@ -135,7 +135,7 @@ export function useProjects() {
             name: template.name,
             description: template.description,
             flow: template.project.flow,
-            user_id: userId,
+            tools: template.project.tools,
           }),
         });
         if (!response.ok) throw new Error(response.statusText);

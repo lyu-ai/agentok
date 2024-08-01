@@ -31,7 +31,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
   } = await supabase.auth.getUser();
   const data = await request.json();
   try {
-    console.log('POST /chats data', data);
+    console.log(`POST /chats/${params.id}/messages data`, data);
     data.user_id = user?.id;
     const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/v1/chats/${params.id}/messages`, {
       method: 'POST',

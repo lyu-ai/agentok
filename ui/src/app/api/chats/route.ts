@@ -7,10 +7,14 @@ const NEXT_PUBLIC_BACKEND_URL =
 export async function GET(request: NextRequest) {
   try {
     const supabase = createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError) throw new Error('Failed to authenticate', authError);
+    if (!user) throw new Error('Not authenticated');
 
     const { data: chats, error } = await supabase
       .from('chats')
       .select('*')
+      .eq('user_id', user.id)
       .order('created_at', { ascending: false });
 
     if (error) throw error;

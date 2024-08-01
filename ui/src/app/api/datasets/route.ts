@@ -32,6 +32,7 @@ export async function POST(
     const dataset = await request.json();
 
     console.log(`POST /datasets`, dataset);
+    dataset.user_id = 'user_id'; // Add the user_id to the dataset
 
     const { data, error } = await supabase
       .from('datasets')

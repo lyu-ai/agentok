@@ -4,10 +4,14 @@ import { createClient, getSupabaseSession } from '@/utils/supabase/server';
 export async function GET(request: NextRequest) {
   try {
     const supabase = createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError) throw new Error('Failed to authenticate', authError);
+    if (!user) throw new Error('Not authenticated');
 
     const { data: projects, error } = await supabase
       .from('projects')
       .select('*')
+      .eq('user_id', user.id)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -28,7 +32,12 @@ export async function POST(request: NextRequest) {
     if (project.id === -1) {
       delete project.id;
     }
-    project.user_id = (await getSupabaseSession()).user.id;
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError) throw new Error('Failed to authenticate', authError);
+    if (!user) throw new Error('Not authenticated');
+
+    project.user_id = user.id;
+
     const { data, error } = await supabase
       .from('projects')
       .insert(project).select('*').single();
