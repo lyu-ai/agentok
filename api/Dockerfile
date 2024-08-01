@@ -10,6 +10,6 @@ ENV UVICORN_HOST=0.0.0.0 \
   UVICORN_LOG_LEVEL=debug
 
 # Adjust the HEALTHCHECK to correctly use the environment variable
-# HEALTHCHECK CMD curl --fail http://localhost:5004/docs || exit 1
+HEALTHCHECK CMD curl --fail http://localhost:5004/docs || exit 1
 
-CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5004", "--workers", "3", "--log-level", "debug"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5004", "--workers", "3", "--log-level", "debug"]
