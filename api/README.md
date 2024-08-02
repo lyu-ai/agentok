@@ -36,6 +36,8 @@ pip install "pyautogen[retrievechat-pgvector]"
 
 ## Docker Build
 
+> This does not work. We've reverted to the old way of building the image.
+
 We've separated the Dockerfile to base image and app image for better caching. You can build the image with the following commands:
 
 ### Base Image
