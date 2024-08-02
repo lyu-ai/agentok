@@ -1,5 +1,5 @@
-# Use a single stage to install dependencies and run the application
-FROM python:3.11-slim
+# Base stage: Install dependencies
+FROM python:3.11-slim AS base
 
 # Set the working directory in the container
 WORKDIR /app
@@ -15,6 +15,15 @@ COPY pyproject.toml poetry.lock ./
 # Install dependencies and create a virtual environment in /app/.venv
 RUN poetry config virtualenvs.in-project true && \
     poetry install --no-dev --no-interaction --no-ansi
+
+# Application stage: Copy application code and use base image
+FROM python:3.11-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the base image's virtual environment
+COPY --from=base /app /app
 
 # Copy the project files
 COPY . .
