@@ -3,10 +3,10 @@ import os
 import tempfile
 from typing import List
 
-from .codegen_service import CodegenService
+from .codegen import CodegenService
 from ..models import Chat, ChatCreate, MessageCreate, Message, Project
 from .chat_manager import ChatManager
-from .supabase_client import SupabaseClient  # Import your SupabaseClient
+from .supabase import SupabaseClient  # Import your SupabaseClient
 
 
 class ChatService:

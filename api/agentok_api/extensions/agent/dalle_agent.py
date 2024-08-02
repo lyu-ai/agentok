@@ -6,9 +6,9 @@ from openai import OpenAI
 from typing import Dict, Literal, Union, Optional, List
 from PIL import Image as PIL
 
-from ..common.base_classes import ExtendedConversableAgent
-from ..services.supabase_client import create_supabase_client
-from ..utils.img_utils import get_image_data, _to_pil
+from ..extended_agent import ExtendedConversableAgent
+from ...services.supabase import create_supabase_client
+from ...utils.img_utils import get_image_data, _to_pil
 from termcolor import colored
 
 from diskcache import Cache

@@ -44,7 +44,7 @@ The project contains Frontend (Built with Next.js) and Backend service (Built wi
 Before running the project, you need to create a `.env` file in the `ui` abd `api` directory and set environment variables.
 
 ```bash
-cp ui/.env.sample ui/.env
+cp frontend/.env.sample frontend/.env
 cp api/.env.sample api/.env
 cp api/OAI_CONFIG_LIST.sample api/OAI_CONFIG_LIST
 ```
@@ -63,53 +63,39 @@ You can also build and run the ui and service separately with docker:
 docker build -t agentok-api ./api
 docker run -d -p 5004:5004 agentok-api
 
-docker build -t agentok-ui ./ui
-docker run -d -p 2855:2855 agentok-ui
+docker build -t agentok-frontend ./web
+docker run -d -p 2855:2855 agentok-frontend
 
 ```
 
 (The default port number 2855 is the address of our first office.)
 
-## 🚀 Deployment
-
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/5k5N_g?referralCode=5I-BUc)
-
-Railway.app supports the deployment of applications in Dockers. By clicking the "Deploy on Railway" button, you'll streamline the setup and deployment of your application on Railway platform:
-
-1. Click the "Deploy on Railway" button to start the process on Railway.app.
-2. Log in to Railway and set the following environment variables:
-   - `PORT`: Please set for each services as `2855`, `5004`, `7676` respectively.
-3. Confirm the settings and deploy.
-4. After deployment, visit the provided URL to access your deployed application.
-
 ## 🛠️ Run on Local (Without Docker)
 
 If you're interested in contributing to the development of this project or wish to run it from the source code, you have the option to run the ui and service independently. Here's how you can do that:
 
-### **UI (Frontend)**
+### **Frontend**
 
-- Navigate to the ui directory `cd ui`.
+- Navigate to the ui directory `cd frontend`.
 - Rename `.env.sample` to `.env.local` and set the value of variables correctly.
 - Install the necessary dependencies using the appropriate package manager command (e.g., `pnpm install` or `yarn`).
 - Run the ui service using the start-up script provided (e.g., `pnpm dev` or `yarn dev`).
 
-### **API (Backend Services)**
+### **Backend Services**
 
 - Switch to the api service directory `cd api`.
 - Rename `.env.sample` to `.env`, `OAI_CONFIG_LIST.sample` to `OAI_CONFIG_LIST`, and set the value of variables correctly.
-- Create virtual environment: `python3 -m venv venv`.
-- Activate virtual environment: `source venv/bin/activate`.
-- Install all required dependencies: `pip install -r requirements.txt`.
-- Launch the api service using command `uvicorn app.main:app --reload --port 5004`.
+- Install Poetry.
+- Launch with command `poetry run uvicorn agentok_api.main:app --reload --port 5004`.
 
 `REPLICATE_API_TOKEN` is needed for LLaVa agent. If you need to use this agent, make sure to include this token in environment variables.
 
-**IMPORTANT**: The latest version of Autogen requires Docker for code execution by default. To proceed, you must either:
+**IMPORTANT**: The latest version of AutoGen requires Docker for code execution by default. To proceed, you must either:
 
 1. Install Docker on your local machine, **OR**
 1. Disable this requirement by setting `AUTOGEN_USE_DOCKER=False` in the `api/.env` file.
 
-Note: This requirement is disabled by default since the default deployment of this project already uses Docker.
+Note: This requirement is disabled by default since the default deployment of this project is already dockerized.
 
 ### **Supabase (Database Services)**
 
@@ -117,8 +103,8 @@ This project relies on Supabase for user authentication and data storage. To get
 
 Once you've started both the ui and api services by following the steps previously outlined, you can access the application by opening your web browser and navigating to:
 
-- ui: http://localhost:2855
-- api: http://localhost:5004 (OpenAPI docs served at http://localhost:5004/redoc)
+- api: http://localhost:5004 (OpenAPI docs served at http://localhost:5004/docs)
+- frontend: http://localhost:2855
 
 If your services are started successfully and running on the expected ports, you should see the user interface or receive responses from the api services via this URL.
 

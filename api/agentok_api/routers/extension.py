@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from typing import List
-from ..services.extension_service import ExtensionService
+from ..services import ExtensionService
 from ..dependencies import get_extension_service
 from ..models import AgentMetadata
 

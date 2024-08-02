@@ -3,12 +3,12 @@ from fastapi.security import APIKeyHeader, HTTPAuthorizationCredentials, HTTPBea
 from typing import Optional
 
 from termcolor import colored
-from .services.chat_service import ChatService
-from .services.codegen_service import CodegenService
-from .services.supabase_client import SupabaseClient
-from .services.extension_service import ExtensionService
-from .services.admin_service import AdminService
-from .services.dataset_service import DatasetService
+from .services.chats import ChatService
+from .services.codegen import CodegenService
+from .services.supabase import SupabaseClient
+from .services.extensions import ExtensionService
+from .services.admin import AdminService
+from .services.datasets import DatasetService
 
 from pathlib import Path
 import logging

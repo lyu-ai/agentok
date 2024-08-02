@@ -4,7 +4,7 @@ from asyncio import subprocess
 import signal
 from termcolor import colored
 
-from .supabase_client import SupabaseClient
+from .supabase import SupabaseClient
 
 from .output_parser import (
     OutputParser,
@@ -93,7 +93,7 @@ class ChatManager:
                     response_message = (
                         line.decode().rstrip()
                     )  # Remove trailing newline/whitespace
-                    print("📺", response_message)
+                    print("📺 ", response_message)
                     if any(
                         status in response_message
                         for status in (

@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Depends
 from ..models import Chat, ChatCreate, MessageCreate
-from ..services.chat_service import ChatService
+from ..services import ChatService
 from ..dependencies import get_chat_service
 
 router = APIRouter()

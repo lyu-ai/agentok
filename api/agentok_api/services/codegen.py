@@ -1,29 +1,15 @@
 from datetime import datetime
 import json
 import os
-from typing import Any, Dict, List, Union
-
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.ext import do
-from storage3 import create_client
-
-from .supabase_client import SupabaseClient, create_supabase_client
-
-# Import models
+from .supabase import SupabaseClient, create_supabase_client
 from ..models import Parameter, Project, Tool
-from gotrue import User
-
-# Set up the Jinja2 environment
-env = Environment(
-    loader=FileSystemLoader(searchpath=os.path.join(os.getcwd(), "app/", "templates")),
-    autoescape=select_autoescape(),
-    extensions=[do]
-)
 
 class CodegenService:
     def __init__(self, supabase: SupabaseClient):
         self.env = Environment(
-            loader=FileSystemLoader(searchpath=os.path.join(os.getcwd(), "app/", "templates")),
+            loader=FileSystemLoader(searchpath=os.path.join(os.getcwd(), "agentok_api/", "templates")),
             autoescape=select_autoescape(),
             extensions=[do]
         )
@@ -141,10 +127,10 @@ class CodegenService:
 
         # Create the prompt with detailed parameter information
         prompt = "Create a Python function as one text string based on the following information, provide the result in JSON format {name, description, code}"
-        prompt += f"the 'code' field should only include the function body and should not include the function name and parameters \n\n"
+        prompt += "the 'code' field should only include the function body and should not include the function name and parameters \n\n"
         prompt += f"Function Name: {tool.name}\n"
         prompt += f"Description: {tool.description}\n"
-        prompt += f"Parameters:\n"
+        prompt += "Parameters:\n"
 
         for param in tool.parameters:
             prompt += f"- {param.name} ({param.type}): {param.description}\n"

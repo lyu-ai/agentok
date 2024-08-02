@@ -9,22 +9,18 @@ In this project, we use the Service Role Key to access the database and authenti
 Run the service:
 
 ```bash
-uvicorn app.main:app --reload --port 5004
+poetry install
+poetry run uvicorn agentok_api.main:app --reload --port 5004
 ```
 
 If you need to run the service with network proxy, you can use the following command:
 
 ```bash
-proxychains4 uvicorn app.main:app --reload --port 5004
+poetry install
+poetry run proxychains4 uvicorn agentok_api.main:app --reload --port 5004
 ```
 
 You need to configure proxychains4 to make it work, which is out of the scope of this document.
-
-For convenience (assumed you have created a virtual environment named `venv`):
-
-```bash
-./start.sh
-```
 
 ## Deps
 

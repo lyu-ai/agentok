@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, BackgroundTasks, UploadFile, File,
 from typing import List
 
 from regex import D
-from ..services.dataset_service import DatasetService
+from ..services import DatasetService
 from ..dependencies import get_dataset_service
 from ..models import Dataset, DatasetCreate, Document
 

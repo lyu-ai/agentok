@@ -6,7 +6,7 @@ from docx import Document as DocxDocument
 from unstructured.partition.auto import partition
 from sentence_transformers import SentenceTransformer
 
-from .supabase_client import SupabaseClient
+from .supabase import SupabaseClient
 from ..models import Dataset, DatasetCreate, Document
 
 

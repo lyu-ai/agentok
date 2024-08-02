@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from ..models import Project, Tool
-from ..services.codegen_service import CodegenService
+from ..services import CodegenService
 from ..dependencies import get_codegen_service
 
 router = APIRouter()

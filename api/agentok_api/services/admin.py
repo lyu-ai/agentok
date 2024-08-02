@@ -2,7 +2,7 @@ import secrets
 from typing import Dict, List
 
 from ..models import ApiKey, ApiKeyCreate
-from .supabase_client import SupabaseClient
+from .supabase import SupabaseClient
 
 class AdminService:
     def __init__(self, supabase: SupabaseClient):

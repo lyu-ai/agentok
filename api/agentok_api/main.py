@@ -4,12 +4,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from .routers import (
-    chat_router,
-    codegen_router,
-    dataset_router,
-    extension_router,
-    doc_router,
-    admin_router,
+    admin,
+    chats,
+    codegen,
+    datasets,
+    api_docs,
+    extension,
 )
 
 main_app = FastAPI(
@@ -27,17 +27,17 @@ main_app.add_middleware(
     allow_headers=["*"],
 )
 
-main_app.include_router(chat_router.router, prefix="/chats", tags=["Chat"])
-main_app.include_router(dataset_router.router, prefix="/datasets", tags=["Knowledge"])
-main_app.include_router(codegen_router.router, prefix="/codegen", tags=["Tool"])
+main_app.include_router(chats.router, prefix="/chats", tags=["Chat"])
+main_app.include_router(datasets.router, prefix="/datasets", tags=["Knowledge"])
+main_app.include_router(codegen.router, prefix="/codegen", tags=["Tool"])
 main_app.include_router(
-    extension_router.router, prefix="/extensions", tags=["Extension"]
+    extension.router, prefix="/extensions", tags=["Extension"]
 )
-main_app.include_router(admin_router.router, prefix="/admin", include_in_schema=False)
+main_app.include_router(admin.router, prefix="/admin", include_in_schema=False)
 
 app = FastAPI()
 app.mount("/v1", main_app)
-app.include_router(doc_router.router, include_in_schema=False)
+app.include_router(api_docs.router, include_in_schema=False)
 
 
 @app.exception_handler(Exception)
@@ -114,7 +114,6 @@ async def root():
 </html>
     """
     return HTMLResponse(content=html_content)
-
 
 # Mount the static directory to serve favicon file
 app.mount("/static", StaticFiles(directory="static"), name="static")

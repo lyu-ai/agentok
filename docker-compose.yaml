@@ -2,7 +2,7 @@ version: '3.8'
 services:
   ui:
     build:
-      context: ./ui
+      context: ./web
       dockerfile: Dockerfile
     ports:
       - "2855:2855"
@@ -15,15 +15,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5004:5004"
-    networks:
-      - app-network
-
-  pocketbase:
-    build:
-      context: ./pocketbase
-      dockerfile: Dockerfile
-    ports:
-      - "7676:7676"
     networks:
       - app-network
 
