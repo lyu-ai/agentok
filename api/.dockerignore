@@ -1,10 +1,20 @@
+# Ignore virtual environments
+venv
+env
+.venv
 __pycache__
-.git
-.gitignore
-Dockerfile
+
+# Ignore Python cache files
 *.pyc
 *.pyo
 *.pyd
-.Python
-venv
-ENV
+*.env
+
+# Ignore IDE/project files
+.idea
+.vscode
+*.iml
+
+# Ignore other unnecessary files
+*.log
+*.tmp

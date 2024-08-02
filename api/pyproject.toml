@@ -27,6 +27,9 @@ sentence_transformers = "3.0.1"
 starlette = "0.37.2"
 termcolor = "2.4.0"
 unstructured = "*"
+uvicorn = "^0.30.5"
+supabase = "^2.6.0"
+python-multipart = "^0.0.9"
 
 [tool.poetry.dev-dependencies]
 black = "^21.9b0"

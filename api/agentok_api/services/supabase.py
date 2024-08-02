@@ -1,18 +1,3 @@
-from base64 import b64decode
-import hashlib
-from io import BytesIO
-import os
-import logging
-from dotenv import load_dotenv
-from h11 import Data
-from supabase import create_client, Client
-from gotrue import User
-from fastapi import HTTPException, UploadFile, status, Request
-from typing import Dict, List, Literal, Optional
-from termcolor import colored
-
-logger = logging.getLogger(__name__)
-
 from ..models import (
     ApiKey,
     ApiKeyCreate,
@@ -25,9 +10,19 @@ from ..models import (
     Message,
     MessageCreate,
 )
+import hashlib
+import os
+import logging
+from dotenv import load_dotenv
+from supabase import create_client, Client
+from gotrue import User
+from fastapi import HTTPException, status
+from typing import Dict, List, Literal, Optional
+from termcolor import colored
+
+logger = logging.getLogger(__name__)
 
 load_dotenv()  # Load environment variables from .env
-
 
 class SupabaseClient:
     def __init__(self):
