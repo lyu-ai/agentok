@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Activate the virtual environment
+source /app/.venv/bin/activate
+
 # Calculate the number of workers based on the number of CPU cores
 UVICORN_WORKERS=${UVICORN_WORKERS:-$(python -c 'import multiprocessing; print(multiprocessing.cpu_count())')}
 

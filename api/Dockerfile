@@ -1,10 +1,11 @@
-# Use a build stage to compile and build dependencies
-FROM python:3.11-slim AS builder
+# Use a single stage to install dependencies and run the application
+FROM python:3.11-slim
 
+# Set the working directory in the container
 WORKDIR /app
 
-# Install Poetry
-RUN apt-get update && apt-get install -y curl && \
+# Install dependencies required for building and running
+RUN apt-get update && apt-get install -y curl build-essential && \
     curl -sSL https://install.python-poetry.org | python3 - && \
     ln -s /root/.local/bin/poetry /usr/local/bin/poetry
 
@@ -14,16 +15,6 @@ COPY pyproject.toml poetry.lock ./
 # Install dependencies and create a virtual environment in /app/.venv
 RUN poetry config virtualenvs.in-project true && \
     poetry install --no-dev --no-interaction --no-ansi
-
-############################
-# Begin the final stage
-FROM python:3.11-slim
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy the virtual environment from the builder stage
-COPY --from=builder /app/.venv /app/.venv
 
 # Copy the project files
 COPY . .
@@ -36,5 +27,8 @@ ENV UVICORN_PORT=5004 \
     UVICORN_HOST=0.0.0.0 \
     UVICORN_LOG_LEVEL=debug
 
+# Give execution permissions to the entrypoint script
+RUN chmod +x /app/entrypoint.sh
+
 # Command to run the application
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
