@@ -1,7 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 
 # Activate the virtual environment
 source .venv/bin/activate
+
+# Diagnostic: Print the PATH and check uvicorn presence
+echo "PATH is: $PATH"
+which uvicorn || (echo "uvicorn not found in PATH" && exit 1)
+
+# Print the uvicorn binary details
+ls -la $(which uvicorn)
 
 # Calculate the number of workers based on the number of CPU cores
 UVICORN_WORKERS=${UVICORN_WORKERS:-$(python -c 'import multiprocessing; print(multiprocessing.cpu_count())')}
