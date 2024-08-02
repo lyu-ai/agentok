@@ -49,7 +49,7 @@ cp api/.env.sample api/.env
 cp api/OAI_CONFIG_LIST.sample api/OAI_CONFIG_LIST
 ```
 
-Please be aware that Supabase provides both **anon** key and **service_role** key for each project. Please be sure to set anon key to `NEXT_PUBLIC_SUPABASE_ANON_KEY` for frontend(ui), and service role key to `SUPABASE_SERVICE_KEY` for backend(api).
+Please be aware that Supabase provides both **anon** key and **service_role** key for each project. Please be sure to set anon key to `NEXT_PUBLIC_SUPABASE_ANON_KEY` for frontend, and service role key to `SUPABASE_SERVICE_KEY` for backend(api).
 
 The easiest way to run on local is using docker-compose:
 
@@ -63,7 +63,7 @@ You can also build and run the ui and service separately with docker:
 docker build -t agentok-api ./api
 docker run -d -p 5004:5004 agentok-api
 
-docker build -t agentok-frontend ./web
+docker build -t agentok-frontend ./frontend
 docker run -d -p 2855:2855 agentok-frontend
 
 ```

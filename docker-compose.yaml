@@ -1,8 +1,8 @@
 version: '3.8'
 services:
-  ui:
+  frontend:
     build:
-      context: ./web
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
       - "2855:2855"
