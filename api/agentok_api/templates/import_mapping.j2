@@ -13,7 +13,7 @@
         'RetrieveUserProxyAgent': 'from autogen.agentchat.contrib.retrieve_user_proxy_agent import RetrieveUserProxyAgent',
         'LLaVAAgent': 'from autogen.agentchat.contrib.llava_agent import LLaVAAgent',
         'MathUserProxyAgent': 'from autogen.agentchat.contrib.math_user_proxy_agent import MathUserProxyAgent',
-        'DALLEAgent': 'from app.extensions.dalle_agent import DALLEAgent',
+        'DALLEAgent': 'from agentok_api.extensions.dalle_agent import DALLEAgent',
     } -%}
     {%- for node in nodes -%}
         {% set cls = node['data'].get('class') %}

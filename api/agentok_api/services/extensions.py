@@ -12,7 +12,7 @@ class ExtensionService:
     def load_extensions(self):
         extensions_metadata = []
         for _, name, _ in pkgutil.iter_modules([self.extensions_path]):
-            module = importlib.import_module(f".{name}", "app.extensions")
+            module = importlib.import_module(f".{name}", "agentok_api.extensions")
             for attribute_name in dir(module):
                 attribute = getattr(module, attribute_name)
                 if isinstance(attribute, type) and issubclass(
