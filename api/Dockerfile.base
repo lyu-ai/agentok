@@ -1,53 +1,34 @@
-# Base image Dockerfile
-FROM --platform=$BUILDPLATFORM python:3.12-slim AS builder
+FROM python:3.11-slim as builder
 
-# Set the working directory
 WORKDIR /app
 
-# Install build dependencies
-RUN apt-get update && apt-get install -y \
-  build-essential \
-  gcc \
-  g++ \
-  curl \
-  && rm -rf /var/lib/apt/lists/*
-
-# Copy requirements and install dependencies
+# Copy requirements and install dependencies,
+# Utilize the cache unless requirements.txt has changed
 COPY requirements.txt .
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.txt
 
-# Start a new stage to create a lean runtime image
-FROM python:3.12-slim
+############################
+# Begin the final stage
+FROM python:3.11-slim
 
-# Set the working directory
+# Copy only the necessary wheels from builder stage
+COPY --from=builder /app/wheels /wheels
+COPY --from=builder /app/requirements.txt .
+
+# Install the python dependencies
+RUN pip3 install --no-cache /wheels/*
+
+# Set the working directory in the container
 WORKDIR /app
 
-# Install runtime dependencies
-RUN apt-get update && apt-get install -y \
-  curl \
-  && rm -rf /var/lib/apt/lists/*
-
-# Copy Python installation from builder stage
-COPY --from=builder /usr/local /usr/local
-COPY --from=builder /usr/lib /usr/lib
-
-# Set environment variables
-ENV PYTHONUNBUFFERED=1 \
-  PYTHONDONTWRITEBYTECODE=1 \
-  PATH="/usr/local/bin:/usr/local/lib/python3.12/site-packages:${PATH}"
-
-# Copy app code and requirements
+# Copy the code into the container
 COPY . .
 
-# Install runtime dependencies if needed, e.g., for FastAPI and Uvicorn
-RUN /usr/local/bin/python3 -m pip install --no-cache-dir uvicorn fastapi
+# Set environment variables
+ENV UVICORN_WORKERS=3 \
+  UVICORN_PORT=5004 \
+  UVICORN_HOST=0.0.0.0 \
+  UVICORN_LOG_LEVEL=debug
 
-# Verify Python and Uvicorn installation
-RUN /usr/local/bin/python3 --version && /usr/local/bin/python3 -m pip show uvicorn && /usr/local/bin/python3 -m pip show fastapi
-
-# Add a non-root user
-RUN useradd -m myuser
-USER myuser
-
-# Command to run when the container starts
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Command to run the application
+CMD ["sh", "-c", "uvicorn app.main:app --host ${UVICORN_HOST} --port ${UVICORN_PORT} --workers ${UVICORN_WORKERS} --log-level ${UVICORN_LOG_LEVEL}"]
