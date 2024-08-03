@@ -9,11 +9,15 @@ import { RiSwap3Line, RiShoppingBag4Line } from "react-icons/ri";
 import Link from "next/link";
 import Image from "next/image";
 import TemplateList from "../components/TemplateList";
+import { useEffect } from "react";
 
 const Page = () => {
   const t = useTranslations("page.Projects");
   const router = useRouter();
-  const { createProject } = useProjects();
+  const { createProject, setActiveProjectId } = useProjects();
+  useEffect(() => {
+    setActiveProjectId(-1);
+  }, []);
   const onCreateProject = async () => {
     const project = await createProject();
     if (!project) {

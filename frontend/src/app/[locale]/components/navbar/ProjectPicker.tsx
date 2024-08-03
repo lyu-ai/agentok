@@ -99,7 +99,7 @@ const ProjectPicker = () => {
     activeProjectId,
     getProjectById,
   } = useProjects();
-  const isActive = pathname.startsWith("/projects/");
+  const isActive = pathname.startsWith("/projects");
 
   const onCreateProject = async () => {
     const newProject = await createProject({
@@ -140,7 +140,9 @@ const ProjectPicker = () => {
       )}
     >
       <Link
-        href={`/projects/${activeProject?.id}/flow`}
+        href={
+          activeProject ? `/projects/${activeProject?.id}/flow` : "/projects"
+        }
         className="flex items-center gap-1.5 text-sm"
       >
         <Icon className="h-4 w-4 group-hover:scale-125 transform transition duration-700 ease-in-out" />
