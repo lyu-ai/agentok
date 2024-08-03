@@ -7,12 +7,15 @@ export async function GET(
 ) {
   try {
     const supabase = createClient();
-    await getSupabaseSession(); // Ensure user is authenticated
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError) throw new Error('Failed to authenticate');
+    if (!user) throw new Error('Not authenticated');
 
     const { data: tool, error } = await supabase
       .from('tools')
       .select('*')
       .eq('id', params.id)
+      .eq('user_id', user.id)
       .single();
 
     if (error) throw error;
@@ -30,12 +33,18 @@ export async function POST(
 ) {
   try {
     const supabase = createClient();
-    await getSupabaseSession(); // Ensure user is authenticated
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError) throw new Error('Failed to authenticate');
+    if (!user) throw new Error('Not authenticated');
     const tool = await request.json();
+    const toolWithOwner = {
+      ...tool,
+      user_id: user.id,
+    };
 
     const { data, error } = await supabase
       .from('tools')
-      .update(tool)
+      .update(toolWithOwner)
       .eq('id', params.id)
       .select()
       .single();
@@ -55,12 +64,15 @@ export async function DELETE(
 ) {
   try {
     const supabase = createClient();
-    await getSupabaseSession(); // Ensure user is authenticated
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError) throw new Error('Failed to authenticate');
+    if (!user) throw new Error('Not authenticated');
 
     const { error } = await supabase
       .from('tools')
       .delete()
-      .eq('id', params.id);
+      .eq('id', params.id)
+      .eq('user_id', user.id);
 
     if (error) throw error;
 

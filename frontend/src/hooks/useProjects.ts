@@ -2,7 +2,6 @@ import useSWR from 'swr';
 import useProjectStore, { Project } from '@/store/projects';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { fetcher } from './fetcher';
-import supabase from '@/utils/supabase/client';
 import { ProjectTemplate } from '@/store/templates';
 
 export function useProjects() {
@@ -13,6 +12,8 @@ export function useProjects() {
   const setProjects = useProjectStore(state => state.setProjects);
   const deleteProject = useProjectStore(state => state.deleteProject);
   const updateProject = useProjectStore(state => state.updateProject);
+  const activeProjectId = useProjectStore(state => state.activeProjectId);
+  const setActiveProjectId = useProjectStore(state => state.setActiveProjectId);
   const getProjectById = useProjectStore(state => state.getProjectById);
   const prevDataRef = useRef(data);
   useEffect(() => {
@@ -21,19 +22,6 @@ export function useProjects() {
       prevDataRef.current = data;
     }
   }, [data, error, setProjects, projects]);
-
-  const [userId, setUserId] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchUserId = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUserId(user?.id || null);
-    };
-
-    fetchUserId();
-  }, []);
 
   const [isCreating, setIsCreating] = useState(false);
   const handleCreateProject = useCallback(
@@ -51,7 +39,6 @@ export function useProjects() {
             description:
               project?.description ?? 'A new project with sample nodes.',
             flow: project?.flow ?? {},
-            user_id: userId,
           }),
         });
         if (!response.ok) throw new Error(await response.text());
@@ -72,7 +59,7 @@ export function useProjects() {
   const handleDeleteProject = useCallback(
     async (id: number) => {
       setIsDeleting(true);
-      const previousProjects = [...data];
+      const previousProjects = [...projects];
       deleteProject(id);
       try {
         await fetch(`/api/projects/${id}`, {
@@ -135,7 +122,6 @@ export function useProjects() {
             name: template.name,
             description: template.description,
             flow: template.project.flow,
-            tools: template.project.tools,
           }),
         });
         if (!response.ok) throw new Error(response.statusText);
@@ -154,18 +140,20 @@ export function useProjects() {
 
   return {
     projects: (data as Project[]) ?? [],
+    activeProjectId,
+    setActiveProjectId,
     isLoading: !error && !data,
     isError: error,
     refresh: mutate,
     createProject: handleCreateProject,
-    updateProject: handleUpdateProject,
-    deleteProject: handleDeleteProject,
-    forkProject: handleForkProject,
-    getProjectById,
     isCreating,
-    isDeleting,
-    isForking,
+    updateProject: handleUpdateProject,
     isUpdating,
+    deleteProject: handleDeleteProject,
+    isDeleting,
+    forkProject: handleForkProject,
+    isForking,
+    getProjectById,
   };
 }
 

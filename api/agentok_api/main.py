@@ -6,6 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from .routers import (
     admin,
     chats,
+    tools,
     codegen,
     datasets,
     api_docs,
@@ -28,8 +29,9 @@ main_app.add_middleware(
 )
 
 main_app.include_router(chats.router, prefix="/chats", tags=["Chat"])
-main_app.include_router(datasets.router, prefix="/datasets", tags=["Knowledge"])
-main_app.include_router(codegen.router, prefix="/codegen", tags=["Tool"])
+main_app.include_router(tools.router, prefix="/tools", tags=["Tool"])
+main_app.include_router(datasets.router, prefix="/datasets", tags=["Dataset"])
+main_app.include_router(codegen.router, prefix="/codegen", tags=["Codegen"])
 main_app.include_router(
     extension.router, prefix="/extensions", tags=["Extension"]
 )

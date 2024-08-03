@@ -333,7 +333,7 @@ const ChatPane = ({
   }
 
   return (
-    <div className="flex flex-col w-full h-full z-10 shadow-box shadow-gray-700 rounded-xl bg-gray-700/80 text-base-content border border-gray-600">
+    <div className="flex flex-col w-full h-full shadow-box shadow-gray-700 rounded-xl bg-gray-700/80 text-base-content border border-gray-600">
       <div className="flex items-center justify-between w-full p-2">
         <div className="flex items-center gap-2 text-sm">
           {standalone && (

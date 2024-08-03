@@ -15,26 +15,27 @@ import ReactFlow, {
   Panel,
   useEdgesState,
   useNodesState,
-} from 'reactflow';
-import 'reactflow/dist/style.css';
-import './reactflow.css';
-import { nodeTypes, edgeTypes, isConversable } from '../utils/flow';
-import { useState, useCallback, useRef, useEffect } from 'react';
-import ViewToggle from './ViewToggle';
-import NodeButton from './NodeButton';
-import Python from './Python';
-import Json from './Json';
-import { genId } from '@/utils/id';
-import ChatButton from '../../../../components/chat/ChatButton';
-import { useTranslations } from 'next-intl';
-import { useChats, useProject, useSettings } from '@/hooks';
-import { debounce } from 'lodash-es';
-import ChatPane from '../../../../components/chat/ChatPane';
-import useProjectStore from '@/store/projects';
-import NodePane from './NodePane';
-import { Chat as ChatType } from '@/store/chats';
-import { RiSpyLine } from 'react-icons/ri';
-import clsx from 'clsx';
+} from "reactflow";
+import "reactflow/dist/style.css";
+import "./reactflow.css";
+import { nodeTypes, edgeTypes, isConversable } from "../utils/flow";
+import { useState, useCallback, useRef, useEffect } from "react";
+import ViewToggle from "./ViewToggle";
+import NodeButton from "./NodeButton";
+import Python from "./Python";
+import Json from "./Json";
+import { genId } from "@/utils/id";
+import ChatButton from "../../../../components/chat/ChatButton";
+import { useTranslations } from "next-intl";
+import { useChats, useProject, useSettings } from "@/hooks";
+import { debounce } from "lodash-es";
+import ChatPane from "../../../../components/chat/ChatPane";
+import useProjectStore from "@/store/projects";
+import NodePane from "./NodePane";
+import { Chat as ChatType } from "@/store/chats";
+import { RiSettings2Line, RiSpyLine } from "react-icons/ri";
+import clsx from "clsx";
+import Link from "next/link";
 
 const DEBOUNCE_DELAY = 500; // Adjust this value as needed
 
@@ -44,7 +45,7 @@ const useDebouncedUpdate = (projectId: number) => {
   const { toObject } = useReactFlow();
   const initialLoad = useRef(true);
 
-  const debouncedUpdate = debounce(flow => {
+  const debouncedUpdate = debounce((flow) => {
     updateProject({ flow });
     setIsDirty(false);
   }, DEBOUNCE_DELAY);
@@ -73,23 +74,23 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
   const [edges, setEdges] = useEdgesState([]);
   const { setIsDirty } = useDebouncedUpdate(projectId);
   const { chats, createChat } = useChats();
-  const [mode, setMode] = useState<'main' | 'flow' | 'json' | 'python'>('flow');
+  const [mode, setMode] = useState<"main" | "flow" | "json" | "python">("flow");
   const flowParent = useRef<HTMLDivElement>(null);
-  const chatPanePinned = useProjectStore(state => state.chatPanePinned);
-  const nodePanePinned = useProjectStore(state => state.nodePanePinned);
+  const chatPanePinned = useProjectStore((state) => state.chatPanePinned);
+  const nodePanePinned = useProjectStore((state) => state.nodePanePinned);
   const { spyModeEnabled, enableSpyMode } = useSettings();
   const [activeChatId, setActiveChatId] = useState<ChatType | undefined>();
-  const t = useTranslations('component.Flow');
+  const t = useTranslations("component.Flow");
 
   // Suppress error code 002
   const store = useStoreApi();
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       store.getState().onError = (code, message) => {
-        if (code === '002') {
+        if (code === "002") {
           return;
         }
-        console.warn('Workflow warning:', code, message);
+        console.warn("Workflow warning:", code, message);
       };
     }
   }, []);
@@ -102,7 +103,7 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
         setIsDirty(false);
       }
       const existingChat = chats.findLast(
-        chat => chat.from_project === project?.id
+        (chat) => chat.from_project === project?.id
       );
       if (existingChat) {
         setActiveChatId(existingChat);
@@ -113,17 +114,17 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
   }, [projectId]);
 
   const isGroupType = (type: string) =>
-    ['groupchat', 'nestedchat'].includes(type);
+    ["groupchat", "nestedchat"].includes(type);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
-      setNodes(nds => {
+      setNodes((nds) => {
         let newNodes = applyNodeChanges(changes, nds);
 
         // Handle parent-child relationships for group nodes
-        changes.forEach(change => {
-          if (change.type === 'position' && !change.dragging) {
-            const draggedNode = newNodes.find(n => n.id === change.id);
+        changes.forEach((change) => {
+          if (change.type === "position" && !change.dragging) {
+            const draggedNode = newNodes.find((n) => n.id === change.id);
             if (draggedNode) {
               const nodePosition = draggedNode.position;
 
@@ -157,7 +158,7 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
               } else if (draggedNode.parentId) {
                 // Node is not over any group
                 const parentNode = newNodes.find(
-                  n => n.id === draggedNode.parentId
+                  (n) => n.id === draggedNode.parentId
                 );
                 if (parentNode) {
                   // Convert to absolute position before detaching from the group
@@ -186,7 +187,7 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
 
         return newNodes;
       });
-      if (changes.some(change => change.type !== 'select')) {
+      if (changes.some((change) => change.type !== "select")) {
         setIsDirty(true);
       }
     },
@@ -205,36 +206,36 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
 
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
-      if (changes.some(change => change.type !== 'select')) {
+      if (changes.some((change) => change.type !== "select")) {
         setIsDirty(true);
       }
-      setEdges(eds => applyEdgeChanges(changes, eds));
+      setEdges((eds) => applyEdgeChanges(changes, eds));
     },
     [setIsDirty]
   );
 
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
+    event.dataTransfer.dropEffect = "move";
   }, []);
 
   const onDrop = useCallback(
     (event: React.DragEvent) => {
       event.preventDefault();
 
-      if (!event.dataTransfer.getData('json')) {
+      if (!event.dataTransfer.getData("json")) {
         return;
       }
 
       if (!flowParent.current) {
         console.warn(
-          'Unexpected null value of flowParent, drag & drop failed.'
+          "Unexpected null value of flowParent, drag & drop failed."
         );
         return;
       }
 
       const flowBounds = flowParent.current.getBoundingClientRect();
-      const data = JSON.parse(event.dataTransfer.getData('json'));
+      const data = JSON.parse(event.dataTransfer.getData("json"));
       const position = screenToFlowPosition({
         x: event.clientX - flowBounds.left - data.offsetX,
         y: event.clientY - flowBounds.top - data.offsetY,
@@ -242,7 +243,7 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
 
       if (position.x === 0 && position.y === 0) {
         console.warn(
-          'Failed calculating target position, need to check the problem. context:',
+          "Failed calculating target position, need to check the problem. context:",
           position,
           data
         );
@@ -261,7 +262,7 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
 
       // Handle parent-child relationships for group nodes immediately after drop
       const groupNode = nodes.find(
-        n => n.type === 'groupchat' && isPositionInsideNode(position, n)
+        (n) => n.type === "groupchat" && isPositionInsideNode(position, n)
       );
 
       if (groupNode) {
@@ -272,19 +273,19 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
         };
       }
 
-      setNodes(nds =>
-        nds.map(nd => ({ ...nd, selected: false } as Node)).concat(newNode)
+      setNodes((nds) =>
+        nds.map((nd) => ({ ...nd, selected: false } as Node)).concat(newNode)
       );
     },
     [nodes, screenToFlowPosition, setNodes, flowParent]
   );
 
   const onConnect = (params: any) => {
-    const sourceNode = nodes.find(nd => nd.id === params.source);
-    const targetNode = nodes.find(nd => nd.id === params.target);
+    const sourceNode = nodes.find((nd) => nd.id === params.source);
+    const targetNode = nodes.find((nd) => nd.id === params.target);
     const isConverseEdge =
       isConversable(sourceNode) && isConversable(targetNode);
-    setEdges(eds => {
+    setEdges((eds) => {
       let newEdges = {
         ...params,
         strokeWidth: 2,
@@ -293,7 +294,7 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
         newEdges = {
           ...newEdges,
           animated: true,
-          type: 'converse',
+          type: "converse",
         };
       }
       return addEdge(newEdges, eds);
@@ -318,30 +319,34 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
       },
       data,
     };
-    setNodes(nds => nds.concat(newNode));
+    setNodes((nds) => nds.concat(newNode));
   };
 
   const handleStartChat = async () => {
     if (!project) {
-      console.warn('Project not found');
+      console.warn("Project not found");
       return;
     }
-    const existingChat = chats.findLast(chat => chat.from_project === project.id);
-    console.log('existingChat', existingChat);
+    const existingChat = chats.findLast(
+      (chat) => chat.from_project === project.id
+    );
+    console.log("existingChat", existingChat);
     if (existingChat) {
       setActiveChatId(existingChat);
       return;
     }
-    await createChat(project.id, 'project').then(chat => setActiveChatId(chat));
+    await createChat(project.id, "project").then((chat) =>
+      setActiveChatId(chat)
+    );
   };
 
-  if (mode === 'python') {
+  if (mode === "python") {
     return (
       <div className="relative flex w-full h-full">
         <Python data={project} setMode={setMode} />
       </div>
     );
-  } else if (mode === 'json') {
+  } else if (mode === "json") {
     return (
       <div className="relative flex w-full h-full">
         <Json data={project} setMode={setMode} />
@@ -359,7 +364,7 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
     return (
       <div className="relative flex w-full h-full items-center justify-center">
         <p className="text-red-500">
-          {t('project-load-failed')} {projectId}
+          {t("project-load-failed")} {projectId}
         </p>
       </div>
     );
@@ -385,7 +390,7 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
           edgeTypes={edgeTypes}
           onConnect={onConnect}
           connectionLineType={ConnectionLineType.Bezier}
-          connectionLineStyle={{ strokeWidth: 2, stroke: 'darkgreen' }}
+          connectionLineStyle={{ strokeWidth: 2, stroke: "darkgreen" }}
           onDragOver={onDragOver}
           onDrop={onDrop}
           panOnScroll
@@ -400,7 +405,7 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
             gap={32}
             color="hsl(var(--sc))"
             className="engraved-bg bg-no-repeat bg-center bg-[url('/logo-bg.svg')]"
-            style={{ backgroundSize: '160px' }}
+            style={{ backgroundSize: "160px" }}
           />
           <Controls
             fitViewOptions={{ maxZoom: 1 }}
@@ -409,16 +414,23 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
             className="flex"
           />
           <Panel position="top-right" className="flex p-1 gap-2">
-            <ViewToggle mode={'json'} setMode={setMode} />
-            <ViewToggle mode={'python'} setMode={setMode} />
+            <ViewToggle mode={"json"} setMode={setMode} />
+            <ViewToggle mode={"python"} setMode={setMode} />
+            <Link
+              className="btn btn-sm btn-ghost btn-circle"
+              href={`/projects/${projectId}/settings`}
+            >
+              <RiSettings2Line className="w-4 h-4" />
+            </Link>
             <button
               type="button"
-              className={clsx('btn btn-sm btn-circle btn-ghost', {
-                'text-secondary': spyModeEnabled,
+              className={clsx("btn btn-sm btn-circle btn-ghost", {
+                "text-secondary": spyModeEnabled,
               })}
               data-tooltip-id="default-tooltip"
-              data-tooltip-content={`Spy mode ${spyModeEnabled ? 'enabled' : 'disabled'
-                }`}
+              data-tooltip-content={`Spy mode ${
+                spyModeEnabled ? "enabled" : "disabled"
+              }`}
               onClick={() => enableSpyMode(!spyModeEnabled)}
             >
               <RiSpyLine className="w-4 h-4" />

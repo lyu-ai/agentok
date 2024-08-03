@@ -14,7 +14,7 @@ interface UserState {
 
 const useUserStore = create<UserState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       loading: false,
       error: null,
@@ -31,10 +31,10 @@ const useUserStore = create<UserState>()(
         }
       },
       setUser: (user) => set({ user }),
+      getUser: () => get().user,
     }),
     {
       name: 'agentok-user-storage',
-      partialize: (state) => ({ user: state.user }),
     }
   )
 );

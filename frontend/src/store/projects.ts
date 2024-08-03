@@ -1,40 +1,23 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type ToolParameter = {
-  id: number;
-  name: string;
-  description: string;
-  type: 'str' | 'int' | 'bool' | 'float';
-};
-
-export type Tool = {
-  id: number;
-  name: string;
-  description: string;
-  async?: boolean;
-  parameters: ToolParameter[];
-  code?: string;
-  assigned?: [{ agent: string; scene: 'execution' | 'llm' }];
-};
-
 export interface Project {
   id: number;
   name: string;
   description?: string;
   flow: any; // Complicated JSON object
-  tools?: Tool[];
-  datasets?: any;
   settings?: any;
-  created?: string;
-  updated?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 interface ProjectState {
   projects: Project[];
+  activeProjectId: number;
   chatPanePinned: boolean;
   nodePanePinned: boolean;
   setProjects: (projects: Project[]) => void;
+  setActiveProjectId: (id: number) => void;
   updateProject: (id: number, project: Partial<Project>) => void;
   deleteProject: (id: number) => void;
   getProjectById: (id: number) => Project | undefined;
@@ -46,9 +29,11 @@ const useProjectStore = create<ProjectState>()(
   persist(
     (set, get) => ({
       projects: [],
+      activeProjectId: -1,
       chatPanePinned: false,
       nodePanePinned: false,
       setProjects: projects => set({ projects }),
+      setActiveProjectId: id => set({ activeProjectId: id }),
       updateProject: (id, newProject) =>
         set(state => {
           const projects = state.projects.map(project => {

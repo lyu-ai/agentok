@@ -8,20 +8,44 @@
       "reset": "Reset",
       "reset-confirm": "Are you sure to reset all settings to default?"
     },
+    "Detail": {
+      "title": "Tool Detail",
+      "tool-name": "Name",
+      "tool-description": "Description",
+      "tool-actions": "Actions",
+      "tool-create": "New Tool",
+      "tool-edit": "Edit Tool",
+      "tool-delete": "Delete Tool",
+      "tool-delete-confirm": "Are you sure to delete this tool?",
+      "show-variables": "Show Variables"
+    },
     "Editor": {
       "title": "Tool Editor",
       "generate-code": "Generate Code",
       "generate-code-tooltip": "Auto-generate code with AI",
+      "extract-meta": "Extract Meta",
       "run-test": "Run Test"
     },
-    "Params": {
+    "Signatures": {
       "title": "Parameters",
-      "param-required": "Required",
-      "param-name": "Name",
-      "param-type": "Type",
-      "param-description": "Description",
-      "param-actions": "Actions",
-      "param-add": "Add Parameter"
+      "signature-required": "Required",
+      "signature-name": "Name",
+      "signature-type": "Type",
+      "signature-description": "Description",
+      "signature-actions": "Actions",
+      "signature-create": "New Signature"
+    },
+    "Variables": {
+      "title": "Variables",
+      "description": "Variables are the configurations such as API_KEY etc, to be set at runtime.",
+      "variable-name": "Name",
+      "variable-description": "Description",
+      "variable-description-placeholder": "Description",
+      "variable-actions": "Actions",
+      "default-value": "Default Value",
+      "default-value-placeholder": "Enter default value",
+      "default-value-tip": "The value in format **'{{'VAR'}}'** will be replaced at runtime by `os.environ.get('VAR')`",
+      "variable-create": "New Variable"
     }
   },
   "node": {
@@ -353,7 +377,7 @@
       "description": "Build Multi-Agent Apps with Drag-and-Drop Simplicity.",
       "create-project": "Create New Project",
       "start-from-template": "Start from Template",
-      "discover": "Find more templates"
+      "discover": "Discover Community"
     },
     "Discover": {
       "select-template-title": "Agentok Community",

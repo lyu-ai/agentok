@@ -11,18 +11,26 @@ import {
   RiCompassLine,
   RiBankFill,
   RiBankLine,
+  RiBriefcase4Line,
+  RiBriefcase4Fill,
+  RiDatabase2Line,
+  RiDatabase2Fill,
+  RiToolsLine,
+  RiToolsFill,
+  RiShuffleFill,
+  RiShuffleLine,
 } from 'react-icons/ri';
 import { usePathname } from 'next/navigation';
 
 export const getGeneralMenuItems = () => {
   const NAV_MENU_ITEMS = [
-    {
-      id: 'projects',
-      label: 'Projects',
-      icon: RiApps2Line,
-      activeIcon: RiApps2Fill,
-      href: '/projects',
-    },
+    // {
+    //   id: 'projects',
+    //   label: 'Flows',
+    //   icon: RiShuffleLine,
+    //   activeIcon: RiShuffleFill,
+    //   href: '/projects',
+    // },
     {
       id: 'chat',
       label: 'Chat',
@@ -31,10 +39,17 @@ export const getGeneralMenuItems = () => {
       href: '/chat',
     },
     {
+      id: 'tools',
+      label: 'Tools',
+      icon: RiToolsLine,
+      activeIcon: RiToolsFill,
+      href: `/tools`,
+    },
+    {
       id: 'datasets',
-      label: 'Knowledge',
-      icon: RiBankLine,
-      activeIcon: RiBankFill,
+      label: 'Datasets',
+      icon: RiDatabase2Line,
+      activeIcon: RiDatabase2Fill,
       href: `/datasets`,
     },
     {

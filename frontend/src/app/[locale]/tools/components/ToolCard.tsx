@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import { RiFormula, RiDeleteBin4Line } from 'react-icons/ri';
 
-const ToolBlock = ({ nodeId, tool, onDelete, selected, ...props }: any) => {
+const ToolCard = ({ nodeId, tool, onDelete, selected, ...props }: any) => {
   const [isDeleting, setIsDeleting] = useState(false);
-  const onHandleDelete = async (e: any) => {
+  const handleDelete = async (e: any) => {
     e.stopPropagation();
     setIsDeleting(true);
     onDelete && (await onDelete(tool).finally(() => setIsDeleting(false)));
@@ -31,7 +31,7 @@ const ToolBlock = ({ nodeId, tool, onDelete, selected, ...props }: any) => {
       <div className="absolute bottom-1 right-1 hidden group-hover:block">
         <button
           className="btn btn-xs btn-square btn-ghost hover:text-red-600"
-          onClick={onHandleDelete}
+          onClick={handleDelete}
         >
           {isDeleting ? (
             <div className="loading loading-xs" />
@@ -44,4 +44,4 @@ const ToolBlock = ({ nodeId, tool, onDelete, selected, ...props }: any) => {
   );
 };
 
-export default ToolBlock;
+export default ToolCard;

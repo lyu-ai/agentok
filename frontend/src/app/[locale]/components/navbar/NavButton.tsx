@@ -1,14 +1,11 @@
-'use client';
-import { HiMenuAlt2 } from 'react-icons/hi';
-import { Float } from '@headlessui-float/react';
-import { Popover } from '@headlessui/react';
-import { getGeneralMenuItems } from './GeneralMenu';
-import { getProjectNavbarItems } from './ProjectMenu';
+"use client";
+import { HiMenuAlt2 } from "react-icons/hi";
+import { Float } from "@headlessui-float/react";
+import { Popover } from "@headlessui/react";
+import { getGeneralMenuItems } from "./GeneralMenu";
 
 const NavButton = ({ projectId, className }: any) => {
-  const NAV_MENU_ITEMS = projectId
-    ? getProjectNavbarItems(projectId)
-    : getGeneralMenuItems();
+  const NAV_MENU_ITEMS = getGeneralMenuItems();
   return (
     <Popover>
       <Float
@@ -24,7 +21,7 @@ const NavButton = ({ projectId, className }: any) => {
           <HiMenuAlt2 className="w-5 h-5" />
         </Popover.Button>
         <Popover.Panel className="origin-top-left absolute shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 overflow-auto max-h-[80vh]">
-          {NAV_MENU_ITEMS.map(item => (
+          {NAV_MENU_ITEMS.map((item) => (
             <Popover.Button
               as="a"
               href={item.href}

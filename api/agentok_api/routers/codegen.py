@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 
-from ..models import Project, Tool
+from ..models import Project, Tool, ToolCode
 from ..services import CodegenService
 from ..dependencies import get_codegen_service
 
@@ -15,3 +15,8 @@ async def api_code_gen(project: Project, service: CodegenService = Depends(get_c
 async def api_code_gen_tool(tool: Tool, service: CodegenService = Depends(get_codegen_service)):
   generatedFunc = service.tool2py(tool)
   return generatedFunc
+
+@router.post('/extract', summary="Extract meta data of the tool code")
+async def api_code_gen_extract_meta(tool: ToolCode, service: CodegenService = Depends(get_codegen_service)):
+  meta = service.extract_tool_meta(tool.code)
+  return meta

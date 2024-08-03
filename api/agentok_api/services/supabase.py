@@ -9,6 +9,7 @@ from ..models import (
     DocumentCreate,
     Message,
     MessageCreate,
+    Tool,
 )
 import hashlib
 import os
@@ -280,6 +281,94 @@ class SupabaseClient:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Failed to create chat: {exc}",
             )
+
+    def fetch_tools(self) -> List[Tool]:
+        try:
+            response = (
+                self.supabase.table("tools")
+                .select("*")
+                .eq("user_id", self.user_id)
+                .execute()
+            )
+            if response.data:
+                return response.data
+            else:
+                return []
+        except Exception as exc:
+            logger.error(f"An error occurred: {exc}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Failed fetching tools: {exc}",
+            )
+
+    def create_tool(self, tool_to_create: Tool) -> Tool:
+        try:
+            tool_data = tool_to_create.model_dump(exclude={"id"})
+            tool_data["user_id"] = self.user_id
+            response = self.supabase.table("tools").insert(tool_data).execute()
+            if response.data:
+                return Tool(**response.data[0])
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Failed to create tool",
+                )
+        except Exception as exc:
+            logger.error(f"An error occurred: {exc}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Failed to create tool: {exc}",
+            )
+
+    def fetch_tool(self, tool_id: str) -> Tool:
+        try:
+            response = (
+                self.supabase.table("tools")
+                .select("*")
+                .eq("id", tool_id)
+                .eq("user_id", self.user_id)
+                .execute()
+            )
+            if response.data:
+                return Tool(**response.data[0])
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND, detail="Tool not found"
+                )
+        except Exception as exc:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Tool not found: {exc}",
+            )
+
+    def update_tool(self, tool_to_update: Tool) -> Tool:
+        tool_data = tool_to_update.model_dump()
+        tool_id = tool_data.pop("id")
+        if not tool_id:
+            raise Exception("Invalid tool_id")
+        response = (
+            self.supabase.table("tools")
+            .update(tool_data)
+            .eq("id", tool_id)
+            .execute()
+        )
+        if response.data:
+            return response.data[0]
+        else:
+            raise Exception("Tool not found")
+
+    def delete_tool(self, tool_id: str) -> Dict:
+        response = (
+            self.supabase.table("tools")
+            .delete()
+            .eq("id", tool_id)
+            .eq("user_id", self.user_id)
+            .execute()
+        )
+        if response.data:
+            return {"message": f"Tool {tool_id} deleted successfully"}
+        else:
+            raise Exception(f"Error deleting tool {tool_id}")
 
     def fetch_datasets(self) -> List[Dataset]:
         try:

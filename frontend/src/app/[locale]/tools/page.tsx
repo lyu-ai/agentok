@@ -2,37 +2,26 @@
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { RiFormula } from 'react-icons/ri';
-import SharedToolList from './components/SharedToolList';
-import { genId } from '@/utils/id';
-import { useProject, useSharedTools } from '@/hooks';
+import { useSharedTools, useTools } from '@/hooks';
 import { toast } from 'react-toastify';
 
-const Page = ({ params }: { params: { projectId: string } }) => {
-  const projectId = parseInt(params.projectId, 10);
+const Page = () => {
   const t = useTranslations('tool.Config');
-  const { project, updateProject } = useProject(projectId);
   const { tools: sharedTools } = useSharedTools();
+  const { createTool } = useTools();
   const router = useRouter();
 
   const onFork = async (sharedToolId: any) => {
     const sharedTool = sharedTools.find(t => t.id === sharedToolId);
-    if (!sharedTool || !sharedTool.tool) {
+    if (!sharedTool) {
       toast.error(`Shared tool ${sharedToolId} not found.`);
       console.error(`Shared tool ${sharedToolId} not found.`);
       return;
     }
-    const newToolId = genId();
-    await updateProject({
-      tools: [
-        {
-          ...sharedTool.tool,
-          id: newToolId,
-        },
-        ...(project?.tools ?? []),
-      ],
-    })
-      .then(() => {
-        router.push(`/projects/${params.projectId}/tools/${newToolId}`);
+    const { id, ...newTool  } = sharedTool;
+    await createTool(newTool)
+      .then(tool => {
+        router.push(`/tools/${tool.id}`);
       })
       .catch(err => console.error(err));
   };

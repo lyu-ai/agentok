@@ -4,11 +4,14 @@ import { createClient, getSupabaseSession } from '@/utils/supabase/server';
 export async function GET(request: NextRequest) {
   try {
     const supabase = createClient();
-    await getSupabaseSession(); // Ensure user is authenticated
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError) throw new Error('Failed to authenticate');
+    if (!user) throw new Error('Not authenticated');
 
     const { data: tools, error } = await supabase
       .from('tools')
       .select(`*`)
+      .eq('user_id', user.id)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -23,12 +26,14 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const supabase = createClient();
-    const session = await getSupabaseSession();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError) throw new Error('Failed to authenticate');
+    if (!user) throw new Error('Not authenticated');
 
     const tool = await request.json();
     const toolWithOwner = {
       ...tool,
-      user_id: session.user.id,
+      user_id: user.id,
     };
 
     const { data, error } = await supabase

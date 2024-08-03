@@ -3,6 +3,8 @@ from .chats import ChatService
 from .codegen import CodegenService
 from .datasets import DatasetService
 from .extensions import ExtensionService
+from .supabase import SupabaseClient
+from .tools import ToolService
 
 __all__ = [
   'AdminService',
@@ -10,4 +12,6 @@ __all__ = [
     'CodegenService',
     'DatasetService',
     'ExtensionService',
+    'SupabaseClient',
+    'ToolService',
 ]

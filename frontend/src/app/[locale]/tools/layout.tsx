@@ -6,43 +6,28 @@ import { usePathname, useRouter } from 'next/navigation';
 import { genId } from '@/utils/id';
 import { Tooltip } from 'react-tooltip';
 import { useTranslations } from 'next-intl';
-import { useProject } from '@/hooks';
+import { useTools } from '@/hooks';
 import {
-  RiBriefcase4Fill,
-  RiBriefcase4Line,
   RiLayoutGridFill,
 } from 'react-icons/ri';
-import { Tool } from '@/store/projects';
 import Link from 'next/link';
 
 const Layout = ({
   children,
   params,
 }: PropsWithChildren<{ params: { projectId: string } }>) => {
-  const projectId = parseInt(params.projectId, 10);
+  const { tools, createTool, isCreating, deleteTool, isDeleting } = useTools();
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations('tool.Config');
-  const { project, updateProject } = useProject(projectId);
-  const [isCreating, setIsCreating] = useState(false);
-  const [tools, setTools] = useState<Tool[]>([]);
 
-  useEffect(() => {
-    if (project?.tools && project?.tools.length > 0) {
-      setTools(project.tools);
-    }
-  }, [project]);
-
-  const onAdd = async () => {
-    setIsCreating(true);
-    await updateProject({
-      tools: [
-        {
+  const handleCreate = async () => {
+    await createTool({
           id: genId(),
           name: 'hello',
           description: 'Send hello world message.',
           code: '',
-          parameters: [
+          signatures: [
             {
               id: genId(),
               name: 'message',
@@ -50,19 +35,16 @@ const Layout = ({
               description: 'The message to be printed.',
             },
           ],
-        },
-        ...tools,
-      ],
-    }).finally(() => setIsCreating(false));
+          variables: [],
+        });
   };
 
-  const onDelete = async (tool: any) => {
-    const updatedTools = tools.filter((t: any) => t.id !== tool.id) ?? [];
-    await updateProject({ tools: updatedTools });
+  const handleDelete = async (tool: any) => {
+    await deleteTool(tool.id);
   };
 
-  const onSelect = async (tool: any) => {
-    router.push(`/projects/${params.projectId}/tools/${tool.id}`);
+  const handleSelect = async (tool: any) => {
+    router.push(`/tools/${tool.id}`);
   };
 
   return (
@@ -70,26 +52,24 @@ const Layout = ({
       <div className="flex flex-col w-80 h-full border-r p-2 gap-2 border-base-content/10">
         <div className="flex items-center gap-1">
           <button
-            className="btn btn-sm btn-primary flex flex-1"
-            onClick={onAdd}
+            className="btn btn-sm btn-primary rounded flex flex-1"
+            onClick={handleCreate}
           >
-            {isCreating ? (
+            {isCreating && (
               <div className="loading loading-xs" />
-            ) : (
-              <RiBriefcase4Line className="w-4 h-4" />
             )}
             <span>{t('new-tool')}</span>
           </button>
           <Link
-            href={`/projects/${params.projectId}/tools`}
-            className="btn btn-sm btn-primary btn-square"
+            href={`/tools`}
+            className="btn btn-sm btn-primary btn-square rounded"
             data-tooltip-id="default-tooltip"
             data-tooltip-content={'Shared Tools'}
           >
             <RiLayoutGridFill className="w-4 h-4" />
           </Link>
         </div>
-        <div className="flex flex-col gap-2 w-full h-full overflow-y-hidden">
+        <div className="flex flex-col gap-0.5 w-full h-full overflow-y-hidden">
           {tools.length > 0 ? (
             tools.map((tool: any, index: any) => {
               const isSelected = pathname.includes(`/tools/${tool.id}`);
@@ -98,8 +78,8 @@ const Layout = ({
                   selected={isSelected}
                   tool={tool}
                   key={index}
-                  onDelete={() => onDelete(tool)}
-                  onClick={() => onSelect(tool)}
+                  onDelete={() => handleDelete(tool)}
+                  onClick={() => handleSelect(tool)}
                 />
               );
             })

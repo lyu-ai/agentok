@@ -1,14 +1,8 @@
-from fastapi import Depends, HTTPException, Header, Security, status
+from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import APIKeyHeader, HTTPAuthorizationCredentials, HTTPBearer
 from typing import Optional
 
-from termcolor import colored
-from .services.chats import ChatService
-from .services.codegen import CodegenService
-from .services.supabase import SupabaseClient
-from .services.extensions import ExtensionService
-from .services.admin import AdminService
-from .services.datasets import DatasetService
+from .services import ChatService,CodegenService,SupabaseClient,ExtensionService,AdminService,DatasetService, ToolService
 
 from pathlib import Path
 import logging
@@ -59,6 +53,9 @@ async def get_supabase_client(
 def get_extension_service(supabase: SupabaseClient = Depends(get_supabase_client)) -> ExtensionService:
     extensions_path = Path(__file__).parent / 'extensions'
     return ExtensionService(supabase=supabase, extensions_path=extensions_path.as_posix())
+
+def get_tool_service(supabase: SupabaseClient = Depends(get_supabase_client)) -> ExtensionService:
+    return ToolService(supabase=supabase)
 
 def get_codegen_service(supabase: SupabaseClient = Depends(get_supabase_client)) -> CodegenService:
     return CodegenService(supabase=supabase)
