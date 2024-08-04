@@ -133,7 +133,7 @@ const ProjectPicker = () => {
   return (
     <div
       className={clsx(
-        "group flex items-center gap-0.5 z-50 hover:text-primary cursor-pointer",
+        "group flex items-center gap-0.5 z-10 hover:text-primary cursor-pointer",
         {
           "text-primary/80 border-b border-primary/80": isActive,
         }
@@ -158,8 +158,8 @@ const ProjectPicker = () => {
           <RiArrowDownSLine />
         </ListboxButton>
         <ListboxOptions
-          anchor="bottom start"
-          className="flex flex-col p-2 bg-base-200 dark:bg-gray-700 rounded mt-1 min-w-48 gap-1 shadow dark:border dark:border-gray-600"
+          anchor="bottom end"
+          className="flex flex-col p-2 bg-base-200 dark:bg-gray-700 rounded mt-1 min-w-48 gap-1 shadow dark:border dark:border-gray-600 z-20"
         >
           <div className="flex items-center gap-2 py-2 justify-between border-b border-base-content/10">
             <div className="flex items-center gap-2">
@@ -169,7 +169,8 @@ const ProjectPicker = () => {
               onClick={onCreateProject}
               className={clsx("btn btn-xs btn-outline btn-circle")}
               data-tooltip-id="nav-tooltip"
-              data-tooltip-content="New Project"
+              data-tooltip-content="Start a New Project"
+              data-tooltip-place="bottom"
             >
               {!isCreating && <RiAddLine />}
               {isCreating && (

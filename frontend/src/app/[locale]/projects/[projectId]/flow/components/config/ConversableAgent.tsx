@@ -1,26 +1,27 @@
-import React, { useRef } from 'react';
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import PopupDialog from '@/components/PopupDialog';
-import clsx from 'clsx';
-import { useTranslations } from 'next-intl';
-import { useProjectId } from '@/context/ProjectContext';
-import { useProject } from '@/hooks';
-import { Tool } from '@/store/projects';
+import React, { useRef } from "react";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import PopupDialog from "@/components/PopupDialog";
+import clsx from "clsx";
+import { useTranslations } from "next-intl";
+import { useProjectId } from "@/context/ProjectContext";
+import { useProject, useTool, useTools } from "@/hooks";
+import { Tool } from "@/store/tools";
 import {
   RiCloseLine,
   RiDraggable,
-  RiPuzzle2Line,
   RiSettings3Line,
   RiToolsLine,
-} from 'react-icons/ri';
-import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/react';
-import GenericOption from '../option/Option';
-import Tip from '@/components/Tip';
-import Link from 'next/link';
+} from "react-icons/ri";
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/react";
+import GenericOption from "../option/Option";
+import Tip from "@/components/Tip";
+import Link from "next/link";
+import { setNodeData } from "../../utils/flow";
+import { useReactFlow } from "reactflow";
 
 const ItemType = {
-  TOOL: 'tool',
+  TOOL: "tool",
 };
 
 const AvailableTool = ({ tool }: any) => {
@@ -28,7 +29,7 @@ const AvailableTool = ({ tool }: any) => {
   const [{ isDragging }, drag] = useDrag({
     type: ItemType.TOOL,
     item: { id: tool.id },
-    collect: monitor => ({
+    collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
   });
@@ -39,15 +40,15 @@ const AvailableTool = ({ tool }: any) => {
     <div
       ref={dragRef}
       className={clsx(
-        'group flex items-center justify-between gap-2 p-2 border bg-base-content/10 border-base-content/40 rounded cursor-move',
+        "group flex items-center justify-between gap-2 p-2 border bg-base-content/10 border-base-content/40 rounded cursor-move",
         {
-          'border-primary': isDragging,
+          "border-primary": isDragging,
         }
       )}
     >
       <div className="flex flex-col gap-1">
         <div className="font-bold">
-          {tool.name} {isDragging ? '👋' : ''}
+          {tool.name} {isDragging ? "👋" : ""}
         </div>
         <div className="text-xs line-clamp-1">{tool.description}</div>
       </div>
@@ -56,7 +57,9 @@ const AvailableTool = ({ tool }: any) => {
   );
 };
 
-const AssignedTool = ({ scene, tool, onRemove }: any) => {
+const AssignedTool = ({ scene, toolId, onRemove }: any) => {
+  const { tool } = useTool(toolId);
+  if (!tool) return null;
   return (
     <div className="relative group flex w-48 h-16 items-center justify-between gap-1 p-2 bg-base-content/20 border border-base-content/40 rounded">
       <div className="flex flex-col gap-1">
@@ -78,13 +81,13 @@ const DropZone = ({ onDrop, placeholder, children }: any) => {
   const [{ isOver }, drop] = useDrop({
     accept: ItemType.TOOL,
     drop: (item: { id: string }, monitor) => {
-      console.log('dropping', item, monitor.getDropResult());
+      console.log("dropping", item, monitor.getDropResult());
       if (monitor.didDrop()) {
         return;
       }
       onDrop(item.id);
     },
-    collect: monitor => ({
+    collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   });
@@ -95,9 +98,9 @@ const DropZone = ({ onDrop, placeholder, children }: any) => {
     <div
       ref={ref}
       className={clsx(
-        'flex w-full min-h-32 flex-wrap gap-1 p-1 border border-dashed border-primary/20 rounded',
+        "flex w-full min-h-32 flex-wrap gap-1 p-1 border border-dashed border-primary/20 rounded",
         {
-          'bg-gray-600': isOver,
+          "bg-gray-600": isOver,
         }
       )}
     >
@@ -117,89 +120,78 @@ const ConversableAgentConfig = ({
   className,
   ...props
 }: any) => {
-  const t = useTranslations('option.ConversableAgentConfig');
-  const tGeneric = useTranslations('node.Generic');
-  const { projectId } = useProjectId();
-  const { project, updateProject } = useProject(projectId);
+  const t = useTranslations("option.ConversableAgentConfig");
+  const tGeneric = useTranslations("node.Generic");
+  const { tools } = useTools();
+  const reactflowInstance = useReactFlow();
+  // node: { data: { tools: { execution: [toolId1, toolId2], llm: [toolId3, toolId4] } } }
+  const assignTool = (scene: "execution" | "llm", toolId: number) => {
+    const existingTools = data?.tools || {};
+    const sceneTools = existingTools[scene] || [];
 
-  const handleDrop = async (toolId: number, scene: 'execution' | 'llm') => {
-    if (!project) {
-      return;
+    // Check if the toolId already exists in the array
+    if (!sceneTools.includes(toolId)) {
+      setNodeData(reactflowInstance, nodeId, {
+        ...data,
+        tools: {
+          ...existingTools,
+          [scene]: [...sceneTools, toolId],
+        },
+      });
     }
-    let originalTools = project.tools ?? [];
-    // Handle the drop logic here
-    await updateProject({
-      tools: [
-        ...originalTools.map(tool => {
-          if (
-            tool.id === toolId &&
-            !tool.assigned?.find(a => a.agent === nodeId && a.scene === scene)
-          ) {
-            return {
-              ...tool,
-              assigned: [
-                ...(tool.assigned || []),
-                { agent: nodeId as string, scene },
-              ],
-            } as Tool;
-          }
-          return tool;
-        }),
-      ],
-    });
   };
 
-  const handleRemove = async (toolId: number, scene: 'execution' | 'llm') => {
-    if (!project) {
-      return;
+  const removeTool = (scene: "execution" | "llm", toolId: number) => {
+    const existingTools = data?.tools || {};
+    const sceneTools = existingTools[scene] || [];
+
+    // Check if the toolId exists in the array
+    if (sceneTools.includes(toolId)) {
+      const updatedSceneTools = sceneTools.filter(
+        (id: number) => id !== toolId
+      );
+
+      setNodeData(reactflowInstance, nodeId, {
+        ...data,
+        tools: {
+          ...existingTools,
+          [scene]: updatedSceneTools,
+        },
+      });
     }
-    let originalTools = project.tools ?? [];
-    // Handle the remove logic here
-    await updateProject({
-      tools: [
-        ...originalTools.map(tool => {
-          if (
-            tool.id === toolId &&
-            tool.assigned?.find(a => a.agent === nodeId && a.scene === scene)
-          ) {
-            return {
-              ...tool,
-              assigned: [
-                ...(tool.assigned || []).filter(
-                  a => a.agent !== nodeId || a.scene !== scene
-                ),
-              ],
-            } as Tool;
-          }
-          return tool;
-        }),
-      ],
-    });
+  };
+
+  const handleDrop = async (toolId: number, scene: "execution" | "llm") => {
+    assignTool(scene, toolId);
+  };
+
+  const handleRemove = async (toolId: number, scene: "execution" | "llm") => {
+    removeTool(scene, toolId);
   };
 
   const ToolPanel = (
     <div className="flex flex-col gap-2 w-full h-full">
-      <div className="py-4">{t('available-tools-tooltip')}</div>
+      <div className="py-4">{t("available-tools-tooltip")}</div>
       <div className="flex h-full w-full gap-2">
         <div className="flex w-64">
           <div className="flex flex-col gap-2 w-full h-full">
             <div className="flex items-center flex-0 gap-1 w-full">
-              {t('available-tools')}
-              <Link href={`/projects/${projectId}/tools`} className="link">
+              {t("available-tools")}
+              <Link href={`/tools`} className="link">
                 <RiSettings3Line className="w-4 h-4" />
               </Link>
             </div>
 
             <div className="flex flex-col gap-1 h-full p-1 border border-primary/20 rounded">
               <div className="flex flex-col h-full items-center gap-1 overflow-y-auto ">
-                {project?.tools &&
-                  project.tools.map((tool: Tool) => (
+                {tools &&
+                  tools.map((tool: Tool) => (
                     <AvailableTool key={tool.id} tool={tool} />
                   ))}
-                {(!project?.tools || project?.tools?.length === 0) && (
+                {(!tools || tools.length === 0) && (
                   <div className="flex flex-col gap-2 w-full h-full justify-center items-center">
                     <RiToolsLine className="w-10 h-10 opacity-40" />
-                    <span className=" opacity-40">{t('no-tools')}</span>
+                    <span className=" opacity-40">{t("no-tools")}</span>
                   </div>
                 )}
               </div>
@@ -208,52 +200,40 @@ const ConversableAgentConfig = ({
         </div>
         <div className="flex flex-col gap-2 w-full">
           <div className="flex items-center gap-2">
-            {t('tools-for-execution')}
-            <Tip content={t('tools-for-execution-tooltip')} />
+            {t("tools-for-execution")}
+            <Tip content={t("tools-for-execution-tooltip")} />
           </div>
           <DropZone
-            placeholder={t('tools-for-execution-placeholder')}
-            onDrop={(toolId: number) => handleDrop(toolId, 'execution')}
+            placeholder={t("tools-for-execution-placeholder")}
+            onDrop={(toolId: number) => handleDrop(toolId, "execution")}
           >
-            {project?.tools &&
-              project.tools
-                .filter(tool =>
-                  tool.assigned?.find(
-                    a => a.scene === 'execution' && a.agent === nodeId
-                  )
-                )
-                .map((tool: Tool) => (
-                  <AssignedTool
-                    key={tool.id}
-                    scene="execution"
-                    tool={tool}
-                    onRemove={handleRemove}
-                  />
-                ))}
+            {data?.tools?.execution &&
+              data.tools.execution.map((toolId: number) => (
+                <AssignedTool
+                  key={toolId}
+                  scene="execution"
+                  toolId={toolId}
+                  onRemove={handleRemove}
+                />
+              ))}
           </DropZone>
           <div className="flex items-center gap-2">
-            {t('tools-for-llm')}
-            <Tip content={t('tools-for-llm-tooltip')} />
+            {t("tools-for-llm")}
+            <Tip content={t("tools-for-llm-tooltip")} />
           </div>
           <DropZone
-            placeholder={t('tools-for-llm-placeholder')}
-            onDrop={(toolId: number) => handleDrop(toolId, 'llm')}
+            placeholder={t("tools-for-llm-placeholder")}
+            onDrop={(toolId: number) => handleDrop(toolId, "llm")}
           >
-            {project?.tools &&
-              project.tools
-                .filter(tool =>
-                  tool.assigned?.find(
-                    a => a.scene === 'llm' && a.agent === nodeId
-                  )
-                )
-                .map((tool: Tool) => (
-                  <AssignedTool
-                    scene="llm"
-                    key={tool.id}
-                    tool={tool}
-                    onRemove={handleRemove}
-                  />
-                ))}
+            {data?.tools?.llm &&
+              data.tools.llm.map((toolId: number) => (
+                <AssignedTool
+                  scene="llm"
+                  key={toolId}
+                  toolId={toolId}
+                  onRemove={handleRemove}
+                />
+              ))}
           </DropZone>
         </div>
       </div>
@@ -263,55 +243,55 @@ const ConversableAgentConfig = ({
   const GeneralPanel = () => {
     const GENERAL_OPTIONS = [
       {
-        type: 'text',
-        name: 'description',
-        label: tGeneric('description'),
-        placeholder: tGeneric('description-placeholder'),
+        type: "text",
+        name: "description",
+        label: tGeneric("description"),
+        placeholder: tGeneric("description-placeholder"),
         rows: 2,
       },
       {
-        type: 'text',
-        name: 'system_message',
-        label: tGeneric('system-message'),
-        placeholder: tGeneric('system-message-placeholder'),
+        type: "text",
+        name: "system_message",
+        label: tGeneric("system-message"),
+        placeholder: tGeneric("system-message-placeholder"),
         rows: 2,
       },
       {
-        type: 'text',
-        name: 'termination_msg',
-        label: tGeneric('termination-msg'),
+        type: "text",
+        name: "termination_msg",
+        label: tGeneric("termination-msg"),
         compact: true,
       },
       {
-        type: 'select',
-        name: 'human_input_mode',
-        label: tGeneric('human-input-mode'),
+        type: "select",
+        name: "human_input_mode",
+        label: tGeneric("human-input-mode"),
         options: [
-          { value: 'NEVER', label: tGeneric('input-mode-never') },
-          { value: 'ALWAYS', label: tGeneric('input-mode-always') },
-          { value: 'TERMINATE', label: tGeneric('input-mode-terminate') },
+          { value: "NEVER", label: tGeneric("input-mode-never") },
+          { value: "ALWAYS", label: tGeneric("input-mode-always") },
+          { value: "TERMINATE", label: tGeneric("input-mode-terminate") },
         ],
         compact: true,
       },
       {
-        type: 'number',
-        name: 'max_consecutive_auto_reply',
-        label: tGeneric('max-consecutive-auto-reply'),
+        type: "number",
+        name: "max_consecutive_auto_reply",
+        label: tGeneric("max-consecutive-auto-reply"),
       },
       {
-        type: 'check',
-        name: 'disable_llm',
-        label: tGeneric('disable-llm'),
+        type: "check",
+        name: "disable_llm",
+        label: tGeneric("disable-llm"),
       },
       {
-        type: 'check',
-        name: 'enable_code_execution',
-        label: tGeneric('enable-code-execution'),
+        type: "check",
+        name: "enable_code_execution",
+        label: tGeneric("enable-code-execution"),
       },
     ];
     return (
       <div className="flex flex-col gap-2 w-full h-full">
-        {GENERAL_OPTIONS.filter(o => !optionsDisabled.includes(o.name)).map(
+        {GENERAL_OPTIONS.filter((o) => !optionsDisabled.includes(o.name)).map(
           (options, index) => (
             <GenericOption
               key={index}
@@ -331,11 +311,11 @@ const ConversableAgentConfig = ({
         title={
           <div className="flex items-center gap-2">
             <RiSettings3Line className="w-5 h-5" />
-            <span className="text-md font-bold">{t('title')}</span>
+            <span className="text-md font-bold">{t("title")}</span>
           </div>
         }
         className={clsx(
-          'flex flex-col bg-gray-800/80 backgrop-blur-md border border-gray-700 shadow-box-lg shadow-gray-700',
+          "flex flex-col bg-gray-800/80 backgrop-blur-md border border-gray-700 shadow-box-lg shadow-gray-700",
           className
         )}
         classNameTitle="border-b border-base-content/10"
@@ -344,8 +324,8 @@ const ConversableAgentConfig = ({
       >
         <TabGroup className="w-full h-full">
           <TabList className="w-full tabs tabs-bordered">
-            <Tab className="tab">{t('general')}</Tab>
-            <Tab className="tab">{t('tools')}</Tab>
+            <Tab className="tab">{t("general")}</Tab>
+            <Tab className="tab">{t("tools")}</Tab>
           </TabList>
           <TabPanels className="p-2">
             <TabPanel>{GeneralPanel}</TabPanel>

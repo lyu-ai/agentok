@@ -20,7 +20,6 @@ export type Tool = {
   id: number;
   name: string;
   description: string;
-  signatures: ToolSignature[];
   variables: ToolVariable[];
   code?: string;
   created_at?: string;

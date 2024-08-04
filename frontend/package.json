@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@codemirror/lang-python": "^6.1.6",
+    "@faker-js/faker": "9.0.0-alpha.1",
     "@headlessui-float/react": "^0.14.0",
     "@headlessui/react": "^2.1.2",
     "@next/bundle-analyzer": "^14.2.5",

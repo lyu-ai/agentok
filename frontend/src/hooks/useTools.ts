@@ -50,6 +50,7 @@ export function useTools() {
         return newTool;
       } catch (error) {
         console.error('Failed to create project:', error);
+        throw error;
       } finally {
         setIsCreating(false);
       }

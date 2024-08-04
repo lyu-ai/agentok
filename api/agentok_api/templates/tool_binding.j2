@@ -1,18 +1,21 @@
-# Tool Binding
-{% if tools %}
-{%- if tools|length > 0 %}
-# Register the tools to agents
-{%- for tool in tools %}
-{%- if tool.assigned and tool.assigned | length > 0 %}
-{%- for assign in tool.assigned %}
-node_{{ assign['agent']}}.register_for_{{assign['scene']}}(
-  name="{{ tool.name }}",
-  {%- if assign['scene'] == 'llm' %}
-  description="{{ tool.description }}", # This field is only required when registering to LLM
-  {%- endif %}
-)({{ tool.name }})
+{# Tool Binding #}
+{%- if tool_assignments %}
+{# Register LLM tools #}
+{%- if tool_assignments.llm %}
+# Register LLM tools to agents
+{%- for assignment in tool_assignments.llm %}
+node_{{ assignment['node'] }}.register_for_llm(
+    name="{{ assignment.tool }}",
+    description="{{ assignment.description }}"  # This field is only required when registering to LLM
+)({{ assignment.tool }})
 {%- endfor %}
 {%- endif %}
+
+{# Register Execution tools #}
+{%- if tool_assignments.execution %}
+# Register Execution tools to agents
+{%- for assignment in tool_assignments.execution %}
+node_{{ assignment['node'] }}.register_for_execution(name="{{ assignment.tool }}")({{ assignment.tool }})
 {%- endfor %}
 {%- endif %}
-{% endif %}
+{%- endif %}

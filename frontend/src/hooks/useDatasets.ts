@@ -1,5 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from './fetcher';
+import { update } from 'lodash-es';
 
 export type Dataset = {
   id: string;
@@ -48,6 +49,7 @@ export function useDataset(datasetId: number) {
 
   return {
     dataset: data,
+    updateDataset: (dataset: Partial<Dataset>) => {},
     isLoading: !error && !data,
     isError: error,
   };

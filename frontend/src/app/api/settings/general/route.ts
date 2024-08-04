@@ -10,22 +10,22 @@ export async function GET(request: NextRequest) {
 
     const { data, error } = await supabase
       .from('user_settings')
-      .select('settings')
+      .select('general')
       .eq('user_id', user.id)
       .single();
 
     // Handle specific error code for no rows returned
     if (error) {
       if (error.code === 'PGRST116') {
-        console.warn('User settings not found');
+        console.warn('User settings general not found');
         return NextResponse.json({});
       }
       throw error;
     }
 
-    return NextResponse.json(data?.settings ?? {});
+    return NextResponse.json(data?.general ?? {});
   } catch (e) {
-    console.error(`Failed GET /settings:`, (e as Error).message);
+    console.error(`Failed GET /settings/general:`, (e as Error).message);
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     // Use upsert to insert or update the user's settings
     const { data, error } = await supabase
       .from('users')
-      .upsert({ user_id: user.id, settings }, { onConflict: 'user_id' }).select('*').single();
+      .upsert({ user_id: user.id, general: settings }, { onConflict: 'user_id' }).select('*').single();
 
     if (error) throw error;
 

@@ -14,7 +14,7 @@ interface UserState {
 
 const useUserStore = create<UserState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       user: null,
       loading: false,
       error: null,
@@ -31,7 +31,6 @@ const useUserStore = create<UserState>()(
         }
       },
       setUser: (user) => set({ user }),
-      getUser: () => get().user,
     }),
     {
       name: 'agentok-user-storage',
@@ -41,6 +40,7 @@ const useUserStore = create<UserState>()(
 
 // Set up the auth listener
 supabase.auth.onAuthStateChange((event: AuthChangeEvent, session: Session | null) => {
+  console.log('Auth event:', event);
   useUserStore.getState().setUser(session?.user || null);
 });
 

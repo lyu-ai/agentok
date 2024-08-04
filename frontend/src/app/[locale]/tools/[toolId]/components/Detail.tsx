@@ -1,6 +1,5 @@
 import EditableText from "@/components/EditableText";
 import { RiFormula, RiSparklingLine } from "react-icons/ri";
-import ParamList from "./SignatureList";
 import CodeEditor from "./CodeEditor";
 import VariableList from "./VariableList";
 import { useTool } from "@/hooks";
@@ -34,7 +33,6 @@ const ToolDetail = ({ toolId, ...props }: any) => {
             onChange={(text: any) => {
               setToolData("name", text);
             }}
-            showButtons
             className="text-base-content/80 !text-lg !font-bold"
           />
         </div>
@@ -53,10 +51,8 @@ const ToolDetail = ({ toolId, ...props }: any) => {
         onChange={(text: any) => {
           setToolData("description", text);
         }}
-        showButtons
         className="text-base-content/80 !text-base !font-normal"
       />
-      <ParamList toolId={toolId} className="shrink-0" />
       {showVariables && <VariableList toolId={toolId} className="shrink-0" />}
       <CodeEditor toolId={toolId} className="flex-grow min-h-80" />
     </div>

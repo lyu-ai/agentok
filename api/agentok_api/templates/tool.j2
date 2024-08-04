@@ -1,18 +1,11 @@
 # Tools
-{% if tools and tools | length > 0 %}
+{%- if tools and tools | length > 0 %}
 # Function for tools
 {%- for tool in tools %}
-def {{ tool.name }}(
-  {%- for param in tool.parameters %}
-  {{ param.name }}: {{ param.type }}{% if not loop.last %},{% endif %}
-  {%- endfor %}
-):
 {%- if tool.code %}
 {%- for line in tool.code.split('\n') %}
-    {{ line }}
+{{ line }}
 {%- endfor %}
-{% else %}
-    pass
 {%- endif %}
 {%- endfor %}
-{% endif %}
+{%- endif %}

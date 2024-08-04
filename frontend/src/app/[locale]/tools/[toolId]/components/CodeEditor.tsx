@@ -28,10 +28,13 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   }, []);
 
   const debouncedUpdateProject = useCallback(
-    debounce((updatedCode: string) => {
-      updateTool({
-        code: updatedCode,
-      });
+    debounce(async (updatedCode: string) => {
+      let updatedTool = { code: updatedCode };
+      const meta = await extractMeta(updatedCode);
+      if (meta) {
+        updatedTool = { ...updatedTool, ...meta };
+      }
+      updateTool(updatedTool);
     }, 500),
     [toolId]
   );
@@ -67,7 +70,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     }
   };
 
-  const handleExtractMeta = async () => {
+  const extractMeta = async (code: string) => {
     setIsExtracting(true);
     try {
       const res = await fetch("/api/codegen/extract", {
@@ -81,8 +84,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
       if (res.ok) {
         const extractedMeta = await res.json();
-        // updateTool(extractedMeta);
         console.log(extractedMeta);
+        return extractedMeta;
       } else {
         console.error("Failed to extract meta");
       }
@@ -129,17 +132,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
               />
               <span>{t("generate-code")}</span>
             </button>
-            {code && (
-              <button
-                className="btn rounded btn-sm btn-outline"
-                onClick={handleExtractMeta}
-              >
-                <RiExchange2Fill
-                  className={clsx("w-5 h-5", { "animate-spin": isGenerating })}
-                />
-                {t("extract-meta")}
-              </button>
-            )}
           </div>
         </div>
       </div>

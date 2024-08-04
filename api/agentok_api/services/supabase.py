@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 
 load_dotenv()  # Load environment variables from .env
 
+
 class SupabaseClient:
     def __init__(self):
         self.supabase_url = os.environ.get("SUPABASE_URL")
@@ -202,11 +203,12 @@ class SupabaseClient:
                 detail="Failed to delete API key",
             )
 
+    # Fetch the user settings -> general settings
     def fetch_settings(self) -> Dict:
         try:
             response = (
                 self.supabase.table("user_settings")
-                .select("settings")
+                .select("general")
                 .eq("user_id", self.user_id)
                 .execute()
             )
@@ -347,10 +349,7 @@ class SupabaseClient:
         if not tool_id:
             raise Exception("Invalid tool_id")
         response = (
-            self.supabase.table("tools")
-            .update(tool_data)
-            .eq("id", tool_id)
-            .execute()
+            self.supabase.table("tools").update(tool_data).eq("id", tool_id).execute()
         )
         if response.data:
             return response.data[0]
