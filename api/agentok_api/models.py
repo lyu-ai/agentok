@@ -18,14 +18,6 @@ class Flow(BaseModel):
     edges: List[Edge]
 
 
-class ToolSignature(BaseModel):
-    id: int
-    name: str
-    description: str
-    type: Literal["bool", "str", "int", "float"]
-    required: Optional[bool] = False
-
-
 class ToolAssign(BaseModel):
     agent: str
     scene: str
@@ -42,7 +34,6 @@ class Tool(BaseModel):
     id: int
     name: str
     description: Optional[str] = None
-    signatures: List[ToolSignature]
     variables: List[ToolVariable]
     code: Optional[str] = None
     user_id: Optional[str] = None
@@ -56,7 +47,6 @@ class ToolCode(BaseModel):
 class ToolCreate(BaseModel):
     name: str
     description: Optional[str] = None
-    signatures: List[ToolSignature]
     variables: List[ToolVariable]
     code: Optional[str] = None
 
@@ -66,7 +56,6 @@ class Project(BaseModel):
     name: str
     description: Optional[str] = None
     flow: Flow
-    tools: Optional[List[Tool]] = None
     settings: Optional[Dict[str, Any]] = None
     user_id: Optional[str] = None
     created_at: str
