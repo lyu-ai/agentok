@@ -30,11 +30,13 @@ class ToolAssign(BaseModel):
     agent: str
     scene: str
 
+
 class ToolVariable(BaseModel):
     name: str
     description: Optional[str] = None
     value: Any
     default: Optional[Any] = None
+
 
 class Tool(BaseModel):
     id: int
@@ -46,8 +48,10 @@ class Tool(BaseModel):
     user_id: Optional[str] = None
     assigned: Optional[List[ToolAssign]] = None
 
+
 class ToolCode(BaseModel):
     code: str
+
 
 class ToolCreate(BaseModel):
     name: str
@@ -55,6 +59,7 @@ class ToolCreate(BaseModel):
     signatures: List[ToolSignature]
     variables: List[ToolVariable]
     code: Optional[str] = None
+
 
 class Project(BaseModel):
     id: int

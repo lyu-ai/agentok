@@ -1,10 +1,8 @@
 import os
 import re
 from autogen import ConversableAgent
-from numpy import size
 from openai import OpenAI
 from typing import Dict, Literal, Union, Optional, List
-from PIL import Image as PIL
 
 from ..extended_agent import ExtendedConversableAgent
 from ...services.supabase import create_supabase_client
@@ -13,7 +11,15 @@ from termcolor import colored
 
 from diskcache import Cache
 
-def dalle_call(client: OpenAI, model: str, prompt: str, size: Literal['256x256', '512x512', '1024x1024', '1792x1024', '1024x1792'] | None, quality: Literal['standard', 'hd'], n: int) -> Optional[bytes]:
+
+def dalle_call(
+    client: OpenAI,
+    model: str,
+    prompt: str,
+    size: Literal["256x256", "512x512", "1024x1024", "1792x1024", "1024x1792"] | None,
+    quality: Literal["standard", "hd"],
+    n: int,
+) -> Optional[bytes]:
     """
     Generate an image using OpenAI's DALL-E model and cache the result.
 
@@ -38,7 +44,7 @@ def dalle_call(client: OpenAI, model: str, prompt: str, size: Literal['256x256',
     - The image data is obtained by making a secondary request to the URL provided by the DALL-E API response.
     """
     # Create a cache directory
-    cache = Cache('.cache/')
+    cache = Cache(".cache/")
     key = (model, prompt, size, quality, n)
 
     # Check if the result is in cache
@@ -71,6 +77,7 @@ def dalle_call(client: OpenAI, model: str, prompt: str, size: Literal['256x256',
 
     return img_data
 
+
 def extract_img(agent: ConversableAgent):
     """
     Extracts an image from the last message of an agent and converts it to a PIL image.
@@ -95,18 +102,20 @@ def extract_img(agent: ConversableAgent):
     message = agent.last_message()
     if message is None:
         return None
-    img_data = re.findall("<img (.*)>", message['content'])[0]
+    img_data = re.findall("<img (.*)>", message["content"])[0]
     pil_img = _to_pil(img_data)
     return pil_img
 
+
 class DALLEAgent(ExtendedConversableAgent):
     metadata = {
-        'name': 'DALLEAgent',
+        "name": "DALLEAgent",
         "description": "An agent that uses OpenAI's DALL-E model to generate images.",
         "type": "custom_conversable",
         "label": "dalle",
-        "class_type": "DALLEAgent", # Assumed the path is always "agentok_api.extensions.*"
+        "class_name": "DALLEAgent",  # Assumed the path is always "agentok_api.extensions.*"
     }
+
     def __init__(self, name, llm_config: dict, **kwargs):
         super().__init__(name, llm_config=llm_config, **kwargs)
 
@@ -115,7 +124,7 @@ class DALLEAgent(ExtendedConversableAgent):
             api_key = config_list[0]["api_key"]
         except Exception as e:
             print("Unable to fetch API Key, because", e)
-            api_key = os.getenv('OPENAI_API_KEY')
+            api_key = os.getenv("OPENAI_API_KEY")
         self.client = OpenAI(api_key=api_key)
         self.register_reply([ConversableAgent, None], DALLEAgent.generate_dalle_reply)
 
@@ -128,7 +137,9 @@ class DALLEAgent(ExtendedConversableAgent):
     ):
         super().send(message, recipient, request_reply, silent)
 
-    def generate_dalle_reply(self, messages: Optional[List[Dict]], sender: "ConversableAgent", config):
+    def generate_dalle_reply(
+        self, messages: Optional[List[Dict]], sender: "ConversableAgent", config
+    ):
         """Generate a reply using OpenAI DALLE call."""
         client = self.client if config is None else config
         if client is None:
@@ -161,7 +172,12 @@ class DALLEAgent(ExtendedConversableAgent):
         upload_response = supabase.upload_image(filename, img_data)
 
         if upload_response.status_code != 200:
-            print(colored(f"Failed to upload image to Supabase: {upload_response.reason_phrase}", "red"))
+            print(
+                colored(
+                    f"Failed to upload image to Supabase: {upload_response.reason_phrase}",
+                    "red",
+                )
+            )
             return False, "Failed to upload image"
 
         upload_result = upload_response.json()
