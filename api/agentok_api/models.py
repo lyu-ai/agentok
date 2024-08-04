@@ -65,6 +65,7 @@ class Project(BaseModel):
 class MessageCreate(BaseModel):
     type: Literal["user", "assistant"]
     content: str
+    meta: Optional[Dict[str, Any]] = None
     sender: Optional[str] = None
     receiver: Optional[str] = None
 

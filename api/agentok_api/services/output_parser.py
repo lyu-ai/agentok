@@ -1,7 +1,8 @@
 import re
+import json
+
 
 class OutputParser:
-
     # Define states as class-level immutable constants
     STATE_VERSION = 1
     STATE_CHAT = 2
@@ -22,14 +23,30 @@ class OutputParser:
 
     def _initialize_patterns(self):
         """Compile regex patterns."""
-        self.version_pattern = re.compile(r'^\d+\.\d+\.\d+[a-z]?\d*')
-        self.meta_pattern = re.compile(r'^>>>>>>>> (.*?)')
-        self.from_to_pattern = re.compile(r'^(.*?) \(to (.*?)\):')
-        self.end_pattern = re.compile(r'^-{80}')  # Assuming 80 dashes as a separator
+        self.version_pattern = re.compile(r"^\d+\.\d+\.\d+[a-z]?\d*")
+        self.meta_pattern = re.compile(r"^>>>>>>>> (.*?)")
+        self.from_to_pattern = re.compile(r"^(.*?) \(to (.*?)\):")
+        self.end_pattern = re.compile(r"^-{80}")  # Assuming 80 dashes as a separator
+
+        # Patterns for tool-related messages
+        self.tool_response_pattern = re.compile(
+            r"^\*\*\*\*\* Response from calling tool \((.*?)\) \*\*\*\*\*"
+        )
+        self.suggested_tool_call_pattern = re.compile(
+            r"^\*\*\*\*\* Suggested tool call \((.*?)\): (.*?) \*\*\*\*\*"
+        )
+        self.arguments_pattern = re.compile(r"^Arguments:\s*(\{.*\})")
 
     def _reset_current_message(self):
         """Reset (or initialize) the current message structure."""
-        self.current_message = {'version': '', 'meta': '', 'sender': '', 'receiver': '', 'content': '', 'type': 'assistant'}
+        self.current_message = {
+            "version": "",
+            "meta": {},
+            "sender": "",
+            "receiver": "",
+            "content": "",
+            "type": "assistant",  # Default to 'assistant'
+        }
         self.message_content = []
 
     def parse_line(self, line):
@@ -52,19 +69,26 @@ class OutputParser:
 
     def _handle_version_state(self, line):
         if self.version_pattern.match(line):
-            self.current_message['version'] = line
+            self.current_message["version"] = line
             self.state = self.STATE_CHAT
 
     def _handle_chat_state(self, line):
         if self.meta_pattern.match(line):
             match = self.meta_pattern.match(line)
             if match:
-                self.current_message['meta'] = match.group(1)
+                self.current_message["meta"]["general"] = match.group(1)
+                self.current_message["type"] = "assistant"
         elif self.from_to_pattern.match(line):
             match = self.from_to_pattern.match(line)
             if match:
-                self.current_message['sender'] = match.group(1)
-                self.current_message['receiver'] = match.group(2)
+                self.current_message["sender"] = match.group(1)
+                self.current_message["receiver"] = match.group(2)
+                # Determine message type based on sender
+                self.current_message["type"] = (
+                    "user"
+                    if self.current_message["sender"].lower() == "user"
+                    else "assistant"
+                )
                 self.state = self.STATE_CONTENT
         elif self.end_pattern.match(line):
             self._end_of_message()
@@ -72,11 +96,54 @@ class OutputParser:
     def _handle_content_state(self, line):
         if self.end_pattern.match(line):
             self._end_of_message()
+        elif self.tool_response_pattern.match(line):
+            match = self.tool_response_pattern.match(line)
+            if match:
+                self.current_message["meta"]["tool_info"] = {
+                    "type": "tool_response",
+                    "meta": match.group(1),
+                }
+                # Ensure type is 'assistant' for tool responses
+                self.current_message["type"] = "assistant"
+        elif self.suggested_tool_call_pattern.match(line):
+            match = self.suggested_tool_call_pattern.match(line)
+            if match:
+                self.current_message["meta"]["tool_info"] = {
+                    "type": "suggested_tool_call",
+                    "meta": match.group(1),
+                    "tool": match.group(2),
+                }
+                # Ensure type is 'assistant' for suggested tool calls
+                self.current_message["type"] = "assistant"
+        elif (
+            self.arguments_pattern.match(line)
+            and self.current_message["meta"].get("tool_info", {}).get("type")
+            == "suggested_tool_call"
+        ):
+            match = self.arguments_pattern.match(line)
+            if match:
+                try:
+                    self.current_message["meta"]["tool_info"]["arguments"] = json.loads(
+                        match.group(1).replace("'", '"')
+                    )
+                except json.JSONDecodeError:
+                    self.current_message["meta"]["tool_info"]["arguments"] = None
         else:
-            self.message_content.append(line)
+            # Filter out redundant 'User (to Assistant):' lines and trailing asterisks
+            if not (
+                self.from_to_pattern.match(line)
+                and self.message_content
+                and self.message_content[-1] == line
+            ):
+                if (
+                    not line == "User (to Assistant):"
+                    and not line.startswith("*****")
+                    and not line.startswith("Arguments:")
+                ):
+                    self.message_content.append(line)
 
     def _end_of_message(self):
-        self.current_message['content'] = "\n".join(self.message_content).strip()
+        self.current_message["content"] = "\n".join(self.message_content).strip()
 
         if self.on_message:
             self.on_message(self.current_message)
