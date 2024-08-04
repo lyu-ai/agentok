@@ -10,24 +10,27 @@ const VariableRow = ({ variable, onDelete, onUpdate }: any) => {
   const t = useTranslations("tool.Variables");
   const [name, setName] = useState(variable.name ?? "");
   const [description, setDescription] = useState(variable.description ?? "");
-  const [defaultValue, setDefaultValue] = useState(variable.default_value ?? "");
+  const [defaultValue, setDefaultValue] = useState(
+    variable.default_value ?? ""
+  );
   useEffect(() => {
     setName(variable.name ?? "");
     setDescription(variable.description ?? "");
   }, [variable?.name, variable?.description]);
 
   return (
-    <tr className="group flex items-center w-full hover:bg-gray-700">
-      <td className="w-36 px-1">
+    <tr className="group flex items-center gap-1 w-full hover:bg-gray-700">
+      <td className="w-48">
         <input
           type="text"
           value={name}
+          placeholder={"VAR_NAME"}
           onChange={(e) => setName(e.target.value)}
           onBlur={(e) => onUpdate(variable, "name", e.target.value)}
           className="input input-sm input-bordered bg-transparent rounded w-full"
         />
       </td>
-      <td className="flex-grow px-1">
+      <td className="flex-grow">
         <input
           type="text"
           value={description}
@@ -37,7 +40,7 @@ const VariableRow = ({ variable, onDelete, onUpdate }: any) => {
           className="input input-sm input-bordered bg-transparent rounded w-full"
         />
       </td>
-      <td className="w-48 px-1">
+      <td className="flex-grow">
         <input
           type="text"
           value={defaultValue}
@@ -47,7 +50,7 @@ const VariableRow = ({ variable, onDelete, onUpdate }: any) => {
           className="input input-sm input-bordered bg-transparent rounded w-full"
         />
       </td>
-      <td className="w-12 flex text-right justify-end px-1">
+      <td className="w-12 flex text-right justify-end">
         <div className="w-full">
           <button
             className="btn btn-xs btn-square rounded hover:text-red-600"
@@ -116,13 +119,16 @@ const VariableList = ({ toolId, className, ...props }: any) => {
           <span>{t("variable-create")}</span>
         </button>
       </div>
-      <table className="table table-xs border-transparent">
+      <table className="table table-xs border-transparent p-2">
         <thead>
-          <tr className="flex items-center w-full">
-            <th className="w-36 px-1">{t("variable-name")}</th>
-            <th className="flex-grow px-1">{t("variable-description")}</th>
-            <th className="flex items-center gap-1 w-36 px-1">{t("default-value")}<Tip content={t('default-value-tip')} /></th>
-            <th className="w-12 px-1 text-right">{t("variable-actions")}</th>
+          <tr className="flex items-center gap-1 w-full">
+            <th className="w-48">{t("variable-name")}</th>
+            <th className="flex-grow">{t("variable-description")}</th>
+            <th className="flex items-center gap-1 flex-grow">
+              {t("default-value")}
+              <Tip content={t("default-value-tip")} />
+            </th>
+            <th className="w-12 text-right">{t("variable-actions")}</th>
           </tr>
         </thead>
         <tbody>
@@ -134,6 +140,16 @@ const VariableList = ({ toolId, className, ...props }: any) => {
               onDelete={handleDelete}
             />
           ))}
+          <VariableRow
+            variable={{
+              id: genId(),
+              name: "",
+              description: "",
+              default_value: "",
+            }}
+            onUpdate={handleUpdate}
+            onDelete={handleDelete}
+          />
         </tbody>
       </table>
     </div>

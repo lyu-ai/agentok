@@ -82,7 +82,7 @@ class SupabaseClient:
                 self.user_id = user_data.user.id
                 return user_data.user
             else:
-                print(colored(f"Failed to retrieve user", "red"))
+                print(colored("Failed to retrieve user", "red"))
                 self.user_id = None
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
@@ -218,8 +218,8 @@ class SupabaseClient:
                 return {}
         except Exception as exc:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"User settings not found: {exc}",
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"An error occurred while fetching user settings: {exc}",
             )
 
     def fetch_chats(self) -> List[Chat]:

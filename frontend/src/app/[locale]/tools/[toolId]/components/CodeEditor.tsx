@@ -30,10 +30,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const debouncedUpdateProject = useCallback(
     debounce(async (updatedCode: string) => {
       let updatedTool = { code: updatedCode };
-      const meta = await extractMeta(updatedCode);
-      if (meta) {
-        updatedTool = { ...updatedTool, ...meta };
-      }
+      // const meta = await extractMeta(updatedCode);
+      // if (meta) {
+      //   updatedTool = { ...updatedTool, ...meta };
+      // }
       updateTool(updatedTool);
     }, 500),
     [toolId]

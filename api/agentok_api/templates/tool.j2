@@ -1,11 +1,11 @@
 # Tools
-{%- if tools and tools | length > 0 %}
-# Function for tools
-{%- for tool in tools %}
+{% if tool_dict and tool_dict | length > 0 %}
+{%- for tool in tool_dict.values() %}
 {%- if tool.code %}
+# Function for {{ tool.name }}
 {%- for line in tool.code.split('\n') %}
 {{ line }}
 {%- endfor %}
-{%- endif %}
+{% endif %}
 {%- endfor %}
 {%- endif %}

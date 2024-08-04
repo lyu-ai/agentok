@@ -41,7 +41,6 @@ const useToolStore = create<ToolState>()(
       setTools: tools => set({ tools }),
       updateTool: (id, newTool) =>
         set(state => {
-          console.log('update tool', id, newTool);
           const tools = state.tools.map(tool => {
             if (tool.id === id) {
               return { ...newTool, ...tool };

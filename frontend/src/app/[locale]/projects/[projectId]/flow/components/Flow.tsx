@@ -414,14 +414,16 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
             className="flex"
           />
           <Panel position="top-right" className="flex p-1 gap-2">
-            <ViewToggle mode={"json"} setMode={setMode} />
             <ViewToggle mode={"python"} setMode={setMode} />
             <Link
               className="btn btn-sm btn-ghost btn-circle"
+              data-tooltip-id="default-tooltip"
+              data-tooltip-content="Project Settings"
               href={`/projects/${projectId}/settings`}
             >
               <RiSettings2Line className="w-4 h-4" />
             </Link>
+            <ViewToggle mode={"json"} setMode={setMode} />
             <button
               type="button"
               className={clsx("btn btn-sm btn-circle btn-ghost", {

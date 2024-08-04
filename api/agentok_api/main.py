@@ -1,7 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from starlette.exceptions import HTTPException as StarletteHTTPException
+import logging
 
 from .routers import (
     admin,
@@ -12,6 +15,10 @@ from .routers import (
     api_docs,
     extension,
 )
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 main_app = FastAPI(
     title="Agentok APIs",
@@ -32,9 +39,7 @@ main_app.include_router(chats.router, prefix="/chats", tags=["Chat"])
 main_app.include_router(tools.router, prefix="/tools", tags=["Tool"])
 main_app.include_router(datasets.router, prefix="/datasets", tags=["Dataset"])
 main_app.include_router(codegen.router, prefix="/codegen", tags=["Codegen"])
-main_app.include_router(
-    extension.router, prefix="/extensions", tags=["Extension"]
-)
+main_app.include_router(extension.router, prefix="/extensions", tags=["Extension"])
 main_app.include_router(admin.router, prefix="/admin", include_in_schema=False)
 
 app = FastAPI()
@@ -42,12 +47,47 @@ app.mount("/v1", main_app)
 app.include_router(api_docs.router, include_in_schema=False)
 
 
+# Ensure middleware and exception handlers are registered correctly
+# @app.middleware("http")
+# async def add_exception_handling(request: Request, call_next):
+#     try:
+#         response = await call_next(request)
+#         return response
+#     except Exception as exc:
+#         logger.error(f"Unhandled exception in middleware: {exc}", exc_info=True)
+#         return await global_exception_handler(request, exc)
+
+
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    logger.error(f"HTTP exception: {exc.detail}", exc_info=True)
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "status_code": exc.status_code,
+            "error": {"message": exc.detail},
+        },
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    logger.error(f"Validation error: {exc.errors()}", exc_info=True)
+    return JSONResponse(
+        status_code=422,
+        content={
+            "status_code": 422,
+            "error": {"message": "Validation Error", "detail": exc.errors()},
+        },
+    )
+
+
 @app.exception_handler(Exception)
 async def global_exception_handler(request, exc: Exception):
     return JSONResponse(
-        status_code=400,
+        status_code=500,
         content={
-            "status_code": 400,
+            "status_code": 500,
             "error": {"message": "Internal Server Error", "detail": str(exc)},
         },
     )
@@ -116,6 +156,7 @@ async def root():
 </html>
     """
     return HTMLResponse(content=html_content)
+
 
 # Mount the static directory to serve favicon file
 app.mount("/static", StaticFiles(directory="static"), name="static")

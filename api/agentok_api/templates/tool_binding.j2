@@ -1,21 +1,28 @@
 {# Tool Binding #}
 {%- if tool_assignments %}
-{# Register LLM tools #}
-{%- if tool_assignments.llm %}
-# Register LLM tools to agents
-{%- for assignment in tool_assignments.llm %}
-node_{{ assignment['node'] }}.register_for_llm(
-    name="{{ assignment.tool }}",
-    description="{{ assignment.description }}"  # This field is only required when registering to LLM
-)({{ assignment.tool }})
-{%- endfor %}
-{%- endif %}
+    {# Iterate over each tool_id in tool_assignments #}
+    {%- for tool_id, assignments in tool_assignments.items() %}
 
-{# Register Execution tools #}
-{%- if tool_assignments.execution %}
+        {# Register LLM tools #}
+        {%- if assignments.llm %}
+# Register LLM tools to agents
+            {%- set tool = tool_dict[tool_id] %}
+            {%- for node_id in assignments.llm %}
+node_{{ node_id }}.register_for_llm(
+    name="{{ tool['func_name'] }}",
+    description="{{ tool['description'] }}"  # This field is only required when registering to LLM
+)({{ tool['func_name'] }})
+            {%- endfor %}
+        {%- endif %}
+
+        {# Register Execution tools #}
+        {%- if assignments.execution %}
 # Register Execution tools to agents
-{%- for assignment in tool_assignments.execution %}
-node_{{ assignment['node'] }}.register_for_execution(name="{{ assignment.tool }}")({{ assignment.tool }})
-{%- endfor %}
-{%- endif %}
+            {%- set tool = tool_dict[tool_id] %}
+            {%- for node_id in assignments.execution %}
+node_{{ node_id }}.register_for_execution(name="{{ tool['func_name'] }}")({{ tool['func_name'] }})
+            {%- endfor %}
+        {%- endif %}
+
+    {%- endfor %}
 {%- endif %}

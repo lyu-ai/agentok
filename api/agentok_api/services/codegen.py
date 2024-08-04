@@ -6,6 +6,7 @@ import re
 import textwrap
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.ext import do
+from termcolor import colored
 from .supabase import SupabaseClient, create_supabase_client
 from ..models import Project, Tool
 from openai import OpenAI, APIStatusError
@@ -167,7 +168,17 @@ class CodegenService:
 
         # Generate tool assignments
         tools = self.supabase.fetch_tools()
-        tool_assignments = self.generate_tool_assignments(flow.nodes, tools)
+        tool_dict = {tool["id"]: tool for tool in tools}
+        for tool in tools:
+            meta = self.extract_tool_meta(tool["code"])
+            tool_dict[tool["id"]]["func_name"] = meta["func_name"]
+        tool_assignments = self.generate_tool_assignments(flow.nodes, tool_dict)
+        print(tool_assignments)
+        tool_dict = {
+            tool_id: tool
+            for tool_id, tool in tool_dict.items()
+            if tool_id in tool_assignments
+        }
 
         code = template.render(
             project=project,
@@ -184,37 +195,43 @@ class CodegenService:
             nested_chats=nested_chats,
             generation_date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             note_nodes=note_nodes,
-            tools=tools,
+            tool_dict=tool_dict,
             tool_assignments=tool_assignments,
         )
 
         return code
 
-    def generate_tool_assignments(self, nodes, tools):
+    def generate_tool_assignments(self, nodes, tool_dict):
         # Prepare the tool assignments
-        tool_assignments = {"llm": [], "execution": []}
-
-        # Create a dictionary for quick lookup of tools by their ID
-        tool_dict = {tool["id"]: tool for tool in tools}
+        tool_assignments = {}
 
         for node in nodes:
             if node["data"].get("tools") is not None:
-                # Iterate over node.data.tools.llm and append to llm_tools
+                # Iterate over node.data.tools.llm and append node.id to the respective tool_id in llm
                 for tool_id in node["data"]["tools"].get("llm", []):
                     if tool_id in tool_dict:
-                        tool_assignments["llm"].append(
-                            {
-                                "node": node["id"],
-                                "tool": tool_dict[tool_id]["name"],
-                                "description": tool_dict[tool_id]["description"],
-                            }
+                        if tool_id not in tool_assignments:
+                            tool_assignments[tool_id] = {"execution": [], "llm": []}
+                        tool_assignments[tool_id]["llm"].append(node["id"])
+                    else:
+                        print(
+                            colored(
+                                f"Assigned tool ID {tool_id} not found in tools", "red"
+                            )
                         )
 
-                # Iterate over node.data.tools.execution and append to execution_tools
+                # Iterate over node.data.tools.execution and append node.id to the respective tool_id in execution
                 for tool_id in node["data"]["tools"].get("execution", []):
                     if tool_id in tool_dict:
-                        tool_assignments["execution"].append(
-                            {"node": node["id"], "tool": tool_dict[tool_id]["name"]}
+                        if tool_id not in tool_assignments:
+                            tool_assignments[tool_id] = {"execution": [], "llm": []}
+                        tool_assignments[tool_id]["execution"].append(node["id"])
+                    else:
+                        print(
+                            colored(
+                                f"Tool ID {tool_id} assigned for execution not found",
+                                "red",
+                            )
                         )
 
         # Now tool_assignments contains the desired structure
@@ -341,7 +358,7 @@ class CodegenService:
 
         # Create the meta information dictionary
         meta_info = {
-            "name": func_name,
+            "func_name": func_name,
             "description": description,
             "signatures": parameters,
             "variables": variables,

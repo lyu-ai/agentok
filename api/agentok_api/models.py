@@ -37,7 +37,6 @@ class Tool(BaseModel):
     variables: List[ToolVariable]
     code: Optional[str] = None
     user_id: Optional[str] = None
-    assigned: Optional[List[ToolAssign]] = None
 
 
 class ToolCode(BaseModel):

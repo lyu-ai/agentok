@@ -11,6 +11,8 @@
 [![GitHub star](https://img.shields.io/github/stars/hughlv/agentok?style=flat&logo=github&color=black&labelColor=gray)](https://star-history.com/#hughlv/agentok)
 [![](https://dcbadge.limes.pink/api/server/xBQxwRSWfm?style=social&timestamp=20240705)](https://discord.gg/xBQxwRSWfm)
 
+> ⚠️ **Warning:** This project is currently under development. It is not recommended for production use at this time.
+
 ## 🌟 What is Agentok Studio
 
 Agentok Studio is a tool built upon [AutoGen](https://microsoft.github.io/autogen/), a powerful agent framework from Microsoft and [a vibrant community of contributors](https://github.com/microsoft/autogen?tab=readme-ov-file#contributors-wall).

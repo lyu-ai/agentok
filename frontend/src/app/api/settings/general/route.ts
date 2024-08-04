@@ -32,24 +32,59 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient();
     const settings = await request.json();
 
     // Get the authenticated user
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const supabase = createClient();
+    const { data: authData, error: authError } = await supabase.auth.getUser();
     if (authError) throw new Error('Failed to authenticate');
-    if (!user) throw new Error('Not authenticated');
+    if (!authData.user) throw new Error('Not authenticated');
 
-    // Use upsert to insert or update the user's settings
-    const { data, error } = await supabase
-      .from('users')
-      .upsert({ user_id: user.id, general: settings }, { onConflict: 'user_id' }).select('*').single();
+    const user = authData.user;
+
+    // Fetch the existing settings
+    const { data: existingSettings, error: settingsError } = await supabase
+      .from('user_settings')
+      .select('id, general')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    console.log('existingSettings:', existingSettings);
+
+    if (settingsError) throw settingsError;
+
+    // Merge existing settings with new settings
+    const mergedSettings = {
+      ...(existingSettings?.general ?? {}), // existing settings
+      ...settings, // new settings
+    };
+
+    console.log('mergedSettings:', mergedSettings);
+
+    let data, error;
+
+    if (existingSettings) {
+      // Update existing settings
+      ({ data, error } = await supabase
+        .from('user_settings')
+        .update({ general: mergedSettings })
+        .eq('id', existingSettings.id)
+        .select('*')
+        .single());
+    } else {
+      // Insert new settings
+      ({ data, error } = await supabase
+        .from('user_settings')
+        .insert({ user_id: user.id, general: mergedSettings })
+        .select('*')
+        .single());
+    }
 
     if (error) throw error;
 
     return NextResponse.json(data);
   } catch (e) {
-    console.error(`Failed POST /settings:`, (e as Error).message);
+    console.error('Failed POST /settings:', (e as Error).message);
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
