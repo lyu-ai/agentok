@@ -26,7 +26,7 @@ const Navbar = () => {
 
   const t = useTranslations("component.Navbar");
   return (
-    <div className="z-50 navbar flex w-full items-center justify-between px-2">
+    <div className="z-10 navbar flex w-full items-center justify-between px-2">
       <div className="navbar-start gap-2 flex items-center justify-start">
         <NavButton projectId={projectId} className="lg:hidden" />
         <NavLogo />

@@ -9,33 +9,32 @@
 # Last generated: {{ generation_date }}
 #
 # Project Name: {{ project['name'] }}
-# Owner: {{ user['name'] }}
-# Updated: {{ project['updated'] }}
-{%- if project['description'] -%}
+# Owner: {{ user['user_metadata']['name'] }} ({{ user['email'] }})
+# Updated: {{ project['updated_at'] }}
+{% if project['description'] -%}
 # Description:
 """
 {{ project['description'] }}
 """
-{%- endif -%}
+{%- endif %}
 
 {% if note_nodes %}
 # Notes
 """
-{% for node in note_nodes %}
+{% for node in note_nodes -%}
 {{ node['data']['content'] }}
 {%- endfor %}
 """
-{% endif %}
+{%- endif %}
 
-{{- get_imports(nodes) }}
-{{- generate_config(project) }}
-{{- generate_conversable_agents(conversable_nodes) }}
-{{- generate_assistants(assistant_nodes) }}
-{{- generate_gpt_assistants(gpt_assistant_nodes) }}
-{{- generate_users(user_nodes) }}
-{% include "group_chat.j2" %}
-{% include "nested_chat.j2" %}
-{% include 'tool.j2' %}
-{% include 'tool_binding.j2' %}
-
-{% include 'start_chat.j2' %}
+{{- get_imports(nodes) -}}
+{{- generate_config(project) -}}
+{{- generate_conversable_agents(conversable_nodes) -}}
+{{- generate_assistants(assistant_nodes) -}}
+{{- generate_gpt_assistants(gpt_assistant_nodes) -}}
+{{- generate_users(user_nodes) -}}
+{%- include "group_chat.j2" %}
+{%- include "nested_chat.j2" %}
+{%- include 'tool.j2' %}
+{%- include 'tool_binding.j2' %}
+{%- include 'start_chat.j2' %}

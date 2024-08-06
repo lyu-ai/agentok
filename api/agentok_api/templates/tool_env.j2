@@ -1,0 +1,5 @@
+{%- if tool_settings.variables and tool_settings.variables | length > 0 -%}
+{%- for name, value in tool_settings.variables.items() -%}
+{{ name }}={{ value }}
+{%- endfor -%}
+{%- endif -%}

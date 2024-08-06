@@ -1,9 +1,10 @@
 {
   "tool": {
     "Config": {
-      "title": "Functions",
+      "title": "Tool Config",
       "new-tool": "New Tool",
       "no-tools": "No tool yet.",
+      "no-variables": "This tool does not contain any variables.",
       "tool-prompt": "Tools enable you to expand an Agent's skills. Select an existing tool from the list on the left, or click 'New Tool' to build a custom tool.",
       "reset": "Reset",
       "reset-confirm": "Are you sure to reset all settings to default?"
@@ -383,6 +384,19 @@
       "select-template-title": "Agentok Community",
       "select-project": "Discover top project templates. Chat, or Fork to build your own custom agentic app.",
       "refresh": "Refresh"
+    },
+    "Tools": {
+      "title": "Tools",
+      "new-tool": "New Tool",
+      "make-public": "Make Public",
+      "all": "All",
+      "public": "Public",
+      "custom": "Custom",
+      "public-tools": "Public Tools",
+      "public-tools-description": "Public tools are shared by the community. You can use them in your projects.",
+      "custom-tools": "Custom Tools",
+      "custom-tools-description": "Tools built by yourself. You can manage or customize the tools.",
+      "description": "Tools enable you to expand an Agent's skills. Select an existing tool, or build a custom tool."
     },
     "Datasets": {
       "title": "Datasets",

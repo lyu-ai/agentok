@@ -1,11 +1,16 @@
 # Tools
-{% if tool_dict and tool_dict | length > 0 %}
+{%- if tool_dict and tool_dict | length > 0 %}
 {%- for tool in tool_dict.values() %}
 {%- if tool.code %}
-# Function for {{ tool.name }}
+# Tool: {{ tool.name }}
+
+env_{{ tool.id }} = dotenv_values(os.path.join(current_dir, '{{ tool.id }}.env'))
+
+print("Loading vars:", env_{{ tool.id }})
+
 {%- for line in tool.code.split('\n') %}
 {{ line }}
-{%- endfor %}
-{% endif %}
-{%- endfor %}
-{%- endif %}
+{%- endfor -%}
+{%- endif -%}
+{%- endfor -%}
+{%- endif -%}

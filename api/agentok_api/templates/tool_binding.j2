@@ -3,8 +3,8 @@
     {# Iterate over each tool_id in tool_assignments #}
     {%- for tool_id, assignments in tool_assignments.items() %}
 
-        {# Register LLM tools #}
-        {%- if assignments.llm %}
+{# Register LLM tools #}
+        {%- if assignments.llm -%}
 # Register LLM tools to agents
             {%- set tool = tool_dict[tool_id] %}
             {%- for node_id in assignments.llm %}
@@ -15,14 +15,14 @@ node_{{ node_id }}.register_for_llm(
             {%- endfor %}
         {%- endif %}
 
-        {# Register Execution tools #}
-        {%- if assignments.execution %}
+{# Register Execution tools #}
+        {%- if assignments.execution -%}
 # Register Execution tools to agents
             {%- set tool = tool_dict[tool_id] %}
             {%- for node_id in assignments.execution %}
 node_{{ node_id }}.register_for_execution(name="{{ tool['func_name'] }}")({{ tool['func_name'] }})
             {%- endfor %}
-        {%- endif %}
+        {%- endif -%}
 
-    {%- endfor %}
-{%- endif %}
+    {%- endfor -%}
+{%- endif -%}

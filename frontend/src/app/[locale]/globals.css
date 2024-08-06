@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Override the default behavior */
+html:has(.drawer-toggle:checked) {
+  overflow-y: auto !important;
+  scrollbar-gutter: auto !important;
+}
+
 /* Suppress the default focus expansion effect of Textarea components */
 :focus:not([class*='no-outline']) {
   outline: 2px solid transparent;

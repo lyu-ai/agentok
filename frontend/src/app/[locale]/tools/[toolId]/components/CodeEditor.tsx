@@ -1,7 +1,7 @@
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
 import { vscodeDark as theme } from "@uiw/codemirror-theme-vscode";
-import { RiExchange2Fill, RiMagicFill } from "react-icons/ri";
+import { RiMagicFill } from "react-icons/ri";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import { useEffect, useState, useCallback } from "react";
@@ -109,14 +109,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
             style={{ fontSize: "0.75rem", height: "100%" }}
           />
           <div
-            className={clsx(
-              "absolute transition-transform ease-linear duration-300 flex items-center gap-1",
-              {
-                "right-2 bottom-2 translate-x-0 translate-y-0": code !== "",
-                "left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2":
-                  code === "",
-              }
-            )}
+            className={clsx("absolute flex items-center gap-1", {
+              "right-2 bottom-2 translate-x-0 translate-y-0": code !== "",
+              "left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2": code === "",
+            })}
           >
             <button
               className={clsx(

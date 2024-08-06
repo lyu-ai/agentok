@@ -23,7 +23,7 @@ class CodegenService:
         )
         self.supabase = supabase  # Keep an instance of SupabaseClient
 
-    def project2py(self, project: Project) -> str:
+    def generate_project(self, project: Project) -> str:
         flow = project.flow
         initializer_node = next(
             (node for node in flow.nodes if node["type"] == "initializer"), None
@@ -98,9 +98,60 @@ class CodegenService:
                         ],
                     }
                 )
-        print("group_nodes", group_nodes)
 
         # Prepare nested chats data
+        nested_chats = self.prepare_nested_chats(flow)
+
+        note_nodes = [node for node in flow.nodes if node["type"] == "note"]
+
+        settings = self.supabase.fetch_general_settings()
+        for model in settings.get("models", []):
+            if "id" in model:
+                del model["id"]
+            if "description" in model:
+                del model["description"]
+        # Use the template for each node
+        template = self.env.get_template("main.j2")  # Main template
+
+        # Generate tool assignments
+        tools = self.supabase.fetch_tools()
+        tool_dict = {tool["id"]: tool for tool in tools}
+        for tool in tools:
+            meta = self.extract_tool_meta(tool["code"])
+            tool_dict[tool["id"]]["func_name"] = meta["func_name"]
+            tool_dict[tool["id"]]["code"] = self.replace_env_placeholders(tool)
+        tool_assignments = self.generate_tool_assignments(flow.nodes, tool_dict)
+        print(tool_assignments)
+        tool_dict = {
+            tool_id: tool
+            for tool_id, tool in tool_dict.items()
+            if tool_id in tool_assignments
+        }
+
+        print("user", self.supabase.get_user())
+
+        code = template.render(
+            project=project,
+            user=self.supabase.get_user(),
+            settings=settings,  # Account level settings include models, etc.
+            nodes=flow.nodes,
+            first_converser=first_converser,
+            initial_chat_targets=initial_chat_targets,
+            conversable_nodes=conversable_nodes,
+            assistant_nodes=assistant_nodes,
+            gpt_assistant_nodes=gpt_assistant_nodes,
+            user_nodes=user_nodes,
+            group_nodes=group_nodes,
+            nested_chats=nested_chats,
+            generation_date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            note_nodes=note_nodes,
+            tool_dict=tool_dict,
+            tool_assignments=tool_assignments,
+        )
+
+        return code
+
+    def prepare_nested_chats(self, flow):
         nested_chats = []
         for node in flow.nodes:
             if node["type"] == "nestedchat":
@@ -155,51 +206,7 @@ class CodegenService:
                     }
                 )
 
-        note_nodes = [node for node in flow.nodes if node["type"] == "note"]
-
-        settings = self.supabase.fetch_settings()
-        for model in settings.get("models", []):
-            if "id" in model:
-                del model["id"]
-            if "description" in model:
-                del model["description"]
-        # Use the template for each node
-        template = self.env.get_template("main.j2")  # Main template
-
-        # Generate tool assignments
-        tools = self.supabase.fetch_tools()
-        tool_dict = {tool["id"]: tool for tool in tools}
-        for tool in tools:
-            meta = self.extract_tool_meta(tool["code"])
-            tool_dict[tool["id"]]["func_name"] = meta["func_name"]
-        tool_assignments = self.generate_tool_assignments(flow.nodes, tool_dict)
-        print(tool_assignments)
-        tool_dict = {
-            tool_id: tool
-            for tool_id, tool in tool_dict.items()
-            if tool_id in tool_assignments
-        }
-
-        code = template.render(
-            project=project,
-            user=self.supabase.get_user(),
-            settings=settings,  # Account level settings include models, etc.
-            nodes=flow.nodes,
-            first_converser=first_converser,
-            initial_chat_targets=initial_chat_targets,
-            conversable_nodes=conversable_nodes,
-            assistant_nodes=assistant_nodes,
-            gpt_assistant_nodes=gpt_assistant_nodes,
-            user_nodes=user_nodes,
-            group_nodes=group_nodes,
-            nested_chats=nested_chats,
-            generation_date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            note_nodes=note_nodes,
-            tool_dict=tool_dict,
-            tool_assignments=tool_assignments,
-        )
-
-        return code
+        return nested_chats
 
     def generate_tool_assignments(self, nodes, tool_dict):
         # Prepare the tool assignments
@@ -238,7 +245,68 @@ class CodegenService:
         print(tool_assignments)
         return tool_assignments
 
-    def tool2py(self, tool: Tool):
+    def generate_tool_envs(self, project: Project):
+        """Generate tool environment files for the provided project.
+
+        Args:
+            project (Project): The project metadata.
+
+        Returns:
+            dict: A dictionary containing the tool IDs as keys and the environment file contents as values.
+        """
+        tools = self.supabase.fetch_tools()
+        tool_dict = {tool["id"]: tool for tool in tools}
+        for tool in tools:
+            meta = self.extract_tool_meta(tool["code"])
+            tool_dict[tool["id"]]["func_name"] = meta["func_name"]
+        tool_assignments = self.generate_tool_assignments(project.flow.nodes, tool_dict)
+        # {tool_id: {execution: [node_id], llm: [node_id]}}
+        print("tool_assignments", tool_assignments)
+
+        tool_settings = self.supabase.fetch_tool_settings()
+        # {tool_id: {variables: {var_name: var_value}}}
+        print("tool_settings", tool_settings)
+
+        # Clean unused tools from tool_settings that not included in tool_assignments
+        tool_settings = {
+            int(tool_id): settings
+            for tool_id, settings in tool_settings.items()
+            if int(tool_id) in tool_assignments
+        }
+
+        template = self.env.get_template("tool_env.j2")
+        tool_envs = {}
+        for tool_id, tool_settings in tool_settings.items():
+            tool_envs[tool_id] = template.render(tool_settings=tool_settings)
+
+        print("tool_envs", tool_envs)
+
+        return tool_envs
+
+    def replace_env_placeholders(self, tool):
+        """
+        Replace all {{xxx}} placeholders in tool.code with {tool.id}_env.get('xxx').
+
+        :param tool: An object with attributes 'code' (str) and 'id' (int)
+        :return: The modified code with placeholders replaced
+        """
+        # Define the fixed rule for replacement
+        fixed_rule = f"env_{tool['id']}['{{}}']"
+
+        # Regular expression to find {{ placeholder }}
+        pattern = r"\{\{\s*(.*?)\s*\}\}"
+
+        # Replacement function
+        def replacer(match):
+            placeholder = match.group(1)
+            return fixed_rule.format(placeholder)
+
+        # Replace all placeholders in the tool's code
+        replaced_code = re.sub(pattern, replacer, tool["code"])
+
+        return replaced_code
+
+    def generate_tool(self, tool: Tool):
         """Generate code based on the provided function meta information.
 
         Args:

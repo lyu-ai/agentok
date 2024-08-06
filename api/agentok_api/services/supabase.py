@@ -14,6 +14,7 @@ from ..models import (
 import hashlib
 import os
 import logging
+import requests
 from dotenv import load_dotenv
 from supabase import create_client, Client
 from gotrue import User
@@ -38,28 +39,28 @@ class SupabaseClient:
         self.user_id = None
 
     def get_user(self) -> User:
-        try:
-            # Then, get the user data from the auth.users table
-            user_response = self.supabase.rpc(
-                "get_user_by_id", {"user_id": self.user_id}
-            ).execute()
+        if not self.user_id:
+            raise Exception("User ID is not set")
 
-            if not user_response.data or len(user_response.data) == 0:
-                print(colored(f"User not found for user_id {self.user_id}", "red"))
-                self.user_id = None
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
-                )
+        headers = {
+            "apikey": self.supabase_service_key,
+            "Authorization": f"Bearer {self.supabase_service_key}",
+        }
+        response = requests.get(
+            f"{self.supabase_url}/auth/v1/admin/users/{self.user_id}", headers=headers
+        )
 
-            user_data = user_response.data[0]
-            user_data["app_metadata"] = user_data.get("app_metadata", {})
-            user_data["user_metadata"] = user_data.get("user_metadata", {})
-
-            user = User(**user_data)
-            return user
-        except Exception as exc:
-            logger.error(f"An error occurred: {exc}")
-            raise
+        if response.status_code == 200:
+            user_info = response.json()
+            return {
+                "id": user_info.get("id"),
+                "email": user_info.get("email"),
+                "app_metadata": user_info.get("app_metadata"),
+                "user_metadata": user_info.get("user_metadata"),
+            }
+        else:
+            print(f"Failed to fetch user info: {response.status_code} {response.text}")
+            return None
 
     # Load the user from the cookie. This is for the situation where the user is already logged in on client side.
     # The request should be called with credentials: 'include'
@@ -204,7 +205,7 @@ class SupabaseClient:
             )
 
     # Fetch the user settings -> general settings
-    def fetch_settings(self) -> Dict:
+    def fetch_general_settings(self) -> Dict:
         try:
             response = (
                 self.supabase.table("user_settings")
@@ -219,7 +220,27 @@ class SupabaseClient:
         except Exception as exc:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"An error occurred while fetching user settings: {exc}",
+                detail=f"An error occurred while fetching user settings (general): {exc}",
+            )
+
+    # Fetch the user settings -> general settings
+    def fetch_tool_settings(self) -> Dict:
+        try:
+            response = (
+                self.supabase.table("user_settings")
+                .select("tools")
+                .eq("user_id", self.user_id)
+                .execute()
+            )
+            if response.data:
+                return response.data[0]["tools"]
+            else:
+                return {}
+        except Exception as exc:
+            print(colored(f"An error occurred: {exc}", "red"))
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"An error occurred while fetching user settings (tools): {exc}",
             )
 
     def fetch_chats(self) -> List[Chat]:

@@ -1,45 +1,96 @@
-"use client"; // Ensures this file is treated as a client component
+"use client";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import { RiFormula } from "react-icons/ri";
-import { useSharedTools, useTools } from "@/hooks";
-import { toast } from "react-toastify";
+import ToolCard from "./components/ToolCard";
+import { useState } from "react";
+import ToolConfig from "./components/ToolConfig";
+import { usePublicTools, useTools } from "@/hooks";
+import clsx from "clsx";
+import { RiToolsFill } from "react-icons/ri";
 
 const Page = () => {
-  const t = useTranslations("tool.Config");
-  const { tools: sharedTools } = useSharedTools();
-  const { createTool } = useTools();
-  const router = useRouter();
+  const t = useTranslations("page.Tools");
+  const { tools: publicTools } = usePublicTools();
+  const { tools: customTools, createTool } = useTools();
+  const [filter, setFilter] = useState<"all" | "public" | "custom">("all");
+  const [activeTool, setActiveTool] = useState<any>(null);
 
-  const onFork = async (sharedToolId: any) => {
-    const sharedTool = sharedTools.find((t) => t.id === sharedToolId);
-    if (!sharedTool) {
-      toast.error(`Shared tool ${sharedToolId} not found.`);
-      console.error(`Shared tool ${sharedToolId} not found.`);
-      return;
-    }
-    const { id, ...newTool } = sharedTool;
-    await createTool(newTool)
-      .then((tool) => {
-        if (!tool) {
-          toast.error(
-            `Failed to create tool from shared tool ${sharedToolId}.`
-          );
-          console.error(
-            `Failed to create tool from shared tool ${sharedToolId}.`
-          );
-          return;
-        }
-        router.push(`/tools/${tool.id}`);
-      })
-      .catch((err) => console.error(err));
+  const handleSelect = (tool: any) => {
+    setActiveTool(tool);
   };
+
   return (
-    <div className="flex flex-col w-full gap-4 p-2 flex-grow h-full overflow-y-auto">
-      <div className="flex flex-col items-center gap-3 w-full h-full text-center justify-center">
-        <RiFormula className="w-16 h-16 text-primary" />
-        {t("tool-prompt")}
-        {/* <SharedToolList onFork={onFork} /> */}
+    <div className="drawer drawer-end">
+      <input
+        type="checkbox"
+        id="drawer-tool-config"
+        className="drawer-toggle"
+      />
+      <div className="drawer-content flex flex-col p-2 gap-4">
+        <div className="flex gap-2">
+          <RiToolsFill className="w-16 h-16 text-primary" />
+          <div className="flex flex-col gap-2">
+            <div className="text-2xl font-bold">{t("title")}</div>
+            <div className="">{t("description")}</div>
+          </div>
+        </div>
+        <div className="flex items-center justify-start w-full gap-2">
+          <div role="tablist" className="tabs tabs-sm tabs-boxed p-1">
+            {["all", "public", "custom"].map((item, index) => (
+              <a
+                role="tab"
+                key={index}
+                onClick={() => setFilter(item as any)}
+                className={clsx("min-w-24 tab", {
+                  "tab-active": item === filter,
+                })}
+              >
+                {t(item)}
+              </a>
+            ))}
+          </div>
+        </div>
+        {["all", "public"].includes(filter) && publicTools.length > 0 && (
+          <div className="flex flex-col gap-2">
+            <div className="divider my-0" />
+            <div className="text-lg font-bold">{t("public-tools")}</div>
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {publicTools.map((tool, index) => (
+                <ToolCard
+                  tool={tool}
+                  key={index}
+                  selected={activeTool?.id === tool.id}
+                  onClick={() => handleSelect(tool)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        {["all", "custom"].includes(filter) && customTools.length > 0 && (
+          <div className="flex flex-col gap-4">
+            <div className="divider my-0" />
+            <div className="text-lg font-bold">{t("custom-tools")}</div>
+            <div className="text-sm text-base-content/50">
+              {t("custom-tools-description")}
+            </div>
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {customTools.map((tool, index) => (
+                <ToolCard
+                  tool={tool}
+                  key={index}
+                  onClick={() => handleSelect(tool)}
+                  htmlFor="drawer-tool-config"
+                  className="drawer-button"
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="drawer-side z-20">
+        <label htmlFor="drawer-tool-config" className="drawer-overlay"></label>
+        <div className="w-80 lg:w-96 h-full bg-base-100">
+          {activeTool && <ToolConfig tool={activeTool} />}
+        </div>
       </div>
     </div>
   );

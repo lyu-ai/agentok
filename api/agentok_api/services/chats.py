@@ -3,6 +3,8 @@ import os
 import tempfile
 from typing import List
 
+from termcolor import colored
+
 from .codegen import CodegenService
 from ..models import Chat, ChatCreate, MessageCreate, Message, Project
 from .chat_manager import ChatManager
@@ -36,21 +38,32 @@ class ChatService:
         # No matter what happnes next, persist the message to the database beforehand
         self.supabase.add_message(message, chat_id)
 
+        target_path = os.path.join(tempfile.gettempdir(), f"agentok/{chat_id}/")
+        # Create the directory if it doesn't exist
+        os.makedirs(target_path, exist_ok=True)
+        print(colored(f"Target directory {target_path}", "green"))
+
         # Check the existence of latest code
         source = self.supabase.fetch_source_metadata(chat_id)
         datetime_obj = datetime.fromisoformat(source["created_at"])
-
         source_file = f"{source['id']}-{datetime_obj.timestamp()}.py"
-        source_path = os.path.join(
-            tempfile.gettempdir(), "agentok/generated/", source_file
-        )
+        source_path = os.path.join(target_path, source_file)
 
-        # Create the directory if it doesn't exist
-        os.makedirs(os.path.dirname(source_path), exist_ok=True)
+        # Write tool env files, which will be used in project code
+        print(colored("Generating tool envs...", "blue"))
+        tool_envs = self.codegen_service.generate_tool_envs(Project(**source))
+        for tool_id, env in tool_envs.items():
+            with open(
+                os.path.join(target_path, f"{tool_id}.env"),
+                "w",
+                encoding="utf-8",
+            ) as file:
+                file.write(env)
 
-        generated_code = self.codegen_service.project2py(Project(**source))
+        print(colored("Generating project code...", "blue"))
+        project_code = self.codegen_service.generate_project(Project(**source))
         with open(source_path, "w", encoding="utf-8") as file:
-            file.write(generated_code)
+            file.write(project_code)
 
         # Launch the agent instance and intialize the chat
         def on_message(assistant_message):

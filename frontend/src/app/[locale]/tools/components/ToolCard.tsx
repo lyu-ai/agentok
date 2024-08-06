@@ -1,10 +1,16 @@
-'use client';
-import clsx from 'clsx';
-import { useState } from 'react';
-import { RiFormula, RiDeleteBin4Line } from 'react-icons/ri';
+import { useUser } from "@/hooks";
+import clsx from "clsx";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { RiFormula, RiDeleteBin4Line, RiCodeLine } from "react-icons/ri";
 
-const ToolCard = ({ nodeId, tool, onDelete, selected, ...props }: any) => {
+const ToolCard = ({ tool, onDelete, selected, className, ...props }: any) => {
+  const [isOwned, setIsOwned] = useState(false);
+  const { userId } = useUser();
   const [isDeleting, setIsDeleting] = useState(false);
+  useEffect(() => {
+    setIsOwned(tool.user_id === userId);
+  }, [tool, userId]);
   const handleDelete = async (e: any) => {
     e.stopPropagation();
     setIsDeleting(true);
@@ -12,23 +18,39 @@ const ToolCard = ({ nodeId, tool, onDelete, selected, ...props }: any) => {
   };
 
   return (
-    <div
+    <label
       className={clsx(
-        'relative group w-full flex flex-col gap-2 p-3 rounded-md border cursor-pointer hover:bg-base-content/10 hover:shadow-box hover:shadow-gray-700',
+        "relative group w-full flex flex-col gap-2 p-3 rounded-md border cursor-pointer hover:bg-base-content/10 hover:shadow-box hover:shadow-gray-700",
         selected
-          ? 'shadow-box shadow-gray-600 bg-gray-700/90 border-gray-600'
-          : 'border-base-content/10 '
+          ? "shadow-box shadow-gray-600 bg-gray-700/90 border-gray-600"
+          : "border-base-content/10 bg-base-content/5",
+        className
       )}
       {...props}
     >
       <div className="flex items-center gap-2">
-        <RiFormula className="w-5 h-5 flex-shrink-0" />
+        {tool.icon_url ? (
+          <img src={tool.icon_url} className="w-12 h-12 flex-shrink-0" />
+        ) : (
+          <RiFormula className="w-12 h-12 flex-shrink-0" />
+        )}
         <div className="text-base font-bold">{tool.name}</div>
       </div>
-      <div className="text-sm text-base-content/50 w-full line-clamp-2">
+      <div className="text-sm text-base-content/50 w-full line-clamp-4 min-h-28">
         {tool.description}
       </div>
-      <div className="absolute bottom-1 right-1 hidden group-hover:block">
+      {isOwned && (
+        <div className="absolute bottom-2 left-2 hidden group-hover:block text-xs text-base-content/50">
+          <Link
+            href={`/tools/${tool.id}`}
+            className="gap-1 btn btn-xs btn-ghost"
+          >
+            <RiCodeLine className="w-4 h-4" />
+            Develop
+          </Link>
+        </div>
+      )}
+      <div className="absolute bottom-2 right-2 hidden group-hover:block">
         <button
           className="btn btn-xs btn-square btn-ghost hover:text-red-600"
           onClick={handleDelete}
@@ -40,7 +62,7 @@ const ToolCard = ({ nodeId, tool, onDelete, selected, ...props }: any) => {
           )}
         </button>
       </div>
-    </div>
+    </label>
   );
 };
 

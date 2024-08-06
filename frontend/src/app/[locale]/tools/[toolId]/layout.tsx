@@ -1,16 +1,56 @@
 "use client"; // Ensures this file is treated as a client component
 import clsx from "clsx";
 import { PropsWithChildren, useEffect, useState } from "react";
-import ToolCard from "./components/ToolCard";
 import { usePathname, useRouter } from "next/navigation";
 import { genId } from "@/utils/id";
 import { Tooltip } from "react-tooltip";
 import { useTranslations } from "next-intl";
 import { useTools } from "@/hooks";
-import { RiLayoutGridFill } from "react-icons/ri";
+import { RiDeleteBin4Line, RiFormula, RiHomeGearLine } from "react-icons/ri";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { faker } from "@faker-js/faker";
+
+const ToolItem = ({ nodeId, tool, onDelete, selected, ...props }: any) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const handleDelete = async (e: any) => {
+    e.stopPropagation();
+    setIsDeleting(true);
+    onDelete && (await onDelete(tool).finally(() => setIsDeleting(false)));
+  };
+
+  return (
+    <div
+      className={clsx(
+        "relative group w-full flex flex-col gap-2 p-3 rounded-md border cursor-pointer hover:bg-base-content/10 hover:shadow-box hover:shadow-gray-700",
+        selected
+          ? "shadow-box shadow-gray-600 bg-gray-700/90 border-gray-600"
+          : "border-base-content/10 "
+      )}
+      {...props}
+    >
+      <div className="flex items-center gap-2">
+        <RiFormula className="w-5 h-5 flex-shrink-0" />
+        <div className="text-base font-bold">{tool.name}</div>
+      </div>
+      <div className="text-sm text-base-content/50 w-full line-clamp-2">
+        {tool.description}
+      </div>
+      <div className="absolute bottom-1 right-1 hidden group-hover:block">
+        <button
+          className="btn btn-xs btn-square btn-ghost hover:text-red-600"
+          onClick={handleDelete}
+        >
+          {isDeleting ? (
+            <div className="loading loading-xs" />
+          ) : (
+            <RiDeleteBin4Line className="w-4 h-4" />
+          )}
+        </button>
+      </div>
+    </div>
+  );
+};
 
 const Layout = ({
   children,
@@ -73,6 +113,14 @@ const Layout = ({
     <div className={clsx("flex w-full h-full")}>
       <div className="flex flex-col w-80 h-full border-r p-2 gap-2 border-base-content/10">
         <div className="flex items-center gap-1">
+          <Link
+            href={`/tools`}
+            className="btn btn-sm btn-primary btn-square rounded"
+            data-tooltip-id="default-tooltip"
+            data-tooltip-content={"Back to Tools"}
+          >
+            <RiHomeGearLine className="w-5 h-5" />
+          </Link>
           <button
             className="btn btn-sm btn-primary rounded flex flex-1"
             onClick={handleCreate}
@@ -80,21 +128,13 @@ const Layout = ({
             {isCreating && <div className="loading loading-xs" />}
             <span>{t("new-tool")}</span>
           </button>
-          <Link
-            href={`/tools`}
-            className="btn btn-sm btn-primary btn-square rounded"
-            data-tooltip-id="default-tooltip"
-            data-tooltip-content={"Shared Tools"}
-          >
-            <RiLayoutGridFill className="w-4 h-4" />
-          </Link>
         </div>
         <div className="flex flex-col gap-0.5 w-full h-full overflow-y-hidden">
           {tools.length > 0 ? (
             tools.map((tool: any, index: any) => {
-              const isSelected = pathname.includes(`/tools/${tool.id}`);
+              const isSelected = pathname.endsWith(`/tools/${tool.id}`);
               return (
-                <ToolCard
+                <ToolItem
                   selected={isSelected}
                   tool={tool}
                   key={index}

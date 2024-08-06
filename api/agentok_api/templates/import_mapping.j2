@@ -22,7 +22,7 @@
         {%- endif -%}
     {%- endfor %}
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv, dotenv_values
 load_dotenv()  # This will load all environment variables from .env
 
 import argparse
@@ -56,5 +56,8 @@ def custom_get_human_input(self, prompt: str) -> str:
     return reply
 
 autogen.ConversableAgent.get_human_input = custom_get_human_input
+
+# Get the directory of the current script
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
 {% endmacro %}

@@ -1,5 +1,5 @@
 # gpt_assistant.j2
-{% macro generate_gpt_assistants(gpt_assistant_nodes) %}
+{%- macro generate_gpt_assistants(gpt_assistant_nodes) %}
 {%- for node in gpt_assistant_nodes %}
 {%- set class_name = node.data.class %}
 {%- set name = node.data.name %}
@@ -26,4 +26,4 @@ node_{{ node.id }} = {{ class_name }}(
 )
 
 {%- endfor %}
-{% endmacro %}
+{%- endmacro %}

@@ -3,12 +3,9 @@ import { fetcher } from './fetcher';
 import { Tool } from '@/store/tools';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useToolStore from '@/store/tools';
-import { useUser } from './useUser';
 
-export function useSharedTools() {
-  const { data, error } = useSWR<Tool[]>('/api/tools', fetcher);
-
-  // TODO: Add publish and delete functions
+export function usePublicTools() {
+  const { data, error } = useSWR<Tool[]>('/api/tools/public', fetcher);
 
   return {
     tools: data ?? [],

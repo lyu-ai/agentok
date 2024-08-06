@@ -3,20 +3,23 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { useTool } from "@/hooks";
-import { RiAddLargeLine, RiCloseLine } from "react-icons/ri";
-import Tip from "@/components/Tip";
+import { RiDeleteBin4Line } from "react-icons/ri";
 
-const VariableRow = ({ variable, onDelete, onUpdate }: any) => {
+const VariableRow = ({ variable, onDelete, showActions, onUpdate }: any) => {
   const t = useTranslations("tool.Variables");
   const [name, setName] = useState(variable.name ?? "");
   const [description, setDescription] = useState(variable.description ?? "");
-  const [defaultValue, setDefaultValue] = useState(
-    variable.default_value ?? ""
-  );
+
   useEffect(() => {
     setName(variable.name ?? "");
     setDescription(variable.description ?? "");
   }, [variable?.name, variable?.description]);
+
+  const handleBlur = (field: string, value: string) => {
+    if (variable.id) {
+      onUpdate(variable, field, value);
+    }
+  };
 
   return (
     <tr className="group flex items-center gap-1 w-full hover:bg-gray-700">
@@ -26,7 +29,7 @@ const VariableRow = ({ variable, onDelete, onUpdate }: any) => {
           value={name}
           placeholder={"VAR_NAME"}
           onChange={(e) => setName(e.target.value)}
-          onBlur={(e) => onUpdate(variable, "name", e.target.value)}
+          onBlur={(e) => handleBlur("name", e.target.value)}
           className="input input-sm input-bordered bg-transparent rounded w-full"
         />
       </td>
@@ -36,29 +39,21 @@ const VariableRow = ({ variable, onDelete, onUpdate }: any) => {
           value={description}
           placeholder={t("variable-description")}
           onChange={(e) => setDescription(e.target.value)}
-          onBlur={(e) => onUpdate(variable, "description", e.target.value)}
+          onBlur={(e) => handleBlur("description", e.target.value)}
           className="input input-sm input-bordered bg-transparent rounded w-full"
         />
       </td>
-      <td className="flex-grow">
-        <input
-          type="text"
-          value={defaultValue}
-          placeholder={t("default-value")}
-          onChange={(e) => setDefaultValue(e.target.value)}
-          onBlur={(e) => onUpdate(variable, "default_value", e.target.value)}
-          className="input input-sm input-bordered bg-transparent rounded w-full"
-        />
-      </td>
-      <td className="w-12 flex text-right justify-end">
-        <div className="w-full">
-          <button
-            className="btn btn-xs btn-square rounded hover:text-red-600"
-            onClick={() => onDelete(variable)}
-          >
-            <RiCloseLine className="w-4 h-4" />
-          </button>
-        </div>
+      <td className="w-16 flex text-right justify-end">
+        {showActions && (
+          <div className="hidden group-hover:block">
+            <button
+              className="btn btn-xs btn-ghost btn-square rounded hover:text-red-600"
+              onClick={() => onDelete(variable)}
+            >
+              <RiDeleteBin4Line className="w-4 h-4" />
+            </button>
+          </div>
+        )}
       </td>
     </tr>
   );
@@ -67,39 +62,45 @@ const VariableRow = ({ variable, onDelete, onUpdate }: any) => {
 const VariableList = ({ toolId, className, ...props }: any) => {
   const t = useTranslations("tool.Variables");
   const { tool, updateTool } = useTool(toolId);
+  const [newVariable, setNewVariable] = useState({
+    id: genId(),
+    name: "",
+    description: "",
+    default_value: "",
+  });
+
   const handleDelete = (variable: any) => {
     if (!tool) return;
     updateTool({
       variables: tool.variables.filter((v: any) => v.id !== variable.id),
     });
   };
+
   const handleUpdate = (variable: any, name: string, value: any) => {
+    if (!variable) return;
     if (!tool) return;
-    updateTool({
-      variables: tool.variables?.map((v: any) => {
-        if (variable && variable.id === v.id) {
-          return {
-            ...v,
-            [name]: value,
-          };
-        }
-        return v;
-      }), // explicitly remove undefined entries
-    });
-  };
-  const handleCreate = () => {
-    if (!tool) return;
-    updateTool({
-      variables: [
-        ...(tool.variables || []),
-        {
-          id: genId(),
-          name: "VAR_NAME",
-          description: "New variable description",
-          value: "",
-        },
-      ],
-    });
+    console.log("handleUpdate", variable, name, value);
+    if (variable.id === newVariable.id) {
+      if (!variable.name && !variable.description) return;
+      // If the variable is the new variable, add it to the list
+      const updatedVariable = { ...variable, [name]: value };
+      setNewVariable({
+        id: genId(),
+        name: "",
+        description: "",
+        default_value: "",
+      });
+      updateTool({
+        variables: [...tool.variables, updatedVariable],
+      });
+    } else {
+      // Update existing variable
+      updateTool({
+        variables: tool.variables.map((v: any) =>
+          v.id === variable.id ? { ...v, [name]: value } : v
+        ),
+      });
+    }
   };
 
   return (
@@ -109,44 +110,29 @@ const VariableList = ({ toolId, className, ...props }: any) => {
         className
       )}
     >
-      <div className="flex items-center justify-between">
-        <div className="font-bold">{t("title")}</div>
-        <button
-          className="btn btn-sm btn-outline btn-ghost rounded"
-          onClick={handleCreate}
-        >
-          <RiAddLargeLine className="w-4 h-4" />
-          <span>{t("variable-create")}</span>
-        </button>
-      </div>
-      <table className="table table-xs border-transparent p-2">
+      <div className="text-lg font-bold">{t("title")}</div>
+      <div className="text-sm">{t("description")}</div>
+      <table className="table table-xs border-transparent">
         <thead>
           <tr className="flex items-center gap-1 w-full">
             <th className="w-48">{t("variable-name")}</th>
             <th className="flex-grow">{t("variable-description")}</th>
-            <th className="flex items-center gap-1 flex-grow">
-              {t("default-value")}
-              <Tip content={t("default-value-tip")} />
-            </th>
-            <th className="w-12 text-right">{t("variable-actions")}</th>
+            <th className="w-16 text-right">{t("variable-actions")}</th>
           </tr>
         </thead>
         <tbody>
           {tool?.variables?.map((variable: any, index: number) => (
             <VariableRow
-              key={index}
+              key={variable.id}
               variable={variable}
               onUpdate={handleUpdate}
               onDelete={handleDelete}
+              showActions
             />
           ))}
           <VariableRow
-            variable={{
-              id: genId(),
-              name: "",
-              description: "",
-              default_value: "",
-            }}
+            key={newVariable.id}
+            variable={newVariable}
             onUpdate={handleUpdate}
             onDelete={handleDelete}
           />
