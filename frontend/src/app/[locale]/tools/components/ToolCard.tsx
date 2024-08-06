@@ -29,11 +29,10 @@ const ToolCard = ({ tool, onDelete, selected, className, ...props }: any) => {
       {...props}
     >
       <div className="flex items-center gap-2">
-        {tool.icon_url ? (
-          <img src={tool.icon_url} className="w-12 h-12 flex-shrink-0" />
-        ) : (
-          <RiFormula className="w-12 h-12 flex-shrink-0" />
-        )}
+        <img
+          src={tool.logo_url ?? "/images/tools-solid.svg"}
+          className="w-12 h-12 flex-shrink-0"
+        />
         <div className="text-base font-bold">{tool.name}</div>
       </div>
       <div className="text-sm text-base-content/50 w-full line-clamp-4 min-h-28">
@@ -51,16 +50,18 @@ const ToolCard = ({ tool, onDelete, selected, className, ...props }: any) => {
         </div>
       )}
       <div className="absolute bottom-2 right-2 hidden group-hover:block">
-        <button
-          className="btn btn-xs btn-square btn-ghost hover:text-red-600"
-          onClick={handleDelete}
-        >
-          {isDeleting ? (
-            <div className="loading loading-xs" />
-          ) : (
-            <RiDeleteBin4Line className="w-4 h-4" />
-          )}
-        </button>
+        {!tool.is_public && (
+          <button
+            className="btn btn-xs btn-square btn-ghost hover:text-red-600"
+            onClick={handleDelete}
+          >
+            {isDeleting ? (
+              <div className="loading loading-xs" />
+            ) : (
+              <RiDeleteBin4Line className="w-4 h-4" />
+            )}
+          </button>
+        )}
       </div>
     </label>
   );

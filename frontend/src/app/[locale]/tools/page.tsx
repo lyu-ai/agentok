@@ -34,7 +34,7 @@ const Page = () => {
           </div>
         </div>
         <div className="flex items-center justify-start w-full gap-2">
-          <div role="tablist" className="tabs tabs-sm tabs-boxed p-1">
+          <div role="tablist" className="tabs tabs-sm tabs-boxed p-1 gap-1">
             {["all", "public", "custom"].map((item, index) => (
               <a
                 role="tab"
@@ -60,6 +60,8 @@ const Page = () => {
                   key={index}
                   selected={activeTool?.id === tool.id}
                   onClick={() => handleSelect(tool)}
+                  htmlFor="drawer-tool-config"
+                  className="drawer-button"
                 />
               ))}
             </div>
@@ -78,6 +80,7 @@ const Page = () => {
                   tool={tool}
                   key={index}
                   onClick={() => handleSelect(tool)}
+                  selected={activeTool?.id === tool.id}
                   htmlFor="drawer-tool-config"
                   className="drawer-button"
                 />

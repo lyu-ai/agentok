@@ -37,16 +37,18 @@ const ToolItem = ({ nodeId, tool, onDelete, selected, ...props }: any) => {
         {tool.description}
       </div>
       <div className="absolute bottom-1 right-1 hidden group-hover:block">
-        <button
-          className="btn btn-xs btn-square btn-ghost hover:text-red-600"
-          onClick={handleDelete}
-        >
-          {isDeleting ? (
-            <div className="loading loading-xs" />
-          ) : (
-            <RiDeleteBin4Line className="w-4 h-4" />
-          )}
-        </button>
+        {!tool.is_public && (
+          <button
+            className="btn btn-xs btn-square btn-ghost hover:text-red-600"
+            onClick={handleDelete}
+          >
+            {isDeleting ? (
+              <div className="loading loading-xs" />
+            ) : (
+              <RiDeleteBin4Line className="w-4 h-4" />
+            )}
+          </button>
+        )}
       </div>
     </div>
   );

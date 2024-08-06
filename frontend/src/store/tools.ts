@@ -20,6 +20,7 @@ export type Tool = {
   id: number;
   name: string;
   description: string;
+  logo_url?: string;
   variables: ToolVariable[];
   code?: string;
   is_public: boolean;
