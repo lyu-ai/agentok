@@ -65,7 +65,7 @@ export const getGeneralMenuItems = () => {
   return NAV_MENU_ITEMS;
 };
 
-const GeneralMenu = () => {
+const GeneralMenu = ({ className }: any) => {
   const pathname = usePathname();
   const pathSegments = pathname ? pathname.split("/").filter((p) => p) : []; // filter to remove any empty strings caused by leading/trailing slashes
 
@@ -93,7 +93,8 @@ const GeneralMenu = () => {
                 "text-primary/80 border-b border-primary/80": isActive(
                   item.href
                 ),
-              }
+              },
+              className
             )}
           >
             <ItemIcon className="h-4 w-4 group-hover:scale-125 transform transition duration-700 ease-in-out" />

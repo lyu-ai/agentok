@@ -31,9 +31,9 @@ const Navbar = () => {
         <NavButton projectId={projectId} className="lg:hidden" />
         <NavLogo />
       </div>
-      <div className="navbar-center gap-4 hidden lg:flex">
+      <div className="navbar-center gap-4">
         <ProjectPicker />
-        <GeneralMenu />
+        <GeneralMenu className="hidden lg:flex" />
       </div>
       <div className="navbar-end flex items-center my-auto gap-4">
         <a
