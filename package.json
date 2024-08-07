@@ -1,0 +1,13 @@
+{
+	"scripts": {
+  "semantic-release": "semantic-release"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^19.3.0",
+		"@commitlint/config-conventional": "^19.2.2",
+		"@semantic-release/commit-analyzer": "^13.0.0",
+		"@semantic-release/github": "^10.1.3",
+		"@semantic-release/release-notes-generator": "^14.0.1",
+		"semantic-release": "^24.0.0"
+	}
+}
