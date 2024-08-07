@@ -84,11 +84,13 @@ class OutputParser:
                 self.current_message["sender"] = match.group(1)
                 self.current_message["receiver"] = match.group(2)
                 # Determine message type based on sender
-                self.current_message["type"] = (
-                    "user"
-                    if self.current_message["sender"].lower() == "user"
-                    else "assistant"
-                )
+                # TODO: This rule does not work when there is a tool call/response
+                # self.current_message["type"] = (
+                #     "user"
+                #     if self.current_message["sender"].lower() == "user"
+                #     else "assistant"
+                # )
+                self.current_message["type"] = "assistant"
                 self.state = self.STATE_CONTENT
         elif self.end_pattern.match(line):
             self._end_of_message()

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   RiArrowDownLine,
   RiArrowUpLine,
@@ -8,21 +8,19 @@ import {
   RiEraserLine,
   RiShuffleLine,
   RiWindowLine,
-} from 'react-icons/ri';
-import ChatInput from './ChatInput';
-import { genId } from '@/utils/id';
-import supabase from '@/utils/supabase/client';
-import {
-  RealtimeChannel,
-} from '@supabase/supabase-js';
-import { StatusMessage } from '@/utils/chat';
-import { useTranslations } from 'next-intl';
-import { useChat, useChats } from '@/hooks';
-import { Tooltip } from 'react-tooltip';
-import MessageList from './MessageList';
-import clsx from 'clsx';
-import { isArray } from 'lodash-es';
-import useProjectStore from '@/store/projects';
+} from "react-icons/ri";
+import ChatInput from "./ChatInput";
+import { genId } from "@/utils/id";
+import supabase from "@/utils/supabase/client";
+import { RealtimeChannel } from "@supabase/supabase-js";
+import { StatusMessage } from "@/utils/chat";
+import { useTranslations } from "next-intl";
+import { useChat, useChats } from "@/hooks";
+import { Tooltip } from "react-tooltip";
+import MessageList from "./MessageList";
+import clsx from "clsx";
+import { isArray } from "lodash-es";
+import useProjectStore from "@/store/projects";
 import {
   RiAlertLine,
   RiChatSmile2Line,
@@ -31,15 +29,15 @@ import {
   RiSendPlaneLine,
   RiStopLine,
   RiUnpinLine,
-} from 'react-icons/ri';
-import Loading from '@/components/Loading';
-import { useUser } from '@/hooks/useUser';
-import { Chat as ChatType } from '@/store/chats';
+} from "react-icons/ri";
+import Loading from "@/components/Loading";
+import { useUser } from "@/hooks/useUser";
+import { Chat as ChatType } from "@/store/chats";
 
 const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
-  const t = useTranslations('component.ChatPane');
+  const t = useTranslations("component.ChatPane");
   const [minimized, setMinimized] = useState(false);
-  const config = flow?.nodes?.find((node: any) => node.type === 'initializer');
+  const config = flow?.nodes?.find((node: any) => node.type === "initializer");
   if (!config?.data?.sample_messages || !isArray(config.data.sample_messages)) {
     return null;
   }
@@ -49,7 +47,7 @@ const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
     _onSelect && _onSelect(msg);
   };
   return (
-    <div className={clsx(className, 'flex flex-col items-end gap-1')}>
+    <div className={clsx(className, "flex flex-col items-end gap-1")}>
       <button
         className="btn btn-primary btn-outline btn-xs btn-circle"
         onClick={() => setMinimized(!minimized)}
@@ -62,7 +60,7 @@ const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
             key={i}
             onClick={() => onSelect(msg)}
             data-tooltip-id="chat-tooltip"
-            data-tooltip-content={t('click-to-send')}
+            data-tooltip-content={t("click-to-send")}
             data-tooltip-place="left-end"
             className="cursor-pointer btn btn-primary backdrop-blur-md text-xs max-w-xs font-normal border-opacity-80 bg-opacity-80"
           >
@@ -74,31 +72,31 @@ const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
 };
 
 const StatusTag = ({ status }: { status: string }) => {
-  const t = useTranslations('component.ChatPane');
+  const t = useTranslations("component.ChatPane");
   const statusMap: { [key: string]: { label: string; icon: any } } = {
-    ready: { label: t('ready'), icon: RiSendPlaneLine },
-    running: { label: t('running'), icon: RiRidingLine },
+    ready: { label: t("ready"), icon: RiSendPlaneLine },
+    running: { label: t("running"), icon: RiRidingLine },
     wait_for_human_input: {
-      label: t('wait-for-human-input'),
+      label: t("wait-for-human-input"),
       icon: RiChatSmile2Line,
     },
-    completed: { label: t('completed'), icon: RiCheckboxCircleLine },
-    aborted: { label: t('aborted'), icon: RiStopLine },
-    failed: { label: t('failed'), icon: RiAlertLine },
+    completed: { label: t("completed"), icon: RiCheckboxCircleLine },
+    aborted: { label: t("aborted"), icon: RiStopLine },
+    failed: { label: t("failed"), icon: RiAlertLine },
   };
   const StatusIcon = statusMap[status].icon;
   const label = statusMap[status].label || status;
   return (
     <span
       className={clsx(
-        'flex items-center justify-center text-xs rounded-lg h-6 w-6',
+        "flex items-center justify-center text-xs rounded-lg h-6 w-6",
         {
-          'border-primary text-primary bg-blue-600 animate-pulse':
-            status === 'running',
-          'border-success text-success': status === 'completed',
-          'border-error text-error': status === 'failed',
-          'border-warning text-warning': status === 'wait_for_human_input',
-          'border-base-content text-base-content': status === 'ready',
+          "border-primary text-primary bg-blue-600 animate-pulse":
+            status === "running",
+          "border-success text-success": status === "completed",
+          "border-error text-error": status === "failed",
+          "border-warning text-warning": status === "wait_for_human_input",
+          "border-base-content text-base-content": status === "ready",
         }
       )}
     >
@@ -115,18 +113,16 @@ const ChatPane = ({
   standalone?: boolean;
   onStartChat?: () => void;
 }) => {
-  const { chatSource } = useChat(
-    chat.id
-  );
+  const { chatSource } = useChat(chat.id);
   const { sidebarCollapsed, setSidebarCollapsed } = useChats();
-  const [status, setStatus] = useState('ready');
+  const [status, setStatus] = useState("ready");
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [help, setHelp] = useState('');
+  const [help, setHelp] = useState("");
   const [cleaning, setCleaning] = useState(false);
   const isFirstRender = useRef(true);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const t = useTranslations('component.ChatPane');
+  const t = useTranslations("component.ChatPane");
   const { pinChatPane, chatPanePinned } = useProjectStore();
   const { user } = useUser();
 
@@ -134,17 +130,22 @@ const ChatPane = ({
     if (chat.id === -1) return;
     setLoading(true);
     await fetch(`/api/chats/${chat.id}/messages`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
-      .then(resp => resp.json())
-      .then(json => {
+      .then((resp) => {
+        if (!resp.ok) {
+          throw new Error("Failed to fetch messages");
+        }
+        return resp.json();
+      })
+      .then((json) => {
         setMessages(json ? json : []);
       })
-      .catch(err => {
-        console.error('Failed to fetch messages:', err);
+      .catch((err) => {
+        console.error("Failed to fetch messages:", err);
       })
       .finally(() => setLoading(false));
   }, [setMessages, chat.id]);
@@ -153,13 +154,13 @@ const ChatPane = ({
   const fetchChatStatus = useCallback(async () => {
     if (chat.id === -1) return;
     const { data, error } = await supabase
-      .from('chats')
-      .select('status')
-      .eq('id', chat.id)
+      .from("chats")
+      .select("status")
+      .eq("id", chat.id)
       .single();
 
-    if (error && error.code !== 'PGRST116') {
-      console.error('Error fetching chat status:', error);
+    if (error && error.code !== "PGRST116") {
+      console.error("Error fetching chat status:", error);
     } else if (data) {
       setStatus(data.status);
     }
@@ -167,7 +168,7 @@ const ChatPane = ({
 
   const extractHelp = useCallback(() => {
     const noteNode = chatSource?.flow?.nodes?.find(
-      (node: any) => node.type === 'note'
+      (node: any) => node.type === "note"
     );
     if (noteNode) {
       setHelp(noteNode.data.content);
@@ -185,13 +186,18 @@ const ChatPane = ({
     const messagesChannel: RealtimeChannel = supabase
       .channel(`chat_messasges_${genId()}`)
       .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'chat_messages', filter: `chat_id=eq.${chat.id}` },
-        payload => {
-          console.log('changes_event(chat_messages):', payload);
-          if (payload.new && payload.new.type !== 'user') {
-            setMessages(msgs =>
-              msgs.some(m => m.id === payload.new.id)
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "chat_messages",
+          filter: `chat_id=eq.${chat.id}`,
+        },
+        (payload) => {
+          console.log("changes_event(chat_messages):", payload);
+          if (payload.new && payload.new.type !== "user") {
+            setMessages((msgs) =>
+              msgs.some((m) => m.id === payload.new.id)
                 ? msgs
                 : [...msgs, payload.new]
             );
@@ -204,16 +210,16 @@ const ChatPane = ({
     const chatsChannel: RealtimeChannel = supabase
       .channel(`chats_${genId()}`)
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'chats',
+          event: "UPDATE",
+          schema: "public",
+          table: "chats",
           filter: `id=eq.${chat.id}`,
         },
-        payload => {
-          console.log('changes_event(chats):', payload);
-          if (payload.new && 'status' in payload.new) {
+        (payload) => {
+          console.log("changes_event(chats):", payload);
+          if (payload.new && "status" in payload.new) {
             setStatus(payload.new.status);
           }
         }
@@ -235,18 +241,18 @@ const ChatPane = ({
       messagesEndRef.current?.scrollIntoView();
       isFirstRender.current = false;
     } else {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
 
   const handleClean = () => {
     setCleaning(true);
     fetch(`/api/chats/${chat.id}/messages`, {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      credentials: 'include',
+      credentials: "include",
     })
       .then(() => {
         setMessages([]);
@@ -257,41 +263,42 @@ const ChatPane = ({
   const handleSend = async (message: string): Promise<boolean> => {
     const newMessage = {
       id: genId(),
-      type: 'user',
-      sender: user?.user_metadata.full_name ?? 'User',
-      content: message ?? '\n', // If it's empty message, let's simulate a Enter key-press
+      type: "user",
+      sender: user?.user_metadata.full_name ?? "User",
+      content: message ?? "\n", // If it's empty message, let's simulate a Enter key-press
       created_at: new Date().toISOString(),
     };
-    setMessages(msgs => [...msgs, newMessage]);
+    setMessages((msgs) => [...msgs, newMessage]);
     const res = await fetch(
-      `/api/chats/${chat.id}/${status === 'wait_for_human_input' ? 'input' : 'messages'
+      `/api/chats/${chat.id}/${
+        status === "wait_for_human_input" ? "input" : "messages"
       }`,
       {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify(newMessage),
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
       }
     );
 
     if (!res.ok) {
-      console.warn('Failed sending message:', res.statusText);
+      console.warn("Failed sending message:", res.statusText);
       return false;
     }
     const json = await res.json();
-    console.log('message sent:', json);
+    console.log("message sent:", json);
     return true;
   };
 
   const handleAbort = async () => {
     const res = await fetch(`/api/chats/${chat.id}/abort`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      credentials: 'include',
+      credentials: "include",
     });
   };
 
@@ -303,7 +310,7 @@ const ChatPane = ({
           <button
             className="btn btn-ghost btn-square btn-xs"
             onClick={() => pinChatPane(!chatPanePinned)}
-            data-tooltip-content={chatPanePinned ? t('unpin') : t('pin')}
+            data-tooltip-content={chatPanePinned ? t("unpin") : t("pin")}
             data-tooltip-id="chat-tooltip"
           >
             {chatPanePinned ? (
@@ -315,19 +322,19 @@ const ChatPane = ({
         </div>
         <div className="flex flex-grow w-full gap-2 items-center justify-center">
           <RiChatSmile2Line className="w-5 h-5" />
-          {t('start-chat')}
+          {t("start-chat")}
         </div>
       </div>
     );
   }
 
   let messagesToDisplay = [...messages];
-  if (status === 'running') {
+  if (status === "running") {
     messagesToDisplay.push({
       id: genId(),
-      type: 'assistant',
+      type: "assistant",
       chat_id: chat.id,
-      content: t('thinking'),
+      content: t("thinking"),
       created_at: new Date().toISOString(),
     });
   }
@@ -348,15 +355,16 @@ const ChatPane = ({
               )}
             </button>
           )}
-          <span className="line-clamp-1 font-bold">{`${chat?.name ?? 'Untitled ' + chat.id
-            } ${chatSource?.name ? ' | ' + chatSource?.name : ''}`}</span>
+          <span className="line-clamp-1 font-bold">{`${
+            chat?.name ?? "Untitled " + chat.id
+          } ${chatSource?.name ? " | " + chatSource?.name : ""}`}</span>
           {status && <StatusTag status={status} />}
         </div>
         <div className="flex items-center gap-2">
           <button
             className="btn btn-xs btn-ghost btn-square"
             data-tooltip-id="chat-tooltip"
-            data-tooltip-content={t('clean-history')}
+            data-tooltip-content={t("clean-history")}
             onClick={handleClean}
           >
             {cleaning ? (
@@ -369,18 +377,18 @@ const ChatPane = ({
             <a
               className="btn btn-xs btn-ghost btn-square"
               data-tooltip-id="chat-tooltip"
-              data-tooltip-content={t('open-in-new-window')}
+              data-tooltip-content={t("open-in-new-window")}
               href={`/chat?id=${chat?.id}`}
               target="_blank"
             >
               <RiWindowLine className="w-4 h-4" />
             </a>
           )}
-          {!standalone && chat?.from_type === 'project' && (
+          {!standalone && chat?.from_type === "project" && (
             <button
               className="btn btn-ghost btn-square btn-xs"
               onClick={() => pinChatPane(!chatPanePinned)}
-              data-tooltip-content={chatPanePinned ? t('unpin') : t('pin')}
+              data-tooltip-content={chatPanePinned ? t("unpin") : t("pin")}
               data-tooltip-id="chat-tooltip"
             >
               {chatPanePinned ? (
@@ -390,11 +398,11 @@ const ChatPane = ({
               )}
             </button>
           )}
-          {standalone && chat?.from_type === 'project' && (
+          {standalone && chat?.from_type === "project" && (
             <a
               className="btn btn-xs btn-ghost btn-square"
               data-tooltip-id="chat-tooltip"
-              data-tooltip-content={t('go-to-editor')}
+              data-tooltip-content={t("go-to-editor")}
               data-tooltip-place="bottom"
               href={`/projects/${chat.from_project}/flow`}
               target="_blank"
@@ -419,11 +427,11 @@ const ChatPane = ({
       <div className="relative justify-center w-full p-1 font-normal">
         <ChatInput
           className={clsx(
-            'flex items-center p-1 w-full bg-base-100/70 border rounded-lg shadow-lg',
+            "flex items-center p-1 w-full bg-base-100/70 border rounded-lg shadow-lg",
             {
-              'border-secondary bg-secondary/40':
-                status === 'wait_for_human_input',
-              'border-primary ': status !== 'wait_for_human_input',
+              "border-secondary bg-secondary/40":
+                status === "wait_for_human_input",
+              "border-primary ": status !== "wait_for_human_input",
             }
           )}
           onSend={handleSend}

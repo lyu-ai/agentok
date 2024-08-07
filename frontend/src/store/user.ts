@@ -1,6 +1,5 @@
-// userStore.ts
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import { AuthChangeEvent, Session, User } from '@supabase/supabase-js';
 import supabase from '@/utils/supabase/client';
 
@@ -11,6 +10,21 @@ interface UserState {
   fetchUser: () => Promise<void>;
   setUser: (user: User | null) => void;
 }
+
+// Custom storage to handle SSR
+const clientStorage = {
+  getItem: (name: string) => (typeof window !== 'undefined' ? localStorage.getItem(name) : null),
+  setItem: (name: string, value: string) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(name, value);
+    }
+  },
+  removeItem: (name: string) => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(name);
+    }
+  }
+};
 
 const useUserStore = create<UserState>()(
   persist(
@@ -34,6 +48,7 @@ const useUserStore = create<UserState>()(
     }),
     {
       name: 'agentok-user-storage',
+      storage: createJSONStorage(() => clientStorage),
     }
   )
 );
