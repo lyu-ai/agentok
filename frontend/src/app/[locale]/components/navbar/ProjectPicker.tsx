@@ -183,7 +183,7 @@ const ProjectPicker = () => {
               <ListboxOption
                 key={project.id}
                 value={project}
-                className="group flex gap-2 text-sm rounded px-4 py-2 data-[selected]:border data-[selected]:border-base-content/20 data-[focus]:bg-base-content/10 cursor-pointer"
+                className="group flex items-center gap-2 text-sm rounded px-4 py-2 data-[selected]:border data-[selected]:border-base-content/20 data-[focus]:bg-base-content/10 cursor-pointer"
               >
                 <Icon className="h-4 w-4" />
                 {project.name}

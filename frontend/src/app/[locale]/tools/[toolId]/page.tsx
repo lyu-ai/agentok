@@ -33,7 +33,7 @@ const Page = ({ params }: { params: { toolId: string } }) => {
                   setToolData("name", text);
                 }}
                 showButtons
-                className="text-base-content/80 !text-lg !font-bold"
+                className="text-base-content !text-lg !font-bold"
               />
               <EditableText
                 text={tool?.description ?? ""}
@@ -41,7 +41,7 @@ const Page = ({ params }: { params: { toolId: string } }) => {
                   setToolData("description", text);
                 }}
                 showButtons
-                className="text-base-content/80 !text-base !font-normal"
+                className="text-base-content/80 !text-sm !font-normal"
               />
             </div>
           </div>

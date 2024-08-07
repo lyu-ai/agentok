@@ -1,6 +1,6 @@
-import clsx from 'clsx';
-import { OptionProps, OptionType } from './Option';
-import { useState } from 'react';
+import clsx from "clsx";
+import { OptionProps, OptionType } from "./Option";
+import { useState } from "react";
 
 type TextOptionProps = {
   rows?: number;
@@ -15,13 +15,13 @@ const TextOption = ({
   onChange,
   compact = false,
 }: TextOptionProps) => {
-  const [value, setValue] = useState(data?.[name] ?? '');
+  const [value, setValue] = useState(data?.[name] ?? "");
 
   return (
     <div
-      className={clsx('flex text-sm', {
-        'flex-col gap-1 ': !compact,
-        'items-center justify-between gap-2': compact,
+      className={clsx("flex text-sm", {
+        "flex-col gap-1 ": !compact,
+        "items-center gap-2": compact,
       })}
     >
       <span className="whitespace-nowrap">{label}</span>
@@ -29,7 +29,7 @@ const TextOption = ({
         <textarea
           value={value}
           placeholder={placeholder}
-          onChange={e => setValue(e.target.value)}
+          onChange={(e) => setValue(e.target.value)}
           onBlur={() => onChange && onChange(name, value)}
           rows={rows}
           className="textarea textarea-bordered focus:textarea-primary p-1 rounded bg-transparent w-full nodrag nowheel"
@@ -39,9 +39,9 @@ const TextOption = ({
           type="text"
           value={value}
           placeholder={placeholder}
-          onChange={e => setValue(e.target.value)}
-          onBlur={e => onChange && onChange(name, e.target.value)}
-          className="input input-xs input-bordered focus:input-primary p-1 rounded bg-transparent w-full nodrag nowheel"
+          onChange={(e) => setValue(e.target.value)}
+          onBlur={(e) => onChange && onChange(name, e.target.value)}
+          className="input input-xs input-bordered focus:input-primary p-1 rounded bg-transparent nodrag nowheel"
         />
       )}
     </div>

@@ -4,8 +4,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import PopupDialog from "@/components/PopupDialog";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
-import { useProjectId } from "@/context/ProjectContext";
-import { useProject, useTool, useTools } from "@/hooks";
+import { useTool, useTools } from "@/hooks";
 import { Tool } from "@/store/tools";
 import {
   RiCloseLine,
@@ -40,7 +39,7 @@ const AvailableTool = ({ tool }: any) => {
     <div
       ref={dragRef}
       className={clsx(
-        "group flex items-center justify-between gap-2 p-2 border bg-base-content/10 border-base-content/40 rounded cursor-move",
+        "group flex w-full items-center justify-between gap-2 p-2 border bg-base-content/10 border-base-content/40 rounded cursor-move",
         {
           "border-primary": isDragging,
         }
@@ -98,7 +97,7 @@ const DropZone = ({ onDrop, placeholder, children }: any) => {
     <div
       ref={ref}
       className={clsx(
-        "flex w-full min-h-32 flex-wrap gap-1 p-1 border border-dashed border-primary/20 rounded",
+        "flex w-full h-full min-h-32 flex-wrap gap-1 p-1 border border-dashed border-primary/20 rounded",
         {
           "bg-gray-600": isOver,
         }
@@ -117,6 +116,7 @@ const ConversableAgentConfig = ({
   nodeId,
   data,
   optionsDisabled,
+  toolScene = "all", // 'all' | 'execution' | 'llm'
   className,
   ...props
 }: any) => {
@@ -171,7 +171,7 @@ const ConversableAgentConfig = ({
 
   const ToolPanel = (
     <div className="flex flex-col gap-2 w-full h-full">
-      <div className="py-4">{t("available-tools-tooltip")}</div>
+      <div>{t("available-tools-tooltip")}</div>
       <div className="flex h-full w-full gap-2">
         <div className="flex w-64">
           <div className="flex flex-col gap-2 w-full h-full">
@@ -183,7 +183,7 @@ const ConversableAgentConfig = ({
             </div>
 
             <div className="flex flex-col gap-1 h-full p-1 border border-primary/20 rounded">
-              <div className="flex flex-col h-full items-center gap-1 overflow-y-auto ">
+              <div className="flex flex-col h-full min-h-80 items-center gap-1 overflow-y-auto ">
                 {tools &&
                   tools.map((tool: Tool) => (
                     <AvailableTool key={tool.id} tool={tool} />
@@ -199,42 +199,50 @@ const ConversableAgentConfig = ({
           </div>
         </div>
         <div className="flex flex-col gap-2 w-full">
-          <div className="flex items-center gap-2">
-            {t("tools-for-execution")}
-            <Tip content={t("tools-for-execution-tooltip")} />
-          </div>
-          <DropZone
-            placeholder={t("tools-for-execution-placeholder")}
-            onDrop={(toolId: number) => handleDrop(toolId, "execution")}
-          >
-            {data?.tools?.execution &&
-              data.tools.execution.map((toolId: number) => (
-                <AssignedTool
-                  key={toolId}
-                  scene="execution"
-                  toolId={toolId}
-                  onRemove={handleRemove}
-                />
-              ))}
-          </DropZone>
-          <div className="flex items-center gap-2">
-            {t("tools-for-llm")}
-            <Tip content={t("tools-for-llm-tooltip")} />
-          </div>
-          <DropZone
-            placeholder={t("tools-for-llm-placeholder")}
-            onDrop={(toolId: number) => handleDrop(toolId, "llm")}
-          >
-            {data?.tools?.llm &&
-              data.tools.llm.map((toolId: number) => (
-                <AssignedTool
-                  scene="llm"
-                  key={toolId}
-                  toolId={toolId}
-                  onRemove={handleRemove}
-                />
-              ))}
-          </DropZone>
+          {["all", "execution"].includes(toolScene) && (
+            <>
+              <div className="flex items-center gap-2">
+                {t("tools-for-execution")}
+                <Tip content={t("tools-for-execution-tooltip")} />
+              </div>
+              <DropZone
+                placeholder={t("tools-for-execution-placeholder")}
+                onDrop={(toolId: number) => handleDrop(toolId, "execution")}
+              >
+                {data?.tools?.execution &&
+                  data.tools.execution.map((toolId: number) => (
+                    <AssignedTool
+                      key={toolId}
+                      scene="execution"
+                      toolId={toolId}
+                      onRemove={handleRemove}
+                    />
+                  ))}
+              </DropZone>
+            </>
+          )}
+          {["all", "llm"].includes(toolScene) && (
+            <>
+              <div className="flex items-center gap-2">
+                {t("tools-for-llm")}
+                <Tip content={t("tools-for-llm-tooltip")} />
+              </div>
+              <DropZone
+                placeholder={t("tools-for-llm-placeholder")}
+                onDrop={(toolId: number) => handleDrop(toolId, "llm")}
+              >
+                {data?.tools?.llm &&
+                  data.tools.llm.map((toolId: number) => (
+                    <AssignedTool
+                      scene="llm"
+                      key={toolId}
+                      toolId={toolId}
+                      onRemove={handleRemove}
+                    />
+                  ))}
+              </DropZone>
+            </>
+          )}
         </div>
       </div>
     </div>
@@ -311,7 +319,9 @@ const ConversableAgentConfig = ({
         title={
           <div className="flex items-center gap-2">
             <RiSettings3Line className="w-5 h-5" />
-            <span className="text-md font-bold">{t("title")}</span>
+            <span className="text-md font-bold">
+              {t("title")} - {data.name}
+            </span>
           </div>
         }
         className={clsx(
@@ -319,7 +329,7 @@ const ConversableAgentConfig = ({
           className
         )}
         classNameTitle="border-b border-base-content/10"
-        classNameBody="flex flex-1 w-full h-full p-2 gap-2 min-h-96 max-h-[500px] text-sm overflow-y-auto"
+        classNameBody="flex flex-1 w-full p-2 gap-2 min-h-96 max-h-[500px] text-sm overflow-y-auto"
         {...props}
       >
         <TabGroup className="w-full h-full">
@@ -327,7 +337,7 @@ const ConversableAgentConfig = ({
             <Tab className="tab">{t("general")}</Tab>
             <Tab className="tab">{t("tools")}</Tab>
           </TabList>
-          <TabPanels className="p-2">
+          <TabPanels className="pt-2 w-full h-full">
             <TabPanel>{GeneralPanel}</TabPanel>
             <TabPanel>{ToolPanel}</TabPanel>
           </TabPanels>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import supabase from "@/utils/supabase/client";
-import { RiImage2Line } from "react-icons/ri";
+import { RiImageAddLine } from "react-icons/ri";
 
 type ImageUploaderProps = {
   imageUrl: string;
@@ -47,7 +47,9 @@ const ImageUploader = ({
   };
 
   return (
-    <div className={`image-uploader ${className} overflow-hidden`}>
+    <div
+      className={`image-uploader ${className} overflow-hidden border border-dashed border-base-content/20 rounded`}
+    >
       <input
         type="file"
         onChange={handleUpload}
@@ -56,7 +58,7 @@ const ImageUploader = ({
       />
       <label htmlFor="file-upload" className="cursor-pointer">
         {isUploading ? (
-          <div className="flex items-center justify-center w-full h-full border border-dashed border-base-content/20 rounded">
+          <div className="flex items-center justify-center w-full h-full">
             <div className="loading loading-xs" />
           </div>
         ) : previewUrl ? (
@@ -66,15 +68,13 @@ const ImageUploader = ({
               alt="Uploaded"
               className="block max-w-full max-h-72"
             />
-            <div className="absolute inset-0 flex items-center justify-center bg-base-content/20 opacity-0 hover:opacity-100 transition-opacity rounded">
-              <div className="text-base-content text-4xl">
-                <RiImage2Line />
-              </div>
+            <div className="absolute inset-0 flex items-center justify-center bg-base-content opacity-0 hover:opacity-90 transition-opacity">
+              <RiImageAddLine className="w-10 h-10 text-primary" />
             </div>
           </div>
         ) : (
-          <div className="p-10 border-2 border-dashed border-gray-300 text-center">
-            <RiImage2Line />
+          <div className="">
+            <RiImageAddLine />
           </div>
         )}
       </label>
