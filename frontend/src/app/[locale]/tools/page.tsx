@@ -4,8 +4,7 @@ import ToolCard from "./components/ToolCard";
 import { useState } from "react";
 import ToolConfig from "./components/ToolConfig";
 import { usePublicTools, useTools } from "@/hooks";
-import clsx from "clsx";
-import { RiHammerFill, RiHammerLine, RiToolsFill } from "react-icons/ri";
+import { RiHammerLine, RiToolsFill } from "react-icons/ri";
 import { faker } from "@faker-js/faker";
 import { useRouter } from "next/navigation";
 import { genId } from "@/utils/id";
@@ -35,7 +34,7 @@ const NewToolCard = () => {
   return (
     <button
       onClick={handleCreate}
-      className="group flex flex-col items-center justify-center gap-2 p-3 rounded-md border border-dashed border-base-content/20 cursor-pointer hover:bg-base-content/10 hover:shadow-box hover:shadow-gray-700"
+      className="group flex flex-col min-h-48 items-center justify-center gap-2 p-3 rounded-md border border-dashed border-base-content/20 cursor-pointer hover:bg-base-content/10 hover:shadow-box hover:shadow-gray-700"
     >
       <div className="flex flex-col items-center gap-2">
         {isCreating && <div className="loading loading-sm" />}
@@ -74,7 +73,7 @@ const Page = () => {
             <div className="">{t("description")}</div>
           </div>
         </div>
-        <div className="flex items-center justify-start w-full gap-2">
+        {/* <div className="flex items-center justify-start w-full gap-2">
           <div role="tablist" className="tabs tabs-sm tabs-boxed p-1 gap-1">
             {["all", "public", "custom"].map((item, index) => (
               <a
@@ -89,7 +88,7 @@ const Page = () => {
               </a>
             ))}
           </div>
-        </div>
+        </div> */}
         <div className="divider my-0" />
         {["all", "public"].includes(filter) && publicTools.length > 0 && (
           <div className="flex flex-col gap-2">
@@ -108,7 +107,7 @@ const Page = () => {
             </div>
           </div>
         )}
-        {["all", "custom"].includes(filter) && customTools.length > 0 && (
+        {["all", "custom"].includes(filter) && (
           <div className="flex flex-col gap-4">
             <div className="text-lg font-bold">{t("custom-tools")}</div>
             <div className="text-sm text-base-content/50">
