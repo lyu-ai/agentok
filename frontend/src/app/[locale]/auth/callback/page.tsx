@@ -1,7 +1,8 @@
-'use client';
-import { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import supabase from '@/utils/supabase/client';
+"use client";
+import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import supabase from "@/utils/supabase/client";
+import Loading from "@/components/Loading";
 
 export default function AuthCallback() {
   const router = useRouter();
@@ -10,10 +11,10 @@ export default function AuthCallback() {
   useEffect(() => {
     const handleAuthCallback = async () => {
       const { error } = await supabase.auth.getSession();
-      if (error) console.error('Error:', error);
+      if (error) console.error("Error:", error);
 
       // Get the intended redirect URL from the query parameters
-      const redirectTo = searchParams.get('redirect') || '/';
+      const redirectTo = searchParams.get("redirect") || "/";
 
       // Redirect to the intended page
       router.push(decodeURIComponent(redirectTo));
@@ -22,5 +23,5 @@ export default function AuthCallback() {
     handleAuthCallback();
   }, [router, supabase.auth]);
 
-  return <div>Loading...</div>;
+  return <Loading />;
 }
