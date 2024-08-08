@@ -55,7 +55,7 @@ export const initialNodes: Node[] = [
       label: "note",
       class: "Note",
       content:
-        "Click **Start Chat** to show the chat pane, and in chat pane, select a sample question to start the conversation.",
+        "Click **Chat** icon on the right bottom to show the chat pane, and in chat pane, select a sample question to start the conversation. \n\nThis project uses Tavily Search tool, which requires an API key to work. \n\nIf you don't have your own, you can use this test key: `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`",
     },
     position: { x: 87, y: 740 },
   },

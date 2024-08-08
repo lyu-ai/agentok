@@ -1,16 +1,16 @@
-import React from 'react';
-import ReactMarkdown from 'react-markdown';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus as style } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import RemarkBreaks from 'remark-breaks';
-import RemarkGfm from 'remark-gfm';
-import RemarkMath from 'remark-math';
-import RehypeKatex from 'rehype-katex';
-import 'katex/dist/katex.min.css'; // Import the KaTeX CSS
-import './markdown.css';
-import CopyButton from '../CopyButton';
-import { common, createLowlight } from 'lowlight';
-import clsx from 'clsx';
+import React from "react";
+import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus as style } from "react-syntax-highlighter/dist/esm/styles/prism";
+import RemarkBreaks from "remark-breaks";
+import RemarkGfm from "remark-gfm";
+import RemarkMath from "remark-math";
+import RehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
+import "./markdown.css";
+import CopyButton from "../CopyButton";
+import { common, createLowlight } from "lowlight";
+import clsx from "clsx";
 
 const lowlight = createLowlight(common);
 
@@ -41,17 +41,17 @@ const CodeComponent = ({
   suppressCopy,
   ...props
 }: any) => {
-  const match = /language-(\w+)/.exec(className || '');
+  const match = /language-(\w+)/.exec(className || "");
   if (inline) return <InlineCode {...props}>{children}</InlineCode>;
   return (
     <div className="relative">
       <CodeBlock language={match && match[1]} {...props}>
-        {String(children).replace(/\n$/, '')}
+        {String(children).replace(/\n$/, "")}
       </CodeBlock>
       {!suppressCopy && (
         <CopyButton
           minimal
-          content={String(children).replace(/\n$/, '')}
+          content={String(children).replace(/\n$/, "")}
           className="absolute top-1 right-1"
         />
       )}
@@ -59,10 +59,6 @@ const CodeComponent = ({
   );
 };
 
-// suppressLink:
-//    Replace the link in the markdown with span
-//    This is to solve the link-nesting issue if the container itself is a link
-//
 const Markdown = ({
   className,
   suppressLink,
@@ -71,24 +67,14 @@ const Markdown = ({
   ...props
 }: any) => {
   if (!children) return null;
-  // This function is for image format in autogen
+
   function preprocessImageTags(content: string): string {
-    // Regex to find <img> tags with the assumed format
     const imgTagRegex = /<img (https?:\/\/[^">]+)>/g;
-
-    // Replacement function to convert to Markdown
-    const replaceWithMarkdown = (match: string, p1: string) => {
-      // p1 contains the first capture group: the URL of the image
-      return `![img](${p1})`;
-    };
-
-    // Replace all occurrences in the content
-    return content.replace(imgTagRegex, replaceWithMarkdown);
+    return content.replace(imgTagRegex, (match, p1) => `![img](${p1})`);
   }
 
   const markdownWithImages: string = preprocessImageTags(children as string);
 
-  // Ensure math delimiters are correctly formatted in the markdown
   const processedMarkdown = markdownWithImages
     .replace(/\\\((.*?)\\\)/g, (match, p1) => `$${p1}$`)
     .replace(/\\\[(.*?)\\\]/gs, (match, p1) => `$$${p1}$$`);
@@ -100,6 +86,10 @@ const Markdown = ({
       components={{
         code(data): JSX.Element {
           return <CodeComponent {...data} suppressCopy={suppressCopy} />;
+        },
+        p({ node, children, ...props }) {
+          // Replace <p> with <div>
+          return <div {...props}>{children}</div>;
         },
         a(data): JSX.Element {
           return suppressLink ? (
@@ -114,8 +104,8 @@ const Markdown = ({
         },
         img: ({ node, ...props }) => (
           <img
-            style={{ maxWidth: '480px', width: '100%', maxHeight: '320px' }}
-            alt={props.alt ?? 'md-img'}
+            style={{ maxWidth: "480px", width: "100%", maxHeight: "320px" }}
+            alt={props.alt ?? "md-img"}
             {...props}
           />
         ),
