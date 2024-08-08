@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import ProjectList from "../components/ProjectList";
-import { useProjects } from "@/hooks/useProjects";
+import { initialEdges, initialNodes, useProjects } from "@/hooks";
 import { toast } from "react-toastify";
 import { useTranslations } from "next-intl";
 import { RiSwap3Line, RiShoppingBag4Line } from "react-icons/ri";
@@ -19,7 +19,15 @@ const Page = () => {
     setActiveProjectId(-1);
   }, []);
   const onCreateProject = async () => {
-    const project = await createProject();
+    const project = await createProject({
+      id: -1, // Will be replaced by actual id from server side
+      name: "New Project",
+      description: "A new project with sample flow.",
+      flow: {
+        nodes: initialNodes,
+        edges: initialEdges,
+      },
+    });
     if (!project) {
       toast.error("Failed to create project");
       return;

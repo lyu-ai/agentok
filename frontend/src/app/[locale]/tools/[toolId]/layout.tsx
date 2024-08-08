@@ -29,10 +29,7 @@ const ToolItem = ({ nodeId, tool, onDelete, selected, ...props }: any) => {
       )}
       {...props}
     >
-      <div className="flex items-center gap-2">
-        <RiFormula className="w-5 h-5 flex-shrink-0" />
-        <div className="text-base font-bold">{tool.name}</div>
-      </div>
+      <div className="text-base font-bold">{tool.name}</div>
       <div className="text-sm text-base-content/50 w-full line-clamp-2">
         {tool.description}
       </div>

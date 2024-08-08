@@ -30,7 +30,7 @@ const ToolCard = ({ tool, onDelete, selected, className, ...props }: any) => {
     >
       <div className="flex items-center gap-2">
         <img
-          src={tool.logo_url ?? "/images/tools-solid.svg"}
+          src={tool.logo_url ?? "/images/tools.svg"}
           className="w-12 h-12 flex-shrink-0"
         />
         <div className="text-base font-bold">{tool.name}</div>

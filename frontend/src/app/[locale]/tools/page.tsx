@@ -5,7 +5,48 @@ import { useState } from "react";
 import ToolConfig from "./components/ToolConfig";
 import { usePublicTools, useTools } from "@/hooks";
 import clsx from "clsx";
-import { RiToolsFill } from "react-icons/ri";
+import { RiHammerFill, RiHammerLine, RiToolsFill } from "react-icons/ri";
+import { faker } from "@faker-js/faker";
+import { useRouter } from "next/navigation";
+import { genId } from "@/utils/id";
+import { toast } from "react-toastify";
+
+const NewToolCard = () => {
+  const router = useRouter();
+  const { tools, createTool, isCreating, deleteTool, isDeleting } = useTools();
+  const t = useTranslations("page.Tools");
+  const handleCreate = async () => {
+    const name = faker.word.verb();
+    const tool = await createTool({
+      id: genId(),
+      name: name,
+      description: "Send hello world message.",
+      code: `def ${name}(message: str) -> None:\n\
+    '''Send hello world message.'''\n\
+    print(message)`,
+      variables: [],
+    });
+    if (!tool) {
+      toast.error("Failed to create tool");
+      return;
+    }
+    router.push(`/tools/${tool.id}`);
+  };
+  return (
+    <button
+      onClick={handleCreate}
+      className="group flex flex-col items-center justify-center gap-2 p-3 rounded-md border border-dashed border-base-content/20 cursor-pointer hover:bg-base-content/10 hover:shadow-box hover:shadow-gray-700"
+    >
+      <div className="flex flex-col items-center gap-2">
+        {isCreating && <div className="loading loading-sm" />}
+        {!isCreating && (
+          <RiHammerLine className="w-8 h-8 flex-shrink-0 group-hover:scale-125 transform transition duration-700 ease-in-out group-hover:text-primary" />
+        )}
+        <div className="text-base font-bold">{t("new-tool")}</div>
+      </div>
+    </button>
+  );
+};
 
 const Page = () => {
   const t = useTranslations("page.Tools");
@@ -49,9 +90,9 @@ const Page = () => {
             ))}
           </div>
         </div>
+        <div className="divider my-0" />
         {["all", "public"].includes(filter) && publicTools.length > 0 && (
           <div className="flex flex-col gap-2">
-            <div className="divider my-0" />
             <div className="text-lg font-bold">{t("public-tools")}</div>
             <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {publicTools.map((tool, index) => (
@@ -69,12 +110,12 @@ const Page = () => {
         )}
         {["all", "custom"].includes(filter) && customTools.length > 0 && (
           <div className="flex flex-col gap-4">
-            <div className="divider my-0" />
             <div className="text-lg font-bold">{t("custom-tools")}</div>
             <div className="text-sm text-base-content/50">
               {t("custom-tools-description")}
             </div>
             <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <NewToolCard />
               {customTools.map((tool, index) => (
                 <ToolCard
                   tool={tool}

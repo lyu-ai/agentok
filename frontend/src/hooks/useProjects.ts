@@ -3,6 +3,78 @@ import useProjectStore, { Project } from '@/store/projects';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { fetcher } from './fetcher';
 import { ProjectTemplate } from '@/store/templates';
+import { Node, Edge } from "reactflow";
+
+export const initialNodes: Node[] = [
+  {
+    id: "1001",
+    type: "initializer",
+    data: {
+      name: "Initializer",
+      label: "initializer",
+      class: "Initializer",
+      sample_messages: [
+        "Write a poem based on recent headlines about Vancouver.",
+      ],
+    },
+    position: { x: -133, y: 246 },
+  },
+  {
+    id: "1",
+    type: "user",
+    data: {
+      name: "User",
+      label: "user",
+      class: "UserProxyAgent",
+      human_input_mode: "NEVER",
+      termination_msg: "TERMINATE",
+      enable_code_execution: true,
+      max_consecutive_auto_reply: 10,
+      tools: { execution: [172278707085517] },
+    },
+    position: { x: 271, y: 222 },
+  },
+  {
+    id: "2",
+    type: "assistant",
+    data: {
+      name: "Assistant",
+      type: "assistant",
+      label: "assistant",
+      class: "AssistantAgent",
+      max_consecutive_auto_reply: 10,
+      tools: { llm: [172278707085517] },
+    },
+    position: { x: 811, y: 216 },
+  },
+  {
+    id: "998",
+    type: "note",
+    data: {
+      name: "Note",
+      label: "note",
+      class: "Note",
+      content:
+        "Click **Start Chat** to show the chat pane, and in chat pane, select a sample question to start the conversation.",
+    },
+    position: { x: 87, y: 740 },
+  },
+];
+
+export const initialEdges: Edge[] = [
+  {
+    id: "1001-1",
+    source: "1001",
+    target: "1",
+  },
+  {
+    id: "1-2",
+    source: "1",
+    target: "2",
+    animated: true,
+    type: "converse",
+  },
+];
 
 export function useProjects() {
   const { data, error, mutate } = useSWR('/api/projects', fetcher, {

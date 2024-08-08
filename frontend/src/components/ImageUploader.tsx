@@ -62,14 +62,14 @@ const ImageUploader = ({
             <div className="loading loading-xs" />
           </div>
         ) : previewUrl ? (
-          <div className="relative inline-block">
+          <div className="relative inline-block p-2">
             <img
               src={previewUrl}
               alt="Uploaded"
               className="block max-w-full max-h-72"
             />
-            <div className="absolute inset-0 flex items-center justify-center bg-base-content opacity-0 hover:opacity-90 transition-opacity">
-              <RiImageAddLine className="w-10 h-10 text-primary" />
+            <div className="absolute inset-0 flex items-center justify-center bg-base-content opacity-0 hover:opacity-95 hover:backdrop-blur-md transition-opacity">
+              <RiImageAddLine className="w-9 h-9 text-base-200" />
             </div>
           </div>
         ) : (

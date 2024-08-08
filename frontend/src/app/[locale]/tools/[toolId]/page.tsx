@@ -21,7 +21,7 @@ const Page = ({ params }: { params: { toolId: string } }) => {
         <div className="flex items-start justify-between w-full gap-1">
           <div className="flex items-center gap-2">
             <ImageUploader
-              imageUrl={tool.logo_url ?? "/images/tools-solid.svg"}
+              imageUrl={tool.logo_url ?? "/images/tools.svg"}
               storagePath="/images/tools"
               onUpdate={(url) => setToolData("logo_url", url)}
               className="w-20 h-20 flex-shrink-0 rounded"
