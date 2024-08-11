@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { RiDeleteBin4Line, RiTextBlock } from "react-icons/ri";
 
 const ChunkCard = ({
@@ -14,11 +14,20 @@ const ChunkCard = ({
   ...props
 }: any) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [enabled, setEnabled] = useState(chunk.enabled || true);
   const handleDelete = async (e: any) => {
     e.stopPropagation();
     setIsDeleting(true);
     onDelete && (await onDelete(document).finally(() => setIsDeleting(false)));
   };
+
+  useEffect(() => {
+    setEnabled(chunk.enabled || true);
+  }, [chunk]);
+
+  useEffect(() => {
+    onUpdate(chunk.id, { enabled });
+  }, [enabled]);
 
   if (!document) {
     return null;
@@ -42,12 +51,12 @@ const ChunkCard = ({
         <input
           type="checkbox"
           className="toggle toggle-xs toggle-success"
-          checked={chunk.enabled}
+          checked={enabled}
           onChange={(e) => {
-            e.stopPropagation();
             e.preventDefault();
-            onUpdate({ enabled: e.target.checked });
+            setEnabled(e.target.checked);
           }}
+          onClick={(e) => e.stopPropagation()}
         />
       </div>
       <div className="p-1">

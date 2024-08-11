@@ -4,7 +4,7 @@ import { getFileIcon } from "@/utils/icon";
 import clsx from "clsx";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { RiDeleteBin4Line, RiEyeCloseLine, RiEyeLine } from "react-icons/ri";
+import { RiDeleteBin4Line } from "react-icons/ri";
 
 const DocumentCard = ({
   document,
@@ -22,6 +22,9 @@ const DocumentCard = ({
     onDelete && (await onDelete(document).finally(() => setIsDeleting(false)));
   };
   const [enabled, setEnabled] = useState(document.enabled || true);
+  useEffect(() => {
+    setEnabled(document.enabled || true);
+  }, [document]);
   useEffect(() => {
     updateDocument({ enabled: !document.enabled });
   }, [enabled]);
@@ -62,12 +65,12 @@ const DocumentCard = ({
           <input
             type="checkbox"
             className="toggle toggle-xs toggle-success"
-            checked={document.enabled}
+            checked={enabled}
             onChange={(e) => {
-              e.stopPropagation();
               e.preventDefault();
               setEnabled(e.target.checked);
             }}
+            onClick={(e) => e.stopPropagation()}
           />
           <div className="text-xs text-base-content/50 px-2 py-0.5 border border-base-content/20 rounded-full">
             {document.status === "completed" ? (
