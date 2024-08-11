@@ -53,7 +53,7 @@ export async function POST(
 
     return NextResponse.json(data);
   } catch (e) {
-    console.error(`Failed POST /tools/${params.id}: ${e}`);
+    console.error(`Failed POST /tools/${params.id}: ${JSON.stringify(e)}`);
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }

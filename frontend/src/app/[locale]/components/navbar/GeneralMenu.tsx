@@ -3,22 +3,12 @@
 import clsx from "clsx";
 import Link from "next/link";
 import {
-  RiApps2Line,
-  RiApps2Fill,
   RiRobot2Line,
   RiRobot2Fill,
   RiCompassFill,
   RiCompassLine,
-  RiBankFill,
-  RiBankLine,
-  RiBriefcase4Line,
-  RiBriefcase4Fill,
   RiDatabase2Line,
   RiDatabase2Fill,
-  RiToolsLine,
-  RiToolsFill,
-  RiShuffleFill,
-  RiShuffleLine,
   RiHammerLine,
   RiHammerFill,
 } from "react-icons/ri";

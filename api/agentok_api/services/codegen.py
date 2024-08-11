@@ -128,7 +128,20 @@ class CodegenService:
             if tool_id in tool_assignments
         }
 
-        print("user", self.supabase.get_user())
+        datasets = self.supabase.fetch_datasets()
+        dataset_prompts = self.generate_dataset_prompts(datasets)
+        # Filter out all the agents that assigned RAG tool for execution
+        # If conversable node is assigned RAG tool, it will be enabled for both exeuction and llm
+        nodes_for_rag_execution = [
+            node["id"]
+            for node in user_nodes + conversable_nodes
+            if node["data"].get("enable_rag") is True
+        ]
+        nodes_for_rag_llm = [
+            node["id"]
+            for node in assistant_nodes + conversable_nodes
+            if node["data"].get("enable_rag") is True
+        ]
 
         code = template.render(
             project=project,
@@ -147,6 +160,10 @@ class CodegenService:
             note_nodes=note_nodes,
             tool_dict=tool_dict,
             tool_assignments=tool_assignments,
+            datasets=datasets,
+            dataset_prompts=dataset_prompts,
+            nodes_for_rag_execution=nodes_for_rag_execution,
+            nodes_for_rag_llm=nodes_for_rag_llm,
         )
 
         return code
@@ -305,6 +322,25 @@ class CodegenService:
         replaced_code = re.sub(pattern, replacer, tool["code"])
 
         return replaced_code
+
+    def generate_dataset_prompts(self, datasets):
+        # Create a description that includes information about all datasets
+        datasets_info = "\n".join(
+            [
+                f"- Dataset ID {d['id']}: {d['name']} - {d['description']}"
+                for d in datasets
+            ]
+        )
+
+        dataset_prompt = f"""
+        Retrieves relevant information and generates a response based on the query.
+        Available datasets:
+        {datasets_info}
+
+        Choose the appropriate dataset ID based on the query.
+        """
+
+        return dataset_prompt
 
     def generate_tool(self, tool: Tool):
         """Generate code based on the provided function meta information.

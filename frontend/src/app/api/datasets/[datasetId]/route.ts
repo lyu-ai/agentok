@@ -6,14 +6,17 @@ export async function GET(
   { params }: { params: { datasetId: string } }
 ) {
   try {
-    const supabase = createClient();
-    await getSupabaseSession(); // Ensure user is authenticated
     const datasetId = parseInt(params.datasetId, 10);
+    const supabase = createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError) throw new Error('Failed to authenticate');
+    if (!user) throw new Error('Not authenticated');
 
     const { data, error } = await supabase
       .from('datasets')
       .select('*')
       .eq('id', datasetId)
+      .eq('user_id', user.id)
       .single();
 
     if (error) throw error;
@@ -32,7 +35,9 @@ export async function POST(
   const datasetId = parseInt(params.datasetId, 10);
   try {
     const supabase = createClient();
-    await getSupabaseSession(); // Ensure user is authenticated
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError) throw new Error('Failed to authenticate');
+    if (!user) throw new Error('Not authenticated');
     const dataset = await request.json();
 
     console.log('POST /datasets', datasetId, dataset);
@@ -41,6 +46,7 @@ export async function POST(
       .from('datasets')
       .update(dataset)
       .eq('id', datasetId)
+      .eq('user_id', user.id)
       .select()
       .single();
 
@@ -59,13 +65,16 @@ export async function DELETE(
 ) {
   try {
     const supabase = createClient();
-    await getSupabaseSession(); // Ensure user is authenticated
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError) throw new Error('Failed to authenticate');
+    if (!user) throw new Error('Not authenticated');
     const datasetId = parseInt(params.datasetId, 10);
 
     const { error } = await supabase
       .from('datasets')
       .delete()
-      .eq('id', datasetId);
+      .eq('id', datasetId)
+      .eq('user_id', user.id);
 
     if (error) throw error;
 

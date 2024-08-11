@@ -68,6 +68,7 @@
       "max-consecutive-auto-reply": "Max Consecutive Auto-Replies",
       "termination-msg": "Termination Message",
       "disable-llm": "Disable LLM",
+      "enable-rag": "Enable RAG (Retrieval Augmented Generation)",
       "enable-code-execution": "Enable Code Execution",
       "options": "More Options"
     },

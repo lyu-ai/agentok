@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient, getSupabaseSession } from '@/utils/supabase/server';
+import { NextRequest, NextResponse } from "next/server";
+import { createClient, getSupabaseSession } from "@/utils/supabase/server";
 
 const NEXT_PUBLIC_BACKEND_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5004';
+  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5004";
 
 export async function GET(
   request: NextRequest,
@@ -13,17 +13,25 @@ export async function GET(
     await getSupabaseSession(); // Ensure user is authenticated
     const datasetId = parseInt(params.datasetId, 10);
 
-    const { data: project, error } = await supabase
-      .from('documents')
-      .select('*')
-      .eq('dataset_id', datasetId)
-      .single();
+    const { data: documents, error } = await supabase
+      .from("documents")
+      .select("*")
+      .order("id", { ascending: true })
+      .eq("dataset_id", datasetId);
+
+    if (error && error.code === "PGRST116") {
+      return NextResponse.json([]);
+    }
+
+    console.log(`GET /datasets/${params.datasetId}/documents`, documents);
 
     if (error) throw error;
 
-    return NextResponse.json(project);
+    return NextResponse.json(documents);
   } catch (e) {
-    console.error(`Failed GET /datasets/${params.datasetId}/documents: ${e}`);
+    console.error(
+      `Failed GET /datasets/${params.datasetId}/documents: ${JSON.stringify(e)}`
+    );
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
@@ -39,23 +47,29 @@ export async function POST(
 
     console.log(`POST /datasets/${datasetId}/documents`, formData);
 
-    const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/v1/datasets/${datasetId}/documents`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.access_token}`,
-      },
-      body: formData,
-    });
+    const res = await fetch(
+      `${NEXT_PUBLIC_BACKEND_URL}/v1/datasets/${datasetId}/documents`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: formData,
+      }
+    );
 
     if (!res.ok) {
       const errorData = await res.json();
-      throw new Error(errorData.detail || 'Failed to upload document');
+      throw new Error(errorData.detail || "Failed to upload document");
     }
     const data = await res.json();
     return NextResponse.json(data);
   } catch (e) {
-    console.error(`Failed POST /datasets/${params.datasetId}/documents: ${e}`);
+    console.error(
+      `Failed POST /datasets/${params.datasetId}/documents: ${JSON.stringify(
+        e
+      )}`
+    );
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }

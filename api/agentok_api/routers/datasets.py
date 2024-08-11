@@ -4,7 +4,7 @@ from typing import List
 from regex import D
 from ..services import DatasetService
 from ..dependencies import get_dataset_service
-from ..models import Dataset, DatasetCreate, Document
+from ..models import Dataset, DatasetCreate, DatasetQuery, Document
 
 router = APIRouter()
 
@@ -200,6 +200,23 @@ async def delete_chunk(
 ):
     try:
         result = service.delete_chunk(chunk_id)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.post(
+    "/{dataset_id}/retrieve",
+    summary="Retrieval test on a dataset",
+    response_model=List[dict],
+)
+async def retrieve(
+    dataset_id: str,
+    query: DatasetQuery,
+    service: DatasetService = Depends(get_dataset_service),
+):
+    try:
+        result = service.retrieve(dataset_id, query.query, 5)
         return result
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))

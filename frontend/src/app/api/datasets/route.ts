@@ -6,11 +6,13 @@ export async function GET(
 ) {
   try {
     const supabase = createClient();
-    await getSupabaseSession(); // Ensure user is authenticated
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError) throw new Error('Failed to authenticate');
+    if (!user) throw new Error('Not authenticated');
 
     const { data: dataset, error } = await supabase
       .from('datasets')
-      .select('*');
+      .select('*').eq('user_id', user.id);
 
     console.log('GET /datasets', dataset);
 
@@ -28,11 +30,13 @@ export async function POST(
 ) {
   try {
     const supabase = createClient();
-    await getSupabaseSession(); // Ensure user is authenticated
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError) throw new Error('Failed to authenticate');
+    if (!user) throw new Error('Not authenticated');
     const dataset = await request.json();
 
     console.log(`POST /datasets`, dataset);
-    dataset.user_id = 'user_id'; // Add the user_id to the dataset
+    dataset.user_id = user.id; // Add the user_id to the dataset
 
     const { data, error } = await supabase
       .from('datasets')

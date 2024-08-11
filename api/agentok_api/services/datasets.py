@@ -120,3 +120,8 @@ class DatasetService:
 
     def delete_chunk(self, chunk_id: str) -> dict:
         return self.supabase.delete_chunk(chunk_id)
+
+    def retrieve(self, dataset_id: str, query: str, top_k: int) -> list:
+        query_vector = self.model.encode(query).tolist()
+        chunks = self.supabase.search_chunks(dataset_id, query_vector, top_k)
+        return chunks

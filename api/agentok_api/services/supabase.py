@@ -567,6 +567,7 @@ class SupabaseClient:
                         "content": chunk,
                         "chunk_index": idx,
                         "embedding": embedding,
+                        "user_id": self.user_id,
                     }
                 ]
             )
@@ -767,6 +768,18 @@ class SupabaseClient:
         except Exception as e:
             logger.error(f"An error occurred during uploading document: {e}")
             raise
+
+    def search_chunks(self, dataset_id, query_vector, top_k):
+        result = self.supabase.rpc(
+            "search_chunks_by_dataset",
+            {
+                "p_dataset_id": dataset_id,
+                "p_query_vector": query_vector,
+                "p_limit": top_k,
+            },
+        ).execute()
+        print("search_chunks", result)
+        return result.data
 
 
 def create_supabase_client():

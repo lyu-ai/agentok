@@ -4,7 +4,7 @@ import ToolCard from "./components/ToolCard";
 import { useState } from "react";
 import ToolConfig from "./components/ToolConfig";
 import { usePublicTools, useTools } from "@/hooks";
-import { RiHammerLine, RiToolsFill } from "react-icons/ri";
+import { RiHammerFill, RiHammerLine, RiToolsFill } from "react-icons/ri";
 import { faker } from "@faker-js/faker";
 import { useRouter } from "next/navigation";
 import { genId } from "@/utils/id";
@@ -66,8 +66,8 @@ const Page = () => {
         className="drawer-toggle"
       />
       <div className="drawer-content flex flex-col p-2 gap-4">
-        <div className="flex gap-2">
-          <RiToolsFill className="w-16 h-16 text-primary" />
+        <div className="flex items-center gap-4 p-2 border-b border-base-content/10">
+          <RiHammerLine className="w-12 h-12" />
           <div className="flex flex-col gap-2">
             <div className="text-2xl font-bold">{t("title")}</div>
             <div className="">{t("description")}</div>
@@ -89,7 +89,6 @@ const Page = () => {
             ))}
           </div>
         </div> */}
-        <div className="divider my-0" />
         {["all", "public"].includes(filter) && publicTools.length > 0 && (
           <div className="flex flex-col gap-2">
             <div className="text-lg font-bold">{t("public-tools")}</div>

@@ -10,12 +10,16 @@ import clsx from "clsx";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
+  RiAddLargeLine,
   RiAddLine,
   RiArrowDownSLine,
+  RiHome2Line,
+  RiListRadio,
   RiShuffleFill,
   RiShuffleLine,
 } from "react-icons/ri";
 import { toast } from "react-toastify";
+import { Tooltip } from "react-tooltip";
 
 const ProjectPicker = () => {
   const router = useRouter();
@@ -55,7 +59,7 @@ const ProjectPicker = () => {
   return (
     <div
       className={clsx(
-        "group flex items-center gap-0.5 z-10 hover:text-primary cursor-pointer",
+        "group flex items-center gap-0.5 hover:text-primary cursor-pointer",
         {
           "text-primary/80 border-b border-primary/80": isActive,
         }
@@ -81,31 +85,40 @@ const ProjectPicker = () => {
         </ListboxButton>
         <ListboxOptions
           anchor="bottom end"
-          className="flex flex-col p-2 bg-base-200 dark:bg-gray-700 rounded mt-1 min-w-48 gap-1 shadow dark:border dark:border-gray-600 z-20"
+          className="flex flex-col p-2 bg-base-200 dark:bg-gray-700 rounded mt-1 min-w-48 gap-1 shadow dark:border dark:border-gray-600"
         >
-          <div className="flex items-center gap-2 py-2 justify-between border-b border-base-content/10">
+          <div className="flex items-center gap-2 border-b border-base-content/10">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-bold">Projects</span>
+              <Link
+                href="/projects"
+                className="btn btn-xs btn-square"
+                data-tooltip-id="projects-tooltip"
+                data-tooltip-content="Back to Project List"
+                data-tooltip-place="bottom"
+              >
+                <RiListRadio className="h-4 w-4" />
+              </Link>
             </div>
             <button
               onClick={onCreateProject}
-              className={clsx("btn btn-xs btn-outline btn-circle")}
-              data-tooltip-id="nav-tooltip"
+              className={clsx("btn btn-xs btn-square")}
+              data-tooltip-id="projects-tooltip"
               data-tooltip-content="Start a New Project"
               data-tooltip-place="bottom"
             >
-              {!isCreating && <RiAddLine />}
+              {!isCreating && <RiAddLargeLine />}
               {isCreating && (
                 <div className="loading loading-primary w-5 h-5" />
               )}
             </button>
+            <Tooltip id="projects-tooltip" place="bottom" />
           </div>
           {projects.length > 0 &&
             projects.map((project) => (
               <ListboxOption
                 key={project.id}
                 value={project}
-                className="group flex items-center gap-2 text-sm rounded px-4 py-2 data-[selected]:border data-[selected]:border-base-content/20 data-[focus]:bg-base-content/10 cursor-pointer"
+                className="group flex items-center gap-2 text-sm rounded p-2 data-[selected]:border data-[selected]:border-base-content/20 data-[focus]:bg-base-content/10 cursor-pointer"
               >
                 <Icon className="h-4 w-4" />
                 {project.name}
