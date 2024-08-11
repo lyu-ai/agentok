@@ -30,6 +30,9 @@ unstructured = "*"
 uvicorn = "^0.30.5"
 supabase = "^2.6.0"
 python-multipart = "^0.0.9"
+tavily-python = "^0.3.7"
+cohere = "^5.8.0"
+pymongo = "^4.8.0"
 
 [tool.poetry.dev-dependencies]
 black = "^24.3"
