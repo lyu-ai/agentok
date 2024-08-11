@@ -194,6 +194,12 @@ class ChatManager:
     async def abort_assistant(self, chat_id: str):
         proc_info = self._subprocesses.get(chat_id)
         if not proc_info:
+            print(
+                colored(
+                    f"No assistant found with that chat ID. {chat_id}, {self._subprocesses}",
+                    "red",
+                )
+            )
             return {"error": f"No assistant found with that chat ID. {chat_id}"}
 
         process = proc_info["process"]
