@@ -24,20 +24,25 @@ jobs:
       - name: Send Discord notification
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_ANN }}
-          RELEASE_TAG: ${{ env.RELEASE_TAG || github.event.release.tag_name }}
-          RELEASE_NAME: ${{ env.RELEASE_NAME || github.event.release.name }}
-          RELEASE_URL: ${{ env.RELEASE_URL || github.event.release.html_url }}
+          RELEASE_TAG: ${{ env.RELEASE_TAG }}
+          RELEASE_URL: ${{ env.RELEASE_URL }}
         run: |
           sudo apt-get update && sudo apt-get install -y pandoc
-          RELEASE_BODY=$(pandoc -f markdown -t plain release_body.txt | sed 's/^#* //g' | sed 's/`//g')
+          RELEASE_BODY=$(pandoc -f markdown -t plain release_body.txt | 
+            sed 's/^#* //g' | 
+            sed 's/`//g' | 
+            sed -E 's/^[0-9]+\.[0-9]+\.[0-9]+ \([0-9]{4}-[0-9]{2}-[0-9]{2}\)//g' | 
+            sed '/^$/N;/^\n$/D' |
+            sed -E 's/^(Bug Fixes|Features|BREAKING CHANGES)/**\1**/g' |
+            sed -E 's/^([A-Z][a-z]+ [A-Z][a-z]+)/**\1**/g')
           echo "Sending notification for release: $RELEASE_TAG"
           curl -H "Content-Type: application/json" -X POST -d @- $DISCORD_WEBHOOK <<EOF
           {
             "embeds": [{
               "title": "New Release: $RELEASE_TAG",
-              "description": "$RELEASE_NAME\n\n$RELEASE_BODY",
+              "description": "$RELEASE_BODY",
               "url": "$RELEASE_URL",
-              "color": 3066993
+              "color": 11530902
             }]
           }
           EOF
