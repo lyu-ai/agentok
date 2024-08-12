@@ -2,14 +2,22 @@ name: Discord Release Notification
 
 on:
   release:
-    types: [published]
+    types: [published, created, edited]
+  workflow_dispatch:
 
 jobs:
   notify_discord:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJson(job) }}
+        run: echo "$JOB_CONTEXT"
 
       - name: Send Discord notification
         env:
@@ -19,6 +27,7 @@ jobs:
           RELEASE_BODY: ${{ github.event.release.body }}
           RELEASE_URL: ${{ github.event.release.html_url }}
         run: |
+          echo "Sending notification for release: $RELEASE_TAG"
           curl -H "Content-Type: application/json" -X POST -d @- $DISCORD_WEBHOOK <<EOF
           {
             "embeds": [{
