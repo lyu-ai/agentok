@@ -18,25 +18,19 @@ jobs:
             "https://api.github.com/repos/${{ github.repository }}/releases/latest")
           echo "RELEASE_TAG=$(echo $latest_release | jq -r .tag_name)" >> $GITHUB_ENV
           echo "RELEASE_NAME=$(echo $latest_release | jq -r .name)" >> $GITHUB_ENV
-          printf "RELEASE_BODY=%s\n" "$(echo $latest_release | jq -r .body)" >> $GITHUB_ENV
+          echo "RELEASE_BODY=$(echo $latest_release | jq -r .body | base64 -w 0)" >> $GITHUB_ENV
           echo "RELEASE_URL=$(echo $latest_release | jq -r .html_url)" >> $GITHUB_ENV
 
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
-      - name: Dump job context
-        env:
-          JOB_CONTEXT: ${{ toJson(job) }}
-        run: echo "$JOB_CONTEXT"
+      - name: Decode release body
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: echo "RELEASE_BODY_DECODED=$(echo $RELEASE_BODY | base64 --decode)" >> $GITHUB_ENV
 
       - name: Send Discord notification
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_ANN }}
           RELEASE_TAG: ${{ env.RELEASE_TAG || github.event.release.tag_name }}
           RELEASE_NAME: ${{ env.RELEASE_NAME || github.event.release.name }}
-          RELEASE_BODY: ${{ env.RELEASE_BODY || github.event.release.body }}
+          RELEASE_BODY: ${{ env.RELEASE_BODY_DECODED || github.event.release.body }}
           RELEASE_URL: ${{ env.RELEASE_URL || github.event.release.html_url }}
         run: |
           echo "Sending notification for release: $RELEASE_TAG"
