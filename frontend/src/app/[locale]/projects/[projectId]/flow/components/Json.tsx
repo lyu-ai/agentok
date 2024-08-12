@@ -101,7 +101,7 @@ const Json = ({ data, setMode, onSave }: any) => {
           <RiSaveLine className="w-4 h-4" />
         </button>
         <ViewToggle mode={"python"} setMode={setMode} />
-        <CopyButton content={json} />
+        <CopyButton content={code} />
         <DownloadButton
           data={JSON.stringify(data, null, 2)}
           label={t("download")}
