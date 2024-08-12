@@ -40,10 +40,10 @@ const useToolStore = create<ToolState>()(
   persist(
     (set, get) => ({
       tools: [],
-      setTools: tools => set({ tools }),
+      setTools: (tools) => set({ tools }),
       updateTool: (id, newTool) =>
-        set(state => {
-          const tools = state.tools.map(tool => {
+        set((state) => {
+          const tools = state.tools.map((tool) => {
             if (tool.id === id) {
               return { ...newTool, ...tool };
             }
@@ -51,12 +51,12 @@ const useToolStore = create<ToolState>()(
           });
           return { tools };
         }),
-        deleteTool: id =>
-        set(state => ({
-          tools: state.tools.filter(t => t.id !== id),
+      deleteTool: (id) =>
+        set((state) => ({
+          tools: state.tools.filter((t) => t.id !== id),
         })),
-        getToolById: id =>
-        id ? get().tools.find(tool => tool.id === id) : undefined,
+      getToolById: (id) =>
+        id ? get().tools.find((tool) => tool.id === id) : undefined,
     }),
     {
       name: 'agentok-projects',

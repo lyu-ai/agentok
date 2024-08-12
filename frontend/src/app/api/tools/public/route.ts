@@ -4,7 +4,10 @@ import { createClient, getSupabaseSession } from '@/utils/supabase/server';
 export async function GET(request: NextRequest) {
   try {
     const supabase = createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
     if (authError) throw new Error('Failed to authenticate');
     if (!user) throw new Error('Not authenticated');
 

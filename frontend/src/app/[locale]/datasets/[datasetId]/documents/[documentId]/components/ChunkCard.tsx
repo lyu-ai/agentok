@@ -1,7 +1,7 @@
-"use client";
-import clsx from "clsx";
-import { use, useEffect, useState } from "react";
-import { RiDeleteBin4Line, RiTextBlock } from "react-icons/ri";
+'use client';
+import clsx from 'clsx';
+import { use, useEffect, useState } from 'react';
+import { RiDeleteBin4Line, RiTextBlock } from 'react-icons/ri';
 
 const ChunkCard = ({
   datasetId,
@@ -37,8 +37,8 @@ const ChunkCard = ({
     <div
       onClick={() => onSelect(chunk)}
       className={clsx(
-        "relative group w-full flex flex-col gap-1 max-w-sm rounded-md border cursor-pointer hover:shadow-box",
-        "bg-base-content/10 border-base-content/20 hover:bg-base-content/20 hover:shadow-gray-700",
+        'relative group w-full flex flex-col gap-1 max-w-sm rounded-md border cursor-pointer hover:shadow-box',
+        'bg-base-content/10 border-base-content/20 hover:bg-base-content/20 hover:shadow-gray-700',
         className
       )}
       {...props}

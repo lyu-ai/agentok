@@ -1,10 +1,10 @@
-import clsx from "clsx";
-import { useState } from "react";
-import { RiTextBlock } from "react-icons/ri";
+import clsx from 'clsx';
+import { useState } from 'react';
+import { RiTextBlock } from 'react-icons/ri';
 
 const RetrieveTestPane = ({ dataset }: any) => {
-  const [query, setQuery] = useState("");
-  const [lastQuery, setLastQuery] = useState("");
+  const [query, setQuery] = useState('');
+  const [lastQuery, setLastQuery] = useState('');
   const [chunks, setChunks] = useState([]);
   const [isTesting, setIsTesting] = useState(false);
   const handleSend = async () => {
@@ -12,7 +12,7 @@ const RetrieveTestPane = ({ dataset }: any) => {
     try {
       // Send test message
       await fetch(`/api/datasets/${dataset.id}/retrieve`, {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify({ query, top_k: 5 }),
       })
         .then((res) => {
@@ -25,7 +25,7 @@ const RetrieveTestPane = ({ dataset }: any) => {
           setChunks(data);
         });
       setLastQuery(query);
-      setQuery(""); // clear input only when sent successfully
+      setQuery(''); // clear input only when sent successfully
     } catch (error) {
       console.error(error);
     } finally {
@@ -35,7 +35,7 @@ const RetrieveTestPane = ({ dataset }: any) => {
   const handleKeyDown = (event: any) => {
     // event.nativeEvent.isComposing === true when the user is typing in a CJK IME.
     if (
-      event.key === "Enter" &&
+      event.key === 'Enter' &&
       !event.shiftKey &&
       !event.nativeEvent.isComposing
     ) {
@@ -81,7 +81,7 @@ const RetrieveTestPane = ({ dataset }: any) => {
       <div className="p-1 border-t border-base-content/20 flex items-center gap-1">
         <input
           className="w-full bg-transparent text-sm"
-          placeholder={"Enter test message"}
+          placeholder={'Enter test message'}
           value={query}
           autoFocus
           onKeyDown={handleKeyDown}
@@ -89,11 +89,11 @@ const RetrieveTestPane = ({ dataset }: any) => {
         />
         <button
           onClick={handleSend}
-          className={clsx("btn btn-sm btn-primary", {
-            "btn-disabled": query === "",
+          className={clsx('btn btn-sm btn-primary', {
+            'btn-disabled': query === '',
           })}
         >
-          {isTesting ? <div className="loading loading-xs" /> : "Send"}
+          {isTesting ? <div className="loading loading-xs" /> : 'Send'}
         </button>
       </div>
     </div>

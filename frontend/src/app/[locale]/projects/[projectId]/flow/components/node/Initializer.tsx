@@ -33,7 +33,7 @@ const Initializer = ({ id, data, ...props }: any) => {
               : data.sample_messages
             : ''
         }
-        onChange={e =>
+        onChange={(e) =>
           setNodeData(instance, id, {
             sample_messages: e.target.value.split('\n'),
           })

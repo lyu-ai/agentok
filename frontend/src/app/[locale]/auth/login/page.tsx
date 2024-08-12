@@ -122,7 +122,7 @@ const Login = ({
 
         <form
           className="flex flex-col w-full justify-center border border-base-content/20 bg-base-content/10 rounded-md p-4 gap-2 text-foreground"
-          onSubmit={e => {
+          onSubmit={(e) => {
             e.preventDefault();
             signIn();
           }}
@@ -134,7 +134,7 @@ const Login = ({
             className="input input-bordered rounded py-2 bg-primary/20 mb-2"
             name="email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder={t('email-placeholder')}
             autoComplete="email"
             required
@@ -147,7 +147,7 @@ const Login = ({
             type="password"
             name="password"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder={t('password-placeholder')}
             autoComplete="current-password"
             required

@@ -1,14 +1,14 @@
-"use client";
-import { initialEdges, initialNodes, useProjects } from "@/hooks";
+'use client';
+import { initialEdges, initialNodes, useProjects } from '@/hooks';
 import {
   Listbox,
   ListboxButton,
   ListboxOption,
   ListboxOptions,
-} from "@headlessui/react";
-import clsx from "clsx";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+} from '@headlessui/react';
+import clsx from 'clsx';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   RiAddLargeLine,
   RiAddLine,
@@ -17,9 +17,9 @@ import {
   RiListRadio,
   RiShuffleFill,
   RiShuffleLine,
-} from "react-icons/ri";
-import { toast } from "react-toastify";
-import { Tooltip } from "react-tooltip";
+} from 'react-icons/ri';
+import { toast } from 'react-toastify';
+import { Tooltip } from 'react-tooltip';
 
 const ProjectPicker = () => {
   const router = useRouter();
@@ -32,24 +32,24 @@ const ProjectPicker = () => {
     activeProjectId,
     getProjectById,
   } = useProjects();
-  const isActive = pathname.startsWith("/projects");
+  const isActive = pathname.startsWith('/projects');
 
   const onCreateProject = async () => {
     const newProject = await createProject({
       id: -1, // Will be replaced by actual id from server side
-      name: "New Project",
-      description: "A new project with sample flow.",
+      name: 'New Project',
+      description: 'A new project with sample flow.',
       flow: {
         nodes: initialNodes,
         edges: initialEdges,
       },
     });
     if (!newProject) {
-      toast.error("Failed to create project");
+      toast.error('Failed to create project');
       return;
     }
 
-    toast.success("Project created. Now jumping to project page.");
+    toast.success('Project created. Now jumping to project page.');
     router.push(`/projects/${newProject.id}/flow`);
   };
 
@@ -57,23 +57,23 @@ const ProjectPicker = () => {
   const activeProject = getProjectById(activeProjectId);
 
   return (
-    <div className={clsx("join group flex items-center gap-2")}>
+    <div className={clsx('join group flex items-center gap-2')}>
       <Link
         href={
-          activeProject ? `/projects/${activeProject?.id}/flow` : "/projects"
+          activeProject ? `/projects/${activeProject?.id}/flow` : '/projects'
         }
         className="join-item flex items-center gap-1.5 text-sm"
       >
         <Icon className="h-4 w-4 group-hover:scale-125 transform transition duration-700 ease-in-out" />
         <span className="text-ellipsis overflow-hidden whitespace-nowrap max-w-24">
-          {activeProject?.name || "Projects"}
+          {activeProject?.name || 'Projects'}
         </span>
       </Link>
       <Listbox
-        value={activeProject || { id: -1, name: "Select Project" }}
+        value={activeProject || { id: -1, name: 'Select Project' }}
         onChange={(v) => router.push(`/projects/${v?.id}/flow`)}
       >
-        <ListboxButton className={clsx("join-item ")}>
+        <ListboxButton className={clsx('join-item ')}>
           <RiArrowDownSLine className="w-5 h-5" />
         </ListboxButton>
         <ListboxOptions
@@ -94,7 +94,7 @@ const ProjectPicker = () => {
             </div>
             <button
               onClick={onCreateProject}
-              className={clsx("btn btn-xs btn-square")}
+              className={clsx('btn btn-xs btn-square')}
               data-tooltip-id="projects-tooltip"
               data-tooltip-content="Start a New Project"
               data-tooltip-place="bottom"

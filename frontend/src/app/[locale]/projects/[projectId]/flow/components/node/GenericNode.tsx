@@ -1,10 +1,10 @@
-import clsx from "clsx";
+import clsx from 'clsx';
 import React, {
   PropsWithChildren,
   ReactNode,
   useEffect,
   useState,
-} from "react";
+} from 'react';
 import {
   Handle,
   NodeResizeControl,
@@ -12,22 +12,22 @@ import {
   Position,
   useReactFlow,
   NodeToolbar,
-} from "reactflow";
-import { formatData, getNodeIcon, setNodeData } from "../../utils/flow";
-import EditableText from "@/components/EditableText";
-import { useTranslations } from "next-intl";
-import { RiDeleteBin4Line, RiSettings3Line } from "react-icons/ri";
-import ResizeIcon from "@/components/ResizeIcon";
-import Option from "../option/Option";
-import { useSettings } from "@/hooks";
-import Tip from "@/components/Tip";
+} from 'reactflow';
+import { formatData, getNodeIcon, setNodeData } from '../../utils/flow';
+import EditableText from '@/components/EditableText';
+import { useTranslations } from 'next-intl';
+import { RiDeleteBin4Line, RiSettings3Line } from 'react-icons/ri';
+import ResizeIcon from '@/components/ResizeIcon';
+import Option from '../option/Option';
+import { useSettings } from '@/hooks';
+import Tip from '@/components/Tip';
 
 type Props = {
   id: string;
   data: any;
   icon?: any;
   activeIcon?: any;
-  nodeClass?: "general" | "agent" | "group"; // predefined style class of the node, such as 'primary' or 'sky-300'
+  nodeClass?: 'general' | 'agent' | 'group'; // predefined style class of the node, such as 'primary' or 'sky-300'
   nameEditable?: boolean;
   deletable?: boolean;
   resizable?: boolean;
@@ -47,7 +47,7 @@ const GenericNode = ({
   selected,
   icon,
   activeIcon,
-  nodeClass = "general",
+  nodeClass = 'general',
   nameEditable,
   deletable,
   resizable,
@@ -63,8 +63,8 @@ const GenericNode = ({
   const [editingName, setEditingName] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const controlStyle = {
-    background: "transparent",
-    border: "none",
+    background: 'transparent',
+    border: 'none',
   };
   const instance = useReactFlow();
   const { spyModeEnabled } = useSettings();
@@ -76,48 +76,48 @@ const GenericNode = ({
   } else {
     NodeIcon = getNodeIcon(data.type, selected);
   }
-  const t = useTranslations("node.Generic");
+  const t = useTranslations('node.Generic');
   const COMMON_OPTIONS = [
     {
-      type: "text",
-      name: "system_message",
-      label: t("system-message"),
-      placeholder: t("system-message-placeholder"),
+      type: 'text',
+      name: 'system_message',
+      label: t('system-message'),
+      placeholder: t('system-message-placeholder'),
       rows: 2,
     },
     {
-      type: "text",
-      name: "description",
-      label: t("description"),
-      placeholder: t("description-placeholder"),
+      type: 'text',
+      name: 'description',
+      label: t('description'),
+      placeholder: t('description-placeholder'),
       rows: 2,
     },
     {
-      type: "text",
-      name: "termination_msg",
-      label: t("termination-msg"),
+      type: 'text',
+      name: 'termination_msg',
+      label: t('termination-msg'),
       compact: true,
     },
     {
-      type: "select",
-      name: "human_input_mode",
-      label: t("human-input-mode"),
+      type: 'select',
+      name: 'human_input_mode',
+      label: t('human-input-mode'),
       options: [
-        { value: "NEVER", label: t("input-mode-never") },
-        { value: "ALWAYS", label: t("input-mode-always") },
-        { value: "TERMINATE", label: t("input-mode-terminate") },
+        { value: 'NEVER', label: t('input-mode-never') },
+        { value: 'ALWAYS', label: t('input-mode-always') },
+        { value: 'TERMINATE', label: t('input-mode-terminate') },
       ],
       compact: true,
     },
     {
-      type: "number",
-      name: "max_consecutive_auto_reply",
-      label: t("max-consecutive-auto-reply"),
+      type: 'number',
+      name: 'max_consecutive_auto_reply',
+      label: t('max-consecutive-auto-reply'),
     },
     {
-      type: "check",
-      name: "disable_llm",
-      label: t("disable-llm"),
+      type: 'check',
+      name: 'disable_llm',
+      label: t('disable-llm'),
     },
   ];
 
@@ -155,7 +155,7 @@ const GenericNode = ({
 
     const node = instance.getNode(id);
     if (!node) {
-      console.warn("The node to delete does not exist", id);
+      console.warn('The node to delete does not exist', id);
       return;
     }
     instance.deleteElements({ nodes: [node] });
@@ -166,7 +166,7 @@ const GenericNode = ({
       <div
         data-node-id={id}
         className={clsx(
-          "p-2 rounded-md border min-w-[240px] backdrop-blur-sm w-full h-full",
+          'p-2 rounded-md border min-w-[240px] backdrop-blur-sm w-full h-full',
           {
             [`node-${nodeClass}`]: nodeClass && !selected,
             [`node-${nodeClass}-selected`]: nodeClass && selected,
@@ -182,7 +182,7 @@ const GenericNode = ({
           align="end"
           className={clsx(
             `node-${nodeClass}-selected`,
-            "flex items-center gap-3 py-1 px-2 border rounded"
+            'flex items-center gap-3 py-1 px-2 border rounded'
           )}
         >
           {toolbarButtons}
@@ -190,7 +190,7 @@ const GenericNode = ({
             <div
               className="cursor-pointer hover:text-white"
               onClick={() => setShowOptions((show) => !show)}
-              data-tooltip-content={t("options")}
+              data-tooltip-content={t('options')}
               data-tooltip-id="default-tooltip"
               data-tooltip-place="top"
             >
@@ -200,7 +200,7 @@ const GenericNode = ({
           {!deletable && (
             <div
               className="cursor-pointer hover:text-white"
-              data-tooltip-content={t("delete-node-tooltip")}
+              data-tooltip-content={t('delete-node-tooltip')}
               data-tooltip-id="default-tooltip"
               data-tooltip-place="top"
               onClick={onDelete}
@@ -249,8 +249,8 @@ const GenericNode = ({
         {ports.map((port, index) => (
           <Handle
             key={index}
-            type={port.type === "input" ? "target" : "source"}
-            position={port.type === "input" ? Position.Left : Position.Right}
+            type={port.type === 'input' ? 'target' : 'source'}
+            position={port.type === 'input' ? Position.Left : Position.Right}
             id={port.name}
             className="w-16 !bg-green-600"
           />

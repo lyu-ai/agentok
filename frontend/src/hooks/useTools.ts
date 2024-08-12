@@ -16,10 +16,10 @@ export function usePublicTools() {
 
 export function useTools() {
   const { data, error, mutate } = useSWR<Tool[]>('/api/tools', fetcher);
-  const tools = useToolStore(state => state.tools);
-  const updateTool = useToolStore(state => state.updateTool);
-  const deleteTool = useToolStore(state => state.deleteTool);
-  const setTools = useToolStore(state => state.setTools);
+  const tools = useToolStore((state) => state.tools);
+  const updateTool = useToolStore((state) => state.updateTool);
+  const deleteTool = useToolStore((state) => state.deleteTool);
+  const setTools = useToolStore((state) => state.setTools);
   const prevDataRef = useRef(data);
   useEffect(() => {
     if (data && !error && data !== prevDataRef.current) {
@@ -59,7 +59,7 @@ export function useTools() {
   const handleUpdateTool = useCallback(
     async (id: number, tool: Partial<Tool>) => {
       setIsUpdating(true);
-      const previousTool = tools.find(t => t.id === id);
+      const previousTool = tools.find((t) => t.id === id);
       if (!previousTool) return;
       updateTool(id, tool);
       try {
@@ -107,7 +107,7 @@ export function useTools() {
     [data, deleteTool, setTools, mutate]
   );
 
-  const getToolById = useToolStore(state => state.getToolById);
+  const getToolById = useToolStore((state) => state.getToolById);
 
   return {
     tools: data ?? [],

@@ -220,7 +220,7 @@ export const getNodeLabel = (label: string, tNodeMeta: any) => {
 const allNodes = [...basicNodes, ...agentNodes, ...advancedNodes];
 
 export const getNodeIcon = (type: string, active?: boolean) => {
-  const nodeMeta = allNodes.find(node => node.type === type);
+  const nodeMeta = allNodes.find((node) => node.type === type);
   return (active ? nodeMeta?.activeIcon : nodeMeta?.icon) || RiQuestionLine;
 };
 
@@ -298,8 +298,8 @@ export function deepEqual(obj1: any, obj2: any, ignoreKeys: string[] = []) {
     return true;
   }
 
-  const keys1 = Object.keys(obj1).filter(key => !ignoreKeys.includes(key));
-  const keys2 = Object.keys(obj2).filter(key => !ignoreKeys.includes(key));
+  const keys1 = Object.keys(obj1).filter((key) => !ignoreKeys.includes(key));
+  const keys2 = Object.keys(obj2).filter((key) => !ignoreKeys.includes(key));
 
   if (keys1.length !== keys2.length) {
     return false;

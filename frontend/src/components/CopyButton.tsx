@@ -1,7 +1,7 @@
-import clsx from "clsx";
-import React, { useState } from "react";
-import { GoCheck, GoCopy } from "react-icons/go";
-import { PlacesType } from "react-tooltip";
+import clsx from 'clsx';
+import React, { useState } from 'react';
+import { GoCheck, GoCopy } from 'react-icons/go';
+import { PlacesType } from 'react-tooltip';
 
 const CopyButton = ({
   content,
@@ -30,12 +30,12 @@ const CopyButton = ({
       onClick={() => onCopy()}
       className={clsx(
         className,
-        "cursor-pointer",
-        !minimal && "btn btn-sm btn-ghost btn-circle"
+        'cursor-pointer',
+        !minimal && 'btn btn-sm btn-ghost btn-circle'
       )}
       data-tooltip-id="default-tooltip"
-      data-tooltip-content={tooltip ?? "Copy"}
-      data-tooltip-place={place ?? "bottom"}
+      data-tooltip-content={tooltip ?? 'Copy'}
+      data-tooltip-place={place ?? 'bottom'}
     >
       <CopyIcon className="w-4 h-4" />
     </div>

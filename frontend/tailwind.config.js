@@ -24,8 +24,8 @@ module.exports = {
         scale: 'transform',
       },
       transitionDuration: {
-        '300': '300ms',
-        '75': '75ms',
+        300: '300ms',
+        75: '75ms',
       },
       scale: {
         0: '0',
@@ -33,8 +33,8 @@ module.exports = {
         100: '1',
       },
       minWidth: {
-        '64': '16rem', // or '256px'
-        '80': '20rem', // or '320px'
+        64: '16rem', // or '256px'
+        80: '20rem', // or '320px'
       },
     },
   },

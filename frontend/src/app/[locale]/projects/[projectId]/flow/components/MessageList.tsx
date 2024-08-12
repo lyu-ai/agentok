@@ -83,9 +83,7 @@ const MessageBlock = ({ chatId, message, onSend }: any) => {
 
   let avatarIcon = <RiRobot2Fill className="w-5 h-5" />;
   if (message.type === 'user') {
-    avatarIcon = (
-      <GoPersonFill className="w-5 h-5" />
-    );
+    avatarIcon = <GoPersonFill className="w-5 h-5" />;
   } else if (message.sender === userNodeName) {
     avatarIcon = <GoPersonFill className="w-5 h-5" />;
   }

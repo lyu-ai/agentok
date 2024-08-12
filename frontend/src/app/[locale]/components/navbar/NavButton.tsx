@@ -1,9 +1,9 @@
-"use client";
-import { HiMenuAlt2 } from "react-icons/hi";
-import { Float } from "@headlessui-float/react";
-import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
-import { NAV_MENU_ITEMS } from "./Navbar";
-import { RiShuffleFill, RiShuffleLine } from "react-icons/ri";
+'use client';
+import { HiMenuAlt2 } from 'react-icons/hi';
+import { Float } from '@headlessui-float/react';
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
+import { NAV_MENU_ITEMS } from './Navbar';
+import { RiShuffleFill, RiShuffleLine } from 'react-icons/ri';
 
 const NavButton = ({ className }: any) => {
   return (
@@ -23,11 +23,11 @@ const NavButton = ({ className }: any) => {
         <PopoverPanel className="origin-top-left absolute shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 overflow-auto max-h-[80vh]">
           {[
             {
-              id: "projects",
-              label: "Projects",
+              id: 'projects',
+              label: 'Projects',
               icon: RiShuffleLine,
               activeIcon: RiShuffleFill,
-              href: "/projects",
+              href: '/projects',
             },
             ...NAV_MENU_ITEMS,
           ].map((item) => (

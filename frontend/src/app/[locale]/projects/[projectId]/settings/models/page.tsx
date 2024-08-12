@@ -16,9 +16,8 @@ const ModelCard = ({ model }: { model: LlmModel }) => {
 
 const Page = ({ params }: { params: { projectId: string } }) => {
   const projectId = parseInt(params.projectId, 10);
-  const { settings, isLoading, isError, updateSettings } = useProjectSettings(
-    projectId
-  );
+  const { settings, isLoading, isError, updateSettings } =
+    useProjectSettings(projectId);
   const { settings: globalSettings } = useSettings();
   const [filters, setFilters] = useState<{ [key: string]: string }>({});
   const [isSaving, setIsSaving] = useState(false);
@@ -30,7 +29,7 @@ const Page = ({ params }: { params: { projectId: string } }) => {
   }, [settings?.filters]);
 
   const onFilterChange = (key: string, value: string) => {
-    setFilters(prevFilters => ({
+    setFilters((prevFilters) => ({
       ...prevFilters,
       [key]: value,
     }));
@@ -79,7 +78,7 @@ const Page = ({ params }: { params: { projectId: string } }) => {
             type="text"
             placeholder="gpt4,gpt-3.5"
             value={filters?.name || ''}
-            onChange={e => onFilterChange('name', e.target.value)}
+            onChange={(e) => onFilterChange('name', e.target.value)}
             onBlur={onFilterBlur}
             className="input input-sm rounded min-w-2xl"
           />

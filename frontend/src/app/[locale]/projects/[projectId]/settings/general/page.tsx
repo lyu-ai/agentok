@@ -34,7 +34,7 @@ const Page = ({ params }: { params: { projectId: string } }) => {
           <input
             className="input input-sm input-bordered rounded"
             value={name}
-            onChange={e => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
           />
         </div>
         <div className="flex flex-col gap-2 ">
@@ -43,7 +43,7 @@ const Page = ({ params }: { params: { projectId: string } }) => {
             rows={3}
             className="textarea textarea-sm textarea-bordered rounded"
             value={description}
-            onChange={e => setDescription(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </div>
         <div className="flex items-center gap-2 ">

@@ -6,7 +6,8 @@
     "dev": "next dev -p 2855 --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@codemirror/lang-json": "^6.0.1",
@@ -58,6 +59,7 @@
     "eslint-config-next": "14.2.5",
     "husky": "^9.1.4",
     "postcss": "8.4.39",
+    "prettier": "^3.3.3",
     "typescript": "5.5.3"
   }
 }

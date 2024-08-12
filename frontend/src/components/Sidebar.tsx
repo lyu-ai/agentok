@@ -23,7 +23,7 @@ const Sidebar = ({ pathPrefix, items }: SidebarProps) => {
   const isMedium = useMediaQuery('only screen and (max-width : 769px)');
   return (
     <div className="flex flex-col gap-2 md:w-48 h-full">
-      {items.map(item => {
+      {items.map((item) => {
         const path = pathPrefix ? `${pathPrefix}${item.path}` : item.path;
         const isActive = isParentPath(pathname, path);
         const Icon = isActive && item.activeIcon ? item.activeIcon : item.icon;
@@ -33,7 +33,8 @@ const Sidebar = ({ pathPrefix, items }: SidebarProps) => {
             className={clsx(
               'flex items-center px-2 md:px-4 py-2 gap-1.5  text-sm rounded-lg hover:bg-base-content/5',
               {
-                'bg-base-100/50 dark:bg-base-content/20 shadow text-primary': isActive,
+                'bg-base-100/50 dark:bg-base-content/20 shadow text-primary':
+                  isActive,
                 'tooltip tooltip-right': isMedium,
               }
             )}

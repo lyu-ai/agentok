@@ -1,5 +1,13 @@
 import { Float } from '@headlessui-float/react';
-import { Popover, PopoverButton, PopoverPanel, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
+import {
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
+} from '@headlessui/react';
 import clsx from 'clsx';
 import { GoPlus } from 'react-icons/go';
 import { useTranslations } from 'next-intl';
@@ -19,17 +27,17 @@ const ChatListPanel = ({ onAdd }: any) => {
     data: any[] | undefined;
     isLoading: boolean;
   }[] = [
-      {
-        type: 'project',
-        data: projects,
-        isLoading: isLoadingProjects,
-      },
-      {
-        type: 'template',
-        data: templates,
-        isLoading: isLoadingTemplates,
-      },
-    ];
+    {
+      type: 'project',
+      data: projects,
+      isLoading: isLoadingProjects,
+    },
+    {
+      type: 'template',
+      data: templates,
+      isLoading: isLoadingTemplates,
+    },
+  ];
   return (
     <TabGroup>
       <TabList className="tabs tabs-bordered flex rounded-xl p-1 flex-0">
@@ -59,7 +67,7 @@ const ChatListPanel = ({ onAdd }: any) => {
               <PopoverButton
                 key={`${type}-${sourceItem.id}`}
                 onClick={() =>
-                  createChat(sourceItem.id, type).then(chat =>
+                  createChat(sourceItem.id, type).then((chat) =>
                     router.push(`/chat?id=${chat.id}`)
                   )
                 }

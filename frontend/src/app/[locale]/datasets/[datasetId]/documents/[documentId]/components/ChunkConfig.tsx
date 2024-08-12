@@ -1,9 +1,9 @@
-import PopupDialog from "@/components/PopupDialog";
-import { useEffect, useState } from "react";
-import { RiTextBlock } from "react-icons/ri";
+import PopupDialog from '@/components/PopupDialog';
+import { useEffect, useState } from 'react';
+import { RiTextBlock } from 'react-icons/ri';
 
 const ChunkConfig = ({ show, chunk, onUpdate, onClose }: any) => {
-  const [content, setContent] = useState(chunk?.content || "");
+  const [content, setContent] = useState(chunk?.content || '');
   useEffect(() => {
     if (!chunk) return;
     setContent(chunk.content);

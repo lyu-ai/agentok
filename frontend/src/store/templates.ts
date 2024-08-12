@@ -28,15 +28,15 @@ const useTemplateStore = create<ProjectTemplateState>()(
     (set, get) => ({
       // Public flows
       templates: [],
-      setTemplates: templates => set({ templates }),
-      deleteTemplate: id =>
-        set(state => {
+      setTemplates: (templates) => set({ templates }),
+      deleteTemplate: (id) =>
+        set((state) => {
           return {
-            templates: state.templates.filter(template => template.id !== id),
+            templates: state.templates.filter((template) => template.id !== id),
           };
         }),
-      getTemplateById: id => {
-        return get().templates.find(template => template.id === id);
+      getTemplateById: (id) => {
+        return get().templates.find((template) => template.id === id);
       },
     }),
     {

@@ -9,8 +9,8 @@ export function useTemplates() {
     '/api/templates',
     fetcher
   );
-  const setTemplates = useTemplateStore(state => state.setTemplates);
-  const deleteTemplate = useTemplateStore(state => state.deleteTemplate);
+  const setTemplates = useTemplateStore((state) => state.setTemplates);
+  const deleteTemplate = useTemplateStore((state) => state.deleteTemplate);
 
   useEffect(() => {
     if (data) {

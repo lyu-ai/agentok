@@ -83,8 +83,8 @@ export const genEntry = (
   }
   // Chat should be connected to an UserProxyAgent and at least one AssistantAgent to start conversation
   const chatEdges = edges.filter((edge: any) => edge.target === userProxy.id);
-  const upsteamNodes = nodes.filter(node =>
-    chatEdges.find(edge => edge.source === node.id)
+  const upsteamNodes = nodes.filter((node) =>
+    chatEdges.find((edge) => edge.source === node.id)
   );
 
   if (!upsteamNodes || upsteamNodes.length === 0) {

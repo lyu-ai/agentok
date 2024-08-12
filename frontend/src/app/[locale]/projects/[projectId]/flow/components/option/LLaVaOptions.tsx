@@ -27,7 +27,7 @@ const LLavaOptions = ({ id, data, selected }: any) => {
             type="text"
             className="input input-sm input-bordered bg-transparent rounded"
             value={data.llava_config?.base_url ?? ''}
-            onChange={e => {
+            onChange={(e) => {
               setNodeData(instance, id, {
                 llava_config: {
                   mode: 'remote',

@@ -7,10 +7,10 @@ import {
   RiFileExcelLine,
   RiFilePptLine,
   RiFileWordLine,
-} from "react-icons/ri";
+} from 'react-icons/ri';
 
 export function getFileIcon(path: string): any {
-  const fileType = path.split(".").pop() || "";
+  const fileType = path.split('.').pop() || '';
   const fileTypeToIcon: { [key: string]: any } = {
     pdf: RiFilePdf2Line,
     docx: RiFileWord2Line,

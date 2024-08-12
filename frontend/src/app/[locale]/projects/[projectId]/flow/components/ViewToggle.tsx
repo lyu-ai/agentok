@@ -1,6 +1,9 @@
 import { useTranslations } from 'next-intl';
-import { RiArrowGoBackLine, RiBracesLine, RiCodeSSlashLine } from 'react-icons/ri';
-import { GoHome } from 'react-icons/go';
+import {
+  RiArrowGoBackLine,
+  RiBracesLine,
+  RiCodeSSlashLine,
+} from 'react-icons/ri';
 
 type modeType = 'main' | 'flow' | 'json' | 'python';
 

@@ -1,15 +1,15 @@
-"use client";
-import { useDataset, useDocuments } from "@/hooks";
-import clsx from "clsx";
-import Link from "next/link";
+'use client';
+import { useDataset, useDocuments } from '@/hooks';
+import clsx from 'clsx';
+import Link from 'next/link';
 import {
   RiDeleteBin4Line,
   RiDatabaseLine,
   RiSettings4Line,
   RiFile2Line,
-} from "react-icons/ri";
-import DatasetConfig from "./DatasetConfig";
-import { useState } from "react";
+} from 'react-icons/ri';
+import DatasetConfig from './DatasetConfig';
+import { useState } from 'react';
 
 const DatasetCard = ({ dataset, ...props }: any) => {
   const { updateDataset, isUpdating, deleteDataset, isDeleting } = useDataset(
@@ -36,7 +36,7 @@ const DatasetCard = ({ dataset, ...props }: any) => {
       <Link
         href={`/datasets/${dataset.id}`}
         className={clsx(
-          "relative group w-full flex flex-col gap-2 p-3 max-w-sm min-h-48 rounded-md bg-base-content/10 border-base-content/20 hover:bg-base-content/20 border cursor-pointer hover:shadow-box hover:shadow-gray-700"
+          'relative group w-full flex flex-col gap-2 p-3 max-w-sm min-h-48 rounded-md bg-base-content/10 border-base-content/20 hover:bg-base-content/20 border cursor-pointer hover:shadow-box hover:shadow-gray-700'
         )}
         {...props}
       >

@@ -7,7 +7,10 @@ const NEXT_PUBLIC_BACKEND_URL =
 export async function GET(request: NextRequest) {
   try {
     const supabase = createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
     if (authError) throw new Error('Failed to authenticate', authError);
     if (!user) throw new Error('Not authenticated');
 
@@ -37,14 +40,19 @@ export async function POST(request: NextRequest) {
     }
 
     // Get the authenticated user
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
     if (authError) throw new Error('Failed to authenticate');
     if (!user) throw new Error('Not authenticated');
 
     chat.user_id = user.id;
     const { data, error } = await supabase
       .from('chats')
-      .upsert(chat).select('*').single();
+      .upsert(chat)
+      .select('*')
+      .single();
 
     if (error) throw error;
 

@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import { createClient, getSupabaseSession } from "@/utils/supabase/server";
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient, getSupabaseSession } from '@/utils/supabase/server';
 
 const NEXT_PUBLIC_BACKEND_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5004";
+  process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5004';
 
 export async function GET(
   request: NextRequest,
@@ -16,17 +16,17 @@ export async function GET(
       data: { user },
       error: authError,
     } = await supabase.auth.getUser();
-    if (authError) throw new Error("Failed to authenticate");
-    if (!user) throw new Error("Not authenticated");
+    if (authError) throw new Error('Failed to authenticate');
+    if (!user) throw new Error('Not authenticated');
 
     const { data: chunks, error } = await supabase
-      .from("chunks")
-      .select("*")
-      .order("chunk_index", { ascending: true })
-      .eq("document_id", documentId)
-      .eq("user_id", user.id);
+      .from('chunks')
+      .select('*')
+      .order('chunk_index', { ascending: true })
+      .eq('document_id', documentId)
+      .eq('user_id', user.id);
 
-    if (error && error.code === "PGRST116") {
+    if (error && error.code === 'PGRST116') {
       return NextResponse.json([]);
     }
     if (error) throw error;
@@ -60,9 +60,9 @@ export async function POST(
     const res = await fetch(
       `${NEXT_PUBLIC_BACKEND_URL}/v1/datasets/${datasetId}/documents/${documentId}/chunks`,
       {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${session.access_token}`,
         },
         body: formData,
@@ -71,7 +71,7 @@ export async function POST(
 
     if (!res.ok) {
       const errorData = await res.json();
-      throw new Error(errorData.detail || "Failed to upload document");
+      throw new Error(errorData.detail || 'Failed to upload document');
     }
     const data = await res.json();
     return NextResponse.json(data);

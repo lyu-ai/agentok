@@ -22,7 +22,9 @@ export async function GET(
 
     return NextResponse.json(data);
   } catch (e) {
-    console.error(`Failed GET /datasets/${params.datasetId}/documents/${params.documentId}: ${e}`);
+    console.error(
+      `Failed GET /datasets/${params.datasetId}/documents/${params.documentId}: ${e}`
+    );
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
@@ -38,7 +40,10 @@ export async function POST(
     await getSupabaseSession(); // Ensure user is authenticated
     const document = await request.json();
 
-    console.log(`POST /datasets/${datasetId}/documents/${documentId}`, document);
+    console.log(
+      `POST /datasets/${datasetId}/documents/${documentId}`,
+      document
+    );
 
     const { data, error } = await supabase
       .from('documents')
@@ -52,7 +57,9 @@ export async function POST(
 
     return NextResponse.json(data);
   } catch (e) {
-    console.error(`Failed POST /datasets/${params.datasetId}/documents/${params.documentId}: ${e}`);
+    console.error(
+      `Failed POST /datasets/${params.datasetId}/documents/${params.documentId}: ${e}`
+    );
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
@@ -77,7 +84,9 @@ export async function DELETE(
 
     return NextResponse.json({ result: 'success' });
   } catch (e) {
-    console.error(`Failed DELETE /datasets/${params.datasetId}/documents/${params.documentId}: ${e}`);
+    console.error(
+      `Failed DELETE /datasets/${params.datasetId}/documents/${params.documentId}: ${e}`
+    );
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }

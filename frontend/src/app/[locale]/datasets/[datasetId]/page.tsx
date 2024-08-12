@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useDataset, useDocuments } from "@/hooks";
-import DocumentCard from "./components/DocumentCard";
-import { RiDatabase2Line, RiSettings4Line } from "react-icons/ri";
-import UploadDocumentCard from "./components/UploadDocumentCard";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { useState } from "react";
-import DatasetConfig from "../components/DatasetConfig";
-import RetrieveTestPane from "./components/RetrieveTestPane";
+import { useDataset, useDocuments } from '@/hooks';
+import DocumentCard from './components/DocumentCard';
+import { RiDatabase2Line, RiSettings4Line } from 'react-icons/ri';
+import UploadDocumentCard from './components/UploadDocumentCard';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useState } from 'react';
+import DatasetConfig from '../components/DatasetConfig';
+import RetrieveTestPane from './components/RetrieveTestPane';
 
 const Page = ({ params }: { params: { datasetId: string } }) => {
   const datasetId = parseInt(params.datasetId, 10);

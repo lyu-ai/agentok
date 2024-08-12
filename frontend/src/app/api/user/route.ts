@@ -24,9 +24,7 @@ export async function POST(request: NextRequest) {
     const supabase = createClient();
     const user = await request.json();
 
-    const { data, error } = await supabase
-      .from('users')
-      .upsert(user);
+    const { data, error } = await supabase.from('users').upsert(user);
 
     if (error) throw error;
 

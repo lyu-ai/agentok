@@ -29,14 +29,16 @@ const ChatListPane = () => {
           placeholder={t('filter')}
           value={filter}
           autoFocus
-          onChange={e => setFilter(e.target.value)}
+          onChange={(e) => setFilter(e.target.value)}
         />
-        {filter && <button
-          className="absolute right-3 btn btn-xs btn-square btn-ghost"
-          onClick={() => setFilter('')}
-        >
-          <RiCloseLargeLine className="w-4 h-4" />
-        </button>}
+        {filter && (
+          <button
+            className="absolute right-3 btn btn-xs btn-square btn-ghost"
+            onClick={() => setFilter('')}
+          >
+            <RiCloseLargeLine className="w-4 h-4" />
+          </button>
+        )}
       </div>
       <div className="flex flex-col w-full h-full p-1 overflow-y-auto overflow-x-hidden">
         <ChatList filter={filter} />

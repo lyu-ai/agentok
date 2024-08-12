@@ -1,6 +1,15 @@
 import { stripMatch } from '@/utils/re';
 import { StatusMessage } from '@/utils/chat';
-import { RiRobot2Line, RiRobot2Fill, RiUserVoiceLine, RiCheckLine, RiAlertLine, RiVoiceprintLine, RiRefreshLine, RiUserVoiceFill } from 'react-icons/ri';
+import {
+  RiRobot2Line,
+  RiRobot2Fill,
+  RiUserVoiceLine,
+  RiCheckLine,
+  RiAlertLine,
+  RiVoiceprintLine,
+  RiRefreshLine,
+  RiUserVoiceFill,
+} from 'react-icons/ri';
 import Markdown from '@/components/Markdown';
 import { useTranslations } from 'next-intl';
 import { useChat, useUser } from '@/hooks';

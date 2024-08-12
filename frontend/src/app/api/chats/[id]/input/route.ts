@@ -32,7 +32,10 @@ export async function POST(
     if (!res.ok) {
       const errorText = await res.text();
       console.error('Error', errorText);
-      return NextResponse.json({ error: res.statusText }, { status: res.status });
+      return NextResponse.json(
+        { error: res.statusText },
+        { status: res.status }
+      );
     }
 
     const messages = await res.json();

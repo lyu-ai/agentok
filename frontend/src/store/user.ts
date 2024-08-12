@@ -13,7 +13,8 @@ interface UserState {
 
 // Custom storage to handle SSR
 const clientStorage = {
-  getItem: (name: string) => (typeof window !== 'undefined' ? localStorage.getItem(name) : null),
+  getItem: (name: string) =>
+    typeof window !== 'undefined' ? localStorage.getItem(name) : null,
   setItem: (name: string, value: string) => {
     if (typeof window !== 'undefined') {
       localStorage.setItem(name, value);
@@ -23,7 +24,7 @@ const clientStorage = {
     if (typeof window !== 'undefined') {
       localStorage.removeItem(name);
     }
-  }
+  },
 };
 
 const useUserStore = create<UserState>()(
@@ -35,11 +36,19 @@ const useUserStore = create<UserState>()(
       fetchUser: async () => {
         try {
           set({ loading: true });
-          const { data: { user }, error } = await supabase.auth.getUser();
+          const {
+            data: { user },
+            error,
+          } = await supabase.auth.getUser();
           if (error) throw error;
           set({ user, error: null });
         } catch (error) {
-          set({ error: error instanceof Error ? error : new Error('An unknown error occurred') });
+          set({
+            error:
+              error instanceof Error
+                ? error
+                : new Error('An unknown error occurred'),
+          });
         } finally {
           set({ loading: false });
         }
@@ -54,9 +63,11 @@ const useUserStore = create<UserState>()(
 );
 
 // Set up the auth listener
-supabase.auth.onAuthStateChange((event: AuthChangeEvent, session: Session | null) => {
-  console.log('Auth event:', event);
-  useUserStore.getState().setUser(session?.user || null);
-});
+supabase.auth.onAuthStateChange(
+  (event: AuthChangeEvent, session: Session | null) => {
+    console.log('Auth event:', event);
+    useUserStore.getState().setUser(session?.user || null);
+  }
+);
 
 export default useUserStore;

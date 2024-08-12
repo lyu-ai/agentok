@@ -37,8 +37,8 @@ export async function updateSession(request: NextRequest) {
 
   if (!session && isAuthPath) {
     // Redirect to login page, preserving the current locale if present
-    const url = request.nextUrl.clone()
-    url.pathname = '/auth/login'
+    const url = request.nextUrl.clone();
+    url.pathname = '/auth/login';
     return NextResponse.redirect(url);
   }
 

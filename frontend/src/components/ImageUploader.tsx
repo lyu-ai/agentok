@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import supabase from "@/utils/supabase/client";
-import { RiImageAddLine } from "react-icons/ri";
+import React, { useState } from 'react';
+import supabase from '@/utils/supabase/client';
+import { RiImageAddLine } from 'react-icons/ri';
 
 type ImageUploaderProps = {
   imageUrl: string;
@@ -22,23 +22,23 @@ const ImageUploader = ({
     const file = event.target.files?.[0];
     if (file) {
       setIsUploading(true);
-      const fileExt = file.name.split(".").pop();
+      const fileExt = file.name.split('.').pop();
       const fileName = `${Date.now()}.${fileExt}`;
-      const filePath = `${storagePath ?? "/images"}/${fileName}`;
+      const filePath = `${storagePath ?? '/images'}/${fileName}`;
 
       const { data, error } = await supabase.storage
-        .from("images")
+        .from('images')
         .upload(filePath, file);
 
       if (error) {
-        console.error("Error uploading file: ", error);
+        console.error('Error uploading file: ', error);
         setIsUploading(false);
         return;
       }
 
       const {
         data: { publicUrl },
-      } = supabase.storage.from("images").getPublicUrl(filePath);
+      } = supabase.storage.from('images').getPublicUrl(filePath);
 
       setPreviewUrl(publicUrl);
       onUpdate && onUpdate(publicUrl);

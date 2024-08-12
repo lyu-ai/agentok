@@ -52,9 +52,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (isLoading || !templates) return;
     if (params?.id) {
       const id = parseInt(params.id, 10);
-      const index = templates.findIndex(
-        (template: any) => template.id === id
-      );
+      const index = templates.findIndex((template: any) => template.id === id);
       if (index >= 0) {
         setTemplate(templates[index]);
         setIndex(index);

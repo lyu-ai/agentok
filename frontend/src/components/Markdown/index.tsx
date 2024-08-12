@@ -1,16 +1,16 @@
-import React from "react";
-import ReactMarkdown from "react-markdown";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus as style } from "react-syntax-highlighter/dist/esm/styles/prism";
-import RemarkBreaks from "remark-breaks";
-import RemarkGfm from "remark-gfm";
-import RemarkMath from "remark-math";
-import RehypeKatex from "rehype-katex";
-import "katex/dist/katex.min.css";
-import "./markdown.css";
-import CopyButton from "../CopyButton";
-import { common, createLowlight } from "lowlight";
-import clsx from "clsx";
+import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus as style } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import RemarkBreaks from 'remark-breaks';
+import RemarkGfm from 'remark-gfm';
+import RemarkMath from 'remark-math';
+import RehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
+import './markdown.css';
+import CopyButton from '../CopyButton';
+import { common, createLowlight } from 'lowlight';
+import clsx from 'clsx';
 
 const lowlight = createLowlight(common);
 
@@ -41,17 +41,17 @@ const CodeComponent = ({
   suppressCopy,
   ...props
 }: any) => {
-  const match = /language-(\w+)/.exec(className || "");
+  const match = /language-(\w+)/.exec(className || '');
   if (inline) return <InlineCode {...props}>{children}</InlineCode>;
   return (
     <div className="relative">
       <CodeBlock language={match && match[1]} {...props}>
-        {String(children).replace(/\n$/, "")}
+        {String(children).replace(/\n$/, '')}
       </CodeBlock>
       {!suppressCopy && (
         <CopyButton
           minimal
-          content={String(children).replace(/\n$/, "")}
+          content={String(children).replace(/\n$/, '')}
           className="absolute top-1 right-1"
         />
       )}
@@ -104,8 +104,8 @@ const Markdown = ({
         },
         img: ({ node, ...props }) => (
           <img
-            style={{ maxWidth: "480px", width: "100%", maxHeight: "320px" }}
-            alt={props.alt ?? "md-img"}
+            style={{ maxWidth: '480px', width: '100%', maxHeight: '320px' }}
+            alt={props.alt ?? 'md-img'}
             {...props}
           />
         ),

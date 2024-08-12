@@ -1,4 +1,4 @@
-import ConversableAgentConfig from "./ConversableAgent";
+import ConversableAgentConfig from './ConversableAgent';
 
 const AssistantConfig = ({ nodeId, data, className, ...props }: any) => {
   return (
@@ -6,7 +6,7 @@ const AssistantConfig = ({ nodeId, data, className, ...props }: any) => {
       nodeId={nodeId}
       data={data}
       className={className}
-      toolScene={"llm"}
+      toolScene={'llm'}
       {...props}
     />
   );

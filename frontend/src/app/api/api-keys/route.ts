@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${session.access_token}`,
-      }
+      },
     });
 
     if (!res.ok) {

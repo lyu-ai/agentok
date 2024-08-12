@@ -13,11 +13,11 @@ const supabase = createClient();
 export default supabase;
 
 // Utility functions for generating file URLs
-export const getRecordFileUrl = (
-  supabase: SupabaseClient,
-  fileFieldName: string
-) => (record: { [key: string]: any }) =>
-    supabase.storage.from('files').getPublicUrl(record[fileFieldName]).data.publicUrl;
+export const getRecordFileUrl =
+  (supabase: SupabaseClient, fileFieldName: string) =>
+  (record: { [key: string]: any }) =>
+    supabase.storage.from('files').getPublicUrl(record[fileFieldName]).data
+      .publicUrl;
 
 export const getAssetFileUrl = (supabase: SupabaseClient) =>
   getRecordFileUrl(supabase, 'file');
@@ -27,6 +27,6 @@ export const getAvatarUrl = async () => {
   const user = resp.data.user;
   if (!user) return null;
   return user.user_metadata?.avatar_url;
-}
+};
 
 export const getIconUrl = getRecordFileUrl(supabase, 'icon');

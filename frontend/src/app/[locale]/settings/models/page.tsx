@@ -52,7 +52,7 @@ const ModelForm = ({
           <input
             className="input input-sm input-bordered rounded"
             value={model || ''}
-            onChange={e => setModel(e.target.value)}
+            onChange={(e) => setModel(e.target.value)}
           />
         </label>
         <label className="flex flex-col gap-1">
@@ -60,7 +60,7 @@ const ModelForm = ({
           <input
             className="input input-sm input-bordered rounded"
             value={apiKey || ''}
-            onChange={e => setApiKey(e.target.value)}
+            onChange={(e) => setApiKey(e.target.value)}
           />
         </label>
         <label className="flex flex-col gap-1 md:col-span-2">
@@ -68,7 +68,7 @@ const ModelForm = ({
           <textarea
             className="textarea textarea-sm textarea-bordered rounded"
             value={description || ''}
-            onChange={e => setDescription(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </label>
         <label className="flex items-center gap-2 md:col-span-2">
@@ -87,7 +87,7 @@ const ModelForm = ({
               <input
                 className="input input-sm input-bordered rounded"
                 value={baseUrl || ''}
-                onChange={e => setBaseUrl(e.target.value)}
+                onChange={(e) => setBaseUrl(e.target.value)}
               />
             </label>
             <label className="flex flex-col gap-1">
@@ -95,7 +95,7 @@ const ModelForm = ({
               <input
                 className="input input-sm input-bordered rounded"
                 value={apiType || ''}
-                onChange={e => setApiType(e.target.value)}
+                onChange={(e) => setApiType(e.target.value)}
               />
             </label>
             <label className="flex flex-col gap-1">
@@ -103,7 +103,7 @@ const ModelForm = ({
               <input
                 className="input input-sm input-bordered rounded"
                 value={apiVersion || ''}
-                onChange={e => setApiVersion(e.target.value)}
+                onChange={(e) => setApiVersion(e.target.value)}
               />
             </label>
             <label className="flex flex-col gap-1">
@@ -111,7 +111,7 @@ const ModelForm = ({
               <input
                 className="input input-sm input-bordered rounded"
                 value={tags || ''}
-                onChange={e => setTags(e.target.value)}
+                onChange={(e) => setTags(e.target.value)}
               />
             </label>
           </>
@@ -193,7 +193,7 @@ const Page = () => {
   };
 
   const handleSaveModel = async (updatedModel: LlmModel) => {
-    const newModels = settings?.models?.map(m =>
+    const newModels = settings?.models?.map((m) =>
       m.id === updatedModel.id ? updatedModel : m
     );
     await updateSettings({
@@ -203,7 +203,7 @@ const Page = () => {
   };
 
   const handleDeleteModel = async (modelId: string) => {
-    const newModels = settings?.models?.filter(m => m.id !== modelId);
+    const newModels = settings?.models?.filter((m) => m.id !== modelId);
     await updateSettings({
       ...settings,
       models: newModels,
@@ -226,7 +226,7 @@ const Page = () => {
       </div>
       <div className="flex flex-col gap-2">
         {settings ? (
-          settings.models?.map(model => (
+          settings.models?.map((model) => (
             <ModelCard
               model={model}
               key={model.id}

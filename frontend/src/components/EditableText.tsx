@@ -45,7 +45,7 @@ const EditableText = ({
         <input
           type="text"
           value={inputValue ?? ''}
-          onChange={e => setInputValue(e.target.value)}
+          onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={onKeyDown}
           autoFocus
           className={clsx(

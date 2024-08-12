@@ -1,15 +1,15 @@
-import { useTranslations } from "next-intl";
-import { RiFormula } from "react-icons/ri";
-import Markdown from "react-markdown";
-import { useToolSettings } from "@/hooks";
-import { useEffect, useState } from "react";
+import { useTranslations } from 'next-intl';
+import { RiFormula } from 'react-icons/ri';
+import Markdown from 'react-markdown';
+import { useToolSettings } from '@/hooks';
+import { useEffect, useState } from 'react';
 
 const VariableConfig = ({ tool, variable, onChange }: any) => {
   const { settings, updateSettings } = useToolSettings();
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   useEffect(() => {
     const existingSettings = settings[tool.id] ?? {};
-    setValue(existingSettings.variables?.[variable.name] ?? "");
+    setValue(existingSettings.variables?.[variable.name] ?? '');
   }, [settings, tool.id, variable.name]);
 
   const handleVariableChange = (name: any, value: any) => {
@@ -34,7 +34,7 @@ const VariableConfig = ({ tool, variable, onChange }: any) => {
       )}
       <input
         type="text"
-        value={value ?? ""}
+        value={value ?? ''}
         onChange={(v) => setValue(v.target.value)}
         onBlur={(v) => handleVariableChange(variable.name, v.target.value)}
         className="input input-primary input-sm rounded"
@@ -44,11 +44,11 @@ const VariableConfig = ({ tool, variable, onChange }: any) => {
 };
 
 const ToolConfig = ({ tool }: any) => {
-  const t = useTranslations("tool.Config");
+  const t = useTranslations('tool.Config');
   if (!tool) {
     return (
       <div className="w-full h-full justify-center items-center flex">
-        {t("tool-not-found")}
+        {t('tool-not-found')}
       </div>
     );
   }
@@ -57,7 +57,7 @@ const ToolConfig = ({ tool }: any) => {
     <div className="flex flex-col w-full h-full gap-2">
       <h1 className="flex items-center gap-2 px-2 py-4 font-bold border-b border-base-content/10">
         <RiFormula className="w-5 h-5" />
-        {t("title")}
+        {t('title')}
       </h1>
       <div className="flex  gap-2 p-2">
         <RiFormula className="w-16 h-16 text-primary" />
@@ -74,7 +74,7 @@ const ToolConfig = ({ tool }: any) => {
         </div>
       ) : (
         <div className="flex items-center justify-center text-base-content/50 w-full h-full">
-          {t("no-variables")}
+          {t('no-variables')}
         </div>
       )}
     </div>

@@ -27,8 +27,8 @@ const Python = ({ data, setMode }: any) => {
         'Content-Type': 'application/json',
       },
     })
-      .then(resp => resp.json())
-      .then(json => {
+      .then((resp) => resp.json())
+      .then((json) => {
         if (json.error) {
           setErrorDetail(json.error.detail);
         } else {
@@ -36,7 +36,7 @@ const Python = ({ data, setMode }: any) => {
           setErrorDetail(null); // Clear previous error details
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.warn(e);
         setErrorDetail(e.message);
       })

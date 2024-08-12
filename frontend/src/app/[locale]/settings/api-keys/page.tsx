@@ -67,11 +67,11 @@ const CreateKeyDialog = ({ show, onClose }: any) => {
       },
       credentials: 'include',
     })
-      .then(resp => resp.json())
-      .then(json => {
+      .then((resp) => resp.json())
+      .then((json) => {
         onClose(true);
       })
-      .catch(e => {
+      .catch((e) => {
         console.error(e);
         setError(e.message);
       })
@@ -97,7 +97,7 @@ const CreateKeyDialog = ({ show, onClose }: any) => {
           type="text"
           name="name"
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           className="input input-primary input-bordered"
         />
         <button
@@ -134,15 +134,15 @@ const Page = () => {
       },
       credentials: 'include',
     })
-      .then(resp => resp.json())
-      .then(json => {
+      .then((resp) => resp.json())
+      .then((json) => {
         if (json.error) {
           toast.error(json.error);
           throw new Error(json.error);
         }
         setKeys(json);
       })
-      .catch(e => {
+      .catch((e) => {
         console.error(JSON.stringify(e));
       })
       .finally(() => setLoading(false));
@@ -166,9 +166,9 @@ const Page = () => {
     })
       .then(() => {
         toast.success(t('delete-apikey-success', { key_name: key.name }));
-        setKeys(keys.filter(k => k.id !== key.id));
+        setKeys(keys.filter((k) => k.id !== key.id));
       })
-      .catch(e => {
+      .catch((e) => {
         console.error(e);
       });
   };
@@ -207,7 +207,7 @@ const Page = () => {
             </tr>
           </thead>
           <tbody className="gap-2">
-            {keys.map(key => {
+            {keys.map((key) => {
               return (
                 <tr key={key.id} className="flex items-center w-full py-2">
                   <td className="w-12 lg:w-32">{key.name || '(No name)'}</td>

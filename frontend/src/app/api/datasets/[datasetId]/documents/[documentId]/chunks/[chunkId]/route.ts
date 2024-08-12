@@ -22,7 +22,9 @@ export async function GET(
 
     return NextResponse.json(data);
   } catch (e) {
-    console.error(`Failed GET /documents/${params.documentId}/chunks/${params.chunkId}: ${e}`);
+    console.error(
+      `Failed GET /documents/${params.documentId}/chunks/${params.chunkId}: ${e}`
+    );
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
@@ -38,7 +40,10 @@ export async function POST(
     await getSupabaseSession(); // Ensure user is authenticated
     const chunk = await request.json();
 
-    console.log(`POST /documents/${params.documentId}/chunks/${params.chunkId}`, chunk);
+    console.log(
+      `POST /documents/${params.documentId}/chunks/${params.chunkId}`,
+      chunk
+    );
 
     const { data, error } = await supabase
       .from('chunks')
@@ -52,7 +57,9 @@ export async function POST(
 
     return NextResponse.json(data);
   } catch (e) {
-    console.error(`Failed GET /documents/${params.documentId}/chunks/${params.chunkId}: ${e}`);
+    console.error(
+      `Failed GET /documents/${params.documentId}/chunks/${params.chunkId}: ${e}`
+    );
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
@@ -77,7 +84,9 @@ export async function DELETE(
 
     return NextResponse.json({ result: 'success' });
   } catch (e) {
-    console.error(`Failed DELETE /documents/${params.documentId}/chunks/${params.chunkId}: ${e}`);
+    console.error(
+      `Failed DELETE /documents/${params.documentId}/chunks/${params.chunkId}: ${e}`
+    );
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }

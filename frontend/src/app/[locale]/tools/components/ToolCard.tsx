@@ -1,8 +1,8 @@
-import { useUser } from "@/hooks";
-import clsx from "clsx";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { RiFormula, RiDeleteBin4Line, RiCodeLine } from "react-icons/ri";
+import { useUser } from '@/hooks';
+import clsx from 'clsx';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { RiFormula, RiDeleteBin4Line, RiCodeLine } from 'react-icons/ri';
 
 const ToolCard = ({ tool, onDelete, selected, className, ...props }: any) => {
   const [isOwned, setIsOwned] = useState(false);
@@ -20,17 +20,17 @@ const ToolCard = ({ tool, onDelete, selected, className, ...props }: any) => {
   return (
     <label
       className={clsx(
-        "relative group w-full flex flex-col gap-2 p-3 rounded-md border cursor-pointer hover:bg-base-content/10 hover:shadow-box hover:shadow-gray-700",
+        'relative group w-full flex flex-col gap-2 p-3 rounded-md border cursor-pointer hover:bg-base-content/10 hover:shadow-box hover:shadow-gray-700',
         selected
-          ? "shadow-box shadow-gray-600 bg-gray-700/90 border-gray-600"
-          : "border-base-content/10 bg-base-content/5",
+          ? 'shadow-box shadow-gray-600 bg-gray-700/90 border-gray-600'
+          : 'border-base-content/10 bg-base-content/5',
         className
       )}
       {...props}
     >
       <div className="flex items-center gap-2">
         <img
-          src={tool.logo_url ?? "/images/tools.svg"}
+          src={tool.logo_url ?? '/images/tools.svg'}
           className="w-12 h-12 flex-shrink-0"
         />
         <div className="text-base font-bold">{tool.name}</div>

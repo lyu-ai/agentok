@@ -8,7 +8,10 @@ export async function GET(
   try {
     const datasetId = parseInt(params.datasetId, 10);
     const supabase = createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
     if (authError) throw new Error('Failed to authenticate');
     if (!user) throw new Error('Not authenticated');
 
@@ -35,7 +38,10 @@ export async function POST(
   const datasetId = parseInt(params.datasetId, 10);
   try {
     const supabase = createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
     if (authError) throw new Error('Failed to authenticate');
     if (!user) throw new Error('Not authenticated');
     const dataset = await request.json();
@@ -65,7 +71,10 @@ export async function DELETE(
 ) {
   try {
     const supabase = createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
     if (authError) throw new Error('Failed to authenticate');
     if (!user) throw new Error('Not authenticated');
     const datasetId = parseInt(params.datasetId, 10);

@@ -8,7 +8,10 @@ export async function GET(request: NextRequest) {
   const supabase = await createClient();
 
   // Get the session from Supabase
-  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+  const {
+    data: { session },
+    error: sessionError,
+  } = await supabase.auth.getSession();
 
   if (sessionError || !session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -25,7 +28,10 @@ export async function GET(request: NextRequest) {
 
     if (!res.ok) {
       console.error('GET /agents Error', await res.text());
-      return NextResponse.json({ error: res.statusText }, { status: res.status });
+      return NextResponse.json(
+        { error: res.statusText },
+        { status: res.status }
+      );
     }
 
     const agents = await res.json();

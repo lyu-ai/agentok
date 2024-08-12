@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export type Dataset = {
   id: number;
@@ -177,7 +177,7 @@ const useDatasetStore = create<DatasetState>()(
         id ? get().datasets.find((dataset) => dataset.id === id) : undefined,
     }),
     {
-      name: "agentok-datasets",
+      name: 'agentok-datasets',
     }
   )
 );

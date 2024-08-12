@@ -13,7 +13,7 @@ html:has(.drawer-toggle:checked) {
   outline: 2px solid transparent;
 }
 
-input-sm[type="number"] {
+input-sm[type='number'] {
   padding-right: 0 !important;
 }
 
@@ -36,7 +36,7 @@ input-sm[type="number"] {
 }
 
 .engraved-bg::after {
-  content: "";
+  content: '';
   background-image: url('/logo-bg.svg');
   filter: grayscale(100%) brightness(50%) contrast(200%);
   mix-blend-mode: multiply;
@@ -77,7 +77,10 @@ input-sm[type="number"] {
 .collapsing-width {
   max-width: 0;
   overflow: hidden;
-  transition: max-width 0.5s ease-out, padding 0.5s ease-out, border 0.5s ease-out;
+  transition:
+    max-width 0.5s ease-out,
+    padding 0.5s ease-out,
+    border 0.5s ease-out;
   padding: 0;
   border: 0;
   /* or use 'border-none' if you use utility classes */
@@ -87,7 +90,10 @@ input-sm[type="number"] {
   max-width: 1000px;
   /* Use a sensible max-width based on the expected expanded size */
   overflow: hidden;
-  transition: max-width 0.5s ease-in, padding 0.5s ease-in, border 0.5s ease-in;
+  transition:
+    max-width 0.5s ease-in,
+    padding 0.5s ease-in,
+    border 0.5s ease-in;
   /* If you had padding originally added, put those values here */
 }
 

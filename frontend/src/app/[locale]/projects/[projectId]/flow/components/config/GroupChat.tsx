@@ -31,7 +31,7 @@ const GroupChatConfig = ({ nodeId, data, className, ...props }: any) => {
             <select
               className="select select-bordered select-sm bg-transparent rounded"
               value={data.speaker_selection_method ?? 'auto'}
-              onChange={e => {
+              onChange={(e) => {
                 setNodeData(instance, nodeId, {
                   speaker_selection_method: e.target.value,
                 });
@@ -54,7 +54,7 @@ const GroupChatConfig = ({ nodeId, data, className, ...props }: any) => {
             max="50"
             step="1"
             value={data?.max_round ?? 0}
-            onChange={e => {
+            onChange={(e) => {
               setNodeData(instance, nodeId, {
                 max_round:
                   e.target.valueAsNumber === 0 ? null : e.target.valueAsNumber,
@@ -67,7 +67,7 @@ const GroupChatConfig = ({ nodeId, data, className, ...props }: any) => {
           <input
             type="checkbox"
             checked={data?.send_introductions}
-            onChange={e =>
+            onChange={(e) =>
               setNodeData(instance, nodeId, {
                 send_introductions: e.target.checked,
               })

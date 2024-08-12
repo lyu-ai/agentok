@@ -5,7 +5,7 @@ async function extractStrings() {
   const regex = /<\w+(?:\s+[^<>"]+)*?>([\u4e00-\u9fff]+)<\/\w+>/g;
   const tsxFiles = await glob('src/**/*.tsx', {});
 
-  tsxFiles.forEach(file => {
+  tsxFiles.forEach((file) => {
     const content = fs.readFileSync(file, 'utf8');
     let match;
     while ((match = regex.exec(content)) !== null) {

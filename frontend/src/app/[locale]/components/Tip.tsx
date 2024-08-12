@@ -13,11 +13,11 @@ const Tip = ({ content, icon, className, classNameContent, ...props }: any) => {
         <Markdown className={classNameContent} suppressCopy>
           {content}
         </Markdown>
-      ).then(html => {
+      ).then((html) => {
         if (isMounted) setHtmlContent(html);
       });
     } else {
-      renderToString(content).then(html => {
+      renderToString(content).then((html) => {
         if (isMounted) setHtmlContent(html);
       });
     }
@@ -33,7 +33,7 @@ const Tip = ({ content, icon, className, classNameContent, ...props }: any) => {
     const root = createRoot(container);
     root.render(element);
 
-    await new Promise(resolve => setTimeout(resolve, 100)); // wait for the rendering to complete
+    await new Promise((resolve) => setTimeout(resolve, 100)); // wait for the rendering to complete
 
     const html = container.innerHTML;
     root.unmount();

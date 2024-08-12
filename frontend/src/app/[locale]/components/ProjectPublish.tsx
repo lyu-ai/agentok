@@ -34,7 +34,7 @@ const PublishConfig = ({ projectId, className, ...props }: any) => {
       description,
       project,
     })
-      .then(template => {
+      .then((template) => {
         toast.success(t('publish-success', { project_name: project.name }));
         router.push(`/discover/${template.id}`);
       })
@@ -68,7 +68,7 @@ const PublishConfig = ({ projectId, className, ...props }: any) => {
         <input
           className="input input-bordered input-sm p-1 w-full rounded"
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
         />
       </div>
       <div className="flex flex-col gap-2 w-full">
@@ -77,7 +77,7 @@ const PublishConfig = ({ projectId, className, ...props }: any) => {
           rows={4}
           className="textarea textarea-bordered textarea-sm rounded"
           value={description}
-          onChange={e => setDescription(e.target.value)}
+          onChange={(e) => setDescription(e.target.value)}
         />
       </div>
       <div className="flex items-center justify-end mt-4">

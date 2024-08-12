@@ -32,11 +32,11 @@ const useProjectStore = create<ProjectState>()(
       activeProjectId: -1,
       chatPanePinned: false,
       nodePanePinned: false,
-      setProjects: projects => set({ projects }),
-      setActiveProjectId: id => set({ activeProjectId: id }),
+      setProjects: (projects) => set({ projects }),
+      setActiveProjectId: (id) => set({ activeProjectId: id }),
       updateProject: (id, newProject) =>
-        set(state => {
-          const projects = state.projects.map(project => {
+        set((state) => {
+          const projects = state.projects.map((project) => {
             if (project.id === id) {
               // Merge the existing Project with the new Project data, allowing for partial updates
               return { ...project, ...newProject };
@@ -45,12 +45,12 @@ const useProjectStore = create<ProjectState>()(
           });
           return { projects };
         }),
-      deleteProject: id =>
-        set(state => ({
-          projects: state.projects.filter(project => project.id !== id),
+      deleteProject: (id) =>
+        set((state) => ({
+          projects: state.projects.filter((project) => project.id !== id),
         })),
-      getProjectById: id =>
-        id ? get().projects.find(project => project.id === id) : undefined,
+      getProjectById: (id) =>
+        id ? get().projects.find((project) => project.id === id) : undefined,
       pinChatPane: (pin: boolean) => set({ chatPanePinned: pin }),
       pinNodePane: (pin: boolean) => set({ nodePanePinned: pin }),
     }),

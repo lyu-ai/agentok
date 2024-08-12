@@ -1,18 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient, getSupabaseSession } from '@/utils/supabase/server';
 
-export async function GET(
-  request: NextRequest,
-) {
+export async function GET(request: NextRequest) {
   try {
     const supabase = createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
     if (authError) throw new Error('Failed to authenticate');
     if (!user) throw new Error('Not authenticated');
 
     const { data: dataset, error } = await supabase
       .from('datasets')
-      .select('*').eq('user_id', user.id);
+      .select('*')
+      .eq('user_id', user.id);
 
     console.log('GET /datasets', dataset);
 
@@ -25,12 +27,13 @@ export async function GET(
   }
 }
 
-export async function POST(
-  request: NextRequest,
-) {
+export async function POST(request: NextRequest) {
   try {
     const supabase = createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
     if (authError) throw new Error('Failed to authenticate');
     if (!user) throw new Error('Not authenticated');
     const dataset = await request.json();
@@ -40,7 +43,9 @@ export async function POST(
 
     const { data, error } = await supabase
       .from('datasets')
-      .insert(dataset).select('*').single();
+      .insert(dataset)
+      .select('*')
+      .single();
 
     if (error) throw error;
 

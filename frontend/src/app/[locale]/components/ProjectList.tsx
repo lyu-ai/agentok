@@ -46,12 +46,12 @@ export const ProjectBlock = ({ project, className }: any) => {
     e.stopPropagation();
     e.preventDefault();
     await createChat(project.id, 'project')
-      .then(chat => {
+      .then((chat) => {
         if (chat) {
           router.push(`/chat?id=${chat.id}`);
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
         toast.error(`Failed to create chat: ${e}`);
       });
@@ -91,7 +91,7 @@ export const ProjectBlock = ({ project, className }: any) => {
           <div className="flex items-center gap-2">
             <button
               className="btn btn-xs rounded btn-ghost gap-1"
-              onClick={() => setShowPublishDialog(v => !v)}
+              onClick={() => setShowPublishDialog((v) => !v)}
               data-tooltip-id="default-tooltip"
               data-tooltip-content={t('publish-project-tooltip')}
             >

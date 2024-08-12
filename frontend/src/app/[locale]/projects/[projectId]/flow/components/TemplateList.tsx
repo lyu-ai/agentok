@@ -74,7 +74,7 @@ export const TemplateCard = ({
     });
   }
   useEffect(() => {
-    supabase.auth.getUser().then(resp => {
+    supabase.auth.getUser().then((resp) => {
       const user = resp.data?.user;
       setIsAuthed(!!user);
       setIsOwned(template.owner === user?.id);
@@ -97,12 +97,12 @@ export const TemplateCard = ({
     e.stopPropagation();
     e.preventDefault();
     await createChat(template.id, 'template')
-      .then(chat => {
+      .then((chat) => {
         if (chat) {
           router.push(`/chats/${chat.id}`);
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
         toast.error(`Failed to create chat: ${e}`);
       });
@@ -138,7 +138,8 @@ export const TemplateCard = ({
         'group card w-80 bg-base-content/10 border border-base-content/10',
         className,
         {
-          'hover:shadow-box hover:shadow-primary/40 hover:border-primary/40': !suppressLink,
+          'hover:shadow-box hover:shadow-primary/40 hover:border-primary/40':
+            !suppressLink,
         }
       )}
     >

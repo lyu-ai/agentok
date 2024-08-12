@@ -1,6 +1,6 @@
-import clsx from "clsx";
-import { OptionProps, OptionType } from "./Option";
-import { useState } from "react";
+import clsx from 'clsx';
+import { OptionProps, OptionType } from './Option';
+import { useState } from 'react';
 
 type TextOptionProps = {
   rows?: number;
@@ -15,13 +15,13 @@ const TextOption = ({
   onChange,
   compact = false,
 }: TextOptionProps) => {
-  const [value, setValue] = useState(data?.[name] ?? "");
+  const [value, setValue] = useState(data?.[name] ?? '');
 
   return (
     <div
-      className={clsx("flex text-sm", {
-        "flex-col gap-1 ": !compact,
-        "items-center gap-2": compact,
+      className={clsx('flex text-sm', {
+        'flex-col gap-1 ': !compact,
+        'items-center gap-2': compact,
       })}
     >
       <span className="whitespace-nowrap">{label}</span>

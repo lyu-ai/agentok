@@ -3,31 +3,31 @@ import useProjectStore, { Project } from '@/store/projects';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { fetcher } from './fetcher';
 import { ProjectTemplate } from '@/store/templates';
-import { Node, Edge } from "reactflow";
+import { Node, Edge } from 'reactflow';
 
 export const initialNodes: Node[] = [
   {
-    id: "1001",
-    type: "initializer",
+    id: '1001',
+    type: 'initializer',
     data: {
-      name: "Initializer",
-      label: "initializer",
-      class: "Initializer",
+      name: 'Initializer',
+      label: 'initializer',
+      class: 'Initializer',
       sample_messages: [
-        "Write a poem based on recent headlines about Vancouver.",
+        'Write a poem based on recent headlines about Vancouver.',
       ],
     },
     position: { x: -133, y: 246 },
   },
   {
-    id: "1",
-    type: "user",
+    id: '1',
+    type: 'user',
     data: {
-      name: "User",
-      label: "user",
-      class: "UserProxyAgent",
-      human_input_mode: "NEVER",
-      termination_msg: "TERMINATE",
+      name: 'User',
+      label: 'user',
+      class: 'UserProxyAgent',
+      human_input_mode: 'NEVER',
+      termination_msg: 'TERMINATE',
       enable_code_execution: true,
       max_consecutive_auto_reply: 10,
       tools: { execution: [172278707085517] },
@@ -35,25 +35,25 @@ export const initialNodes: Node[] = [
     position: { x: 271, y: 222 },
   },
   {
-    id: "2",
-    type: "assistant",
+    id: '2',
+    type: 'assistant',
     data: {
-      name: "Assistant",
-      type: "assistant",
-      label: "assistant",
-      class: "AssistantAgent",
+      name: 'Assistant',
+      type: 'assistant',
+      label: 'assistant',
+      class: 'AssistantAgent',
       max_consecutive_auto_reply: 10,
       tools: { llm: [172278707085517] },
     },
     position: { x: 811, y: 216 },
   },
   {
-    id: "998",
-    type: "note",
+    id: '998',
+    type: 'note',
     data: {
-      name: "Note",
-      label: "note",
-      class: "Note",
+      name: 'Note',
+      label: 'note',
+      class: 'Note',
       content:
         "Click **Chat** icon on the right bottom to show the chat pane, and in chat pane, select a sample question to start the conversation. \n\nThis project uses Tavily Search tool, which requires an API key to work. \n\nIf you don't have your own, you can use this test key: `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`",
     },
@@ -63,16 +63,16 @@ export const initialNodes: Node[] = [
 
 export const initialEdges: Edge[] = [
   {
-    id: "1001-1",
-    source: "1001",
-    target: "1",
+    id: '1001-1',
+    source: '1001',
+    target: '1',
   },
   {
-    id: "1-2",
-    source: "1",
-    target: "2",
+    id: '1-2',
+    source: '1',
+    target: '2',
     animated: true,
-    type: "converse",
+    type: 'converse',
   },
 ];
 
@@ -80,13 +80,15 @@ export function useProjects() {
   const { data, error, mutate } = useSWR('/api/projects', fetcher, {
     revalidateOnFocus: false,
   });
-  const projects = useProjectStore(state => state.projects);
-  const setProjects = useProjectStore(state => state.setProjects);
-  const deleteProject = useProjectStore(state => state.deleteProject);
-  const updateProject = useProjectStore(state => state.updateProject);
-  const activeProjectId = useProjectStore(state => state.activeProjectId);
-  const setActiveProjectId = useProjectStore(state => state.setActiveProjectId);
-  const getProjectById = useProjectStore(state => state.getProjectById);
+  const projects = useProjectStore((state) => state.projects);
+  const setProjects = useProjectStore((state) => state.setProjects);
+  const deleteProject = useProjectStore((state) => state.deleteProject);
+  const updateProject = useProjectStore((state) => state.updateProject);
+  const activeProjectId = useProjectStore((state) => state.activeProjectId);
+  const setActiveProjectId = useProjectStore(
+    (state) => state.setActiveProjectId
+  );
+  const getProjectById = useProjectStore((state) => state.getProjectById);
   const prevDataRef = useRef(data);
   useEffect(() => {
     if (data && !error && data !== prevDataRef.current) {
@@ -153,7 +155,7 @@ export function useProjects() {
   const handleUpdateProject = useCallback(
     async (id: number, project: Partial<Project>) => {
       setIsUpdating(true);
-      const previousProject = projects.find(p => p.id === id);
+      const previousProject = projects.find((p) => p.id === id);
       if (!previousProject) return;
       updateProject(id, project);
       try {
@@ -230,13 +232,8 @@ export function useProjects() {
 }
 
 export function useProject(id: number) {
-  const {
-    isLoading,
-    isError,
-    updateProject,
-    isUpdating,
-    getProjectById,
-  } = useProjects();
+  const { isLoading, isError, updateProject, isUpdating, getProjectById } =
+    useProjects();
 
   return {
     project: getProjectById(id),

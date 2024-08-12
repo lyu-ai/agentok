@@ -10,15 +10,17 @@ import { useTemplates } from './useTemplates';
 
 export function useChats() {
   const { data, error, mutate } = useSWR('/api/chats', fetcher);
-  const chats = useChatStore(state => state.chats);
-  const setChats = useChatStore(state => state.setChats);
-  const activeChatId = useChatStore(state => state.activeChatId);
-  const setActiveChatId = useChatStore(state => state.setActiveChatId);
-  const deleteChat = useChatStore(state => state.deleteChat);
-  const sidebarCollapsed = useChatStore(state => state.sidebarCollapsed);
-  const setSidebarCollapsed = useChatStore(state => state.setSidebarCollapsed);
-  const projects = useProjectStore(state => state.projects);
-  const templates = useTemplateStore(state => state.templates);
+  const chats = useChatStore((state) => state.chats);
+  const setChats = useChatStore((state) => state.setChats);
+  const activeChatId = useChatStore((state) => state.activeChatId);
+  const setActiveChatId = useChatStore((state) => state.setActiveChatId);
+  const deleteChat = useChatStore((state) => state.deleteChat);
+  const sidebarCollapsed = useChatStore((state) => state.sidebarCollapsed);
+  const setSidebarCollapsed = useChatStore(
+    (state) => state.setSidebarCollapsed
+  );
+  const projects = useProjectStore((state) => state.projects);
+  const templates = useTemplateStore((state) => state.templates);
 
   const getInitialName = (
     sourceId: number,
@@ -26,8 +28,8 @@ export function useChats() {
   ) => {
     const source =
       sourceType === 'project'
-        ? projects.find(project => project.id === sourceId)
-        : templates.find(template => template.id === sourceId);
+        ? projects.find((project) => project.id === sourceId)
+        : templates.find((template) => template.id === sourceId);
     return `Chat for ${source?.name || ''}`;
   };
 
@@ -95,7 +97,7 @@ export function useChats() {
     }
   };
 
-  const updateChat = useChatStore(state => state.updateChat);
+  const updateChat = useChatStore((state) => state.updateChat);
   const [isUpdating, setIsUpdating] = useState(false);
   const handleUpdateChat = async (id: number, chat: Partial<Chat>) => {
     setIsUpdating(true);
@@ -138,14 +140,17 @@ export function useChat(chatId: number) {
   const { chats, updateChat, isUpdating, isLoading, isError } = useChats();
   const { projects } = useProjects();
   const { templates } = useTemplates();
-  const chat = chatId === -1 ? undefined : chats.find(chat => chat.id === chatId);
-  const chatSource = chatId === -1 ? undefined :
-    chat?.from_type === 'project'
-      ? projects &&
-      projects.find((project: any) => project.id === chat.from_project)
-      : templates &&
-      templates.find((template: any) => template.id === chat?.from_template)
-        ?.project;
+  const chat =
+    chatId === -1 ? undefined : chats.find((chat) => chat.id === chatId);
+  const chatSource =
+    chatId === -1
+      ? undefined
+      : chat?.from_type === 'project'
+        ? projects &&
+          projects.find((project: any) => project.id === chat.from_project)
+        : templates &&
+          templates.find((template: any) => template.id === chat?.from_template)
+            ?.project;
 
   const handleUpdateChat = (chat: Partial<Chat>) => {
     updateChat(chatId, chat);

@@ -19,7 +19,10 @@ export interface Settings {
 }
 
 export function useSettings() {
-  const { data, error, mutate } = useSWR<Settings>('/api/settings/general', fetcher);
+  const { data, error, mutate } = useSWR<Settings>(
+    '/api/settings/general',
+    fetcher
+  );
   const [isUpdating, setIsUpdating] = useState(false);
   const handleUpdateSettings = async (newSettings: Settings) => {
     setIsUpdating(true);

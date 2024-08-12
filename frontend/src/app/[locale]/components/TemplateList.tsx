@@ -95,12 +95,12 @@ export const TemplateCard = ({
     e.stopPropagation();
     e.preventDefault();
     await createChat(template.id, 'template')
-      .then(chat => {
+      .then((chat) => {
         if (chat) {
           router.push(`/chat?id=${chat.id}`);
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
         toast.error(`Failed to create chat: ${e}`);
       });
@@ -136,7 +136,8 @@ export const TemplateCard = ({
         'group card w-80 bg-base-content/10 border border-base-content/10',
         className,
         {
-          'hover:shadow-box hover:shadow-base-content/20 hover:border-base-content/20': !suppressLink,
+          'hover:shadow-box hover:shadow-base-content/20 hover:border-base-content/20':
+            !suppressLink,
         }
       )}
     >
@@ -161,9 +162,10 @@ export const TemplateCard = ({
               width={24}
               alt="owner"
               className="w-6 h-6 rounded-full"
-            />) : (
+            />
+          ) : (
             <div className="w-6 h-6 rounded-full shrink-0 bg-base-content/20 flex items-center justify-center">
-              <RiUserHeartLine className='w-4 h-4 text-base-content' />
+              <RiUserHeartLine className="w-4 h-4 text-base-content" />
             </div>
           )}
           {template.full_name ?? template.email ?? ''}

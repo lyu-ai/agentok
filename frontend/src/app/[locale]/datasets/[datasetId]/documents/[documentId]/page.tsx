@@ -1,12 +1,12 @@
-"use client";
-import { useChunks, useDataset, useDocument } from "@/hooks";
-import ChunkCard from "./components/ChunkCard";
-import { Chunk } from "@/store/dataset";
-import { useState } from "react";
-import { getFileIcon } from "@/utils/icon";
-import ChunkConfig from "./components/ChunkConfig";
-import { RiDatabase2Line } from "react-icons/ri";
-import Link from "next/link";
+'use client';
+import { useChunks, useDataset, useDocument } from '@/hooks';
+import ChunkCard from './components/ChunkCard';
+import { Chunk } from '@/store/dataset';
+import { useState } from 'react';
+import { getFileIcon } from '@/utils/icon';
+import ChunkConfig from './components/ChunkConfig';
+import { RiDatabase2Line } from 'react-icons/ri';
+import Link from 'next/link';
 
 const Page = ({
   params,

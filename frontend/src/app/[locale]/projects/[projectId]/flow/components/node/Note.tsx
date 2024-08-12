@@ -31,7 +31,7 @@ function Note({ id, data, ...props }: any) {
               type="button"
               aria-label="Confirm editing"
               className="btn btn-xs btn-ghost btn-square rounded"
-              onClick={e => {
+              onClick={(e) => {
                 setEditing(false);
                 setNodeData(instance, id, { content: content });
               }}
@@ -59,7 +59,7 @@ function Note({ id, data, ...props }: any) {
         {editing && (
           <textarea
             value={content}
-            onChange={e => setContent(e.target.value)}
+            onChange={(e) => setContent(e.target.value)}
             placeholder={t('note-placeholder')}
             className="nodrag nowheel textarea w-full h-full p-2 bg-base-content/20 rounded"
             rows={6}

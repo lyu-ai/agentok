@@ -3,15 +3,19 @@ import { useEffect, useState } from 'react';
 import { fetcher } from './fetcher';
 
 export interface ToolSettings {
-  [key: number]: { // Tool ID
+  [key: number]: {
+    // Tool ID
     variables: {
       [key: string]: string; // Variable name and value
     };
-  }
+  };
 }
 
 export function useToolSettings() {
-  const { data, error, mutate } = useSWR<ToolSettings>('/api/settings/tools', fetcher);
+  const { data, error, mutate } = useSWR<ToolSettings>(
+    '/api/settings/tools',
+    fetcher
+  );
   const [isUpdating, setIsUpdating] = useState(false);
   const handleUpdateSettings = async (newSettings: ToolSettings) => {
     setIsUpdating(true);

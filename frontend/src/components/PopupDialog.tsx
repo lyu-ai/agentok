@@ -1,6 +1,6 @@
-import { Dialog, DialogTitle, DialogPanel } from "@headlessui/react";
-import clsx from "clsx";
-import { RiCloseLine } from "react-icons/ri";
+import { Dialog, DialogTitle, DialogPanel } from '@headlessui/react';
+import clsx from 'clsx';
+import { RiCloseLine } from 'react-icons/ri';
 
 const PopupDialog = ({
   className,
@@ -20,14 +20,14 @@ const PopupDialog = ({
       <div className="flex items-center justify-center min-h-screen ">
         <DialogPanel
           className={clsx(
-            "relative z-10 bg-base-100 text-base-content dark:bg-gray-800/80 rounded-md border border-base-content/10 transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0",
+            'relative z-10 bg-base-100 text-base-content dark:bg-gray-800/80 rounded-md border border-base-content/10 transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0',
             className
           )}
           transition
         >
           <DialogTitle
             className={clsx(
-              "font-bold p-2 flex items-center justify-between",
+              'font-bold p-2 flex items-center justify-between',
               classNameTitle
             )}
           >

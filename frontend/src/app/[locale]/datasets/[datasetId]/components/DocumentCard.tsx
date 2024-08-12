@@ -1,10 +1,10 @@
-"use client";
-import { useChunks, useDocument } from "@/hooks";
-import { getFileIcon } from "@/utils/icon";
-import clsx from "clsx";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { RiDeleteBin4Line } from "react-icons/ri";
+'use client';
+import { useChunks, useDocument } from '@/hooks';
+import { getFileIcon } from '@/utils/icon';
+import clsx from 'clsx';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { RiDeleteBin4Line } from 'react-icons/ri';
 
 const DocumentCard = ({
   document,
@@ -39,7 +39,7 @@ const DocumentCard = ({
     <Link
       href={`/datasets/${document.dataset_id}/documents/${document.id}`}
       className={clsx(
-        "relative group w-full flex flex-col gap-2 p-3 h-48 rounded-md bg-base-content/10 border-base-content/20 hover:bg-base-content/20 border cursor-pointer hover:shadow-box hover:shadow-gray-700",
+        'relative group w-full flex flex-col gap-2 p-3 h-48 rounded-md bg-base-content/10 border-base-content/20 hover:bg-base-content/20 border cursor-pointer hover:shadow-box hover:shadow-gray-700',
         className
       )}
       {...props}
@@ -71,7 +71,7 @@ const DocumentCard = ({
             onClick={(e) => e.stopPropagation()}
           />
           <div className="text-xs text-base-content/50 px-2 py-0.5 border border-base-content/20 rounded-full">
-            {document.status === "completed" ? (
+            {document.status === 'completed' ? (
               <span className="text-success">{chunks.length} chunks</span>
             ) : (
               <span className="text-warning">processing...</span>

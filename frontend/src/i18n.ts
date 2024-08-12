@@ -19,7 +19,7 @@ export default getRequestConfig(async ({ locale }) => {
       }
     },
     getMessageFallback({ namespace, key, error }) {
-      const path = [namespace, key].filter(part => part != null).join('.');
+      const path = [namespace, key].filter((part) => part != null).join('.');
 
       if (error.code === IntlErrorCode.MISSING_MESSAGE) {
         return path + ' is not yet translated';
@@ -27,5 +27,5 @@ export default getRequestConfig(async ({ locale }) => {
         return 'Dear developer, please fix this message: ' + path;
       }
     },
-  }
+  };
 });

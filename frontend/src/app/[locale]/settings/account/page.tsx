@@ -13,12 +13,18 @@ const AccountPage = () => {
       <div className="flex flex-col gap-6 border rounded-lg p-6 w-full border-base-content/20 bg-gradient-to-r from-transparent to-base-content/20">
         <div className="avatar">
           <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-            <img src={user.user_metadata?.avatar_url ?? '/logo-spaced.png'} alt="User avatar" />
+            <img
+              src={user.user_metadata?.avatar_url ?? '/logo-spaced.png'}
+              alt="User avatar"
+            />
           </div>
         </div>
         <div className="flex-grow">
           <div className="mb-4">
-            <span className="font-bold">Name:</span> {user.user_metadata?.full_name ?? user.email?.match(/^([^@]+)/)?.[1] ?? '(No Name)'}
+            <span className="font-bold">Name:</span>{' '}
+            {user.user_metadata?.full_name ??
+              user.email?.match(/^([^@]+)/)?.[1] ??
+              '(No Name)'}
           </div>
           <div className="mb-4">
             <span className="font-bold">Email:</span> {user.email}

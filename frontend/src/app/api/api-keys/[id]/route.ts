@@ -29,7 +29,10 @@ export async function DELETE(
     const deleted = await res.json();
     return NextResponse.json(deleted);
   } catch (e) {
-    console.error(`Failed DELETE /api-keys/${params.id}:`, (e as Error).message);
+    console.error(
+      `Failed DELETE /api-keys/${params.id}:`,
+      (e as Error).message
+    );
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }

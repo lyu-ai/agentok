@@ -1,5 +1,5 @@
-import clsx from "clsx";
-import { OptionProps, OptionType } from "./Option";
+import clsx from 'clsx';
+import { OptionProps, OptionType } from './Option';
 
 type RangeOptionProps = {
   min: number;
@@ -19,9 +19,9 @@ const RangeOption = ({
 }: RangeOptionProps) => {
   return (
     <div
-      className={clsx("flex gap-1 text-sm", {
-        "flex-col": !compact,
-        "items-center": compact,
+      className={clsx('flex gap-1 text-sm', {
+        'flex-col': !compact,
+        'items-center': compact,
       })}
     >
       <label className="whitespace-nowrap">{label}</label>
@@ -34,7 +34,7 @@ const RangeOption = ({
         onChange={(e) => onChange && onChange(name, e.target.valueAsNumber)}
         className="range range-xs nodrag focus:range-primary w-full p-1"
       />
-      [{data?.[name] ?? "None"}]
+      [{data?.[name] ?? 'None'}]
     </div>
   );
 };

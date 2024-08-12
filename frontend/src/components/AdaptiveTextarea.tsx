@@ -1,17 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 
-const AdaptiveTextarea = ({ placeholder, value, onChange, onEnter, className }: any) => {
+const AdaptiveTextarea = ({
+  placeholder,
+  value,
+  onChange,
+  onEnter,
+  className,
+}: any) => {
   const [height, setHeight] = useState('16px');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const resetTextareaHeight = (textarea: any) => {
     textarea.style.height = '16px'; /* Reset height to default */
-    textarea.style.height = `${
-      Math.min(
-        textarea.scrollHeight,
-        5 * 1.5 * 20,
-      )
-    }px`; /* Set height to fit content or max 5 lines */
+    textarea.style.height = `${Math.min(
+      textarea.scrollHeight,
+      5 * 1.5 * 20
+    )}px`; /* Set height to fit content or max 5 lines */
     setHeight(textarea.style.height);
   };
 
@@ -23,7 +27,11 @@ const AdaptiveTextarea = ({ placeholder, value, onChange, onEnter, className }: 
 
   const onKeyDown = (event: any) => {
     // event.nativeEvent.isComposing === true when the user is typing in a CJK IME.
-    if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
+    if (
+      event.key === 'Enter' &&
+      !event.shiftKey &&
+      !event.nativeEvent.isComposing
+    ) {
       event.preventDefault();
       onEnter();
     }

@@ -1,5 +1,5 @@
-import clsx from "clsx";
-import { OptionProps } from "./Option";
+import clsx from 'clsx';
+import { OptionProps } from './Option';
 
 type SelectOptionProps = {
   options: { label: string; value: string }[];
@@ -18,9 +18,9 @@ const SelectOption = ({
     selectedIndex = options.findIndex((o) => o.value === data[name]);
   return (
     <div
-      className={clsx("flex gap-1 text-sm", {
-        "flex-col": !compact,
-        "items-center": compact,
+      className={clsx('flex gap-1 text-sm', {
+        'flex-col': !compact,
+        'items-center': compact,
       })}
     >
       <label className="whitespace-nowrap">{label}</label>

@@ -1,8 +1,8 @@
-import useSWR from "swr";
-import { fetcher } from "./fetcher";
-import { useState } from "react";
-import useDatasetStore, { Chunk, Document, Dataset } from "@/store/dataset";
-import { update } from "lodash-es";
+import useSWR from 'swr';
+import { fetcher } from './fetcher';
+import { useState } from 'react';
+import useDatasetStore, { Chunk, Document, Dataset } from '@/store/dataset';
+import { update } from 'lodash-es';
 
 export function useDatasets() {
   const { data, error, mutate } = useSWR<Dataset[]>(`/api/datasets`, fetcher);
@@ -13,11 +13,11 @@ export function useDatasets() {
     setIsCreating(true);
     try {
       const res = await fetch(`/api/datasets`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        credentials: "include",
+        credentials: 'include',
         body: JSON.stringify(dataset),
       });
       if (res.ok) {
@@ -25,7 +25,7 @@ export function useDatasets() {
         return await res.json();
       }
     } catch (error) {
-      console.error("Failed to create dataset:", error);
+      console.error('Failed to create dataset:', error);
       // Rollback or handle the error state as necessary
       mutate();
     } finally {
@@ -40,12 +40,12 @@ export function useDatasets() {
     deleteDataset(id);
     try {
       await fetch(`/api/datasets/${id}`, {
-        method: "DELETE",
-        credentials: "include",
+        method: 'DELETE',
+        credentials: 'include',
       });
       mutate(); // Revalidate the cache to reflect the change
     } catch (error) {
-      console.error("Failed to delete the dataset:", error);
+      console.error('Failed to delete the dataset:', error);
       mutate();
     } finally {
       setIsDeleting(false);
@@ -57,11 +57,11 @@ export function useDatasets() {
     setIsUpdating(true);
     try {
       const res = await fetch(`/api/datasets/${id}`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        credentials: "include",
+        credentials: 'include',
         body: JSON.stringify(dataset),
       });
       if (res.ok) {
@@ -69,7 +69,7 @@ export function useDatasets() {
         return await res.json();
       }
     } catch (error) {
-      console.error("Failed to update dataset:", error);
+      console.error('Failed to update dataset:', error);
       mutate();
     } finally {
       setIsUpdating(false);
@@ -104,11 +104,11 @@ export function useDataset(datasetId: number) {
     deleteDataset(datasetId);
     try {
       await fetch(`/api/datasets/${datasetId}`, {
-        method: "DELETE",
-        credentials: "include",
+        method: 'DELETE',
+        credentials: 'include',
       });
     } catch (error) {
-      console.error("Failed to delete the dataset:", error);
+      console.error('Failed to delete the dataset:', error);
     }
     setIsDeleting(false);
   };
@@ -120,7 +120,7 @@ export function useDataset(datasetId: number) {
       const updatedDataset = await updateDataset(datasetId, dataset);
       return updatedDataset;
     } catch (error) {
-      console.error("Failed to update dataset:", error);
+      console.error('Failed to update dataset:', error);
     } finally {
       setIsUpdating(false);
     }
@@ -151,12 +151,12 @@ export function useDocuments(datasetId: number) {
     deleteDocument(id);
     try {
       await fetch(`/api/datasets/${datasetId}/documents/${id}`, {
-        method: "DELETE",
-        credentials: "include",
+        method: 'DELETE',
+        credentials: 'include',
       });
       mutate(); // Revalidate the cache to reflect the change
     } catch (error) {
-      console.error("Failed to delete the document:", error);
+      console.error('Failed to delete the document:', error);
       mutate();
     } finally {
       setIsDeleting(false);
@@ -185,11 +185,11 @@ export function useDocument(datasetId: number, documentId: number) {
       const res = await fetch(
         `/api/datasets/${datasetId}/documents/${documentId}`,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
-          credentials: "include",
+          credentials: 'include',
           body: JSON.stringify(document),
         }
       );
@@ -197,7 +197,7 @@ export function useDocument(datasetId: number, documentId: number) {
         return await res.json();
       }
     } catch (error) {
-      console.error("Failed to update document:", error);
+      console.error('Failed to update document:', error);
     } finally {
       setIsUpdating(false);
     }
@@ -228,12 +228,12 @@ export function useChunks(datasetId: number, documentId: number) {
       await fetch(
         `/api/datasets/${datasetId}/documents/${documentId}/chunks/${chunkId}`,
         {
-          method: "DELETE",
-          credentials: "include",
+          method: 'DELETE',
+          credentials: 'include',
         }
       );
     } catch (error) {
-      console.error("Failed to delete the chunk:", error);
+      console.error('Failed to delete the chunk:', error);
     }
   };
 
@@ -243,11 +243,11 @@ export function useChunks(datasetId: number, documentId: number) {
       const res = await fetch(
         `/api/datasets/${datasetId}/documents/${documentId}/chunks/${chunkId}`,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
-          credentials: "include",
+          credentials: 'include',
           body: JSON.stringify(chunk),
         }
       );
@@ -255,7 +255,7 @@ export function useChunks(datasetId: number, documentId: number) {
         return await res.json();
       }
     } catch (error) {
-      console.error("Failed to update chunk:", error);
+      console.error('Failed to update chunk:', error);
     }
   };
 
@@ -290,12 +290,12 @@ export function useChunk(
       await fetch(
         `/api/datasets/${datasetId}/documents/${documentId}/chunks/${chunkId}`,
         {
-          method: "DELETE",
-          credentials: "include",
+          method: 'DELETE',
+          credentials: 'include',
         }
       );
     } catch (error) {
-      console.error("Failed to delete the chunk:", error);
+      console.error('Failed to delete the chunk:', error);
     }
     setIsDeleting(false);
   };
@@ -308,11 +308,11 @@ export function useChunk(
       const res = await fetch(
         `/api/datasets/${datasetId}/documents/${documentId}/chunks/${chunkId}`,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
-          credentials: "include",
+          credentials: 'include',
           body: JSON.stringify(chunk),
         }
       );
@@ -320,7 +320,7 @@ export function useChunk(
         return await res.json();
       }
     } catch (error) {
-      console.error("Failed to update chunk:", error);
+      console.error('Failed to update chunk:', error);
     } finally {
       setIsUpdating(false);
     }

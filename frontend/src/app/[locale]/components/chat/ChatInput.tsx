@@ -4,13 +4,7 @@ import ImagePanel from '@/components/ImagePanel';
 import { useTranslations } from 'next-intl';
 import { RiImageAddLine, RiSendPlane2Line, RiStopFill } from 'react-icons/ri';
 
-const ChatInput = ({
-  onSend,
-  onAbort,
-  status,
-  className,
-  ...props
-}: any) => {
+const ChatInput = ({ onSend, onAbort, status, className, ...props }: any) => {
   const [showImagePanel, setShowImagePanel] = useState(false);
   const [image, setImage] = useState('');
   const [message, setMessage] = useState('');

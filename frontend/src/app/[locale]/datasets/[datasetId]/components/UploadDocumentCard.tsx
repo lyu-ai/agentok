@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
-import { useDrop } from "react-dnd";
-import { RiUpload2Line } from "react-icons/ri";
-import { toast } from "react-toastify";
+import React, { useRef, useState } from 'react';
+import { useDrop } from 'react-dnd';
+import { RiUpload2Line } from 'react-icons/ri';
+import { toast } from 'react-toastify';
 
 const UploadDocumentCard = ({ datasetId }: { datasetId: number }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -11,24 +11,24 @@ const UploadDocumentCard = ({ datasetId }: { datasetId: number }) => {
   const handleUpload = async (file: File) => {
     setIsUploading(true);
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append('file', file);
 
     try {
       const response = await fetch(`/api/datasets/${datasetId}/documents`, {
-        method: "POST",
+        method: 'POST',
         body: formData,
       });
 
       if (!response.ok) {
-        throw new Error("Failed to upload document");
+        throw new Error('Failed to upload document');
       }
 
       const document = await response.json();
-      console.log("Uploaded document:", document);
-      toast.success("Document uploaded successfully");
+      console.log('Uploaded document:', document);
+      toast.success('Document uploaded successfully');
     } catch (error) {
       console.error(error);
-      toast.error("Error uploading document");
+      toast.error('Error uploading document');
     } finally {
       setIsUploading(false);
     }
@@ -36,18 +36,18 @@ const UploadDocumentCard = ({ datasetId }: { datasetId: number }) => {
 
   const isValidFileType = (file: File) => {
     const validTypes = [
-      "application/pdf",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "application/msword",
-      "text/plain",
+      'application/pdf',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/msword',
+      'text/plain',
     ];
     return validTypes.includes(file.type);
   };
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
-    accept: "file",
+    accept: 'file',
     drop: (item: { files: File[] }, monitor) => {
-      console.log("Dropped files:", item.files, monitor.getDropResult());
+      console.log('Dropped files:', item.files, monitor.getDropResult());
       if (monitor.didDrop()) {
         return;
       }
@@ -84,10 +84,10 @@ const UploadDocumentCard = ({ datasetId }: { datasetId: number }) => {
 
   const isActive = canDrop && isOver;
   const backgroundColor = isActive
-    ? "bg-green-200"
+    ? 'bg-green-200'
     : canDrop
-    ? "bg-green-100"
-    : "bg-base-content/5";
+      ? 'bg-green-100'
+      : 'bg-base-content/5';
 
   return (
     <div
@@ -99,7 +99,7 @@ const UploadDocumentCard = ({ datasetId }: { datasetId: number }) => {
         type="file"
         ref={fileInputRef}
         onChange={handleFileSelect}
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
         multiple
       />
       <div className="flex flex-col items-center gap-4">
@@ -110,8 +110,8 @@ const UploadDocumentCard = ({ datasetId }: { datasetId: number }) => {
         )}
         <div className="text-sm text-center">
           {isActive
-            ? "Drop the document here..."
-            : "Click or drag to upload new documents."}
+            ? 'Drop the document here...'
+            : 'Click or drag to upload new documents.'}
         </div>
       </div>
     </div>

@@ -1,10 +1,10 @@
-import PopupDialog from "@/components/PopupDialog";
-import clsx from "clsx";
-import { useState } from "react";
+import PopupDialog from '@/components/PopupDialog';
+import clsx from 'clsx';
+import { useState } from 'react';
 
 const DatasetConfig = ({ dataset, show, onApply, onClose }: any) => {
-  const [name, setName] = useState(dataset?.name || "");
-  const [description, setDescription] = useState(dataset?.description || "");
+  const [name, setName] = useState(dataset?.name || '');
+  const [description, setDescription] = useState(dataset?.description || '');
   return (
     <PopupDialog
       show={show}
@@ -40,8 +40,8 @@ const DatasetConfig = ({ dataset, show, onApply, onClose }: any) => {
       <div className="flex items-center justify-end gap-2">
         <button
           onClick={() => onApply(name, description) && onClose()}
-          className={clsx("btn btn-sm btn-primary min-w-24", {
-            "btn-disabled": name === "",
+          className={clsx('btn btn-sm btn-primary min-w-24', {
+            'btn-disabled': name === '',
           })}
         >
           OK

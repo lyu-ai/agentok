@@ -67,7 +67,7 @@ const ImagePanel = (props: ImagePanelProps) => {
         <input
           type="text"
           value={url}
-          onChange={e => setUrl(e.target.value)}
+          onChange={(e) => setUrl(e.target.value)}
           className="input input-xs input-bordered rounded-sm w-full bg-base-100/40"
           placeholder={t('image-url-placeholder')}
         />

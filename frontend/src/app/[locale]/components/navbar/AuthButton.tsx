@@ -61,7 +61,9 @@ const UserPanel = ({ user }: { user: any }) => {
         className="mt-8 w-16 h-16 rounded-full bg-primary/20 text-primary overflow-hidden"
       />
       <span className="text-lg font-bold">
-        {user.user_metadata.name ?? user.email?.match(/^([^@]+)/)?.[1] ?? '(No Name)'}
+        {user.user_metadata.name ??
+          user.email?.match(/^([^@]+)/)?.[1] ??
+          '(No Name)'}
       </span>
       <span className="flex flex-col items-center gap-2">
         {user.email}

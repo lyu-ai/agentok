@@ -8,7 +8,10 @@ export async function POST(request: NextRequest) {
   const supabase = await createClient();
 
   // Get the session from Supabase
-  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+  const {
+    data: { session },
+    error: sessionError,
+  } = await supabase.auth.getSession();
 
   if (sessionError || !session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

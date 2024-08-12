@@ -23,8 +23,8 @@ const NumberOption = ({
       <input
         type="number"
         value={value}
-        onChange={e => setValue(e.target.valueAsNumber)}
-        onBlur={e => onChange && onChange(name, e.target.valueAsNumber)}
+        onChange={(e) => setValue(e.target.valueAsNumber)}
+        onBlur={(e) => onChange && onChange(name, e.target.valueAsNumber)}
         className="input input-xs input-bordered w-24 bg-transparent focus:input-primary rounded px-0 pl-1"
       />
     </div>
