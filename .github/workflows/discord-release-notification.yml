@@ -11,12 +11,11 @@ jobs:
     steps:
       - name: Set test variables
         if: ${{ github.event_name == 'workflow_dispatch' }}
-        env:
-          RELEASE_TAG: "v1.0.0-test"
-          RELEASE_NAME: "Test Release"
-          RELEASE_BODY: "This is a test release."
-          RELEASE_URL: "https://example.com"
-        run: echo "Testing with release tag: $RELEASE_TAG"
+        run: |
+          echo "RELEASE_TAG=v1.0.0-test" >> $GITHUB_ENV
+          echo "RELEASE_NAME=Test Release" >> $GITHUB_ENV
+          echo "RELEASE_BODY=This is a test release." >> $GITHUB_ENV
+          echo "RELEASE_URL=https://example.com" >> $GITHUB_ENV
 
       - name: Dump GitHub context
         env:
