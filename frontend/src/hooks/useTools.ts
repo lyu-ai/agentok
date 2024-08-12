@@ -124,19 +124,35 @@ export function useTools() {
 }
 
 export function useTool(toolId: number) {
-  const {
-    isLoading,
-    isError,
-    updateTool: handleUpdateTool,
-    isUpdating,
-    getToolById,
-  } = useTools();
+  const { isLoading, isError, updateTool, deleteTool, getToolById } =
+    useTools();
+
+  const [isUpdating, setIsUpdating] = useState(false);
+  const handleUpdateTool = useCallback(
+    async (tool: Partial<Tool>) => {
+      setIsUpdating(true);
+      await updateTool(toolId, tool).finally(() => {
+        setIsUpdating(false);
+      });
+    },
+    [updateTool, toolId]
+  );
+
+  const [isDeleting, setIsDeleting] = useState(false);
+  const handleDeleteTool = useCallback(async () => {
+    setIsDeleting(true);
+    await deleteTool(toolId).finally(() => {
+      setIsDeleting(false);
+    });
+  }, [deleteTool, toolId]);
 
   return {
     tool: getToolById(toolId),
     isLoading,
     isError,
-    updateTool: (tool: Partial<Tool>) => handleUpdateTool(toolId, tool),
+    updateTool: handleUpdateTool,
     isUpdating,
+    deleteTool: handleDeleteTool,
+    isDeleting,
   };
 }

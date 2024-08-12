@@ -50,7 +50,7 @@ const NewToolCard = () => {
 const Page = () => {
   const t = useTranslations('page.Tools');
   const { tools: publicTools } = usePublicTools();
-  const { tools: customTools, createTool } = useTools();
+  const { tools: customTools } = useTools();
   const [filter, setFilter] = useState<'all' | 'public' | 'custom'>('all');
   const [activeTool, setActiveTool] = useState<any>(null);
 

@@ -48,7 +48,7 @@ const ImageUploader = ({
 
   return (
     <div
-      className={`image-uploader ${className} overflow-hidden border border-dashed border-base-content/20 rounded`}
+      className={`image-uploader ${className} overflow-hidden border-2 border-dashed border-base-content/40 rounded`}
     >
       <input
         type="file"
@@ -68,8 +68,8 @@ const ImageUploader = ({
               alt="Uploaded"
               className="block max-w-full max-h-72"
             />
-            <div className="absolute inset-0 flex items-center justify-center bg-base-content opacity-0 hover:opacity-95 hover:backdrop-blur-md transition-opacity">
-              <RiImageAddLine className="w-9 h-9 text-base-200" />
+            <div className="absolute inset-0 flex items-center justify-center bg-black opacity-0 hover:opacity-40 backdrop-blur-md">
+              <RiImageAddLine className="w-9 h-9 text-primary" />
             </div>
           </div>
         ) : (

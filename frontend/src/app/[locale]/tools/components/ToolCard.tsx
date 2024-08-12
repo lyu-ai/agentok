@@ -1,20 +1,20 @@
-import { useUser } from '@/hooks';
+import { useTool, useUser } from '@/hooks';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { RiFormula, RiDeleteBin4Line, RiCodeLine } from 'react-icons/ri';
+import { RiDeleteBin4Line, RiCodeLine } from 'react-icons/ri';
 
-const ToolCard = ({ tool, onDelete, selected, className, ...props }: any) => {
+const ToolCard = ({ tool, selected, className, ...props }: any) => {
   const [isOwned, setIsOwned] = useState(false);
   const { userId } = useUser();
-  const [isDeleting, setIsDeleting] = useState(false);
+  const { deleteTool, isDeleting } = useTool(tool.id);
   useEffect(() => {
     setIsOwned(tool.user_id === userId);
   }, [tool, userId]);
   const handleDelete = async (e: any) => {
     e.stopPropagation();
-    setIsDeleting(true);
-    onDelete && (await onDelete(tool).finally(() => setIsDeleting(false)));
+    e.preventDefault();
+    await deleteTool();
   };
 
   return (
@@ -39,17 +39,14 @@ const ToolCard = ({ tool, onDelete, selected, className, ...props }: any) => {
         {tool.description}
       </div>
       {isOwned && (
-        <div className="absolute bottom-2 left-2 hidden group-hover:block text-xs text-base-content/50">
-          <Link
-            href={`/tools/${tool.id}`}
-            className="gap-1 btn btn-xs btn-ghost"
-          >
+        <div className="absolute bottom-2 left-2 text-xs text-base-content/50">
+          <Link href={`/tools/${tool.id}`} className="gap-1 btn btn-xs">
             <RiCodeLine className="w-4 h-4" />
             Develop
           </Link>
         </div>
       )}
-      <div className="absolute bottom-2 right-2 hidden group-hover:block">
+      <div className="absolute bottom-2 right-2">
         {!tool.is_public && (
           <button
             className="btn btn-xs btn-square btn-ghost hover:text-red-600"
