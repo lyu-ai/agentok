@@ -17,12 +17,15 @@ jobs:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
           RELEASE_NAME: ${{ github.event.release.name }}
           RELEASE_BODY: ${{ github.event.release.body }}
+          RELEASE_URL: ${{ github.event.release.html_url }}
         run: |
-          curl -H "Content-Type: application/json" -X POST -d '{
+          curl -H "Content-Type: application/json" -X POST -d @- $DISCORD_WEBHOOK <<EOF
+          {
             "embeds": [{
-              "title": "New Release: ${{ env.RELEASE_TAG }}",
-              "description": ${{ toJson(env.RELEASE_BODY) }},
-              "url": "${{ github.event.release.html_url }}",
+              "title": "New Release: $RELEASE_TAG",
+              "description": "$RELEASE_NAME\n\n$RELEASE_BODY",
+              "url": "$RELEASE_URL",
               "color": 3066993
             }]
-          }' ${{ env.DISCORD_WEBHOOK }}
+          }
+          EOF
