@@ -1,0 +1,28 @@
+name: Discord Release Notification
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  notify_discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Send Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_ANN }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_NAME: ${{ github.event.release.name }}
+          RELEASE_BODY: ${{ github.event.release.body }}
+        run: |
+          curl -H "Content-Type: application/json" -X POST -d '{
+            "embeds": [{
+              "title": "New Release: ${{ env.RELEASE_TAG }}",
+              "description": ${{ toJson(env.RELEASE_BODY) }},
+              "url": "${{ github.event.release.html_url }}",
+              "color": 3066993
+            }]
+          }' ${{ env.DISCORD_WEBHOOK }}
