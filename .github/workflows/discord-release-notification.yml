@@ -28,7 +28,8 @@ jobs:
           RELEASE_NAME: ${{ env.RELEASE_NAME || github.event.release.name }}
           RELEASE_URL: ${{ env.RELEASE_URL || github.event.release.html_url }}
         run: |
-          RELEASE_BODY=$(cat release_body.txt)
+          sudo apt-get update && sudo apt-get install -y pandoc
+          RELEASE_BODY=$(pandoc -f markdown -t plain release_body.txt | sed 's/^#* //g' | sed 's/`//g')
           echo "Sending notification for release: $RELEASE_TAG"
           curl -H "Content-Type: application/json" -X POST -d @- $DISCORD_WEBHOOK <<EOF
           {
