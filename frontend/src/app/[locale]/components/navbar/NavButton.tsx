@@ -1,11 +1,11 @@
 "use client";
 import { HiMenuAlt2 } from "react-icons/hi";
 import { Float } from "@headlessui-float/react";
-import { Popover } from "@headlessui/react";
-import { getGeneralMenuItems } from "./GeneralMenu";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
+import { NAV_MENU_ITEMS } from "./Navbar";
+import { RiShuffleFill, RiShuffleLine } from "react-icons/ri";
 
-const NavButton = ({ projectId, className }: any) => {
-  const NAV_MENU_ITEMS = getGeneralMenuItems();
+const NavButton = ({ className }: any) => {
   return (
     <Popover>
       <Float
@@ -17,12 +17,21 @@ const NavButton = ({ projectId, className }: any) => {
         leaveFrom="transform scale-100 opacity-100"
         leaveTo="transform scale-0 opacity-0"
       >
-        <Popover.Button className={className}>
+        <PopoverButton className={className}>
           <HiMenuAlt2 className="w-5 h-5" />
-        </Popover.Button>
-        <Popover.Panel className="origin-top-left absolute shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 overflow-auto max-h-[80vh]">
-          {NAV_MENU_ITEMS.map((item) => (
-            <Popover.Button
+        </PopoverButton>
+        <PopoverPanel className="origin-top-left absolute shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 overflow-auto max-h-[80vh]">
+          {[
+            {
+              id: "projects",
+              label: "Projects",
+              icon: RiShuffleLine,
+              activeIcon: RiShuffleFill,
+              href: "/projects",
+            },
+            ...NAV_MENU_ITEMS,
+          ].map((item) => (
+            <PopoverButton
               as="a"
               href={item.href}
               key={item.id}
@@ -30,9 +39,9 @@ const NavButton = ({ projectId, className }: any) => {
             >
               <item.icon className="h-4 w-4" />
               {item.label}
-            </Popover.Button>
+            </PopoverButton>
           ))}
-        </Popover.Panel>
+        </PopoverPanel>
       </Float>
     </Popover>
   );

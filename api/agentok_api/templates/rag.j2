@@ -1,4 +1,4 @@
-{%- if datasets | length > 0 %}
+{%- if datasets | length > 0 and rag_assignments is defined %}
 
 # Apply RAG Tools
 import os
@@ -35,21 +35,16 @@ def query_vectordb(query: str, dataset_id: int, top_k: int = 5) -> str:
 
     return context
 
-{%- if nodes_for_rag_execution %}
 # Register RAG tools to agents
-{%- for node_id in nodes_for_rag_execution %}
+{%- for node_id in rag_assignments['execution'] %}
 node_{{ node_id }}.register_for_execution(name="query_vectordb")(query_vectordb)
 {%- endfor %}
-{%- endif %}
 
-{%- if nodes_for_rag_llm %}
-# Register RAG tools to agents
-{%- for node_id in nodes_for_rag_llm %}
+{%- for node_id in rag_assignments['llm'] %}
 node_{{ node_id }}.register_for_llm(
     name="query_vectordb",
-    description="{{ dataset_prompts }}"
+    description="""{{ dataset_prompts }}""",
 )(query_vectordb)
 {%- endfor %}
-{%- endif %}
 
-{%- endif %}
+{% endif %}

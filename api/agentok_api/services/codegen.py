@@ -120,7 +120,7 @@ class CodegenService:
             meta = self.extract_tool_meta(tool["code"])
             tool_dict[tool["id"]]["func_name"] = meta["func_name"]
             tool_dict[tool["id"]]["code"] = self.replace_env_placeholders(tool)
-        tool_assignments = self.generate_tool_assignments(flow.nodes, tool_dict)
+        tool_assignments = self.generate_tool_assignments(flow.edges, tool_dict)
         print(tool_assignments)
         tool_dict = {
             tool_id: tool
@@ -132,16 +132,7 @@ class CodegenService:
         dataset_prompts = self.generate_dataset_prompts(datasets)
         # Filter out all the agents that assigned RAG tool for execution
         # If conversable node is assigned RAG tool, it will be enabled for both exeuction and llm
-        nodes_for_rag_execution = [
-            node["id"]
-            for node in user_nodes + conversable_nodes
-            if node["data"].get("enable_rag") is True
-        ]
-        nodes_for_rag_llm = [
-            node["id"]
-            for node in assistant_nodes + conversable_nodes
-            if node["data"].get("enable_rag") is True
-        ]
+        rag_assignments = self.generate_rag_assignments(flow.edges)
 
         code = template.render(
             project=project,
@@ -160,10 +151,9 @@ class CodegenService:
             note_nodes=note_nodes,
             tool_dict=tool_dict,
             tool_assignments=tool_assignments,
+            rag_assignments=rag_assignments,
             datasets=datasets,
             dataset_prompts=dataset_prompts,
-            nodes_for_rag_execution=nodes_for_rag_execution,
-            nodes_for_rag_llm=nodes_for_rag_llm,
         )
 
         return code
@@ -225,18 +215,19 @@ class CodegenService:
 
         return nested_chats
 
-    def generate_tool_assignments(self, nodes, tool_dict):
+    def generate_tool_assignments(self, edges, tool_dict):
         # Prepare the tool assignments
         tool_assignments = {}
 
-        for node in nodes:
-            if node["data"].get("tools") is not None:
-                # Iterate over node.data.tools.llm and append node.id to the respective tool_id in llm
-                for tool_id in node["data"]["tools"].get("llm", []):
+        for edge in edges:
+            if edge.get("data") is not None and edge["data"].get("tools") is not None:
+                # Iterate over edge.data.tools.llm and append node.id to the respective tool_id in llm
+                for tool_id in edge["data"]["tools"]:
                     if tool_id in tool_dict:
                         if tool_id not in tool_assignments:
                             tool_assignments[tool_id] = {"execution": [], "llm": []}
-                        tool_assignments[tool_id]["llm"].append(node["id"])
+                        tool_assignments[tool_id]["execution"].append(edge["source"])
+                        tool_assignments[tool_id]["llm"].append(edge["target"])
                     else:
                         print(
                             colored(
@@ -244,23 +235,19 @@ class CodegenService:
                             )
                         )
 
-                # Iterate over node.data.tools.execution and append node.id to the respective tool_id in execution
-                for tool_id in node["data"]["tools"].get("execution", []):
-                    if tool_id in tool_dict:
-                        if tool_id not in tool_assignments:
-                            tool_assignments[tool_id] = {"execution": [], "llm": []}
-                        tool_assignments[tool_id]["execution"].append(node["id"])
-                    else:
-                        print(
-                            colored(
-                                f"Tool ID {tool_id} assigned for execution not found",
-                                "red",
-                            )
-                        )
-
         # Now tool_assignments contains the desired structure
-        print(tool_assignments)
         return tool_assignments
+
+    def generate_rag_assignments(self, edges):
+        # Prepare the tool assignments
+        rag_assignments = {"execution": [], "llm": []}
+
+        for edge in edges:
+            if edge.get("data") is not None and edge["data"].get("enable_rag") is True:
+                rag_assignments["execution"].append(edge["source"])
+                rag_assignments["llm"].append(edge["target"])
+
+        return rag_assignments
 
     def generate_tool_envs(self, project: Project):
         """Generate tool environment files for the provided project.
@@ -333,12 +320,12 @@ class CodegenService:
         )
 
         dataset_prompt = f"""
-        Retrieves relevant information and generates a response based on the query.
-        Available datasets:
-        {datasets_info}
+Retrieves relevant information and generates a response based on the query.
+Available datasets:
+{datasets_info}
 
-        Choose the appropriate dataset ID based on the query.
-        """
+Choose the appropriate dataset ID based on the query.
+"""
 
         return dataset_prompt
 

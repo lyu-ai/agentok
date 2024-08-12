@@ -33,8 +33,6 @@ const DocumentCard = ({
     return null;
   }
 
-  console.log(document);
-
   const FileIcon = getFileIcon(document.path);
 
   return (

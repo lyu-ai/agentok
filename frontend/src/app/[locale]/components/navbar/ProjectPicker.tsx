@@ -57,19 +57,12 @@ const ProjectPicker = () => {
   const activeProject = getProjectById(activeProjectId);
 
   return (
-    <div
-      className={clsx(
-        "group flex items-center gap-0.5 hover:text-primary cursor-pointer",
-        {
-          "text-primary/80 border-b border-primary/80": isActive,
-        }
-      )}
-    >
+    <div className={clsx("join group flex items-center gap-2")}>
       <Link
         href={
           activeProject ? `/projects/${activeProject?.id}/flow` : "/projects"
         }
-        className="flex items-center gap-1.5 text-sm"
+        className="join-item flex items-center gap-1.5 text-sm"
       >
         <Icon className="h-4 w-4 group-hover:scale-125 transform transition duration-700 ease-in-out" />
         <span className="text-ellipsis overflow-hidden whitespace-nowrap max-w-24">
@@ -80,8 +73,8 @@ const ProjectPicker = () => {
         value={activeProject || { id: -1, name: "Select Project" }}
         onChange={(v) => router.push(`/projects/${v?.id}/flow`)}
       >
-        <ListboxButton className={clsx("btn btn-xs btn-ghost btn-circle")}>
-          <RiArrowDownSLine />
+        <ListboxButton className={clsx("join-item ")}>
+          <RiArrowDownSLine className="w-5 h-5" />
         </ListboxButton>
         <ListboxOptions
           anchor="bottom end"

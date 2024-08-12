@@ -15,12 +15,12 @@ const PopupDialog = ({
     <Dialog
       open={show}
       onClose={() => onClose()}
-      className="fixed inset-0 z-50 overflow-y-auto bg-black/30 backdrop-blur-md transition duration-300 ease-in-out data-[closed]:opacity-0"
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/30 backdrop-blur-md transition duration-400 ease-in-out data-[closed]:opacity-0"
     >
       <div className="flex items-center justify-center min-h-screen ">
         <DialogPanel
           className={clsx(
-            "relative z-10 bg-base-100 text-base-content dark:bg-gray-800/80 rounded-md border border-base-content/10 transition duration-300 ease-in-out data-[closed]:scale-0",
+            "relative z-10 bg-base-100 text-base-content dark:bg-gray-800/80 rounded-md border border-base-content/10 transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0",
             className
           )}
           transition

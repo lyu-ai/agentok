@@ -1,91 +1,110 @@
-import { useReactFlow } from 'reactflow';
-import { setEdgeData, setNodeData } from '../../utils/flow';
-import { useTranslations } from 'next-intl';
-import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
-import { RiChatSettingsFill, RiChatSettingsLine } from 'react-icons/ri';
+import { useTranslations } from "next-intl";
+import {
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+  Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
+} from "@headlessui/react";
+import { RiSettings4Line } from "react-icons/ri";
+import ToolPanel from "./ToolPanel";
+import GenericOption from "../option/Option";
 
-const ConversePanel = ({ edgeId, data, ...props }: any) => {
-  const t = useTranslations('option.ConverseConfig');
-  const instance = useReactFlow();
+const ConversePanel = ({ edgeId, data, optionsDisabled = [] }: any) => {
+  const t = useTranslations("option.ConverseConfig");
+
+  const GENERAL_OPTIONS = [
+    {
+      type: "text",
+      name: "message",
+      label: t("message"),
+      placeholder: t("message-placeholder"),
+      rows: 4,
+    },
+    {
+      type: "text",
+      name: "summary_prompt",
+      label: t("summary-prompt"),
+      placeholder: t("summary-prompt-placeholder"),
+      rows: 4,
+    },
+    {
+      type: "range",
+      name: "max_turns",
+      label: t("max-turns"),
+      min: 0,
+      max: 50,
+      step: 1,
+      compact: true,
+    },
+    {
+      type: "select",
+      name: "summary_method",
+      label: t("summary-method"),
+      compact: true,
+      options: [
+        { label: "Last Message", value: "last_msg" },
+        { label: "Reflection with LLM", value: "reflection_with_llm" },
+      ],
+    },
+    {
+      type: "check",
+      name: "enable_rag",
+      label: t("enable-rag"),
+      compact: true,
+    },
+  ];
   return (
-    <div className="z-50 flex flex-col gap-2 w-full h-full nodrag nowheel text-sm">
-      <div className="flex items-center gap-2">
-        <RiChatSettingsFill className="w-5 h-5" />
-        <div className="font-bold">{t('title')}</div>
-      </div>
-      <div className="text-xs">{t('description')}</div>
-      <div className="text-sm font-bold">{t('message')}</div>
-      <textarea
-        className="textarea textarea-bordered textarea-xs rounded w-full"
-        value={data?.message ?? ''}
-        onChange={e => {
-          setEdgeData(instance, edgeId, { message: e.target.value });
-        }}
-      />
-      <div className="text-sm font-bold">{t('summary-prompt')}</div>
-      <textarea
-        className="textarea textarea-bordered textarea-xs rounded w-full"
-        value={data?.summary_prompt ?? ''}
-        onChange={e => {
-          setEdgeData(instance, edgeId, { summary_prompt: e.target.value });
-        }}
-      />
-      <div className="flex items-center justify-between text-sm gap-2 w-full">
-        <div className="whitespace-nowrap text-base-content/80 w-48">
-          {`${t('max-turns')} - [${data?.max_turns ?? 'None'}]`}
-        </div>
-        <input
-          type="range"
-          min="0"
-          max="50"
-          step="1"
-          value={data?.max_turns ?? 0}
-          onChange={e => {
-            setEdgeData(instance, edgeId, {
-              max_turns:
-                e.target.valueAsNumber === 0 ? null : e.target.valueAsNumber,
-            });
-          }}
-          className="range range-xs w-full nodrag"
-        />
-      </div>
-      <div className="flex items-center justify-between text-sm text-base-content/60 gap-2">
-        <div className="text-base-content/80">{t('summary-method')}</div>
-        <select
-          className="select select-bordered select-sm bg-transparent rounded nodrag"
-          value={data?.summary_method ?? 'last_msg'}
-          onChange={e => {
-            setEdgeData(instance, edgeId, { summary_method: e.target.value });
-          }}
-        >
-          <option value={'last_msg'}>Last Message</option>
-          <option value={'reflection_with_llm'}>Reflection with LLM</option>
-        </select>
-      </div>
+    <div className="flex flex-col gap-2 w-full h-full">
+      {GENERAL_OPTIONS.filter((o) => !optionsDisabled.includes(o.name)).map(
+        (options, index) => (
+          <GenericOption key={index} nodeId={edgeId} data={data} {...options} />
+        )
+      )}
     </div>
   );
 };
 
 const ConverseConfig = ({ edgeId, data, className, style, ...props }: any) => {
-  const instance = useReactFlow();
-  const t = useTranslations('option.ConverseConfig');
-
+  const t = useTranslations("option.ConverseConfig");
   return (
     <Popover className="relative nodrag nowheel">
       <PopoverButton style={style} className={className}>
         <div
-          className="btn btn-sm btn-circle btn-primary flex items-center gap-2"
-          data-tooltip-id='default-tooltip'
-          data-tooltip-content={'Config the conversation between two agents'}
+          className="btn btn-sm btn-circle btn-primary"
+          data-tooltip-id="default-tooltip"
+          data-tooltip-content={t("edge-tooltip")}
         >
-          <RiChatSettingsLine className="w-5 h-5" />
+          <RiSettings4Line className="w-5 h-5" />
         </div>
       </PopoverButton>
       <PopoverPanel
-        anchor="top start"
-        className="fixed origin-bottom-left rounded-lg backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600 max-w-96 p-3"
+        anchor={{ to: "top start", gap: 4 }}
+        transition
+        className="flex flex-col origin-bottom-left rounded-lg backdrop-blur-md bg-gray-700/70 shadow-box shadow-gray-700 text-base-content border border-gray-600 max-w-md p-2 transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0"
       >
-        <ConversePanel edgeId={edgeId} data={data} />
+        <div className="flex items-center gap-2">
+          <RiSettings4Line className="w-5 h-5" />
+          <div className="font-bold">{t("title")}</div>
+        </div>
+
+        <TabGroup className="w-full h-full">
+          <TabList className="w-full tabs tabs-bordered">
+            <Tab className="tab">{t("general")}</Tab>
+            <Tab className="tab">{t("tools")}</Tab>
+          </TabList>
+          <TabPanels className="pt-2 w-full h-full">
+            <TabPanel>
+              <ConversePanel edgeId={edgeId} data={data} />
+            </TabPanel>
+            <TabPanel>
+              <ToolPanel edgeId={edgeId} data={data} />
+            </TabPanel>
+          </TabPanels>
+        </TabGroup>
       </PopoverPanel>
     </Popover>
   );

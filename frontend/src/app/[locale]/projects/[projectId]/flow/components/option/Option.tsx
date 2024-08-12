@@ -1,11 +1,11 @@
-import TextOption from './Text';
-import NumberOption from './Number';
-import OptionGroup from './OptionGroup';
-import { setNodeData } from '../../utils/flow';
-import { useReactFlow } from 'reactflow';
-import RangeOption from './Range';
-import SelectOption from './Select';
-import CheckOption from './Check';
+import TextOption from "./Text";
+import NumberOption from "./Number";
+import OptionGroup from "./OptionGroup";
+import { setEdgeData, setNodeData } from "../../utils/flow";
+import { useReactFlow } from "reactflow";
+import RangeOption from "./Range";
+import SelectOption from "./Select";
+import CheckOption from "./Check";
 
 export type OptionType = {
   type: string; // text, number, group ...
@@ -52,6 +52,8 @@ const GenericOption = ({ type, onChange, ...props }: OptionProps) => {
   const handleChange = (name: string, value: any) => {
     if (onChange) {
       onChange(name, value);
+    } else if (props.nodeId.startsWith("reactflow__edge")) {
+      setEdgeData(instance, props.nodeId, { [name]: value });
     } else {
       // Default onChange
       setNodeData(instance, props.nodeId, { [name]: value });

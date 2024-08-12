@@ -1,23 +1,27 @@
-import { useTranslations } from 'next-intl';
-import { BsInboxes } from 'react-icons/bs';
-import { useChat, useChats, useProjects, useTemplates } from '@/hooks';
-import clsx from 'clsx';
-import { Float } from '@headlessui-float/react';
-import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
-import { GoTrash, GoPencil, GoKebabHorizontal } from 'react-icons/go';
-import EditableText from '@/components/EditableText';
-import { useState, useEffect, useRef, createRef, forwardRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { RiWechat2Fill, RiWechat2Line } from 'react-icons/ri';
-import { getGeneralMenuItems } from '../navbar/GeneralMenu';
+import { useTranslations } from "next-intl";
+import { BsInboxes } from "react-icons/bs";
+import { useChat, useChats, useProjects, useTemplates } from "@/hooks";
+import clsx from "clsx";
+import { Float } from "@headlessui-float/react";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
+import { GoTrash, GoPencil, GoKebabHorizontal } from "react-icons/go";
+import EditableText from "@/components/EditableText";
+import { useState, useEffect, useRef, createRef, forwardRef } from "react";
+import { useRouter } from "next/navigation";
+import {
+  RiCompassLine,
+  RiShuffleLine,
+  RiWechat2Fill,
+  RiWechat2Line,
+} from "react-icons/ri";
 
 export const ChatEmpty = () => {
-  const t = useTranslations('component.ChatList');
+  const t = useTranslations("component.ChatList");
   return (
     <div className="flex items-center justify-center w-full h-full">
       <div className="flex flex-col gap-2 items-center text-base-content/60">
         <BsInboxes className="w-12 h-12" />
-        <div className="mt-2 text-sm">{t('chat-empty')}</div>
+        <div className="mt-2 text-sm">{t("chat-empty")}</div>
       </div>
     </div>
   );
@@ -47,7 +51,7 @@ export const ChatLoading = () => {
 };
 
 const ContextButton = ({ className, onDelete, onEdit }: any) => {
-  const t = useTranslations('component.ChatList');
+  const t = useTranslations("component.ChatList");
   return (
     <Popover>
       <Float
@@ -63,29 +67,29 @@ const ContextButton = ({ className, onDelete, onEdit }: any) => {
         leaveTo="transform scale-0 opacity-0"
       >
         <PopoverButton
-          onClick={e => e.stopPropagation()}
-          className={clsx('btn btn-xs btn-square btn-ghost', className)}
+          onClick={(e) => e.stopPropagation()}
+          className={clsx("btn btn-xs btn-square btn-ghost", className)}
         >
           <GoKebabHorizontal className="w-4 h-4" />
         </PopoverButton>
         <PopoverPanel className="origin-top-right w-40 shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-600/80 text-base-content border border-gray-500 max-h-[80vh]">
           {[
             {
-              label: t('edit-chat-name'),
+              label: t("edit-chat-name"),
               icon: GoPencil,
               onClick: onEdit,
             },
             {
-              label: t('delete-chat'),
+              label: t("delete-chat"),
               icon: GoTrash,
               onClick: onDelete,
-              className: 'text-red-500',
+              className: "text-red-500",
             },
           ].map(({ label, icon: Icon, className, onClick }) => (
             <PopoverButton
               key={label}
               className={clsx(
-                'flex items-center w-full p-2 gap-2 rounded-md hover:bg-base-content/20 cursor-pointer',
+                "flex items-center w-full p-2 gap-2 rounded-md hover:bg-base-content/20 cursor-pointer",
                 className
               )}
               onClick={onClick}
@@ -112,13 +116,8 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
     const router = useRouter();
     const [isEditing, setIsEditing] = useState(false);
     const { chat, isLoading, chatSource } = useChat(chatId);
-    const {
-      chats,
-      setActiveChatId,
-      activeChatId,
-      updateChat,
-      deleteChat,
-    } = useChats();
+    const { chats, setActiveChatId, activeChatId, updateChat, deleteChat } =
+      useChats();
     const selected = activeChatId === chatId && !disableSelection;
 
     const onEditStarted = () => {
@@ -130,12 +129,12 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
     };
     const onDelete = async () => {
       if (!chat || !chats) {
-        console.warn('Chat not found', chatId);
+        console.warn("Chat not found", chatId);
         return;
       }
-      const currentIndex = chats.findIndex(c => c.id === chat.id);
+      const currentIndex = chats.findIndex((c) => c.id === chat.id);
       if (currentIndex < 0) {
-        console.warn('Chat not found', chat.id);
+        console.warn("Chat not found", chat.id);
         return;
       }
       let nextChatId = -1;
@@ -153,20 +152,20 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
 
     if (!chat || isLoading) return <ChatLoading />;
     const ChatIcon = selected ? RiWechat2Fill : RiWechat2Line;
-    const ChatTypeIcon = getGeneralMenuItems()[
-      chat.from_type === 'project' ? 0 : 2
-    ].icon;
+    const ChatTypeIcon =
+      chat.from_type === "project" ? RiShuffleLine : RiCompassLine;
 
     return (
       <div
         key={chat.id}
         ref={ref}
         className={clsx(
-          'group flex flex-col w-80 justify-center gap-2 text-sm rounded p-1 border cursor-pointer',
-          'hover:shadow-box hover:bg-base-content/10 hover:text-primary hover:border-base-content/30',
+          "group flex flex-col w-80 justify-center gap-2 text-sm rounded p-1 border cursor-pointer",
+          "hover:shadow-box hover:bg-base-content/10 hover:text-primary hover:border-base-content/30",
           {
-            'text-primary/80 border-base-content/50 bg-base-content/20 shadow-box shadow-base-content/20': selected,
-            'border-base-content/5 bg-base-content/5': !selected,
+            "text-primary/80 border-base-content/50 bg-base-content/20 shadow-box shadow-base-content/20":
+              selected,
+            "border-base-content/5 bg-base-content/5": !selected,
           },
           className
         )}
@@ -182,7 +181,7 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
                 className="font-bold nowrap line-clamp-1 truncate w-64"
                 editing={isEditing}
                 onChange={onEditCompleted}
-                text={chat.name ?? chatSource?.name ?? 'Untitled ' + chat.id}
+                text={chat.name ?? chatSource?.name ?? "Untitled " + chat.id}
               />
               <div className="text-xs text-base-content/60 px-2">
                 {chat.created_at && new Date(chat.created_at).toLocaleString()}
@@ -191,15 +190,14 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
           </div>
           <div
             className={clsx(
-              'join flex items-center border border-base-content/40 text-base-content/40 text-xs rounded-sm py-0.5 gap-0.5')}
+              "join flex items-center border border-base-content/40 text-base-content/40 text-xs rounded-sm py-0.5 gap-0.5"
+            )}
           >
-            <span
-              className={clsx('join-item px-0.5')}
-            >
+            <span className={clsx("join-item px-0.5")}>
               <ChatTypeIcon className="w-3 h-3" />
             </span>
             <span className="join-item line-clamp-1 px-0.5">
-              {chatSource?.name ?? ''}
+              {chatSource?.name ?? ""}
             </span>
           </div>
           {selected && (
@@ -217,7 +215,7 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
   }
 );
 
-ChatBlock.displayName = 'ChatBlock';
+ChatBlock.displayName = "ChatBlock";
 
 const ChatList = ({
   className,
@@ -250,7 +248,7 @@ const ChatList = ({
       targetRect.bottom <= containerRect.top ||
       targetRect.top >= containerRect.bottom
     ) {
-      targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      targetElement.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   };
   const [filteredChats, setFilteredChats] = useState<any[]>([]);
@@ -265,7 +263,7 @@ const ChatList = ({
     ) {
       const activeChatRef = chatRefs.get(activeChatId);
       if (!activeChatRef.current) {
-        console.warn('Active chat ref not found');
+        console.warn("Active chat ref not found");
         return;
       }
       autoScrollIntoView(activeChatRef.current, chatListRef.current);
@@ -280,9 +278,9 @@ const ChatList = ({
     let newChats = chats.filter((chat: any) => {
       if (chat.name?.toLowerCase().includes(filter.toLowerCase())) return true;
       const chatSource =
-        chat.sourceType === 'template'
-          ? templates?.find(t => t.id === chat.sourceId)
-          : projects?.find(p => p.id === chat.sourceId);
+        chat.sourceType === "template"
+          ? templates?.find((t) => t.id === chat.sourceId)
+          : projects?.find((p) => p.id === chat.sourceId);
       return chatSource?.name?.toLowerCase().includes(filter.toLowerCase());
     });
     if (maxCount) {
@@ -292,7 +290,7 @@ const ChatList = ({
   }, [chats, filter, setFilteredChats, maxCount, templates, projects]);
 
   if (isChatsError) {
-    console.warn('Failed to load chats');
+    console.warn("Failed to load chats");
   }
   if (isLoadingChats) return <ChatLoading />;
   if (!chats || chats.length === 0) return <ChatEmpty />;
@@ -301,8 +299,8 @@ const ChatList = ({
     <div
       ref={chatListRef}
       className={clsx(
-        'flex w-full h-full',
-        horitontal ? 'flex-wrap justify-center gap-4' : 'flex-col gap-0.5'
+        "flex w-full h-full",
+        horitontal ? "flex-wrap justify-center gap-4" : "flex-col gap-0.5"
       )}
     >
       {filteredChats.map((chat: any) => {

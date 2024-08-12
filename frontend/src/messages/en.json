@@ -293,26 +293,27 @@
     "ConversableAgentConfig": {
       "title": "Agent Settings",
       "general": "General",
-      "disable-llm": "Disable LLM",
-      "tools": "Tools",
-      "no-tools": "No tools available",
-      "build-tool": "Build Tool",
-      "available-tools": "Available Tools",
-      "available-tools-tooltip": "Drag and drop tools to the right zones to enable them for different purposes.",
-      "tools-for-execution": "Tools for Execution",
-      "tools-for-execution-tooltip": "Select tools to be executed in this agent",
-      "tools-for-execution-placeholder": "Drag and drop tools here for execution",
-      "tools-for-llm": "Tools for LLM",
-      "tools-for-llm-tooltip": "Select tools to be used in LLM",
-      "tools-for-llm-placeholder": "Drag and drop tools here for LLM"
+      "disable-llm": "Disable LLM"
     },
     "ConverseConfig": {
       "title": "Converse Settings",
+      "edge-tooltip": "Config the conversation between two agents",
+      "no-tools": "No tool yet.",
+      "available-tools": "Available Tools",
+      "available-tools-tooltip": "Drag and drop tools to the right zones to enable them for different purposes.",
+      "tools-assigned": "Tools Assigned",
+      "tools-assigned-tooltip": "The selected tools will be automatically assigned to speaker for execution and listener for LLM.",
+      "tools-assigned-placeholder": "Select tools to be used in this conversation",
       "description": "Configure how the two connected agents collaborate.",
       "message": "Message",
+      "message-placeholder": "Enter message here",
       "summary-prompt": "Summary Prompt",
+      "summary-prompt-placeholder": "Enter summary prompt here",
       "summary-method": "Summary Method",
-      "max-turns": "Max Turns"
+      "max-turns": "Max Turns",
+      "enable-rag": "Enable RAG (Retrieval Augmented Generation)",
+      "general": "General",
+      "tools": "Tools"
     },
     "GroupChatConfig": {
       "title": "Group Chat Settings",

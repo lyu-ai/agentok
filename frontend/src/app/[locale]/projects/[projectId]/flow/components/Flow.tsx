@@ -28,7 +28,7 @@ import { genId } from "@/utils/id";
 import ChatButton from "../../../../components/chat/ChatButton";
 import { useTranslations } from "next-intl";
 import { useChats, useProject, useSettings } from "@/hooks";
-import { debounce } from "lodash-es";
+import { debounce, set } from "lodash-es";
 import ChatPane from "../../../../components/chat/ChatPane";
 import useProjectStore from "@/store/projects";
 import NodePane from "./NodePane";
@@ -36,6 +36,7 @@ import { Chat as ChatType } from "@/store/chats";
 import { RiSettings2Line, RiSpyLine } from "react-icons/ri";
 import clsx from "clsx";
 import Link from "next/link";
+import { json } from "stream/consumers";
 
 const DEBOUNCE_DELAY = 500; // Adjust this value as needed
 
@@ -68,7 +69,7 @@ const useDebouncedUpdate = (projectId: number) => {
 };
 
 const Agentflow = ({ projectId }: { projectId: number }) => {
-  const { project, isLoading, isError } = useProject(projectId);
+  const { project, isLoading, isError, updateProject } = useProject(projectId);
   const { screenToFlowPosition } = useReactFlow();
   const [nodes, setNodes] = useNodesState([]);
   const [edges, setEdges] = useEdgesState([]);
@@ -349,7 +350,15 @@ const Agentflow = ({ projectId }: { projectId: number }) => {
   } else if (mode === "json") {
     return (
       <div className="relative flex w-full h-full">
-        <Json data={project} setMode={setMode} />
+        <Json
+          data={project}
+          setMode={setMode}
+          onSave={async (project: any) => {
+            console.log("Saving json", project);
+            await updateProject(project);
+            setIsDirty(false);
+          }}
+        />
       </div>
     );
   } else if (isLoading) {
