@@ -9,7 +9,7 @@ jobs:
   notify_discord:
     runs-on: ubuntu-latest
     steps:
-      - name: Set test variables
+      - name: Fetch latest release
         if: ${{ github.event_name == 'workflow_dispatch' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -18,7 +18,7 @@ jobs:
             "https://api.github.com/repos/${{ github.repository }}/releases/latest")
           echo "RELEASE_TAG=$(echo $latest_release | jq -r .tag_name)" >> $GITHUB_ENV
           echo "RELEASE_NAME=$(echo $latest_release | jq -r .name)" >> $GITHUB_ENV
-          echo "RELEASE_BODY=$(echo $latest_release | jq -r .body)" >> $GITHUB_ENV
+          printf "RELEASE_BODY=%s\n" "$(echo $latest_release | jq -r .body)" >> $GITHUB_ENV
           echo "RELEASE_URL=$(echo $latest_release | jq -r .html_url)" >> $GITHUB_ENV
 
       - name: Dump GitHub context
