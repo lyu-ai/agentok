@@ -1,4 +1,4 @@
-import { useTool, useUser } from '@/hooks';
+import { useTool, useToolSettings, useUser } from '@/hooks';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -8,6 +8,7 @@ const ToolCard = ({ tool, selected, className, ...props }: any) => {
   const [isOwned, setIsOwned] = useState(false);
   const { userId } = useUser();
   const { deleteTool, isDeleting } = useTool(tool.id);
+  const { settings } = useToolSettings();
   useEffect(() => {
     setIsOwned(tool.user_id === userId);
   }, [tool, userId]);
@@ -16,6 +17,14 @@ const ToolCard = ({ tool, selected, className, ...props }: any) => {
     e.preventDefault();
     await deleteTool();
   };
+
+  const needConfig =
+    tool.variables?.length > 0 &&
+    tool.variables.some(
+      (v: any) =>
+        !settings[tool.id]?.variables[v.name] ||
+        settings[tool.id].variables[v.name] === ''
+    );
 
   return (
     <label
@@ -46,7 +55,14 @@ const ToolCard = ({ tool, selected, className, ...props }: any) => {
           </Link>
         </div>
       )}
-      <div className="absolute bottom-2 right-2">
+      <div className="absolute top-2 right-2 flex items-center gap-2">
+        {needConfig && (
+          <span className="text-xs bg-yellow-600 text-white p-1 rounded">
+            Not Configured
+          </span>
+        )}
+      </div>
+      <div className="absolute bottom-2 right-2 flex items-center gap-2">
         {!tool.is_public && (
           <button
             className="btn btn-xs btn-square btn-ghost hover:text-red-600"

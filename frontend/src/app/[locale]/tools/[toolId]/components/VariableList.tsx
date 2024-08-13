@@ -43,16 +43,14 @@ const VariableRow = ({ variable, onDelete, showActions, onUpdate }: any) => {
           className="input input-sm input-bordered bg-transparent rounded w-full"
         />
       </td>
-      <td className="w-16 flex text-right justify-end">
+      <td className="w-16 flex justify-center">
         {showActions && (
-          <div className="hidden group-hover:block">
-            <button
-              className="btn btn-xs btn-ghost btn-square rounded hover:text-red-600"
-              onClick={() => onDelete(variable)}
-            >
-              <RiDeleteBin4Line className="w-4 h-4" />
-            </button>
-          </div>
+          <button
+            className="btn btn-xs btn-ghost btn-square hover:text-red-600"
+            onClick={() => onDelete(variable)}
+          >
+            <RiDeleteBin4Line className="w-4 h-4" />
+          </button>
         )}
       </td>
     </tr>
@@ -79,9 +77,9 @@ const VariableList = ({ toolId, className, ...props }: any) => {
   const handleUpdate = (variable: any, name: string, value: any) => {
     if (!variable) return;
     if (!tool) return;
-    console.log('handleUpdate', variable, name, value);
+    console.log('handleUpdate', variable, newVariable, name, value);
     if (variable.id === newVariable.id) {
-      if (!variable.name && !variable.description) return;
+      if (!name) return;
       // If the variable is the new variable, add it to the list
       const updatedVariable = { ...variable, [name]: value };
       setNewVariable({
