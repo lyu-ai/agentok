@@ -24,6 +24,9 @@ export type Tool = {
   variables: ToolVariable[];
   code?: string;
   is_public: boolean;
+  user_name?: string;
+  user_avatar?: string;
+  user_email?: string;
   created_at?: string;
   updated_at?: string;
 };

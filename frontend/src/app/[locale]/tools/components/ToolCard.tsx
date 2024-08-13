@@ -43,7 +43,17 @@ const ToolCard = ({ tool, selected, className, ...props }: any) => {
           src={tool.logo_url ?? '/images/tools.svg'}
           className="w-12 h-12 flex-shrink-0"
         />
-        <div className="text-base font-bold">{tool.name}</div>
+        <div className="flex flex-col items-start gap-1">
+          <div className="text-base font-bold">{tool.name}</div>
+          {tool.user_name && (
+            <div className="flex items-center gap-1">
+              <img src={tool.user_avatar} className="w-4 h-4 rounded-full" />
+              <span className="text-xs text-base-content/50">
+                {tool.user_name}
+              </span>
+            </div>
+          )}
+        </div>
       </div>
       <div className="text-sm text-base-content/50 w-full line-clamp-4 min-h-28">
         {tool.description}

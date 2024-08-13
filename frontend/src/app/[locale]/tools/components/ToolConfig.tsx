@@ -2,6 +2,7 @@ import { useTranslations } from 'next-intl';
 import Markdown from 'react-markdown';
 import { useToolSettings } from '@/hooks';
 import { useEffect, useState } from 'react';
+import { RiMailLine } from 'react-icons/ri';
 
 const VariableConfig = ({ tool, variable, onChange }: any) => {
   const { settings, updateSettings } = useToolSettings();
@@ -56,15 +57,30 @@ const ToolConfig = ({ tool }: any) => {
 
   return (
     <div className="flex flex-col w-full h-full gap-2 p-2">
-      <div className="flex items-center gap-2 border-b py-4 border-base-content/10">
-        <img
-          src={tool.logo_url ?? '/images/tools.svg'}
-          className="w-12 h-12 flex-shrink-0"
-        />
-        <div className="flex flex-col gap-2">
-          <span className="font-bold">{tool.name}</span>
-          <Markdown className="text-sm">{tool.description}</Markdown>
+      <div className="flex flex-col w-full gap-4  border-b py-4 border-base-content/10">
+        <div className="flex items-center gap-2">
+          <img
+            src={tool.logo_url ?? '/images/tools.svg'}
+            className="w-16 h-16 flex-shrink-0"
+          />
+          <div className="flex flex-col gap-2">
+            <span className="text-lg font-bold">{tool.name}</span>
+            {tool.user_name && (
+              <div className="flex items-center gap-1">
+                <img src={tool.user_avatar} className="w-4 h-4 rounded-full" />
+                <span className="flex items-center gap-1 text-xs">
+                  <a
+                    href={`mailto:${tool.user_email}`}
+                    className="link link-hover"
+                  >
+                    {tool.user_name}
+                  </a>
+                </span>
+              </div>
+            )}
+          </div>
         </div>
+        <Markdown className="text-sm">{tool.description}</Markdown>
       </div>
       {tool.variables.length > 0 ? (
         <div className="flex flex-col gap-2">
