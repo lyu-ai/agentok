@@ -68,7 +68,7 @@ const ContextButton = ({ className, onDelete, onEdit }: any) => {
       >
         <PopoverButton
           onClick={(e) => e.stopPropagation()}
-          className={clsx('btn btn-xs btn-square btn-ghost', className)}
+          className={clsx('btn btn-xs btn-circle btn-ghost', className)}
         >
           <GoKebabHorizontal className="w-4 h-4" />
         </PopoverButton>
@@ -151,7 +151,6 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
     };
 
     if (!chat || isLoading) return <ChatLoading />;
-    const ChatIcon = selected ? RiWechat2Fill : RiWechat2Line;
     const ChatTypeIcon =
       chat.from_type === 'project' ? RiShuffleLine : RiCompassLine;
 
@@ -161,11 +160,10 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
         ref={ref}
         className={clsx(
           'group flex flex-col w-80 justify-center gap-2 text-sm rounded p-1 border cursor-pointer',
-          'hover:shadow-box hover:bg-base-content/10 hover:text-primary hover:border-base-content/30',
+          'hover:shadow-box hover:bg-base-content/10 hover:text-primary hover:border-primary/30',
           {
-            'text-primary/80 border-base-content/50 bg-base-content/20 shadow-box shadow-base-content/20':
-              selected,
-            'border-base-content/5 bg-base-content/5': !selected,
+            'text-primary/80 border-primary/80': selected,
+            'border-base-content/10': !selected,
           },
           className
         )}
@@ -174,8 +172,8 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
         }}
       >
         <div className="relative flex flex-col w-full gap-2 justify-between items-start">
-          <div className="flex items-center gap-1">
-            <ChatIcon className="w-7 h-7 flex-0" />
+          <div className="flex items-center">
+            <ChatTypeIcon className="w-5 h-5" />
             <div className="flex flex-col items-start">
               <EditableText
                 className="font-bold nowrap line-clamp-1 truncate w-64"
@@ -183,22 +181,7 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
                 onChange={onEditCompleted}
                 text={chat.name ?? chatSource?.name ?? 'Untitled ' + chat.id}
               />
-              <div className="text-xs text-base-content/60 px-2">
-                {chat.created_at && new Date(chat.created_at).toLocaleString()}
-              </div>
             </div>
-          </div>
-          <div
-            className={clsx(
-              'join flex items-center border border-base-content/40 text-base-content/40 text-xs rounded-sm py-0.5 gap-0.5'
-            )}
-          >
-            <span className={clsx('join-item px-0.5')}>
-              <ChatTypeIcon className="w-3 h-3" />
-            </span>
-            <span className="join-item line-clamp-1 px-0.5">
-              {chatSource?.name ?? ''}
-            </span>
           </div>
           {selected && (
             <div className="absolute bottom-0 right-0">

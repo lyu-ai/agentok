@@ -46,7 +46,6 @@ const useDebouncedUpdate = (projectId: number) => {
   const initialLoad = useRef(true);
 
   const debouncedUpdate = debounce((flow) => {
-    console.log('Updating project', flow);
     updateProject({ flow });
     setIsDirty(false);
   }, DEBOUNCE_DELAY);

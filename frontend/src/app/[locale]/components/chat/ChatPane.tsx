@@ -2,12 +2,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   RiArrowDownLine,
   RiArrowUpLine,
+  RiBrush3Line,
   RiCheckboxCircleLine,
   RiContractLeftLine,
   RiContractRightLine,
-  RiEraserLine,
+  RiExternalLinkLine,
+  RiPictureInPictureExitLine,
   RiShuffleLine,
-  RiWindowLine,
 } from 'react-icons/ri';
 import ChatInput from './ChatInput';
 import { genId } from '@/utils/id';
@@ -370,7 +371,7 @@ const ChatPane = ({
             {cleaning ? (
               <div className="animate-spin h-4 w-4 border-b-2 border-white" />
             ) : (
-              <RiEraserLine className="w-4 h-4" />
+              <RiBrush3Line className="w-4 h-4" />
             )}
           </button>
           {!standalone && (
@@ -381,7 +382,7 @@ const ChatPane = ({
               href={`/chat?id=${chat?.id}`}
               target="_blank"
             >
-              <RiWindowLine className="w-4 h-4" />
+              <RiPictureInPictureExitLine className="w-4 h-4" />
             </a>
           )}
           {!standalone && chat?.from_type === 'project' && (

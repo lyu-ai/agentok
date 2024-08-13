@@ -9,12 +9,15 @@ import {
   RiVoiceprintLine,
   RiRefreshLine,
   RiUserVoiceFill,
+  RiCodeBlock,
 } from 'react-icons/ri';
 import Markdown from '@/components/Markdown';
 import { useTranslations } from 'next-intl';
 import { useChat, useUser } from '@/hooks';
+import PopupDialog from '@/components/PopupDialog';
+import { useState } from 'react';
 
-const MessageBubble = ({ chat, message, onSend }: any) => {
+const MessageBubble = ({ chat, message, onSend, onShowMessageData }: any) => {
   const t = useTranslations('component.ChatPane');
   const { chatSource } = useChat(chat.id);
   const { user } = useUser();
@@ -118,6 +121,13 @@ const MessageBubble = ({ chat, message, onSend }: any) => {
         <div className="text-base-content/20 text-xs">
           {new Date(message.created_at).toLocaleString()}
         </div>
+        <button
+          onClick={() => onShowMessageData(message.content)}
+          data-tooltip-id="default-tooltip"
+          data-tooltip-content={'Show raw message data'}
+        >
+          <RiCodeBlock className="w-4 h-4 text-gray-200/20 hover:text-gray-200/50" />
+        </button>
       </div>
     );
   }
@@ -160,6 +170,7 @@ const MessageBubble = ({ chat, message, onSend }: any) => {
 
 const MessageList = ({ chat, messages, onSend }: any) => {
   const t = useTranslations('component.ChatPane');
+  const [messageData, setMessageData] = useState('');
   return (
     <>
       {messages.length === 0 && (
@@ -176,8 +187,22 @@ const MessageList = ({ chat, messages, onSend }: any) => {
           chat={chat}
           message={message}
           onSend={onSend}
+          onShowMessageData={(data: string) => setMessageData(data)}
         />
       ))}
+      <PopupDialog
+        title="Raw Message Data"
+        show={messageData !== ''}
+        onClose={() => setMessageData('')}
+        className="w-full max-w-3xl"
+        classNameBody="max-h-screen overflow-y-auto"
+      >
+        <div className="p-4 text-sm text-base-content/50">
+          <pre className="whitespace-pre-wrap">
+            <code>{messageData}</code>
+          </pre>
+        </div>
+      </PopupDialog>
     </>
   );
 };
