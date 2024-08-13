@@ -50,7 +50,6 @@ const GenericOption = ({ type, onChange, ...props }: OptionProps) => {
   };
   const instance = useReactFlow();
   const isEdge = (nodeId: string) => {
-    console.log('nodes and edges', instance.getNodes(), instance.getEdges());
     const includedInEdges = instance
       .getEdges()
       .some((edge: any) => edge.id === nodeId);

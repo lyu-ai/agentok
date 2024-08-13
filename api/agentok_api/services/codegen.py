@@ -127,6 +127,7 @@ class CodegenService:
             for tool_id, tool in tool_dict.items()
             if tool_id in tool_assignments
         }
+        self.generate_tool_envs(project)
 
         datasets = self.supabase.fetch_datasets()
         dataset_prompts = self.generate_dataset_prompts(datasets)
@@ -263,13 +264,9 @@ class CodegenService:
         for tool in tools:
             meta = self.extract_tool_meta(tool["code"])
             tool_dict[tool["id"]]["func_name"] = meta["func_name"]
-        tool_assignments = self.generate_tool_assignments(project.flow.nodes, tool_dict)
-        # {tool_id: {execution: [node_id], llm: [node_id]}}
-        print("tool_assignments", tool_assignments)
+        tool_assignments = self.generate_tool_assignments(project.flow.edges, tool_dict)
 
         tool_settings = self.supabase.fetch_tool_settings()
-        # {tool_id: {variables: {var_name: var_value}}}
-        print("tool_settings", tool_settings)
 
         # Clean unused tools from tool_settings that not included in tool_assignments
         tool_settings = {
