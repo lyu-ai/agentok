@@ -150,12 +150,12 @@ const ToolPanel = ({ edgeId, data }: any) => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="flex flex-col gap-2 w-full h-full">
+      <div className="flex flex-col gap-2 w-full h-full text-sm">
         <div>{t('available-tools-tooltip')}</div>
         <div className="flex h-full w-full gap-2">
           <div className="flex w-64">
             <div className="flex flex-col gap-2 w-full h-full">
-              <div className="flex items-center flex-0 gap-1 w-full">
+              <div className="flex items-center flex-0 gap-1 font-bold">
                 {t('available-tools')}
                 <Link href={`/tools`} className="link">
                   <RiSettings3Line className="w-4 h-4" />
@@ -179,7 +179,7 @@ const ToolPanel = ({ edgeId, data }: any) => {
             </div>
           </div>
           <div className="flex flex-col gap-2 w-full">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 font-bold">
               {t('tools-assigned')}
               <Tip content={t('tools-assigned-tooltip')} />
             </div>

@@ -300,7 +300,7 @@
       "edge-tooltip": "Config the conversation between two agents",
       "no-tools": "No tool yet.",
       "available-tools": "Available Tools",
-      "available-tools-tooltip": "Drag and drop tools to the right zones to enable them for different purposes.",
+      "available-tools-tooltip": "Drag and drop tools to the right zones to enable.",
       "tools-assigned": "Tools Assigned",
       "tools-assigned-tooltip": "The selected tools will be automatically assigned to speaker for execution and listener for LLM.",
       "tools-assigned-placeholder": "Select tools to be used in this conversation",
