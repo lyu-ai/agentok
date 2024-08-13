@@ -9,22 +9,23 @@ const ToolCard = ({ tool, selected, className, ...props }: any) => {
   const { userId } = useUser();
   const { deleteTool, isDeleting } = useTool(tool.id);
   const { settings } = useToolSettings();
+  const [needConfig, setNeedConfig] = useState(false);
   useEffect(() => {
     setIsOwned(tool.user_id === userId);
-  }, [tool, userId]);
+    setNeedConfig(
+      tool.variables?.length > 0 &&
+        tool.variables.some(
+          (v: any) =>
+            !settings[tool.id]?.variables[v.name] ||
+            settings[tool.id].variables[v.name] === ''
+        )
+    );
+  }, [tool, settings, userId]);
   const handleDelete = async (e: any) => {
     e.stopPropagation();
     e.preventDefault();
     await deleteTool();
   };
-
-  const needConfig =
-    tool.variables?.length > 0 &&
-    tool.variables.some(
-      (v: any) =>
-        !settings[tool.id]?.variables[v.name] ||
-        settings[tool.id].variables[v.name] === ''
-    );
 
   return (
     <label
