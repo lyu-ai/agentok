@@ -39,18 +39,24 @@ const Login = ({
   const t = useTranslations('page.Login');
 
   const signIn = async (asGuest?: boolean) => {
-    try {
-      setAuthenticating(true);
-      await supabase.auth.signInWithPassword({
-        email: asGuest ? 'hi@agentok.ai' : email,
-        password: asGuest ? '12345678' : password,
-      });
-      setError('');
-      router.push(redirect ?? '/');
-    } catch (e) {
-      setError((e as any).message ?? `Sign in failed. ${e}`);
-    } finally {
-      setAuthenticating(false);
+    if (asGuest) {
+      setEmail('hi@agentok.ai');
+      setPassword('12345678');
+      await signIn();
+    } else {
+      try {
+        setAuthenticating(true);
+        await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        setError('');
+        router.push(redirect ?? '/');
+      } catch (e) {
+        setError((e as any).message ?? `Sign in failed. ${e}`);
+      } finally {
+        setAuthenticating(false);
+      }
     }
   };
 

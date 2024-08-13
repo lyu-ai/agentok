@@ -45,7 +45,7 @@ class ChatService:
 
         # Check the existence of latest code
         source = self.supabase.fetch_source_metadata(chat_id)
-        datetime_obj = datetime.fromisoformat(source["created_at"])
+        datetime_obj = datetime.fromisoformat(source.get("created_at", datetime.now()))
         source_file = f"{source['id']}-{datetime_obj.timestamp()}.py"
         source_path = os.path.join(target_path, source_file)
 
