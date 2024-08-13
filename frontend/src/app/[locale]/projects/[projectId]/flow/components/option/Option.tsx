@@ -49,10 +49,27 @@ const GenericOption = ({ type, onChange, ...props }: OptionProps) => {
     group: OptionGroup,
   };
   const instance = useReactFlow();
+  const isEdge = (nodeId: string) => {
+    console.log('nodes and edges', instance.getNodes(), instance.getEdges());
+    const includedInEdges = instance
+      .getEdges()
+      .some((edge: any) => edge.id === nodeId);
+    const includedInNodes = instance
+      .getNodes()
+      .some((node: any) => node.id === nodeId);
+    if (includedInEdges && includedInNodes) {
+      console.warn(
+        `ID ${nodeId} is found in both nodes and edges. Go with nodes.`
+      );
+      return false;
+    } else {
+      return includedInEdges;
+    }
+  };
   const handleChange = (name: string, value: any) => {
     if (onChange) {
       onChange(name, value);
-    } else if (props.nodeId.startsWith('reactflow__edge')) {
+    } else if (isEdge(props.nodeId)) {
       setEdgeData(instance, props.nodeId, { [name]: value });
     } else {
       // Default onChange
