@@ -310,7 +310,7 @@ class SupabaseClient:
             response = (
                 self.supabase.table("tools")
                 .select("*")
-                .eq("user_id", self.user_id)
+                .or_(f"user_id.eq.{self.user_id},is_public.eq.true")
                 .execute()
             )
             if response.data:
@@ -349,7 +349,7 @@ class SupabaseClient:
                 self.supabase.table("tools")
                 .select("*")
                 .eq("id", tool_id)
-                .eq("user_id", self.user_id)
+                # .eq("user_id", self.user_id) # This is not so needed as the tool_id is unique and public tools can be fetched
                 .execute()
             )
             if response.data:

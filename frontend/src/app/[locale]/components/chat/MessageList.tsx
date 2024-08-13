@@ -136,7 +136,7 @@ const MessageBubble = ({ chat, message, onSend, onShowMessageData }: any) => {
     <div className={`chat gap-x-1 chat-start`}>
       <div className="chat-image text-base-content/50">
         <div
-          className={`w-8 h-8 rounded-full ${messageClass} flex items-center justify-center`}
+          className={`w-8 h-8 rounded-full text-sm ${messageClass} flex items-center justify-center`}
         >
           {avatarIcon}
         </div>

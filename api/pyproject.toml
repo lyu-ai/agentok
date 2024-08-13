@@ -2,7 +2,7 @@
 name = "agentok-api"
 version = "0.1.0"
 description = "Agentok APIs"
-authors = ["Hugh Lyu <hugh.lv@gmail.com>"]
+authors = ["Agentok Team <hi@agentok.ai>"]
 readme = "README.md"
 package-mode = false
 
