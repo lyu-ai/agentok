@@ -505,25 +505,21 @@ class SupabaseClient:
             )
             # Read the file content
             md5_hash = hashlib.md5(file_content).hexdigest()
-            file_extension = filename.split(".")[-1]
-            unique_filename = f"{dataset_id}/{md5_hash}.{file_extension}"
+            unique_filename = f"{md5_hash}.{filename.split(".")[-1]}"
+            unique_path = f"{dataset_id}/{unique_filename}"
             # Check if the file already exists
             existing_files = self.supabase.storage.from_("documents").list(
-                path=unique_filename
+                path=dataset_id
             )
-            # TODO: This can be optimized to avoid multiple uploads of the same file
             if any(file["name"] == unique_filename for file in existing_files):
+                print(colored(f"Found existing document: {unique_path}", "yellow"))
                 # Delete the existing file
-                print(
-                    colored(f"Deleting existing document: {unique_filename}", "yellow")
+                # self.supabase.storage.from_("documents").remove([unique_filename])
+            else:
+                self.supabase.storage.from_("documents").upload(
+                    unique_path, file_content
                 )
-                self.supabase.storage.from_("documents").remove([unique_filename])
-            self.supabase.storage.from_("documents").upload(
-                unique_filename, file_content
-            )
-            print(
-                colored(f"Uploaded document: {filename} to {unique_filename}", "green")
-            )
+                print(colored(f"Uploaded {filename} to {unique_filename}", "green"))
             return self.create_document(
                 DocumentCreate(
                     dataset_id=int(dataset_id), name=filename, path=unique_filename

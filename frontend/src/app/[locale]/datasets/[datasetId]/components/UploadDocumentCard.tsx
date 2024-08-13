@@ -1,3 +1,4 @@
+import { useDocuments } from '@/hooks';
 import React, { useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { RiUpload2Line } from 'react-icons/ri';
@@ -7,6 +8,7 @@ const UploadDocumentCard = ({ datasetId }: { datasetId: number }) => {
   const ref = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const { mutate } = useDocuments(datasetId);
 
   const handleUpload = async (file: File) => {
     setIsUploading(true);
@@ -22,6 +24,7 @@ const UploadDocumentCard = ({ datasetId }: { datasetId: number }) => {
       if (!response.ok) {
         throw new Error('Failed to upload document');
       }
+      mutate();
 
       const document = await response.json();
       console.log('Uploaded document:', document);
@@ -35,13 +38,9 @@ const UploadDocumentCard = ({ datasetId }: { datasetId: number }) => {
   };
 
   const isValidFileType = (file: File) => {
-    const validTypes = [
-      'application/pdf',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'application/msword',
-      'text/plain',
-    ];
-    return validTypes.includes(file.type);
+    const validExtensions = ['.md', '.txt', '.pdf', '.docx', '.doc']; // Add other valid extensions here
+    const fileName = file.name.toLowerCase();
+    return validExtensions.some((extension) => fileName.endsWith(extension));
   };
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
@@ -78,6 +77,8 @@ const UploadDocumentCard = ({ datasetId }: { datasetId: number }) => {
         }
       });
     }
+    // Clear the input value to allow selecting the same file again
+    event.target.value = '';
   };
 
   drop(ref);
@@ -93,7 +94,7 @@ const UploadDocumentCard = ({ datasetId }: { datasetId: number }) => {
     <div
       ref={ref}
       onClick={() => fileInputRef.current?.click()}
-      className={`flex items-center justify-center w-full h-48 p-4 ${backgroundColor} hover:bg-base-content/10 rounded-md border-dashed border border-base-content/20 cursor-pointer`}
+      className={`flex items-center justify-center w-full max-w-sm h-48 p-4 ${backgroundColor} hover:bg-base-content/10 rounded-md border-dashed border border-base-content/20 cursor-pointer`}
     >
       <input
         type="file"

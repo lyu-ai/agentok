@@ -165,6 +165,7 @@ export function useDocuments(datasetId: number) {
 
   return {
     documents: data ?? [],
+    mutate,
     isLoading: !error && !data,
     isError: error,
     deleteDocument: handleDeleteDocument,

@@ -17,13 +17,27 @@
 
 Agentok Studio is a tool built upon [AutoGen](https://microsoft.github.io/autogen/), a powerful agent framework from Microsoft and [a vibrant community of contributors](https://github.com/microsoft/autogen?tab=readme-ov-file#contributors-wall).
 
+### Visualizing AutoGen
+
 We consider AutoGen to be at the forefront of next-generation Multi-Agent Applications technology. Agentok Studio takes this concept to the next level by offering intuitive visual tools that streamline the creation and management of complex agent-based workflows. This simplifies the entire process for creators and developers.
 
 ![studio-1](./website/static/img/screenshot-studio-1.png)
 
+### Conversation Relations
+
+The relationship between two agents is essential. To incorporate tool calls in a conversation, the LLM must determine which tools to invoke, while informing the user proxy about which nodes to execute. Configuring tools on the edge between these nodes is crucial for optimal operation.
+
+![tool-1](./website/static/img/screenshot-tool-1.png)
+
+### Code Generation
+
 We strive to create a user-friendly tool that generates native Python code with minimal dependencies. Simply put, Agentok Studio is a diagram-based code generator for autogen. The generated code is self-contained and can be executed anywhere as a normal Python program, relying solely on the official `pyautogen` library.
 
 ![codegen-1](./website/static/img/screenshot-codegen-1.png)
+
+We also integrated a basic RAG content management feature. This feature is still under development.
+
+![dataset-1](./website/static/img/screenshot-dataset-1.png)
 
 Contributions (Issues, Pull Requests, Documentation, even Typo-corrections) to this project are welcome! All contributors will be added to the Contribution Wall.
 
@@ -82,6 +96,8 @@ If you're interested in contributing to the development of this project or wish 
 - Rename `.env.sample` to `.env.local` and set the value of variables correctly.
 - Install the necessary dependencies using the appropriate package manager command (e.g., `pnpm install` or `yarn`).
 - Run the ui service using the start-up script provided (e.g., `pnpm dev` or `yarn dev`).
+
+> If you see Server Error related to 'useContext' quite often, it's possibly caused by the bugs in turbo mode. In this case, please remove `--turbo` from the **dev** command in package.json.
 
 ### **Backend Services**
 

@@ -33,6 +33,7 @@ python-multipart = "^0.0.9"
 tavily-python = "^0.3.7"
 cohere = "^5.8.0"
 pymongo = "^4.8.0"
+python-magic = "^0.4.27"
 
 [tool.poetry.dev-dependencies]
 black = "^24.3"

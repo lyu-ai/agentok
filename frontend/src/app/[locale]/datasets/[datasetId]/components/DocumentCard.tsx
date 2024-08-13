@@ -1,5 +1,5 @@
 'use client';
-import { useChunks, useDocument } from '@/hooks';
+import { useChunks, useDocument, useDocuments } from '@/hooks';
 import { getFileIcon } from '@/utils/icon';
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -14,12 +14,18 @@ const DocumentCard = ({
   ...props
 }: any) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const { deleteDocument } = useDocuments(document.dataset_id);
   const { updateDocument } = useDocument(document.dataset_id, document.id);
   const { chunks } = useChunks(document.dataset_id, document.id);
   const handleDelete = async (e: any) => {
     e.stopPropagation();
-    setIsDeleting(true);
-    onDelete && (await onDelete(document).finally(() => setIsDeleting(false)));
+    e.preventDefault();
+    try {
+      setIsDeleting(true);
+      await deleteDocument(document.id);
+    } finally {
+      setIsDeleting(false);
+    }
   };
   const [enabled, setEnabled] = useState(document.enabled || true);
   useEffect(() => {
@@ -39,7 +45,7 @@ const DocumentCard = ({
     <Link
       href={`/datasets/${document.dataset_id}/documents/${document.id}`}
       className={clsx(
-        'relative group w-full flex flex-col gap-2 p-3 h-48 rounded-md bg-base-content/10 border-base-content/20 hover:bg-base-content/20 border cursor-pointer hover:shadow-box hover:shadow-gray-700',
+        'relative group w-full max-w-sm flex flex-col gap-2 p-3 h-48 rounded-md bg-base-content/10 border-base-content/20 hover:bg-base-content/20 border cursor-pointer hover:shadow-box hover:shadow-gray-700',
         className
       )}
       {...props}
@@ -70,11 +76,15 @@ const DocumentCard = ({
             }}
             onClick={(e) => e.stopPropagation()}
           />
-          <div className="text-xs text-base-content/50 px-2 py-0.5 border border-base-content/20 rounded-full">
+          <div className="text-xs">
             {document.status === 'completed' ? (
-              <span className="text-success">{chunks.length} chunks</span>
+              <span className="text-success border-success px-1 py-0.5 border rounded">
+                {chunks.length} chunks
+              </span>
             ) : (
-              <span className="text-warning">processing...</span>
+              <span className="text-warning border-warning px-1 py-0.5 border rounded ">
+                Chunking...
+              </span>
             )}
           </div>
         </div>

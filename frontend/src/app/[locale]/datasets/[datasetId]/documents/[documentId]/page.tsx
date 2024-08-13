@@ -41,7 +41,7 @@ const Page = ({
           <li>
             <Link href={`/datasets/${dataset.id}`}>{dataset.name}</Link>
           </li>
-          <li className="">
+          <li className="flex items-center gap-1">
             <FileIcon />
             {document.name}
           </li>

@@ -49,7 +49,7 @@ const Page = ({ params }: { params: { datasetId: string } }) => {
 
         <div className="flex flex-1 w-full h-full gap-2 overflow-y-hidden">
           <div className="flex flex-col flex-1 gap-2 w-full h-full overflow-y-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-6 3xl:grid-cols-4 gap-2">
               <UploadDocumentCard datasetId={datasetId} />
               {documents.map((document) => (
                 <DocumentCard

@@ -68,6 +68,7 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { datasetId: string; documentId: string } }
 ) {
+  console.log('deleting document', params);
   try {
     const supabase = createClient();
     await getSupabaseSession(); // Ensure user is authenticated
@@ -85,7 +86,7 @@ export async function DELETE(
     return NextResponse.json({ result: 'success' });
   } catch (e) {
     console.error(
-      `Failed DELETE /datasets/${params.datasetId}/documents/${params.documentId}: ${e}`
+      `Failed DELETE /datasets/${params.datasetId}/documents/${params.documentId}: ${JSON.stringify(e)}`
     );
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }

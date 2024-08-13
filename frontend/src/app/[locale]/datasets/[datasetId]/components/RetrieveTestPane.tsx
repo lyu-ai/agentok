@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { useState } from 'react';
-import { RiTextBlock } from 'react-icons/ri';
+import { RiMenuSearchLine, RiTextBlock } from 'react-icons/ri';
 
 const RetrieveTestPane = ({ dataset }: any) => {
   const [query, setQuery] = useState('');
@@ -45,29 +45,38 @@ const RetrieveTestPane = ({ dataset }: any) => {
   };
   return (
     <div className="flex flex-col w-full h-full max-w-md shadow-box shadow-gray-700 gap-2 border border-base-content/20 rounded-md">
-      <div className="flex items-center justify-between gap-1 p-2 text-sm">
-        <div className="flex items-center gap-1 font-bold">
-          <RiTextBlock className="w-5 h-5 flex-shrink-0" />
-          Retrieval Test {lastQuery && `: ${lastQuery}`}
+      <div className="flex items-center justify-between gap-1 p-2 text-sm w-full">
+        <div className="flex items-center gap-1 w-full">
+          <RiMenuSearchLine className="w-5 h-5 flex-shrink-0" />
+          <span className="whitespace-nowrap font-bold">Retrieval Test</span>
+          {lastQuery && (
+            <span
+              className="text-xs line-clamp-1 max-w-48"
+              data-tooltip-id="html-tooltip"
+              data-tooltip-html={lastQuery}
+            >
+              | {lastQuery}
+            </span>
+          )}
         </div>
-        <div className="text-xs text-success/50 border border-success/50 bg-success/20 rounded-md px-2 py-0.5">
-          Vector Search
+        <div className="whitespace-nowrap text-xs text-success/50 border border-success/50 bg-success/20 rounded-md px-2 py-0.5">
+          Vector | Top 5
         </div>
       </div>
       <div className="flex flex-col w-full flex-grow overflow-y-auto gap-1 p-1">
         {chunks.map((chunk: any, index: number) => (
           <div
             key={index}
-            className="flex flex-col gap-1 p-2 bg-base-content/10 rounded-md"
+            className="flex flex-col gap-1 p-1 bg-base-content/10 rounded-md"
           >
-            <div className="flex items-center justify-between p-1 text-xs text-base-content/50 border-b border-base-content/10">
+            <div className="flex items-center font-bold justify-between p-1 text-xs text-base-content/40 border-b border-base-content/10">
               <span className="flex items-center gap-1">
                 <RiTextBlock className="w-4 h-4 flex-shrink-0" />
-                Doc ({chunk.document_id}) - Chunk ({chunk.id})
+                Chunk [{chunk.document_id}:{chunk.id}]
               </span>
               <span>Similarity: {chunk.similarity.toFixed(8)}</span>
             </div>
-            <div className="text-sm line-clamp-6">{chunk.content}</div>
+            <div className="text-sm line-clamp-6 p-1">{chunk.content}</div>
           </div>
         ))}
         {chunks.length === 0 && (

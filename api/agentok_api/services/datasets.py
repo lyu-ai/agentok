@@ -85,7 +85,7 @@ class DatasetService:
         content = self.extract_text_from_file(file_content, file_extension)
 
         # Chunk the document content
-        chunk_size = 200  # Define your chunk size
+        chunk_size = 2000  # Define your chunk size
         chunks = [
             content[i : i + chunk_size] for i in range(0, len(content), chunk_size)
         ]

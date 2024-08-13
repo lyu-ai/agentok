@@ -5,8 +5,14 @@ FROM python:3.12-slim-bookworm AS base
 WORKDIR /app
 
 # Install dependencies required for building and running
-RUN apt-get update && apt-get install -y curl build-essential && \
-    curl -sSL https://install.python-poetry.org | python3 - && \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    build-essential \
+    libmagic-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Poetry
+RUN curl -sSL https://install.python-poetry.org | python3 - && \
     ln -s /root/.local/bin/poetry /usr/local/bin/poetry
 
 # Copy the pyproject.toml and poetry.lock to the container
