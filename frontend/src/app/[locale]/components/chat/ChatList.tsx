@@ -9,6 +9,7 @@ import EditableText from '@/components/EditableText';
 import { useState, useEffect, useRef, createRef, forwardRef } from 'react';
 import { useRouter } from 'next/navigation';
 import {
+  RiAlertLine,
   RiCompassLine,
   RiShuffleLine,
   RiWechat2Fill,
@@ -171,17 +172,24 @@ const ChatBlock = forwardRef<HTMLDivElement, ChatBlockProps>(
           router.push(`/chat?id=${chat.id}`);
         }}
       >
-        <div className="relative flex flex-col w-full gap-2 justify-between items-start">
-          <div className="flex items-center">
-            <ChatTypeIcon className="w-5 h-5" />
-            <div className="flex flex-col items-start">
-              <EditableText
-                className="font-bold nowrap line-clamp-1 truncate w-64"
-                editing={isEditing}
-                onChange={onEditCompleted}
-                text={chat.name ?? chatSource?.name ?? 'Untitled ' + chat.id}
-              />
-            </div>
+        <div className="relative flex flex-col w-full gap-1 justify-between items-start">
+          <div className="flex items-center gap-1 px-1 text-base-content/50">
+            {chatSource?.name ? (
+              <ChatTypeIcon className="w-4 h-4" />
+            ) : (
+              <RiAlertLine className="w-4 h-4 text-error" />
+            )}
+            <span className="text-xs">
+              {chatSource?.name ?? 'Unknown Source'}
+            </span>
+          </div>
+          <div className="flex items-center w-full gap-1">
+            <EditableText
+              className="nowrap line-clamp-1 truncate w-64"
+              editing={isEditing}
+              onChange={onEditCompleted}
+              text={chat.name ?? chatSource?.name ?? 'Untitled ' + chat.id}
+            />
           </div>
           {selected && (
             <div className="absolute bottom-0 right-0">
