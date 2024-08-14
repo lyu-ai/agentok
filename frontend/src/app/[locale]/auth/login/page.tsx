@@ -42,14 +42,18 @@ const Login = ({
     if (asGuest) {
       setEmail('hi@agentok.ai');
       setPassword('12345678');
-      await signIn();
-    } else {
+      // Ensure state is updated before calling signIn again
+      setTimeout(async () => {
+        await signIn();
+      }, 0);
+    } else if (email && password) {
       try {
         setAuthenticating(true);
-        await supabase.auth.signInWithPassword({
+        const res = await supabase.auth.signInWithPassword({
           email,
           password,
         });
+        if (res.error) throw res.error;
         setError('');
         router.push(redirect ?? '/');
       } catch (e) {

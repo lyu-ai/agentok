@@ -21,6 +21,7 @@ import {
 } from 'react-icons/ri';
 import Link from 'next/link';
 import clsx from 'clsx';
+import path from 'path';
 
 const apiEndpoint =
   process.env.NEXT_PUBLIC_BACKEND_URL || 'https://localhost:5004';
@@ -78,40 +79,46 @@ const Navbar = () => {
     );
   };
 
+  const isAuthPage = pathname.startsWith('/auth');
+
   return (
     <div className="navbar flex w-full items-center justify-between px-2">
       <div className="navbar-start gap-2 flex items-center justify-start">
-        <NavButton projectId={projectId} className="lg:hidden" />
+        {!isAuthPage && (
+          <NavButton projectId={projectId} className="lg:hidden" />
+        )}
         <NavLogo />
       </div>
-      <div role="tablist" className="flex navbar-center tabs tabs-boxed px-2">
-        <div
-          role="tab"
-          className={clsx('tab', { 'tab-active': isActive('/projects') })}
-        >
-          <ProjectPicker />
+      {!isAuthPage && (
+        <div role="tablist" className="flex navbar-center tabs tabs-boxed px-2">
+          <div
+            role="tab"
+            className={clsx('tab', { 'tab-active': isActive('/projects') })}
+          >
+            <ProjectPicker />
+          </div>
+          {NAV_MENU_ITEMS.map((item) => {
+            const ItemIcon = item.icon;
+            return (
+              <Link
+                role="tab"
+                key={item.id}
+                href={item.href}
+                className={clsx(
+                  'tab group flex items-center text-sm py-1 gap-1.5 hover:text-primary',
+                  {
+                    'tab-active': isActive(item.href),
+                  },
+                  'hidden lg:flex'
+                )}
+              >
+                <ItemIcon className="h-4 w-4" />
+                {item.label}
+              </Link>
+            );
+          })}
         </div>
-        {NAV_MENU_ITEMS.map((item) => {
-          const ItemIcon = item.icon;
-          return (
-            <Link
-              role="tab"
-              key={item.id}
-              href={item.href}
-              className={clsx(
-                'tab group flex items-center text-sm py-1 gap-1.5 hover:text-primary',
-                {
-                  'tab-active': isActive(item.href),
-                },
-                'hidden lg:flex'
-              )}
-            >
-              <ItemIcon className="h-4 w-4" />
-              {item.label}
-            </Link>
-          );
-        })}
-      </div>
+      )}
       <div className="navbar-end flex items-center my-auto gap-4">
         <a
           href="https://agentok.ai/"
