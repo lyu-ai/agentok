@@ -115,11 +115,13 @@ If you're interested in contributing to the development of this project or wish 
 
 Note: This requirement is disabled by default since the default deployment of this project is already dockerized.
 
-### **Supabase (Database Services)**
+### **Database Services**
 
-This project relies on Supabase for user authentication and data storage. To get started, create a Supabase project on https://supabase.com/ and set the environment variables (with SUPABSE in the variable name) in the `.env` file. If you prefer, you can deploy your own Supabase instance, but that is beyond the scope of this document.
+This project relies on Supabase for user authentication and data storage. To get started, please follow the [./db/README.md](./db/README.md) to prepare the database, and set the environment variables (Refer to those variables with name starts with SUPABSE in .env.sample) in the `.env` file.
 
-Once you've started both the ui and api services by following the steps previously outlined, you can access the application by opening your web browser and navigating to:
+If you prefer, you can deploy your own Supabase instance, but that is beyond the scope of this document.
+
+Once you've started both the frontend and api services by following the steps previously outlined, you can access the application by opening your web browser and navigating to:
 
 - api: http://localhost:5004 (OpenAPI docs served at http://localhost:5004/docs)
 - frontend: http://localhost:2855
