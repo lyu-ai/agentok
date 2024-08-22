@@ -1,4 +1,4 @@
-<img src="./ui/public/logo.png" width="90" />
+<img src="./frontend/public/logo.png" width="90" />
 
 # Agentok Studio
 
