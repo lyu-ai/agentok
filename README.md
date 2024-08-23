@@ -11,7 +11,11 @@
 [![GitHub star](https://img.shields.io/github/stars/hughlv/agentok?style=flat&logo=github&color=black&labelColor=gray)](https://star-history.com/#hughlv/agentok)
 [![](https://dcbadge.limes.pink/api/server/xBQxwRSWfm?style=social&timestamp=20240705)](https://discord.gg/xBQxwRSWfm)
 
-> ⚠️ **Warning:** This project is currently under development. It is not recommended for production use at this time.
+> ⚠️ **Warning:** This project is currently under development and is not yet recommended for production use.
+>
+> While code generation has proven effective in maintaining the tool’s utility across various runtimes beyond AutoGen, it has also revealed challenges related to efficiency and observability. As a result, I’m considering transitioning the project into a workflow engine rather than continuing as a standalone program. This change would introduce significant modifications to the backend architecture.
+>
+> Your feedback is invaluable as we move forward. If you have any thoughts or suggestions, please share them by opening a new issue or participating in the ongoing discussions here #160.
 
 ## 🌟 What is Agentok Studio
 
