@@ -22,14 +22,6 @@ poetry run proxychains4 uvicorn agentok_api.main:app --reload --port 5004
 
 You need to configure proxychains4 to make it work, which is out of the scope of this document.
 
-## Deps
-
-For retrieve related agents, should install pyautogen[retrievechat-pgvector]:
-
-```bash
-pip install "pyautogen[retrievechat-pgvector]"
-```
-
 ## Docker Build
 
 > This does not work. We've reverted to the old way of building the image.
