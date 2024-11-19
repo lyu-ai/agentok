@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
-import { pathToRegexp } from 'path-to-regexp';
+import { match } from 'path-to-regexp';
 
-// Utility function to match authentication paths
-const publicMatcher = pathToRegexp('/(auth|discover)/(.*)');
+// Create a matcher function for authentication paths
+const matchAuthPath = match<{ type: 'auth' | 'discover'; path: string }>(
+  '/:type(auth|discover)/*'
+);
 
 export async function updateSession(request: NextRequest) {
   const supabaseResponse = NextResponse.next();
@@ -31,7 +33,7 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getSession();
 
   const pathname = request.nextUrl.pathname;
-  const isAuthPath = publicMatcher.test(pathname);
+  const isAuthPath = matchAuthPath(pathname) !== false;
 
   console.log('session', session, pathname, isAuthPath);
 

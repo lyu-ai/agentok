@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { pathToRegexp } from 'path-to-regexp';
+import { match } from 'path-to-regexp';
 
 import AuthButton from './AuthButton';
 import NavLogo from './NavLogo';
@@ -14,8 +14,6 @@ import {
   RiRobot2Fill,
   RiHammerLine,
   RiHammerFill,
-  RiDatabase2Line,
-  RiDatabase2Fill,
   RiCompassLine,
   RiCompassFill,
 } from 'react-icons/ri';
@@ -52,13 +50,17 @@ export const NAV_MENU_ITEMS = [
 
 const Navbar = () => {
   const pathname = usePathname();
-  const regexResult = pathToRegexp(
-    '/projects/:projectId{/:feature}?{/:sub}?'
-  ).exec(pathname);
-  const projectId =
-    regexResult && regexResult.length >= 2
-      ? parseInt(regexResult[1], 10)
-      : null;
+
+  // Create a matcher function
+  const matchPath = match<{
+    projectId: string;
+    feature?: string;
+    sub?: string;
+  }>('/projects/:projectId/:feature?/:sub?');
+
+  // Execute the matcher
+  const result = matchPath(pathname);
+  const projectId = result ? parseInt(result.params.projectId, 10) : null;
 
   const t = useTranslations('component.Navbar');
 

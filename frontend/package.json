@@ -1,6 +1,6 @@
 {
-  "name": "agentok-ui",
-  "description": "Agentok Studio - AutoGen Visualized",
+  "name": "agentok-frontend",
+  "description": "Agentok Studio - AG2 Visualized",
   "author": "Dustland <agentok@dustland.ai>",
   "private": true,
   "scripts": {
