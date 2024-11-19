@@ -42,13 +42,6 @@ export const NAV_MENU_ITEMS = [
     href: `/tools`,
   },
   {
-    id: 'datasets',
-    label: 'Datasets',
-    icon: RiDatabase2Line,
-    activeIcon: RiDatabase2Fill,
-    href: `/datasets`,
-  },
-  {
     id: 'discover',
     label: 'Discover',
     icon: RiCompassLine,

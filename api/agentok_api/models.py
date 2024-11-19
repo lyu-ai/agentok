@@ -1,5 +1,6 @@
-from pydantic import BaseModel
 from typing import Any, Dict, List, Literal, Optional
+
+from pydantic import BaseModel
 
 Node = Dict[str, Any]
 Edge = Dict[str, Any]
@@ -100,57 +101,3 @@ class ApiKey(ApiKeyCreate):
     id: int
     user_id: str
     created_at: str
-
-
-class DatasetCreate(BaseModel):
-    name: str
-    description: Optional[str] = None
-
-
-class Dataset(DatasetCreate):
-    id: int
-    user_id: str
-
-
-class Query(BaseModel):
-    query: str
-
-
-class DocumentCreate(BaseModel):
-    dataset_id: int
-    name: str
-    path: str
-
-
-class Document(BaseModel):
-    id: int
-    name: str
-    path: str
-    status: Optional[str] = None
-    enabled: Optional[bool] = True
-    user_id: str
-    created_at: str
-    updated_at: Optional[str] = None
-
-
-class ChunkCreate(BaseModel):
-    document_id: int
-    content: str
-
-
-class Chunk(ChunkCreate):
-    id: int
-    enabled: Optional[bool] = True
-    user_id: str
-    created_at: str
-    updated_at: str
-
-
-class DatasetQuery(BaseModel):
-    query: str
-
-
-class RetrivalChunk(ChunkCreate):
-    id: int
-    embedding: Optional[str] = None
-    similarity: Optional[float] = 0.0

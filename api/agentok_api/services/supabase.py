@@ -1,26 +1,23 @@
+import logging
+import os
+from typing import Dict, List, Literal, Optional
+
+import requests
+from dotenv import load_dotenv
+from fastapi import HTTPException, status
+from gotrue import User
+from supabase import Client, create_client
+from termcolor import colored
+
 from ..models import (
     ApiKey,
     ApiKeyCreate,
     Chat,
     ChatCreate,
-    Dataset,
-    DatasetCreate,
-    Document,
-    DocumentCreate,
     Message,
     MessageCreate,
     Tool,
 )
-import hashlib
-import os
-import logging
-import requests
-from dotenv import load_dotenv
-from supabase import create_client, Client
-from gotrue import User
-from fastapi import HTTPException, status
-from typing import Dict, List, Literal, Optional
-from termcolor import colored
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +25,13 @@ load_dotenv()  # Load environment variables from .env
 
 
 class SupabaseClient:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     def __init__(self):
         self.supabase_url = os.environ.get("SUPABASE_URL")
         self.supabase_service_key = os.environ.get("SUPABASE_SERVICE_KEY")
@@ -39,27 +43,17 @@ class SupabaseClient:
         self.user_id = None
 
     def get_user(self) -> User:
-        if not self.user_id:
-            raise Exception("User ID is not set")
-
-        headers = {
-            "apikey": self.supabase_service_key,
-            "Authorization": f"Bearer {self.supabase_service_key}",
-        }
-        response = requests.get(
-            f"{self.supabase_url}/auth/v1/admin/users/{self.user_id}", headers=headers
-        )
-
-        if response.status_code == 200:
-            user_info = response.json()
+        try:
+            user = self.supabase.auth.admin.get_user_by_id(self.user_id)
+            print("get_user_log", user, self.user_id)
             return {
-                "id": user_info.get("id"),
-                "email": user_info.get("email"),
-                "app_metadata": user_info.get("app_metadata"),
-                "user_metadata": user_info.get("user_metadata"),
+                "id": user.user.id,
+                "email": user.user.email,
+                "app_metadata": user.user.app_metadata,
+                "user_metadata": user.user.user_metadata,
             }
-        else:
-            print(f"Failed to fetch user info: {response.status_code} {response.text}")
+        except Exception as e:
+            print(f"Failed to fetch user info: {e}")
             return None
 
     # Load the user from the cookie. This is for the situation where the user is already logged in on client side.
@@ -73,15 +67,13 @@ class SupabaseClient:
                     "Supabase URL or key not found in environment variables"
                 )
             temp_supabase = create_client(self.supabase_url, self.supabase_service_key)
-            # Set the session in Supabase
-            temp_supabase.auth.set_session(
+            session = temp_supabase.auth.set_session(
                 access_token=access_token,
                 refresh_token=refresh_token or "dummy_refresh_token",
             )
-            user_data = temp_supabase.auth.get_user()
-            if user_data:
-                self.user_id = user_data.user.id
-                return user_data.user
+            if session:
+                self.user_id = session.user.id
+                return session.user
             else:
                 print(colored("Failed to retrieve user", "red"))
                 self.user_id = None
@@ -305,14 +297,20 @@ class SupabaseClient:
                 detail=f"Failed to create chat: {exc}",
             )
 
-    def fetch_tools(self) -> List[Tool]:
+    def fetch_tools(self, tool_ids: Optional[List[int]] = None) -> List[Tool]:
         try:
-            response = (
+            query = (
                 self.supabase.table("tools")
                 .select("*")
                 .or_(f"user_id.eq.{self.user_id},is_public.eq.true")
-                .execute()
             )
+
+            # Add tool_ids filter if provided
+            if tool_ids and len(tool_ids) > 0:
+                query = query.in_("id", tool_ids)
+
+            response = query.execute()
+
             if response.data:
                 return response.data
             else:
@@ -389,254 +387,6 @@ class SupabaseClient:
             return {"message": f"Tool {tool_id} deleted successfully"}
         else:
             raise Exception(f"Error deleting tool {tool_id}")
-
-    def fetch_datasets(self) -> List[Dataset]:
-        try:
-            response = (
-                self.supabase.table("datasets")
-                .select("*")
-                .eq("user_id", self.user_id)
-                .execute()
-            )
-            if response.data and len(response.data) > 0:
-                return response.data
-            else:
-                return []
-        except Exception as exc:
-            logger.error(f"An error occurred: {exc}")
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Failed fetching datasets: {exc}",
-            )
-
-    def create_dataset(self, dataset_to_create: DatasetCreate) -> Dataset:
-        dataset_data = dataset_to_create.model_dump(exclude={"id"})
-        dataset_data["user_id"] = self.user_id
-        response = self.supabase.table("datasets").insert(dataset_data).execute()
-        if not response.data or len(response.data) == 0:
-            print(colored(f"Error creating dataset {dataset_to_create.name}", "red"))
-            raise Exception("Error creating dataset")
-        return Dataset(**response.data[0])
-
-    def fetch_dataset(self, dataset_id: str) -> Dataset:
-        response = (
-            self.supabase.table("datasets")
-            .select("*")
-            .eq("id", dataset_id)
-            .eq("user_id", self.user_id)
-            .execute()
-        )
-        if response.data and len(response.data) > 0:
-            return Dataset(**response.data[0])
-        else:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Dataset not found"
-            )
-
-    def delete_dataset(self, dataset_id: str) -> Dict:
-        response = (
-            self.supabase.table("datasets")
-            .delete()
-            .eq("id", dataset_id)
-            .eq("user_id", self.user_id)
-            .execute()
-        )
-        if response.data:
-            return {"message": "Dataset deleted successfully"}
-        else:
-            raise Exception("Error deleting dataset")
-
-    def fetch_documents(self, dataset_id: str) -> List[Document]:
-        response = (
-            self.supabase.table("documents")
-            .select("*")
-            .eq("dataset_id", dataset_id)
-            .eq("user_id", self.user_id)
-            .execute()
-        )
-        if response.data:
-            return [Document(**item) for item in response.data]
-        else:
-            return []
-
-    def create_document(self, document_to_create: DocumentCreate) -> Document:
-        try:
-            document_data = document_to_create.model_dump(exclude={"id"})
-            document_data["user_id"] = self.user_id
-            response = self.supabase.table("documents").insert(document_data).execute()
-            if response.data:
-                return Document(**response.data[0])
-            else:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Failed to create document. Response: {response}",
-                )
-        except Exception as exc:
-            logger.error(f"An error occurred: {exc}")
-            raise
-
-    def fetch_document(self, dataset_id: str, document_id: str) -> Document:
-        response = (
-            self.supabase.table("documents")
-            .select("*")
-            .eq("document_id", document_id)
-            .eq("dataset_id", dataset_id)
-            .eq("user_id", self.user_id)
-            .execute()
-        )
-        if response.data and len(response.data) > 0:
-            return Document(**response.data[0])
-        else:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Dataset not found"
-            )
-
-    async def upload_document(
-        self, dataset_id: str, filename: str, file_content: bytes
-    ) -> Document:
-        try:
-            if not filename:
-                raise HTTPException(status_code=400, detail="Invalid file")
-            print(
-                colored(
-                    f"Uploading document to dataset {dataset_id} {filename}",
-                    "light_blue",
-                )
-            )
-            # Read the file content
-            md5_hash = hashlib.md5(file_content).hexdigest()
-            unique_filename = f"{md5_hash}.{filename.split(".")[-1]}"
-            unique_path = f"{dataset_id}/{unique_filename}"
-            # Check if the file already exists
-            existing_files = self.supabase.storage.from_("documents").list(
-                path=dataset_id
-            )
-            if any(file["name"] == unique_filename for file in existing_files):
-                print(colored(f"Found existing document: {unique_path}", "yellow"))
-                # Delete the existing file
-                # self.supabase.storage.from_("documents").remove([unique_filename])
-            else:
-                self.supabase.storage.from_("documents").upload(
-                    unique_path, file_content
-                )
-                print(colored(f"Uploaded {filename} to {unique_filename}", "green"))
-            return self.create_document(
-                DocumentCreate(
-                    dataset_id=int(dataset_id), name=filename, path=unique_filename
-                )
-            )
-        except Exception as e:
-            logger.error(f"An error occurred during uploading document: {e}")
-            raise
-
-    def fetch_document_content(self, document_path: str) -> bytes:
-        response = self.supabase.storage.from_("documents").download(document_path)
-        if response:
-            return response
-        else:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Document not found in storage",
-            )
-
-    def delete_document(self, dataset_id: str, document_id: str) -> Dict:
-        response = (
-            self.supabase.table("documents")
-            .delete()
-            .eq("id", document_id)
-            .eq("dataset_id", dataset_id)
-            .eq("user_id", self.user_id)
-            .execute()
-        )
-        if response.data:
-            return {"message": "Document deleted successfully"}
-        else:
-            raise Exception("Error deleting document")
-
-    def insert_chunk(self, doc_id, chunk, idx, embedding):
-        response = (
-            self.supabase.table("chunks")
-            .insert(
-                [
-                    {
-                        "document_id": doc_id,
-                        "content": chunk,
-                        "chunk_index": idx,
-                        "embedding": embedding,
-                        "user_id": self.user_id,
-                    }
-                ]
-            )
-            .execute()
-        )
-        if not response.data:
-            raise Exception(f"Error inserting chunk: {response}")
-
-    def update_document_status(self, doc_id, status):
-        response = (
-            self.supabase.table("documents")
-            .update({"status": status})
-            .eq("id", doc_id)
-            .execute()
-        )
-        if not response.data:
-            raise Exception(f"Error updating document status: {response}")
-
-    def fetch_document_status(self, document_id):
-        response = (
-            self.supabase.table("documents")
-            .select("status")
-            .eq("id", document_id)
-            .execute()
-        )
-        if response.data:
-            return {"status": response.data[0]["status"]}
-        else:
-            raise Exception("Document not found")
-
-    def fetch_document_chunks(self, document_id):
-        response = (
-            self.supabase.table("chunks")
-            .select("*")
-            .eq("document_id", document_id)
-            .execute()
-        )
-        if response.data:
-            return response.data
-        else:
-            raise Exception("Error fetching chunks")
-
-    def fetch_chunk(self, chunk_id):
-        response = (
-            self.supabase.table("chunks").select("*").eq("id", chunk_id).execute()
-        )
-        if response.data:
-            return response.data[0]
-        else:
-            raise Exception("Chunk not found")
-
-    def update_chunk(self, chunk_to_update):
-        chunk_data = chunk_to_update.model_dump()
-        chunk_id = chunk_data.pop("id")
-        if not chunk_id:
-            raise Exception("Invalid chunk_id")
-        response = (
-            self.supabase.table("chunks")
-            .update(chunk_data)
-            .eq("id", chunk_id)
-            .execute()
-        )
-        if response.data:
-            return response.data[0]
-        else:
-            raise Exception("Chunk not found")
-
-    def delete_chunk(self, chunk_id):
-        response = self.supabase.table("chunks").delete().eq("id", chunk_id).execute()
-        if response.data:
-            return {"message": f"Chunk {chunk_id} deleted successfully"}
-        else:
-            raise Exception(f"Error deleting chunk {chunk_id}")
 
     def fetch_messages(self, chat_id: str) -> List[Message]:
         try:

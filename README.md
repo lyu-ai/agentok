@@ -2,13 +2,13 @@
 
 # Agentok Studio
 
-**AutoGen Visualized - Build Multi-Agent Apps with Drag-and-Drop Simplicity.**
+**AG2 Visualized - Build Agentic Apps with Drag-and-Drop Simplicity.**
 
-[![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/hughlv/agentok)
-[![Open in GitHub Codespaces](https://img.shields.io/badge/Codespaces-Open-blue?style=flat&logo=github)](https://codespaces.new/hughlv/agentok)
+[![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/dustland/agentok)
+[![Open in GitHub Codespaces](https://img.shields.io/badge/Codespaces-Open-blue?style=flat&logo=github)](https://codespaces.new/dustland/agentok)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-![GitHub release](https://img.shields.io/github/v/release/hughlv/agentok)
-[![GitHub star](https://img.shields.io/github/stars/hughlv/agentok?style=flat&logo=github&color=black&labelColor=gray)](https://star-history.com/#hughlv/agentok)
+![GitHub release](https://img.shields.io/github/v/release/dustland/agentok)
+[![GitHub star](https://img.shields.io/github/stars/dustland/agentok?style=flat&logo=github&color=black&labelColor=gray)](https://star-history.com/#dustland/agentok)
 [![](https://dcbadge.limes.pink/api/server/xBQxwRSWfm?style=social&timestamp=20240705)](https://discord.gg/xBQxwRSWfm)
 
 > [!Warning]
@@ -20,11 +20,11 @@
 
 ## 🌟 What is Agentok Studio
 
-Agentok Studio is a tool built upon [AutoGen](https://microsoft.github.io/autogen/), a powerful agent framework from Microsoft and [a vibrant community of contributors](https://github.com/microsoft/autogen?tab=readme-ov-file#contributors-wall).
+Agentok Studio is a tool built upon [AG2](https://github.com/ag2ai/ag2)(Previously AutoGen), a powerful agent framework from Microsoft and [a vibrant community of contributors](https://github.com/ag2ai/ag2?tab=readme-ov-file#contributors-wall).
 
-### Visualizing AutoGen
+### Visualizing AG2
 
-We consider AutoGen to be at the forefront of next-generation Multi-Agent Applications technology. Agentok Studio takes this concept to the next level by offering intuitive visual tools that streamline the creation and management of complex agent-based workflows. This simplifies the entire process for creators and developers.
+We consider AG2 to be at the forefront of next-generation Multi-Agent Applications technology. Agentok Studio takes this concept to the next level by offering intuitive visual tools that streamline the creation and management of complex agent-based workflows. This simplifies the entire process for creators and developers.
 
 ![studio-1](./website/static/img/screenshot-studio-1.png)
 
@@ -36,15 +36,14 @@ The relationship between two agents is essential. To incorporate tool calls in a
 
 ### Code Generation
 
-We strive to create a user-friendly tool that generates native Python code with minimal dependencies. Simply put, Agentok Studio is a diagram-based code generator for autogen. The generated code is self-contained and can be executed anywhere as a normal Python program, relying solely on the official `pyautogen` library.
+We strive to create a user-friendly tool that generates native Python code with minimal dependencies. Simply put, Agentok Studio is a diagram-based code generator for ag2. The generated code is self-contained and can be executed anywhere as a normal Python program, relying solely on the official `ag2` library.
 
 ![codegen-1](./website/static/img/screenshot-codegen-1.png)
 
-We also integrated a basic RAG content management feature. This feature is still under development.
-
-![dataset-1](./website/static/img/screenshot-dataset-1.png)
-
 Contributions (Issues, Pull Requests, Documentation, even Typo-corrections) to this project are welcome! All contributors will be added to the Contribution Wall.
+
+> [!Note]
+> RAG feature has been removed from this project, since we believe it should be a separate service.
 
 ## 💡 Quickstart
 
@@ -54,7 +53,7 @@ After login as Guest or with your OAuth2 account, you can click the **Create New
 
 ![studio-2](./website/static/img/screenshot-studio-2.png)
 
-Due to the limitations of GPT-4 and AutoGen, this simple workflow may not work as expected, but it's a good starting point to understand the basic concepts of Agentic App and Agentok Studio.
+Due to the limitations of GPT-4 and AG2, this simple workflow may not work as expected, but it's a good starting point to understand the basic concepts of Agentic App and Agentok Studio.
 
 For a more in-depth look at the project, please refer to [Getting Started](https://agentok.ai/getting-started).
 
@@ -97,10 +96,10 @@ If you're interested in contributing to the development of this project or wish 
 
 ### **Frontend**
 
-- Navigate to the ui directory `cd frontend`.
+- Navigate to the frontend directory `cd frontend`.
 - Rename `.env.sample` to `.env.local` and set the value of variables correctly.
 - Install the necessary dependencies using the appropriate package manager command (e.g., `pnpm install` or `yarn`).
-- Run the ui service using the start-up script provided (e.g., `pnpm dev` or `yarn dev`).
+- Run the frontend service using the start-up script provided (e.g., `pnpm dev` or `yarn dev`).
 
 > If you see Server Error related to 'useContext' quite often, it's possibly caused by the bugs in turbo mode. In this case, please remove `--turbo` from the **dev** command in package.json.
 
@@ -113,7 +112,7 @@ If you're interested in contributing to the development of this project or wish 
 
 `REPLICATE_API_TOKEN` is needed for LLaVa agent. If you need to use this agent, make sure to include this token in environment variables.
 
-**IMPORTANT**: The latest version of AutoGen requires Docker for code execution by default. To proceed, you must either:
+**IMPORTANT**: The latest version of AG2 requires Docker for code execution by default. To proceed, you must either:
 
 1. Install Docker on your local machine, **OR**
 1. Disable this requirement by setting `AUTOGEN_USE_DOCKER=False` in the `api/.env` file.
@@ -143,7 +142,7 @@ This project welcomes contributions and suggestions. Please read our [Contributi
 
 If you are new to GitHub, [here](https://help.github.com/categories/collaborating-with-issues-and-pull-requests/) is a detailed help source on getting involved with development on GitHub.
 
-Please consider contributing to [AutoGen](https://github.com/microsoft/autogen), as Agentok Studio relies on a robust foundation to deliver its capabilities. Your contributions can help enhance the platform's core functionalities, ensuring a more seamless and efficient development experience for Multi-Agent Applications.
+Please consider contributing to [AG2](https://github.com/ag2ai/ag2), as Agentok Studio relies on a robust foundation to deliver its capabilities. Your contributions can help enhance the platform's core functionalities, ensuring a more seamless and efficient development experience for Multi-Agent Applications.
 
 This project uses [📦🚀semantic-release](https://github.com/semantic-release/semantic-release) to manage versioning and releases. To avoid too frequent auto-releases, we make it a manual GitHub Action to trigger the release.
 
