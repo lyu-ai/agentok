@@ -6,7 +6,7 @@
 node_{{ node.id }} = {{ class_name }}(
     name="{{ name }}",
     {%- if node['data'].get('system_message') %}
-    system_message="{{ node['data']['system_message'] }}",
+    system_message="""{{ node['data']['system_message'] }}""",
     {%- endif %}
     {%- if node['data'].get('human_input_mode') %}
     human_input_mode="{{ node['data']['human_input_mode'] }}",
