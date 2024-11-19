@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 import createIntlMiddleware from 'next-intl/middleware';
 // import { updateSession } from '@/utils/supabase/middleware';
 import { createClient } from '@/utils/supabase/server';
-import { pathToRegexp } from 'path-to-regexp';
+import { match } from 'path-to-regexp';
 
 const intlMiddleware = createIntlMiddleware({
   locales: ['en', 'zh'],
@@ -11,6 +11,8 @@ const intlMiddleware = createIntlMiddleware({
   localeDetection: false,
   localePrefix: 'as-needed',
 });
+
+const publicMatcher = match(['/auth/:path', '/discover/:path']);
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
@@ -24,11 +26,7 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  if (
-    pathToRegexp(
-      '/(auth|discover)/(.*)' // /auth/* or /templates/*
-    ).test(req.nextUrl.pathname)
-  ) {
+  if (publicMatcher(req.nextUrl.pathname)) {
     return res;
   }
 
