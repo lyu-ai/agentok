@@ -1,13 +1,13 @@
-from datetime import datetime
 import os
 import tempfile
+from datetime import datetime
 from typing import List
 
 from termcolor import colored
 
-from .codegen import CodegenService
-from ..models import Chat, ChatCreate, MessageCreate, Message, Project
+from ..models import Chat, ChatCreate, Message, MessageCreate, Project
 from .chat_manager import ChatManager
+from .codegen import CodegenService
 from .supabase import SupabaseClient  # Import your SupabaseClient
 
 
@@ -51,7 +51,9 @@ class ChatService:
 
         # Write tool env files, which will be used in project code
         print(colored("Generating tool envs...", "blue"))
-        tool_envs = self.codegen_service.generate_tool_envs(Project(**source))
+        project = Project(**source)
+        tool_dict = self.codegen_service.build_tool_dict(project)
+        tool_envs = self.codegen_service.generate_tool_envs(project, tool_dict)
         for tool_id, env in tool_envs.items():
             with open(
                 os.path.join(target_path, f"{tool_id}.env"),

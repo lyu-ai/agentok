@@ -1,15 +1,17 @@
-from datetime import datetime
 import ast
 import json
 import os
 import re
 import textwrap
+from datetime import datetime
+
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.ext import do
+from openai import APIStatusError, OpenAI
 from termcolor import colored
-from .supabase import SupabaseClient, create_supabase_client
+
 from ..models import Project, Tool
-from openai import OpenAI, APIStatusError
+from .supabase import SupabaseClient, create_supabase_client
 
 
 class CodegenService:
@@ -114,12 +116,7 @@ class CodegenService:
         template = self.env.get_template("main.j2")  # Main template
 
         # Generate tool assignments
-        tools = self.supabase.fetch_tools()
-        tool_dict = {tool["id"]: tool for tool in tools}
-        for tool in tools:
-            meta = self.extract_tool_meta(tool["code"])
-            tool_dict[tool["id"]]["func_name"] = meta["func_name"]
-            tool_dict[tool["id"]]["code"] = self.replace_env_placeholders(tool)
+        tool_dict = self.build_tool_dict(project)
         tool_assignments = self.generate_tool_assignments(flow.edges, tool_dict)
         print(tool_assignments)
         tool_dict = {
@@ -127,13 +124,7 @@ class CodegenService:
             for tool_id, tool in tool_dict.items()
             if tool_id in tool_assignments
         }
-        self.generate_tool_envs(project)
-
-        datasets = self.supabase.fetch_datasets()
-        dataset_prompts = self.generate_dataset_prompts(datasets)
-        # Filter out all the agents that assigned RAG tool for execution
-        # If conversable node is assigned RAG tool, it will be enabled for both exeuction and llm
-        rag_assignments = self.generate_rag_assignments(flow.edges)
+        self.generate_tool_envs(project, tool_dict)
 
         code = template.render(
             project=project,
@@ -152,9 +143,6 @@ class CodegenService:
             note_nodes=note_nodes,
             tool_dict=tool_dict,
             tool_assignments=tool_assignments,
-            rag_assignments=rag_assignments,
-            datasets=datasets,
-            dataset_prompts=dataset_prompts,
         )
 
         return code
@@ -216,6 +204,15 @@ class CodegenService:
 
         return nested_chats
 
+    def build_tool_dict(self, project: Project):
+        tool_ids = []
+        for edge in project.flow.edges:
+            if "data" in edge and "tools" in edge["data"]:
+                tool_ids.extend(edge["data"]["tools"])
+
+        tools = self.supabase.fetch_tools(tool_ids)
+        return {tool["id"]: tool for tool in tools}
+
     def generate_tool_assignments(self, edges, tool_dict):
         # Prepare the tool assignments
         tool_assignments = {}
@@ -250,7 +247,7 @@ class CodegenService:
 
         return rag_assignments
 
-    def generate_tool_envs(self, project: Project):
+    def generate_tool_envs(self, project: Project, tool_dict: dict):
         """Generate tool environment files for the provided project.
 
         Args:
@@ -259,9 +256,7 @@ class CodegenService:
         Returns:
             dict: A dictionary containing the tool IDs as keys and the environment file contents as values.
         """
-        tools = self.supabase.fetch_tools()
-        tool_dict = {tool["id"]: tool for tool in tools}
-        for tool in tools:
+        for tool in tool_dict.values():
             meta = self.extract_tool_meta(tool["code"])
             tool_dict[tool["id"]]["func_name"] = meta["func_name"]
         tool_assignments = self.generate_tool_assignments(project.flow.edges, tool_dict)
@@ -398,7 +393,9 @@ Choose the appropriate dataset ID based on the query.
             (node for node in tree.body if isinstance(node, ast.FunctionDef)), None
         )
         if not func_def:
-            raise ValueError("No function definition found in the provided code")
+            raise ValueError(
+                f"No function definition found in the provided code: \n{code}"
+            )
 
         # Extract function name
         func_name = func_def.name

@@ -1,20 +1,19 @@
+import logging
 from functools import lru_cache
-from fastapi import Depends, HTTPException, Security, status
-from fastapi.security import APIKeyHeader, HTTPAuthorizationCredentials, HTTPBearer
+from pathlib import Path
 from typing import Optional
 
+from fastapi import Depends, HTTPException, Security, status
+from fastapi.security import APIKeyHeader, HTTPAuthorizationCredentials, HTTPBearer
+
 from .services import (
+    AdminService,
     ChatService,
     CodegenService,
-    SupabaseClient,
     ExtensionService,
-    AdminService,
-    DatasetService,
+    SupabaseClient,
     ToolService,
 )
-
-from pathlib import Path
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -80,12 +79,6 @@ def get_codegen_service(
     supabase: SupabaseClient = Depends(get_supabase_client),
 ) -> CodegenService:
     return CodegenService(supabase=supabase)
-
-
-def get_dataset_service(
-    supabase: SupabaseClient = Depends(get_supabase_client),
-) -> DatasetService:
-    return DatasetService(supabase)
 
 
 # Using @lru_cache() effectively makes get_chat_service a singleton provider, as it caches the result of the first call and returns it for subsequent calls.

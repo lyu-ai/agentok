@@ -1,6 +1,7 @@
 {
   "name": "agentok-ui",
   "description": "Agentok Studio - AutoGen Visualized",
+  "author": "Dustland <agentok@dustland.ai>",
   "private": true,
   "scripts": {
     "dev": "next dev -p 2855 --turbo",
