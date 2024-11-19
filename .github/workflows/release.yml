@@ -6,16 +6,20 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required for pushing tags
+      issues: write # Required if issues are updated
+      pull-requests: write # Required if pull requests are updated
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          ref: 'main' # Explicitly state that you want to check out 'main'
+          ref: "main" # Explicitly state that you want to check out 'main'
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
+          node-version: "20.x"
           # Disabled automatic pnpm caching for now
 
       - name: Manually install pnpm
