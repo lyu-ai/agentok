@@ -12,7 +12,10 @@ const intlMiddleware = createIntlMiddleware({
   localePrefix: 'as-needed',
 });
 
-const publicMatcher = match(['/auth/:path', '/discover/:path']);
+const publicPaths = /^\/(?:auth|discover)(?:\/.*)?$/;
+const publicMatcher = (pathname: string): boolean => {
+  return publicPaths.test(pathname);
+};
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
@@ -26,7 +29,10 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  if (publicMatcher(req.nextUrl.pathname)) {
+  const isPublicPath = publicMatcher(req.nextUrl.pathname) !== false;
+  console.log('isPublicPath', req.nextUrl.pathname, isPublicPath);
+
+  if (isPublicPath) {
     return res;
   }
 

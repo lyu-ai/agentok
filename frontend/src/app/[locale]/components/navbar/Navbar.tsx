@@ -56,7 +56,7 @@ const Navbar = () => {
     projectId: string;
     feature?: string;
     sub?: string;
-  }>('/projects/:projectId/:feature?/:sub?');
+  }>('/projects/:projectId/:feature/:sub');
 
   // Execute the matcher
   const result = matchPath(pathname);
