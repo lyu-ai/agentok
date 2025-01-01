@@ -1,7 +1,7 @@
 'use client';
-import Loading from '@/components/Loading';
+import Loading from '@/components/loading';
 import { Settings, useSettings, LlmModel } from '@/hooks/useSettings';
-import { genId } from '@/utils/id';
+import { genId } from '@/lib/id';
 import { useEffect, useState } from 'react';
 import { RiBrainFill } from 'react-icons/ri';
 

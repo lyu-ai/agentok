@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import TemplateList from '../components/TemplateList';
+import TemplateList from '../../../components/project/TemplateList';
 
 // standalone means this is not a child of Popover component
 const Page = () => {

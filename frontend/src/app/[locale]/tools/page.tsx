@@ -7,7 +7,7 @@ import { usePublicTools, useTools } from '@/hooks';
 import { RiHammerFill, RiHammerLine, RiToolsFill } from 'react-icons/ri';
 import { faker } from '@faker-js/faker';
 import { useRouter } from 'next/navigation';
-import { genId } from '@/utils/id';
+import { genId } from '@/lib/id';
 import { toast } from 'react-toastify';
 
 const NewToolCard = () => {

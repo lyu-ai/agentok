@@ -2,7 +2,7 @@
 import clsx from 'clsx';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { genId } from '@/utils/id';
+import { genId } from '@/lib/id';
 import { Tooltip } from 'react-tooltip';
 import { useTranslations } from 'next-intl';
 import { useTools } from '@/hooks';

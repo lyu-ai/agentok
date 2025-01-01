@@ -1,6 +1,10 @@
 'use client';
 
-import supabase from '@/utils/supabase/client';
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useToast } from "@/components/ui/use-toast"
+import supabase from '@/lib/supabase/client';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -17,8 +21,8 @@ const providers = [
 const LoginToast = () => {
   const t = useTranslations('page.Login');
   return (
-    <div className="fixed items-center justify-centre z-50">
-      <div className="flex flex-col items-center justify-center p-4 gap-2 bg-base-content/50 backdrop-blur-md rounded-md">
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="flex flex-col items-center justify-center p-4 gap-2 bg-background/80 backdrop-blur-md rounded-md">
         <HiSparkles className="w-6 h-6 text-primary animate-spin" />
         <span className="text-sm text-primary">{t('signing-in')}</span>
       </div>
@@ -37,6 +41,7 @@ const Login = ({
   const router = useRouter();
   const [authenticating, setAuthenticating] = useState(false);
   const t = useTranslations('page.Login');
+  const { toast } = useToast()
 
   const signIn = async (asGuest?: boolean) => {
     if (asGuest) {
@@ -118,70 +123,75 @@ const Login = ({
       <div className="flex flex-col gap-3 w-96">
         <div className="flex w-full items-center gap-2">
           {providers.map(({ id, name, icon: Icon }) => (
-            <button
-              className="flex-1 btn btn-outline bg-base-content/10 border-base-content/20"
+            <Button
+              variant="outline"
+              className="flex-1"
               key={id}
               onClick={() => signInWithOAuth(id)}
-              data-tooltip-content={t('sign-in-with', { provider: name })}
-              data-tooltip-id="default-tooltip"
             >
               <Icon className="w-5 h-5" />
-            </button>
+            </Button>
           ))}
         </div>
 
         <form
-          className="flex flex-col w-full justify-center border border-base-content/20 bg-base-content/10 rounded-md p-4 gap-2 text-foreground"
+          className="flex flex-col w-full justify-center space-y-4 border rounded-lg p-4 bg-card"
           onSubmit={(e) => {
             e.preventDefault();
             signIn();
           }}
         >
-          <label className="text-md" htmlFor="email">
-            {t('email')}
-          </label>
-          <input
-            className="input input-bordered rounded py-2 bg-primary/20 mb-2"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder={t('email-placeholder')}
-            autoComplete="email"
-            required
-          />
-          <label className="text-md" htmlFor="password">
-            {t('password')}
-          </label>
-          <input
-            className="input input-bordered rounded py-2 bg-primary/20 mb-2"
-            type="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder={t('password-placeholder')}
-            autoComplete="current-password"
-            required
-          />
+          <div className="space-y-2">
+            <Label htmlFor="email">{t('email')}</Label>
+            <Input
+              id="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder={t('email-placeholder')}
+              autoComplete="email"
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="password">{t('password')}</Label>
+            <Input
+              id="password"
+              type="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder={t('password-placeholder')}
+              autoComplete="current-password"
+              required
+            />
+          </div>
+
           {error && (
-            <p className="p-2 text-error text-center w-full">{error}</p>
+            <p className="text-destructive text-center">{error}</p>
           )}
-          <button className="btn btn-primary rounded" type="submit">
+
+          <Button type="submit" className="w-full">
             {t('sign-in')}
-          </button>
+          </Button>
+
           <div className="mt-2 flex items-center justify-between text-sm">
-            <button
-              className="link link-hover link-primary"
+            <Button
+              variant="link"
+              className="p-0"
               onClick={() => signUp()}
             >
               {t('sign-up-email')}
-            </button>
-            <button
-              className="link link-hover link-primary flex items-center gap-1"
+            </Button>
+            <Button
+              variant="link"
+              className="p-0 flex items-center gap-1"
               onClick={() => signIn(true)}
             >
               <GoZap className="w-4 h-4" />
               {t('sign-in-as-guest')}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

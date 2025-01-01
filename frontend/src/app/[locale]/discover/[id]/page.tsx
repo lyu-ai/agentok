@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { TemplateCard } from '../../components/TemplateList';
+import { TemplateCard } from '../../../../components/project/TemplateList';
 import { useTemplates } from '@/hooks';
 import { useEffect, useState } from 'react';
 import ReactFlow, { ReactFlowProvider, useStoreApi } from 'reactflow';
@@ -9,8 +9,8 @@ import 'reactflow/dist/style.css';
 import {
   edgeTypes,
   nodeTypes,
-} from '../../projects/[projectId]/flow/utils/flow';
-import Markdown from '@/components/Markdown';
+} from '../../projects/[id]/flow/utils/flow';
+import Markdown from '@/components/markdown';
 import clsx from 'clsx';
 
 const FlowViewer = ({ template, className }: any) => {

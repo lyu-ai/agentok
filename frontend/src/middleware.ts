@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import createIntlMiddleware from 'next-intl/middleware';
 // import { updateSession } from '@/utils/supabase/middleware';
-import { createClient } from '@/utils/supabase/server';
+import { createClient } from '@/lib/supabase/server';
 import { match } from 'path-to-regexp';
 
 const intlMiddleware = createIntlMiddleware({

@@ -1,14 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import ProjectList from '../components/ProjectList';
+import ProjectList from '@/components/project/project-list';
 import { initialEdges, initialNodes, useProjects } from '@/hooks';
 import { toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
 import { RiSwap3Line, RiShoppingBag4Line } from 'react-icons/ri';
 import Link from 'next/link';
 import Image from 'next/image';
-import TemplateList from '../components/TemplateList';
+import TemplateList from '@/components/project/template-list';
 import { useEffect } from 'react';
 
 const Page = () => {

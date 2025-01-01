@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, getSupabaseSession } from '@/utils/supabase/server';
+import { createClient, getSupabaseSession } from '@/lib/supabase/server';
 import { parse } from 'path';
 
 export async function GET(

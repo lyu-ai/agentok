@@ -5,9 +5,9 @@
 // scroll position of the chat list.
 // Refer to: https://github.com/vercel/next.js/issues/44793#issuecomment-1382458981
 import { useChats, useMediaQuery } from '@/hooks';
-import ChatListButton from '../components/chat/ChatListButton';
+import ChatListButton from '../../../components/chat/ChatListButton';
 import { useTranslations } from 'next-intl';
-import ChatList from '../components/chat/ChatList';
+import ChatList from '../../../components/chat/ChatList';
 import clsx from 'clsx';
 import { useEffect, PropsWithChildren, useState } from 'react';
 import { RiCloseLargeLine, RiFilterLine } from 'react-icons/ri';

@@ -1,4 +1,4 @@
-import { genId } from '@/utils/id';
+import { genId } from '@/lib/id';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';

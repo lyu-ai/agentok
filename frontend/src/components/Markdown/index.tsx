@@ -8,7 +8,7 @@ import RemarkMath from 'remark-math';
 import RehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 import './markdown.css';
-import CopyButton from '../CopyButton';
+import CopyButton from '../copy-button';
 import { common, createLowlight } from 'lowlight';
 import clsx from 'clsx';
 

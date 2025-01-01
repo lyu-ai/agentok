@@ -1,10 +1,8 @@
 import './globals.css';
-import { Inter } from 'next/font/google';
-const inter = Inter({ subsets: ['latin'] });
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { PropsWithChildren } from 'react';
-import Navbar from './components/navbar/Navbar';
+import Navbar from '@/components/navbar/navbar';
 import Providers from './providers';
 
 export default async function RootLayout({
@@ -22,19 +20,17 @@ export default async function RootLayout({
     notFound();
   }
   return (
-    <html data-theme="dim" suppressHydrationWarning lang={params.locale}>
+    <html lang={params.locale} suppressHydrationWarning>
       <title>Agentok Studio</title>
-      <body className={inter.className} suppressHydrationWarning>
-        <div className="flex flex-col h-screen w-full items-center text-base-content">
-          <NextIntlClientProvider locale={params.locale} messages={messages}>
-            <Providers>
-              <Navbar />
-              <div className="flex flex-1 w-full overflow-y-auto">
-                {children}
-              </div>
-            </Providers>
-          </NextIntlClientProvider>
-        </div>
+      <body className="flex flex-col h-screen w-full items-center">
+        <NextIntlClientProvider locale={params.locale} messages={messages}>
+          <Providers>
+            <Navbar />
+            <div className="flex flex-1 w-full overflow-y-auto">
+              {children}
+            </div>
+          </Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
