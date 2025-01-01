@@ -3,10 +3,10 @@ import { useTranslations } from 'next-intl';
 import { useChats, useProjects } from '@/hooks';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { toast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import Markdown from '@/components/markdown';
-import ProjectPublish from './ProjectPublish';
+import { ProjectPublish } from './project-publish';
 import { useState } from 'react';
 import { Icons } from '@/components/icons';
 
@@ -52,7 +52,11 @@ export const ProjectBlock = ({ project, className }: any) => {
       })
       .catch((e) => {
         console.log(e);
-        toast.error(`Failed to create chat: ${e}`);
+        toast({
+          title: t('error'),
+          description: `Failed to create chat: ${e}`,
+          variant: 'destructive',
+        });
       });
   };
   return (
@@ -80,7 +84,7 @@ export const ProjectBlock = ({ project, className }: any) => {
             data-tooltip-id="default-tooltip"
             data-tooltip-content={t('start-chat-tooltip')}
           >
-            <RiWechat2Line
+            <Icons.chat
               className={clsx('w-4 h-4', {
                 'animate-spin': isCreating,
               })}
@@ -94,7 +98,7 @@ export const ProjectBlock = ({ project, className }: any) => {
               data-tooltip-id="default-tooltip"
               data-tooltip-content={t('publish-project-tooltip')}
             >
-              <RiShare2Line className={clsx('w-4 h-4')} />
+              <Icons.share className={clsx('w-4 h-4')} />
               {t('publish-project')}
             </button>
             <Link
@@ -103,7 +107,7 @@ export const ProjectBlock = ({ project, className }: any) => {
               data-tooltip-id="default-tooltip"
               data-tooltip-content={t('edit-project-tooltip')}
             >
-              <RiEdit2Line className="w-4 h-4" />
+              <Icons.edit className="w-4 h-4" />
               {t('edit-project')}
             </Link>
           </div>
@@ -120,7 +124,7 @@ export const ProjectBlock = ({ project, className }: any) => {
   );
 };
 
-const ProjectList = ({ maxCount }: any) => {
+export const ProjectList = ({ maxCount }: any) => {
   const { projects, isLoading, isError } = useProjects();
   const t = useTranslations('component.TemplateList');
 
@@ -138,5 +142,3 @@ const ProjectList = ({ maxCount }: any) => {
     </div>
   );
 };
-
-export default ProjectList;

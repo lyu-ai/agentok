@@ -1,13 +1,13 @@
 'use client';
 
-import CopyButton from '@/components/CopyButton';
-import DeleteButton from '@/components/DeleteButton';
-import PopupDialog from '@/components/PopupDialog';
+import { CopyButton } from '@/components/copy-button';
+import { DeleteButton } from '@/components/delete-button';
+import { Icons } from '@/components/icons';
+import { PopupDialog } from '@/components/popup-dialog';
+import { toast } from '@/hooks/use-toast';
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
-import { RiKeyFill, RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
-import { toast } from 'react-toastify';
 
 const ApiKeyText = ({ apikey }: { apikey: string }) => {
   const [isShowing, setIsShowing] = useState(false);
@@ -41,9 +41,9 @@ const ApiKeyText = ({ apikey }: { apikey: string }) => {
         data-tooltip-content={t('show-apikey')}
       >
         {isShowing ? (
-          <RiEyeCloseLine className="w-4 h-4 text-yellow-600" />
+          <Icons.eyeOff className="w-4 h-4 text-yellow-600" />
         ) : (
-          <RiEyeLine className="w-4 h-4 text-green-600" />
+          <Icons.eye className="w-4 h-4 text-green-600" />
         )}
       </button>
       <CopyButton content={apikey} tooltip="Copy" />
@@ -137,7 +137,11 @@ const Page = () => {
       .then((resp) => resp.json())
       .then((json) => {
         if (json.error) {
-          toast.error(json.error);
+          toast({
+            title: t('error'),
+            description: json.error,
+            variant: 'destructive',
+          });
           throw new Error(json.error);
         }
         setKeys(json);
@@ -165,7 +169,10 @@ const Page = () => {
       credentials: 'include',
     })
       .then(() => {
-        toast.success(t('delete-apikey-success', { key_name: key.name }));
+        toast({
+          title: t('delete-apikey'),
+          description: t('delete-apikey-success', { key_name: key.name }),
+        });
         setKeys(keys.filter((k) => k.id !== key.id));
       })
       .catch((e) => {
@@ -191,7 +198,7 @@ const Page = () => {
             className="btn btn-sm btn-primary"
             onClick={() => setShowCreateKeyDialog(true)}
           >
-            <RiKeyFill className="w-5 h-5" />
+            <Icons.key className="w-5 h-5" />
             {t('create-apikey')}
           </button>
         </div>

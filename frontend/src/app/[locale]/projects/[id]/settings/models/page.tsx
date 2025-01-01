@@ -1,9 +1,14 @@
 'use client';
-import Loading from '@/components/loading';
-import { useSettings, LlmModel, useProjectSettings } from '@/hooks/useSettings';
+import { Loading } from '@/components/loading';
+import {
+  useSettings,
+  LlmModel,
+  useProjectSettings,
+} from '@/hooks/use-settings';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { RiAlertLine } from 'react-icons/ri';
+import { useTranslations } from 'next-intl';
+import { Icons } from '@/components/icons';
+import { use, useEffect, useState } from 'react';
 
 const ModelCard = ({ model }: { model: LlmModel }) => {
   return (
@@ -14,8 +19,9 @@ const ModelCard = ({ model }: { model: LlmModel }) => {
   );
 };
 
-const Page = ({ params }: { params: { projectId: string } }) => {
-  const projectId = parseInt(params.projectId, 10);
+const Page = ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = use(params);
+  const projectId = parseInt(id, 10);
   const { settings, isLoading, isError, updateSettings } =
     useProjectSettings(projectId);
   const { settings: globalSettings } = useSettings();
@@ -53,7 +59,7 @@ const Page = ({ params }: { params: { projectId: string } }) => {
     <div className="flex flex-col w-full gap-4 text-sm">
       <h1 className="text-lg font-bold">Project Models</h1>
       <div className="flex flex-col gap-4 border rounded-lg p-4 border-warning text-warning bg-warning/20">
-        <RiAlertLine className="w-12 h-12" />
+        <Icons.alert className="w-12 h-12" />
         <p>
           Project-level models are not yet supported. Please configure models in{' '}
           <span>

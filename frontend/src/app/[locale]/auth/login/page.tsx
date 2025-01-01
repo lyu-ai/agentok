@@ -3,19 +3,16 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from '@/hooks/use-toast';
 import supabase from '@/lib/supabase/client';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { FaGithub, FaXTwitter } from 'react-icons/fa6';
-import { FcGoogle } from 'react-icons/fc';
-import { GoZap } from 'react-icons/go';
-import { HiSparkles } from 'react-icons/hi2';
+import { use, useState } from 'react';
+import { Icons } from '@/components/icons';
 
 const providers = [
-  { id: 'github', name: 'GitHub', icon: FaGithub },
-  { id: 'google', name: 'Google', icon: FcGoogle },
+  { id: 'github', name: 'GitHub', icon: Icons.github },
+  { id: 'google', name: 'Google', icon: Icons.google },
 ];
 
 const LoginToast = () => {
@@ -23,7 +20,7 @@ const LoginToast = () => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="flex flex-col items-center justify-center p-4 gap-2 bg-background/80 backdrop-blur-md rounded-md">
-        <HiSparkles className="w-6 h-6 text-primary animate-spin" />
+        <Icons.sparkles className="w-6 h-6 text-primary animate-spin" />
         <span className="text-sm text-primary">{t('signing-in')}</span>
       </div>
     </div>
@@ -31,17 +28,17 @@ const LoginToast = () => {
 };
 
 const Login = ({
-  searchParams: { redirect },
+  searchParams,
 }: {
-  searchParams: { redirect: string };
+  searchParams: Promise<{ redirect: string }>;
 }) => {
+  const { redirect } = use(searchParams);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
   const [authenticating, setAuthenticating] = useState(false);
   const t = useTranslations('page.Login');
-  const { toast } = useToast()
 
   const signIn = async (asGuest?: boolean) => {
     if (asGuest) {
@@ -168,20 +165,14 @@ const Login = ({
             />
           </div>
 
-          {error && (
-            <p className="text-destructive text-center">{error}</p>
-          )}
+          {error && <p className="text-destructive text-center">{error}</p>}
 
           <Button type="submit" className="w-full">
             {t('sign-in')}
           </Button>
 
           <div className="mt-2 flex items-center justify-between text-sm">
-            <Button
-              variant="link"
-              className="p-0"
-              onClick={() => signUp()}
-            >
+            <Button variant="link" className="p-0" onClick={() => signUp()}>
               {t('sign-up-email')}
             </Button>
             <Button
@@ -189,7 +180,7 @@ const Login = ({
               className="p-0 flex items-center gap-1"
               onClick={() => signIn(true)}
             >
-              <GoZap className="w-4 h-4" />
+              <Icons.zap className="w-4 h-4" />
               {t('sign-in-as-guest')}
             </Button>
           </div>

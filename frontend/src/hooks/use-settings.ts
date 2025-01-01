@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { useEffect, useState } from 'react';
 import { fetcher } from './fetcher';
-import { useProject } from './useProjects';
+import { useProject } from './use-projects';
 
 export interface LlmModel {
   id: string;

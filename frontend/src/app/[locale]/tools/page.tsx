@@ -1,14 +1,14 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import ToolCard from './components/ToolCard';
+import { ToolCard } from '@/components/tool/tool-card';
 import { useState } from 'react';
-import ToolConfig from './components/ToolConfig';
+import { ToolConfig } from '@/components/tool/tool-config';
 import { usePublicTools, useTools } from '@/hooks';
-import { RiHammerFill, RiHammerLine, RiToolsFill } from 'react-icons/ri';
 import { faker } from '@faker-js/faker';
 import { useRouter } from 'next/navigation';
 import { genId } from '@/lib/id';
-import { toast } from 'react-toastify';
+import { toast } from '@/hooks/use-toast';
+import { Icons } from '@/components/icons';
 
 const NewToolCard = () => {
   const router = useRouter();
@@ -26,7 +26,7 @@ const NewToolCard = () => {
       variables: [],
     });
     if (!tool) {
-      toast.error('Failed to create tool');
+      toast({ title: 'Failed to create tool' });
       return;
     }
     router.push(`/tools/${tool.id}`);
@@ -39,7 +39,7 @@ const NewToolCard = () => {
       <div className="flex flex-col items-center gap-2">
         {isCreating && <div className="loading loading-sm" />}
         {!isCreating && (
-          <RiHammerLine className="w-8 h-8 flex-shrink-0 group-hover:scale-125 transform transition duration-700 ease-in-out group-hover:text-primary" />
+          <Icons.tool className="w-8 h-8 flex-shrink-0 group-hover:scale-125 transform transition duration-700 ease-in-out group-hover:text-primary" />
         )}
         <div className="text-base font-bold">{t('new-tool')}</div>
       </div>
@@ -68,7 +68,7 @@ const Page = () => {
       />
       <div className="drawer-content flex flex-col p-2 gap-4">
         <div className="flex items-center gap-4 p-2 border-b border-base-content/10">
-          <RiHammerLine className="w-12 h-12" />
+          <Icons.tool className="w-12 h-12" />
           <div className="flex flex-col gap-2">
             <div className="text-2xl font-bold">{t('title')}</div>
             <div className="">{t('description')}</div>

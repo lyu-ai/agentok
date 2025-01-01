@@ -3,23 +3,14 @@
 import { usePathname } from 'next/navigation';
 import { match } from 'path-to-regexp';
 
-import AuthButton from './auth-button';
-import NavLogo from './nav-logo';
-import NavButton from './nav-button';
+import AuthButton from '@/components/navbar/auth-button';
+import { Logo } from './logo';
+import { NavButton } from './nav-button';
 import { useTranslations } from 'next-intl';
-import ProjectPicker from './project-picker';
-import { Tooltip } from 'react-tooltip';
-import {
-  RiRobot2Line,
-  RiRobot2Fill,
-  RiHammerLine,
-  RiHammerFill,
-  RiCompassLine,
-  RiCompassFill,
-} from 'react-icons/ri';
+import { ProjectPicker } from '@/components/project/project-picker';
 import Link from 'next/link';
 import clsx from 'clsx';
-import path from 'path';
+import { Icons } from '../icons';
 
 const apiEndpoint =
   process.env.NEXT_PUBLIC_BACKEND_URL || 'https://localhost:5004';
@@ -28,22 +19,19 @@ export const NAV_MENU_ITEMS = [
   {
     id: 'chat',
     label: 'Chat',
-    icon: RiRobot2Line,
-    activeIcon: RiRobot2Fill,
+    icon: Icons.robot,
     href: '/chat',
   },
   {
     id: 'tools',
     label: 'Tools',
-    icon: RiHammerLine,
-    activeIcon: RiHammerFill,
+    icon: Icons.tool,
     href: `/tools`,
   },
   {
     id: 'discover',
     label: 'Discover',
-    icon: RiCompassLine,
-    activeIcon: RiCompassFill,
+    icon: Icons.compass,
     href: '/discover',
   },
 ];
@@ -82,7 +70,7 @@ const Navbar = () => {
         {!isAuthPage && (
           <NavButton projectId={projectId} className="lg:hidden" />
         )}
-        <NavLogo />
+        <Logo />
       </div>
       {!isAuthPage && (
         <div role="tablist" className="flex navbar-center tabs tabs-boxed px-2">
@@ -146,7 +134,6 @@ const Navbar = () => {
         {/* <ThemeSwitcher /> */}
         <AuthButton />
       </div>
-      <Tooltip id="nav-tooltip" />
     </div>
   );
 };

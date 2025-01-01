@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { GoQuestion } from 'react-icons/go';
 import Markdown from '@/components/markdown';
 import { createRoot } from 'react-dom/client';
 import clsx from 'clsx';
+import { Icons } from './icons';
 
 const Tip = ({ content, icon, className, classNameContent, ...props }: any) => {
   const [htmlContent, setHtmlContent] = React.useState('');
@@ -49,7 +49,7 @@ const Tip = ({ content, icon, className, classNameContent, ...props }: any) => {
       className={clsx(className, 'cursor-pointer')}
       {...props}
     >
-      {icon ?? <GoQuestion className="w-4 h-4" />}
+      {icon ?? <Icons.question className="w-4 h-4" />}
     </div>
   );
 };

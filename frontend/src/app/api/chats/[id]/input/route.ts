@@ -6,8 +6,9 @@ const NEXT_PUBLIC_BACKEND_URL =
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const session = await getSupabaseSession();
 
   if (!session || !session.access_token) {
@@ -17,17 +18,14 @@ export async function POST(
   const message = await request.json();
 
   try {
-    const res = await fetch(
-      `${NEXT_PUBLIC_BACKEND_URL}/v1/chats/${params.id}/input`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify(message),
-      }
-    );
+    const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/v1/chats/${id}/input`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify(message),
+    });
 
     if (!res.ok) {
       const errorText = await res.text();

@@ -1,9 +1,8 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { GoCheck, GoCopy } from 'react-icons/go';
-import { PlacesType } from 'react-tooltip';
+import { Icons } from '@/components/icons';
 
-const CopyButton = ({
+export const CopyButton = ({
   content,
   minimal,
   className,
@@ -14,7 +13,7 @@ const CopyButton = ({
   minimal?: boolean;
   className?: string;
   tooltip?: string;
-  place?: PlacesType;
+  place?: string;
 }) => {
   const [copied, setCopied] = useState(false);
   const onCopy = () => {
@@ -24,7 +23,7 @@ const CopyButton = ({
       setCopied(false);
     }, 2000);
   };
-  const CopyIcon = copied ? GoCheck : GoCopy;
+  const CopyIcon = copied ? Icons.check : Icons.copy;
   return (
     <div
       onClick={() => onCopy()}
@@ -41,5 +40,3 @@ const CopyButton = ({
     </div>
   );
 };
-
-export default CopyButton;

@@ -1,17 +1,16 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { TemplateCard } from '../../../../components/project/TemplateList';
+import { TemplateCard } from '@/components/project/template-list';
 import { useTemplates } from '@/hooks';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import ReactFlow, { ReactFlowProvider, useStoreApi } from 'reactflow';
 import 'reactflow/dist/style.css';
-import {
-  edgeTypes,
-  nodeTypes,
-} from '../../projects/[id]/flow/utils/flow';
+import { edgeTypes, nodeTypes } from '../../../../lib/flow';
 import Markdown from '@/components/markdown';
 import clsx from 'clsx';
+// Import icons from the new icons file
+import { Icons } from '@/components/icons';
 
 const FlowViewer = ({ template, className }: any) => {
   // Suppress error code 002
@@ -43,22 +42,25 @@ const FlowViewer = ({ template, className }: any) => {
   );
 };
 
-const Page = ({ params }: { params: { id: string } }) => {
+const Page = ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = use(params);
   const t = useTranslations('page.Discover');
   const { templates, isLoading, isError } = useTemplates();
   const [template, setTemplate] = useState<any>();
   const [index, setIndex] = useState<number>(0);
   useEffect(() => {
     if (isLoading || !templates) return;
-    if (params?.id) {
-      const id = parseInt(params.id, 10);
-      const index = templates.findIndex((template: any) => template.id === id);
+    if (id) {
+      const intId = parseInt(id, 10);
+      const index = templates.findIndex(
+        (template: any) => template.id === intId
+      );
       if (index >= 0) {
         setTemplate(templates[index]);
         setIndex(index);
       }
     }
-  }, [params?.id, templates, isLoading]);
+  }, [id, templates, isLoading]);
 
   if (isLoading) {
     return (

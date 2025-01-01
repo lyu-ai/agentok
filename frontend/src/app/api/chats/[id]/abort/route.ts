@@ -6,8 +6,10 @@ const NEXT_PUBLIC_BACKEND_URL =
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
+
   const session = await getSupabaseSession();
 
   if (!session || !session.access_token) {
@@ -15,16 +17,13 @@ export async function POST(
   }
 
   try {
-    const res = await fetch(
-      `${NEXT_PUBLIC_BACKEND_URL}/v1/chats/${params.id}/abort`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.access_token}`,
-        },
-      }
-    );
+    const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/v1/chats/${id}/abort`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.access_token}`,
+      },
+    });
 
     if (!res.ok) {
       const errorText = await res.text();

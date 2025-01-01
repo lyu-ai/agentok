@@ -1,17 +1,18 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import ProjectList from '@/components/project/project-list';
+import { ProjectList } from '@/components/project/project-list';
 import { initialEdges, initialNodes, useProjects } from '@/hooks';
-import { toast } from 'react-toastify';
+import { toast } from '@/hooks/use-toast';
 import { useTranslations } from 'next-intl';
-import { RiSwap3Line, RiShoppingBag4Line } from 'react-icons/ri';
+import { Icons } from '@/components/icons';
 import Link from 'next/link';
 import Image from 'next/image';
-import TemplateList from '@/components/project/template-list';
+import { TemplateList } from '@/components/project/template-list';
 import { useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 
-const Page = () => {
+export default function Page() {
   const t = useTranslations('page.Projects');
   const router = useRouter();
   const { createProject, setActiveProjectId } = useProjects();
@@ -29,10 +30,10 @@ const Page = () => {
       },
     });
     if (!project) {
-      toast.error('Failed to create project');
+      toast({ title: 'Failed to create project' });
       return;
     }
-    toast.success('Project created. Now jumping to project page.');
+    toast({ title: 'Project created. Now jumping to project page.' });
     router.push(`/projects/${project.id}/flow`);
   };
   return (
@@ -50,14 +51,14 @@ const Page = () => {
         <span className="text-5xl font-bold font-arial p-4">{t('title')}</span>
         <span className="text-lg p-4">{t('description')}</span>
         <ProjectList />
-        <button onClick={onCreateProject} className="btn btn-primary">
-          <RiSwap3Line className="w-7 h-7" />
+        <Button className="btn btn-primary" onClick={onCreateProject}>
+          <Icons.swap3 className="w-7 h-7" />
           {t('create-project')}
-        </button>
+        </Button>
       </div>
       <div className="divider text-2xl">Or</div>
       <div className="flex flex-col items-center justify-center gap-2 text-sm py-8 mb-12">
-        <RiShoppingBag4Line className="w-16 h-16 text-primary" />
+        <Icons.shoppingBag className="w-16 h-16 text-primary" />
         <span className="text-2xl p-4">{t('start-from-template')}</span>
         <TemplateList maxCount={3} />
         <Link
@@ -70,5 +71,3 @@ const Page = () => {
     </div>
   );
 };
-
-export default Page;

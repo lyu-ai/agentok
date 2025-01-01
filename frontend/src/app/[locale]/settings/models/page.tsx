@@ -1,9 +1,9 @@
 'use client';
-import Loading from '@/components/loading';
-import { Settings, useSettings, LlmModel } from '@/hooks/useSettings';
+import { Loading } from '@/components/loading';
+import { Settings, useSettings, LlmModel } from '@/hooks/use-settings';
 import { genId } from '@/lib/id';
 import { useEffect, useState } from 'react';
-import { RiBrainFill } from 'react-icons/ri';
+import { Icons } from '@/components/icons';
 
 const ModelForm = ({
   model: sourceModel,
@@ -150,7 +150,7 @@ const ModelCard = ({ model, onSave, onDelete }: any) => {
   return (
     <div className="mb-4">
       <div className="flex gap-2 items-center mb-2">
-        <RiBrainFill className="w-5 h-5" />
+        <Icons.brain className="w-5 h-5" />
         <h1 className="font-bold">Model: {model.model}</h1>
       </div>
       <ModelForm
@@ -219,7 +219,7 @@ const Page = () => {
       </div>
       <div className="flex items-center justify-end gap-2">
         <button className="btn btn-sm btn-primary" onClick={onAddModel}>
-          {!isCreating && <RiBrainFill className="w-4 h-4" />}
+          {!isCreating && <Icons.brain className="w-4 h-4" />}
           {isCreating && <div className="loading loading-xs"></div>}
           New Model
         </button>

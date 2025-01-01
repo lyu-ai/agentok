@@ -1,8 +1,7 @@
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
-import { GoImage, GoX } from 'react-icons/go';
-import { MdOutlineCleaningServices } from 'react-icons/md';
+import { Icons } from '@/components/icons';
 
 type ImagePanelProps = {
   onSelectImage: (url: string) => void;
@@ -38,12 +37,12 @@ const ImagePanel = (props: ImagePanelProps) => {
               className="btn btn-xs btn-primary btn-square absolute top-1 right-1"
               onClick={() => setUrl('')}
             >
-              <MdOutlineCleaningServices className="w-4 h-4" />
+              <Icons.trash className="w-4 h-4" />
             </button>
           </div>
         ) : (
           <div className="flex flex-col gap-2 justify-center items-center w-full h-full">
-            <GoImage className="w-12 h-12 mx-auto" />
+            <Icons.image className="w-12 h-12 mx-auto" />
             <div className="text-sm font-bold">{t('preview')}</div>
             <div className="flex items-center gap-2">
               {sampleImages.map((image, index) => (

@@ -5,12 +5,12 @@
 // scroll position of the chat list.
 // Refer to: https://github.com/vercel/next.js/issues/44793#issuecomment-1382458981
 import { useChats, useMediaQuery } from '@/hooks';
-import ChatListButton from '../../../components/chat/ChatListButton';
+import { ChatListButton } from '@/components/chat/chat-list-button';
 import { useTranslations } from 'next-intl';
-import ChatList from '../../../components/chat/ChatList';
+import { ChatList } from '@/components/chat/chat-list';
 import clsx from 'clsx';
 import { useEffect, PropsWithChildren, useState } from 'react';
-import { RiCloseLargeLine, RiFilterLine } from 'react-icons/ri';
+import { Icons } from '@/components/icons';
 
 const ChatListPane = () => {
   const t = useTranslations('page.Chat');
@@ -23,7 +23,7 @@ const ChatListPane = () => {
         <ChatListButton />
       </div>
       <div className="relative flex items-center w-full px-2 gap-1">
-        <RiFilterLine className="w-5 h-5" />
+        <Icons.filter className="w-5 h-5" />
         <input
           className="flex-1 input input-sm input-bordered rounded font-normal"
           placeholder={t('filter')}
@@ -36,7 +36,7 @@ const ChatListPane = () => {
             className="absolute right-3 btn btn-xs btn-square btn-ghost"
             onClick={() => setFilter('')}
           >
-            <RiCloseLargeLine className="w-4 h-4" />
+            <Icons.close className="w-4 h-4" />
           </button>
         )}
       </div>
@@ -47,7 +47,7 @@ const ChatListPane = () => {
   );
 };
 
-const LayoutPage = ({ children }: PropsWithChildren) => {
+export default function LayoutPage({ children }: PropsWithChildren) {
   const { sidebarCollapsed, setSidebarCollapsed } = useChats();
   const t = useTranslations('page.Chat');
   const isMediumScreen = useMediaQuery('(max-width: 768px)');
@@ -75,5 +75,3 @@ const LayoutPage = ({ children }: PropsWithChildren) => {
     </div>
   );
 };
-
-export default LayoutPage;

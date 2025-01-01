@@ -2,10 +2,12 @@
 import { useProject } from '@/hooks';
 import { Project } from '@/store/projects';
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import { toast } from '@/hooks/use-toast';
+import { use } from 'react';
 
-const Page = ({ params }: { params: { projectId: string } }) => {
-  const projectId = parseInt(params.projectId, 10);
+const Page = ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = use(params);
+  const projectId = parseInt(id, 10);
   const { project, isLoading, updateProject } = useProject(projectId);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -23,7 +25,7 @@ const Page = ({ params }: { params: { projectId: string } }) => {
       description,
     });
 
-    toast.success('Project info updated');
+    toast({ title: 'Project info updated' });
   };
   return (
     <div className="flex flex-col w-full gap-2 text-sm">

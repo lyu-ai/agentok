@@ -1,34 +1,23 @@
 'use client';
-import {
-  RiSettings3Fill,
-  RiSettings3Line,
-  RiBrainFill,
-  RiBrainLine,
-  RiFireFill,
-  RiFireLine,
-} from 'react-icons/ri';
+import { Icons } from '@/components/icons';
 
 export const settingList = [
   {
     name: 'General',
     description: 'Create and configure emotion expressions',
-    icon: RiSettings3Line,
-    activeIcon: RiSettings3Fill,
+    icon: Icons.settings,
     path: '/settings/general',
   },
   {
     name: 'Models',
     description: 'View and manage robot action records.',
-    icon: RiBrainLine,
-    activeIcon: RiBrainFill,
+    icon: Icons.brain,
     path: '/settings/models',
   },
   {
-    name: 'Danger Zone',
-    description:
-      'Danger zone, sentitive operations including permanent deletion of the project.',
-    icon: RiFireLine,
-    activeIcon: RiFireFill,
+    name: 'Advanced',
+    description: 'Advanced settings for your project.',
+    icon: Icons.fire,
     path: '/settings/advanced',
   },
 ];

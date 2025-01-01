@@ -2,12 +2,14 @@
 import { ProjectProvider } from '@/context/ProjectContext';
 import { useProject } from '@/hooks';
 import { PropsWithChildren, useEffect } from 'react';
+import { use } from 'react';
 
 export default function Layout({
   children,
   params,
-}: PropsWithChildren<{ params: { projectId: string } }>) {
-  const projectId = parseInt(params.projectId, 10);
+}: PropsWithChildren<{ params: Promise<{ id: string }> }>) {
+  const { id } = use(params);
+  const projectId = parseInt(id, 10);
   const { project } = useProject(projectId);
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import SidebarLayout from '@/components/SidebarLayout';
+import SidebarLayout from '@/components/sidebar-layout';
 import { PropsWithChildren } from 'react';
 import { settingList } from './settings';
 

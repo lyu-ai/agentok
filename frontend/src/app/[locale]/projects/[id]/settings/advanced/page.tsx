@@ -1,12 +1,15 @@
 'use client';
-import PopupDialog from '@/components/PopupDialog';
+import { PopupDialog } from '@/components/popup-dialog';
+import { Icons } from '@/components/icons';
 import { useProject, useProjects } from '@/hooks';
+import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { RiSkull2Line } from 'react-icons/ri';
+import { use } from 'react';
 
-const Page = ({ params }: { params: { projectId: string } }) => {
-  const projectId = parseInt(params.projectId, 10);
+const Page = ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = use(params);
+  const projectId = parseInt(id, 10);
   const [showPrompt, setShowPrompt] = useState(false);
   const { project, isLoading } = useProject(projectId);
   const { deleteProject, isDeleting } = useProjects();
@@ -52,12 +55,12 @@ const Page = ({ params }: { params: { projectId: string } }) => {
               deletion?
             </p>
             <div className="flex items-center gap-2 mt-4">
-              <button
-                className="btn btn-sm bg-red-800 px-6 border-red-500 hover:bg-red-600 hover:border-red-400 text-white rounded"
+              <Button
+                className="bg-red-800 px-6 border-red-500 hover:bg-red-600 hover:border-red-400 text-white rounded"
                 onClick={() => setShowPrompt(true)}
               >
                 Delete [{project.name}]
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -68,7 +71,7 @@ const Page = ({ params }: { params: { projectId: string } }) => {
         onClose={() => setShowPrompt(false)}
         title={
           <div className="flex items-center gap-2">
-            <RiSkull2Line className="w-5 h-5" />
+            <Icons.skull className="w-5 h-5" />
             Are you sure?
           </div>
         }
@@ -80,14 +83,11 @@ const Page = ({ params }: { params: { projectId: string } }) => {
         </p>
         <p>This action cannot be undone. </p>
         <div className="mt-4 flex gap-4 justify-end">
-          <button
-            className="btn btn-sm rounded"
-            onClick={() => setShowPrompt(false)}
-          >
+          <Button className="rounded" onClick={() => setShowPrompt(false)}>
             I changed my mind
-          </button>
-          <button
-            className="btn px-4 btn-sm border-red-600 bg-red-500 text-white hover:bg-red-500 hover:border-red-400 rounded"
+          </Button>
+          <Button
+            className="px-4 border-red-600 bg-red-500 text-white hover:bg-red-500 hover:border-red-400 rounded"
             onClick={() => {
               handleDelete();
               setShowPrompt(false);
@@ -95,7 +95,7 @@ const Page = ({ params }: { params: { projectId: string } }) => {
           >
             {isDeleting && 'Deleting...'}
             {!isDeleting && 'Delete Project'}
-          </button>
+          </Button>
         </div>
       </PopupDialog>
     </>

@@ -5,8 +5,8 @@ import { fetcher } from './fetcher';
 import { isEqual } from 'lodash-es';
 import useProjectStore from '@/store/projects';
 import useTemplateStore from '@/store/templates';
-import { useProjects } from './useProjects';
-import { useTemplates } from './useTemplates';
+import { useProjects } from './use-projects';
+import { useTemplates } from './use-templates';
 
 export function useChats() {
   const { data, error, mutate } = useSWR('/api/chats', fetcher);

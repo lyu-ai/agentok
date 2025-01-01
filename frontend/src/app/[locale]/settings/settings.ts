@@ -1,33 +1,24 @@
 'use client';
-import {
-  RiKeyFill,
-  RiBrainFill,
-  RiBrainLine,
-  RiKeyLine,
-  RiSettings3Fill,
-  RiSettings3Line,
-} from 'react-icons/ri';
+
+import { Icons } from '@/components/icons';
 
 export const settingList = [
   {
     name: 'Account',
     description: 'Create and configure emotion expressions',
-    icon: RiSettings3Line,
-    activeIcon: RiSettings3Fill,
+    icon: Icons.settings,
     path: '/settings/account',
   },
   {
     name: 'Models',
     description: 'Global shared models',
-    icon: RiBrainLine,
-    activeIcon: RiBrainFill,
+    icon: Icons.brain,
     path: '/settings/models',
   },
   {
     name: 'API Keys',
     description: 'Configure how robot speaks',
-    icon: RiKeyLine,
-    activeIcon: RiKeyFill,
+    icon: Icons.key,
     path: '/settings/api-keys',
   },
 ];

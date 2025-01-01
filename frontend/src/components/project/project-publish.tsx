@@ -1,15 +1,15 @@
-import PopupDialog from '@/components/PopupDialog';
+import { PopupDialog } from '@/components/popup-dialog';
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { RiShare2Line } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
 import { useProject, useTemplates } from '@/hooks';
-import Loading from '@/components/loading';
-import { toast } from 'react-toastify';
+import { Loading } from '@/components/loading';
+import { toast } from '@/hooks/use-toast';
+import { Icons } from '@/components/icons';
 
-const PublishConfig = ({ projectId, className, ...props }: any) => {
-  const t = useTranslations('option.PublishConfig');
+export const ProjectPublish = ({ projectId, className, ...props }: any) => {
+  const t = useTranslations('option.ProjectPublish');
   const { project, isLoading } = useProject(projectId);
   const { publishTemplate, isPublishing } = useTemplates();
   const router = useRouter();
@@ -35,11 +35,11 @@ const PublishConfig = ({ projectId, className, ...props }: any) => {
       project,
     })
       .then((template) => {
-        toast.success(t('publish-success', { project_name: project.name }));
+        toast({ title: t('publish-success', { project_name: project.name }) });
         router.push(`/discover/${template.id}`);
       })
       .catch(() => {
-        toast.error(t('publish-failed', { project_name: project.name }));
+        toast({ title: t('publish-failed', { project_name: project.name }) });
       });
   };
 
@@ -47,7 +47,7 @@ const PublishConfig = ({ projectId, className, ...props }: any) => {
     <PopupDialog
       title={
         <div className="flex items-center gap-2">
-          <RiShare2Line className="w-5 h-5" />
+          <Icons.share className="w-5 h-5" />
           <span className="text-md font-bold">{t('title')}</span>
         </div>
       }
@@ -85,7 +85,7 @@ const PublishConfig = ({ projectId, className, ...props }: any) => {
           className="btn btn-sm btn-primary rounded px-4"
           onClick={onPublishProject}
         >
-          {!isPublishing && <RiShare2Line className="w-4 h-4" />}
+          {!isPublishing && <Icons.share className="w-4 h-4" />}
           {isPublishing && <div className="loading loading-xs" />}
           {t('publish')}
         </button>
@@ -93,5 +93,3 @@ const PublishConfig = ({ projectId, className, ...props }: any) => {
     </PopupDialog>
   );
 };
-
-export default PublishConfig;

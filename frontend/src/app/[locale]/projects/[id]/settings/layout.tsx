@@ -1,19 +1,15 @@
-import SidebarLayout from '@/components/SidebarLayout';
+import SidebarLayout from '@/components/sidebar-layout';
 import { PropsWithChildren } from 'react';
 import { settingList } from './project-settings';
 
-const Layout = ({
+export default async function Layout({
   children,
   params,
-}: PropsWithChildren<{ params: { projectId: string } }>) => {
+}: PropsWithChildren<{ params: Promise<{ id: string }> }>) {
+  const { id } = await params;
   return (
-    <SidebarLayout
-      pathPrefix={`/projects/${params.projectId}`}
-      sidebarItems={settingList}
-    >
+    <SidebarLayout pathPrefix={`/projects/${id}`} sidebarItems={settingList}>
       {children}
     </SidebarLayout>
   );
-};
-
-export default Layout;
+}

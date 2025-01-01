@@ -1,10 +1,10 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import TemplateList from '../../../components/project/TemplateList';
+import { TemplateList } from '@/components/project/template-list';
 
 // standalone means this is not a child of Popover component
-const Page = () => {
+export default function Page() {
   const t = useTranslations('page.Discover');
   return (
     <div className="relative flex flex-col w-full h-full gap-2 p-2 overflow-y-auto">
@@ -19,5 +19,3 @@ const Page = () => {
     </div>
   );
 };
-
-export default Page;

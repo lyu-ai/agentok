@@ -1,22 +1,20 @@
 import { useTranslations } from 'next-intl';
-import { BsInboxes } from 'react-icons/bs';
-import { GoRepoForked, GoTrash } from 'react-icons/go';
 import { useChats, useProjects, useTemplates } from '@/hooks';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { toast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import Markdown from '@/components/markdown';
-import { useUser } from '@/hooks/useUser';
-import { RiRobot2Line, RiUserHeartLine } from 'react-icons/ri';
+import { useUser } from '@/hooks/use-user';
+import { Icons } from '../icons';
 
 export const TemplateEmpty = () => {
   const t = useTranslations('component.TemplateList');
   return (
     <div className="flex items-center justify-center w-full h-full">
       <div className="flex flex-col gap-2 items-center text-base-content/60">
-        <BsInboxes className="w-12 h-12" />
+        <Icons.inbox className="w-12 h-12" />
         <div className="mt-2 text-sm">{t('template-empty')}</div>
       </div>
     </div>
@@ -102,7 +100,11 @@ export const TemplateCard = ({
       })
       .catch((e) => {
         console.log(e);
-        toast.error(`Failed to create chat: ${e}`);
+        toast({
+          title: t('error'),
+          description: `Failed to create chat: ${e}`,
+          variant: 'destructive',
+        });
       });
   };
   const randomImage = [
@@ -165,7 +167,7 @@ export const TemplateCard = ({
             />
           ) : (
             <div className="w-6 h-6 rounded-full shrink-0 bg-base-content/20 flex items-center justify-center">
-              <RiUserHeartLine className="w-4 h-4 text-base-content" />
+              <Icons.heart className="w-4 h-4 text-base-content" />
             </div>
           )}
           {template.full_name ?? template.email ?? ''}
@@ -187,7 +189,7 @@ export const TemplateCard = ({
               data-tooltip-id="default-tooltip"
               data-tooltip-content={t('start-chat-tooltip')}
             >
-              <RiRobot2Line
+              <Icons.robot
                 className={clsx('w-4 h-4', {
                   'animate-spin': isCreating,
                 })}
@@ -200,7 +202,7 @@ export const TemplateCard = ({
               data-tooltip-id="default-tooltip"
               data-tooltip-content={t('fork-tooltip')}
             >
-              <GoRepoForked
+              <Icons.gitFork
                 className={clsx('w-4 h-4', { 'animate-spin': isForking })}
               />
               {t('fork')}
@@ -212,7 +214,7 @@ export const TemplateCard = ({
                 data-tooltip-content={t('unpublish-tooltip')}
                 onClick={handleDelete}
               >
-                <GoTrash
+                <Icons.trash
                   className={clsx('w-4 h-4', {
                     'loading loading-xs': isDeleting,
                   })}
@@ -226,7 +228,7 @@ export const TemplateCard = ({
   );
 };
 
-const TemplateList = ({ maxCount }: any) => {
+export const TemplateList = ({ maxCount }: any) => {
   const { templates, isLoading, isError } = useTemplates();
   const t = useTranslations('component.TemplateList');
 
@@ -246,5 +248,3 @@ const TemplateList = ({ maxCount }: any) => {
     </div>
   );
 };
-
-export default TemplateList;

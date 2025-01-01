@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useChat, useChats } from '@/hooks';
-import ChatPane from '../../../components/chat/ChatPane';
+import { ChatPane } from '@/components/chat/chat-pane';
 import { useEffect } from 'react';
 
 const Page = () => {

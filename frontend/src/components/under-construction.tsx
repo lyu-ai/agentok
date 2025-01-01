@@ -7,12 +7,12 @@ import {
 
 export default function UnderConstruction() {
   return (
-    <Alert variant="warning" className="max-w-xl mx-auto mt-8">
+    <Alert className="max-w-xl mx-auto mt-8">
       <AlertCircle className="h-4 w-4" />
       <AlertTitle>Under Construction</AlertTitle>
       <AlertDescription>
         This page is currently under construction. Please check back later.
       </AlertDescription>
     </Alert>
-  )
+  );
 }
