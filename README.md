@@ -14,8 +14,6 @@
 > [!Warning]
 > This project is currently under development and is not yet recommended for production use.
 >
-> While code generation has proven effective in maintaining the tool’s utility across various runtimes beyond AutoGen, it has also revealed challenges related to efficiency and observability. As a result, I’m considering transitioning the project into a workflow engine rather than continuing as a standalone program. This change would introduce significant modifications to the backend architecture.
->
 > Your feedback is invaluable as we move forward. If you have any thoughts or suggestions, please share them by opening a new issue or participating in the ongoing discussions [here](https://github.com/hughlv/agentok/issues/160).
 
 ## 🌟 What is Agentok Studio
