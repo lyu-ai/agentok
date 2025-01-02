@@ -3,15 +3,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/ui/tabs';
 import { Icons } from '@/components/icons';
-import { useTranslations } from 'next-intl';
 import { useChats, useProjects, useTemplates } from '@/hooks';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
 const ChatListPanel = ({ onAdd }: any) => {
-  const t = useTranslations('component.ChatListButton');
   const { projects, isLoading: isLoadingProjects } = useProjects();
   const { templates, isLoading: isLoadingTemplates } = useTemplates();
   const { createChat } = useChats();
@@ -21,22 +24,22 @@ const ChatListPanel = ({ onAdd }: any) => {
     data: any[] | undefined;
     isLoading: boolean;
   }[] = [
-    {
-      type: 'project',
-      data: projects,
-      isLoading: isLoadingProjects,
-    },
-    {
-      type: 'template',
-      data: templates,
-      isLoading: isLoadingTemplates,
-    },
-  ];
+      {
+        type: 'project',
+        data: projects,
+        isLoading: isLoadingProjects,
+      },
+      {
+        type: 'template',
+        data: templates,
+        isLoading: isLoadingTemplates,
+      },
+    ];
   return (
     <Tabs defaultValue="projects" className="w-full">
       <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="projects">{t('projects')}</TabsTrigger>
-        <TabsTrigger value="templates">{t('templates')}</TabsTrigger>
+        <TabsTrigger value="projects">Projects</TabsTrigger>
+        <TabsTrigger value="templates">Templates</TabsTrigger>
       </TabsList>
       <TabsContent value="projects">
         {chatSources[0].data?.map((sourceItem: any) => (
@@ -87,7 +90,6 @@ const ChatListPanel = ({ onAdd }: any) => {
 };
 
 export const ChatListButton = () => {
-  const t = useTranslations('component.ChatListButton');
   const router = useRouter();
   const { createChat } = useChats();
 
@@ -96,7 +98,7 @@ export const ChatListButton = () => {
       <PopoverTrigger asChild>
         <Button variant="outline" className="flex items-center gap-2 w-full">
           <Icons.add className="w-5 h-5" />
-          {t('from-template-tooltip')}
+          Create a new chat from template
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[500px] h-[480px] overflow-y-auto shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/90 text-base-content border border-gray-600">

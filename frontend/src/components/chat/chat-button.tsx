@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 
@@ -11,15 +10,13 @@ interface ChatButtonProps {
 }
 
 export const ChatButton = ({ status, onClick, className }: ChatButtonProps) => {
-  const t = useTranslations('component.ChatButton');
-
   return (
     <Button
       variant="ghost"
       size="icon"
       className={className}
       onClick={onClick}
-      title={t(status)}
+      title={status === 'online' ? 'Chat is active' : 'Start new chat'}
     >
       {status === 'online' ? (
         <Icons.robotActive className="w-5 h-5" />

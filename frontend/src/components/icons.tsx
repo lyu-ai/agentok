@@ -68,6 +68,7 @@ import {
   Sun,
   Moon,
 } from 'lucide-react';
+import { Logo } from './logo';
 
 export type Icon = LucideIcon;
 
@@ -197,4 +198,5 @@ export const Icons = {
       <line x1="4" y1="4" x2="10" y2="10" />
     </svg>
   ),
+  logo: Logo,
 } as const;

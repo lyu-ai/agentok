@@ -1,12 +1,12 @@
 import { AssistantNode } from '@/components/flow/node/assistant';
 import { UserProxyAgent } from '@/components/flow/node/user';
 import { GroupChatManager } from '@/components/flow/node/group-chat';
-import { Note } from '@/components/flow/node/note';
+import { NoteNode } from '@/components/flow/node/note';
 
 import { Node, ReactFlowInstance } from 'reactflow';
 import { genId } from '@/lib/id';
 import { ConversableAgent } from '@/components/flow/node/conversable-agent';
-import { Initializer } from '@/components/flow/node/initializer';
+import { InitializerNode } from '@/components/flow/node/initializer';
 import { ConverseEdge } from '@/components/flow/edge/converse-edge';
 import { NestedChat } from '@/components/flow/node/nested-chat';
 import { GPTAssistantNode } from '@/components/flow/node/gpt-assistant';
@@ -16,11 +16,11 @@ import { RetrieveAssistantNode } from '@/components/flow/node/retrieve-assistant
 import { Icons, Icon } from '@/components/icons';
 
 export const nodeTypes = {
-  initializer: Initializer,
+  initializer: InitializerNode,
   assistant: AssistantNode,
   user: UserProxyAgent,
   groupchat: GroupChatManager, // DO NOT change the type to 'group', as it's a builtin type of react-flow
-  note: Note,
+  note: NoteNode,
   conversable: ConversableAgent,
   nestedchat: NestedChat,
   gpt_assistant: GPTAssistantNode,

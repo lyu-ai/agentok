@@ -1,5 +1,4 @@
 'use client';
-import { useTranslations } from 'next-intl';
 import { useChats, useProjects } from '@/hooks';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
@@ -9,12 +8,14 @@ import Markdown from '@/components/markdown';
 import { ProjectPublish } from './project-publish';
 import { useState } from 'react';
 import { Icons } from '@/components/icons';
+import { Card } from '../ui/card';
+import { Button } from '../ui/button';
 
 export const ProjectLoading = () => {
   return (
     <div className="flex w-full flex-wrap justify-center gap-4">
       {[...Array(4)].map((_, i) => (
-        <div
+        <Card
           key={i}
           className="card w-80 h-48 flex flex-col overflow-hidden gap-2 bg-base-content/10 border border-base-content/10"
         >
@@ -29,14 +30,13 @@ export const ProjectLoading = () => {
               <div className="skeleton h-5 w-20 p-2"></div>
             </div>
           </div>
-        </div>
+        </Card>
       ))}
     </div>
   );
 };
 
 export const ProjectBlock = ({ project, className }: any) => {
-  const t = useTranslations('component.ProjectList');
   const { createChat, isCreating } = useChats();
   const [showPublishDialog, setShowPublishDialog] = useState(false);
   const router = useRouter();
@@ -53,14 +53,14 @@ export const ProjectBlock = ({ project, className }: any) => {
       .catch((e) => {
         console.log(e);
         toast({
-          title: t('error'),
+          title: 'Error',
           description: `Failed to create chat: ${e}`,
           variant: 'destructive',
         });
       });
   };
   return (
-    <div
+    <Card
       className={clsx(
         'group card w-80 bg-base-content/10 border border-base-content/10',
         className,
@@ -78,37 +78,33 @@ export const ProjectBlock = ({ project, className }: any) => {
           {project.description}
         </Markdown>
         <div className="relative card-actions flex justify-between gap-1 text-xs text-base-content/60">
-          <button
-            className="btn btn-xs rounded btn-ghost group-hover:bg-primary group-hover:text-primary-content gap-1 group-hover:animate-pulse"
+          <Button
+            className="flex items-center gap-1"
+            size="icon"
+            variant="ghost"
             onClick={onChat}
-            data-tooltip-id="default-tooltip"
-            data-tooltip-content={t('start-chat-tooltip')}
           >
             <Icons.chat
               className={clsx('w-4 h-4', {
                 'animate-spin': isCreating,
               })}
             />
-            {t('start-chat')}
-          </button>
+          </Button>
           <div className="flex items-center gap-2">
-            <button
-              className="btn btn-xs rounded btn-ghost gap-1"
+            <Button
+              size="icon"
+              variant="ghost"
               onClick={() => setShowPublishDialog((v) => !v)}
-              data-tooltip-id="default-tooltip"
-              data-tooltip-content={t('publish-project-tooltip')}
             >
               <Icons.share className={clsx('w-4 h-4')} />
-              {t('publish-project')}
-            </button>
+            </Button>
             <Link
               href={`/projects/${project.id}/flow`}
-              className="btn btn-xs rounded btn-ghost gap-1"
-              data-tooltip-id="default-tooltip"
-              data-tooltip-content={t('edit-project-tooltip')}
+              className="flex items-center gap-1"
             >
-              <Icons.edit className="w-4 h-4" />
-              {t('edit-project')}
+              <Button size="icon" variant="ghost">
+                <Icons.edit className="w-4 h-4" />
+              </Button>
             </Link>
           </div>
         </div>
@@ -120,13 +116,12 @@ export const ProjectBlock = ({ project, className }: any) => {
           onClose={() => setShowPublishDialog(false)}
         />
       )}
-    </div>
+    </Card>
   );
 };
 
 export const ProjectList = ({ maxCount }: any) => {
   const { projects, isLoading, isError } = useProjects();
-  const t = useTranslations('component.TemplateList');
 
   if (isError) {
     console.warn('Failed to load template');

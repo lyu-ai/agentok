@@ -1,43 +1,40 @@
-import { setNodeData } from '@/lib/flow';
-import { useReactFlow } from 'reactflow';
-import { useTranslations } from 'next-intl';
-import { useEffect } from 'react';
+'use client';
 
-export const LLavaOptions = ({ id, data, selected }: any) => {
-  const instance = useReactFlow();
-  const t = useTranslations('node.Assistant');
-  useEffect(() => {
-    if (data?.llava_config?.base_url === undefined) {
-      setNodeData(instance, id, {
-        llava_config: {
-          mode: 'remote',
-          base_url:
-            'yorickvp/llava-13b:e272157381e2a3bf12df3a8edd1f38d1dbd736bbb7437277c8b34175f8fce358',
-        },
-      });
-    }
-  });
+import React from 'react';
+import { GenericOption } from './option';
+
+export const LLaVAOptions = ({ nodeId, data, selected }: any) => {
   return (
-    <div className="flex flex-col gap-2">
-      <div className="form-control">
-        <label className="flex flex-col gap-2">
-          <span className="label-text">{t('llava-url')}</span>
-          <input
-            id="enable_llava"
-            type="text"
-            className="input input-sm input-bordered bg-transparent rounded"
-            value={data.llava_config?.base_url ?? ''}
-            onChange={(e) => {
-              setNodeData(instance, id, {
-                llava_config: {
-                  mode: 'remote',
-                  base_url: e.target.value,
-                },
-              });
-            }}
-          />
-        </label>
-      </div>
-    </div>
+    <>
+      <GenericOption
+        type="select"
+        nodeId={nodeId}
+        data={data}
+        selected={selected}
+        name="model"
+        label="Model"
+        options={[
+          { value: 'llava-v1.5-7b', label: 'LLaVA v1.5 7B' },
+          { value: 'llava-v1.5-13b', label: 'LLaVA v1.5 13B' },
+        ]}
+      />
+      <GenericOption
+        type="switch"
+        nodeId={nodeId}
+        data={data}
+        selected={selected}
+        name="use_local"
+        label="Use Local Model"
+      />
+      <GenericOption
+        type="text"
+        nodeId={nodeId}
+        data={data}
+        selected={selected}
+        name="local_model_path"
+        label="Local Model Path"
+        placeholder="Enter path to local model..."
+      />
+    </>
   );
 };

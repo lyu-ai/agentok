@@ -1,215 +1,196 @@
-import { Popover } from '@/components/ui/popover';
+'use client';
+
+import React, { useCallback, useEffect, useState } from 'react';
+import { useReactFlow } from 'reactflow';
 import clsx from 'clsx';
-import { useTranslations } from 'next-intl';
-import { useState, useEffect } from 'react';
-import {
-  getNodeLabel,
-  basicNodes,
-  agentNodes,
-  advancedNodes,
-} from '@/lib/flow';
-import useProjectStore from '@/store/projects';
-import { Icons } from '../icons';
-import { Button } from '../ui/button';
+import { Icons } from '@/components/icons';
+import { useSettings } from '@/hooks';
+import { getNodeIcon } from '@/lib/flow';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { cn } from '@/lib/utils';
 
-const DRAGGING_NODE_NAME = '__dragging-node';
+interface NodeButtonProps {
+  name: string;
+  type: string;
+  description?: string;
+  nodeClass?: string;
+  onClick?: () => void;
+}
 
-const NodeGroup = ({ pinned, name, nodes, open, onAddNode }: any) => {
-  const tNodeMeta = useTranslations('meta.node');
-  const [openState, setOpenState] = useState(open ?? false);
-  const onDragStart = (
-    event: React.DragEvent<any>,
-    data: { type: string; name: string; label: string; class: string }
-  ) => {
-    let dragImage = event.currentTarget.cloneNode(true);
-    dragImage.classList.add(
-      'absolute',
-      'bg-gray-700/90',
-      'shadow-box',
-      'shadow-gray-600',
-      'backdrop-blur-sm',
-      DRAGGING_NODE_NAME
-    );
-    // Create an off-screen container for the drag image
-    let offScreenContainer = document.createElement('div');
-    offScreenContainer.style.position = 'fixed';
-    offScreenContainer.style.top = '-9999px';
-    offScreenContainer.style.left = '-9999px';
-    document.body.appendChild(offScreenContainer);
-    offScreenContainer.appendChild(dragImage);
-    // Offset the drag image to the position of the original element, otherwise will be shown at the cursor position
-    const offsetX =
-      event.clientX - event.currentTarget.getBoundingClientRect().left;
-    const offsetY =
-      event.clientY - event.currentTarget.getBoundingClientRect().top;
-    event.dataTransfer.setDragImage(dragImage, offsetX, offsetY);
-    event.dataTransfer.setData(
-      'json',
-      JSON.stringify({ ...data, offsetX, offsetY })
-    );
-    // Clean up the off-screen container after the drag operation ends
-    event.currentTarget.addEventListener(
-      'dragend',
-      () => {
-        if (offScreenContainer) {
-          document.body.removeChild(offScreenContainer);
-        }
-      },
-      { once: true }
-    );
-  };
-  const buildAgentNodes = (nodes: any) => {
-    return (
-      <>
-        {nodes.map(
-          ({
-            id,
-            name,
-            description,
-            label,
-            type,
-            class: _class,
-            icon: Icon = Icons.robot,
-          }: any) => (
-            <Button
-              draggable
-              onDragStart={(event) => {
-                onDragStart(event, {
-                  type,
-                  name,
-                  label,
-                  class: _class,
-                });
-              }}
-              onDragEnd={(event) => {
-                const dragImage = document.querySelector(
-                  `.${DRAGGING_NODE_NAME}`
-                );
-                if (dragImage) {
-                  document.body.removeChild(dragImage);
-                }
-              }}
-              key={id}
-              onClick={() =>
-                onAddNode(type, { name, class: _class, label, type })
-              }
-              className="group min-w-64 flex p-2 items-center rounded-lg bg-base-content/5 hover:bg-base-content/10 cursor-pointer"
-            >
-              <Icon className="flex-shrink-0 w-6 h-6 mx-1 group-hover:text-white group-hover:scale-125 transform transition duration-300 ease-in-out" />
-              <div className="ml-3 flex flex-col items-start gap-1">
-                <div className="text-sm font-bold group-hover:text-white">
-                  {type === 'custom_conversable'
-                    ? label
-                    : getNodeLabel(label, tNodeMeta)}
-                </div>
-                <div className="text-left text-xs text-base-content/40 group-hover:text-white/80">
-                  {type === 'custom_conversable'
-                    ? description
-                    : (getNodeLabel(label + '-description', tNodeMeta) ??
-                      label + '-description')}
-                </div>
-              </div>
-            </Button>
-          )
-        )}
-      </>
-    );
-  };
+const NodeButton = ({ name, type, description, nodeClass = 'general', onClick }: NodeButtonProps) => {
+  const NodeIcon = getNodeIcon(type);
+
   return (
-    <div className="collapse collapse-arrow">
-      <input
-        type="checkbox"
-        onChange={(e) => setOpenState(e.target.checked)}
-        checked={openState}
-      />
-      <div
-        className={clsx('collapse-title flex items-center font-bold text-sm', {
-          'text-white': openState,
-        })}
-      >
-        {name}
-      </div>
-      <div className="collapse-content flex flex-col gap-1 p-1">
-        {buildAgentNodes(nodes)}
-      </div>
-    </div>
+    <button
+      type="button"
+      className={clsx(
+        'flex items-center gap-2 w-full p-2 rounded-lg border',
+        'hover:border-primary/40 hover:bg-base-content/5',
+        {
+          'border-base-content/10': nodeClass === 'general',
+          'border-primary/20': nodeClass === 'agent',
+          'border-secondary/20': nodeClass === 'group',
+        }
+      )}
+      onClick={onClick}
+      data-tooltip-id="default-tooltip"
+      data-tooltip-content={description}
+    >
+      <NodeIcon className="w-5 h-5" />
+      <span className="text-sm">{name}</span>
+    </button>
   );
 };
 
-const NodePane = ({ pinned, onAddNode, contentClassName }: any) => {
-  const t = useTranslations('component.NodeButton');
-  const [customAgents, setCustomAgents] = useState<any[]>([]);
-  const { nodePanePinned, pinNodePane } = useProjectStore();
-  useEffect(() => {
-    fetch('/api/extensions/agent', {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then((res) => res.json())
-      .then((agents) => {
-        setCustomAgents(agents);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+export const NodePane = () => {
+  const [nodePanePinned, setNodePanePinned] = useState(false);
+  const instance = useReactFlow();
+  const { settings } = useSettings();
+
+  const addNode = useCallback(
+    (type: string, nodeClass: string) => {
+      const position = {
+        x: window.innerWidth / 2 - 100,
+        y: window.innerHeight / 2 - 100,
+      };
+
+      const newNode = {
+        id: crypto.randomUUID(),
+        type,
+        position,
+        data: {
+          name: type,
+          class: type,
+        },
+      };
+
+      instance.addNodes(newNode);
+    },
+    [instance]
+  );
 
   return (
-    <div className="flex w-full h-full flex-col gap-2 backdrop-blur-md shadow-box shadow-gray-700 rounded-xl bg-gray-700/70 text-base-content border border-gray-600 ">
-      <div className="flex items-center justify-between p-2">
-        <div className="font-bold">{t('add-node')}</div>
+    <div
+      className={cn(
+        'absolute top-4 right-4 z-10 flex flex-col gap-2 p-4 rounded-xl border shadow-box',
+        'bg-base-content/10 border-base-content/10',
+        'hover:border-primary/40',
+        {
+          'opacity-100': nodePanePinned,
+          'opacity-0 hover:opacity-100': !nodePanePinned,
+        }
+      )}
+    >
+      <div className="flex items-center justify-between gap-4">
+        <div className="font-bold">Add Node</div>
         <button
-          className="btn btn-ghost btn-square btn-xs"
-          onClick={() => pinNodePane(!nodePanePinned)}
-          data-tooltip-content={nodePanePinned ? t('unpin') : t('pin')}
+          type="button"
+          className="btn btn-xs btn-ghost btn-square rounded"
+          onClick={() => setNodePanePinned(!nodePanePinned)}
           data-tooltip-id="default-tooltip"
+          data-tooltip-content={nodePanePinned ? 'Unpin' : 'Pin'}
         >
-          {nodePanePinned ? (
-            <Icons.unpin className="w-4 h-4" />
-          ) : (
-            <Icons.pin className="w-4 h-4" />
-          )}
+          <Icons.pin className="w-4 h-4" />
         </button>
       </div>
-      <div
-        className={clsx(
-          'flex flex-col flex-grow overflow-y-auto',
-          contentClassName
-        )}
-      >
-        <div className="flex flex-col w-full">
-          <NodeGroup
-            pinned={pinned}
-            name={t('group-basic')}
-            nodes={basicNodes}
-            onAddNode={onAddNode}
-            open
-          />
-          <NodeGroup
-            pinned={pinned}
-            name={t('group-agent')}
-            nodes={agentNodes}
-            onAddNode={onAddNode}
-            open
-          />
-          <NodeGroup
-            pinned={pinned}
-            name={t('group-advanced')}
-            nodes={advancedNodes}
-            onAddNode={onAddNode}
-          />
-          {/*  {customAgents?.length > 0 && (
-            <NodeGroup
-              pinned={pinned}
-              name={t('group-extensions')}
-              nodes={customAgents}
-              onAddNode={onAddNode}
-            />
-          )} */}
-        </div>
-      </div>
+      <Accordion type="single" collapsible>
+        <AccordionItem value="basic">
+          <AccordionTrigger>Basic</AccordionTrigger>
+          <AccordionContent>
+            <div className="flex flex-col gap-2">
+              <NodeButton
+                name="Initializer"
+                type="Initializer"
+                description="Configure initial settings for the chat session"
+                onClick={() => addNode('Initializer', 'general')}
+              />
+              <NodeButton
+                name="Note"
+                type="Note"
+                description="Add a note to document your flow"
+                onClick={() => addNode('Note', 'general')}
+              />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="agent">
+          <AccordionTrigger>Agents</AccordionTrigger>
+          <AccordionContent>
+            <div className="flex flex-col gap-2">
+              <NodeButton
+                name="Assistant"
+                type="AssistantAgent"
+                description="A basic assistant agent"
+                nodeClass="agent"
+                onClick={() => addNode('AssistantAgent', 'agent')}
+              />
+              <NodeButton
+                name="GPT Assistant"
+                type="GPTAssistantAgent"
+                description="An assistant powered by GPT"
+                nodeClass="agent"
+                onClick={() => addNode('GPTAssistantAgent', 'agent')}
+              />
+              <NodeButton
+                name="Retrieve Assistant"
+                type="RetrieveAssistantAgent"
+                description="An assistant with retrieval capabilities"
+                nodeClass="agent"
+                onClick={() => addNode('RetrieveAssistantAgent', 'agent')}
+              />
+              <NodeButton
+                name="LLaVA Assistant"
+                type="LLaVAAgent"
+                description="An assistant with vision capabilities"
+                nodeClass="agent"
+                onClick={() => addNode('LLaVAAgent', 'agent')}
+              />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="advanced">
+          <AccordionTrigger>Advanced</AccordionTrigger>
+          <AccordionContent>
+            <div className="flex flex-col gap-2">
+              <NodeButton
+                name="User"
+                type="UserProxyAgent"
+                description="A proxy for user interaction"
+                nodeClass="agent"
+                onClick={() => addNode('UserProxyAgent', 'agent')}
+              />
+              <NodeButton
+                name="Retrieve User"
+                type="RetrieveUserProxyAgent"
+                description="A user proxy with retrieval capabilities"
+                nodeClass="agent"
+                onClick={() => addNode('RetrieveUserProxyAgent', 'agent')}
+              />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="extensions">
+          <AccordionTrigger>Extensions</AccordionTrigger>
+          <AccordionContent>
+            <div className="flex flex-col gap-2">
+              <NodeButton
+                name="Group Chat"
+                type="GroupChat"
+                description="A group chat with multiple agents"
+                nodeClass="group"
+                onClick={() => addNode('GroupChat', 'group')}
+              />
+              <NodeButton
+                name="Nested Chat"
+                type="NestedChat"
+                description="A nested chat session"
+                nodeClass="group"
+                onClick={() => addNode('NestedChat', 'group')}
+              />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </div>
   );
 };
-
-export default NodePane;

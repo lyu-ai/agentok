@@ -1,13 +1,19 @@
-import { stripMatch } from '@/lib/re';
-import { StatusMessage } from '@/lib/chat';
+'use client';
+
+import { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
-import { useTranslations } from 'next-intl';
-import { useChat, useUser } from '@/hooks';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+import { createClient } from '@/lib/supabase/client';
+import useProjectStore from '@/store/projects';
 import { useToast } from '@/hooks/use-toast';
+import { stripMatch } from '@/lib/re';
+import { StatusMessage } from '@/lib/chat';
 import { PopupDialog } from '@/components/popup-dialog';
-import { useState } from 'react';
 import { Message } from '@/types/chat';
+import { useChat, useUser } from '@/hooks';
 
 interface MessageBubbleProps {
   chat: any;
@@ -22,7 +28,6 @@ const MessageBubble = ({
   onSend,
   onShowMessageData,
 }: MessageBubbleProps) => {
-  const t = useTranslations('component.ChatPane');
   const { chatSource } = useChat(chat.id);
   const { user } = useUser();
   const { toast } = useToast();
@@ -59,7 +64,7 @@ const MessageBubble = ({
           ) : (
             <Icons.alert className="w-4 h-4" />
           )}
-          <span>{t('thinking-end')}</span>
+          <span>Thinking completed</span>
         </div>
       </div>
     );
@@ -68,23 +73,23 @@ const MessageBubble = ({
       <div
         className="divider my-2 text-sm text-base-content/30"
         data-tooltip-id="chat-tooltip"
-        data-tooltip-content={t('thinking-begin')}
+        data-tooltip-content="I am thinking..."
         data-tooltip-place="top"
       >
         <div className="flex items-center gap-1 cursor-pointer">
           <Icons.robot className="w-4 h-4" />
-          <span>{t('thinking-begin')}</span>
+          <span>I am thinking...</span>
         </div>
       </div>
     );
   } else if (message.content.startsWith(StatusMessage.receivedHumanInput)) {
-    message.content = t('received-human-input');
+    message.content = "Human input received";
   } else if (message.content.startsWith(StatusMessage.waitForHumanInput)) {
     const { text } = stripMatch(
       message.content,
       StatusMessage.waitForHumanInput
     );
-    message.content = text ?? t('wait-for-human-input');
+    message.content = text ?? "Waiting for human input...";
     waitForHumanInput = true;
   }
 
@@ -112,7 +117,7 @@ const MessageBubble = ({
   let messageHeader = null;
   if (waitForHumanInput) {
     messageHeader = (
-      <div className="flex items-center gap-2">{t('wait-for-human-input')}</div>
+      <div className="flex items-center gap-2">Waiting for human input...</div>
     );
   } else if (message.sender) {
     messageHeader = (
@@ -145,13 +150,13 @@ const MessageBubble = ({
     try {
       await navigator.clipboard.writeText(text);
       toast({
-        title: t('copied'),
-        description: t('message-copied'),
+        title: "Copied",
+        description: "Message copied to clipboard",
       });
     } catch (err) {
       toast({
-        title: t('error'),
-        description: t('copy-failed'),
+        title: "Error",
+        description: "Failed to copy message",
         variant: 'destructive',
       });
     }
@@ -206,7 +211,6 @@ interface MessageListProps {
 }
 
 export const MessageList = ({ chat, messages, onSend }: MessageListProps) => {
-  const t = useTranslations('component.ChatPane');
   const { toast } = useToast();
   const [messageData, setMessageData] = useState('');
 
@@ -214,13 +218,13 @@ export const MessageList = ({ chat, messages, onSend }: MessageListProps) => {
     try {
       await navigator.clipboard.writeText(text);
       toast({
-        title: t('copied'),
-        description: t('message-copied'),
+        title: "Copied",
+        description: "Message copied to clipboard",
       });
     } catch (err) {
       toast({
-        title: t('error'),
-        description: t('copy-failed'),
+        title: "Error",
+        description: "Failed to copy message",
         variant: 'destructive',
       });
     }
@@ -231,7 +235,7 @@ export const MessageList = ({ chat, messages, onSend }: MessageListProps) => {
       <div className="flex items-center justify-center h-full text-muted-foreground">
         <div className="flex flex-col items-center gap-4">
           <Icons.inbox className="w-12 h-12" />
-          <p>{t('no-messages')}</p>
+          <p>No messages yet</p>
         </div>
       </div>
     );

@@ -1,4 +1,3 @@
-import { useTranslations } from 'next-intl';
 import Markdown from 'react-markdown';
 import { useToolSettings } from '@/hooks';
 import { useEffect, useState } from 'react';
@@ -45,11 +44,10 @@ const VariableConfig = ({ tool, variable, onChange }: any) => {
 };
 
 export const ToolConfig = ({ tool }: any) => {
-  const t = useTranslations('tool.Config');
   if (!tool) {
     return (
       <div className="w-full h-full justify-center items-center flex">
-        {t('tool-not-found')}
+        Tool not found
       </div>
     );
   }
@@ -89,7 +87,7 @@ export const ToolConfig = ({ tool }: any) => {
         </div>
       ) : (
         <div className="flex items-center justify-center text-base-content/50 w-full h-full">
-          {t('no-variables')}
+          No variables
         </div>
       )}
     </div>

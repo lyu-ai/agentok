@@ -1,38 +1,63 @@
+'use client';
+
 import clsx from 'clsx';
-import { useReactFlow } from 'reactflow';
+import { useReactFlow, NodeProps } from 'reactflow';
 import { setNodeData } from '@/lib/flow';
-import { useTranslations } from 'next-intl';
 import Tip from '@/components/tip';
 import { isArray } from 'lodash-es';
 import { GenericNode } from './generic-node';
 
-export const Initializer = ({ id, data, ...props }: any) => {
+interface InitializerProps extends NodeProps {
+  id: string;
+  data: any;
+  selected: boolean;
+  type: string;
+  zIndex: number;
+  isConnectable: boolean;
+  xPos: number;
+  yPos: number;
+  dragging: boolean;
+}
+
+export const InitializerNode = ({
+  id,
+  data,
+  selected,
+  type,
+  zIndex,
+  isConnectable,
+  xPos,
+  yPos,
+  dragging,
+}: InitializerProps) => {
   const instance = useReactFlow();
-  const t = useTranslations('node.Initializer');
+
   return (
     <GenericNode
       id={id}
       data={data}
+      selected={selected}
+      type={type}
+      zIndex={zIndex}
+      isConnectable={isConnectable}
+      xPos={xPos}
+      yPos={yPos}
+      dragging={dragging}
       nodeClass="general"
-      ports={[{ type: 'output', name: '' }]}
-      {...props}
+      className="min-w-80"
+      ports={[{ type: 'source', name: '' }]}
     >
-      <div className="py-1 text-sm">{t('initializer-tooltip')}</div>
-      <div className="divider my-0" />
-      <div className="text-base-content/80 flex items-center gap-1">
-        {t('sample-messages')}
-        <Tip content={t('sample-messages-tooltip')} />
+      <div className="py-1 text-sm">
+        Configure initial settings for the chat session
+      </div>
+      <div className="flex items-center gap-2">
+        <span>Sample Messages</span>
+        <Tip content="Sample messages that will be shown in the chat panel" />
       </div>
       <textarea
-        rows={2}
-        className="nodrag nowheel textarea textarea-xs textarea-bordered w-full bg-transparent rounded"
-        value={
-          data.sample_messages
-            ? isArray(data.sample_messages)
-              ? data.sample_messages.join('\n')
-              : data.sample_messages
-            : ''
-        }
+        className="textarea textarea-bordered w-full min-h-[100px] text-sm"
+        value={isArray(data.sample_messages) ? data.sample_messages.join('\n') : ''}
+        placeholder="Enter sample messages, one per line..."
         onChange={(e) =>
           setNodeData(instance, id, {
             sample_messages: e.target.value.split('\n'),
@@ -42,5 +67,3 @@ export const Initializer = ({ id, data, ...props }: any) => {
     </GenericNode>
   );
 };
-
-export default Initializer;

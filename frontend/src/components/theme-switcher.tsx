@@ -1,7 +1,6 @@
 // Refer to https://github.com/pacocoursey/next-themes/pull/171
 'use client';
 import { cn } from '@/lib/utils';
-import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
 import React, { useEffect, useState } from 'react';
 import { Icons } from '@/components/icons';
@@ -18,7 +17,6 @@ const useThemeSwitcher = () => {
 };
 
 const ThemeSwitcher = () => {
-  const t = useTranslations('component.ThemeSwitcher');
   const { mode: theme, setTheme } = useThemeSwitcher();
 
   const toggleTheme = (e: any) => {
@@ -30,7 +28,7 @@ const ThemeSwitcher = () => {
     <div
       className="btn btn-sm btn-ghost btn-circle"
       onClick={toggleTheme}
-      data-tooltip-content={t('theme-tooltip')}
+      data-tooltip-content="Switch Light/Dark Mode"
       data-tooltip-id="default-tooltip"
     >
       <label

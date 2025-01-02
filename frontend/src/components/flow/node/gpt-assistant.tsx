@@ -1,46 +1,73 @@
+'use client';
+
 import React from 'react';
-import { useTranslations } from 'next-intl';
+import { NodeProps } from 'reactflow';
 import { GenericNode } from './generic-node';
 import { ConversableAgentConfig } from '../config/conversable-agent';
 import { GenericOption } from '../option/option';
 
-export const GPTAssistantNode = ({ id, data, selected, ...props }: any) => {
-  const t = useTranslations('node.GPTAssistant');
+interface GPTAssistantProps extends NodeProps {
+  id: string;
+  data: any;
+  selected: boolean;
+  type: string;
+  zIndex: number;
+  isConnectable: boolean;
+  xPos: number;
+  yPos: number;
+  dragging: boolean;
+}
 
+export const GPTAssistantNode = ({
+  id,
+  data,
+  selected,
+  type,
+  zIndex,
+  isConnectable,
+  xPos,
+  yPos,
+  dragging,
+}: GPTAssistantProps) => {
   return (
     <GenericNode
       id={id}
       data={data}
       selected={selected}
-      nameEditable
+      type={type}
+      zIndex={zIndex}
+      isConnectable={isConnectable}
+      xPos={xPos}
+      yPos={yPos}
+      dragging={dragging}
       nodeClass="agent"
+      className="min-w-80"
+      ports={[{ type: 'target', name: '' }, { type: 'source', name: '' }]}
+      ConfigDialog={ConversableAgentConfig}
+      optionComponent={GenericOption}
       optionsDisabled={[
         'human_input_mode',
         'disable_llm',
         'enable_code_execution',
       ]}
-      ports={[{ type: 'input' }, { type: 'output' }]}
-      ConfigDialog={ConversableAgentConfig}
-      {...props}
-      className="min-w-80"
     >
       <GenericOption
-        type="text"
-        rows={2}
+        type="textarea"
         nodeId={id}
         data={data}
         selected={selected}
         name="instructions"
-        label={t('instructions')}
-        placeholder={t('instructions-placeholder')}
+        label="Instructions"
+        placeholder="Enter instructions for the assistant..."
+        className="min-h-[100px]"
       />
       <GenericOption
-        type="check"
+        type="switch"
         nodeId={id}
         data={data}
         selected={selected}
-        label={t('use-default-instructions')}
         name="use_default_instructions"
+        label="Use default instructions"
       />
     </GenericNode>
   );

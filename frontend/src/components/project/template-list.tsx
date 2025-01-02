@@ -1,4 +1,3 @@
-import { useTranslations } from 'next-intl';
 import { useChats, useProjects, useTemplates } from '@/hooks';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
@@ -8,14 +7,14 @@ import Link from 'next/link';
 import Markdown from '@/components/markdown';
 import { useUser } from '@/hooks/use-user';
 import { Icons } from '../icons';
+import { Card } from '../ui/card';
 
 export const TemplateEmpty = () => {
-  const t = useTranslations('component.TemplateList');
   return (
     <div className="flex items-center justify-center w-full h-full">
       <div className="flex flex-col gap-2 items-center text-base-content/60">
         <Icons.inbox className="w-12 h-12" />
-        <div className="mt-2 text-sm">{t('template-empty')}</div>
+        <div className="mt-2 text-sm">No templates found</div>
       </div>
     </div>
   );
@@ -53,7 +52,6 @@ export const TemplateCard = ({
   const { userId } = useUser();
   const [isOwned, setIsOwned] = useState(false);
   const [isAuthed, setIsAuthed] = useState(false);
-  const t = useTranslations('component.TemplateList');
   const { deleteTemplate, isDeleting } = useTemplates();
   const { forkProject, isForking } = useProjects();
   const { createChat, isCreating } = useChats();
@@ -67,10 +65,7 @@ export const TemplateCard = ({
   } else if (config?.data?.flow_description) {
     templateDescription = config.data.flow_description;
   } else {
-    templateDescription = t('default-description', {
-      node_count: template.flow.nodes.length,
-      edge_count: template.flow?.edges?.length ?? 0,
-    });
+    templateDescription = `Default description, ${template.flow.nodes.length} nodes, ${template.flow?.edges?.length ?? 0} edges`;
   }
   useEffect(() => {
     setIsAuthed(userId !== null);
@@ -101,7 +96,7 @@ export const TemplateCard = ({
       .catch((e) => {
         console.log(e);
         toast({
-          title: t('error'),
+          title: 'Error',
           description: `Failed to create chat: ${e}`,
           variant: 'destructive',
         });
@@ -123,11 +118,13 @@ export const TemplateCard = ({
   ][index % 12];
   const ConditionalLink = ({ children, className }: any) => {
     if (suppressLink) {
-      return <div className={className}>{children}</div>;
+      return <Card className={className}>{children}</Card>;
     } else {
       return (
-        <Link href={`/discover/${template.id}`} className={className}>
-          {children}
+        <Link href={`/discover/${template.id}`}>
+          <Card className={className}>
+            {children}
+          </Card>
         </Link>
       );
     }
@@ -187,31 +184,31 @@ export const TemplateCard = ({
               className="btn btn-xs btn-ghost gap-1"
               onClick={handleChat}
               data-tooltip-id="default-tooltip"
-              data-tooltip-content={t('start-chat-tooltip')}
+              data-tooltip-content="Start chat"
             >
               <Icons.robot
                 className={clsx('w-4 h-4', {
                   'animate-spin': isCreating,
                 })}
               />
-              {t('start-chat')}
+              Start chat
             </button>
             <button
               className="btn btn-xs btn-ghost gap-1"
               onClick={handleFork}
               data-tooltip-id="default-tooltip"
-              data-tooltip-content={t('fork-tooltip')}
+              data-tooltip-content="Fork"
             >
               <Icons.gitFork
                 className={clsx('w-4 h-4', { 'animate-spin': isForking })}
               />
-              {t('fork')}
+              Fork
             </button>
             {isOwned && (
               <button
                 className="absolute left-0 btn btn-xs btn-ghost btn-square group-hover:text-red-400"
                 data-tooltip-id="default-tooltip"
-                data-tooltip-content={t('unpublish-tooltip')}
+                data-tooltip-content="Unpublish"
                 onClick={handleDelete}
               >
                 <Icons.trash
@@ -230,7 +227,6 @@ export const TemplateCard = ({
 
 export const TemplateList = ({ maxCount }: any) => {
   const { templates, isLoading, isError } = useTemplates();
-  const t = useTranslations('component.TemplateList');
 
   if (isError) {
     console.warn('Failed to load template');

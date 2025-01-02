@@ -1,7 +1,6 @@
-import { useTranslations } from 'next-intl';
 import { PopupDialog } from '@/components/popup-dialog';
 import { Icons } from '@/components/icons';
-import { clsx } from 'clsx';
+import { cn } from '@/lib/utils';
 import { GenericOption } from '../option/option';
 
 export const ConversableAgentConfig = ({
@@ -11,8 +10,6 @@ export const ConversableAgentConfig = ({
   className,
   ...props
 }: any) => {
-  const t = useTranslations('option.ConversableAgentConfig');
-  const tGeneric = useTranslations('node.Generic');
 
   const GENERAL_OPTIONS = [
     {

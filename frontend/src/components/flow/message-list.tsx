@@ -1,169 +1,176 @@
-import { stripMatch } from '@/lib/re';
-import { StatusMessage } from '@/lib/chat';
+'use client';
 
+import React, { useEffect, useRef, useState } from 'react';
+import clsx from 'clsx';
+import { Icons } from '@/components/icons';
+import { useSettings } from '@/hooks';
 import Markdown from '@/components/markdown';
-import { useTranslations } from 'next-intl';
-import { getAvatarUrl } from '@/lib/supabase/client';
-import supabase from '@/lib/supabase/client';
-import { useChat } from '@/hooks';
-import { Icons } from '../icons';
 
-const MessageBlock = ({ chatId, message, onSend }: any) => {
-  const t = useTranslations('component.ChatPane');
-  const { chatSource } = useChat(chatId);
-  const userNodeName =
-    chatSource?.flow?.nodes?.find(
-      (node: any) =>
-        node.data.class === 'UserProxyAgent' ||
-        node.data.class === 'RetrieveUserProxyAgent'
-    )?.data?.name ?? '';
-  let waitForHumanInput = false;
+interface Message {
+  id: string;
+  content: string;
+  role: string;
+  name?: string;
+  function_call?: any;
+}
 
-  // End of thinking
-  if (message.content.startsWith(StatusMessage.completed)) {
-    const { found, text } = stripMatch(
-      message.content,
-      StatusMessage.completed
-    );
-    const success = found && text.startsWith('DONE');
-    const ResultIcon = success ? Icons.checkCircle : Icons.alert;
-    const resultClass = success ? 'text-green-500' : 'text-red-500/50';
+interface MessageListProps {
+  messages: Message[];
+  onMessageClick?: (message: Message) => void;
+  onMessageDelete?: (message: Message) => void;
+  onMessageEdit?: (message: Message) => void;
+  className?: string;
+}
 
-    return (
-      <div
-        className="divider my-2 text-sm"
-        data-tooltip-id="chat-tooltip"
-        data-tooltip-content={text}
-        data-tooltip-place="top"
-      >
-        <div
-          className={`flex items-center gap-1 cursor-pointer ${resultClass}`}
-        >
-          <ResultIcon className="w-4 h-4" />
-          <span>{t('thinking-end')}</span>
-        </div>
-      </div>
-    );
-  } else if (message.content.startsWith(StatusMessage.running)) {
-    return (
-      <div
-        className="divider my-2 text-sm text-base-content/30"
-        data-tooltip-id="chat-tooltip"
-        data-tooltip-content={t('thinking-begin')}
-        data-tooltip-place="top"
-      >
-        <div className="flex items-center gap-1 cursor-pointer">
-          <Icons.robot className="w-4 h-4" />
-          <span>{t('thinking-begin')}</span>
-        </div>
-      </div>
-    );
-  } else if (message.content.startsWith(StatusMessage.receivedHumanInput)) {
-    message.content = t('received-human-input');
-  } else if (message.content.startsWith(StatusMessage.waitForHumanInput)) {
-    const { text } = stripMatch(
-      message.content,
-      StatusMessage.waitForHumanInput
-    );
-    message.content = text ?? t('wait-for-human-input');
-    waitForHumanInput = true;
-  }
+export const MessageList = ({
+  messages,
+  onMessageClick,
+  onMessageDelete,
+  onMessageEdit,
+  className,
+}: MessageListProps) => {
+  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
+  const [editingMessage, setEditingMessage] = useState<Message | null>(null);
+  const editTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const { settings } = useSettings();
 
-  const messageClass = waitForHumanInput
-    ? 'bg-yellow-600/20 text-yellow-600'
-    : message.type === 'assistant'
-      ? 'bg-base-content/20 text-base-content'
-      : 'bg-primary/80 text-white';
+  useEffect(() => {
+    if (editingMessage && editTextareaRef.current) {
+      editTextareaRef.current.focus();
+      editTextareaRef.current.setSelectionRange(
+        editTextareaRef.current.value.length,
+        editTextareaRef.current.value.length
+      );
+    }
+  }, [editingMessage]);
 
-  let avatarIcon = <Icons.robot className="w-5 h-5" />;
-  if (message.type === 'user') {
-    avatarIcon = <Icons.user className="w-5 h-5" />;
-  } else if (message.sender === userNodeName) {
-    avatarIcon = <Icons.user className="w-5 h-5" />;
-  }
+  const handleMessageClick = (message: Message) => {
+    if (onMessageClick) {
+      onMessageClick(message);
+    }
+    setSelectedMessage(message);
+  };
 
-  let messageHeader = null;
-  if (waitForHumanInput) {
-    messageHeader = (
-      <div className="flex items-center gap-2">{t('wait-for-human-input')}</div>
-    );
-  } else if (message.sender) {
-    messageHeader = (
-      <div className="chat-header w-full flex items-end gap-2 text-sm p-1 text-base-content/80">
-        <div className="flex items-center gap-1">
-          {message.sender}
-          {message.receiver && (
-            <>
-              <Icons.megaphone className="w-3 h-3 inline-block mx-1" />
-              <span className=" text-base-content/50">{message.receiver}</span>
-            </>
-          )}
-        </div>
-        <div className="text-base-content/20 text-xs">
-          {new Date(message.created).toLocaleString()}
-        </div>
-      </div>
-    );
-  }
+  const handleMessageDelete = (message: Message) => {
+    if (onMessageDelete) {
+      onMessageDelete(message);
+    }
+  };
+
+  const handleMessageEdit = (message: Message) => {
+    setEditingMessage(message);
+  };
+
+  const handleEditSave = () => {
+    if (editingMessage && onMessageEdit) {
+      onMessageEdit(editingMessage);
+    }
+    setEditingMessage(null);
+  };
+
+  const handleEditCancel = () => {
+    setEditingMessage(null);
+  };
+
+  const handleEditChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (editingMessage) {
+      setEditingMessage({
+        ...editingMessage,
+        content: e.target.value,
+      });
+    }
+  };
 
   return (
-    <div className={`chat gap-x-1 chat-start`}>
-      <div className="chat-image text-base-content/50">
+    <div className={clsx('flex flex-col gap-2', className)}>
+      {messages.map((message) => (
         <div
-          className={`w-8 h-8 rounded-full ${messageClass} flex items-center justify-center`}
+          key={message.id}
+          className={clsx(
+            'group relative flex flex-col gap-2 p-4 rounded-xl border',
+            'bg-base-content/10 border-base-content/10',
+            'hover:border-primary/40',
+            {
+              'border-primary': selectedMessage?.id === message.id,
+            }
+          )}
+          onClick={() => handleMessageClick(message)}
         >
-          {avatarIcon}
-        </div>
-      </div>
-      {messageHeader}
-      <div
-        className={`relative group chat-bubble rounded-md p-2 ${messageClass} break-word word-wrap`}
-        style={{ maxWidth: '100%' }}
-      >
-        {message.content ? (
-          <Markdown>{message.content}</Markdown>
-        ) : (
-          <span className="text-lime-600">Empty Message</span>
-        )}
-        {message.type === 'user' && (
-          <div className="hidden group-hover:block absolute right-1 bottom-1">
-            <button
-              className="btn btn-xs btn-circle"
-              data-tooltip-content={t('resend')}
-              data-tooltip-id="chat-tooltip"
-              onClick={() => onSend(message.content)}
-            >
-              <Icons.reload className="w-4 h-4 text-gray-200/20 group-hover:text-gray-200" />
-            </button>
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Icons.robot className="w-4 h-4" />
+              <span className="text-sm font-bold">{message.role}</span>
+              {message.name && (
+                <span className="text-sm text-base-content/60">
+                  ({message.name})
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button
+                type="button"
+                className="btn btn-xs btn-ghost btn-square rounded"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleMessageEdit(message);
+                }}
+                data-tooltip-id="default-tooltip"
+                data-tooltip-content="Edit message"
+              >
+                <Icons.edit className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                className="btn btn-xs btn-ghost btn-square rounded"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleMessageDelete(message);
+                }}
+                data-tooltip-id="default-tooltip"
+                data-tooltip-content="Delete message"
+              >
+                <Icons.trash className="w-4 h-4" />
+              </button>
+            </div>
           </div>
-        )}
-      </div>
+          {editingMessage?.id === message.id ? (
+            <div className="flex flex-col gap-2">
+              <textarea
+                ref={editTextareaRef}
+                className="textarea textarea-bordered w-full min-h-[100px]"
+                value={editingMessage.content}
+                onChange={handleEditChange}
+              />
+              <div className="flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  className="btn btn-sm btn-ghost"
+                  onClick={handleEditCancel}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-primary"
+                  onClick={handleEditSave}
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          ) : (
+            <Markdown className="text-sm">{message.content}</Markdown>
+          )}
+          {message.function_call && (
+            <div className="flex flex-col gap-2">
+              <div className="text-sm font-bold">Function Call</div>
+              <pre className="text-sm bg-base-content/5 p-2 rounded">
+                {JSON.stringify(message.function_call, null, 2)}
+              </pre>
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 };
-
-const MessageList = ({ chatId, messages, onSend }: any) => {
-  const t = useTranslations('component.ChatPane');
-  return (
-    <>
-      {messages.length === 0 && (
-        <div className="flex items-center justify-center w-full h-full">
-          <div className="flex flex-col items-center gap-2 text-sm text-base-content/20">
-            <Icons.robot className="w-12 h-12" />
-            {t('message-empty')}
-          </div>
-        </div>
-      )}
-      {messages.map((message: any) => (
-        <MessageBlock
-          key={message.id}
-          chatId={chatId}
-          message={message}
-          onSend={onSend}
-        />
-      ))}
-    </>
-  );
-};
-
-export default MessageList;

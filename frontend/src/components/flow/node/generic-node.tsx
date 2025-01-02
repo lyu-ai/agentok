@@ -1,279 +1,211 @@
+'use client';
+
 import clsx from 'clsx';
-import React, {
-  PropsWithChildren,
-  ReactNode,
-  useEffect,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Handle,
-  NodeResizeControl,
   NodeProps,
   Position,
   useReactFlow,
-  NodeToolbar,
+  NodeResizer,
+  HandleType,
 } from 'reactflow';
 import { formatData, getNodeIcon, setNodeData } from '@/lib/flow';
 import { EditableText } from '@/components/editable-text';
-import { useTranslations } from 'next-intl';
 import { GenericOption } from '../option/option';
 import { useSettings } from '@/hooks';
 import Tip from '@/components/tip';
 import { Icon, Icons } from '@/components/icons';
 
-type Props = {
-  id: string;
-  data: any;
-  icon?: any;
-  activeIcon?: any;
-  nodeClass?: 'general' | 'agent' | 'group'; // predefined style class of the node, such as 'primary' or 'sky-300'
-  nameEditable?: boolean;
-  deletable?: boolean;
-  resizable?: boolean;
-  toolbarButtons?: ReactNode[];
-  options?: string[];
-  optionsDisabled?: string[];
-  ports?: any[];
-  ConfigDialog?: any;
-  selected: boolean;
+interface WrapNodeProps<T = any> extends NodeProps<T> {
+  children?: React.ReactNode;
+  dragHandle?: string;
+  nodeClass?: 'general' | 'agent' | 'group';
   className?: string;
-} & NodeProps &
-  React.HTMLAttributes<HTMLDivElement>;
+  resizable?: boolean;
+  nameEditable?: boolean;
+  optionsDisabled?: string[];
+  ports?: { type: HandleType; name?: string }[];
+  ConfigDialog?: React.ComponentType<any>;
+  optionComponent?: React.ComponentType<any>;
+}
 
 export const GenericNode = ({
   id,
   data,
   selected,
-  icon,
-  activeIcon,
-  nodeClass = 'general',
-  nameEditable,
-  deletable,
-  resizable,
-  toolbarButtons,
-  options = [], // a list of common options
-  optionsDisabled = [], // a list of common options that should be disabled
-  ports = [], // a list of common ports [{ type: 'input', name: '' }, { type: 'output', name: 'handle1' }, ...]
-  ConfigDialog,
-  className,
+  dragHandle,
   children,
-  ...props
-}: PropsWithChildren<Props>) => {
-  const [editingName, setEditingName] = useState(false);
-  const [showOptions, setShowOptions] = useState(false);
-  const controlStyle = {
-    background: 'transparent',
-    border: 'none',
-  };
+  nodeClass = 'general',
+  className,
+  resizable,
+  nameEditable,
+  optionsDisabled = [],
+  ports = [],
+  ConfigDialog,
+  optionComponent: OptionComponent = GenericOption,
+}: WrapNodeProps) => {
   const instance = useReactFlow();
-  const { spyModeEnabled } = useSettings();
-  let NodeIcon;
-  if (selected && activeIcon) {
-    NodeIcon = activeIcon;
-  } else if (icon) {
-    NodeIcon = icon;
-  } else {
-    NodeIcon = getNodeIcon(data.type);
-  }
-  const t = useTranslations('node.Generic');
-  const COMMON_OPTIONS = [
+  const [showConfig, setShowConfig] = useState(false);
+  const { settings } = useSettings();
+
+  const options = [
     {
-      type: 'text',
-      name: 'system_message',
-      label: t('system-message'),
-      placeholder: t('system-message-placeholder'),
-      rows: 2,
+      id: 'system_message',
+      type: 'textarea',
+      label: 'System Message',
+      placeholder: 'Enter system message for the agent...',
+      className: 'min-h-[100px]',
     },
     {
-      type: 'text',
-      name: 'description',
-      label: t('description'),
-      placeholder: t('description-placeholder'),
-      rows: 2,
+      id: 'description',
+      type: 'textarea',
+      label: 'Description',
+      placeholder: 'Enter description for the agent...',
+      className: 'min-h-[100px]',
     },
     {
+      id: 'termination_msg',
       type: 'text',
-      name: 'termination_msg',
-      label: t('termination-msg'),
-      compact: true,
+      label: 'Termination Message',
     },
     {
+      id: 'human_input_mode',
       type: 'select',
-      name: 'human_input_mode',
-      label: t('human-input-mode'),
+      label: 'Human Input Mode',
       options: [
-        { value: 'NEVER', label: t('input-mode-never') },
-        { value: 'ALWAYS', label: t('input-mode-always') },
-        { value: 'TERMINATE', label: t('input-mode-terminate') },
+        { value: 'NEVER', label: 'Never' },
+        { value: 'ALWAYS', label: 'Always' },
+        { value: 'TERMINATE', label: 'On Terminate' },
       ],
-      compact: true,
     },
     {
+      id: 'max_consecutive_auto_reply',
       type: 'number',
-      name: 'max_consecutive_auto_reply',
-      label: t('max-consecutive-auto-reply'),
+      label: 'Max Consecutive Auto Reply',
+      min: 1,
+      max: 100,
     },
     {
-      type: 'check',
-      name: 'disable_llm',
-      label: t('disable-llm'),
+      id: 'disable_llm',
+      type: 'switch',
+      label: 'Disable LLM',
     },
   ];
 
-  useEffect(() => {
-    if (!selected) {
-      setEditingName(false);
-    }
-  }, [selected]);
-
-  // Utility type to extract properties from T that exist in U
-  type ExtractProps<T, U> = {
-    [K in keyof T & keyof U]: T[K];
-  };
-  // Filter the props at runtime
-  const filterProps = <T, U extends object>(
-    props: T,
-    type: U
-  ): ExtractProps<T, U> => {
-    const result = {} as ExtractProps<T, U>;
-    for (const key in props) {
-      if (key in type) {
-        (result as any)[key] = props[key];
-      }
-    }
-    return result;
-  };
-
-  const divProps = filterProps(
-    props,
-    {} as React.HTMLAttributes<HTMLDivElement>
+  const handleNameChange = useCallback(
+    (name: string) => {
+      setNodeData(instance, id, { name });
+    },
+    [instance, id]
   );
 
-  const onDelete = (e: any) => {
-    e.stopPropagation();
+  const handleDataChange = useCallback(
+    (key: string, value: any) => {
+      setNodeData(instance, id, { [key]: value });
+    },
+    [instance, id]
+  );
 
-    const node = instance.getNode(id);
-    if (!node) {
-      console.warn('The node to delete does not exist', id);
-      return;
-    }
-    instance.deleteElements({ nodes: [node] });
-  };
+  const NodeIcon = getNodeIcon(data.class);
 
   return (
     <>
       <div
-        data-node-id={id}
         className={clsx(
-          'p-2 rounded-md border min-w-[240px] backdrop-blur-sm w-full h-full',
+          'group relative flex flex-col gap-2 p-4 rounded-xl border shadow-box',
+          'bg-base-content/10 border-base-content/10',
+          'hover:border-primary/40',
           {
-            [`node-${nodeClass}`]: nodeClass && !selected,
-            [`node-${nodeClass}-selected`]: nodeClass && selected,
+            'border-primary': selected,
+            'min-w-[320px]': !className?.includes('min-w-'),
           },
           className
         )}
-        {...divProps}
       >
-        <NodeToolbar
-          nodeId={id}
-          isVisible={selected}
-          position={Position.Top}
-          align="end"
-          className={clsx(
-            `node-${nodeClass}-selected`,
-            'flex items-center gap-3 py-1 px-2 border rounded'
-          )}
-        >
-          {toolbarButtons}
-          {ConfigDialog && (
-            <div
-              className="cursor-pointer hover:text-white"
-              onClick={() => setShowOptions((show) => !show)}
-              data-tooltip-content={t('options')}
-              data-tooltip-id="default-tooltip"
-              data-tooltip-place="top"
-            >
-              <Icons.settings className="w-4 h-4" />
-            </div>
-          )}
-          {!deletable && (
-            <div
-              className="cursor-pointer hover:text-white"
-              data-tooltip-content={t('delete-node-tooltip')}
-              data-tooltip-id="default-tooltip"
-              data-tooltip-place="top"
-              onClick={onDelete}
-            >
-              <Icons.trash className="w-4 h-4" />
-            </div>
-          )}
-        </NodeToolbar>
-        <div className="relative flex flex-col w-full gap-2 text-sm">
-          <div className="flex items-center gap-1 justify-between">
-            <div className="w-full flex items-center gap-1">
-              <NodeIcon className="w-5 h-5" />
-              <EditableText
-                text={data.name}
-                onChange={(name: any) => {
-                  setEditingName(false);
-                  setNodeData(instance, id, { name: name });
-                }}
-                onModeChange={(editing: any) => setEditingName(editing)}
-                editing={editingName}
-                showButtons={nameEditable}
-                className="text-sm font-bold"
-              />
-            </div>
-            {spyModeEnabled && (
-              <Tip icon={<span>{id}</span>} content={formatData(data)} />
-            )}
-          </div>
-          {options.map((option, index) => {
-            const commonOption = COMMON_OPTIONS.find((o) => o.name === option);
-            if (commonOption) {
-              return (
-                <GenericOption
-                  key={index}
-                  nodeId={id}
-                  data={data}
-                  {...commonOption}
-                  className="flex items-center justify-between gap-2"
-                />
-              );
-            }
-          })}
-          {children}
-        </div>
-
-        {ports.map((port, index) => (
+        {resizable && selected && (
+          <NodeResizer
+            color="#2563eb"
+            isVisible={selected}
+            minWidth={200}
+            minHeight={100}
+          />
+        )}
+        {ports.map(({ type, name }, i) => (
           <Handle
-            key={index}
-            type={port.type === 'input' ? 'target' : 'source'}
-            position={port.type === 'input' ? Position.Left : Position.Right}
-            id={port.name}
-            className="w-16 !bg-green-600"
+            key={i}
+            type={type}
+            position={type === 'target' ? Position.Left : Position.Right}
+            id={name}
+            className={clsx(
+              'w-3 h-3 rounded-full border-2 bg-base-content/10',
+              'border-base-content/10 hover:border-primary',
+              {
+                'border-primary': selected,
+              }
+            )}
           />
         ))}
-
-        {selected && resizable && (
-          <NodeResizeControl
-            className="custom-resize-handle"
-            style={controlStyle}
-            minWidth={100}
-            minHeight={50}
-          >
-            <Icons.resize />
-          </NodeResizeControl>
-        )}
+        <div
+          className={clsx('flex items-center gap-2', dragHandle)}
+          data-testid="draggable-handle"
+        >
+          <div className="flex items-center gap-2 flex-grow">
+            <NodeIcon className="w-5 h-5" />
+            {nameEditable ? (
+              <EditableText
+                value={data.name}
+                onChange={handleNameChange}
+                className="text-sm font-bold"
+              />
+            ) : (
+              <span className="text-sm font-bold">{data.name}</span>
+            )}
+          </div>
+          <div className="flex items-center gap-1">
+            {ConfigDialog && (
+              <button
+                type="button"
+                className="btn btn-xs btn-ghost btn-square rounded"
+                onClick={() => setShowConfig(true)}
+                data-tooltip-id="default-tooltip"
+                data-tooltip-content="Configure options"
+              >
+                <Icons.settings className="w-4 h-4" />
+              </button>
+            )}
+            <button
+              type="button"
+              className="btn btn-xs btn-ghost btn-square rounded"
+              onClick={() => instance.deleteElements({ nodes: [{ id }] })}
+              data-tooltip-id="default-tooltip"
+              data-tooltip-content="Delete node"
+            >
+              <Icons.trash className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+        {children}
+        {options
+          .filter((option) => !optionsDisabled.includes(option.id))
+          .map((option) => (
+            <OptionComponent
+              key={option.id}
+              nodeId={id}
+              data={data}
+              selected={selected}
+              {...option}
+              onChange={(value: any) => handleDataChange(option.id, value)}
+            />
+          ))}
       </div>
       {ConfigDialog && (
         <ConfigDialog
-          show={showOptions}
+          show={showConfig}
+          onClose={() => setShowConfig(false)}
           nodeId={id}
           data={data}
-          optionsDisabled={optionsDisabled}
-          onClose={() => setShowOptions(false)}
-          className="flex shrink-0 w-[640px] max-w-[80vw] max-h-[90vh]"
+          settings={settings}
         />
       )}
     </>

@@ -23,16 +23,15 @@ import { Icons } from '@/components/icons';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { ViewToggle } from './view-toggle';
 import { NodeButton } from './node-button';
-import { Python } from './python';
-import { Json } from './json';
+import { PythonViewer } from './python';
+import { JsonViewer } from './json';
 import { genId } from '@/lib/id';
 import { ChatButton } from '@/components/chat/chat-button';
-import { useTranslations } from 'next-intl';
 import { useChats, useProject, useSettings } from '@/hooks';
 import { debounce } from 'lodash-es';
 import { ChatPane } from '@/components/chat/chat-pane';
 import useProjectStore from '@/store/projects';
-import NodePane from './node-pane';
+import { NodePane } from './node-pane';
 import { Chat as ChatType } from '@/store/chats';
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -80,7 +79,6 @@ export const Agentflow = ({ projectId }: { projectId: number }) => {
   const nodePanePinned = useProjectStore((state) => state.nodePanePinned);
   const { spyModeEnabled, enableSpyMode } = useSettings();
   const [activeChatId, setActiveChatId] = useState<ChatType | undefined>();
-  const t = useTranslations('component.Flow');
 
   // Suppress error code 002
   const store = useStoreApi();
@@ -343,21 +341,16 @@ export const Agentflow = ({ projectId }: { projectId: number }) => {
   if (mode === 'python') {
     return (
       <div className="relative flex w-full h-full">
-        <Python data={project} setMode={setMode} />
+        <PythonViewer data={project} setMode={setMode} />
       </div>
     );
   } else if (mode === 'json') {
     return (
       <div className="relative flex w-full h-full">
-        <Json
+        <JsonViewer
+          show={mode === 'json'}
           data={project}
-          setMode={setMode}
-          onSave={async (project: any) => {
-            console.log('Saving json', project);
-            setNodes(project.flow.nodes);
-            setEdges(project.flow.edges);
-            // await updateProject(project);
-          }}
+          onClose={() => setMode('flow')}
         />
       </div>
     );
@@ -373,7 +366,7 @@ export const Agentflow = ({ projectId }: { projectId: number }) => {
     return (
       <div className="relative flex w-full h-full items-center justify-center">
         <p className="text-red-500">
-          {t('project-load-failed')} {projectId}
+          Project load failed {projectId}
         </p>
       </div>
     );
@@ -383,7 +376,7 @@ export const Agentflow = ({ projectId }: { projectId: number }) => {
     <div className="relative flex w-full h-full overflow-hidden">
       {nodePanePinned && (
         <div className="flex w-80 h-full pl-1 pb-1">
-          <NodePane onAddNode={onAddNode} />
+          <NodePane />
         </div>
       )}
       <div
@@ -439,9 +432,8 @@ export const Agentflow = ({ projectId }: { projectId: number }) => {
                 'text-secondary': spyModeEnabled,
               })}
               data-tooltip-id="default-tooltip"
-              data-tooltip-content={`Spy mode ${
-                spyModeEnabled ? 'enabled' : 'disabled'
-              }`}
+              data-tooltip-content={`Spy mode ${spyModeEnabled ? 'enabled' : 'disabled'
+                }`}
               onClick={() => enableSpyMode(!spyModeEnabled)}
             >
               <Icons.spy className="w-4 h-4" />

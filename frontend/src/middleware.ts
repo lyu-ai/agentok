@@ -1,15 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import createIntlMiddleware from 'next-intl/middleware';
 // import { updateSession } from '@/utils/supabase/middleware';
 import { createClient } from '@/lib/supabase/server';
-
-const intlMiddleware = createIntlMiddleware({
-  locales: ['en', 'zh'],
-  defaultLocale: 'en',
-  localeDetection: false,
-  localePrefix: 'as-needed',
-});
 
 const publicPaths = /^\/(?:auth|discover)(?:\/.*)?$/;
 const publicMatcher = (pathname: string): boolean => {
@@ -18,15 +10,6 @@ const publicMatcher = (pathname: string): boolean => {
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
-
-  // Apply intl middleware first
-  const intlResult = intlMiddleware(req);
-  // Merge headers from intl middleware into the Supabase response
-  if (intlResult && intlResult.headers) {
-    for (const [key, value] of intlResult.headers.entries()) {
-      res.headers.set(key, value);
-    }
-  }
 
   const isPublicPath = publicMatcher(req.nextUrl.pathname) !== false;
   console.log('isPublicPath', req.nextUrl.pathname, isPublicPath);
@@ -54,6 +37,6 @@ export async function middleware(req: NextRequest) {
 
 // export const config = {
 export const config = {
-  // Skip all paths that should not be internationalized
-  matcher: ['/((?!api|_next|.*\\.(?:png|ico|svg|jpeg|jpg|webp|md|cer)).*)'], // Matcher ignoring `/_next/`, `/api/` and '/auth' routes; and all static assets
+  // Skip all paths that should not be processed by middleware
+  matcher: ['/projects/:path*', '/chat/:path*', '/tools/:path*', '/settings/:path*'],
 };

@@ -1,7 +1,6 @@
 import clsx from 'clsx';
-import { useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
-import { Icons } from '@/components/icons';
+import { Icons } from './icons';
 
 type ImagePanelProps = {
   onSelectImage: (url: string) => void;
@@ -16,7 +15,6 @@ const sampleImages = [
 
 const ImagePanel = (props: ImagePanelProps) => {
   const [url, setUrl] = useState('');
-  const t = useTranslations('component.ImagePanel');
   useEffect(() => {
     props.onSelectImage(url);
   }, [props, url]);
@@ -37,13 +35,13 @@ const ImagePanel = (props: ImagePanelProps) => {
               className="btn btn-xs btn-primary btn-square absolute top-1 right-1"
               onClick={() => setUrl('')}
             >
-              <Icons.trash className="w-4 h-4" />
+              <Icons.close className="w-4 h-4" />
             </button>
           </div>
         ) : (
           <div className="flex flex-col gap-2 justify-center items-center w-full h-full">
             <Icons.image className="w-12 h-12 mx-auto" />
-            <div className="text-sm font-bold">{t('preview')}</div>
+            <div className="text-sm font-bold">Image Preview</div>
             <div className="flex items-center gap-2">
               {sampleImages.map((image, index) => (
                 <button
@@ -68,7 +66,7 @@ const ImagePanel = (props: ImagePanelProps) => {
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           className="input input-xs input-bordered rounded-sm w-full bg-base-100/40"
-          placeholder={t('image-url-placeholder')}
+          placeholder="Please enter the image URL to send with message"
         />
       </div>
     </div>

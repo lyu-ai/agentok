@@ -7,7 +7,6 @@ import {
   PopoverContent,
   PopoverClose,
 } from '../ui/popover';
-import { Button } from '../ui/button';
 import Link from 'next/link';
 
 export const NavButton = ({ className }: any) => {
@@ -26,10 +25,9 @@ export const NavButton = ({ className }: any) => {
           },
           ...NAV_MENU_ITEMS,
         ].map((item) => (
-          <PopoverClose asChild>
+          <PopoverClose asChild key={item.id}>
             <Link
               href={item.href}
-              key={item.id}
               className="group min-w-48 flex shrink-0 p-3 gap-2 items-center rounded-lg hover:bg-base-content/10 cursor-pointer"
             >
               <item.icon className="h-4 w-4" />

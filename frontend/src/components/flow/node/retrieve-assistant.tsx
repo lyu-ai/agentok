@@ -1,43 +1,75 @@
+'use client';
+
 import React from 'react';
-import { useTranslations } from 'next-intl';
-import { AssistantConfig } from '../config/assistant';
+import { NodeProps } from 'reactflow';
 import { GenericNode } from './generic-node';
-import { Icons, Icon } from '@/components/icons';
+import { ConversableAgentConfig } from '../config/conversable-agent';
+import { GenericOption } from '../option/option';
+
+interface RetrieveAssistantProps extends NodeProps {
+  id: string;
+  data: any;
+  selected: boolean;
+  type: string;
+  zIndex: number;
+  isConnectable: boolean;
+  xPos: number;
+  yPos: number;
+  dragging: boolean;
+}
 
 export const RetrieveAssistantNode = ({
   id,
   data,
   selected,
-  ...props
-}: any) => {
-  const iconDict: Record<string, { icon: Icon }> = {
-    AssistantAgent: { icon: Icons.robot },
-    GPTAssistantAgent: { icon: Icons.brain },
-    CompressibleAgent: { icon: Icons.robot },
-    RetrieveAssistantAgent: { icon: Icons.robot },
-    MultimodalConversableAgent: { icon: Icons.eye },
-    LLaVAAgent: { icon: Icons.brain },
-  };
-
-  const icon = iconDict[data.class].icon;
-
-  const t = useTranslations('node.Assistant');
-
+  type,
+  zIndex,
+  isConnectable,
+  xPos,
+  yPos,
+  dragging,
+}: RetrieveAssistantProps) => {
   return (
     <GenericNode
       id={id}
-      nodeClass="agent"
       data={data}
-      icon={icon}
       selected={selected}
-      nameEditable
-      options={['desription', 'system_message', 'max_consecutive_auto_reply']}
-      optionsDisabled={['human_input_mode', 'disable_llm']}
-      ports={[{ type: 'input' }, { type: 'output' }]}
-      ConfigDialog={AssistantConfig}
-      {...props}
-    ></GenericNode>
+      type={type}
+      zIndex={zIndex}
+      isConnectable={isConnectable}
+      xPos={xPos}
+      yPos={yPos}
+      dragging={dragging}
+      nodeClass="agent"
+      className="min-w-80"
+      ports={[{ type: 'target', name: '' }, { type: 'source', name: '' }]}
+      ConfigDialog={ConversableAgentConfig}
+      optionComponent={GenericOption}
+      optionsDisabled={[
+        'human_input_mode',
+        'disable_llm',
+        'enable_code_execution',
+      ]}
+    >
+      <GenericOption
+        type="textarea"
+        nodeId={id}
+        data={data}
+        selected={selected}
+        name="instructions"
+        label="Instructions"
+        placeholder="Enter instructions for the assistant..."
+        className="min-h-[100px]"
+      />
+      <GenericOption
+        type="switch"
+        nodeId={id}
+        data={data}
+        selected={selected}
+        name="use_default_instructions"
+        label="Use default instructions"
+      />
+    </GenericNode>
   );
 };
 
-export default RetrieveAssistantNode;

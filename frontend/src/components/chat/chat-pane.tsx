@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useChat, useChats, useUser } from '@/hooks';
 import { Icons } from '@/components/icons';
@@ -18,7 +17,6 @@ import { isArray } from 'lodash-es';
 import useProjectStore from '@/store/projects';
 
 const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
-  const t = useTranslations('component.ChatPane');
   const [minimized, setMinimized] = useState(false);
   const config = flow?.nodes?.find((node: any) => node.type === 'initializer');
   if (!config?.data?.sample_messages || !isArray(config.data.sample_messages)) {
@@ -43,7 +41,7 @@ const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
             key={i}
             onClick={() => onSelect(msg)}
             data-tooltip-id="chat-tooltip"
-            data-tooltip-content={t('click-to-send')}
+            data-tooltip-content="Click to send this sample message"
             data-tooltip-place="left-end"
             className="cursor-pointer btn btn-primary backdrop-blur-md text-xs max-w-xs font-normal border-opacity-80 bg-opacity-80"
           >
@@ -54,47 +52,12 @@ const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
   );
 };
 
-// const StatusTag = ({ status }: { status: string }) => {
-//   const t = useTranslations('component.ChatPane');
-//   const statusMap: { [key: string]: { label: string; icon: any } } = {
-//     ready: { label: t('ready'), icon: Icons.ready },
-//     running: { label: t('running'), icon: Icons.running },
-//     wait_for_human_input: {
-//       label: t('wait-for-human-input'),
-//       icon: Icons.wait,
-//     },
-//     completed: { label: t('completed'), icon: Icons.completed },
-//     aborted: { label: t('aborted'), icon: Icons.aborted },
-//     failed: { label: t('failed'), icon: Icons.failed },
-//   };
-//   const StatusIcon = statusMap[status].icon;
-//   const label = statusMap[status].label || status;
-//   return (
-//     <span
-//       className={cn(
-//         'flex items-center justify-center text-xs rounded-lg h-6 w-6',
-//         {
-//           'border-primary text-primary bg-blue-600 animate-pulse':
-//             status === 'running',
-//           'border-success text-success': status === 'completed',
-//           'border-error text-error': status === 'failed',
-//           'border-warning text-warning': status === 'wait_for_human_input',
-//           'border-base-content text-base-content': status === 'ready',
-//         }
-//       )}
-//     >
-//       <StatusIcon className="w-4 h-4" />
-//     </span>
-//   );
-// };
-
 interface ChatPaneProps {
   chat: ChatType;
   standalone?: boolean;
 }
 
 export const ChatPane = ({ chat, standalone }: ChatPaneProps) => {
-  const t = useTranslations('component.ChatPane');
   const { chatSource, isLoading } = useChat(chat.id);
   const { sidebarCollapsed, setSidebarCollapsed } = useChats();
   const { toast } = useToast();
@@ -250,218 +213,142 @@ export const ChatPane = ({ chat, standalone }: ChatPaneProps) => {
       try {
         const newMessage = {
           id: genId(),
+          chat_id: chat.id,
           type: 'user',
-          sender: user?.user_metadata.full_name ?? 'User',
-          content: message ?? '\n', // If it's empty message, let's simulate a Enter key-press
-          created_at: new Date().toISOString(),
+          sender: user?.email,
+          content: message,
+          created: new Date().toISOString(),
         };
         setMessages((msgs) => [...msgs, newMessage]);
-        const res = await fetch(
-          `/api/chats/${chat.id}/${
-            status === 'wait_for_human_input' ? 'input' : 'messages'
-          }`,
-          {
-            method: 'POST',
-            body: JSON.stringify(newMessage),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-          }
-        );
-
-        if (!res.ok) {
-          console.warn('Failed sending message:', res.statusText);
-          toast({
-            title: t('error'),
-            description: t('error-sending-message'),
-            variant: 'destructive',
-          });
-          return false;
+        const resp = await fetch(`/api/chats/${chat.id}/messages`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newMessage),
+        });
+        if (!resp.ok) {
+          throw new Error('Failed to send message');
         }
-        const json = await res.json();
-        console.log('message sent:', json);
-        return true;
-      } catch (error) {
+      } catch (err) {
+        console.error('Failed to send message:', err);
         toast({
-          title: t('error'),
-          description: t('error-sending-message'),
+          title: 'Error',
+          description: 'Failed to send message',
           variant: 'destructive',
         });
       }
     },
-    [t, toast]
+    [chat.id, user?.email, toast]
   );
 
-  // const handleAbort = useCallback(() => {
-  //   abortMessage();
-  // }, [abortMessage]);
+  const handleAbort = useCallback(async () => {
+    try {
+      const resp = await fetch(`/api/chats/${chat.id}/abort`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!resp.ok) {
+        throw new Error('Failed to abort chat');
+      }
+    } catch (err) {
+      console.error('Failed to abort chat:', err);
+      toast({
+        title: 'Error',
+        description: 'Failed to abort chat',
+        variant: 'destructive',
+      });
+    }
+  }, [chat.id, toast]);
 
-  // If the chat is not loaded yet, show a button to start the chat.
-  if (!chat || chat.id === -1) {
+  if (loading || isLoading) {
     return (
-      <div className="flex flex-col w-full h-full shadow-box rounded-xl bg-gray-700/80 text-base-content border border-gray-600">
-        <div className="p-2 flex items-center justify-end">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => pinChatPane(!chatPanePinned)}
-            data-tooltip-content={chatPanePinned ? t('unpin') : t('pin')}
-            data-tooltip-id="chat-tooltip"
-          >
-            {chatPanePinned ? (
-              <Icons.unpin className="w-4 h-4" />
-            ) : (
-              <Icons.pin className="w-4 h-4" />
-            )}
-          </Button>
-        </div>
-        <div className="flex flex-grow w-full gap-2 items-center justify-center">
-          <Icons.chat className="w-5 h-5" />
-          {t('start-chat')}
-        </div>
+      <div className="relative flex flex-col w-full h-full items-center justify-center gap-2">
+        <Loading />
       </div>
     );
   }
 
-  let messagesToDisplay = [...messages];
-  if (status === 'running') {
-    messagesToDisplay.push({
-      id: genId(),
-      type: 'assistant',
-      chat_id: chat.id,
-      content: t('thinking'),
-      created_at: new Date().toISOString(),
-    });
-  }
-
-  function handleAbort(): void {
-    throw new Error('Function not implemented.');
-  }
-
   return (
-    <div className="flex flex-col w-full h-full shadow-box shadow-gray-700 rounded-xl bg-gray-700/80 text-base-content border border-gray-600">
-      <div className="flex items-center justify-between w-full p-2">
-        <div className="flex items-center gap-2 text-sm">
-          {standalone && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            >
-              {sidebarCollapsed ? (
-                <Icons.chevronRight className="w-4 h-4" />
-              ) : (
-                <Icons.chevronLeft className="w-4 h-4" />
-              )}
-            </Button>
-          )}
-          <span className="line-clamp-1 font-bold">{`${
-            chat?.name ?? 'Untitled ' + chat.id
-          } ${chatSource?.name ? ' | ' + chatSource?.name : ''}`}</span>
-          {status && (
-            <span
-              className={cn(
-                'flex items-center justify-center text-xs rounded-lg h-6 w-6',
-                {
-                  'border-primary text-primary bg-blue-600 animate-pulse':
-                    status === 'running',
-                  'border-success text-success': status === 'completed',
-                  'border-error text-error': status === 'failed',
-                  'border-warning text-warning':
-                    status === 'wait_for_human_input',
-                  'border-base-content text-base-content': status === 'ready',
-                }
-              )}
-            >
-              <Icons.chat className="w-4 h-4" />
-            </span>
-          )}
+    <div className="relative flex flex-col w-full h-full">
+      <div className="flex items-center justify-between gap-2 p-2 border-b border-base-content/10">
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className="lg:hidden"
+          >
+            <Icons.menu className="w-4 h-4" />
+          </Button>
+          <div className="flex flex-col">
+            <div className="text-sm font-bold">
+              {chat.name || chatSource?.name || 'Untitled Chat'}
+            </div>
+            <div className="text-xs text-base-content/60">
+              {chatSource?.description || 'No description'}
+            </div>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
             size="icon"
-            data-tooltip-id="chat-tooltip"
-            data-tooltip-content={t('clean-history')}
             onClick={handleClean}
+            disabled={cleaning}
+            data-tooltip-id="default-tooltip"
+            data-tooltip-content="Clean chat history"
           >
-            {cleaning ? (
-              <div className="animate-spin h-4 w-4 border-b-2 border-white" />
+            <Icons.trash className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => pinChatPane(!chatPanePinned)}
+            data-tooltip-id="default-tooltip"
+            data-tooltip-content={chatPanePinned ? 'Unpin' : 'Pin'}
+          >
+            {chatPanePinned ? (
+              <Icons.pin className="w-4 h-4" />
             ) : (
-              <Icons.brush className="w-4 h-4" />
+              <Icons.pin className="w-4 h-4" />
             )}
           </Button>
-          {!standalone && (
-            <a
-              className="btn btn-xs btn-ghost btn-square"
-              data-tooltip-id="chat-tooltip"
-              data-tooltip-content={t('open-in-new-window')}
-              href={`/chat?id=${chat?.id}`}
-              target="_blank"
-            >
-              <Icons.externalLink className="w-4 h-4" />
-            </a>
-          )}
-          {!standalone && chat?.from_type === 'project' && (
+          {standalone && (
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => pinChatPane(!chatPanePinned)}
-              data-tooltip-content={chatPanePinned ? t('unpin') : t('pin')}
-              data-tooltip-id="chat-tooltip"
+              onClick={() => window.close()}
+              data-tooltip-id="default-tooltip"
+              data-tooltip-content="Close"
             >
-              {chatPanePinned ? (
-                <Icons.unpin className="w-4 h-4" />
-              ) : (
-                <Icons.pin className="w-4 h-4" />
-              )}
+              <Icons.close className="w-4 h-4" />
             </Button>
-          )}
-          {standalone && chat?.from_type === 'project' && (
-            <a
-              className="btn btn-xs btn-ghost btn-square"
-              data-tooltip-id="chat-tooltip"
-              data-tooltip-content={t('go-to-editor')}
-              data-tooltip-place="bottom"
-              href={`/projects/${chat.from_project}/flow`}
-              target="_blank"
-            >
-              <Icons.shuffle className="w-4 h-4" />
-            </a>
           )}
         </div>
       </div>
-      <div className="relative flex mx-auto w-full flex-grow flex-col overflow-y-auto p-1 font-normal">
-        {loading ? (
-          <Loading />
-        ) : (
+      <div className="relative flex flex-col flex-grow w-full h-full overflow-y-auto">
+        <div className="flex flex-col gap-2 p-2">
           <MessageList
             chat={chat}
-            messages={messagesToDisplay}
+            messages={messages}
             onSend={handleSend}
           />
-        )}
-        <div ref={messagesEndRef} id="chat-messages-bottom"></div>
+          <div ref={messagesEndRef} />
+        </div>
       </div>
-      <div className="relative justify-center w-full p-1 font-normal">
+      <div className="flex flex-col gap-2 p-2 border-t border-base-content/10">
         <ChatInput
-          className={cn(
-            'flex items-center p-1 w-full bg-base-100/70 border rounded-lg shadow-lg',
-            {
-              'border-secondary bg-secondary/40':
-                status === 'wait_for_human_input',
-              'border-primary ': status !== 'wait_for_human_input',
-            }
-          )}
           onSubmit={handleSend}
-          onStop={handleAbort}
-          disabled={false}
-          loading={isLoading}
+          onAbort={handleAbort}
+          loading={status === 'running'}
+          disabled={status === 'failed'}
         />
         <SampleMessagePanel
           flow={chatSource?.flow}
-          className="absolute bottom-full mb-2 right-2 z-20"
+          className="absolute bottom-20 right-2"
           onSelect={handleSend}
         />
       </div>

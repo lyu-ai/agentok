@@ -1,4 +1,3 @@
-import { useTranslations } from 'next-intl';
 import { Icons } from '../icons';
 
 type modeType = 'main' | 'flow' | 'json' | 'python';
@@ -12,12 +11,11 @@ export const ViewToggle = ({
   flat?: boolean; // show as flat button for controls in reactflow
   setMode: (mode: modeType) => void;
 }) => {
-  const t = useTranslations('component.ViewToggle');
   const ModeIcon =
     mode === 'flow' ? Icons.home : mode === 'json' ? Icons.braces : Icons.code;
   const tip =
     mode === 'flow'
-      ? t('back-to-editor')
+      ? 'Back to Workflow Editor'
       : mode === 'json'
         ? 'Show in Json'
         : 'Generate Python Code';
