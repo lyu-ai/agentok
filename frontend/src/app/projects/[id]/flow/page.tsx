@@ -1,7 +1,7 @@
 'use client';
 
-import { ReactFlowProvider } from 'reactflow';
-import { Agentflow } from '@/components/flow/flow';
+import { ReactFlowProvider } from '@xyflow/react';
+import { FlowEditor } from '@/components/flow/flow-editor';
 import { useProjects } from '@/hooks';
 import { useEffect } from 'react';
 import { use } from 'react';
@@ -17,7 +17,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   }, [projectId]);
   return (
     <ReactFlowProvider key="agentok-reactflow">
-      <Agentflow projectId={projectId} />
+      <FlowEditor projectId={projectId} />
     </ReactFlowProvider>
   );
 };

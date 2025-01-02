@@ -3,7 +3,7 @@ import useProjectStore, { Project } from '@/store/projects';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { fetcher } from './fetcher';
 import { ProjectTemplate } from '@/store/templates';
-import { Node, Edge } from 'reactflow';
+import { Node, Edge } from '@xyflow/react';
 
 export const initialNodes: Node[] = [
   {

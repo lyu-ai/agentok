@@ -49,24 +49,14 @@ export const ProjectPicker = () => {
 
   return (
     <div className={cn('flex items-center gap-2')}>
-      <Link
-        href={
-          activeProject ? `/projects/${activeProject?.id}/flow` : '/projects'
-        }
-        className="flex items-center gap-1.5 text-sm"
-      >
-        <Icons.project className="h-4 w-4 group-hover:scale-125 transform transition duration-700 ease-in-out" />
-        <span className="text-ellipsis overflow-hidden whitespace-nowrap max-w-24">
-          {activeProject?.name || 'Projects'}
-        </span>
-      </Link>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon">
+          <Link href="/projects" className="flex items-center gap-1.5 text-sm font-medium">
+            {activeProject?.name || 'Projects'}
             <Icons.chevronDown className="w-4 h-4" />
-          </Button>
+          </Link>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="min-w-48">
+        <DropdownMenuContent className="min-w-48 max-h-[calc(100vh-var(--navbar-height))] overflow-y-auto">
           <div className="flex items-center gap-2 border-b p-2">
             <Button variant="outline" size="icon" asChild>
               <Link href="/projects">

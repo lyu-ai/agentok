@@ -3,7 +3,7 @@ import { UserProxyAgent } from '@/components/flow/node/user';
 import { GroupChatManager } from '@/components/flow/node/group-chat';
 import { NoteNode } from '@/components/flow/node/note';
 
-import { Node, ReactFlowInstance } from 'reactflow';
+import { Node, ReactFlowInstance, NodeTypes } from '@xyflow/react';
 import { genId } from '@/lib/id';
 import { ConversableAgent } from '@/components/flow/node/conversable-agent';
 import { InitializerNode } from '@/components/flow/node/initializer';
@@ -15,18 +15,18 @@ import { RetrieveAssistantNode } from '@/components/flow/node/retrieve-assistant
 // Import icons from the new icons file
 import { Icons, Icon } from '@/components/icons';
 
-export const nodeTypes = {
+export const nodeTypes: NodeTypes = {
   initializer: InitializerNode,
   assistant: AssistantNode,
   user: UserProxyAgent,
-  groupchat: GroupChatManager, // DO NOT change the type to 'group', as it's a builtin type of react-flow
+  groupchat: GroupChatManager,
   note: NoteNode,
   conversable: ConversableAgent,
   nestedchat: NestedChat,
   gpt_assistant: GPTAssistantNode,
   retrieve_user: RetrieveUserProxyAgent,
   retrieve_assistant: RetrieveAssistantNode,
-};
+} as const;
 
 export const edgeTypes = {
   converse: ConverseEdge,
@@ -236,7 +236,7 @@ export const getFlowName = (nodes: Node[]) => {
   const configNode = nodes.find((node: any) => node.type === 'config');
   let name = 'flow-unknown';
   if (configNode && configNode?.data.flow_name) {
-    name = configNode.data.flow_name;
+    name = configNode.data.flow_name as string;
   } else {
     name = 'flow-' + genId();
   }
@@ -247,7 +247,7 @@ export const getFlowDescription = (nodes: Node[]) => {
   const configNode = nodes.find((node: any) => node.type === 'config');
   let description = '';
   if (configNode && configNode?.data.flow_description) {
-    description = configNode.data.flow_description;
+    description = configNode.data.flow_description as string;
   }
   return description;
 };

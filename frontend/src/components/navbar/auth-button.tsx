@@ -156,7 +156,7 @@ const UserAvatar = ({ user }: any) => {
       <DropdownMenuTrigger asChild>
         <UserImage user={user} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="origin-top-right shadow-box-lg shadow-gray-600 rounded-xl backdrop-blur-md bg-gray-700/70 text-base-content border border-gray-600">
+      <DropdownMenuContent align="end">
         <UserPanel user={user} />
       </DropdownMenuContent>
     </DropdownMenu>

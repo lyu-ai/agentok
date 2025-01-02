@@ -114,20 +114,6 @@ input-sm[type='number'] {
   padding-right: 0 !important;
 }
 
-::-webkit-scrollbar {
-  background-color: transparent;
-  width: 4px;
-  height: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-gray-600 rounded-full;
-}
-
-::-webkit-scrollbar-corner {
-  background-color: transparent;
-}
-
 .engraved-bg::after {
   content: '';
   background-image: url('/logo-bg.svg');

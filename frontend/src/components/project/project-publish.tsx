@@ -6,8 +6,12 @@ import { useProject, useTemplates } from '@/hooks';
 import { Loading } from '@/components/loading';
 import { toast } from '@/hooks/use-toast';
 import { Icons } from '@/components/icons';
+import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
+import { Button } from '../ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog';
 
-export const ProjectPublish = ({ projectId, className, ...props }: any) => {
+export const ProjectPublish = ({ projectId, show, onClose }: any) => {
   const { project, isLoading } = useProject(projectId);
   const { publishTemplate, isPublishing } = useTemplates();
   const router = useRouter();
@@ -48,52 +52,33 @@ export const ProjectPublish = ({ projectId, className, ...props }: any) => {
   };
 
   return (
-    <PopupDialog
-      title={
-        <div className="flex items-center gap-2">
-          <Icons.share className="w-5 h-5" />
-          <span className="text-md font-bold">Publish</span>
-        </div>
-      }
-      className={clsx(
-        'flex flex-col bg-gray-800/80 backgrop-blur-md border border-gray-700 shadow-box-lg shadow-gray-700',
-        className
-      )}
-      classNameTitle="border-b border-base-content/10"
-      classNameBody="flex flex-grow flex-col w-full h-full min-w-2xl p-4 gap-2 text-sm overflow-y-auto"
-      {...props}
+    <Dialog
+      open={show}
+      onOpenChange={onClose}
     >
-      <span className="py-4">
-        Publish your project to the world
-      </span>
-      <div className="divider my-0" />
-      <div className="flex items-center gap-2">
-        <span className="py-4">Project name</span>
-        <input
-          className="input input-bordered input-sm p-1 w-full rounded"
+      <DialogContent>
+        <DialogHeader >
+          <DialogTitle className='flex items-center gap-2'><Icons.share className="w-5 h-5" />Publish</DialogTitle>
+          <DialogDescription>Publish your project to the world</DialogDescription>
+        </DialogHeader>
+        <span className="font-bold whitespace-nowrap">Project name</span>
+        <Input
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-      </div>
-      <div className="flex flex-col gap-2 w-full">
-        <span>Project description</span>
-        <textarea
+        <span className="font-bold whitespace-nowrap">Project description</span>
+        <Textarea
           rows={4}
-          className="textarea textarea-bordered textarea-sm rounded"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-      </div>
-      <div className="flex items-center justify-end mt-4">
-        <button
-          className="btn btn-sm btn-primary rounded px-4"
-          onClick={onPublishProject}
-        >
-          {!isPublishing && <Icons.share className="w-4 h-4" />}
-          {isPublishing && <div className="loading loading-xs" />}
-          Publish
-        </button>
-      </div>
-    </PopupDialog>
+        <DialogFooter>
+          <Button onClick={onPublishProject}>
+            {isPublishing && <Icons.spinner className="w-4 h-4 animate-spin" />}
+            Publish
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };

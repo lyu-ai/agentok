@@ -1,4 +1,4 @@
-import { Edge, Node } from 'reactflow';
+import { Edge, Node } from '@xyflow/react';
 
 export enum AgentTypes {
   user_proxy = 'UserProxyAgent',
@@ -27,11 +27,10 @@ const genConversableAgent = (node: any) => {
 node_${node.id} = ${node.data.class}(
   name="${name}",
   max_consecutive_auto_reply=${node.data.max_consecutive_auto_reply},
-  llm_config=${
-    node.data.class === 'MultimodalConversableAgent'
+  llm_config=${node.data.class === 'MultimodalConversableAgent'
       ? 'llm_config_4v'
       : 'llm_config'
-  },
+    },
 )
 `;
 };

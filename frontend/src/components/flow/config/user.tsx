@@ -33,14 +33,14 @@ export const UserConfig = ({ show, onClose, nodeId, data, settings }: any) => {
             max={100}
           />
           <GenericOption
-            type="switch"
+            type="check"
             nodeId={nodeId}
             data={data}
             name="disable_llm"
             label="Disable LLM"
           />
           <GenericOption
-            type="switch"
+            type="check"
             nodeId={nodeId}
             data={data}
             name="enable_code_execution"

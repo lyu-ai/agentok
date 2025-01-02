@@ -25,7 +25,7 @@ export const ToolPanel = ({ show, onClose, nodeId, data, settings }: any) => {
             ]}
           />
           <GenericOption
-            type="textarea"
+            type="text"
             nodeId={nodeId}
             data={data}
             name="code"
@@ -34,7 +34,7 @@ export const ToolPanel = ({ show, onClose, nodeId, data, settings }: any) => {
             className="min-h-[100px]"
           />
           <GenericOption
-            type="switch"
+            type="check"
             nodeId={nodeId}
             data={data}
             name="use_docker"

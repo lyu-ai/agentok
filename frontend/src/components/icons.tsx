@@ -67,6 +67,7 @@ import {
   CheckCircle,
   Sun,
   Moon,
+  Laptop,
 } from 'lucide-react';
 import { Logo } from './logo';
 
@@ -81,6 +82,7 @@ export const Icons = {
   externalLink: ExternalLink,
   sun: Sun,
   moon: Moon,
+  laptop: Laptop,
   brush: Brush,
   megaphone: Megaphone,
   project: FolderKanban,

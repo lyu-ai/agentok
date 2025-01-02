@@ -19,7 +19,7 @@ export const LLaVAOptions = ({ nodeId, data, selected }: any) => {
         ]}
       />
       <GenericOption
-        type="switch"
+        type="check"
         nodeId={nodeId}
         data={data}
         selected={selected}

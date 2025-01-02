@@ -8,6 +8,7 @@ import Markdown from '@/components/markdown';
 import { useUser } from '@/hooks/use-user';
 import { Icons } from '../icons';
 import { Card } from '../ui/card';
+import { Button } from '../ui/button';
 
 export const TemplateEmpty = () => {
   return (
@@ -149,7 +150,7 @@ export const TemplateCard = ({
           className="rounded-t-md h-48 w-full object-cover"
         />
       </figure>
-      <div className="card-body p-4 gap-2 font-normal h-64">
+      <div className="card-body p-4 gap-2 font-normal">
         <h2 className="card-title  group-hover:text-primary line-clamp-1">
           {template.name}
         </h2>
@@ -179,12 +180,12 @@ export const TemplateCard = ({
           {templateDescription}
         </Markdown>
         {isAuthed && (
-          <div className="relative card-actions justify-end gap-2 text-xs text-base-content/60">
-            <button
-              className="btn btn-xs btn-ghost gap-1"
+          <div className="relative flex items-center justify-end gap-2 text-xs">
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-1"
               onClick={handleChat}
-              data-tooltip-id="default-tooltip"
-              data-tooltip-content="Start chat"
             >
               <Icons.robot
                 className={clsx('w-4 h-4', {
@@ -192,23 +193,23 @@ export const TemplateCard = ({
                 })}
               />
               Start chat
-            </button>
-            <button
-              className="btn btn-xs btn-ghost gap-1"
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-1"
               onClick={handleFork}
-              data-tooltip-id="default-tooltip"
-              data-tooltip-content="Fork"
             >
               <Icons.gitFork
                 className={clsx('w-4 h-4', { 'animate-spin': isForking })}
               />
               Fork
-            </button>
+            </Button>
             {isOwned && (
-              <button
-                className="absolute left-0 btn btn-xs btn-ghost btn-square group-hover:text-red-400"
-                data-tooltip-id="default-tooltip"
-                data-tooltip-content="Unpublish"
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-1"
                 onClick={handleDelete}
               >
                 <Icons.trash
@@ -216,7 +217,7 @@ export const TemplateCard = ({
                     'loading loading-xs': isDeleting,
                   })}
                 />
-              </button>
+              </Button>
             )}
           </div>
         )}

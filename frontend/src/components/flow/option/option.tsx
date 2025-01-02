@@ -2,7 +2,7 @@ import { TextOption } from './text';
 import { NumberOption } from './number';
 import { OptionGroup } from './option-group';
 import { setEdgeData, setNodeData } from '@/lib/flow';
-import { useReactFlow } from 'reactflow';
+import { useReactFlow } from '@xyflow/react';
 import { RangeOption } from './range';
 import { SelectOption } from './select';
 import { CheckOption } from './check';

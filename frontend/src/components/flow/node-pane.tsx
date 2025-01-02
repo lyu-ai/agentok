@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { useReactFlow } from 'reactflow';
-import clsx from 'clsx';
+import { useReactFlow } from '@xyflow/react';
 import { Icons } from '@/components/icons';
 import { useSettings } from '@/hooks';
 import { getNodeIcon } from '@/lib/flow';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface NodeButtonProps {
   name: string;
@@ -21,24 +21,17 @@ const NodeButton = ({ name, type, description, nodeClass = 'general', onClick }:
   const NodeIcon = getNodeIcon(type);
 
   return (
-    <button
+    <Button
       type="button"
-      className={clsx(
+      className={cn(
         'flex items-center gap-2 w-full p-2 rounded-lg border',
         'hover:border-primary/40 hover:bg-base-content/5',
-        {
-          'border-base-content/10': nodeClass === 'general',
-          'border-primary/20': nodeClass === 'agent',
-          'border-secondary/20': nodeClass === 'group',
-        }
       )}
       onClick={onClick}
-      data-tooltip-id="default-tooltip"
-      data-tooltip-content={description}
     >
       <NodeIcon className="w-5 h-5" />
       <span className="text-sm">{name}</span>
-    </button>
+    </Button>
   );
 };
 
@@ -83,15 +76,13 @@ export const NodePane = () => {
     >
       <div className="flex items-center justify-between gap-4">
         <div className="font-bold">Add Node</div>
-        <button
-          type="button"
-          className="btn btn-xs btn-ghost btn-square rounded"
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => setNodePanePinned(!nodePanePinned)}
-          data-tooltip-id="default-tooltip"
-          data-tooltip-content={nodePanePinned ? 'Unpin' : 'Pin'}
         >
           <Icons.pin className="w-4 h-4" />
-        </button>
+        </Button>
       </div>
       <Accordion type="single" collapsible>
         <AccordionItem value="basic">

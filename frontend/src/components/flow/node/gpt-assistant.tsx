@@ -1,45 +1,25 @@
 'use client';
 
 import React from 'react';
-import { NodeProps } from 'reactflow';
+import { NodeProps } from '@xyflow/react';
 import { GenericNode } from './generic-node';
 import { ConversableAgentConfig } from '../config/conversable-agent';
 import { GenericOption } from '../option/option';
-
-interface GPTAssistantProps extends NodeProps {
-  id: string;
-  data: any;
-  selected: boolean;
-  type: string;
-  zIndex: number;
-  isConnectable: boolean;
-  xPos: number;
-  yPos: number;
-  dragging: boolean;
-}
 
 export const GPTAssistantNode = ({
   id,
   data,
   selected,
   type,
-  zIndex,
-  isConnectable,
-  xPos,
-  yPos,
-  dragging,
-}: GPTAssistantProps) => {
+  ...props
+}: NodeProps) => {
   return (
     <GenericNode
+      {...props}
       id={id}
       data={data}
       selected={selected}
       type={type}
-      zIndex={zIndex}
-      isConnectable={isConnectable}
-      xPos={xPos}
-      yPos={yPos}
-      dragging={dragging}
       nodeClass="agent"
       className="min-w-80"
       ports={[{ type: 'target', name: '' }, { type: 'source', name: '' }]}
@@ -52,7 +32,7 @@ export const GPTAssistantNode = ({
       ]}
     >
       <GenericOption
-        type="textarea"
+        type="text"
         nodeId={id}
         data={data}
         selected={selected}
@@ -62,7 +42,7 @@ export const GPTAssistantNode = ({
         className="min-h-[100px]"
       />
       <GenericOption
-        type="switch"
+        type="check"
         nodeId={id}
         data={data}
         selected={selected}

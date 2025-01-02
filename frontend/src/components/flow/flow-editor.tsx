@@ -1,5 +1,7 @@
-import ReactFlow, {
+import {
+  ReactFlow,
   Node,
+  Edge,
   Background,
   Controls,
   applyNodeChanges,
@@ -15,8 +17,8 @@ import ReactFlow, {
   Panel,
   useEdgesState,
   useNodesState,
-} from 'reactflow';
-import 'reactflow/dist/style.css';
+} from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
 import './reactflow.css';
 import { nodeTypes, edgeTypes, isConversable } from '@/lib/flow';
 import { Icons } from '@/components/icons';
@@ -33,8 +35,8 @@ import { ChatPane } from '@/components/chat/chat-pane';
 import useProjectStore from '@/store/projects';
 import { NodePane } from './node-pane';
 import { Chat as ChatType } from '@/store/chats';
-import clsx from 'clsx';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 const DEBOUNCE_DELAY = 500; // Adjust this value as needed
 
@@ -66,11 +68,16 @@ const useDebouncedUpdate = (projectId: number) => {
   return { setIsDirty, debouncedUpdate };
 };
 
-export const Agentflow = ({ projectId }: { projectId: number }) => {
+interface NodeData extends Record<string, unknown> {
+  name: string;
+  class: string;
+}
+
+export const FlowEditor = ({ projectId }: { projectId: number }) => {
   const { project, isLoading, isError, updateProject } = useProject(projectId);
   const { screenToFlowPosition } = useReactFlow();
-  const [nodes, setNodes] = useNodesState([]);
-  const [edges, setEdges] = useEdgesState([]);
+  const [nodes, setNodes] = useNodesState<Node>([]);
+  const [edges, setEdges] = useEdgesState<Edge>([]);
   const { setIsDirty } = useDebouncedUpdate(projectId);
   const { chats, createChat } = useChats();
   const [mode, setMode] = useState<'main' | 'flow' | 'json' | 'python'>('flow');
@@ -373,7 +380,7 @@ export const Agentflow = ({ projectId }: { projectId: number }) => {
   }
 
   return (
-    <div className="relative flex w-full h-full overflow-hidden">
+    <div className="relative flex w-full overflow-hidden h-[calc(100vh-var(--header-height))]">
       {nodePanePinned && (
         <div className="flex w-80 h-full pl-1 pb-1">
           <NodePane />
@@ -402,13 +409,6 @@ export const Agentflow = ({ projectId }: { projectId: number }) => {
           fitViewOptions={{ maxZoom: 1 }}
           attributionPosition="bottom-left"
         >
-          <Background
-            id="logo"
-            gap={32}
-            color="hsl(var(--sc))"
-            className="engraved-bg bg-no-repeat bg-center bg-[url('/logo-bg.svg')]"
-            style={{ backgroundSize: '160px' }}
-          />
           <Controls
             fitViewOptions={{ maxZoom: 1 }}
             showInteractive={false}
@@ -426,23 +426,13 @@ export const Agentflow = ({ projectId }: { projectId: number }) => {
               <Icons.settings className="w-4 h-4" />
             </Link>
             <ViewToggle mode={'json'} setMode={setMode} />
-            <button
-              type="button"
-              className={clsx('btn btn-sm btn-circle btn-ghost', {
-                'text-secondary': spyModeEnabled,
-              })}
-              data-tooltip-id="default-tooltip"
-              data-tooltip-content={`Spy mode ${spyModeEnabled ? 'enabled' : 'disabled'
-                }`}
+            <Button
               onClick={() => enableSpyMode(!spyModeEnabled)}
             >
               <Icons.spy className="w-4 h-4" />
-            </button>
+            </Button>
           </Panel>
         </ReactFlow>
-        <div className="absolute bottom-0 left-12 flex w-full items-center px-2">
-          <div className="flex flex-shrink-0 items-center gap-2"></div>
-        </div>
       </div>
       {!nodePanePinned && (
         <NodeButton onAddNode={onAddNode} className="absolute top-2 left-2" />

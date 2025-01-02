@@ -68,7 +68,7 @@ export const ProjectBlock = ({ project, className }: any) => {
       )}
     >
       <div className="card-body p-4 gap-2 font-normal">
-        <h2 className="card-title  group-hover:text-primary line-clamp-1">
+        <h2 className="text-xl group-hover:text-primary line-clamp-1">
           {project.name}
         </h2>
         <div className="text-xs text-base-content/40">

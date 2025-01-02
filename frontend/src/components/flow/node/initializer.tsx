@@ -1,48 +1,21 @@
 'use client';
 
-import clsx from 'clsx';
-import { useReactFlow, NodeProps } from 'reactflow';
+import { useReactFlow, NodeProps } from '@xyflow/react';
 import { setNodeData } from '@/lib/flow';
 import Tip from '@/components/tip';
 import { isArray } from 'lodash-es';
 import { GenericNode } from './generic-node';
+import { ComponentType } from 'react';
+import { Textarea } from '@/components/ui/textarea';
 
-interface InitializerProps extends NodeProps {
-  id: string;
-  data: any;
-  selected: boolean;
-  type: string;
-  zIndex: number;
-  isConnectable: boolean;
-  xPos: number;
-  yPos: number;
-  dragging: boolean;
-}
-
-export const InitializerNode = ({
-  id,
-  data,
-  selected,
-  type,
-  zIndex,
-  isConnectable,
-  xPos,
-  yPos,
-  dragging,
-}: InitializerProps) => {
+const InitializerNode: ComponentType<NodeProps> = ({ id, data, ...props }) => {
   const instance = useReactFlow();
 
   return (
     <GenericNode
       id={id}
       data={data}
-      selected={selected}
-      type={type}
-      zIndex={zIndex}
-      isConnectable={isConnectable}
-      xPos={xPos}
-      yPos={yPos}
-      dragging={dragging}
+      {...props}
       nodeClass="general"
       className="min-w-80"
       ports={[{ type: 'source', name: '' }]}
@@ -54,7 +27,7 @@ export const InitializerNode = ({
         <span>Sample Messages</span>
         <Tip content="Sample messages that will be shown in the chat panel" />
       </div>
-      <textarea
+      <Textarea
         className="textarea textarea-bordered w-full min-h-[100px] text-sm"
         value={isArray(data.sample_messages) ? data.sample_messages.join('\n') : ''}
         placeholder="Enter sample messages, one per line..."
@@ -67,3 +40,5 @@ export const InitializerNode = ({
     </GenericNode>
   );
 };
+
+export { InitializerNode };

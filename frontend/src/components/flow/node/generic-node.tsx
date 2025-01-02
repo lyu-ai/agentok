@@ -1,45 +1,45 @@
 'use client';
 
-import clsx from 'clsx';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   Handle,
-  NodeProps,
   Position,
   useReactFlow,
   NodeResizer,
   HandleType,
-} from 'reactflow';
-import { formatData, getNodeIcon, setNodeData } from '@/lib/flow';
+  NodeProps,
+} from '@xyflow/react';
+import { getNodeIcon, setNodeData } from '@/lib/flow';
 import { EditableText } from '@/components/editable-text';
 import { GenericOption } from '../option/option';
 import { useSettings } from '@/hooks';
-import Tip from '@/components/tip';
-import { Icon, Icons } from '@/components/icons';
+import { Icons } from '@/components/icons';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
-interface WrapNodeProps<T = any> extends NodeProps<T> {
+export type WrapNodeProps = NodeProps & {
   children?: React.ReactNode;
-  dragHandle?: string;
   nodeClass?: 'general' | 'agent' | 'group';
   className?: string;
   resizable?: boolean;
   nameEditable?: boolean;
+  options?: string[];
   optionsDisabled?: string[];
   ports?: { type: HandleType; name?: string }[];
   ConfigDialog?: React.ComponentType<any>;
   optionComponent?: React.ComponentType<any>;
-}
+};
 
 export const GenericNode = ({
   id,
   data,
   selected,
-  dragHandle,
   children,
   nodeClass = 'general',
   className,
   resizable,
   nameEditable,
+  options = [],
   optionsDisabled = [],
   ports = [],
   ConfigDialog,
@@ -49,17 +49,17 @@ export const GenericNode = ({
   const [showConfig, setShowConfig] = useState(false);
   const { settings } = useSettings();
 
-  const options = [
+  const defaultOptions = [
     {
       id: 'system_message',
-      type: 'textarea',
+      type: 'text',
       label: 'System Message',
       placeholder: 'Enter system message for the agent...',
       className: 'min-h-[100px]',
     },
     {
       id: 'description',
-      type: 'textarea',
+      type: 'text',
       label: 'Description',
       placeholder: 'Enter description for the agent...',
       className: 'min-h-[100px]',
@@ -88,7 +88,7 @@ export const GenericNode = ({
     },
     {
       id: 'disable_llm',
-      type: 'switch',
+      type: 'check',
       label: 'Disable LLM',
     },
   ];
@@ -107,12 +107,12 @@ export const GenericNode = ({
     [instance, id]
   );
 
-  const NodeIcon = getNodeIcon(data.class);
+  const NodeIcon = getNodeIcon(data.class as string);
 
   return (
     <>
       <div
-        className={clsx(
+        className={cn(
           'group relative flex flex-col gap-2 p-4 rounded-xl border shadow-box',
           'bg-base-content/10 border-base-content/10',
           'hover:border-primary/40',
@@ -137,7 +137,7 @@ export const GenericNode = ({
             type={type}
             position={type === 'target' ? Position.Left : Position.Right}
             id={name}
-            className={clsx(
+            className={cn(
               'w-3 h-3 rounded-full border-2 bg-base-content/10',
               'border-base-content/10 hover:border-primary',
               {
@@ -146,10 +146,7 @@ export const GenericNode = ({
             )}
           />
         ))}
-        <div
-          className={clsx('flex items-center gap-2', dragHandle)}
-          data-testid="draggable-handle"
-        >
+        <div className={cn('flex items-center gap-2')}>
           <div className="flex items-center gap-2 flex-grow">
             <NodeIcon className="w-5 h-5" />
             {nameEditable ? (
@@ -159,34 +156,34 @@ export const GenericNode = ({
                 className="text-sm font-bold"
               />
             ) : (
-              <span className="text-sm font-bold">{data.name}</span>
+              <span className="text-sm font-bold">{data.name as string}</span>
             )}
           </div>
           <div className="flex items-center gap-1">
             {ConfigDialog && (
-              <button
-                type="button"
-                className="btn btn-xs btn-ghost btn-square rounded"
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => setShowConfig(true)}
                 data-tooltip-id="default-tooltip"
                 data-tooltip-content="Configure options"
               >
                 <Icons.settings className="w-4 h-4" />
-              </button>
+              </Button>
             )}
-            <button
-              type="button"
-              className="btn btn-xs btn-ghost btn-square rounded"
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => instance.deleteElements({ nodes: [{ id }] })}
               data-tooltip-id="default-tooltip"
               data-tooltip-content="Delete node"
             >
               <Icons.trash className="w-4 h-4" />
-            </button>
+            </Button>
           </div>
         </div>
         {children}
-        {options
+        {defaultOptions
           .filter((option) => !optionsDisabled.includes(option.id))
           .map((option) => (
             <OptionComponent

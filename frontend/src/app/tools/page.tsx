@@ -59,11 +59,6 @@ const Page = () => {
 
   return (
     <div className="drawer drawer-end">
-      <input
-        type="checkbox"
-        id="drawer-tool-config"
-        className="drawer-toggle"
-      />
       <div className="drawer-content flex flex-col p-2 gap-4">
         <div className="flex items-center gap-4 p-2 border-b border-base-content/10">
           <Icons.tool className="w-12 h-12" />

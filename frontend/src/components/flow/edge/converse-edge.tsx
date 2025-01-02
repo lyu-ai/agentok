@@ -3,7 +3,7 @@ import {
   EdgeLabelRenderer,
   getBezierPath,
   Position,
-} from 'reactflow';
+} from '@xyflow/react';
 import { ConverseConfig } from './converse-config';
 
 export function ConverseEdge({

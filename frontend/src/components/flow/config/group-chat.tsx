@@ -34,7 +34,7 @@ export const GroupChatConfig = ({ show, onClose, nodeId, data, settings }: any) 
             max={100}
           />
           <GenericOption
-            type="switch"
+            type="check"
             nodeId={nodeId}
             data={data}
             name="allow_repeat_speaker"

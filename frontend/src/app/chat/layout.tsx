@@ -6,6 +6,7 @@ import { ChatPane } from '@/components/chat/chat-pane';
 import { useParams } from 'next/navigation';
 import useChatStore from '@/store/chats';
 import Navbar from '@/components/navbar/navbar';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function ChatLayout({ children }: { children: React.ReactNode }) {
   const params = useParams();
@@ -15,18 +16,18 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
   const chat = getChatById(chatId);
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col w-screen h-screen">
       <Navbar />
-      <div className="flex flex-grow overflow-hidden">
+      <ScrollArea className="flex h-[calc(100vh-var(--header-height))] ">
         <div className="flex flex-col flex-grow overflow-hidden">
           {children}
         </div>
         {chatSource && chat && (
-          <div className="flex flex-col w-96 border-l border-base-content/10">
+          <div className="flex flex-col w-96 border-l">
             <ChatPane chat={chat} />
           </div>
         )}
-      </div>
+      </ScrollArea>
     </div>
   );
 }

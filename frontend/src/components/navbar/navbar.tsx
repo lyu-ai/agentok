@@ -61,7 +61,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar flex w-full items-center justify-between p-2">
+    <div className="navbar flex w-full items-center justify-between p-2 h-[var(--navbar-height)] border-b border-gray-200">
       <div className="navbar-start gap-2 flex items-center justify-start">
         <NavButton projectId={projectId} className="lg:hidden" />
         <Logo />
@@ -74,18 +74,16 @@ const Navbar = () => {
           <ProjectPicker />
         </div>
         {NAV_MENU_ITEMS.map((item) => {
-          const ItemIcon = item.icon;
           return (
             <Link
               role="tab"
               key={item.id}
               href={item.href}
               className={cn(
-                ' group flex items-center text-sm py-1 gap-1.5 hover:text-primary',
+                ' group flex items-center text-sm py-1 gap-1.5 hover:text-primary font-medium',
                 'hidden lg:flex'
               )}
             >
-              <ItemIcon className="h-4 w-4" />
               {item.label}
             </Link>
           );
