@@ -28,15 +28,15 @@ import { NodeButton } from './node-button';
 import { PythonViewer } from './python';
 import { JsonViewer } from './json';
 import { genId } from '@/lib/id';
-import { ChatButton } from '@/components/chat/chat-button';
 import { useChats, useProject, useSettings } from '@/hooks';
 import { debounce } from 'lodash-es';
 import { ChatPane } from '@/components/chat/chat-pane';
 import useProjectStore from '@/store/projects';
-import { NodePane } from './node-pane';
 import { Chat as ChatType } from '@/store/chats';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '../ui/resizable';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 
 const DEBOUNCE_DELAY = 500; // Adjust this value as needed
 
@@ -82,10 +82,10 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
   const { chats, createChat } = useChats();
   const [mode, setMode] = useState<'main' | 'flow' | 'json' | 'python'>('flow');
   const flowParent = useRef<HTMLDivElement>(null);
-  const chatPanePinned = useProjectStore((state) => state.chatPanePinned);
   const nodePanePinned = useProjectStore((state) => state.nodePanePinned);
   const { spyModeEnabled, enableSpyMode } = useSettings();
   const [activeChatId, setActiveChatId] = useState<ChatType | undefined>();
+  const [showNodeSheet, setShowNodeSheet] = useState(false);
 
   // Suppress error code 002
   const store = useStoreApi();
@@ -380,74 +380,89 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
   }
 
   return (
-    <div className="relative flex w-full overflow-hidden h-[calc(100vh-var(--header-height))]">
-      {nodePanePinned && (
-        <div className="flex w-80 h-full pl-1 pb-1">
-          <NodePane />
-        </div>
-      )}
-      <div
-        className="relative flex flex-grow flex-col w-full h-full"
-        ref={flowParent}
-      >
-        <ReactFlow
-          nodes={nodes}
-          onNodesChange={onNodesChange}
-          edges={edges}
-          onEdgesChange={onEdgesChange}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
-          onConnect={onConnect}
-          connectionLineType={ConnectionLineType.Bezier}
-          connectionLineStyle={{ strokeWidth: 2, stroke: 'darkgreen' }}
-          onDragOver={onDragOver}
-          onDrop={onDrop}
-          panOnScroll
-          selectionOnDrag
-          selectionMode={SelectionMode.Partial}
-          fitView
-          fitViewOptions={{ maxZoom: 1 }}
-          attributionPosition="bottom-left"
-        >
-          <Controls
-            fitViewOptions={{ maxZoom: 1 }}
-            showInteractive={false}
-            position="bottom-left"
-            className="flex"
-          />
-          <Panel position="top-right" className="flex p-1 gap-2">
-            <ViewToggle mode={'python'} setMode={setMode} />
-            <Link
-              className="btn btn-sm btn-ghost btn-circle"
-              data-tooltip-id="default-tooltip"
-              data-tooltip-content="Project Settings"
-              href={`/projects/${projectId}/settings`}
+    <div className="flex h-[calc(100vh-var(--header-height))]">
+      <ResizablePanelGroup direction="horizontal" className="flex h-full">
+        <ResizablePanel className="h-[calc(100vh-var(--header-height))]" defaultSize={70}>
+          <div
+            className="relative flex flex-grow flex-col w-full h-full"
+            ref={flowParent}
+          >
+            <ReactFlow
+              nodes={nodes}
+              onNodesChange={onNodesChange}
+              edges={edges}
+              onEdgesChange={onEdgesChange}
+              nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
+              onConnect={onConnect}
+              connectionLineType={ConnectionLineType.Bezier}
+              connectionLineStyle={{ strokeWidth: 2, stroke: 'darkgreen' }}
+              onDragOver={onDragOver}
+              onDrop={onDrop}
+              panOnScroll
+              selectionOnDrag
+              selectionMode={SelectionMode.Partial}
+              fitView
+              fitViewOptions={{ maxZoom: 1 }}
+              attributionPosition="bottom-right"
             >
-              <Icons.settings className="w-4 h-4" />
-            </Link>
-            <ViewToggle mode={'json'} setMode={setMode} />
-            <Button
-              onClick={() => enableSpyMode(!spyModeEnabled)}
-            >
-              <Icons.spy className="w-4 h-4" />
-            </Button>
-          </Panel>
-        </ReactFlow>
-      </div>
-      {!nodePanePinned && (
-        <NodeButton onAddNode={onAddNode} className="absolute top-2 left-2" />
-      )}
-      {chatPanePinned && activeChatId ? (
-        <div className="text-sm w-96 lg:w-[480px] h-full shrink-0">
-          <ChatPane chat={activeChatId} />
-        </div>
-      ) : (
-        <ChatButton
-          status={activeChatId ? 'online' : 'offline'}
-          onClick={handleStartChat}
-          className="absolute bottom-6 right-2"
-        />
-      )}
+              <Controls
+                fitViewOptions={{ maxZoom: 1 }}
+                showInteractive={false}
+                position="bottom-left"
+                className="flex"
+              />
+              <Panel position="top-right" className="flex items-center p-1 gap-2">
+                <ViewToggle mode={'python'} setMode={setMode} />
+                <Link
+                  href={`/projects/${projectId}/settings`}
+                >
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6"
+                  >
+                    <Icons.settings className="w-4 h-4" />
+                  </Button>
+                </Link>
+                <ViewToggle mode={'json'} setMode={setMode} />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6"
+                  onClick={() => enableSpyMode(!spyModeEnabled)}
+                >
+                  <Icons.spy className="w-4 h-4" />
+                </Button>
+              </Panel>
+            </ReactFlow>
+          </div>
+          {!nodePanePinned && (
+            <NodeButton onAddNode={onAddNode} className="absolute top-2 left-2" />
+          )}
+        </ResizablePanel>
+        <ResizableHandle />
+        <ResizablePanel className="h-[calc(100vh-var(--navbar-height))]" defaultSize={30}>
+          <Tabs defaultValue="config">
+            <TabsList className="flex items-center gap-2 w-full rounded-none">
+              <TabsTrigger value="config" className="flex items-center gap-2">
+                <Icons.settings className="w-4 h-4" />
+                <span className="text-sm">Config</span>
+              </TabsTrigger>
+              <TabsTrigger value="chat" className="flex items-center gap-2">
+                <Icons.chat className="w-4 h-4" />
+                <span className="text-sm">Chat</span>
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="config">
+              <div>Hello</div>
+            </TabsContent>
+            <TabsContent value="chat">
+              {activeChatId && <ChatPane chat={activeChatId} />}
+            </TabsContent>
+          </Tabs>
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   );
 };

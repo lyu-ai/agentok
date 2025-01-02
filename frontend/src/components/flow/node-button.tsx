@@ -1,4 +1,4 @@
-import { NodePane } from './node-pane';
+import { NodeList } from './node-list';
 import {
   Popover,
   PopoverContent,
@@ -17,9 +17,8 @@ export const NodeButton = ({ className, onAddNode, ...props }: any) => {
           Add Node
         </Button>
       </PopoverTrigger>
-      <PopoverContent id="agent-list" className="origin-top-left z-50 w-80">
-        <NodePane
-        />
+      <PopoverContent id="agent-list" className="w-80" side="bottom" align="start">
+        <NodeList />
       </PopoverContent>
     </Popover>
   );

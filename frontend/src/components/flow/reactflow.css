@@ -1,7 +1,3 @@
-.react-flow__controls-button {
-  @apply bg-gray-800 hover:bg-gray-700 text-primary border-gray-800 shadow !important;
-}
-
 .react-flow__controls svg {
   fill: currentColor;
 }

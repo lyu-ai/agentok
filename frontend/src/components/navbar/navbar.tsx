@@ -61,7 +61,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar flex w-full items-center justify-between p-2 h-[var(--navbar-height)] border-b border-gray-200">
+    <div className="flex w-full items-center justify-between p-2 h-[var(--header-height)] border-b border-gray-200">
       <div className="navbar-start gap-2 flex items-center justify-start">
         <NavButton projectId={projectId} className="lg:hidden" />
         <Logo />
@@ -89,7 +89,7 @@ const Navbar = () => {
           );
         })}
       </div>
-      <div className="navbar-end flex items-center my-auto gap-4">
+      <div className="flex items-center gap-4">
         <Link
           href="https://agentok.ai/"
           target="_blank"

@@ -68,6 +68,7 @@ import {
   Sun,
   Moon,
   Laptop,
+  MessagesSquare,
 } from 'lucide-react';
 import { Logo } from './logo';
 
@@ -133,7 +134,7 @@ export const Icons = {
   more: MoreVertical,
   edit: Edit,
   inbox: Inbox,
-  chat: MessageSquare,
+  chat: MessagesSquare,
   shuffle: Shuffle,
   compass: Compass,
   send: Send,
@@ -201,4 +202,7 @@ export const Icons = {
     </svg>
   ),
   logo: Logo,
+  node: ({ ...props }: any) => (
+    <svg {...props} viewBox="0 0 1024 1024" width="200" height="200"><path d="M512 512a128 128 0 1 1-256 0 128 128 0 0 1 256 0z m-192 0a64 64 0 1 0 128 0 64 64 0 0 0-128 0zM512 512a128 128 0 1 0 256 0 128 128 0 0 0-256 0z m192 0a64 64 0 1 1-128 0 64 64 0 0 1 128 0zM544.64 720.085333a173.482667 173.482667 0 0 0 87.68-47.36l44.8 45.44A236.8 236.8 0 0 1 512 786.645333a240.768 240.768 0 0 1-90.88-18.56 233.088 233.088 0 0 1-76.16-50.56l44.8-45.44a173.525333 173.525333 0 0 0 154.88 47.36v0.64z" p-id="7746"></path><path d="M608 96a96 96 0 0 1-64 90.538667V192h160A192 192 0 0 1 896 384v64l64 64v128L896 704V768a192 192 0 0 1-192 192h-384A192 192 0 0 1 128 768v-64L64 640v-128L128 448V384a192 192 0 0 1 192-192h160v-5.461333a96 96 0 1 1 128-90.538667zM320 256a128 128 0 0 0-128 128v384a128 128 0 0 0 128 128h384a128 128 0 0 0 128-128V384a128 128 0 0 0-128-128h-384z" p-id="7747"></path></svg>
+  ),
 } as const;

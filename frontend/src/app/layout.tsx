@@ -45,9 +45,7 @@ export default async function RootLayout({
         )}
       >
         <Providers>
-          <div className="flex flex-1 w-full overflow-y-auto">
-            {children}
-          </div>
+          {children}
         </Providers>
       </body>
     </html>
