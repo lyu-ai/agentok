@@ -68,3 +68,8 @@ export async function getUser(): Promise<User | null> {
   }
   return user;
 }
+
+export async function getSession() {
+  const supabase = await createClient();
+  return supabase.auth.getSession();
+}

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSupabaseSession } from '@/lib/supabase/server';
+import { getSession } from '@/lib/supabase/server';
 
 const NEXT_PUBLIC_BACKEND_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5004';
@@ -10,7 +10,12 @@ export async function DELETE(
 ) {
   const { id } = await params;
   try {
-    const session = await getSupabaseSession();
+    const {
+      data: { session },
+    } = await getSession();
+    if (!session || !session.access_token) {
+      throw new Error('No session or access token found');
+    }
 
     const res = await fetch(
       `${NEXT_PUBLIC_BACKEND_URL}/v1/admin/api-keys/${id}`,
@@ -18,7 +23,7 @@ export async function DELETE(
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${session?.access_token}`,
         },
       }
     );

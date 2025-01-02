@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, getSupabaseSession } from '@/lib/supabase/server';
+import { createClient, getUser, getSession } from '@/lib/supabase/server';
 
 const NEXT_PUBLIC_BACKEND_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5004';
@@ -11,7 +11,7 @@ export async function GET(
   const { id } = await params;
 
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { data, error } = await supabase
       .from('chat_messages')
@@ -33,13 +33,15 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const session = await getSupabaseSession();
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
   const data = await request.json();
   try {
+    const user = await getUser();
+    const {
+      data: { session },
+    } = await getSession();
+    if (!session || !session.access_token) {
+      throw new Error('No session or access token found');
+    }
     console.log(`POST /chats/${id}/messages data`, data);
     data.user_id = user?.id;
     const res = await fetch(

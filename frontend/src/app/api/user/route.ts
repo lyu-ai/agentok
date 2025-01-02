@@ -1,17 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, getUser } from '@/lib/supabase/server';
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createClient();
+    const user = await getUser();
 
-    const { data: user, error } = await supabase
-      .from('users')
-      .select('*')
-      .single();
-
-    if (error) throw error;
-
+    if (!user) throw new Error('Not authenticated');
     return NextResponse.json(user);
   } catch (e) {
     console.error(`Failed GET /user:`, (e as Error).message);
@@ -21,7 +15,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const user = await request.json();
 
     const { data, error } = await supabase.from('users').upsert(user);

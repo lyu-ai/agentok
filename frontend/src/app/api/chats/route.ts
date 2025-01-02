@@ -1,17 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, getSupabaseSession } from '@/lib/supabase/server';
+import { createClient, getUser } from '@/lib/supabase/server';
 
 const NEXT_PUBLIC_BACKEND_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5004';
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-    if (authError) throw new Error('Failed to authenticate', authError);
+    const supabase = await createClient();
+    const user = await getUser();
+
     if (!user) throw new Error('Not authenticated');
 
     const { data: chats, error } = await supabase
@@ -31,7 +28,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const chat = await request.json();
 
     // Use upsert to handle both insert and update
@@ -40,11 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get the authenticated user
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-    if (authError) throw new Error('Failed to authenticate');
+    const user = await getUser();
     if (!user) throw new Error('Not authenticated');
 
     chat.user_id = user.id;

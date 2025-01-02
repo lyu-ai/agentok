@@ -3,7 +3,6 @@ import type { NextRequest } from 'next/server';
 import createIntlMiddleware from 'next-intl/middleware';
 // import { updateSession } from '@/utils/supabase/middleware';
 import { createClient } from '@/lib/supabase/server';
-import { match } from 'path-to-regexp';
 
 const intlMiddleware = createIntlMiddleware({
   locales: ['en', 'zh'],
@@ -36,7 +35,7 @@ export async function middleware(req: NextRequest) {
     return res;
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   // Ensure user is authenticated
   const { data } = await supabase.auth.getSession();

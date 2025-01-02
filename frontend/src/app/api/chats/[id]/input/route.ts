@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, getSupabaseSession } from '@/lib/supabase/server';
+import { getSession } from '@/lib/supabase/server';
 
 const NEXT_PUBLIC_BACKEND_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL || 'https://localhost:5004';
@@ -9,15 +9,16 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const session = await getSupabaseSession();
-
-  if (!session || !session.access_token) {
-    throw new Error('No session or access token found');
-  }
-
   const message = await request.json();
 
   try {
+    const {
+      data: { session },
+    } = await getSession();
+    if (!session || !session.access_token) {
+      throw new Error('No session or access token found');
+    }
+
     const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/v1/chats/${id}/input`, {
       method: 'POST',
       headers: {

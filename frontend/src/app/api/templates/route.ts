@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, getSupabaseSession } from '@/lib/supabase/server';
+import { createClient, getUser } from '@/lib/supabase/server';
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
+    const user = await getUser();
+
+    if (!user) throw new Error('Not authenticated');
+
     const { data: templates, error } = await supabase
       .from('public_templates')
       .select(`*`)
@@ -20,13 +24,15 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient();
-    const session = await getSupabaseSession();
+    const supabase = await createClient();
+    const user = await getUser();
+
+    if (!user) throw new Error('Not authenticated');
 
     const template = await request.json();
     const templateWithOwner = {
       ...template,
-      user_id: session.user.id,
+      user_id: user.id,
     };
 
     const { data, error } = await supabase
