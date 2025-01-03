@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { ScrollArea } from '../ui/scroll-area';
 
 export const ProjectPicker = () => {
   const router = useRouter();
@@ -48,44 +49,54 @@ export const ProjectPicker = () => {
   const activeProject = getProjectById(activeProjectId);
 
   return (
-    <div className={cn('flex items-center gap-2')}>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Link href="/projects" className="flex items-center gap-1.5 text-sm font-medium">
-            {activeProject?.name || 'Projects'}
-            <Icons.chevronDown className="w-4 h-4" />
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Link href="/projects" className="flex items-center gap-1 text-sm font-medium">
+          {activeProject?.name || 'Projects'}
+          <Icons.chevronsUpDown className="w-3 h-3" />
+        </Link>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" sideOffset={20} className="flex flex-col w-[400px] p-0 h-[calc(100vh-var(--header-height))]">
+        <div className="flex items-center gap-2 border-b justify-between w-full p-1">
+          <Link href="/projects">
+            <Button variant="ghost" size="icon" className="h-6 w-6">
+              <Icons.list className="h-4 w-4" />
+            </Button>
           </Link>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="min-w-48 max-h-[calc(100vh-var(--navbar-height))] overflow-y-auto">
-          <div className="flex items-center gap-2 border-b p-2">
-            <Button variant="outline" size="icon" asChild>
-              <Link href="/projects">
-                <Icons.list className="h-4 w-4" />
-              </Link>
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={onCreateProject}
-              disabled={isCreating}
-            >
-              {!isCreating ? <Icons.add className="h-4 w-4" /> : null}
-              {isCreating && <div className="animate-spin">...</div>}
-            </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onCreateProject}
+            disabled={isCreating}
+            className="h-6 w-6"
+          >
+            {!isCreating ? <Icons.add className="h-4 w-4" /> : null}
+            {isCreating && <div className="animate-spin">...</div>}
+          </Button>
+        </div>
+        <ScrollArea className="flex-1">
+          <div className="flex flex-col gap-1 p-2 pl-1">
+            {projects.length > 0 &&
+              projects.map((project) => (
+                <DropdownMenuItem
+                  key={project.id}
+                  onSelect={() => router.push(`/projects/${project.id}/flow`)}
+                  className="flex w-full"
+                >
+                  <div className="flex items-center gap-2 text-sm cursor-pointer hover:bg-muted/5">
+                    <Icons.project className="h-5 w-5 shrink-0" />
+                    <span className="flex flex-col">
+                      <span className="font-medium">{project.name}</span>
+                      <span className="text-xs text-muted-foreground line-clamp-2">
+                        {project.description}
+                      </span>
+                    </span>
+                  </div>
+                </DropdownMenuItem>
+              ))}
           </div>
-          {projects.length > 0 &&
-            projects.map((project) => (
-              <DropdownMenuItem
-                key={project.id}
-                onSelect={() => router.push(`/projects/${project.id}/flow`)}
-                className="flex items-center gap-2 text-sm"
-              >
-                <Icons.project className="h-4 w-4" />
-                {project.name}
-              </DropdownMenuItem>
-            ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+        </ScrollArea>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };

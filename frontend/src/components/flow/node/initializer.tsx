@@ -16,8 +16,6 @@ const InitializerNode: ComponentType<NodeProps> = ({ id, data, ...props }) => {
       id={id}
       data={data}
       {...props}
-      nodeClass="general"
-      className="min-w-80"
       ports={[{ type: 'source', name: '' }]}
     >
       <div className="py-1 text-sm">

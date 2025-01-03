@@ -1,14 +1,13 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useReactFlow } from '@xyflow/react';
-import { Icons } from '@/components/icons';
-import { useSettings } from '@/hooks';
-import { getNodeIcon } from '@/lib/flow';
+import { advancedNodes, agentNodes, basicNodes, getNodeIcon } from '@/lib/flow';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
+import { nanoid } from 'nanoid';
 
-interface NodeButtonProps {
+interface NodeItemProps {
   name: string;
   type: string;
   description?: string;
@@ -16,7 +15,7 @@ interface NodeButtonProps {
   onClick?: () => void;
 }
 
-const NodeButton = ({ name, type, description, nodeClass = 'general', onClick }: NodeButtonProps) => {
+const NodeItem = ({ name, type, description, nodeClass = 'general', onClick }: NodeItemProps) => {
   const NodeIcon = getNodeIcon(type);
 
   return (
@@ -28,16 +27,17 @@ const NodeButton = ({ name, type, description, nodeClass = 'general', onClick }:
       onClick={onClick}
       draggable
     >
-      <NodeIcon className="w-5 h-5" />
-      <span className="text-sm">{name}</span>
-      <Icons.resize className="w-5 h-5" />
+      <NodeIcon className="w-4 h-4" />
+      <div className="flex flex-col">
+        <span className="text-sm">{name}</span>
+        <span className="text-xs text-muted-foreground">{description}</span>
+      </div>
     </div>
   );
 };
 
 export const NodeList = () => {
   const instance = useReactFlow();
-  const { settings } = useSettings();
 
   const addNode = useCallback(
     (type: string, nodeClass: string) => {
@@ -47,12 +47,12 @@ export const NodeList = () => {
       };
 
       const newNode = {
-        id: crypto.randomUUID(),
+        id: nanoid(),
         type,
         position,
         data: {
           name: type,
-          class: type,
+          class: nodeClass,
         },
       };
 
@@ -63,102 +63,38 @@ export const NodeList = () => {
 
   return (
     <Accordion type="single" collapsible className="w-full">
-      <AccordionItem value="basic">
-        <AccordionTrigger>Basic</AccordionTrigger>
-        <AccordionContent>
-          <div className="flex flex-col gap-1">
-            <NodeButton
-              name="Initializer"
-              type="Initializer"
-              description="Configure initial settings for the chat session"
-              onClick={() => addNode('Initializer', 'general')}
-            />
-            <NodeButton
-              name="Note"
-              type="Note"
-              description="Add a note to document your flow"
-              onClick={() => addNode('Note', 'general')}
-            />
-          </div>
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="agent">
-        <AccordionTrigger>Agents</AccordionTrigger>
-        <AccordionContent>
-          <div className="flex flex-col gap-1">
-            <NodeButton
-              name="Assistant"
-              type="AssistantAgent"
-              description="A basic assistant agent"
-              nodeClass="agent"
-              onClick={() => addNode('AssistantAgent', 'agent')}
-            />
-            <NodeButton
-              name="GPT Assistant"
-              type="GPTAssistantAgent"
-              description="An assistant powered by GPT"
-              nodeClass="agent"
-              onClick={() => addNode('GPTAssistantAgent', 'agent')}
-            />
-            <NodeButton
-              name="Retrieve Assistant"
-              type="RetrieveAssistantAgent"
-              description="An assistant with retrieval capabilities"
-              nodeClass="agent"
-              onClick={() => addNode('RetrieveAssistantAgent', 'agent')}
-            />
-            <NodeButton
-              name="LLaVA Assistant"
-              type="LLaVAAgent"
-              description="An assistant with vision capabilities"
-              nodeClass="agent"
-              onClick={() => addNode('LLaVAAgent', 'agent')}
-            />
-          </div>
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="advanced">
-        <AccordionTrigger>Advanced</AccordionTrigger>
-        <AccordionContent>
-          <div className="flex flex-col gap-1">
-            <NodeButton
-              name="User"
-              type="UserProxyAgent"
-              description="A proxy for user interaction"
-              nodeClass="agent"
-              onClick={() => addNode('UserProxyAgent', 'agent')}
-            />
-            <NodeButton
-              name="Retrieve User"
-              type="RetrieveUserProxyAgent"
-              description="A user proxy with retrieval capabilities"
-              nodeClass="agent"
-              onClick={() => addNode('RetrieveUserProxyAgent', 'agent')}
-            />
-          </div>
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="extensions">
-        <AccordionTrigger>Extensions</AccordionTrigger>
-        <AccordionContent>
-          <div className="flex flex-col gap-1">
-            <NodeButton
-              name="Group Chat"
-              type="GroupChat"
-              description="A group chat with multiple agents"
-              nodeClass="group"
-              onClick={() => addNode('GroupChat', 'group')}
-            />
-            <NodeButton
-              name="Nested Chat"
-              type="NestedChat"
-              description="A nested chat session"
-              nodeClass="group"
-              onClick={() => addNode('NestedChat', 'group')}
-            />
-          </div>
-        </AccordionContent>
-      </AccordionItem>
+      {[
+        {
+          title: 'Basic',
+          nodes: basicNodes,
+        },
+        {
+          title: 'Agents',
+          nodes: agentNodes,
+        },
+        {
+          title: 'Advanced',
+          nodes: advancedNodes,
+        },
+      ].map(({ title, nodes }) => (
+        <AccordionItem value={title} className="border-none">
+          <AccordionTrigger>{title}</AccordionTrigger>
+          <AccordionContent>
+            <div className="flex flex-col gap-1">
+              {nodes.map((node) => (
+                <NodeItem
+                  name={node.name}
+                  type={node.type}
+                  description={node.description}
+                  nodeClass={node.class}
+                  onClick={() => addNode(node.type, node.class)}
+                />
+              ))}
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      ))}
     </Accordion>
   );
 };
+

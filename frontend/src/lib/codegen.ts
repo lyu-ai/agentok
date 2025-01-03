@@ -8,7 +8,7 @@ export enum AgentTypes {
   chat = 'Chat',
 }
 
-const genAssistantAgent = (node: any) => {
+const genAssistantAgent = (node: Node) => {
   const name = node.data.name;
   const instructions = node.data.instructions
     ? `"${node.data.instructions}"`
@@ -21,7 +21,7 @@ node_${node.id} = ${node.data.class}(
 `;
 };
 
-const genConversableAgent = (node: any) => {
+const genConversableAgent = (node: Node) => {
   const name = node.data.name;
   return `
 node_${node.id} = ${node.data.class}(
@@ -35,7 +35,7 @@ node_${node.id} = ${node.data.class}(
 `;
 };
 
-const genUserProxyAgent = (node: any) => {
+const genUserProxyAgent = (node: Node) => {
   const name = node.data.name;
   return `
 node_${node.id} = ${node.data.class}(
@@ -51,7 +51,7 @@ node_${node.id} = ${node.data.class}(
 `;
 };
 
-const codegenDict: Record<string, (node: any) => string> = {
+const codegenDict: Record<string, (node: Node) => string> = {
   UserProxyAgent: genUserProxyAgent,
   AssistantAgent: genAssistantAgent,
   GPTAssistantAgent: genAssistantAgent,
@@ -95,7 +95,7 @@ export const genEntry = (
   const uniqueImports = new Set<string>();
   uniqueImports.add(importDict['AssistantAgent']); // Always import AssistantAgent
   for (const node of nodes) {
-    const importLine = importDict[node.data.class];
+    const importLine = importDict[node.data.class as keyof typeof importDict];
     if (importLine) {
       uniqueImports.add(importLine);
     } else {
@@ -127,7 +127,7 @@ config_list_4v = autogen.config_list_from_json(
   code += `llm_config_4v = {"config_list": config_list_4v, "temperature": 0.5, "max_tokens": 1024}\n\n`;
 
   for (const node of nodes) {
-    code += codegenDict[node.data.class](node);
+    code += codegenDict[node.data.class as keyof typeof codegenDict](node);
   }
 
   code += `

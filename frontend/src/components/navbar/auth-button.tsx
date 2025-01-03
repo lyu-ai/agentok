@@ -24,22 +24,15 @@ const UserAvatar = ({ user, className }: any) => {
   }, [user]);
 
   return (
-    <Button
-      className={
-        className ??
-        'w-8 h-8 rounded-full bg-primary/10 text-primary/80 hover:text-primary hover:bg-primary/20 overflow-hidden'
-      }
-    >
-      <Avatar>
-        <AvatarImage
-          alt="avatar"
-          src={imgUrl}
-        />
-        <AvatarFallback>
-          {user.email?.match(/^([^@]+)/)?.[1] ?? '(No Name)'}
-        </AvatarFallback>
-      </Avatar>
-    </Button>
+    <Avatar>
+      <AvatarImage
+        alt="avatar"
+        src={imgUrl}
+      />
+      <AvatarFallback>
+        {user.email?.match(/^([^@]+)/)?.[1] ?? '(No Name)'}
+      </AvatarFallback>
+    </Avatar>
   );
 };
 
@@ -84,10 +77,8 @@ export const AuthButton = () => {
           </span>
           <span className="flex flex-col items-center gap-2">
             {user.email}
-            {user.confirmed_at ? (
+            {user.confirmed_at && (
               <Icons.badgeCheck className="text-green-600 w-5 h-5" />
-            ) : (
-              <span className="text-red-500"> (unverified)</span>
             )}
           </span>
           <div className="flex items-center no-wrap gap-1 mt-8 w-full">
@@ -95,7 +86,6 @@ export const AuthButton = () => {
               onClick={() => router.push('/settings/models')}
               className={clsx(
                 'flex w-64 items-center justify-start py-2 px-4 gap-1.5 bg-base-content/20 rounded-r-sm rounded-l-lg',
-                'hover:bg-base-content/30'
               )}
             >
               <Icons.brain className="w-5 h-5" />
@@ -107,7 +97,6 @@ export const AuthButton = () => {
               }
               className={clsx(
                 'flex w-64 items-center justify-start py-2 px-4 gap-1.5 bg-base-content/20 rounded-l-sm rounded-r-lg',
-                'hover:bg-base-content/30'
               )}
             >
               <Icons.github className="h-5 w-5" />
@@ -119,7 +108,6 @@ export const AuthButton = () => {
               onClick={() => router.push('/settings')}
               className={clsx(
                 'flex w-64 items-center justify-start py-2 px-4 gap-1.5 bg-base-content/20 rounded-r-sm rounded-l-lg',
-                'hover:bg-base-content/30'
               )}
             >
               <Icons.settings className="h-5 w-5" />
@@ -130,7 +118,6 @@ export const AuthButton = () => {
               onClick={signOut}
               className={clsx(
                 'flex w-64 items-center justify-start py-2 px-4 gap-1.5 bg-base-content/20 rounded-l-sm rounded-r-lg',
-                'hover:bg-base-content/30'
               )}
             >
               <Icons.logout className="w-5 h-5" />

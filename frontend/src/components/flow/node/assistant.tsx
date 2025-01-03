@@ -20,16 +20,8 @@ export const AssistantNode = ({
       data={data}
       selected={selected}
       type={type}
-      nodeClass="agent"
-      className="min-w-80"
       ports={[{ type: 'target', name: '' }, { type: 'source', name: '' }]}
-      ConfigDialog={ConversableAgentConfig}
-      optionComponent={GenericOption}
-      optionsDisabled={[
-        'human_input_mode',
-        'disable_llm',
-        'enable_code_execution',
-      ]}
+      config={ConversableAgentConfig}
     >
       <GenericOption
         type="text"

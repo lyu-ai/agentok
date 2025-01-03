@@ -36,9 +36,7 @@ export const NoteNode = memo(({
       data={data}
       selected={selected}
       type={type}
-      nodeClass="general"
       {...props}
-      className="min-w-80"
     >
       {editing ? (
         <Textarea

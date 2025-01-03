@@ -5,9 +5,7 @@ import { GenericNode } from './generic-node';
 export const GroupChatManager = (props: NodeProps) => {
   return (
     <GenericNode
-      resizable
-      nodeClass="group"
-      ConfigDialog={GroupChatConfig}
+      config={GroupChatConfig}
       ports={[{ type: 'source', name: '' }]}
       {...props}
     />

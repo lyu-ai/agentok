@@ -354,11 +354,7 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
   } else if (mode === 'json') {
     return (
       <div className="relative flex w-full h-full">
-        <JsonViewer
-          show={mode === 'json'}
-          data={project}
-          onClose={() => setMode('flow')}
-        />
+        <JsonViewer data={project} />
       </div>
     );
   } else if (isLoading) {
@@ -414,26 +410,6 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
               />
               <Panel position="top-right" className="flex items-center p-1 gap-2">
                 <ViewToggle mode={'python'} setMode={setMode} />
-                <Link
-                  href={`/projects/${projectId}/settings`}
-                >
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6"
-                  >
-                    <Icons.settings className="w-4 h-4" />
-                  </Button>
-                </Link>
-                <ViewToggle mode={'json'} setMode={setMode} />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6"
-                  onClick={() => enableSpyMode(!spyModeEnabled)}
-                >
-                  <Icons.spy className="w-4 h-4" />
-                </Button>
               </Panel>
             </ReactFlow>
           </div>
@@ -453,12 +429,19 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
                 <Icons.chat className="w-4 h-4" />
                 <span className="text-sm">Chat</span>
               </TabsTrigger>
+              <TabsTrigger value="nodes" className="flex items-center gap-2">
+                <Icons.braces className="w-4 h-4" />
+                <span className="text-sm">Data</span>
+              </TabsTrigger>
             </TabsList>
             <TabsContent value="config">
               <div>Hello</div>
             </TabsContent>
             <TabsContent value="chat">
               {activeChatId && <ChatPane chat={activeChatId} />}
+            </TabsContent>
+            <TabsContent value="nodes" className="p-0 overflow-auto">
+              <JsonViewer data={project} />
             </TabsContent>
           </Tabs>
         </ResizablePanel>

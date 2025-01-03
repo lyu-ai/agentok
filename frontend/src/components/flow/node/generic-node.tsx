@@ -10,14 +10,18 @@ import { Icons } from '@/components/icons';
 import { cn } from '@/lib/utils';
 
 export type WrapNodeProps = NodeProps & {
+  config?: React.ComponentType<any>;
   ports?: { type: HandleType; name?: string }[];
+  children?: React.ReactNode;
 };
 
 export const GenericNode = ({
   id,
   data,
   selected,
+  config,
   ports = [],
+  children,
 }: WrapNodeProps) => {
   return (
     <>

@@ -69,6 +69,7 @@ import {
   Moon,
   Laptop,
   MessagesSquare,
+  ChevronsUpDown,
 } from 'lucide-react';
 import { Logo } from './logo';
 
@@ -79,6 +80,7 @@ export const Icons = {
   chevronRight: ChevronRight,
   chevronLeft: ChevronLeft,
   chevronUp: ChevronUp,
+  chevronsUpDown: ChevronsUpDown,
   checkCircle: CheckCircle,
   externalLink: ExternalLink,
   sun: Sun,
