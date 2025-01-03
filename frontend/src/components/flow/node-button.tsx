@@ -17,7 +17,7 @@ export const NodeButton = ({ className, onAddNode, ...props }: any) => {
           Add Node
         </Button>
       </PopoverTrigger>
-      <PopoverContent id="agent-list" className="w-80" side="bottom" align="start">
+      <PopoverContent id="agent-list" className="w-80 p-2" side="bottom" align="start">
         <NodeList />
       </PopoverContent>
     </Popover>

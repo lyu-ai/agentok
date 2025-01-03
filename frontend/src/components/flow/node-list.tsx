@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { nanoid } from 'nanoid';
 
 interface NodeItemProps {
+  id: string;
   name: string;
   type: string;
   description?: string;
@@ -15,8 +16,15 @@ interface NodeItemProps {
   onClick?: () => void;
 }
 
-const NodeItem = ({ name, type, description, nodeClass = 'general', onClick }: NodeItemProps) => {
+const NodeItem = ({ id, name, type, description, nodeClass = 'general', onClick }: NodeItemProps) => {
   const NodeIcon = getNodeIcon(type);
+  const onDragStart = (
+    event: React.DragEvent<HTMLDivElement>,
+    nodeData: any
+  ) => {
+    console.log('onDragStart', event, nodeData);
+    event.dataTransfer.setData('application/json', JSON.stringify(nodeData));
+  };
 
   return (
     <div
@@ -26,11 +34,12 @@ const NodeItem = ({ name, type, description, nodeClass = 'general', onClick }: N
       )}
       onClick={onClick}
       draggable
+      onDragStart={(e: React.DragEvent<HTMLDivElement>) => onDragStart(e, { id, name })}
     >
       <NodeIcon className="w-4 h-4" />
       <div className="flex flex-col">
-        <span className="text-sm">{name}</span>
-        <span className="text-xs text-muted-foreground">{description}</span>
+        <span className="text-sm font-medium">{name}</span>
+        <span className="text-xs text-muted-foreground line-clamp-2">{description}</span>
       </div>
     </div>
   );
@@ -62,7 +71,7 @@ export const NodeList = () => {
   );
 
   return (
-    <Accordion type="single" collapsible className="w-full">
+    <Accordion type="single" collapsible defaultValue="Basic" className="w-full p-2">
       {[
         {
           title: 'Basic',
@@ -78,11 +87,12 @@ export const NodeList = () => {
         },
       ].map(({ title, nodes }) => (
         <AccordionItem value={title} className="border-none">
-          <AccordionTrigger className="text-sm outline-none">{title}</AccordionTrigger>
+          <AccordionTrigger className="text-sm outline-none py-2">{title}</AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col gap-1">
               {nodes.map((node) => (
                 <NodeItem
+                  id={node.id}
                   name={node.name}
                   type={node.type}
                   description={node.description}

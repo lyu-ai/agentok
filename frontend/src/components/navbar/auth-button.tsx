@@ -92,7 +92,7 @@ export const AuthButton = () => {
           <Link
             href="/settings"
             className={cn(
-              'flex items-center justify-start p-2 gap-2',
+              'flex items-center justify-start p-2 gap-2 py-3',
             )}
           >
             <Icons.settings className="h-4 w-4" />
@@ -104,7 +104,7 @@ export const AuthButton = () => {
             href="https://github.com/dustland/agentok/issues/new"
             target="_blank"
             className={cn(
-              'flex items-center justify-start p-2 gap-2 ',
+              'flex items-center justify-start p-2 gap-2 py-3',
             )}
           >
             <Icons.github className="h-4 w-4" />

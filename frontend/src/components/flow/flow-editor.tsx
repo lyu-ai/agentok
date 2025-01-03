@@ -33,10 +33,9 @@ import { debounce } from 'lodash-es';
 import { ChatPane } from '@/components/chat/chat-pane';
 import useProjectStore from '@/store/projects';
 import { Chat as ChatType } from '@/store/chats';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '../ui/resizable';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { nanoid } from 'nanoid';
 
 const DEBOUNCE_DELAY = 500; // Adjust this value as needed
 
@@ -68,13 +67,8 @@ const useDebouncedUpdate = (projectId: number) => {
   return { setIsDirty, debouncedUpdate };
 };
 
-interface NodeData extends Record<string, unknown> {
-  name: string;
-  class: string;
-}
-
 export const FlowEditor = ({ projectId }: { projectId: number }) => {
-  const { project, isLoading, isError, updateProject } = useProject(projectId);
+  const { project, isLoading, isError } = useProject(projectId);
   const { screenToFlowPosition } = useReactFlow();
   const [nodes, setNodes] = useNodesState<Node>([]);
   const [edges, setEdges] = useEdgesState<Edge>([]);
@@ -83,9 +77,7 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
   const [mode, setMode] = useState<'main' | 'flow' | 'json' | 'python'>('flow');
   const flowParent = useRef<HTMLDivElement>(null);
   const nodePanePinned = useProjectStore((state) => state.nodePanePinned);
-  const { spyModeEnabled, enableSpyMode } = useSettings();
   const [activeChatId, setActiveChatId] = useState<ChatType | undefined>();
-  const [showNodeSheet, setShowNodeSheet] = useState(false);
 
   // Suppress error code 002
   const store = useStoreApi();
@@ -227,8 +219,8 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
   const onDrop = useCallback(
     (event: React.DragEvent) => {
       event.preventDefault();
-
-      if (!event.dataTransfer.getData('json')) {
+      console.log('onDrop', event.dataTransfer.getData('application/json'));
+      if (!event.dataTransfer.getData('application/json')) {
         return;
       }
 
@@ -240,11 +232,11 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
       }
 
       const flowBounds = flowParent.current.getBoundingClientRect();
-      const data = JSON.parse(event.dataTransfer.getData('json'));
+      const data = JSON.parse(event.dataTransfer.getData('application/json'));
       const position = screenToFlowPosition({
-        x: event.clientX - flowBounds.left - data.offsetX,
-        y: event.clientY - flowBounds.top - data.offsetY,
-      }) ?? { x: 0, y: 0 };
+        x: event.clientX - flowBounds.left,
+        y: event.clientY - flowBounds.top,
+      }, { snapToGrid: true });
 
       if (position.x === 0 && position.y === 0) {
         console.warn(
@@ -255,11 +247,11 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
       }
 
       const { offsetX, offsetY, ...cleanedData } = data;
-      const newId = genId();
+      const newId = nanoid();
 
       const newNode: Node = {
-        id: `${newId}`,
-        type: data.type,
+        id: `node-${data.id}-${newId}`,
+        type: data.id,
         position,
         selected: true,
         data: cleanedData,
@@ -420,13 +412,13 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
         <ResizableHandle />
         <ResizablePanel className="h-[calc(100vh-var(--navbar-height))]" defaultSize={30}>
           <Tabs defaultValue="config">
-            <TabsList className="flex items-center gap-2 w-full rounded-none">
+            <TabsList className="flex items-center justify-start w-full rounded-none">
               <TabsTrigger value="config" className="flex items-center gap-2">
                 <Icons.settings className="w-4 h-4" />
                 <span className="text-sm">Config</span>
               </TabsTrigger>
               <TabsTrigger value="chat" className="flex items-center gap-2">
-                <Icons.chat className="w-4 h-4" />
+                <Icons.node className="w-4 h-4" />
                 <span className="text-sm">Chat</span>
               </TabsTrigger>
               <TabsTrigger value="nodes" className="flex items-center gap-2">

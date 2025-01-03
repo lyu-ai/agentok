@@ -52,7 +52,7 @@ export const isConversable = (node?: Node) =>
 // - class: The class to be choosen during code generation
 // - (description): UI will look for value of label + '-description', for example 'assistant-description'
 export type NodeMeta = {
-  id?: string;
+  id: string;
   name: string;
   description?: string;
   icon?: Icon;
@@ -66,6 +66,7 @@ export const basicNodes: NodeMeta[] = [
     id: 'initializer',
     icon: Icons.rocket,
     name: 'Initializer',
+    description: 'The first node in the flow',
     label: 'initializer',
     type: 'initializer',
     class: 'Initializer',
@@ -74,6 +75,7 @@ export const basicNodes: NodeMeta[] = [
     id: 'groupchat',
     icon: Icons.group,
     name: 'Group',
+    description: 'Group several agents together',
     label: 'groupchat',
     type: 'groupchat',
     class: 'GroupChat',
@@ -82,6 +84,7 @@ export const basicNodes: NodeMeta[] = [
     id: 'nestedchat',
     icon: Icons.group,
     name: 'Nested Chat',
+    description: 'A Nested Chat Manager',
     label: 'nestedchat',
     type: 'nestedchat',
     class: 'NestedChat',
@@ -90,6 +93,7 @@ export const basicNodes: NodeMeta[] = [
     id: 'note',
     icon: Icons.note,
     name: 'Note',
+    description: 'Work as comment for the flow and node',
     label: 'note',
     type: 'note',
     class: 'Note',
@@ -101,6 +105,7 @@ export const agentNodes: NodeMeta[] = [
     id: 'conversable',
     icon: Icons.robot,
     name: 'Agent',
+    description: 'A Conversable Agent',
     label: 'conversable',
     type: 'conversable',
     class: 'ConversableAgent',
@@ -109,6 +114,7 @@ export const agentNodes: NodeMeta[] = [
     id: 'user',
     icon: Icons.user,
     name: 'User',
+    description: 'A User Proxy Agent',
     label: 'user',
     type: 'user',
     class: 'UserProxyAgent',
@@ -117,6 +123,7 @@ export const agentNodes: NodeMeta[] = [
     id: 'assistant',
     icon: Icons.robot,
     name: 'Assistant',
+    description: 'An Assistant Agent',
     label: 'assistant',
     type: 'assistant',
     class: 'AssistantAgent',
@@ -128,6 +135,7 @@ export const advancedNodes: NodeMeta[] = [
     id: 'retrieve_assistant',
     icon: Icons.robot,
     name: 'RetrieveAssistant',
+    description: 'A Retrieve Assistant Agent',
     label: 'retrieve-assistant',
     type: 'assistant',
     class: 'RetrieveAssistantAgent',
@@ -136,6 +144,7 @@ export const advancedNodes: NodeMeta[] = [
     id: 'retrieve_user',
     icon: Icons.search,
     name: 'RetrieveUserProxy',
+    description: 'A Retrieve User Proxy Agent',
     label: 'retrieve-user',
     type: 'user',
     class: 'RetrieveUserProxyAgent',
@@ -144,6 +153,7 @@ export const advancedNodes: NodeMeta[] = [
     id: 'gpt_assistant',
     icon: Icons.brain,
     name: 'GPTAssistant',
+    description: 'A GPT Assistant Agent',
     label: 'gpt-assistant',
     type: 'gpt_assistant',
     class: 'GPTAssistantAgent',
