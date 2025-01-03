@@ -1,11 +1,6 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Icons } from '@/components/icons';
-import { cn } from '@/lib/utils';
 import { GenericOption } from '../option/option';
 
 export const ConversableAgentConfig = ({
-  show,
-  onClose,
   nodeId,
   data,
   optionsDisabled = [],
@@ -68,35 +63,19 @@ export const ConversableAgentConfig = ({
   ];
 
   return (
-    <Dialog open={show} onOpenChange={onClose}>
-      <DialogContent className={cn(
-        className
-      )}>
-        <DialogHeader>
-          <DialogTitle>
-            <div className="flex items-center gap-2">
-              <Icons.settings className="w-5 h-5" />
-              <span className="text-md font-bold">
-                Agent Settings - {data.name}
-              </span>
-            </div>
-          </DialogTitle>
-        </DialogHeader>
-        <div className="flex flex-1 w-full p-2 gap-2 min-h-96 max-h-[500px] text-sm overflow-y-auto">
-          <div className="flex flex-col gap-2 w-full h-full">
-            {GENERAL_OPTIONS.filter((o) => !optionsDisabled.includes(o.name)).map(
-              (options, index) => (
-                <GenericOption
-                  key={index}
-                  nodeId={nodeId}
-                  data={data}
-                  {...options}
-                />
-              )
-            )}
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+    <div className="flex flex-1 w-full p-2 gap-2 min-h-96 max-h-[500px] text-sm overflow-y-auto">
+      <div className="flex flex-col gap-2 w-full h-full">
+        {GENERAL_OPTIONS.filter((o) => !optionsDisabled.includes(o.name)).map(
+          (options, index) => (
+            <GenericOption
+              key={index}
+              nodeId={nodeId}
+              data={data}
+              {...options}
+            />
+          )
+        )}
+      </div>
+    </div>
   );
 };

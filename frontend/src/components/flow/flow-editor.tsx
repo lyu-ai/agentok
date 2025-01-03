@@ -37,6 +37,7 @@ import { Chat as ChatType } from '@/store/chats';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '../ui/resizable';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { nanoid } from 'nanoid';
+import { FlowConfig } from './config';
 
 interface DebugRect {
   x: number;
@@ -111,6 +112,7 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
   const nodePanePinned = useProjectStore((state) => state.nodePanePinned);
   const [activeChatId, setActiveChatId] = useState<ChatType | undefined>();
   const [mousePosition, setMousePosition] = useState<MousePositionState | null>(null);
+  const selectedNode = nodes.find(node => node.selected);
 
   // Suppress error code 002
   const store = useStoreApi();
@@ -578,7 +580,7 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="config" className="flex-1 overflow-auto">
-              <div>Hello</div>
+              <FlowConfig nodeId={selectedNode?.id} data={selectedNode?.data} />
             </TabsContent>
             <TabsContent value="chat" className="flex-1 overflow-auto">
               {activeChatId && <ChatPane chat={activeChatId} />}
