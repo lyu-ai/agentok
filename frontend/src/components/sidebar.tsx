@@ -22,14 +22,15 @@ export interface SidebarItem {
 type SidebarProps = {
   pathPrefix?: string;
   items: SidebarItem[];
+  className?: string;
 };
 
-export const Sidebar = ({ pathPrefix, items }: SidebarProps) => {
+export const Sidebar = ({ pathPrefix, items, className }: SidebarProps) => {
   const pathname = usePathname();
   const isMedium = useMediaQuery('only screen and (max-width : 769px)');
 
   return (
-    <div className="flex flex-col gap-2 md:w-48 h-full">
+    <div className={cn("flex flex-col gap-2 md:w-48 h-full", className)}>
       {items.map((item) => {
         const path = pathPrefix ? `${pathPrefix}${item.path}` : item.path;
         const isActive = isParentPath(pathname, path);

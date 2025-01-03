@@ -10,7 +10,7 @@ const AccountPage = () => {
   return (
     <div className="w-full p-2">
       <h1 className="text-xl font-bold mb-4">Account</h1>
-      <div className="flex flex-col gap-6 border rounded-lg p-6 w-full border-base-content/20 bg-gradient-to-r from-transparent to-base-content/20">
+      <div className="flex flex-col gap-6 border rounded-lg p-6 w-full ">
         <div className="avatar">
           <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
             <img

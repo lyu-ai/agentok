@@ -6,7 +6,7 @@ export const settingList = [
   {
     name: 'Account',
     description: 'Create and configure emotion expressions',
-    icon: Icons.settings,
+    icon: Icons.user,
     path: '/settings/account',
   },
   {

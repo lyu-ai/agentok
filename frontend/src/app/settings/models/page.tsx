@@ -4,6 +4,12 @@ import { Settings, useSettings, LlmModel } from '@/hooks/use-settings';
 import { genId } from '@/lib/id';
 import { useEffect, useState } from 'react';
 import { Icons } from '@/components/icons';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Collapsible } from '@/components/flow/option/collapsible';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
 
 const ModelForm = ({
   model: sourceModel,
@@ -45,36 +51,31 @@ const ModelForm = ({
   };
 
   return (
-    <div className="p-4 border rounded-lg border-base-content/20 bg-base-content/20">
+    <div className="w-full">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <label className="flex flex-col gap-1">
           <span>Model Name</span>
-          <input
-            className="input input-sm input-bordered rounded"
+          <Input
             value={model || ''}
             onChange={(e) => setModel(e.target.value)}
           />
         </label>
         <label className="flex flex-col gap-1">
           <span>API Key</span>
-          <input
-            className="input input-sm input-bordered rounded"
+          <Input
             value={apiKey || ''}
             onChange={(e) => setApiKey(e.target.value)}
           />
         </label>
         <label className="flex flex-col gap-1 md:col-span-2">
           <span>Description</span>
-          <textarea
-            className="textarea textarea-sm textarea-bordered rounded"
+          <Textarea
             value={description || ''}
             onChange={(e) => setDescription(e.target.value)}
           />
         </label>
         <label className="flex items-center gap-2 md:col-span-2">
-          <input
-            type="checkbox"
-            className="checkbox checkbox-xs rounded"
+          <Collapsible
             checked={showAdvanced}
             onChange={() => setShowAdvanced(!showAdvanced)}
           />
@@ -84,32 +85,28 @@ const ModelForm = ({
           <>
             <label className="flex flex-col gap-1">
               <span>Base URL</span>
-              <input
-                className="input input-sm input-bordered rounded"
+              <Input
                 value={baseUrl || ''}
                 onChange={(e) => setBaseUrl(e.target.value)}
               />
             </label>
             <label className="flex flex-col gap-1">
               <span>API Type (e.g., azure)</span>
-              <input
-                className="input input-sm input-bordered rounded"
+              <Input
                 value={apiType || ''}
                 onChange={(e) => setApiType(e.target.value)}
               />
             </label>
             <label className="flex flex-col gap-1">
               <span>API Version</span>
-              <input
-                className="input input-sm input-bordered rounded"
+              <Input
                 value={apiVersion || ''}
                 onChange={(e) => setApiVersion(e.target.value)}
               />
             </label>
             <label className="flex flex-col gap-1">
               <span>Tags (Use comma as separater)</span>
-              <input
-                className="input input-sm input-bordered rounded"
+              <Input
                 value={tags || ''}
                 onChange={(e) => setTags(e.target.value)}
               />
@@ -117,15 +114,15 @@ const ModelForm = ({
           </>
         )}
       </div>
-      <div className="flex justify-between gap-4 mt-4">
-        <button className="btn btn-sm btn-outline" onClick={handleSave}>
+      <div className="flex justify-end gap-4 mt-4">
+        <Button className="flex items-center gap-2" onClick={handleSave}>
           {isSaving && <div className="loading loading-xs"></div>}
           Save Model
-        </button>
-        <button className="btn btn-sm btn-outline btn-error" onClick={onDelete}>
+        </Button>
+        <Button className="flex items-center gap-2" variant="destructive" onClick={onDelete}>
           {isDeleting && <div className="loading loading-xs"></div>}
           Delete Model
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -148,19 +145,23 @@ const ModelCard = ({ model, onSave, onDelete }: any) => {
   };
 
   return (
-    <div className="mb-4">
-      <div className="flex gap-2 items-center mb-2">
-        <Icons.brain className="w-5 h-5" />
-        <h1 className="font-bold">Model: {model.model}</h1>
-      </div>
-      <ModelForm
-        model={model}
-        onSave={handleSave}
-        onDelete={handleDelete}
-        isSaving={isSaving}
-        isDeleting={isDeleting}
-      />
-    </div>
+    <Card className="">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Icons.brain className="w-5 h-5" />
+          <h1 className="font-bold">Model: {model.model}</h1>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <ModelForm
+          model={model}
+          onSave={handleSave}
+          onDelete={handleDelete}
+          isSaving={isSaving}
+          isDeleting={isDeleting}
+        />
+      </CardContent>
+    </Card>
   );
 };
 
@@ -211,18 +212,22 @@ const Page = () => {
   };
 
   return (
-    <div className="flex flex-col w-full gap-2 text-sm">
-      <h1 className="text-lg font-bold">Models</h1>
-      <div>
-        Manage the LLM model configurations. The models configured here will be
-        shared by all projects.
-      </div>
-      <div className="flex items-center justify-end gap-2">
-        <button className="btn btn-sm btn-primary" onClick={onAddModel}>
-          {!isCreating && <Icons.brain className="w-4 h-4" />}
-          {isCreating && <div className="loading loading-xs"></div>}
-          New Model
-        </button>
+    <ScrollArea className="relative flex flex-col w-full gap-2 text-sm p-4">
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-lg font-bold">Models</h1>
+          <div>
+            Manage the LLM model configurations. The models configured here will be
+            shared by all projects.
+          </div>
+        </div>
+        <div className="flex items-center justify-end gap-2 p-2">
+          <Button className="flex items-center gap-2" onClick={onAddModel}>
+            {!isCreating && <Icons.brain className="w-4 h-4" />}
+            {isCreating && <Icons.spinner className="w-4 h-4 animate-spin" />}
+            New Model
+          </Button>
+        </div>
       </div>
       <div className="flex flex-col gap-2">
         {settings ? (
@@ -238,7 +243,7 @@ const Page = () => {
           <div>No models found</div>
         )}
       </div>
-    </div>
+    </ScrollArea>
   );
 };
 

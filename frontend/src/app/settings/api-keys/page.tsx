@@ -4,7 +4,12 @@ import { CopyButton } from '@/components/copy-button';
 import { DeleteButton } from '@/components/delete-button';
 import { Icons } from '@/components/icons';
 import { PopupDialog } from '@/components/popup-dialog';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
@@ -24,27 +29,23 @@ const ApiKeyText = ({ apikey }: { apikey: string }) => {
   return (
     <div className="flex items-center gap-1">
       <span
-        className={clsx(
+        className={cn(
           'mr-2 break-all px-4 py-2 rounded-xl bg-base-100 cursor-pointer'
         )}
         onClick={() => setIsShowing(!isShowing)}
-        data-tooltip-id="default-tooltip"
-        data-tooltip-content="Show/Hide API Key"
       >
         {text}
       </span>
-      <button
+      <Button
         className="btn btn-sm btn-ghost btn-square"
         onClick={() => setIsShowing(!isShowing)}
-        data-tooltip-id="default-tooltip"
-        data-tooltip-content="Show/Hide API Key"
       >
         {isShowing ? (
           <Icons.eyeOff className="w-4 h-4 text-yellow-600" />
         ) : (
           <Icons.eye className="w-4 h-4 text-green-600" />
         )}
-      </button>
+      </Button>
       <CopyButton content={apikey} tooltip="Copy" />
     </div>
   );
@@ -77,45 +78,48 @@ const CreateKeyDialog = ({ show, onClose }: any) => {
       .finally(() => setLoading(false));
   };
   return (
-    <PopupDialog
-      title="Create API Key"
-      show={show}
-      onClose={onClose}
-      className="w-full max-w-md  bg-gray-800/80 backgrop-blur-md border border-gray-700 shadow-box-lg shadow-gray-700"
-      classNameTitle="border-b border-base-content/10 p-3 py-4"
-      classNameBody="flex flex-grow h-full w-full overflow-y-auto p-3"
+    <Dialog
+      open={show}
+      onOpenChange={onClose}
     >
-      <form
-        className="flex flex-col gap-3 w-full"
-        onSubmit={onSubmit}
-        data-tooltip-id="default-tooltip"
-        data-tooltip-content={error}
-      >
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          name="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="input input-primary input-bordered"
-        />
-        <button
-          type="submit"
-          className={clsx('btn btn-primary', {
-            'btn-disabled btn-outline': loading || !name,
-          })}
+      <DialogTrigger>
+        <Button>Create API Key</Button>
+      </DialogTrigger>
+      <DialogTitle>Create API Key</DialogTitle>
+      <DialogDescription>
+        Create a new API key to use in your projects.
+      </DialogDescription>
+      <DialogContent>
+        <form
+          className="flex flex-col gap-3 w-full"
+          onSubmit={onSubmit}
         >
-          {loading ? (
-            <div className="flex items-center gap-2">
-              <div className="loading loading-sm" />
-              Creating API Key...
-            </div>
-          ) : (
-            'Create API Key'
-          )}
-        </button>
-      </form>
-    </PopupDialog>
+          <Label htmlFor="name">Name</Label>
+          <Input
+            type="text"
+            name="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="input input-primary input-bordered"
+          />
+          <Button
+            type="submit"
+            className={clsx('btn btn-primary', {
+              'btn-disabled btn-outline': loading || !name,
+            })}
+          >
+            {loading ? (
+              <div className="flex items-center gap-2">
+                <div className="loading loading-sm" />
+                Creating API Key...
+              </div>
+            ) : (
+              'Create API Key'
+            )}
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 };
 
@@ -190,16 +194,10 @@ const Page = () => {
   return (
     <>
       <title>API Keys | Agentok Studio</title>
-      <div className="flex flex-col w-full gap-3 rounded-lg bg-base-content/5 p-4">
+      <div className="flex flex-col w-full gap-3 ">
         <div className="flex items-center justify-between w-full gap-2 py-2">
           <h2 className="text-2xl font-bold">API Keys</h2>
-          <button
-            className="btn btn-sm btn-primary"
-            onClick={() => setShowCreateKeyDialog(true)}
-          >
-            <Icons.key className="w-5 h-5" />
-            Create API Key
-          </button>
+          <CreateKeyDialog show={showCreateKeyDialog} onClose={onCloseCreateKeyDialog} />
         </div>
         <table className="table border-transparent rounded-lg bg-base-content/20">
           <thead>
