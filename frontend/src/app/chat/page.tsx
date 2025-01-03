@@ -4,8 +4,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useChat, useChats } from '@/hooks';
 import { ChatPane } from '@/components/chat/chat-pane';
 import { useEffect } from 'react';
+import { ChatList } from '@/components/chat/chat-list';
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { ChatListButton } from '@/components/chat/chat-list-button';
 
-const Page = () => {
+export default function Page() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const chatId = parseInt(searchParams.get('id') ?? '-1'); // Extract chatId from query parameters
@@ -28,7 +31,21 @@ const Page = () => {
     return null;
   }
 
-  return <ChatPane chat={chat} standalone />;
-};
-
-export default Page;
+  return (
+    <ResizablePanelGroup direction="horizontal">
+      <ResizablePanel defaultSize={200}>
+        <div className="flex flex-col h-full w-full">
+          <div className="flex items-center justify-between w-full border-b  p-2">
+            <span className="font-bold">Chats</span>
+            <ChatListButton />
+          </div>
+          <ChatList />
+        </div>
+      </ResizablePanel>
+      <ResizableHandle />
+      <ResizablePanel defaultSize={800}>
+        <ChatPane chat={chat} standalone />
+      </ResizablePanel>
+    </ResizablePanelGroup>
+  );
+}

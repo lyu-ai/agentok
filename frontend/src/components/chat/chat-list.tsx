@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { createClient } from '@/lib/supabase/client';
 import useProjectStore from '@/store/projects';
 import { useToast } from '@/hooks/use-toast';
+import { Card } from '../ui/card';
 
 interface ChatListProps {
   className?: string;
@@ -92,14 +93,16 @@ export const ChatList = ({ className }: ChatListProps) => {
   }
 
   return (
-    <div className={cn('flex flex-col gap-2 p-2', className)}>
+    <div className={cn('flex flex-col h-full gap-2 p-2', className)}>
       {chats.length === 0 ? (
-        <div className="text-sm text-muted-foreground">No Chat Yet.</div>
+        <div className="flex items-center justify-center w-full h-full">
+          <div className="text-sm text-muted-foreground">No Chat Yet</div>
+        </div>
       ) : (
         chats.map((chat) => (
-          <div
+          <Card
             key={chat.id}
-            className="flex items-center gap-2 p-2 rounded-lg hover:bg-muted/50 group"
+            className="flex items-center gap-2 p-2 hover:bg-muted/50 group"
           >
             {editingId === chat.id ? (
               <div className="flex items-center gap-2 flex-1">
@@ -155,7 +158,7 @@ export const ChatList = ({ className }: ChatListProps) => {
                 </Button>
               </>
             )}
-          </div>
+          </Card>
         ))
       )}
     </div>

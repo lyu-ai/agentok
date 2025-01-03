@@ -18,16 +18,9 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
   return (
     <div className="flex flex-col w-screen h-screen">
       <Navbar />
-      <ScrollArea className="flex h-[calc(100vh-var(--header-height))] ">
-        <div className="flex flex-col flex-grow overflow-hidden">
-          {children}
-        </div>
-        {chatSource && chat && (
-          <div className="flex flex-col w-96 border-l">
-            <ChatPane chat={chat} />
-          </div>
-        )}
-      </ScrollArea>
+      <div className="h-[calc(100vh-var(--header-height))] overflow-hidden">
+        {children}
+      </div>
     </div>
   );
 }

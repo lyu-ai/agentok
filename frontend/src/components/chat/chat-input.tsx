@@ -46,7 +46,7 @@ export const ChatInput = ({
 
   return (
     <form
-      className={cn('flex items-end gap-2', className)}
+      className={cn('relative flex items-end gap-2 w-full max-w-3xl mx-auto', className)}
       onSubmit={handleSubmit}
     >
       <Textarea
@@ -55,27 +55,27 @@ export const ChatInput = ({
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Enter message to start chat ..."
-        className="min-h-[44px] w-full resize-none bg-transparent"
+        className="min-h-[44px] w-full resize-none bg-transparent rounded-xl shadow-xl"
         disabled={disabled}
       />
-      <div className="flex items-center gap-2">
+      <div className="absolute bottom-1 right-1 flex items-center gap-2">
         {loading && (
           <Button
             type="button"
-            variant="ghost"
+            variant="outline"
             size="icon"
             onClick={onAbort}
-            className="h-[44px]"
+            className="h-7 w-7"
           >
             <Icons.stop className="w-4 h-4" />
           </Button>
         )}
         <Button
           type="submit"
-          variant="ghost"
+          variant="default"
           size="icon"
           disabled={!message.trim() || disabled}
-          className="h-[44px]"
+          className="h-7 w-7"
         >
           <Icons.send className="w-4 h-4" />
         </Button>

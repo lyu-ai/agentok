@@ -1,6 +1,5 @@
 'use client';
 import { useChats, useProjects } from '@/hooks';
-import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import Link from 'next/link';
@@ -10,6 +9,7 @@ import { useState } from 'react';
 import { Icons } from '@/components/icons';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
 
 export const ProjectLoading = () => {
   return (
@@ -40,7 +40,7 @@ export const ProjectBlock = ({ project, className }: any) => {
   const { createChat, isCreating } = useChats();
   const [showPublishDialog, setShowPublishDialog] = useState(false);
   const router = useRouter();
-
+  const { deleteProject, isDeleting } = useProjects();
   const onChat = async (e: any) => {
     e.stopPropagation();
     e.preventDefault();
@@ -59,55 +59,61 @@ export const ProjectBlock = ({ project, className }: any) => {
         });
       });
   };
+  const onDelete = async () => {
+    await deleteProject(project.id);
+    toast({ title: `Project ${project.name} deleted` });
+  };
   return (
     <Card
-      className={clsx(
-        'group card w-80 bg-base-content/10 border border-base-content/10',
+      className={cn(
+        'relative group w-80 hover:border-primary/40 p-4 flex flex-col gap-2',
         className,
-        'hover:shadow-box hover:border-primary/40'
       )}
     >
-      <div className="card-body p-4 gap-2 font-normal">
-        <h2 className="text-xl group-hover:text-primary line-clamp-1">
-          {project.name}
-        </h2>
-        <div className="text-xs text-base-content/40">
-          {new Date(project.created_at).toLocaleString()}
-        </div>
-        <Markdown className="text-left text-sm h-20 break-word word-wrap line-clamp-4">
-          {project.description}
-        </Markdown>
-        <div className="relative card-actions flex justify-between gap-1 text-xs text-base-content/60">
+      <h2 className="line-clamp-1 text-primary text-lg font-bold">
+        {project.name}
+      </h2>
+      <div className="text-xs text-muted-foreground">
+        {new Date(project.created_at).toLocaleString()}
+      </div>
+      <Markdown className="text-left text-sm h-20 text-muted-foreground break-word word-wrap line-clamp-4">
+        {project.description}
+      </Markdown>
+      <div className="relative card-actions flex justify-between gap-1 text-xs text-base-content/60">
+        <Button
+          className="flex items-center gap-1"
+          size="icon"
+          variant="ghost"
+          onClick={onChat}
+        >
+          <Icons.chat
+            className={cn('w-4 h-4', {
+              'animate-spin': isCreating,
+            })}
+          />
+        </Button>
+        <div className="flex items-center gap-2">
           <Button
-            className="flex items-center gap-1"
             size="icon"
             variant="ghost"
-            onClick={onChat}
+            onClick={() => setShowPublishDialog((v) => !v)}
           >
-            <Icons.chat
-              className={clsx('w-4 h-4', {
-                'animate-spin': isCreating,
-              })}
-            />
+            <Icons.share className={cn('w-4 h-4')} />
           </Button>
-          <div className="flex items-center gap-2">
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={() => setShowPublishDialog((v) => !v)}
-            >
-              <Icons.share className={clsx('w-4 h-4')} />
+          <Link
+            href={`/projects/${project.id}/flow`}
+            className="flex items-center gap-1"
+          >
+            <Button size="icon" variant="ghost">
+              <Icons.edit className="w-4 h-4" />
             </Button>
-            <Link
-              href={`/projects/${project.id}/flow`}
-              className="flex items-center gap-1"
-            >
-              <Button size="icon" variant="ghost">
-                <Icons.edit className="w-4 h-4" />
-              </Button>
-            </Link>
-          </div>
+          </Link>
         </div>
+      </div>
+      <div className="hidden absolute top-2 right-2 group-hover:block">
+        <Button size="icon" variant="ghost" onClick={onDelete}>
+          {isDeleting ? <Icons.spinner className="w-4 h-4 animate-spin text-red-500" /> : <Icons.trash className="w-4 h-4 text-red-500" />}
+        </Button>
       </div>
       {showPublishDialog && (
         <ProjectPublish

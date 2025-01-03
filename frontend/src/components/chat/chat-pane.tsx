@@ -28,26 +28,18 @@ const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
     _onSelect && _onSelect(msg);
   };
   return (
-    <div className={cn(className, 'flex flex-col items-end gap-1')}>
-      <button
-        className="btn btn-primary btn-outline btn-xs btn-circle"
-        onClick={() => setMinimized(!minimized)}
-      >
-        {minimized ? <Icons.chevronUp /> : <Icons.chevronDown />}
-      </button>
-      {!minimized &&
-        sampleMessages.map((msg, i) => (
-          <div
-            key={i}
-            onClick={() => onSelect(msg)}
-            data-tooltip-id="chat-tooltip"
-            data-tooltip-content="Click to send this sample message"
-            data-tooltip-place="left-end"
-            className="cursor-pointer btn btn-primary backdrop-blur-md text-xs max-w-xs font-normal border-opacity-80 bg-opacity-80"
-          >
-            <span className="line-clamp-2 text-right">{msg}</span>
-          </div>
-        ))}
+    <div className={cn(className, 'flex items-center gap-1')}>
+      {sampleMessages.map((msg, i) => (
+        <Button
+          key={i}
+          variant="outline"
+          size="sm"
+          onClick={() => onSelect(msg)}
+          className="text-xs max-w-xs truncate px-1 py-0"
+        >
+          <span className="line-clamp-2 text-right">{msg}</span>
+        </Button>
+      ))}
     </div>
   );
 };
@@ -59,18 +51,14 @@ interface ChatPaneProps {
 
 export const ChatPane = ({ chat, standalone }: ChatPaneProps) => {
   const { chatSource, isLoading } = useChat(chat.id);
-  const { sidebarCollapsed, setSidebarCollapsed } = useChats();
   const { toast } = useToast();
   const [status, setStatus] = useState('ready');
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [help, setHelp] = useState('');
   const [cleaning, setCleaning] = useState(false);
   const isFirstRender = useRef(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
-  const chatPanePinned = useProjectStore((state) => state.chatPanePinned);
-  const pinChatPane = useProjectStore((state) => state.pinChatPane);
 
   const fetchMessages = useCallback(async () => {
     if (chat.id === -1) return;
@@ -112,21 +100,11 @@ export const ChatPane = ({ chat, standalone }: ChatPaneProps) => {
     }
   }, [setStatus, chat.id]);
 
-  const extractHelp = useCallback(() => {
-    const noteNode = chatSource?.flow?.nodes?.find(
-      (node: any) => node.type === 'note'
-    );
-    if (noteNode) {
-      setHelp(noteNode.data.content);
-    }
-  }, [chatSource]);
-
   useEffect(() => {
     if (chat.id === -1) return;
 
     fetchMessages();
     fetchChatStatus();
-    extractHelp();
 
     // Subscribe to chat_messages
     const messagesChannel: RealtimeChannel = supabase
@@ -272,85 +250,27 @@ export const ChatPane = ({ chat, standalone }: ChatPaneProps) => {
   }
 
   return (
-    <div className="relative flex flex-col w-full h-full">
-      <div className="flex items-center justify-between gap-2 p-2 border-b border-base-content/10">
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="lg:hidden"
-          >
-            <Icons.menu className="w-4 h-4" />
-          </Button>
-          <div className="flex flex-col">
-            <div className="text-sm font-bold">
-              {chat.name || chatSource?.name || 'Untitled Chat'}
-            </div>
-            <div className="text-xs text-base-content/60">
-              {chatSource?.description || 'No description'}
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleClean}
-            disabled={cleaning}
-            data-tooltip-id="default-tooltip"
-            data-tooltip-content="Clean chat history"
-          >
-            <Icons.trash className="w-4 h-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => pinChatPane(!chatPanePinned)}
-            data-tooltip-id="default-tooltip"
-            data-tooltip-content={chatPanePinned ? 'Unpin' : 'Pin'}
-          >
-            {chatPanePinned ? (
-              <Icons.pin className="w-4 h-4" />
-            ) : (
-              <Icons.pin className="w-4 h-4" />
-            )}
-          </Button>
-          {standalone && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => window.close()}
-              data-tooltip-id="default-tooltip"
-              data-tooltip-content="Close"
-            >
-              <Icons.close className="w-4 h-4" />
-            </Button>
-          )}
-        </div>
-      </div>
-      <div className="relative flex flex-col flex-grow w-full h-full overflow-y-auto">
-        <div className="flex flex-col gap-2 p-2">
-          <MessageList
-            chat={chat}
-            messages={messages}
-            onSend={handleSend}
+    <div className="relative flex flex-col w-full h-full p-2">
+      <MessageList
+        chat={chat}
+        messages={messages}
+        onSend={handleSend}
+      />
+      <div ref={messagesEndRef} />
+      <div className="absolute bottom-0 flex flex-col items-center w-full gap-2 p-2">
+        <div className="flex flex-col gap-1 w-full max-w-3xl">
+          <ChatInput
+            onSubmit={handleSend}
+            onAbort={handleAbort}
+            loading={status === 'running'}
+            disabled={status === 'failed'}
+            className="w-full"
           />
-          <div ref={messagesEndRef} />
+          <SampleMessagePanel
+            flow={chatSource?.flow}
+            onSelect={handleSend}
+          />
         </div>
-      </div>
-      <div className="flex flex-col gap-2 p-2 border-t border-base-content/10">
-        <ChatInput
-          onSubmit={handleSend}
-          onAbort={handleAbort}
-          loading={status === 'running'}
-          disabled={status === 'failed'}
-        />
-        <SampleMessagePanel
-          flow={chatSource?.flow}
-          className="absolute bottom-20 right-2"
-          onSelect={handleSend}
-        />
       </div>
     </div>
   );

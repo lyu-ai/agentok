@@ -71,6 +71,8 @@ import {
   MessagesSquare,
   ChevronsUpDown,
   UserRound,
+  Plane,
+  SendHorizonal,
 } from 'lucide-react';
 import { Logo } from './logo';
 
@@ -140,7 +142,7 @@ export const Icons = {
   chat: MessagesSquare,
   shuffle: Shuffle,
   compass: Compass,
-  send: Send,
+  send: SendHorizonal,
   stop: Square,
   robot: Bot,
   robotActive: Bot,

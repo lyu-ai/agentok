@@ -1,9 +1,4 @@
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
   Tabs,
   TabsContent,
   TabsList,
@@ -13,6 +8,8 @@ import { Icons } from '@/components/icons';
 import { useChats, useProjects, useTemplates } from '@/hooks';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const ChatListPanel = ({ onAdd }: any) => {
   const { projects, isLoading: isLoadingProjects } = useProjects();
@@ -36,55 +33,39 @@ const ChatListPanel = ({ onAdd }: any) => {
       },
     ];
   return (
-    <Tabs defaultValue="projects" className="w-full">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="projects">Projects</TabsTrigger>
-        <TabsTrigger value="templates">Templates</TabsTrigger>
+    <Tabs defaultValue="project" className="w-full h-full p-0">
+      <TabsList className="w-full flex justify-start rounded-none">
+        <TabsTrigger value="project">Projects</TabsTrigger>
+        <TabsTrigger value="template">Templates</TabsTrigger>
       </TabsList>
-      <TabsContent value="projects">
-        {chatSources[0].data?.map((sourceItem: any) => (
-          <PopoverTrigger key={sourceItem.id} asChild>
-            <Button
-              variant="outline"
-              className="w-full justify-start gap-2"
-              onClick={() =>
-                createChat(sourceItem.id, 'project').then((chat) =>
-                  router.push(`/chat?id=${chat.id}`)
-                )
-              }
-            >
-              <span className="line-clamp-1 text-sm text-left font-bold">
-                {sourceItem.name}
-              </span>
-              <span className="h-8 line-clamp-2 text-xs text-left text-base-content/60 font-normal break-all">
-                {sourceItem.description || '(No description)'}
-              </span>
-            </Button>
-          </PopoverTrigger>
-        ))}
-      </TabsContent>
-      <TabsContent value="templates">
-        {chatSources[1].data?.map((sourceItem: any) => (
-          <PopoverTrigger key={sourceItem.id} asChild>
-            <Button
-              variant="outline"
-              className="w-full justify-start gap-2"
-              onClick={() =>
-                createChat(sourceItem.id, 'template').then((chat) =>
-                  router.push(`/chat?id=${chat.id}`)
-                )
-              }
-            >
-              <span className="line-clamp-1 text-sm text-left font-bold">
-                {sourceItem.name}
-              </span>
-              <span className="h-8 line-clamp-2 text-xs text-left text-base-content/60 font-normal break-all">
-                {sourceItem.description || '(No description)'}
-              </span>
-            </Button>
-          </PopoverTrigger>
-        ))}
-      </TabsContent>
+      {(["project", "template"] as const).map((source, index) => (
+        <TabsContent value={source} key={source} className="mt-0 p-0 ">
+          <ScrollArea className="h-[calc(100vh-9rem)] w-full">
+            <div className="grid grid-cols-2 gap-1 p-1">
+              {chatSources[index].data?.map((sourceItem: any) => (
+                <DropdownMenuItem key={sourceItem.id} asChild>
+                  <Button
+                    variant="outline"
+                    className="flex flex-col w-full items-start gap-1 p-2 h-full cursor-pointer"
+                    onClick={() =>
+                      createChat(sourceItem.id, source).then((chat) =>
+                        router.push(`/chat?id=${chat.id}`)
+                      )
+                    }
+                  >
+                    <span className="line-clamp-1 text-sm text-left font-bold">
+                      {sourceItem.name}
+                    </span>
+                    <span className="line-clamp-2 text-xs text-left break-all">
+                      {sourceItem.description || '(No description)'}
+                    </span>
+                  </Button>
+                </DropdownMenuItem>
+              ))}
+            </div>
+          </ScrollArea>
+        </TabsContent>
+      ))}
     </Tabs>
   );
 };
@@ -93,17 +74,20 @@ export const ChatListButton = () => {
   const router = useRouter();
   const { createChat } = useChats();
 
+  const handleAddChat = () => {
+    // createChat().then((chat) => router.push(`/chat?id=${chat.id}`));
+  };
+
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2 w-full">
-          <Icons.add className="w-5 h-5" />
-          Create a new chat from template
+    <DropdownMenu >
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon" className="w-7 h-7">
+          <Icons.add className="w-4 h-4 shrink-0" />
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[500px] h-[480px] overflow-y-auto shadow-box shadow-gray-600 z-50 rounded-xl p-1 gap-2 backdrop-blur-md bg-gray-700/90 text-base-content border border-gray-600">
-        <ChatListPanel />
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-[500px] overflow-hidden p-0">
+        <ChatListPanel onAdd={handleAddChat} />
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
