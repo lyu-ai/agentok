@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Icons } from '@/components/icons';
 import { CopyButton } from '../copy-button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface JsonViewerProps {
   data: any;
@@ -18,13 +19,13 @@ export const JsonViewer = ({ data }: JsonViewerProps) => {
   }, [data]);
 
   return (
-    <div className="relative flex flex-col gap-4 w-full h-full overflow-auto">
-      <div className="absolute top-0 right-0">
+    <ScrollArea className="relative flex w-full h-full">
+      <div className="absolute top-2 right-3">
         <CopyButton content={jsonString} />
       </div>
-      <pre className="text-sm bg-base-content/5 p-4 rounded overflow-auto max-h-[500px]">
+      <pre className="text-sm p-4 text-xs overflow-auto">
         {jsonString}
       </pre>
-    </div>
+    </ScrollArea>
   );
 };

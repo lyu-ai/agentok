@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import { match } from 'path-to-regexp';
 
 import { AuthButton } from './auth-button';
-import { Logo } from './logo';
+import { Logo } from '../logo';
 import { NavButton } from './nav-button';
 import { ProjectPicker } from '@/components/project/project-picker';
 import Link from 'next/link';
@@ -64,7 +64,8 @@ const Navbar = () => {
     <div className="flex w-full items-center justify-between p-2 h-[var(--header-height)] border-b">
       <div className="navbar-start gap-2 flex items-center justify-start">
         <NavButton projectId={projectId} className="lg:hidden" />
-        <Logo />
+        <Logo className="w-8 h-8 text-primary dark:text-brand" />
+        <span className="text-lg font-bold text-primary dark:text-brand">AgentOK</span>
       </div>
       <div role="tablist" className="flex px-2 items-center gap-4">
         <div
@@ -107,13 +108,13 @@ const Navbar = () => {
           API
         </Link>
         <Link
-          href="https://github.com/hughlv/agentok"
+          href="https://github.com/dustland/agentok"
           aria-label="github"
           target="_blank"
           className="hidden md:block"
         >
           <img
-            src="https://img.shields.io/github/stars/hughlv/agentok?style=flat&logo=github&color=black&labelColor=gray&label=Stars"
+            src="https://img.shields.io/github/stars/dustland/agentok?style=flat&logo=github&color=black&labelColor=gray&label=Stars"
             alt="github"
             className="rounded h-5"
           />

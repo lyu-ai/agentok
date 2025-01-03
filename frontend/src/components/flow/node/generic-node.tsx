@@ -13,6 +13,8 @@ export type WrapNodeProps = NodeProps & {
   config?: React.ComponentType<any>;
   ports?: { type: HandleType; name?: string }[];
   children?: React.ReactNode;
+  nodeClass?: string;
+  className?: string;
 };
 
 export const GenericNode = ({
@@ -27,11 +29,10 @@ export const GenericNode = ({
     <>
       <div
         className={cn(
-          'group relative flex flex-col min-w-24 gap-2 p-4 rounded-xl border shadow-box',
-          'hover:border-primary/40',
+          'group relative flex flex-col bg-muted min-w-24 gap-2 p-4 rounded-xl border-2 shadow-box',
+          'hover:border-brand hover:text-brand',
           {
-            'shadow-primary/40': selected,
-            'border-primary': selected,
+            'border-brand/80 text-brand/80': selected,
           },
         )}
       >

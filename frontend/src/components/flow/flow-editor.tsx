@@ -17,6 +17,7 @@ import {
   Panel,
   useEdgesState,
   useNodesState,
+  BackgroundVariant,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import './reactflow.css';
@@ -78,6 +79,7 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
   const flowParent = useRef<HTMLDivElement>(null);
   const nodePanePinned = useProjectStore((state) => state.nodePanePinned);
   const [activeChatId, setActiveChatId] = useState<ChatType | undefined>();
+  const [hoveredGroupId, setHoveredGroupId] = useState<string | null>(null);
 
   // Suppress error code 002
   const store = useStoreApi();
@@ -116,79 +118,51 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
       setNodes((nds) => {
-        let newNodes = applyNodeChanges(changes, nds);
+        const nextNodes = applyNodeChanges(changes, nds);
+        console.log('nextNodes', changes, nextNodes);
 
-        // Handle parent-child relationships for group nodes
         changes.forEach((change) => {
-          if (change.type === 'position' && !change.dragging) {
-            const draggedNode = newNodes.find((n) => n.id === change.id);
-            if (draggedNode) {
-              const nodePosition = draggedNode.position;
-
-              // Find the last group node containing the dragged node
-              const groupNode = newNodes.reduce(
-                (foundGroup: Node | null, currentNode: Node) => {
-                  if (
-                    currentNode.type &&
-                    isGroupType(currentNode.type) &&
-                    currentNode.id !== draggedNode.id &&
-                    isPositionInsideNode(nodePosition, currentNode)
-                  ) {
-                    return currentNode;
-                  }
-                  return foundGroup;
-                },
-                null
+          if (change.type === 'position' && 'id' in change) {
+            const node = nextNodes.find((n) => n.id === change.id);
+            if (node && node.type && !isGroupType(node.type)) {
+              const groupNode = nextNodes.find(
+                (n) =>
+                  n.type && isGroupType(n.type) &&
+                  isPositionInsideNode(
+                    {
+                      x: node.position.x + (node.width ?? 0) / 2,
+                      y: node.position.y + (node.height ?? 0) / 2,
+                    },
+                    n
+                  )
               );
-
               if (groupNode) {
-                if (draggedNode.parentId !== groupNode.id) {
-                  // Node is entering a new group
-                  const newRelativePosition = {
-                    x: nodePosition.x - groupNode.position.x,
-                    y: nodePosition.y - groupNode.position.y,
-                  };
-                  draggedNode.parentId = groupNode.id;
-                  draggedNode.position = newRelativePosition;
+                node.parentId = groupNode.id;
+                node.position = {
+                  x: node.position.x - groupNode.position.x,
+                  y: node.position.y - groupNode.position.y,
+                };
+                // Move the node to be after the group node in the array
+                const nodeIndex = nextNodes.indexOf(node);
+                const groupNodeIndex = nextNodes.indexOf(groupNode);
+                if (nodeIndex > groupNodeIndex) {
+                  nextNodes.splice(nodeIndex, 1);
+                  nextNodes.splice(groupNodeIndex + 1, 0, node);
                 }
-                // If it's already a child, position is handled by React Flow
-              } else if (draggedNode.parentId) {
-                // Node is not over any group
-                const parentNode = newNodes.find(
-                  (n) => n.id === draggedNode.parentId
-                );
-                if (parentNode) {
-                  // Convert to absolute position before detaching from the group
-                  const newAbsolutePosition = {
-                    x: nodePosition.x + parentNode.position.x,
-                    y: nodePosition.y + parentNode.position.y,
-                  };
-                  draggedNode.position = newAbsolutePosition;
-                }
-                delete draggedNode.parentId;
+              } else {
+                node.parentId = undefined;
               }
             }
           }
         });
 
-        // Ensure group nodes are ahead of their child nodes in the array
-        newNodes = newNodes.sort((a, b) => {
-          if (isGroupType(a.type!) && b.parentId === a.id) {
-            return -1; // a is the group, b is the child
-          } else if (isGroupType(b.type!) && a.parentId === b.id) {
-            return 1; // b is the group, a is the child
-          } else {
-            return 0;
-          }
-        });
-
-        return newNodes;
+        if (changes.some((change) => change.type !== 'select')) {
+          setIsDirty(true);
+        }
+        return nextNodes;
       });
-      if (changes.some((change) => change.type !== 'select')) {
-        setIsDirty(true);
-      }
     },
-    [setNodes]
+    [setNodes, setIsDirty]
   );
 
   // Helper function to check if a position is inside a node
@@ -214,13 +188,39 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
+
+    if (!flowParent.current) return;
+
+    const flowBounds = flowParent.current.getBoundingClientRect();
+    const position = screenToFlowPosition({
+      x: event.clientX - flowBounds.left,
+      y: event.clientY - flowBounds.top,
+    });
+
+    // Find if we're hovering over a group node
+    const groupNode = nodes.find(
+      (n) =>
+        n.type === 'groupchat' &&
+        position.x > n.position.x &&
+        position.x < (n.position.x + (n.width ?? 0)) &&
+        position.y > n.position.y &&
+        position.y < (n.position.y + (n.height ?? 0))
+    );
+
+    setHoveredGroupId(groupNode?.id || null);
+  }, [nodes, screenToFlowPosition, flowParent]);
+
+  const onDragLeave = useCallback(() => {
+    setHoveredGroupId(null);
   }, []);
 
   const onDrop = useCallback(
     (event: React.DragEvent) => {
       event.preventDefault();
-      console.log('onDrop', event.dataTransfer.getData('application/json'));
-      if (!event.dataTransfer.getData('application/json')) {
+      const data = JSON.parse(event.dataTransfer.getData('application/json'));
+      console.log('onDrop', data);
+      if (!data) {
+        console.warn('No data found in onDrop');
         return;
       }
 
@@ -232,46 +232,59 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
       }
 
       const flowBounds = flowParent.current.getBoundingClientRect();
-      const data = JSON.parse(event.dataTransfer.getData('application/json'));
       const position = screenToFlowPosition({
         x: event.clientX - flowBounds.left,
         y: event.clientY - flowBounds.top,
-      }, { snapToGrid: true });
-
-      if (position.x === 0 && position.y === 0) {
-        console.warn(
-          'Failed calculating target position, need to check the problem. context:',
-          position,
-          data
-        );
-      }
+      });
 
       const { offsetX, offsetY, ...cleanedData } = data;
       const newId = nanoid();
-
       const newNode: Node = {
         id: `node-${data.id}-${newId}`,
         type: data.id,
         position,
-        selected: true,
         data: cleanedData,
+        selected: true,
+        dragHandle: '.drag-handle',
+        parentId: undefined,
+        style: undefined,
       };
 
-      // Handle parent-child relationships for group nodes immediately after drop
+      // Find if we're dropping into a group node
       const groupNode = nodes.find(
-        (n) => n.type === 'groupchat' && isPositionInsideNode(position, n)
+        (n) =>
+          n.type === 'groupchat' &&
+          position.x > n.position.x &&
+          position.x < (n.position.x + (n.width ?? 0)) &&
+          position.y > n.position.y &&
+          position.y < (n.position.y + (n.height ?? 0))
       );
 
       if (groupNode) {
-        newNode.parentId = groupNode.id;
+        // Adjust position to be relative to the group node
         newNode.position = {
           x: position.x - groupNode.position.x,
           y: position.y - groupNode.position.y,
         };
+        newNode.parentId = groupNode.id;
+        // If the node being dropped is also a group, adjust its size
+        if (data.id === 'groupchat') {
+          newNode.style = {
+            width: Math.min(300, groupNode.width! - 50),
+            height: Math.min(200, groupNode.height! - 50)
+          };
+        }
       }
 
       setNodes((nds) =>
-        nds.map((nd) => ({ ...nd, selected: false }) as Node).concat(newNode)
+        nds.map((n) => ({ ...n, selected: false }))
+          .concat({
+            ...newNode,
+            selected: false,
+            draggable: true,
+            selectable: true,
+            focusable: true,
+          })
       );
     },
     [nodes, screenToFlowPosition, setNodes, flowParent]
@@ -343,12 +356,6 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
         <PythonViewer data={project} setMode={setMode} />
       </div>
     );
-  } else if (mode === 'json') {
-    return (
-      <div className="relative flex w-full h-full">
-        <JsonViewer data={project} />
-      </div>
-    );
   } else if (isLoading) {
     return (
       <div className="relative flex w-full h-full items-center justify-center">
@@ -386,6 +393,7 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
               connectionLineType={ConnectionLineType.Bezier}
               connectionLineStyle={{ strokeWidth: 2, stroke: 'darkgreen' }}
               onDragOver={onDragOver}
+              onDragLeave={onDragLeave}
               onDrop={onDrop}
               panOnScroll
               selectionOnDrag
@@ -394,6 +402,7 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
               fitViewOptions={{ maxZoom: 1 }}
               attributionPosition="bottom-right"
             >
+              <Background variant={BackgroundVariant.Lines} gap={24} size={2} color='#400f0f0f' />
               <Controls
                 fitViewOptions={{ maxZoom: 1 }}
                 showInteractive={false}
@@ -410,9 +419,9 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
           )}
         </ResizablePanel>
         <ResizableHandle />
-        <ResizablePanel className="h-[calc(100vh-var(--navbar-height))]" defaultSize={30}>
-          <Tabs defaultValue="config">
-            <TabsList className="flex items-center justify-start w-full rounded-none">
+        <ResizablePanel defaultSize={30}>
+          <Tabs defaultValue="config" className="flex flex-col h-full">
+            <TabsList className="flex items-center justify-start w-full rounded-none border-b shrink-0">
               <TabsTrigger value="config" className="flex items-center gap-2">
                 <Icons.settings className="w-4 h-4" />
                 <span className="text-sm">Config</span>
@@ -426,13 +435,13 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
                 <span className="text-sm">Data</span>
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="config">
+            <TabsContent value="config" className="flex-1 overflow-auto">
               <div>Hello</div>
             </TabsContent>
-            <TabsContent value="chat">
+            <TabsContent value="chat" className="flex-1 overflow-auto">
               {activeChatId && <ChatPane chat={activeChatId} />}
             </TabsContent>
-            <TabsContent value="nodes" className="p-0 overflow-auto">
+            <TabsContent value="nodes" className="flex-1 overflow-auto">
               <JsonViewer data={project} />
             </TabsContent>
           </Tabs>

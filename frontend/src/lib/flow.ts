@@ -1,6 +1,6 @@
 import { AssistantNode } from '@/components/flow/node/assistant';
 import { UserProxyAgent } from '@/components/flow/node/user';
-import { GroupChatManager } from '@/components/flow/node/group-chat';
+import { GroupNode } from '@/components/flow/node/group';
 import { NoteNode } from '@/components/flow/node/note';
 
 import { Node, ReactFlowInstance, NodeTypes } from '@xyflow/react';
@@ -19,7 +19,7 @@ export const nodeTypes: NodeTypes = {
   initializer: InitializerNode,
   assistant: AssistantNode,
   user: UserProxyAgent,
-  groupchat: GroupChatManager,
+  groupchat: GroupNode,
   note: NoteNode,
   conversable: ConversableAgent,
   nestedchat: NestedChat,
