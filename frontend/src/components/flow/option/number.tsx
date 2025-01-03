@@ -1,6 +1,8 @@
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { OptionProps } from './option';
 import { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 export type NumberOptionProps = {} & OptionProps;
 
@@ -14,13 +16,13 @@ export const NumberOption = ({
   const [value, setValue] = useState(data?.[name] ?? 0);
   return (
     <div
-      className={clsx('flex gap-2', {
-        'flex-col': compact,
+      className={cn('flex gap-2', {
+        'flex-col': !compact,
         'items-center': compact,
       })}
     >
-      <span>{label}</span>
-      <input
+      <Label className="whitespace-nowrap">{label}</Label>
+      <Input
         type="number"
         value={value}
         onChange={(e) => setValue(e.target.valueAsNumber)}

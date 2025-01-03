@@ -4,7 +4,7 @@ import {
   getBezierPath,
   Position,
 } from '@xyflow/react';
-import { ConverseConfig } from './converse-config';
+import { Icons } from '@/components/icons';
 
 export function ConverseEdge({
   id,
@@ -32,22 +32,13 @@ export function ConverseEdge({
         path={edgePath}
         style={{
           ...style,
-          stroke: selected ? 'greenyellow' : '',
+          stroke: selected ? 'green' : '',
           strokeDasharray: selected ? '5 5' : '0',
           strokeWidth: selected ? 3 : 2,
         }}
       />
       <EdgeLabelRenderer>
-        <ConverseConfig
-          edgeId={id}
-          data={data}
-          style={{
-            position: 'absolute',
-            transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-            pointerEvents: 'all',
-          }}
-          className="nodrag nopan"
-        />
+        <Icons.chat className="w-4 h-4" />
       </EdgeLabelRenderer>
     </>
   );

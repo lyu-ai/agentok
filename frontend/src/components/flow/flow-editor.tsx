@@ -113,6 +113,7 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
   const [activeChatId, setActiveChatId] = useState<ChatType | undefined>();
   const [mousePosition, setMousePosition] = useState<MousePositionState | null>(null);
   const selectedNode = nodes.find(node => node.selected);
+  const selectedEdge = edges.find(edge => edge.selected);
 
   // Suppress error code 002
   const store = useStoreApi();
@@ -272,6 +273,7 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
 
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
+      console.log('edge changes', changes);
       if (changes.some((change) => change.type !== 'select')) {
         setIsDirty(true);
       }
@@ -579,13 +581,16 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
                 <span className="text-sm">Data</span>
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="config" className="flex-1 overflow-auto">
-              <FlowConfig nodeId={selectedNode?.id} data={selectedNode?.data} />
+            <TabsContent value="config" className="flex-1 overflow-auto p-2">
+              <FlowConfig
+                nodeId={selectedNode?.id}
+                edgeId={selectedEdge?.id}
+              />
             </TabsContent>
-            <TabsContent value="chat" className="flex-1 overflow-auto">
+            <TabsContent value="chat" className="flex-1 overflow-auto p-2">
               {activeChatId && <ChatPane chat={activeChatId} />}
             </TabsContent>
-            <TabsContent value="nodes" className="flex-1 overflow-auto">
+            <TabsContent value="nodes" className="flex-1 overflow-auto p-2">
               <JsonViewer data={project} />
             </TabsContent>
           </Tabs>

@@ -16,8 +16,8 @@ export const ConversableAgent = ({ id, data, selected, ...props }: any) => {
         'disable_llm',
       ]}
       ports={[
-        { type: 'input', name: 'input' },
-        { type: 'output', name: 'output' },
+        { type: 'target', name: 'input' },
+        { type: 'source', name: 'output' },
       ]}
       ConfigDialog={ConversableAgentConfig}
       nodeClass="agent"

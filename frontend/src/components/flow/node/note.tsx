@@ -4,8 +4,6 @@ import React, { memo, useEffect, useState } from 'react';
 import { useReactFlow, NodeProps } from '@xyflow/react';
 import Markdown from '@/components/markdown';
 import { setNodeData } from '@/lib/flow';
-import { GenericNode } from './generic-node';
-import { Icons } from '@/components/icons';
 import { Textarea } from '@/components/ui/textarea';
 
 export const NoteNode = memo(({
@@ -31,12 +29,9 @@ export const NoteNode = memo(({
   };
 
   return (
-    <GenericNode
-      id={id}
-      data={data}
-      selected={selected}
-      type={type}
-      {...props}
+    <div
+      className="w-full min-w-[200px] min-h-[100px] cursor-text bg-yellow-500/40 rounded-md p-2"
+      onClick={() => setEditing(true)}
     >
       {editing ? (
         <Textarea
@@ -57,6 +52,6 @@ export const NoteNode = memo(({
           </Markdown>
         </div>
       )}
-    </GenericNode>
+    </div>
   );
 });

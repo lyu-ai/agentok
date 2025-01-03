@@ -1,5 +1,7 @@
 import clsx from 'clsx';
 import { OptionProps } from './option';
+import { Label } from '@/components/ui/label';
+import { Select, SelectItem, SelectTrigger, SelectContent } from '@/components/ui/select';
 
 type SelectOptionProps = {
   options: { label: string; value: string }[];
@@ -23,18 +25,22 @@ export const SelectOption = ({
         'items-center': compact,
       })}
     >
-      <label className="whitespace-nowrap">{label}</label>
-      <select
+      <Label className="whitespace-nowrap">{label}</Label>
+      <Select
         value={options[selectedIndex].value}
-        onChange={(e) => onChange && onChange(name, e.target.value)}
-        className="select select-xs select-bordered bg-transparent nodrag focus:range-primary rounded"
+        onValueChange={(value) => onChange && onChange(name, value)}
       >
-        {options.map((o, i) => (
-          <option key={i} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </select>
+        <SelectTrigger>
+          {options[selectedIndex].label}
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((o, i) => (
+            <SelectItem key={i} value={o.value}>
+              {o.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 };

@@ -21,7 +21,6 @@ export const GenericNode = ({
   id,
   data,
   selected,
-  config,
   ports = [],
   children,
 }: WrapNodeProps) => {
@@ -42,10 +41,10 @@ export const GenericNode = ({
           position={type === 'target' ? Position.Left : Position.Right}
           id={name}
           className={cn(
-            'w-3 h-3 rounded-full border-2 bg-base-content/10',
-            'border-base-content/10 hover:border-primary',
+            'w-3 h-3 rounded-full border-2 bg-primary/10',
+            'border-primary/10 hover:border-primary',
             {
-              'border-primary': selected,
+              'border-brand': selected,
             }
           )}
         />

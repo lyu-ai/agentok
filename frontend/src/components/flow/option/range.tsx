@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { OptionProps, OptionType } from './option';
-
+import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
 type RangeOptionProps = {
   min: number;
   max: number;
@@ -24,14 +25,13 @@ export const RangeOption = ({
         'items-center': compact,
       })}
     >
-      <label className="whitespace-nowrap">{label}</label>
-      <input
-        type="range"
+      <Label className="whitespace-nowrap">{label}</Label>
+      <Slider
         min={min ?? 0}
         max={max ?? 100}
         step={step ?? 1}
         value={data?.[name] ?? 0}
-        onChange={(e) => onChange && onChange(name, e.target.valueAsNumber)}
+        onValueChange={(value) => onChange && onChange(name, value)}
         className="range range-xs nodrag focus:range-primary w-full p-1"
       />
       [{data?.[name] ?? 'None'}]
