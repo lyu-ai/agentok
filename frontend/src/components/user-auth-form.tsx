@@ -145,7 +145,9 @@ export function UserAuthForm({
         setIsGoogleLoading(true);
       }
 
-      const supabase = await createClient();
+      console.log('window.location.origin', window.location.origin)
+
+      const supabase = createClient();
       const { error, data } = await supabase.auth.signInWithOAuth({
         provider: provider,
         options: {

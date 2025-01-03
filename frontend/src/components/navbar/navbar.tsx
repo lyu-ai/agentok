@@ -3,14 +3,14 @@
 import { usePathname } from 'next/navigation';
 import { match } from 'path-to-regexp';
 
-import AuthButton from '@/components/navbar/auth-button';
+import { AuthButton } from './auth-button';
 import { Logo } from './logo';
 import { NavButton } from './nav-button';
 import { ProjectPicker } from '@/components/project/project-picker';
 import Link from 'next/link';
-import clsx from 'clsx';
 import { Icons } from '../icons';
 import { cn } from '@/lib/utils';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 
 const apiEndpoint =
   process.env.NEXT_PUBLIC_BACKEND_URL || 'https://localhost:5004';

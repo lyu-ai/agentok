@@ -7,7 +7,6 @@ import { useSettings } from '@/hooks';
 import { getNodeIcon } from '@/lib/flow';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 
 interface NodeButtonProps {
   name: string;
