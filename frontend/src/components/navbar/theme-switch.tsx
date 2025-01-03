@@ -21,7 +21,7 @@ function ThemeButton({ icon, isActive, onClick }: ThemeButtonProps) {
       onClick={handleClick}
       className={cn(
         'p-1 rounded-full',
-        isActive ? 'bg-muted' : 'hover:bg-muted/50'
+        isActive ? 'bg-primary text-primary-foreground hover:bg-primary/80' : 'hover:bg-muted/50'
       )}
     >
       {icon}

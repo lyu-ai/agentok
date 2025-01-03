@@ -11,14 +11,17 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { Button } from '../ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { ThemeSwitch } from './theme-switch';
+import { cn } from '@/lib/utils';
 
 const UserAvatar = ({ user, className }: any) => {
   // State to handle image load error
-  const [imgUrl, setImgUrl] = useState<string>('/logo-spaced.png');
+  const [imgUrl, setImgUrl] = useState<string>('');
   useEffect(() => {
     getAvatarUrl().then(setImgUrl);
   }, [user]);
@@ -64,84 +67,65 @@ export const AuthButton = () => {
       <DropdownMenuTrigger>
         <UserAvatar user={user} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <div className="flex flex-col items-center w-96 p-4 gap-2 text-sm">
+      <DropdownMenuContent align="end" className="w-64">
+        <div className="flex items-center p-2 gap-2 text-sm">
           <UserAvatar
             user={user}
-            className="w-16 h-16 rounded-full bg-primary/20 text-primary overflow-hidden"
+            className="w-20 h-20"
           />
-          <span className="text-lg font-bold">
-            {user.user_metadata.name ??
-              user.email?.match(/^([^@]+)/)?.[1] ??
-              '(No Name)'}
-          </span>
-          <span className="flex flex-col items-center gap-2">
-            {user.email}
-            {user.confirmed_at && (
-              <Icons.badgeCheck className="text-green-600 w-5 h-5" />
-            )}
-          </span>
-          <div className="flex items-center no-wrap gap-1 mt-8 w-full">
-            <DropdownMenuItem
-              onClick={() => router.push('/settings/models')}
-              className={clsx(
-                'flex w-64 items-center justify-start py-2 px-4 gap-1.5 bg-base-content/20 rounded-r-sm rounded-l-lg',
+          <div className="flex flex-col gap-1">
+            <span className="font-bold">
+              {user.user_metadata.name ??
+                user.email?.match(/^([^@]+)/)?.[1] ??
+                '(No Name)'}
+            </span>
+            <span className="flex items-center gap-2 text-xs">
+              {user.email}
+              {user.confirmed_at && (
+                <Icons.badgeCheck className="text-green-600 w-3 h-3" />
               )}
-            >
-              <Icons.brain className="w-5 h-5" />
-              Models
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() =>
-                router.push('https://github.com/dustland/agentok/issues')
-              }
-              className={clsx(
-                'flex w-64 items-center justify-start py-2 px-4 gap-1.5 bg-base-content/20 rounded-l-sm rounded-r-lg',
-              )}
-            >
-              <Icons.github className="h-5 w-5" />
-              Open Issues
-            </DropdownMenuItem>
-          </div>
-          <div className="flex items-center no-wrap gap-1 w-full">
-            <DropdownMenuItem
-              onClick={() => router.push('/settings')}
-              className={clsx(
-                'flex w-64 items-center justify-start py-2 px-4 gap-1.5 bg-base-content/20 rounded-r-sm rounded-l-lg',
-              )}
-            >
-              <Icons.settings className="h-5 w-5" />
-              Settings
-            </DropdownMenuItem>
-
-            <DropdownMenuItem
-              onClick={signOut}
-              className={clsx(
-                'flex w-64 items-center justify-start py-2 px-4 gap-1.5 bg-base-content/20 rounded-l-sm rounded-r-lg',
-              )}
-            >
-              <Icons.logout className="w-5 h-5" />
-              Sign out
-            </DropdownMenuItem>
-          </div>
-          <div className="flex items-center justify-center text-xs w-full gap-1">
-            <Link
-              href="https://agentok.ai/docs/privacy"
-              target="_blank"
-              className="link link-hover"
-            >
-              Privacy Policy
-            </Link>
-            <span className="">•</span>
-            <Link
-              href="https://agentok.ai/docs/tos"
-              target="_blank"
-              className="link link-hover"
-            >
-              Terms of Service
-            </Link>
+            </span>
           </div>
         </div>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link
+            href="/settings"
+            className={cn(
+              'flex items-center justify-start p-2 gap-2',
+            )}
+          >
+            <Icons.settings className="h-4 w-4" />
+            Settings
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link
+            href="https://github.com/dustland/agentok/issues/new"
+            target="_blank"
+            className={cn(
+              'flex items-center justify-start p-2 gap-2 ',
+            )}
+          >
+            <Icons.github className="h-4 w-4" />
+            Report an Issue
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <div className="flex items-center justify-between gap-2 p-2 py-1">
+          <span className="text-sm font-medium">Theme</span>
+          <ThemeSwitch />
+        </div>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={signOut}
+          className={clsx(
+            'flex items-center justify-start p-2 gap-2',
+          )}
+        >
+          <Icons.logout className="w-4 h-4" />
+          Sign out
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

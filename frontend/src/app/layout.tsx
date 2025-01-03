@@ -1,8 +1,9 @@
 import './globals.css';
 import { PropsWithChildren } from 'react';
-import Providers from './providers';
 import localFont from 'next/font/local';
 import { cn } from '@/lib/utils';
+import { ThemeProvider } from 'next-themes';
+import { Toaster } from '@/components/ui/toaster';
 
 const fontSans = localFont({
   src: [
@@ -35,7 +36,7 @@ export default async function RootLayout({
   children,
 }: PropsWithChildren) {
   return (
-    <html suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <title>Agentok Studio</title>
       <body
         className={cn(
@@ -44,9 +45,10 @@ export default async function RootLayout({
           fontHeading.variable
         )}
       >
-        <Providers>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
-        </Providers>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

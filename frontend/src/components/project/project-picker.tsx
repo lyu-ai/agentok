@@ -56,7 +56,7 @@ export const ProjectPicker = () => {
           <Icons.chevronsUpDown className="w-3 h-3" />
         </Link>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" sideOffset={20} className="flex flex-col w-[400px] p-0 h-[calc(100vh-var(--header-height))]">
+      <DropdownMenuContent align="start" sideOffset={14} className="flex flex-col w-[400px] p-0 h-[calc(100vh-var(--header-height))]">
         <div className="flex items-center gap-2 border-b justify-between w-full p-1">
           <Link href="/projects">
             <Button variant="ghost" size="icon" className="h-6 w-6">

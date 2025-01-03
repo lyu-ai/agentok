@@ -61,7 +61,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex w-full items-center justify-between p-2 h-[var(--header-height)] border-b border-gray-200">
+    <div className="flex w-full items-center justify-between p-2 h-[var(--header-height)] border-b">
       <div className="navbar-start gap-2 flex items-center justify-start">
         <NavButton projectId={projectId} className="lg:hidden" />
         <Logo />
