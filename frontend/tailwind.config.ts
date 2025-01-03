@@ -56,7 +56,7 @@ export default {
 					'4': 'hsl(var(--chart-4))',
 					'5': 'hsl(var(--chart-5))'
 				},
-				brand: '#9fe88d'
+				brand: '#50C878' // A vibrant emerald color
 			},
 			fontFamily: {
 				sans: [

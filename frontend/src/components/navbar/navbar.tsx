@@ -64,8 +64,10 @@ const Navbar = () => {
     <div className="flex w-full items-center justify-between p-2 h-[var(--header-height)] border-b">
       <div className="navbar-start gap-2 flex items-center justify-start">
         <NavButton projectId={projectId} className="lg:hidden" />
-        <Logo className="w-8 h-8 text-primary dark:text-brand" />
-        <span className="text-lg font-bold text-primary dark:text-brand">AgentOK</span>
+        <Link href="/" className="flex items-center gap-2">
+          <Logo className="w-8 h-8 text-brand" />
+          <span className="text-lg font-bold text-primary dark:text-brand">AgentOK</span>
+        </Link>
       </div>
       <div role="tablist" className="flex px-2 items-center gap-4">
         <div

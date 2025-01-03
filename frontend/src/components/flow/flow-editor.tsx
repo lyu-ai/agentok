@@ -38,6 +38,37 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '../ui/resi
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { nanoid } from 'nanoid';
 
+interface DebugRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  id?: string;
+  measured?: any;
+  style?: any;
+}
+
+interface MousePositionState {
+  flow: XYPosition;
+  debug?: {
+    zoom: number;
+    draggedNode: DebugRect;
+    potentialGroups: DebugRect[];
+    dimensions?: {
+      nodeId: string;
+      measured: any;
+      style: any;
+    }[];
+    intersectionTest?: {
+      nodeId: string;
+      xTest: string;
+      yTest: string;
+      xResult: boolean;
+      yResult: boolean;
+    }[];
+  };
+}
+
 const DEBOUNCE_DELAY = 500; // Adjust this value as needed
 
 const useDebouncedUpdate = (projectId: number) => {
@@ -70,7 +101,7 @@ const useDebouncedUpdate = (projectId: number) => {
 
 export const FlowEditor = ({ projectId }: { projectId: number }) => {
   const { project, isLoading, isError } = useProject(projectId);
-  const { screenToFlowPosition } = useReactFlow();
+  const { getZoom, screenToFlowPosition } = useReactFlow();
   const [nodes, setNodes] = useNodesState<Node>([]);
   const [edges, setEdges] = useEdgesState<Edge>([]);
   const { setIsDirty } = useDebouncedUpdate(projectId);
@@ -79,7 +110,7 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
   const flowParent = useRef<HTMLDivElement>(null);
   const nodePanePinned = useProjectStore((state) => state.nodePanePinned);
   const [activeChatId, setActiveChatId] = useState<ChatType | undefined>();
-  const [hoveredGroupId, setHoveredGroupId] = useState<string | null>(null);
+  const [mousePosition, setMousePosition] = useState<MousePositionState | null>(null);
 
   // Suppress error code 002
   const store = useStoreApi();
@@ -141,27 +172,62 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
               draggedNode.position = absolutePosition;
               draggedNode.parentId = undefined;
               draggedNode.extent = undefined;
-              return;
-            }
 
-            // When drag ends, handle grouping/ungrouping
-            if ('dragging' in change && !change.dragging) {
-              // Find potential group node at the dragged node's absolute center position
-              const nodeCenterPosition = {
-                x: absolutePosition.x + (draggedNode.width ?? 0) / 2,
-                y: absolutePosition.y + (draggedNode.height ?? 0) / 2,
-              };
-
-              // Find any group node that contains this position
               const groupNode = nextNodes.find(
                 (n) =>
                   n.type === 'groupchat' &&
                   n.id !== draggedNode.id &&
                   !n.parentId && // Prevent nested groups
-                  nodeCenterPosition.x > n.position.x &&
-                  nodeCenterPosition.x < (n.position.x + (n.width ?? 0)) &&
-                  nodeCenterPosition.y > n.position.y &&
-                  nodeCenterPosition.y < (n.position.y + (n.height ?? 0))
+                  // Check if the node position is within the group's bounds
+                  absolutePosition.x >= n.position.x &&
+                  absolutePosition.x <= (n.position.x + (n.width ?? 0)) &&
+                  absolutePosition.y >= n.position.y &&
+                  absolutePosition.y <= (n.position.y + (n.height ?? 0))
+              );
+
+              // Update all group nodes' data with current hover state
+              nextNodes = nextNodes.map(node => {
+                if (node.type === 'groupchat') {
+                  return {
+                    ...node,
+                    data: {
+                      ...node.data,
+                      hoveredGroupId: groupNode?.id || null
+                    }
+                  };
+                }
+                return node;
+              });
+
+              return;
+            }
+
+            // When drag ends, handle grouping/ungrouping
+            if ('dragging' in change && !change.dragging) {
+              // Clear hover state from all group nodes
+              nextNodes = nextNodes.map(node => {
+                if (node.type === 'groupchat') {
+                  return {
+                    ...node,
+                    data: {
+                      ...node.data,
+                      hoveredGroupId: null
+                    }
+                  };
+                }
+                return node;
+              });
+
+              const groupNode = nextNodes.find(
+                (n) =>
+                  n.type === 'groupchat' &&
+                  n.id !== draggedNode.id &&
+                  !n.parentId && // Prevent nested groups
+                  // Check if the node position is within the group's bounds
+                  absolutePosition.x >= n.position.x &&
+                  absolutePosition.x <= (n.position.x + (n.width ?? 0)) &&
+                  absolutePosition.y >= n.position.y &&
+                  absolutePosition.y <= (n.position.y + (n.height ?? 0))
               );
 
               // Handle grouping - if inside a group
@@ -169,8 +235,8 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
                 // Node is entering a group
                 draggedNode.parentId = groupNode.id;
                 draggedNode.position = {
-                  x: nodeCenterPosition.x - groupNode.position.x,
-                  y: nodeCenterPosition.y - groupNode.position.y,
+                  x: absolutePosition.x - groupNode.position.x,
+                  y: absolutePosition.y - groupNode.position.y,
                 };
                 draggedNode.extent = 'parent';
 
@@ -234,11 +300,35 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
         position.y < (n.position.y + (n.height ?? 0))
     );
 
-    setHoveredGroupId(groupNode?.id || null);
+    // Update all group nodes' data with current hover state
+    setNodes(nodes.map(node => {
+      if (node.type === 'groupchat') {
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            hoveredGroupId: groupNode?.id || null
+          }
+        };
+      }
+      return node;
+    }));
   }, [nodes, screenToFlowPosition, flowParent]);
 
   const onDragLeave = useCallback(() => {
-    setHoveredGroupId(null);
+    // Clear hover state from all group nodes
+    setNodes(nodes => nodes.map(node => {
+      if (node.type === 'groupchat') {
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            hoveredGroupId: null
+          }
+        };
+      }
+      return node;
+    }));
   }, []);
 
   const onDrop = useCallback(
@@ -279,7 +369,12 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
       );
 
       setNodes((nds) => {
-        const updatedNodes = nds.map((n) => ({ ...n, selected: false }));
+        // Clear hover state from all nodes first
+        const updatedNodes = nds.map((n) => ({
+          ...n,
+          selected: false,
+          data: n.type === 'groupchat' ? { ...n.data, hoveredGroupId: null } : n.data
+        }));
 
         if (groupNode) {
           // Adjust position to be relative to the group node
@@ -425,6 +520,15 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
               fitView
               fitViewOptions={{ maxZoom: 1 }}
               attributionPosition="bottom-right"
+              onMouseMove={(event) => {
+                if (!flowParent.current) return;
+                const flowBounds = flowParent.current.getBoundingClientRect();
+                const flowPosition = screenToFlowPosition({
+                  x: event.clientX - flowBounds.left,
+                  y: event.clientY - flowBounds.top,
+                });
+                setMousePosition({ flow: flowPosition } as MousePositionState);
+              }}
             >
               <Background variant={BackgroundVariant.Lines} gap={24} size={2} color='#400f0f0f' />
               <Controls
@@ -435,6 +539,20 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
               />
               <Panel position="top-right" className="flex items-center p-1 gap-2">
                 <ViewToggle mode={'python'} setMode={setMode} />
+              </Panel>
+              <Panel position="bottom-right" className="flex flex-col items-end p-1 gap-1 text-xs font-mono">
+                <div>{JSON.stringify(mousePosition?.flow)}</div>
+                {mousePosition?.debug && (
+                  <>
+                    <div className="text-red-500">
+                      Dragged: {JSON.stringify(mousePosition.debug.draggedNode)}
+                      Groups: {JSON.stringify(mousePosition.debug.potentialGroups)}
+                    </div>
+                    <div className="text-yellow-500">
+                      Intersection Tests: {JSON.stringify(mousePosition.debug.intersectionTest, null, 2)}
+                    </div>
+                  </>
+                )}
               </Panel>
             </ReactFlow>
           </div>

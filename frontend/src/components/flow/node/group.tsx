@@ -5,10 +5,10 @@ import { NodeProps, NodeResizer, Handle, Position } from '@xyflow/react';
 import { GroupChatConfig } from '../config/group-chat';
 import { cn } from '@/lib/utils';
 import { Icons } from '@/components/icons';
+import useProjectStore from '@/store/projects';
 
 interface GroupNodeData extends Record<string, unknown> {
   name?: string;
-  isHighlighted?: boolean;
 }
 
 export const GroupNode = ({
@@ -18,6 +18,7 @@ export const GroupNode = ({
   ...props
 }: NodeProps) => {
   const nodeData = data as GroupNodeData;
+  const isHovered = id === data.hoveredGroupId;
 
   return (
     <div className="relative">
@@ -32,16 +33,16 @@ export const GroupNode = ({
       <div className={cn(
         'flex flex-col min-w-[400px] min-h-[300px] p-2',
         'bg-muted/5 backdrop-blur-sm rounded-xl',
-        'border-2 border-dashed transition-colors',
-        selected ? 'border-purple-500 text-purple-500' : 'border-primary/40 text-primary/40',
-        nodeData.isHighlighted && 'border-primary border-2 bg-primary/5'
+        'border-2 border-dashed transition-colors duration-200',
+        selected ? 'border-purple-500 text-purple-500 bg-purple-500/10' : 'border-primary/40 text-primary/40',
+        isHovered && 'border-blue-500 bg-blue-500/20 text-blue-500'
       )}>
         <Handle
           type="target"
           position={Position.Left}
           className={cn(
-            'w-3 h-3 rounded-full border-2 bg-base-content/10',
-            'border-base-content/10 hover:border-primary',
+            'w-3 h-3 rounded-full border-2 bg-primary/10',
+            'border-primary/10 hover:border-primary',
             { 'border-primary': selected }
           )}
         />
@@ -49,8 +50,8 @@ export const GroupNode = ({
           type="source"
           position={Position.Right}
           className={cn(
-            'w-3 h-3 rounded-full border-2 bg-base-content/10',
-            'border-base-content/10 hover:border-primary',
+            'w-3 h-3 rounded-full border-2 bg-primary/10',
+            'border-primary/10 hover:border-primary',
             { 'border-primary': selected }
           )}
         />

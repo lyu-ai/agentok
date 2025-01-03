@@ -86,13 +86,14 @@ export const NodeList = () => {
           nodes: advancedNodes,
         },
       ].map(({ title, nodes }) => (
-        <AccordionItem value={title} className="border-none">
+        <AccordionItem value={title} className="border-none" key={title}>
           <AccordionTrigger className="text-sm outline-none py-2">{title}</AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col gap-1">
               {nodes.map((node) => (
                 <NodeItem
                   id={node.id}
+                  key={node.id}
                   name={node.name}
                   type={node.type}
                   description={node.description}

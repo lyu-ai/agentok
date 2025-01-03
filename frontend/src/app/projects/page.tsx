@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { TemplateList } from '@/components/project/template-list';
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { Logo } from '@/components/logo';
 
 export default function Page() {
   const router = useRouter();
@@ -38,14 +39,7 @@ export default function Page() {
     <div className="flex flex-col w-full gap-2">
       <title>Projects | Agentok Studio</title>
       <div className="flex flex-col items-center justify-center gap-4 text-sm p-2">
-        <Image
-          priority
-          src="/logo.svg"
-          width={100}
-          height={100}
-          alt="logo"
-          className="mt-8"
-        />
+        <Logo className="w-24 h-24 text-brand mt-8" />
         <span className="text-5xl font-bold font-arial p-4">My Projects</span>
         <span className="text-lg p-4">Create and manage your AI agent projects</span>
         <ProjectList />
