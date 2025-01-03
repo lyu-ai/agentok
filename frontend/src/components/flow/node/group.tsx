@@ -17,7 +17,6 @@ export const GroupNode = ({
   selected,
   ...props
 }: NodeProps) => {
-  const [showConfig, setShowConfig] = React.useState(false);
   const nodeData = data as GroupNodeData;
 
   return (
@@ -34,7 +33,7 @@ export const GroupNode = ({
         'flex flex-col min-w-[400px] min-h-[300px] p-2',
         'bg-muted/5 backdrop-blur-sm rounded-xl',
         'border-2 border-dashed transition-colors',
-        selected ? 'border-purple-500 text-purple-500' : 'border-primary/20',
+        selected ? 'border-purple-500 text-purple-500' : 'border-primary/40 text-primary/40',
         nodeData.isHighlighted && 'border-primary border-2 bg-primary/5'
       )}>
         <Handle

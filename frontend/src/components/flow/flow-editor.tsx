@@ -118,39 +118,66 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
       setNodes((nds) => {
-        const nextNodes = applyNodeChanges(changes, nds);
-        console.log('nextNodes', changes, nextNodes);
+        let nextNodes = applyNodeChanges(changes, nds);
 
+        // Handle node dragging for grouping/ungrouping
         changes.forEach((change) => {
-          if (change.type === 'position' && 'id' in change) {
-            const node = nextNodes.find((n) => n.id === change.id);
-            if (node && node.type && !isGroupType(node.type)) {
+          if (change.type === 'position') {
+            const draggedNode = nextNodes.find((n) => n.id === change.id);
+            if (!draggedNode || (draggedNode.type && isGroupType(draggedNode.type))) {
+              return;
+            }
+
+            // Calculate absolute position for the node
+            const absolutePosition = { ...draggedNode.position };
+            const oldParent = draggedNode.parentId ? nextNodes.find(n => n.id === draggedNode.parentId) : null;
+            if (oldParent) {
+              absolutePosition.x += oldParent.position.x;
+              absolutePosition.y += oldParent.position.y;
+            }
+
+            // During dragging, update the node's position to be absolute
+            if ('dragging' in change && change.dragging) {
+              draggedNode.position = absolutePosition;
+              draggedNode.parentId = undefined;
+              draggedNode.extent = undefined;
+              return;
+            }
+
+            // When drag ends, handle grouping/ungrouping
+            if ('dragging' in change && !change.dragging) {
+              // Find potential group node at the dragged node's absolute center position
+              const nodeCenterPosition = {
+                x: absolutePosition.x + (draggedNode.width ?? 0) / 2,
+                y: absolutePosition.y + (draggedNode.height ?? 0) / 2,
+              };
+
+              // Find any group node that contains this position
               const groupNode = nextNodes.find(
                 (n) =>
-                  n.type && isGroupType(n.type) &&
-                  isPositionInsideNode(
-                    {
-                      x: node.position.x + (node.width ?? 0) / 2,
-                      y: node.position.y + (node.height ?? 0) / 2,
-                    },
-                    n
-                  )
+                  n.type === 'groupchat' &&
+                  n.id !== draggedNode.id &&
+                  !n.parentId && // Prevent nested groups
+                  nodeCenterPosition.x > n.position.x &&
+                  nodeCenterPosition.x < (n.position.x + (n.width ?? 0)) &&
+                  nodeCenterPosition.y > n.position.y &&
+                  nodeCenterPosition.y < (n.position.y + (n.height ?? 0))
               );
+
+              // Handle grouping - if inside a group
               if (groupNode) {
-                node.parentId = groupNode.id;
-                node.position = {
-                  x: node.position.x - groupNode.position.x,
-                  y: node.position.y - groupNode.position.y,
+                // Node is entering a group
+                draggedNode.parentId = groupNode.id;
+                draggedNode.position = {
+                  x: nodeCenterPosition.x - groupNode.position.x,
+                  y: nodeCenterPosition.y - groupNode.position.y,
                 };
-                // Move the node to be after the group node in the array
-                const nodeIndex = nextNodes.indexOf(node);
-                const groupNodeIndex = nextNodes.indexOf(groupNode);
-                if (nodeIndex > groupNodeIndex) {
-                  nextNodes.splice(nodeIndex, 1);
-                  nextNodes.splice(groupNodeIndex + 1, 0, node);
-                }
-              } else {
-                node.parentId = undefined;
+                draggedNode.extent = 'parent';
+
+                // Ensure group node is before its children
+                nextNodes = nextNodes.filter(n => n.id !== draggedNode.id);
+                const groupIndex = nextNodes.findIndex(n => n.id === groupNode.id);
+                nextNodes.splice(groupIndex + 1, 0, draggedNode);
               }
             }
           }
@@ -218,18 +245,7 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
     (event: React.DragEvent) => {
       event.preventDefault();
       const data = JSON.parse(event.dataTransfer.getData('application/json'));
-      console.log('onDrop', data);
-      if (!data) {
-        console.warn('No data found in onDrop');
-        return;
-      }
-
-      if (!flowParent.current) {
-        console.warn(
-          'Unexpected null value of flowParent, drag & drop failed.'
-        );
-        return;
-      }
+      if (!data || !flowParent.current) return;
 
       const flowBounds = flowParent.current.getBoundingClientRect();
       const position = screenToFlowPosition({
@@ -239,16 +255,18 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
 
       const { offsetX, offsetY, ...cleanedData } = data;
       const newId = nanoid();
-      const newNode: Node = {
+      const newNode = {
         id: `node-${data.id}-${newId}`,
         type: data.id,
         position,
         data: cleanedData,
-        selected: true,
-        dragHandle: '.drag-handle',
+        selected: false,
+        draggable: true,
+        selectable: true,
+        focusable: true,
         parentId: undefined,
         style: undefined,
-      };
+      } satisfies Node;
 
       // Find if we're dropping into a group node
       const groupNode = nodes.find(
@@ -260,32 +278,38 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
           position.y < (n.position.y + (n.height ?? 0))
       );
 
-      if (groupNode) {
-        // Adjust position to be relative to the group node
-        newNode.position = {
-          x: position.x - groupNode.position.x,
-          y: position.y - groupNode.position.y,
-        };
-        newNode.parentId = groupNode.id;
-        // If the node being dropped is also a group, adjust its size
-        if (data.id === 'groupchat') {
-          newNode.style = {
-            width: Math.min(300, groupNode.width! - 50),
-            height: Math.min(200, groupNode.height! - 50)
-          };
-        }
-      }
+      setNodes((nds) => {
+        const updatedNodes = nds.map((n) => ({ ...n, selected: false }));
 
-      setNodes((nds) =>
-        nds.map((n) => ({ ...n, selected: false }))
-          .concat({
+        if (groupNode) {
+          // Adjust position to be relative to the group node
+          const updatedNode = {
             ...newNode,
-            selected: false,
-            draggable: true,
-            selectable: true,
-            focusable: true,
-          })
-      );
+            position: {
+              x: position.x - groupNode.position.x,
+              y: position.y - groupNode.position.y,
+            },
+            parentId: groupNode.id,
+            // If the node being dropped is also a group, adjust its size
+            ...(data.id === 'groupchat' ? {
+              style: {
+                width: Math.min(300, groupNode.width! - 50),
+                height: Math.min(200, groupNode.height! - 50)
+              }
+            } : {})
+          };
+
+          // Insert new node right after its parent group
+          const groupIndex = updatedNodes.findIndex(n => n.id === groupNode.id);
+          if (groupIndex !== -1) {
+            updatedNodes.splice(groupIndex + 1, 0, updatedNode);
+            return updatedNodes;
+          }
+        }
+
+        // If not in a group or group not found, just append to the end
+        return [...updatedNodes, newNode];
+      });
     },
     [nodes, screenToFlowPosition, setNodes, flowParent]
   );
