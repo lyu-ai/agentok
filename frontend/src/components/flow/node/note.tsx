@@ -2,7 +2,7 @@
 
 import React, { memo, useEffect, useState } from 'react';
 import { useReactFlow, NodeProps } from '@xyflow/react';
-import { Markdown } from '@/components/markdown/markdown';
+import { Markdown } from '@/components/markdown';
 import { setNodeData } from '@/lib/flow';
 import { Textarea } from '@/components/ui/textarea';
 

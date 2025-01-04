@@ -80,6 +80,7 @@ import {
   Settings2,
   SquareTerminal,
   CircleCheck,
+  StickyNote,
 } from 'lucide-react';
 import { Logo } from './logo';
 
@@ -106,7 +107,7 @@ export const Icons = {
   code: Code2,
   search: Search,
   rocket: Rocket,
-  note: Notebook,
+  note: StickyNote,
   badgeCheck: BadgeCheck,
   draggable: Grip,
   add: Plus,

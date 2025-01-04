@@ -26,17 +26,10 @@ import { Icons } from '@/components/icons';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { NodeButton } from './node-button';
 import { PythonViewer } from './python';
-import { JsonViewer } from './json';
 import { genId } from '@/lib/id';
 import { useChats, useProject } from '@/hooks';
 import { debounce } from 'lodash-es';
 import { Chat as ChatType } from '@/store/chats';
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from '../ui/resizable';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { nanoid } from 'nanoid';
 import { Button } from '../ui/button';
 

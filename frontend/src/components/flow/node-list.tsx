@@ -2,7 +2,7 @@
 
 import React, { useCallback } from 'react';
 import { useReactFlow } from '@xyflow/react';
-import { advancedNodes, agentNodes, basicNodes, getNodeIcon } from '@/lib/flow';
+import { advancedNodes, basicNodes, getNodeIcon } from '@/lib/flow';
 import {
   Accordion,
   AccordionContent,
@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
 import { nanoid } from 'nanoid';
+import { ScrollArea } from '../ui/scroll-area';
 
 interface NodeItemProps {
   id: string;
@@ -87,47 +88,45 @@ export const NodeList = () => {
   );
 
   return (
-    <Accordion
-      type="single"
-      collapsible
-      defaultValue="Basic"
-      className="w-full p-2"
-    >
-      {[
-        {
-          title: 'Basic',
-          nodes: basicNodes,
-        },
-        {
-          title: 'Agents',
-          nodes: agentNodes,
-        },
-        {
-          title: 'Advanced',
-          nodes: advancedNodes,
-        },
-      ].map(({ title, nodes }) => (
-        <AccordionItem value={title} className="border-none" key={title}>
-          <AccordionTrigger className="text-sm outline-none py-2">
-            {title}
-          </AccordionTrigger>
-          <AccordionContent>
-            <div className="flex flex-col gap-1">
-              {nodes.map((node) => (
-                <NodeItem
-                  id={node.id}
-                  key={node.id}
-                  name={node.name}
-                  type={node.type}
-                  description={node.description}
-                  nodeClass={node.class}
-                  onClick={() => addNode(node.type, node.class)}
-                />
-              ))}
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      ))}
-    </Accordion>
+    <ScrollArea className="h-full">
+      <Accordion
+        type="single"
+        collapsible
+        defaultValue="Basic"
+        className="w-full p-2"
+      >
+        {[
+          {
+            title: 'Basic',
+            nodes: basicNodes,
+          },
+          {
+            title: 'Advanced',
+            nodes: advancedNodes,
+          },
+        ].map(({ title, nodes }) => (
+          <AccordionItem value={title} className="border-none" key={title}>
+            <AccordionTrigger className="text-sm outline-none py-2">
+              {title}
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="flex flex-col gap-1">
+                {nodes.map((node) => (
+                  <NodeItem
+                    id={node.id}
+                    key={node.id}
+                    name={node.name}
+                    type={node.type}
+                    description={node.description}
+                    nodeClass={node.class}
+                    onClick={() => addNode(node.type, node.class)}
+                  />
+                ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </ScrollArea>
   );
 };

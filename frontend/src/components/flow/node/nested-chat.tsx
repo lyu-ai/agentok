@@ -1,12 +1,11 @@
 'use client';
 
-import React from 'react';
+import { ComponentType } from 'react';
 import { NodeProps } from '@xyflow/react';
 import { GenericNode } from './generic-node';
-import { ConversableAgentConfig } from '../config/conversable-agent';
 import { GenericOption } from '../option/option';
 
-export const NestedChat = ({
+export const NestedChat: ComponentType<NodeProps> = ({
   id,
   data,
   selected,
@@ -24,7 +23,6 @@ export const NestedChat = ({
         { type: 'target', name: '' },
         { type: 'source', name: '' },
       ]}
-      config={ConversableAgentConfig}
     >
       <GenericOption
         type="text"

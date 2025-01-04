@@ -14,9 +14,11 @@ import { RetrieveUserProxyAgent } from '@/components/flow/node/retrieve-user';
 import { RetrieveAssistantNode } from '@/components/flow/node/retrieve-assistant';
 // Import icons from the new icons file
 import { Icons, Icon } from '@/components/icons';
+import { SummarizerNode } from '@/components/flow/node/summarizer';
 
 export const nodeTypes: NodeTypes = {
   initializer: InitializerNode,
+  summarizer: SummarizerNode,
   assistant: AssistantNode,
   user: UserProxyAgent,
   groupchat: GroupNode,
@@ -72,36 +74,6 @@ export const basicNodes: NodeMeta[] = [
     class: 'Initializer',
   },
   {
-    id: 'groupchat',
-    icon: Icons.group,
-    name: 'Group',
-    description: 'Group several agents together',
-    label: 'groupchat',
-    type: 'groupchat',
-    class: 'GroupChat',
-  },
-  {
-    id: 'nestedchat',
-    icon: Icons.group,
-    name: 'Nested Chat',
-    description: 'A Nested Chat Manager',
-    label: 'nestedchat',
-    type: 'nestedchat',
-    class: 'NestedChat',
-  },
-  {
-    id: 'note',
-    icon: Icons.note,
-    name: 'Note',
-    description: 'Work as comment for the flow and node',
-    label: 'note',
-    type: 'note',
-    class: 'Note',
-  },
-];
-
-export const agentNodes: NodeMeta[] = [
-  {
     id: 'conversable',
     icon: Icons.robot,
     name: 'Agent',
@@ -128,9 +100,45 @@ export const agentNodes: NodeMeta[] = [
     type: 'assistant',
     class: 'AssistantAgent',
   },
+  {
+    id: 'summarizer',
+    icon: Icons.megaphone,
+    name: 'Summarizer',
+    description: 'Summarize the conversation',
+    label: 'summarizer',
+    type: 'summarizer',
+    class: 'Summarizer',
+  },
+  {
+    id: 'groupchat',
+    icon: Icons.group,
+    name: 'Group',
+    description: 'Group several agents together',
+    label: 'groupchat',
+    type: 'groupchat',
+    class: 'GroupChat',
+  },
+  {
+    id: 'note',
+    icon: Icons.note,
+    name: 'Note',
+    description: 'Work as comment for the flow and node',
+    label: 'note',
+    type: 'note',
+    class: 'Note',
+  },
 ];
 
 export const advancedNodes: NodeMeta[] = [
+  {
+    id: 'nestedchat',
+    icon: Icons.group,
+    name: 'Nested Chat',
+    description: 'A Nested Chat Manager',
+    label: 'nestedchat',
+    type: 'nestedchat',
+    class: 'NestedChat',
+  },
   {
     id: 'retrieve_assistant',
     icon: Icons.robot,
@@ -189,7 +197,7 @@ export const getNodeLabel = (label: string, tNodeMeta: any) => {
   return tNodeMeta && label ? tNodeMeta(label) : label;
 };
 
-const allNodes = [...basicNodes, ...agentNodes, ...advancedNodes];
+const allNodes = [...basicNodes, ...advancedNodes];
 
 export const getNodeIcon = (type: string) => {
   const nodeMeta = allNodes.find((node) => node.type === type);

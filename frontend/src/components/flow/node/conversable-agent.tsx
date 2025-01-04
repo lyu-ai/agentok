@@ -1,27 +1,23 @@
-import { ConversableAgentConfig } from '../config/conversable-agent';
+import { NodeProps } from '@xyflow/react';
 import { GenericNode } from './generic-node';
+import { ComponentType } from 'react';
 
-export const ConversableAgent = ({ id, data, selected, ...props }: any) => {
+export const ConversableAgent: ComponentType<NodeProps> = ({
+  id,
+  data,
+  selected,
+  ...props
+}: NodeProps) => {
   return (
     <GenericNode
       id={id}
       data={data}
       selected={selected}
-      options={[
-        'description',
-        'system_message',
-        'human_input_mode',
-        'max_consecutive_auto_reply',
-        'termination_msg',
-        'disable_llm',
-      ]}
       ports={[
         { type: 'target', name: 'input' },
         { type: 'source', name: 'output' },
       ]}
-      ConfigDialog={ConversableAgentConfig}
       nodeClass="agent"
-      nameEditable
       {...props}
     ></GenericNode>
   );

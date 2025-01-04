@@ -1,5 +1,4 @@
 import { NodeProps } from '@xyflow/react';
-import { ConversableAgentConfig } from '../config/conversable-agent';
 import { GenericNode } from './generic-node';
 
 export const RetrieveUserProxyAgent = ({
@@ -18,8 +17,6 @@ export const RetrieveUserProxyAgent = ({
         { type: 'source', name: '' },
         { type: 'target', name: '' },
       ]}
-      config={ConversableAgentConfig}
-      {...props}
     />
   );
 };

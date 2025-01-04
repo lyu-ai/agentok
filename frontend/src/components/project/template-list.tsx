@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import Link from 'next/link';
-import { Markdown } from '@/components/markdown/markdown';
+import { Markdown } from '@/components/markdown';
 import { useUser } from '@/hooks/use-user';
 import { Icons } from '@/components/icons';
 import { Card } from '@/components/ui/card';

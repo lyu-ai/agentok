@@ -1,17 +1,20 @@
 'use client';
 
-import React from 'react';
+import { ComponentType } from 'react';
 import { NodeProps, NodeResizer, Handle, Position } from '@xyflow/react';
-import { GroupChatConfig } from '../config/group-chat';
 import { cn } from '@/lib/utils';
 import { Icons } from '@/components/icons';
-import useProjectStore from '@/store/projects';
 
 interface GroupNodeData extends Record<string, unknown> {
   name?: string;
 }
 
-export const GroupNode = ({ id, data, selected, ...props }: NodeProps) => {
+export const GroupNode: ComponentType<NodeProps> = ({
+  id,
+  data,
+  selected,
+  ...props
+}: NodeProps) => {
   const nodeData = data as GroupNodeData;
   const isHovered = id === data.hoveredGroupId;
 

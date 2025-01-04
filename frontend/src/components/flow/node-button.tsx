@@ -19,7 +19,7 @@ export const NodeButton = ({ className, onAddNode, ...props }: any) => {
       </PopoverTrigger>
       <PopoverContent
         id="agent-list"
-        className="w-80 p-2"
+        className="w-80 p-2 max-h-[calc(100vh-var(--header-height)-3rem)] overflow-y-auto"
         side="bottom"
         align="start"
       >

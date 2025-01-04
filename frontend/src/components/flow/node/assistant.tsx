@@ -1,12 +1,11 @@
 'use client';
 
-import React from 'react';
 import { NodeProps } from '@xyflow/react';
 import { GenericNode } from './generic-node';
-import { ConversableAgentConfig } from '../config/conversable-agent';
 import { GenericOption } from '../option/option';
+import { ComponentType } from 'react';
 
-export const AssistantNode = ({
+export const AssistantNode: ComponentType<NodeProps> = ({
   id,
   data,
   selected,
@@ -24,7 +23,6 @@ export const AssistantNode = ({
         { type: 'target', name: '' },
         { type: 'source', name: '' },
       ]}
-      config={ConversableAgentConfig}
     >
       <GenericOption
         type="text"

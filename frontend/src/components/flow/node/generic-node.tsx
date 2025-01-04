@@ -3,22 +3,21 @@
 import { Handle, Position, HandleType, NodeProps } from '@xyflow/react';
 import { Icons } from '@/components/icons';
 import { cn } from '@/lib/utils';
+import { ComponentType, PropsWithChildren } from 'react';
 
-export type WrapNodeProps = NodeProps & {
-  config?: React.ComponentType<any>;
+export type GenericNodeProps = PropsWithChildren<NodeProps> & {
   ports?: { type: HandleType; name?: string }[];
-  children?: React.ReactNode;
   nodeClass?: string;
   className?: string;
 };
 
-export const GenericNode = ({
+export const GenericNode: ComponentType<GenericNodeProps> = ({
   id,
   data,
   selected,
   ports = [],
   children,
-}: WrapNodeProps) => {
+}: GenericNodeProps) => {
   return (
     <div
       className={cn(
