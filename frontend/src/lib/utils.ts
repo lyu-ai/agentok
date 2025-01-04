@@ -15,10 +15,6 @@ export function formatDate(input: string | number): string {
   });
 }
 
-export function absoluteUrl(path: string) {
-  return `${env.NEXT_PUBLIC_APP_URL}${path}`;
-}
-
 // Utility function to get supported MIME type
 export const getSupportedMimeType = (): string | null => {
   const possibleTypes = [
