@@ -32,7 +32,7 @@ function AuthErrorContent() {
       <Card className="w-[640px]">
         <CardHeader>
           <div className="flex items-center space-x-2">
-            <Icons.alertCircle className="h-6 w-6 text-red-500" />
+            <Icons.alert className="h-6 w-6 text-red-500" />
             <CardTitle>Authentication Error</CardTitle>
           </div>
           <CardDescription>

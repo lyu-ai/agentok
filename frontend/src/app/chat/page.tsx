@@ -1,5 +1,7 @@
 'use client';
 
+import { Suspense } from 'react';
+import { Loading } from '@/components/loading';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useChat, useChats } from '@/hooks';
 import { ChatPane } from '@/components/chat/chat-pane';
@@ -12,13 +14,14 @@ import {
 } from '@/components/ui/resizable';
 import { ChatListButton } from '@/components/chat/chat-list-button';
 
-export default function Page() {
+function ChatPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const chatId = parseInt(searchParams.get('id') ?? '-1'); // Extract chatId from query parameters
+  const chatId = parseInt(searchParams.get('id') ?? '-1');
 
   const { activeChatId, setActiveChatId } = useChats();
   const { chat } = useChat(chatId);
+
   useEffect(() => {
     if (chatId !== -1) {
       setActiveChatId(chatId);
@@ -34,7 +37,7 @@ export default function Page() {
     <ResizablePanelGroup direction="horizontal">
       <ResizablePanel defaultSize={20} minSize={20} maxSize={40}>
         <div className="flex flex-col h-full w-full">
-          <div className="flex items-center justify-between w-full border-b  p-2">
+          <div className="flex items-center justify-between w-full border-b p-2">
             <span className="font-bold">Chats</span>
             <ChatListButton />
           </div>
@@ -46,5 +49,13 @@ export default function Page() {
         <ChatPane projectId={-1} chatId={activeChatId} />
       </ResizablePanel>
     </ResizablePanelGroup>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <ChatPage />
+    </Suspense>
   );
 }

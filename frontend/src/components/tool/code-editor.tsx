@@ -1,11 +1,12 @@
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
-import { vscodeDark as theme } from '@uiw/codemirror-theme-vscode';
+import { githubDark, githubLight } from '@uiw/codemirror-theme-github';
 import clsx from 'clsx';
 import { useEffect, useState, useCallback } from 'react';
 import { useTool } from '@/hooks';
 import { debounce } from 'lodash-es';
 import { Icons } from '@/components/icons';
+import { useTheme } from 'next-themes';
 
 interface CodeEditorProps {
   toolId: number;
@@ -20,7 +21,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const [isGenerating, setIsGenerating] = useState(false);
   const [isExtracting, setIsExtracting] = useState(false);
   const [code, setCode] = useState<string | undefined>('');
-
+  const { resolvedTheme } = useTheme();
   useEffect(() => {
     if (tool?.code !== code) setCode(tool?.code);
   }, []);
@@ -101,7 +102,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           <CodeMirror
             value={code ?? ''}
             height="100%"
-            theme={theme}
+            theme={resolvedTheme === 'dark' ? githubDark : githubLight}
             extensions={[python()]}
             onChange={(value) => setCode(value)}
             style={{ fontSize: '0.75rem', height: '100%' }}

@@ -52,7 +52,7 @@ const ApiKeyText = ({ apikey }: { apikey: string }) => {
           <Icons.eye className="w-4 h-4 text-green-600" />
         )}
       </Button>
-      <CopyButton content={apikey} tooltip="Copy" />
+      <CopyButton content={apikey} />
     </div>
   );
 };
