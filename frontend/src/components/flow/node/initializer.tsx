@@ -27,7 +27,9 @@ const InitializerNode: ComponentType<NodeProps> = ({ id, data, ...props }) => {
       </div>
       <Textarea
         className="textarea textarea-bordered w-full min-h-[100px] text-sm"
-        value={isArray(data.sample_messages) ? data.sample_messages.join('\n') : ''}
+        value={
+          isArray(data.sample_messages) ? data.sample_messages.join('\n') : ''
+        }
         placeholder="Enter sample messages, one per line..."
         onChange={(e) =>
           setNodeData(instance, id, {

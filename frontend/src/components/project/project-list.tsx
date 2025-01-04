@@ -67,7 +67,7 @@ export const ProjectBlock = ({ project, className }: any) => {
     <Card
       className={cn(
         'relative group w-80 hover:border-primary/40 p-4 flex flex-col gap-2',
-        className,
+        className
       )}
     >
       <h2 className="line-clamp-1 text-primary text-lg font-bold">
@@ -112,7 +112,11 @@ export const ProjectBlock = ({ project, className }: any) => {
       </div>
       <div className="hidden absolute top-2 right-2 group-hover:block">
         <Button size="icon" variant="ghost" onClick={onDelete}>
-          {isDeleting ? <Icons.spinner className="w-4 h-4 animate-spin text-red-500" /> : <Icons.trash className="w-4 h-4 text-red-500" />}
+          {isDeleting ? (
+            <Icons.spinner className="w-4 h-4 animate-spin text-red-500" />
+          ) : (
+            <Icons.trash className="w-4 h-4 text-red-500" />
+          )}
         </Button>
       </div>
       {showPublishDialog && (

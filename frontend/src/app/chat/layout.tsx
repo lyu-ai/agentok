@@ -8,7 +8,11 @@ import useChatStore from '@/store/chats';
 import Navbar from '@/components/navbar/navbar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-export default function ChatLayout({ children }: { children: React.ReactNode }) {
+export default function ChatLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const params = useParams();
   const chatId = params?.id ? parseInt(params.id as string) : -1;
   const { chatSource } = useChat(chatId);

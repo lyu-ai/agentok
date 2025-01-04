@@ -4,7 +4,6 @@ import { GenericOption } from '../option/option';
 
 export const GroupChatConfig = ({ nodeId, data }: any) => {
   return (
-
     <div className="flex flex-col gap-4">
       <GenericOption
         type="select"

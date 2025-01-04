@@ -1,4 +1,4 @@
-export * from './use-media-query'
+export * from './use-media-query';
 export * from './use-chats';
 export * from './use-projects';
 export * from './use-templates';

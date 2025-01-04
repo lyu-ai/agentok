@@ -16,13 +16,15 @@ const SidebarLayout = ({
   return (
     <div
       className={cn(
-        'flex h-[calc(100vh-var(--header-height))] w-full gap-2 overflow-hidden',
+        'flex h-[calc(100vh-var(--header-height))] w-full gap-2 overflow-hidden'
       )}
     >
-      <Sidebar items={sidebarItems} pathPrefix={pathPrefix} className="p-2 border-r" />
-      <div className="flex flex-1 h-full w-full">
-        {children}
-      </div>
+      <Sidebar
+        items={sidebarItems}
+        pathPrefix={pathPrefix}
+        className="p-2 border-r"
+      />
+      <div className="flex flex-1 h-full w-full">{children}</div>
     </div>
   );
 };

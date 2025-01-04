@@ -1,14 +1,14 @@
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Icons } from '@/components/icons';
 import { useChats, useProjects, useTemplates } from '@/hooks';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 const ChatListPanel = ({ onAdd }: any) => {
@@ -21,24 +21,24 @@ const ChatListPanel = ({ onAdd }: any) => {
     data: any[] | undefined;
     isLoading: boolean;
   }[] = [
-      {
-        type: 'project',
-        data: projects,
-        isLoading: isLoadingProjects,
-      },
-      {
-        type: 'template',
-        data: templates,
-        isLoading: isLoadingTemplates,
-      },
-    ];
+    {
+      type: 'project',
+      data: projects,
+      isLoading: isLoadingProjects,
+    },
+    {
+      type: 'template',
+      data: templates,
+      isLoading: isLoadingTemplates,
+    },
+  ];
   return (
     <Tabs defaultValue="project" className="w-full h-full p-0">
       <TabsList className="w-full flex justify-start rounded-none">
         <TabsTrigger value="project">Projects</TabsTrigger>
         <TabsTrigger value="template">Templates</TabsTrigger>
       </TabsList>
-      {(["project", "template"] as const).map((source, index) => (
+      {(['project', 'template'] as const).map((source, index) => (
         <TabsContent value={source} key={source} className="mt-0 p-0 ">
           <ScrollArea className="h-[calc(100vh-9rem)] w-full">
             <div className="grid grid-cols-2 gap-1 p-1">
@@ -79,13 +79,16 @@ export const ChatListButton = () => {
   };
 
   return (
-    <DropdownMenu >
+    <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon" className="w-7 h-7">
           <Icons.add className="w-4 h-4 shrink-0" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-[500px] overflow-hidden p-0">
+      <DropdownMenuContent
+        align="start"
+        className="w-[500px] overflow-hidden p-0"
+      >
         <ChatListPanel onAdd={handleAddChat} />
       </DropdownMenuContent>
     </DropdownMenu>

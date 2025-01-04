@@ -5,7 +5,11 @@ import { useChat, useChats } from '@/hooks';
 import { ChatPane } from '@/components/chat/chat-pane';
 import { useEffect } from 'react';
 import { ChatList } from '@/components/chat/chat-list';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from '@/components/ui/resizable';
 import { ChatListButton } from '@/components/chat/chat-list-button';
 
 export default function Page() {
@@ -15,7 +19,6 @@ export default function Page() {
 
   const { activeChatId, setActiveChatId } = useChats();
   const { chat } = useChat(chatId);
-
   useEffect(() => {
     if (chatId !== -1) {
       setActiveChatId(chatId);
@@ -44,7 +47,7 @@ export default function Page() {
       </ResizablePanel>
       <ResizableHandle />
       <ResizablePanel defaultSize={800}>
-        <ChatPane chatId={activeChatId} />
+        <ChatPane projectId={-1} chatId={activeChatId} />
       </ResizablePanel>
     </ResizablePanelGroup>
   );

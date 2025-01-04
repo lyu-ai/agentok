@@ -9,7 +9,14 @@ import { Icons } from '@/components/icons';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../ui/dialog';
 
 export const ProjectPublish = ({ projectId, show, onClose }: any) => {
   const { project, isLoading } = useProject(projectId);
@@ -52,20 +59,19 @@ export const ProjectPublish = ({ projectId, show, onClose }: any) => {
   };
 
   return (
-    <Dialog
-      open={show}
-      onOpenChange={onClose}
-    >
+    <Dialog open={show} onOpenChange={onClose}>
       <DialogContent>
-        <DialogHeader >
-          <DialogTitle className='flex items-center gap-2'><Icons.share className="w-5 h-5" />Publish</DialogTitle>
-          <DialogDescription>Publish your project to the world</DialogDescription>
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Icons.share className="w-5 h-5" />
+            Publish
+          </DialogTitle>
+          <DialogDescription>
+            Publish your project to the world
+          </DialogDescription>
         </DialogHeader>
         <span className="font-bold whitespace-nowrap">Project name</span>
-        <Input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+        <Input value={name} onChange={(e) => setName(e.target.value)} />
         <span className="font-bold whitespace-nowrap">Project description</span>
         <Textarea
           rows={4}

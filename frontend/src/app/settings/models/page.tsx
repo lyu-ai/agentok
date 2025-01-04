@@ -119,7 +119,11 @@ const ModelForm = ({
           {isSaving && <div className="loading loading-xs"></div>}
           Save Model
         </Button>
-        <Button className="flex items-center gap-2" variant="destructive" onClick={onDelete}>
+        <Button
+          className="flex items-center gap-2"
+          variant="destructive"
+          onClick={onDelete}
+        >
           {isDeleting && <div className="loading loading-xs"></div>}
           Delete Model
         </Button>
@@ -217,8 +221,8 @@ const Page = () => {
         <div className="flex flex-col gap-2">
           <h1 className="text-lg font-bold">Models</h1>
           <div>
-            Manage the LLM model configurations. The models configured here will be
-            shared by all projects.
+            Manage the LLM model configurations. The models configured here will
+            be shared by all projects.
           </div>
         </div>
         <div className="flex items-center justify-end gap-2 p-2">

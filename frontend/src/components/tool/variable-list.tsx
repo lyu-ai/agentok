@@ -106,7 +106,9 @@ const VariableList = ({ toolId, className, ...props }: any) => {
       )}
     >
       <div className="text-lg font-bold">Variables</div>
-      <div className="text-sm">Variables are used to pass data between tools.</div>
+      <div className="text-sm">
+        Variables are used to pass data between tools.
+      </div>
       <table className="table table-xs border-transparent">
         <thead>
           <tr className="flex items-center gap-1 w-full">

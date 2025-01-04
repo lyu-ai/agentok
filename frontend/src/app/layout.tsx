@@ -32,9 +32,7 @@ const fontHeading = localFont({
   variable: '--font-heading',
 });
 
-export default async function RootLayout({
-  children,
-}: PropsWithChildren) {
+export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" suppressHydrationWarning>
       <title>Agentok Studio</title>

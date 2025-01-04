@@ -20,7 +20,10 @@ export const NestedChat = ({
       data={data}
       selected={selected}
       type={type}
-      ports={[{ type: 'target', name: '' }, { type: 'source', name: '' }]}
+      ports={[
+        { type: 'target', name: '' },
+        { type: 'source', name: '' },
+      ]}
       config={ConversableAgentConfig}
     >
       <GenericOption

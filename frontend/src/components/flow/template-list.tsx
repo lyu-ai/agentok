@@ -2,7 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 import { Icons } from '@/components/icons';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { useSettings } from '@/hooks';
 
 interface Template {
@@ -18,7 +23,11 @@ interface TemplateListProps {
   onSelect: (template: Template) => void;
 }
 
-export const TemplateList = ({ show, onClose, onSelect }: TemplateListProps) => {
+export const TemplateList = ({
+  show,
+  onClose,
+  onSelect,
+}: TemplateListProps) => {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(false);
   const { settings } = useSettings();

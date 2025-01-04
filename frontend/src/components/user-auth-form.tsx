@@ -65,7 +65,8 @@ export function UserAuthForm({
         } else {
           setShowVerificationPrompt(true);
           toast({
-            title: 'Account created. Please check your email to confirm your account.',
+            title:
+              'Account created. Please check your email to confirm your account.',
             variant: 'default',
           });
         }
@@ -145,7 +146,7 @@ export function UserAuthForm({
         setIsGoogleLoading(true);
       }
 
-      console.log('window.location.origin', window.location.origin)
+      console.log('window.location.origin', window.location.origin);
 
       const supabase = createClient();
       const { error, data } = await supabase.auth.signInWithOAuth({
@@ -189,7 +190,8 @@ export function UserAuthForm({
       })
       .then(() => {
         toast({
-          title: 'Verification email sent. Please check your email to confirm your account.',
+          title:
+            'Verification email sent. Please check your email to confirm your account.',
           variant: 'default',
         });
       })

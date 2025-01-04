@@ -18,11 +18,7 @@ export const PopupDialog = ({
 }: any) => {
   return (
     <Dialog open={show} onOpenChange={onClose}>
-      <DialogContent
-        className={cn(
-          className
-        )}
-      >
+      <DialogContent className={cn(className)}>
         <DialogHeader className={cn('flex justify-between', classNameTitle)}>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>

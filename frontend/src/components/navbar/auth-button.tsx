@@ -28,10 +28,7 @@ const UserAvatar = ({ user, className }: any) => {
 
   return (
     <Avatar>
-      <AvatarImage
-        alt="avatar"
-        src={imgUrl}
-      />
+      <AvatarImage alt="avatar" src={imgUrl} />
       <AvatarFallback>
         {user.email?.match(/^([^@]+)/)?.[1] ?? '(No Name)'}
       </AvatarFallback>
@@ -52,10 +49,7 @@ export const AuthButton = () => {
 
   if (!user) {
     return (
-      <Link
-        href="/auth/login"
-        className="ml-4 btn text-xs font-normal"
-      >
+      <Link href="/auth/login" className="ml-4 btn text-xs font-normal">
         <Button variant="outline" size="sm">
           Login / Sign Up
         </Button>
@@ -69,10 +63,7 @@ export const AuthButton = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64">
         <div className="flex items-center p-2 gap-2 text-sm">
-          <UserAvatar
-            user={user}
-            className="w-20 h-20"
-          />
+          <UserAvatar user={user} className="w-20 h-20" />
           <div className="flex flex-col gap-1">
             <span className="font-bold">
               {user.user_metadata.name ??
@@ -91,9 +82,7 @@ export const AuthButton = () => {
         <DropdownMenuItem asChild>
           <Link
             href="/settings"
-            className={cn(
-              'flex items-center justify-start p-2 gap-2 py-3',
-            )}
+            className={cn('flex items-center justify-start p-2 gap-2 py-3')}
           >
             <Icons.settings className="h-4 w-4" />
             Settings
@@ -103,9 +92,7 @@ export const AuthButton = () => {
           <Link
             href="https://github.com/dustland/agentok/issues/new"
             target="_blank"
-            className={cn(
-              'flex items-center justify-start p-2 gap-2 py-3',
-            )}
+            className={cn('flex items-center justify-start p-2 gap-2 py-3')}
           >
             <Icons.github className="h-4 w-4" />
             Report an Issue
@@ -119,9 +106,7 @@ export const AuthButton = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={signOut}
-          className={clsx(
-            'flex items-center justify-start p-2 gap-2',
-          )}
+          className={clsx('flex items-center justify-start p-2 gap-2')}
         >
           <Icons.logout className="w-4 h-4" />
           Sign out

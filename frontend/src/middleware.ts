@@ -38,5 +38,10 @@ export async function middleware(req: NextRequest) {
 // export const config = {
 export const config = {
   // Skip all paths that should not be processed by middleware
-  matcher: ['/projects/:path*', '/chat/:path*', '/tools/:path*', '/settings/:path*'],
+  matcher: [
+    '/projects/:path*',
+    '/chat/:path*',
+    '/tools/:path*',
+    '/settings/:path*',
+  ],
 };

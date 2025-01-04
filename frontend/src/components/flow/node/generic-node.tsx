@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  Handle,
-  Position,
-  HandleType,
-  NodeProps,
-} from '@xyflow/react';
+import { Handle, Position, HandleType, NodeProps } from '@xyflow/react';
 import { Icons } from '@/components/icons';
 import { cn } from '@/lib/utils';
 
@@ -31,7 +26,7 @@ export const GenericNode = ({
         'hover:border-brand hover:text-brand transition-colors duration-300',
         {
           'border-brand/80 text-brand/80': selected,
-        },
+        }
       )}
     >
       {ports.map(({ type, name }, i) => (

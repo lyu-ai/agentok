@@ -27,10 +27,11 @@ const genConversableAgent = (node: Node) => {
 node_${node.id} = ${node.data.class}(
   name="${name}",
   max_consecutive_auto_reply=${node.data.max_consecutive_auto_reply},
-  llm_config=${node.data.class === 'MultimodalConversableAgent'
+  llm_config=${
+    node.data.class === 'MultimodalConversableAgent'
       ? 'llm_config_4v'
       : 'llm_config'
-    },
+  },
 )
 `;
 };

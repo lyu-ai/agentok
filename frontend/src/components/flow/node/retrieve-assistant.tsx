@@ -6,7 +6,6 @@ import { GenericNode } from './generic-node';
 import { ConversableAgentConfig } from '../config/conversable-agent';
 import { GenericOption } from '../option/option';
 
-
 export const RetrieveAssistantNode = ({
   id,
   data,
@@ -21,7 +20,10 @@ export const RetrieveAssistantNode = ({
       data={data}
       selected={selected}
       type={type}
-      ports={[{ type: 'target', name: '' }, { type: 'source', name: '' }]}
+      ports={[
+        { type: 'target', name: '' },
+        { type: 'source', name: '' },
+      ]}
       config={ConversableAgentConfig}
     >
       <GenericOption
@@ -45,4 +47,3 @@ export const RetrieveAssistantNode = ({
     </GenericNode>
   );
 };
-

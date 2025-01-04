@@ -64,7 +64,9 @@ const Page = () => {
           <Icons.tool className="w-12 h-12" />
           <div className="flex flex-col gap-2">
             <div className="text-2xl font-bold">Tools</div>
-            <div className="">Manage your custom tools and discover public tools</div>
+            <div className="">
+              Manage your custom tools and discover public tools
+            </div>
           </div>
         </div>
         {['all', 'public'].includes(filter) && publicTools.length > 0 && (

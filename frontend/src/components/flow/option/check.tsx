@@ -14,11 +14,7 @@ export const CheckOption = ({
 }: NumberOptionProps) => {
   const [value, setValue] = useState(data?.[name] ?? false);
   return (
-    <div
-      className={cn(
-        'flex justify-start items-center gap-2 text-sm',
-      )}
-    >
+    <div className={cn('flex justify-start items-center gap-2 text-sm')}>
       <Checkbox
         id={name}
         checked={value}
@@ -26,7 +22,9 @@ export const CheckOption = ({
         onBlur={() => onChange && onChange(name, value)}
         className="checkbox checkbox-xs bg-transparent rounded"
       />
-      <Label className="whitespace-nowrap" htmlFor={name}>{label}</Label>
+      <Label className="whitespace-nowrap" htmlFor={name}>
+        {label}
+      </Label>
     </div>
   );
 };

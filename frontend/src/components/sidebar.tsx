@@ -2,16 +2,16 @@
 
 import { useMediaQuery } from '@/hooks';
 import { usePathname } from 'next/navigation';
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { isParentPath } from '@/lib/path';
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 
 export interface SidebarItem {
   name: string;
@@ -30,7 +30,7 @@ export const Sidebar = ({ pathPrefix, items, className }: SidebarProps) => {
   const isMedium = useMediaQuery('only screen and (max-width : 769px)');
 
   return (
-    <div className={cn("flex flex-col gap-2 md:w-48 h-full", className)}>
+    <div className={cn('flex flex-col gap-2 md:w-48 h-full', className)}>
       {items.map((item) => {
         const path = pathPrefix ? `${pathPrefix}${item.path}` : item.path;
         const isActive = isParentPath(pathname, path);
@@ -38,17 +38,17 @@ export const Sidebar = ({ pathPrefix, items, className }: SidebarProps) => {
 
         const linkContent = (
           <Button
-            variant={isActive ? "secondary" : "ghost"}
+            variant={isActive ? 'secondary' : 'ghost'}
             className={cn(
-              "w-full justify-start gap-2",
-              isMedium && "px-2",
-              !isMedium && "px-4"
+              'w-full justify-start gap-2',
+              isMedium && 'px-2',
+              !isMedium && 'px-4'
             )}
             asChild
           >
             <Link href={path}>
               <Icon className="w-4 h-4" />
-              <span className={cn("hidden md:inline-flex")}>{item.name}</span>
+              <span className={cn('hidden md:inline-flex')}>{item.name}</span>
             </Link>
           </Button>
         );
@@ -56,9 +56,7 @@ export const Sidebar = ({ pathPrefix, items, className }: SidebarProps) => {
         return isMedium ? (
           <TooltipProvider key={item.name}>
             <Tooltip>
-              <TooltipTrigger asChild>
-                {linkContent}
-              </TooltipTrigger>
+              <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
               <TooltipContent side="right">
                 <p>{item.name}</p>
               </TooltipContent>

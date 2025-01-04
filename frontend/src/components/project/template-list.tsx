@@ -123,9 +123,7 @@ export const TemplateCard = ({
     } else {
       return (
         <Link href={`/discover/${template.id}`}>
-          <Card className={className}>
-            {children}
-          </Card>
+          <Card className={className}>{children}</Card>
         </Link>
       );
     }

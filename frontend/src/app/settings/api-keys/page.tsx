@@ -5,7 +5,13 @@ import { DeleteButton } from '@/components/delete-button';
 import { Icons } from '@/components/icons';
 import { PopupDialog } from '@/components/popup-dialog';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
@@ -78,10 +84,7 @@ const CreateKeyDialog = ({ show, onClose }: any) => {
       .finally(() => setLoading(false));
   };
   return (
-    <Dialog
-      open={show}
-      onOpenChange={onClose}
-    >
+    <Dialog open={show} onOpenChange={onClose}>
       <DialogTrigger>
         <Button>Create API Key</Button>
       </DialogTrigger>
@@ -90,10 +93,7 @@ const CreateKeyDialog = ({ show, onClose }: any) => {
         Create a new API key to use in your projects.
       </DialogDescription>
       <DialogContent>
-        <form
-          className="flex flex-col gap-3 w-full"
-          onSubmit={onSubmit}
-        >
+        <form className="flex flex-col gap-3 w-full" onSubmit={onSubmit}>
           <Label htmlFor="name">Name</Label>
           <Input
             type="text"
@@ -197,7 +197,10 @@ const Page = () => {
       <div className="flex flex-col w-full gap-3 ">
         <div className="flex items-center justify-between w-full gap-2 py-2">
           <h2 className="text-2xl font-bold">API Keys</h2>
-          <CreateKeyDialog show={showCreateKeyDialog} onClose={onCloseCreateKeyDialog} />
+          <CreateKeyDialog
+            show={showCreateKeyDialog}
+            onClose={onCloseCreateKeyDialog}
+          />
         </div>
         <table className="table border-transparent rounded-lg bg-base-content/20">
           <thead>

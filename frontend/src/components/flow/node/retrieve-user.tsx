@@ -14,7 +14,10 @@ export const RetrieveUserProxyAgent = ({
       id={id}
       data={data}
       selected={selected}
-      ports={[{ type: 'source', name: '' }, { type: 'target', name: '' }]}
+      ports={[
+        { type: 'source', name: '' },
+        { type: 'target', name: '' },
+      ]}
       config={ConversableAgentConfig}
       {...props}
     />

@@ -6,11 +6,9 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 
 const Layout = ({ children }: PropsWithChildren) => {
   return (
-    <div className='flex flex-col h-screen w-screen'>
+    <div className="flex flex-col h-screen w-screen">
       <Navbar />
-      <SidebarLayout sidebarItems={settingList}>
-        {children}
-      </SidebarLayout>
+      <SidebarLayout sidebarItems={settingList}>{children}</SidebarLayout>
     </div>
   );
 };

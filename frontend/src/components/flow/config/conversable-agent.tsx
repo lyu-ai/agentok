@@ -7,7 +7,6 @@ export const ConversableAgentConfig = ({
   className,
   ...props
 }: any) => {
-
   const GENERAL_OPTIONS = [
     {
       type: 'text',

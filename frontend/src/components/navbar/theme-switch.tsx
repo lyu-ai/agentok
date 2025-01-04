@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useTheme } from "next-themes";
-import { Icons } from "@/components/icons";
-import { cn } from "@/lib/utils";
+import { useTheme } from 'next-themes';
+import { Icons } from '@/components/icons';
+import { cn } from '@/lib/utils';
 
 interface ThemeButtonProps {
   icon: React.ReactNode;
@@ -21,7 +21,9 @@ function ThemeButton({ icon, isActive, onClick }: ThemeButtonProps) {
       onClick={handleClick}
       className={cn(
         'p-1 rounded-full',
-        isActive ? 'bg-primary text-primary-foreground hover:bg-primary/80' : 'hover:bg-muted/50'
+        isActive
+          ? 'bg-primary text-primary-foreground hover:bg-primary/80'
+          : 'hover:bg-muted/50'
       )}
     >
       {icon}

@@ -1,7 +1,12 @@
 import clsx from 'clsx';
 import { OptionProps } from './option';
 import { Label } from '@/components/ui/label';
-import { Select, SelectItem, SelectTrigger, SelectContent } from '@/components/ui/select';
+import {
+  Select,
+  SelectItem,
+  SelectTrigger,
+  SelectContent,
+} from '@/components/ui/select';
 
 type SelectOptionProps = {
   options: { label: string; value: string }[];
@@ -30,9 +35,7 @@ export const SelectOption = ({
         value={options[selectedIndex].value}
         onValueChange={(value) => onChange && onChange(name, value)}
       >
-        <SelectTrigger>
-          {options[selectedIndex].label}
-        </SelectTrigger>
+        <SelectTrigger>{options[selectedIndex].label}</SelectTrigger>
         <SelectContent>
           {options.map((o, i) => (
             <SelectItem key={i} value={o.value}>

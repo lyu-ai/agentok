@@ -51,12 +51,19 @@ export const ProjectPicker = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Link href="/projects" className="flex items-center gap-1 text-sm font-medium">
+        <Link
+          href="/projects"
+          className="flex items-center gap-1 text-sm font-medium"
+        >
           {activeProject?.name || 'Projects'}
           <Icons.chevronsUpDown className="w-3 h-3" />
         </Link>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" sideOffset={14} className="flex flex-col w-[480px] p-0 h-[calc(100vh-var(--header-height)-2rem)]">
+      <DropdownMenuContent
+        align="start"
+        sideOffset={14}
+        className="flex flex-col w-[480px] p-0 h-[calc(100vh-var(--header-height)-2rem)]"
+      >
         <div className="flex items-center gap-2 border-b w-full p-1">
           <Link href="/projects">
             <Button variant="ghost" size="icon" className="h-7 w-7">

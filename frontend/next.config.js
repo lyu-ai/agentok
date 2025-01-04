@@ -1,4 +1,3 @@
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // output: 'standalone', // for Docker build
@@ -20,4 +19,4 @@ const nextConfig = {
   },
 };
 
-module.exports = (nextConfig);
+module.exports = nextConfig;

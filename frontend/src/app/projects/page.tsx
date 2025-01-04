@@ -39,8 +39,12 @@ export default function Page() {
     <div className="flex flex-col w-full gap-2">
       <title>Projects | Agentok Studio</title>
       <div className="flex flex-col items-center justify-center gap-4 text-sm p-2">
-        <span className="text-4xl font-bold font-arial p-4">Build Agentic Apps</span>
-        <span className="text-lg">Create and manage your AI agent projects with Agentok Studio.</span>
+        <span className="text-4xl font-bold font-arial p-4">
+          Build Agentic Apps
+        </span>
+        <span className="text-lg">
+          Create and manage your AI agent projects with Agentok Studio.
+        </span>
         <Button size="lg" onClick={onCreateProject}>
           <Icons.project />
           Create New Project
@@ -60,4 +64,4 @@ export default function Page() {
       </div>
     </div>
   );
-};
+}

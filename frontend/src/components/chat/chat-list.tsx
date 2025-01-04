@@ -20,7 +20,8 @@ export const ChatList = ({ className }: ChatListProps) => {
   const { toast } = useToast();
   const supabase = createClient();
   const { activeProjectId, getProjectById } = useProjectStore();
-  const project = activeProjectId > 0 ? getProjectById(activeProjectId) : undefined;
+  const project =
+    activeProjectId > 0 ? getProjectById(activeProjectId) : undefined;
 
   const [chats, setChats] = useState<any[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -87,7 +88,9 @@ export const ChatList = ({ className }: ChatListProps) => {
   if (!project) {
     return (
       <div className={cn('flex flex-col gap-2 p-2', className)}>
-        <div className="text-sm text-muted-foreground">Select a project to start</div>
+        <div className="text-sm text-muted-foreground">
+          Select a project to start
+        </div>
       </div>
     );
   }
