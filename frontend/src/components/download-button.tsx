@@ -1,4 +1,5 @@
 import { Icons } from './icons';
+import { Button } from './ui/button';
 
 export const DownloadButton = ({ data, label, filename }: any) => {
   const onExport = () => {
@@ -21,13 +22,8 @@ export const DownloadButton = ({ data, label, filename }: any) => {
   };
 
   return (
-    <button
-      className="btn btn-sm btn-circle btn-ghost"
-      onClick={onExport}
-      data-tooltip-id="default-tooltip"
-      data-tooltip-content={label}
-    >
+    <Button variant="ghost" size="icon" className="w-7 h-7" onClick={onExport}>
       <Icons.download className="w-4 h-4" />
-    </button>
+    </Button>
   );
 };

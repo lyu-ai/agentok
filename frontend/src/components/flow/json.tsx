@@ -5,7 +5,10 @@ import { CopyButton } from '../copy-button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useProject } from '@/hooks';
 import { cn } from '@/lib/utils';
-
+import { json } from '@codemirror/lang-json';
+import CodeMirror from '@uiw/react-codemirror';
+import { vscodeDark, vscodeLight } from '@uiw/codemirror-theme-vscode';
+import { useTheme } from 'next-themes';
 interface JsonViewerProps {
   projectId: number;
   className?: string;
@@ -14,7 +17,7 @@ interface JsonViewerProps {
 export const JsonViewer = ({ projectId, className }: JsonViewerProps) => {
   const { project, isLoading, isError } = useProject(projectId);
   const [jsonString, setJsonString] = useState('');
-
+  const { resolvedTheme } = useTheme();
   useEffect(() => {
     if (project) {
       setJsonString(JSON.stringify(project, null, 2));
@@ -22,13 +25,17 @@ export const JsonViewer = ({ projectId, className }: JsonViewerProps) => {
   }, [project]);
 
   return (
-    <ScrollArea className={cn("relative flex w-full h-full", className)}>
+    <ScrollArea className={cn('relative flex w-full h-full', className)}>
       <div className="absolute top-2 right-3">
         <CopyButton content={jsonString} />
       </div>
-      <pre className="text-sm p-4 text-xs overflow-auto">
-        {jsonString}
-      </pre>
+      <CodeMirror
+        value={jsonString}
+        extensions={[json()]}
+        theme={resolvedTheme === 'dark' ? vscodeDark : vscodeLight}
+        className="h-full text-xs overflow-x-auto"
+        basicSetup={{ lineNumbers: false }}
+      />
     </ScrollArea>
   );
 };

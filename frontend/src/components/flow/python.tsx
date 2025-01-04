@@ -1,13 +1,17 @@
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus as style } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import CodeMirror from '@uiw/react-codemirror';
+import { python } from '@codemirror/lang-python';
+import { vscodeDark, vscodeLight } from '@uiw/codemirror-theme-vscode';
 import { CopyButton } from '@/components/copy-button';
 import { useState, useEffect } from 'react';
 import { DownloadButton } from '@/components/download-button';
 import { Icons } from '../icons';
 import { Button } from '../ui/button';
+import { ScrollArea } from '../ui/scroll-area';
+import { useTheme } from 'next-themes';
 
 export const PythonViewer = ({ data, setMode }: any) => {
-  const [loading, setLoading] = useState(true);
+  const { resolvedTheme } = useTheme();
+  const [isGenerating, setIsGenerating] = useState(true);
   const [result, setResult] = useState<{
     code: number;
     python?: string;
@@ -17,7 +21,7 @@ export const PythonViewer = ({ data, setMode }: any) => {
 
   useEffect(() => {
     if (!data?.flow) return;
-    setLoading(true);
+    setIsGenerating(true);
     fetch('/api/codegen', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -38,21 +42,21 @@ export const PythonViewer = ({ data, setMode }: any) => {
         console.warn(e);
         setErrorDetail(e.message);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setIsGenerating(false));
   }, [data]);
 
-  if (loading) {
+  if (isGenerating) {
     return (
       <div className="relative flex flex-col w-full h-full items-center justify-center gap-2">
-        <div className="loading text-primary loading-infinity"></div>
+        <Icons.spinner className="w-4 h-4 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="relative w-full h-full pb-2">
+    <ScrollArea className="relative flex flex-col w-full h-[calc(100vh-var(--header-height))]">
       {result.code !== 200 || !result.python ? (
-        <div className="flex w-full h-full items-center justify-center">
+        <div className="flex w-full h-[calc(100vh-var(--header-height))] items-center justify-center">
           <div className="flex flex-col items-center text-sm bg-red-600/10 text-red-600 rounded-md border border-red-600 min-w-96 gap-2 p-4">
             <Icons.alert className="w-6 h-6" />
             <span className="font-bold">Failed to generate Python code</span>
@@ -69,14 +73,14 @@ export const PythonViewer = ({ data, setMode }: any) => {
           </div>
         </div>
       ) : (
-        <SyntaxHighlighter
-          showLineNumbers
-          language="python"
-          style={style}
-          className="h-full text-xs text-base-content"
-        >
-          {result.python}
-        </SyntaxHighlighter>
+        <CodeMirror
+          value={result.python}
+          height="100%"
+          theme={resolvedTheme === 'dark' ? vscodeDark : vscodeLight}
+          extensions={[python()]}
+          editable={false}
+          className="text-xs overflow-x-auto"
+        />
       )}
       <div className="absolute flex items-center gap-2 right-4 top-5">
         <Button variant="ghost" size="sm" onClick={() => setMode('flow')}>
@@ -94,6 +98,6 @@ export const PythonViewer = ({ data, setMode }: any) => {
           </>
         )}
       </div>
-    </div>
+    </ScrollArea>
   );
 };

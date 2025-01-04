@@ -6,7 +6,12 @@ import { stripMatch } from '@/lib/re';
 import { StatusMessage } from '@/lib/chat';
 import { Message } from '@/types/chat';
 import { useChat, useUser } from '@/hooks';
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { CopyButton } from '../copy-button';
 import { Card } from '../ui/card';
 
@@ -16,11 +21,7 @@ interface MessageBubbleProps {
   onSend: (content: string) => void;
 }
 
-const MessageBubble = ({
-  chat,
-  message,
-  onSend,
-}: MessageBubbleProps) => {
+const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
   const { chatSource } = useChat(chat.id);
   const { user } = useUser();
   const userNodeName =
@@ -42,9 +43,7 @@ const MessageBubble = ({
     const resultClass = success ? 'text-green-500' : 'text-red-500/50';
 
     return (
-      <div
-        className={`flex items-center gap-1 cursor-pointer ${resultClass}`}
-      >
+      <div className={`flex items-center gap-1 cursor-pointer ${resultClass}`}>
         {success ? (
           <Icons.check className="w-4 h-4" />
         ) : (
@@ -56,18 +55,18 @@ const MessageBubble = ({
   } else if (message.content.startsWith(StatusMessage.running)) {
     return (
       <div className="flex items-center gap-1 cursor-pointer">
-        <Icons.robot className="w-4 h-4" />
+        <Icons.node className="w-4 h-4" />
         <span>I am thinking...</span>
       </div>
     );
   } else if (message.content.startsWith(StatusMessage.receivedHumanInput)) {
-    message.content = "Human input received";
+    message.content = 'Human input received';
   } else if (message.content.startsWith(StatusMessage.waitForHumanInput)) {
     const { text } = stripMatch(
       message.content,
       StatusMessage.waitForHumanInput
     );
-    message.content = text ?? "Waiting for human input...";
+    message.content = text ?? 'Waiting for human input...';
     waitForHumanInput = true;
   }
 
@@ -77,7 +76,7 @@ const MessageBubble = ({
       ? 'bg-primary text-primary-foreground'
       : 'bg-muted/20 text-muted-foreground';
 
-  let avatarIcon = <Icons.robot className="w-5 h-5" />;
+  let avatarIcon = <Icons.node className="w-5 h-5" />;
   if (message.role === 'user') {
     avatarIcon = user?.user_metadata.avatar_url ? (
       <img
@@ -124,11 +123,8 @@ const MessageBubble = ({
         >
           {avatarIcon}
         </div>
-        <div className="flex flex-1">
-          {messageHeader}
-        </div>
-        <Dialog
-        >
+        <div className="flex flex-1">{messageHeader}</div>
+        <Dialog>
           <DialogTrigger>
             <Icons.code className="w-4 h-4" />
           </DialogTrigger>
@@ -160,7 +156,7 @@ const MessageBubble = ({
           </Button>
         )}
       </div>
-    </Card >
+    </Card>
   );
 };
 
@@ -192,7 +188,6 @@ export const MessageList = ({ chat, messages, onSend }: MessageListProps) => {
           onSend={onSend}
         />
       ))}
-
     </>
   );
 };

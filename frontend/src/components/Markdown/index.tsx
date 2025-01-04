@@ -50,7 +50,6 @@ const CodeComponent = ({
       </CodeBlock>
       {!suppressCopy && (
         <CopyButton
-          minimal
           content={String(children).replace(/\n$/, '')}
           className="absolute top-1 right-1"
         />

@@ -561,7 +561,7 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
                 size="sm"
                 onClick={() => setMode('python')}
               >
-                <Icons.code className="w-4 h-4" />
+                <Icons.python className="w-4 h-4" />
                 <span className="text-xs">Generate Python</span>
               </Button>
             </Panel>

@@ -13,18 +13,15 @@ import supabase from '@/lib/supabase/client';
 import { cn } from '@/lib/utils';
 import { Loading } from '../loading';
 import { isArray } from 'lodash-es';
+import useChatStore from '@/store/chats';
+import { ScrollArea } from '@radix-ui/react-scroll-area';
 
-const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
-  const [minimized, setMinimized] = useState(false);
+const SampleMessagePanel = ({ flow, className, onSelect }: any) => {
   const config = flow?.nodes?.find((node: any) => node.type === 'initializer');
   if (!config?.data?.sample_messages || !isArray(config.data.sample_messages)) {
     return null;
   }
   const sampleMessages = config.data.sample_messages as string[];
-  const onSelect = (msg: string) => {
-    setMinimized(true);
-    _onSelect && _onSelect(msg);
-  };
   return (
     <div className={cn(className, 'flex items-center gap-1')}>
       {sampleMessages.map((msg, i) => (
@@ -43,23 +40,26 @@ const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
 };
 
 interface ChatPaneProps {
+  projectId: number;
   chatId: number;
 }
 
-export const ChatPane = ({ chatId }: ChatPaneProps) => {
-  const { chat, chatSource, isLoading } = useChat(chatId);
+export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
+  const [currentChatId, setCurrentChatId] = useState(chatId);
+  const { chat, chatSource, isLoading: isLoadingChat } = useChat(currentChatId);
+  const { createChat } = useChats();
   const { toast } = useToast();
   const [status, setStatus] = useState('ready');
   const [messages, setMessages] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [cleaning, setCleaning] = useState(false);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(true);
+  const [isCleaning, setIsCleaning] = useState(false);
   const isFirstRender = useRef(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
 
   const fetchMessages = useCallback(async () => {
     if (chatId === -1) return;
-    setLoading(true);
+    setIsLoadingMessages(true);
     await fetch(`/api/chats/${chatId}/messages`, {
       method: 'GET',
       headers: {
@@ -78,7 +78,7 @@ export const ChatPane = ({ chatId }: ChatPaneProps) => {
       .catch((err) => {
         console.error('Failed to fetch messages:', err);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoadingMessages(false));
   }, [setMessages, chatId]);
 
   // Fetch chat status
@@ -169,7 +169,7 @@ export const ChatPane = ({ chatId }: ChatPaneProps) => {
   }, [messages, scrollToBottom]);
 
   const handleClean = useCallback(() => {
-    setCleaning(true);
+    setIsCleaning(true);
     fetch(`/api/chats/${chatId}/messages`, {
       method: 'DELETE',
       headers: {
@@ -180,7 +180,7 @@ export const ChatPane = ({ chatId }: ChatPaneProps) => {
       .then(() => {
         setMessages([]);
       })
-      .finally(() => setCleaning(false));
+      .finally(() => setIsCleaning(false));
   }, [setMessages, chatId]);
 
   const handleSend = useCallback(
@@ -217,6 +217,20 @@ export const ChatPane = ({ chatId }: ChatPaneProps) => {
     [chatId, user?.email, toast]
   );
 
+  const handleAdd = useCallback(async () => {
+    try {
+      const chat = await createChat(projectId, 'project');
+      setCurrentChatId(chat.id);
+    } catch (err) {
+      console.warn('Failed to add chat:', err);
+      toast({
+        title: 'Error',
+        description: 'Failed to add chat',
+        variant: 'destructive',
+      });
+    }
+  }, [projectId, createChat]);
+
   const handleAbort = useCallback(async () => {
     try {
       const resp = await fetch(`/api/chats/${chatId}/abort`, {
@@ -238,36 +252,56 @@ export const ChatPane = ({ chatId }: ChatPaneProps) => {
     }
   }, [chatId, toast]);
 
-  if (loading || isLoading) {
+  if (isLoadingMessages || isLoadingChat) {
     return (
-      <div className="relative flex flex-col w-full h-full items-center justify-center gap-2">
+      <div className="flex flex-col w-full h-full items-center justify-center gap-2">
         <Loading />
       </div>
     );
   }
 
   return (
-    <div className="relative flex flex-col w-full h-full p-2">
-      <MessageList
-        chat={chat}
-        messages={messages}
-        onSend={handleSend}
-      />
-      <div ref={messagesEndRef} />
-      <div className="absolute bottom-0 flex flex-col items-center w-full gap-2 p-2">
-        <div className="flex flex-col gap-1 w-full max-w-3xl">
-          <ChatInput
-            onSubmit={handleSend}
-            onAbort={handleAbort}
-            loading={status === 'running'}
-            disabled={status === 'failed'}
-            className="w-full"
-          />
-          <SampleMessagePanel
-            flow={chatSource?.flow}
-            onSelect={handleSend}
-          />
+    <div className="relative flex flex-col w-full h-full">
+      <ScrollArea className="flex flex-col items-center w-full flex-1 gap-1">
+        {currentChatId === -1 ? (
+          <Button onClick={handleAdd}>Add Chat</Button>
+        ) : (
+          <MessageList chat={chat} messages={messages} onSend={handleSend} />
+        )}
+        <div className="absolute bottom-1 right-1 flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            disabled={isCleaning}
+            onClick={handleClean}
+            className="w-7 h-7"
+          >
+            {isCleaning ? (
+              <Icons.spinner className="w-4 h-4 animate-spin" />
+            ) : (
+              <Icons.trash className="w-4 h-4" />
+            )}
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            className="w-7 h-7"
+            onClick={handleAdd}
+          >
+            <Icons.add className="w-4 h-4" />
+          </Button>
         </div>
+        <div ref={messagesEndRef} />
+      </ScrollArea>
+      <div className="flex flex-col gap-1 w-full max-w-3xl mx-auto">
+        <ChatInput
+          onSubmit={handleSend}
+          onAbort={handleAbort}
+          loading={status === 'running'}
+          disabled={status === 'failed'}
+          className="w-full"
+        />
+        <SampleMessagePanel flow={chatSource?.flow} onSelect={handleSend} />
       </div>
     </div>
   );
