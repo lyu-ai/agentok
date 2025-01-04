@@ -4,7 +4,7 @@ import { TemplateCard } from '@/components/project/template-list';
 import { useTemplates } from '@/hooks';
 import { use, useEffect, useState } from 'react';
 import { ReactFlowProvider } from '@xyflow/react';
-import { Markdown } from '@/components/markdown';
+import { Markdown } from '@/components/markdown/markdown';
 import { FlowPreview } from '@/components/flow/flow-preview';
 const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);

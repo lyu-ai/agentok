@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { Icons } from '@/components/icons';
 import { useSettings } from '@/hooks';
-import { Markdown } from '@/components/markdown';
+import { Markdown } from '@/components/markdown/markdown';
 
 interface Message {
   id: string;

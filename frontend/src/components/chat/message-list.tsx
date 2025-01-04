@@ -15,7 +15,7 @@ import {
 import { CopyButton } from '../copy-button';
 import { Card } from '../ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Markdown } from '@/components/markdown';
+import { Markdown } from '@/components/markdown/markdown';
 import { ScrollArea } from '../ui/scroll-area';
 import { cn } from '@/lib/utils';
 

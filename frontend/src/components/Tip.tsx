@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Markdown } from '@/components/markdown';
+import { Markdown } from '@/components/markdown/markdown';
 import { createRoot } from 'react-dom/client';
 import clsx from 'clsx';
 import { Icons } from './icons';

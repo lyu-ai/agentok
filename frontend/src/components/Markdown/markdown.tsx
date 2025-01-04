@@ -40,13 +40,6 @@ const InlineCode = ({ children }: any) => (
   </code>
 );
 
-interface CodeProps extends React.HTMLAttributes<HTMLElement> {
-  inline?: boolean;
-  className?: string;
-  children?: React.ReactNode;
-  node?: any;
-}
-
 const CodeComponent = ({
   node,
   inline,
