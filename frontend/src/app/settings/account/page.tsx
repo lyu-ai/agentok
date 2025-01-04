@@ -1,5 +1,5 @@
 'use client';
-import { Loading } from '@/components/loading';
+import { Loading } from '@/components/loader';
 import { useUser } from '@/hooks';
 
 const AccountPage = () => {

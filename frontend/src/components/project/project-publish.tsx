@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useProject, useTemplates } from '@/hooks';
-import { Loading } from '@/components/loading';
+import { Loading } from '@/components/loader';
 import { toast } from '@/hooks/use-toast';
 import { Icons } from '@/components/icons';
 import { Input } from '../ui/input';

@@ -3,14 +3,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useChat, useChats, useUser } from '@/hooks';
 import { Icons } from '@/components/icons';
-import { Button } from '@/components/ui/button';
 import { ChatInput } from './chat-input';
 import { MessageList } from './message-list';
 import { useToast } from '@/hooks/use-toast';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { genId } from '@/lib/id';
 import supabase from '@/lib/supabase/client';
-import { Loading } from '../loading';
+import { Loading } from '@/components/loader';
 import { isArray } from 'lodash-es';
 import { ScrollArea } from '@/components/ui/scroll-area';
 

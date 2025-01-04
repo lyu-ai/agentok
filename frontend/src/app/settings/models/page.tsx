@@ -1,5 +1,5 @@
 'use client';
-import { Loading } from '@/components/loading';
+import { Loading } from '@/components/loader';
 import { Settings, useSettings, LlmModel } from '@/hooks/use-settings';
 import { genId } from '@/lib/id';
 import { useEffect, useState } from 'react';

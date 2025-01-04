@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense } from 'react';
-import { Loading } from '@/components/loading';
+import { Loading } from '@/components/loader';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useChat, useChats } from '@/hooks';
 import { ChatPane } from '@/components/chat/chat-pane';
