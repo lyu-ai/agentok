@@ -58,7 +58,7 @@ export const ChatInput = ({
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Enter message to start chat ..."
-        className="min-h-[44px] w-full resize-none bg-transparent rounded-xl shadow-xl"
+        className="min-h-[64px] w-full resize-none rounded-xl shadow-xl"
         disabled={disabled}
       />
       <div className="absolute bottom-2 right-2 flex items-center gap-2">

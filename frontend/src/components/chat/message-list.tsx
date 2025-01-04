@@ -169,10 +169,10 @@ interface MessageListProps {
 export const MessageList = ({ chat, messages, onSend }: MessageListProps) => {
   if (!messages.length) {
     return (
-      <div className="flex items-center justify-center h-full text-muted-foreground/20">
+      <div className="flex flex-col items-center justify-center h-full text-muted-foreground/50">
         <div className="flex flex-col items-center gap-4">
-          <Icons.node className="w-12 h-12" />
-          <p>No messages yet</p>
+          <Icons.node className="w-10 h-10" />
+          <p>Let&apos;s start chatting!</p>
         </div>
       </div>
     );

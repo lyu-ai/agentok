@@ -13,8 +13,7 @@ import supabase from '@/lib/supabase/client';
 import { cn } from '@/lib/utils';
 import { Loading } from '../loading';
 import { isArray } from 'lodash-es';
-import useChatStore from '@/store/chats';
-import { ScrollArea } from '@radix-ui/react-scroll-area';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const SampleMessagePanel = ({ flow, className, onSelect }: any) => {
   const config = flow?.nodes?.find((node: any) => node.type === 'initializer');
@@ -27,10 +26,10 @@ const SampleMessagePanel = ({ flow, className, onSelect }: any) => {
       {sampleMessages.map((msg, i) => (
         <Button
           key={i}
-          variant="outline"
+          variant="secondary"
           size="sm"
           onClick={() => onSelect(msg)}
-          className="text-xs max-w-xs truncate px-1 py-0"
+          className="text-xs max-w-[240px] truncate px-1 py-0"
         >
           <span className="line-clamp-2 text-right">{msg}</span>
         </Button>
@@ -98,6 +97,7 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
   }, [setStatus, chatId]);
 
   useEffect(() => {
+    setCurrentChatId(chatId);
     if (chatId === -1) return;
 
     fetchMessages();
@@ -261,13 +261,9 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
   }
 
   return (
-    <div className="relative flex flex-col w-full h-full">
-      <ScrollArea className="flex flex-col items-center w-full flex-1 gap-1">
-        {currentChatId === -1 ? (
-          <Button onClick={handleAdd}>Add Chat</Button>
-        ) : (
-          <MessageList chat={chat} messages={messages} onSend={handleSend} />
-        )}
+    <div className="flex flex-col w-full h-full">
+      <ScrollArea className="relative flex flex-col items-center w-full flex-1 gap-1">
+        <MessageList chat={chat} messages={messages} onSend={handleSend} />
         <div className="absolute bottom-1 right-1 flex items-center gap-2">
           <Button
             variant="outline"
@@ -293,15 +289,19 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
         </div>
         <div ref={messagesEndRef} />
       </ScrollArea>
-      <div className="flex flex-col gap-1 w-full max-w-3xl mx-auto">
+      <div className="relative flex flex-col gap-1 w-full max-w-3xl mx-auto">
         <ChatInput
           onSubmit={handleSend}
           onAbort={handleAbort}
           loading={status === 'running'}
-          disabled={status === 'failed'}
+          disabled={status === 'failed' || currentChatId === -1}
           className="w-full"
         />
-        <SampleMessagePanel flow={chatSource?.flow} onSelect={handleSend} />
+        <SampleMessagePanel
+          flow={chatSource?.flow}
+          onSelect={handleSend}
+          className="absolute bottom-2 left-2"
+        />
       </div>
     </div>
   );

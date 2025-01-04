@@ -30,13 +30,9 @@ export default function Page() {
     }
   }, [chatId, activeChatId]);
 
-  if (!chat) {
-    return null;
-  }
-
   return (
     <ResizablePanelGroup direction="horizontal">
-      <ResizablePanel defaultSize={200}>
+      <ResizablePanel defaultSize={20}>
         <div className="flex flex-col h-full w-full">
           <div className="flex items-center justify-between w-full border-b  p-2">
             <span className="font-bold">Chats</span>
@@ -46,7 +42,7 @@ export default function Page() {
         </div>
       </ResizablePanel>
       <ResizableHandle />
-      <ResizablePanel defaultSize={800}>
+      <ResizablePanel defaultSize={80}>
         <ChatPane projectId={-1} chatId={activeChatId} />
       </ResizablePanel>
     </ResizablePanelGroup>

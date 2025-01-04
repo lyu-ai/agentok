@@ -6,10 +6,10 @@ import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { createClient } from '@/lib/supabase/client';
-import useProjectStore from '@/store/projects';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from '@/hooks/use-toast';
 import { Card } from '../ui/card';
+import { useChats } from '@/hooks';
+import { ScrollArea } from '../ui/scroll-area';
 
 interface ChatListProps {
   className?: string;
@@ -17,42 +17,23 @@ interface ChatListProps {
 
 export const ChatList = ({ className }: ChatListProps) => {
   const router = useRouter();
-  const { toast } = useToast();
-  const supabase = createClient();
-  const { activeProjectId, getProjectById } = useProjectStore();
-  const project =
-    activeProjectId > 0 ? getProjectById(activeProjectId) : undefined;
-
-  const [chats, setChats] = useState<any[]>([]);
+  const {
+    activeChatId,
+    chats,
+    updateChat,
+    isUpdating,
+    deleteChat,
+    isDeleting,
+  } = useChats();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editingName, setEditingName] = useState('');
-
-  const fetchChats = useCallback(async () => {
-    if (!project) return;
-    const { data, error } = await supabase
-      .from('chats')
-      .select('*')
-      .eq('project_id', project.id)
-      .order('created_at', { ascending: false });
-    if (error) {
-      console.error('Error fetching chats:', error);
-      return;
-    }
-    setChats(data);
-  }, [project, supabase]);
-
-  useEffect(() => {
-    fetchChats();
-  }, [fetchChats]);
 
   const handleEditName = useCallback(
     async (chatId: number) => {
       if (!editingName.trim()) return;
-      const { error } = await supabase
-        .from('chats')
-        .update({ name: editingName })
-        .eq('id', chatId);
-      if (error) {
+      try {
+        await updateChat(chatId, { name: editingName });
+      } catch (error) {
         console.error('Error updating chat name:', error);
         toast({
           variant: 'destructive',
@@ -63,15 +44,26 @@ export const ChatList = ({ className }: ChatListProps) => {
       }
       setEditingId(null);
       setEditingName('');
-      fetchChats();
     },
-    [editingName, fetchChats, supabase]
+    [editingName, updateChat]
   );
 
   const handleDeleteChat = useCallback(
     async (chatId: number) => {
-      const { error } = await supabase.from('chats').delete().eq('id', chatId);
-      if (error) {
+      try {
+        const chatIndex = chats.findIndex((chat) => chat.id === chatId);
+        const newChatId =
+          chatIndex === chats.length - 1
+            ? chats[chatIndex - 1]?.id
+            : chats[chatIndex + 1]?.id;
+
+        await deleteChat(chatId);
+        if (activeChatId === chatId) {
+          if (newChatId) {
+            router.replace(`/chat?id=${newChatId}`);
+          }
+        }
+      } catch (error) {
         console.error('Error deleting chat:', error);
         toast({
           variant: 'destructive',
@@ -80,23 +72,12 @@ export const ChatList = ({ className }: ChatListProps) => {
         });
         return;
       }
-      fetchChats();
     },
-    [fetchChats, supabase]
+    [deleteChat]
   );
 
-  if (!project) {
-    return (
-      <div className={cn('flex flex-col gap-2 p-2', className)}>
-        <div className="text-sm text-muted-foreground">
-          Select a project to start
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className={cn('flex flex-col h-full gap-2 p-2', className)}>
+    <ScrollArea className={cn('flex flex-col h-full p-1 w-full', className)}>
       {chats.length === 0 ? (
         <div className="flex items-center justify-center w-full h-full">
           <div className="text-sm text-muted-foreground">No Chat Yet</div>
@@ -105,7 +86,12 @@ export const ChatList = ({ className }: ChatListProps) => {
         chats.map((chat) => (
           <Card
             key={chat.id}
-            className="flex items-center gap-2 p-2 hover:bg-muted/50 group"
+            onClick={() => router.push(`/chat?id=${chat.id}`)}
+            className={cn(
+              'flex items-center gap-2 p-2 border-transparent hover:bg-muted rounded-md group cursor-pointer',
+              activeChatId === chat.id &&
+                'bg-primary text-primary-foreground hover:bg-primary/90'
+            )}
           >
             {editingId === chat.id ? (
               <div className="flex items-center gap-2 flex-1">
@@ -126,6 +112,7 @@ export const ChatList = ({ className }: ChatListProps) => {
                 <Button
                   variant="ghost"
                   size="icon"
+                  className="w-7 h-7"
                   onClick={() => handleEditName(chat.id)}
                 >
                   <Icons.check className="w-4 h-4" />
@@ -133,37 +120,42 @@ export const ChatList = ({ className }: ChatListProps) => {
               </div>
             ) : (
               <>
-                <Button
-                  variant="ghost"
-                  className="flex-1 justify-start font-normal"
-                  onClick={() => router.push(`/chat/${chat.id}`)}
-                >
-                  {chat.name || `Chat with ${project.name}`}
-                </Button>
+                <div className="flex-1 justify-start text-sm">
+                  {chat.name ||
+                    `Chat with ${chat.from_project || chat.from_template}`}
+                </div>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="opacity-0 group-hover:opacity-100"
+                  className="opacity-0 group-hover:opacity-100 w-7 h-7"
                   onClick={() => {
                     setEditingId(chat.id);
                     setEditingName(chat.name || '');
                   }}
                 >
-                  <Icons.edit className="w-4 h-4" />
+                  {isUpdating ? (
+                    <Icons.spinner className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Icons.edit className="w-4 h-4" />
+                  )}
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="opacity-0 group-hover:opacity-100"
+                  className="opacity-0 group-hover:opacity-100 w-7 h-7"
                   onClick={() => handleDeleteChat(chat.id)}
                 >
-                  <Icons.trash className="w-4 h-4" />
+                  {isDeleting ? (
+                    <Icons.spinner className="w-4 h-4 animate-spin text-red-500" />
+                  ) : (
+                    <Icons.trash className="w-4 h-4 text-red-500" />
+                  )}
                 </Button>
               </>
             )}
           </Card>
         ))
       )}
-    </div>
+    </ScrollArea>
   );
 };

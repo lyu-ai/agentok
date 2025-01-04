@@ -14,8 +14,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 const ChatListPanel = ({ onAdd }: any) => {
   const { projects, isLoading: isLoadingProjects } = useProjects();
   const { templates, isLoading: isLoadingTemplates } = useTemplates();
-  const { createChat } = useChats();
-  const router = useRouter();
   const chatSources: {
     type: 'project' | 'template';
     data: any[] | undefined;
@@ -47,11 +45,7 @@ const ChatListPanel = ({ onAdd }: any) => {
                   <Button
                     variant="outline"
                     className="flex flex-col w-full items-start gap-1 p-2 h-full cursor-pointer"
-                    onClick={() =>
-                      createChat(sourceItem.id, source).then((chat) =>
-                        router.push(`/chat?id=${chat.id}`)
-                      )
-                    }
+                    onClick={() => onAdd(sourceItem.id, source)}
                   >
                     <span className="line-clamp-1 text-sm text-left font-bold">
                       {sourceItem.name}
@@ -72,17 +66,21 @@ const ChatListPanel = ({ onAdd }: any) => {
 
 export const ChatListButton = () => {
   const router = useRouter();
-  const { createChat } = useChats();
+  const { createChat, isCreating } = useChats();
 
-  const handleAddChat = () => {
-    // createChat().then((chat) => router.push(`/chat?id=${chat.id}`));
+  const handleAddChat = (id: number, source: 'project' | 'template') => {
+    createChat(id, source).then((chat) => router.push(`/chat?id=${chat.id}`));
   };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon" className="w-7 h-7">
-          <Icons.add className="w-4 h-4 shrink-0" />
+          {isCreating ? (
+            <Icons.spinner className="w-4 h-4 shrink-0 animate-spin" />
+          ) : (
+            <Icons.add className="w-4 h-4 shrink-0" />
+          )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
