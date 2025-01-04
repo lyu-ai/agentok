@@ -56,11 +56,11 @@ export const ProjectPicker = () => {
           <Icons.chevronsUpDown className="w-3 h-3" />
         </Link>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" sideOffset={14} className="flex flex-col w-[400px] p-0 h-[calc(100vh-var(--header-height))]">
-        <div className="flex items-center gap-2 border-b justify-between w-full p-1">
+      <DropdownMenuContent align="start" sideOffset={14} className="flex flex-col w-[480px] p-0 h-[calc(100vh-var(--header-height)-2rem)]">
+        <div className="flex items-center gap-2 border-b w-full p-1">
           <Link href="/projects">
-            <Button variant="ghost" size="icon" className="h-6 w-6">
-              <Icons.list className="h-4 w-4" />
+            <Button variant="ghost" size="icon" className="h-7 w-7">
+              <Icons.home className="h-4 w-4" />
             </Button>
           </Link>
           <Button
@@ -68,14 +68,14 @@ export const ProjectPicker = () => {
             size="icon"
             onClick={onCreateProject}
             disabled={isCreating}
-            className="h-6 w-6"
+            className="h-7 w-7"
           >
-            {!isCreating ? <Icons.add className="h-4 w-4" /> : null}
-            {isCreating && <div className="animate-spin">...</div>}
+            {!isCreating && <Icons.add className="h-4 w-4" />}
+            {isCreating && <Icons.spinner className="animate-spin h-4 w-4" />}
           </Button>
         </div>
         <ScrollArea className="flex-1">
-          <div className="flex flex-col gap-1 p-2 pl-1">
+          <div className="grid grid-cols-2 gap-1 p-2 pl-1">
             {projects.length > 0 &&
               projects.map((project) => (
                 <DropdownMenuItem
@@ -83,7 +83,7 @@ export const ProjectPicker = () => {
                   onSelect={() => router.push(`/projects/${project.id}/flow`)}
                   className="flex w-full"
                 >
-                  <div className="flex items-center gap-2 text-sm cursor-pointer hover:bg-muted/5">
+                  <div className="flex items-center gap-2 text-sm cursor-pointer hover:bg-muted/5 overflow-hidden">
                     <Icons.project className="h-5 w-5 shrink-0" />
                     <span className="flex flex-col">
                       <span className="font-medium">{project.name}</span>

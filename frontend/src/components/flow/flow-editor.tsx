@@ -534,7 +534,7 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
                 setMousePosition({ flow: flowPosition } as MousePositionState);
               }}
             >
-              <Background variant={BackgroundVariant.Lines} gap={24} size={2} color='#400f0f0f' />
+              <Background variant={BackgroundVariant.Dots} gap={24} size={2} />
               <Controls
                 fitViewOptions={{ maxZoom: 1 }}
                 showInteractive={false}
@@ -590,7 +590,7 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
             <TabsContent value="chat" className="flex-1 overflow-auto p-2">
               {activeChatId && <ChatPane chat={activeChatId} />}
             </TabsContent>
-            <TabsContent value="nodes" className="flex-1 overflow-auto p-2">
+            <TabsContent value="nodes" className="flex-1 overflow-auto">
               <JsonViewer data={project} />
             </TabsContent>
           </Tabs>

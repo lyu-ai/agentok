@@ -10,7 +10,6 @@ import { ProjectPicker } from '@/components/project/project-picker';
 import Link from 'next/link';
 import { Icons } from '../icons';
 import { cn } from '@/lib/utils';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 
 const apiEndpoint =
   process.env.NEXT_PUBLIC_BACKEND_URL || 'https://localhost:5004';
@@ -64,9 +63,9 @@ const Navbar = () => {
     <div className="flex w-full items-center justify-between p-2 h-[var(--header-height)] border-b">
       <div className="navbar-start gap-2 flex items-center justify-start">
         <NavButton projectId={projectId} className="lg:hidden" />
-        <Link href="/" className="flex items-center gap-2">
-          <Logo className="w-8 h-8 text-brand" />
-          <span className="text-lg font-bold text-primary dark:text-brand">AgentOK</span>
+        <Link href="/projects" className="flex items-center">
+          <Logo className="w-7 h-7 text-primary/70 mr-2" />
+          <span className="text-brand font-mono">Agentok</span>
         </Link>
       </div>
       <div role="tablist" className="flex px-2 items-center gap-4">

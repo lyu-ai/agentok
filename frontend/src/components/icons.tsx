@@ -73,6 +73,10 @@ import {
   UserRound,
   Plane,
   SendHorizonal,
+  SquareKanban,
+  Kanban,
+  SquareDot,
+  CircleDot,
 } from 'lucide-react';
 import { Logo } from './logo';
 
@@ -91,7 +95,7 @@ export const Icons = {
   laptop: Laptop,
   brush: Brush,
   megaphone: Megaphone,
-  project: FolderKanban,
+  project: CircleDot,
   list: List,
   question: MessageCircleQuestion,
   code: Code2,

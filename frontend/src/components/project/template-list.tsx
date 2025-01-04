@@ -147,11 +147,11 @@ export const TemplateCard = ({
             template.thumbnail ?? `https://agentok.ai/img/${randomImage}.png`
           }
           alt={template.name}
-          className="rounded-t-md h-48 w-full object-cover"
+          className="rounded-t-xl h-48 w-full object-cover"
         />
       </figure>
-      <div className="card-body p-4 gap-2 font-normal">
-        <h2 className="card-title  group-hover:text-primary line-clamp-1">
+      <div className="flex flex-col p-4 gap-1">
+        <h2 className="text-lg font-bold group-hover:text-primary line-clamp-1">
           {template.name}
         </h2>
         <div className="flex gap-2 h-8 items-center text-xs text-base-content/60">
