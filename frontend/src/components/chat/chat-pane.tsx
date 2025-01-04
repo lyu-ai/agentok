@@ -7,14 +7,12 @@ import { Button } from '@/components/ui/button';
 import { ChatInput } from './chat-input';
 import { MessageList } from './message-list';
 import { useToast } from '@/hooks/use-toast';
-import { Chat as ChatType } from '@/store/chats';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { genId } from '@/lib/id';
 import supabase from '@/lib/supabase/client';
 import { cn } from '@/lib/utils';
 import { Loading } from '../loading';
 import { isArray } from 'lodash-es';
-import useProjectStore from '@/store/projects';
 
 const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
   const [minimized, setMinimized] = useState(false);
@@ -45,12 +43,11 @@ const SampleMessagePanel = ({ flow, className, onSelect: _onSelect }: any) => {
 };
 
 interface ChatPaneProps {
-  chat: ChatType;
-  standalone?: boolean;
+  chatId: number;
 }
 
-export const ChatPane = ({ chat, standalone }: ChatPaneProps) => {
-  const { chatSource, isLoading } = useChat(chat.id);
+export const ChatPane = ({ chatId }: ChatPaneProps) => {
+  const { chat, chatSource, isLoading } = useChat(chatId);
   const { toast } = useToast();
   const [status, setStatus] = useState('ready');
   const [messages, setMessages] = useState<any[]>([]);
@@ -61,9 +58,9 @@ export const ChatPane = ({ chat, standalone }: ChatPaneProps) => {
   const { user } = useUser();
 
   const fetchMessages = useCallback(async () => {
-    if (chat.id === -1) return;
+    if (chatId === -1) return;
     setLoading(true);
-    await fetch(`/api/chats/${chat.id}/messages`, {
+    await fetch(`/api/chats/${chatId}/messages`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -82,15 +79,15 @@ export const ChatPane = ({ chat, standalone }: ChatPaneProps) => {
         console.error('Failed to fetch messages:', err);
       })
       .finally(() => setLoading(false));
-  }, [setMessages, chat.id]);
+  }, [setMessages, chatId]);
 
   // Fetch chat status
   const fetchChatStatus = useCallback(async () => {
-    if (chat.id === -1) return;
+    if (chatId === -1) return;
     const { data, error } = await supabase
       .from('chats')
       .select('status')
-      .eq('id', chat.id)
+      .eq('id', chatId)
       .single();
 
     if (error && error.code !== 'PGRST116') {
@@ -98,10 +95,10 @@ export const ChatPane = ({ chat, standalone }: ChatPaneProps) => {
     } else if (data) {
       setStatus(data.status);
     }
-  }, [setStatus, chat.id]);
+  }, [setStatus, chatId]);
 
   useEffect(() => {
-    if (chat.id === -1) return;
+    if (chatId === -1) return;
 
     fetchMessages();
     fetchChatStatus();
@@ -115,7 +112,7 @@ export const ChatPane = ({ chat, standalone }: ChatPaneProps) => {
           event: 'INSERT',
           schema: 'public',
           table: 'chat_messages',
-          filter: `chat_id=eq.${chat.id}`,
+          filter: `chat_id=eq.${chatId}`,
         },
         (payload) => {
           console.log('changes_event(chat_messages):', payload);
@@ -139,7 +136,7 @@ export const ChatPane = ({ chat, standalone }: ChatPaneProps) => {
           event: 'UPDATE',
           schema: 'public',
           table: 'chats',
-          filter: `id=eq.${chat.id}`,
+          filter: `id=eq.${chatId}`,
         },
         (payload) => {
           console.log('changes_event(chats):', payload);
@@ -155,7 +152,7 @@ export const ChatPane = ({ chat, standalone }: ChatPaneProps) => {
       if (messagesChannel) supabase.removeChannel(messagesChannel);
       if (chatsChannel) supabase.removeChannel(chatsChannel);
     };
-  }, [chat.id]);
+  }, [chatId]);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -173,7 +170,7 @@ export const ChatPane = ({ chat, standalone }: ChatPaneProps) => {
 
   const handleClean = useCallback(() => {
     setCleaning(true);
-    fetch(`/api/chats/${chat.id}/messages`, {
+    fetch(`/api/chats/${chatId}/messages`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -184,21 +181,21 @@ export const ChatPane = ({ chat, standalone }: ChatPaneProps) => {
         setMessages([]);
       })
       .finally(() => setCleaning(false));
-  }, [setMessages, chat.id]);
+  }, [setMessages, chatId]);
 
   const handleSend = useCallback(
     async (message: string) => {
       try {
         const newMessage = {
           id: genId(),
-          chat_id: chat.id,
+          chat_id: chatId,
           type: 'user',
           sender: user?.email,
           content: message,
           created: new Date().toISOString(),
         };
         setMessages((msgs) => [...msgs, newMessage]);
-        const resp = await fetch(`/api/chats/${chat.id}/messages`, {
+        const resp = await fetch(`/api/chats/${chatId}/messages`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -217,12 +214,12 @@ export const ChatPane = ({ chat, standalone }: ChatPaneProps) => {
         });
       }
     },
-    [chat.id, user?.email, toast]
+    [chatId, user?.email, toast]
   );
 
   const handleAbort = useCallback(async () => {
     try {
-      const resp = await fetch(`/api/chats/${chat.id}/abort`, {
+      const resp = await fetch(`/api/chats/${chatId}/abort`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -239,7 +236,7 @@ export const ChatPane = ({ chat, standalone }: ChatPaneProps) => {
         variant: 'destructive',
       });
     }
-  }, [chat.id, toast]);
+  }, [chatId, toast]);
 
   if (loading || isLoading) {
     return (

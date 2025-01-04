@@ -44,7 +44,7 @@ export default function Page() {
       </ResizablePanel>
       <ResizableHandle />
       <ResizablePanel defaultSize={800}>
-        <ChatPane chat={chat} standalone />
+        <ChatPane chatId={activeChatId} />
       </ResizablePanel>
     </ResizablePanelGroup>
   );

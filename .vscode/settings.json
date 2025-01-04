@@ -1,6 +1,0 @@
-{
-  "python.analysis.extraPaths": [
-    "/Users/hugh/ts/agentok/api/.venv/lib/python3.12/site-packages"
-  ],
-  "python.defaultInterpreterPath": "/Users/hugh/ts/agentok/api/.venv/bin/python"
-}

@@ -1,25 +1,28 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Icons } from '@/components/icons';
 import { CopyButton } from '../copy-button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useProject } from '@/hooks';
+import { cn } from '@/lib/utils';
 
 interface JsonViewerProps {
-  data: any;
+  projectId: number;
+  className?: string;
 }
 
-export const JsonViewer = ({ data }: JsonViewerProps) => {
+export const JsonViewer = ({ projectId, className }: JsonViewerProps) => {
+  const { project, isLoading, isError } = useProject(projectId);
   const [jsonString, setJsonString] = useState('');
 
   useEffect(() => {
-    if (data) {
-      setJsonString(JSON.stringify(data, null, 2));
+    if (project) {
+      setJsonString(JSON.stringify(project, null, 2));
     }
-  }, [data]);
+  }, [project]);
 
   return (
-    <ScrollArea className="relative flex w-full h-full">
+    <ScrollArea className={cn("relative flex w-full h-full", className)}>
       <div className="absolute top-2 right-3">
         <CopyButton content={jsonString} />
       </div>
