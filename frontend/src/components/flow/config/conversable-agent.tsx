@@ -1,3 +1,4 @@
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { GenericOption } from '../option/option';
 
 export const ConversableAgentConfig = ({
@@ -62,7 +63,7 @@ export const ConversableAgentConfig = ({
   ];
 
   return (
-    <div className="flex flex-1 w-full p-2 gap-2 min-h-96 max-h-[500px] text-sm overflow-y-auto">
+    <ScrollArea className="flex flex-col h-full w-full p-2">
       <div className="flex flex-col gap-2 w-full h-full">
         {GENERAL_OPTIONS.filter((o) => !optionsDisabled.includes(o.name)).map(
           (options, index) => (
@@ -75,6 +76,6 @@ export const ConversableAgentConfig = ({
           )
         )}
       </div>
-    </div>
+    </ScrollArea>
   );
 };

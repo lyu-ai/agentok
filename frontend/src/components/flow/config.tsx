@@ -5,6 +5,7 @@ import { ConversableAgentConfig } from './config/conversable-agent';
 import { ConverseConfig } from './config/converse-config';
 import { Icons } from '../icons';
 import { useReactFlow } from '@xyflow/react';
+import { InitializerConfig } from './config/initializer';
 
 interface FlowConfigProps {
   nodeId?: string;
@@ -53,6 +54,8 @@ export const FlowConfig = ({ nodeId, edgeId }: FlowConfigProps) => {
   const type = nodeId.split('-')[1];
 
   switch (type) {
+    case 'initializer':
+      return <InitializerConfig nodeId={nodeId} data={node.data} />;
     case 'assistant':
       return <AssistantConfig nodeId={nodeId} data={node.data} />;
     case 'user':
