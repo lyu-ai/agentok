@@ -3,7 +3,7 @@ import { useChats, useProjects } from '@/hooks';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import Link from 'next/link';
-import Markdown from '@/components/markdown';
+import { Markdown } from '@/components/markdown';
 import { ProjectPublish } from './project-publish';
 import { useState } from 'react';
 import { Icons } from '@/components/icons';

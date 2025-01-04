@@ -1,0 +1,5 @@
+# Cursor Rules
+
+- Use `rehypeRaw` to allow raw HTML in the markdown.
+- Use `pnpm` as the package manager.
+- Use `pnpm i` to install dependencies.

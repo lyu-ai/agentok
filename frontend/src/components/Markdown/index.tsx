@@ -1,7 +1,10 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus as style } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import {
+  vscDarkPlus,
+  vs,
+} from 'react-syntax-highlighter/dist/esm/styles/prism';
 import RemarkBreaks from 'remark-breaks';
 import RemarkGfm from 'remark-gfm';
 import RemarkMath from 'remark-math';
@@ -11,10 +14,12 @@ import './markdown.css';
 import { CopyButton } from '../copy-button';
 import { common, createLowlight } from 'lowlight';
 import clsx from 'clsx';
-
+import { useTheme } from 'next-themes';
 const lowlight = createLowlight(common);
 
 const CodeBlock = ({ language, children }: any) => {
+  const { resolvedTheme } = useTheme();
+  const style = resolvedTheme === 'dark' ? vscDarkPlus : vs;
   const detectedLanguage =
     language || lowlight.highlightAuto(children).data?.language;
   return (
@@ -30,8 +35,17 @@ const CodeBlock = ({ language, children }: any) => {
 };
 
 const InlineCode = ({ children }: any) => (
-  <code className="bg-base-300 p-1 rounded-md text-sm mx-1">{children}</code>
+  <code className="px-[0.3rem] py-[0.2rem] font-mono text-sm bg-muted rounded-md">
+    {children}
+  </code>
 );
+
+interface CodeProps extends React.HTMLAttributes<HTMLElement> {
+  inline?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+  node?: any;
+}
 
 const CodeComponent = ({
   node,
@@ -42,11 +56,17 @@ const CodeComponent = ({
   ...props
 }: any) => {
   const match = /language-(\w+)/.exec(className || '');
-  if (inline) return <InlineCode {...props}>{children}</InlineCode>;
+
+  // Handle inline code differently
+  if (inline) {
+    return <InlineCode {...props}>{children}</InlineCode>;
+  }
+
+  // Only wrap in div and add copy button for block code
   return (
     <div className="relative">
       <CodeBlock language={match && match[1]} {...props}>
-        {String(children).replace(/\n$/, '')}
+        {children}
       </CodeBlock>
       {!suppressCopy && (
         <CopyButton
@@ -58,7 +78,7 @@ const CodeComponent = ({
   );
 };
 
-const Markdown = ({
+export const Markdown = ({
   className,
   suppressLink,
   suppressCopy,
@@ -83,8 +103,26 @@ const Markdown = ({
       remarkPlugins={[RemarkGfm, RemarkBreaks, RemarkMath]}
       rehypePlugins={[RehypeKatex]}
       components={{
-        code(data): JSX.Element {
-          return <CodeComponent {...data} suppressCopy={suppressCopy} />;
+        code(props: any) {
+          const isInline =
+            props.node?.position?.start.line === props.node?.position?.end.line;
+          console.log('Code props:', props, isInline);
+
+          if (isInline) {
+            return <InlineCode>{props.children}</InlineCode>;
+          }
+
+          const match = /language-(\w+)/.exec(props.className || '');
+          return (
+            <CodeComponent
+              inline={false}
+              className={props.className}
+              language={match?.[1]}
+              {...props}
+            >
+              {props.children}
+            </CodeComponent>
+          );
         },
         p({ node, children, ...props }) {
           // Replace <p> with <div>
@@ -116,5 +154,3 @@ const Markdown = ({
     </ReactMarkdown>
   );
 };
-
-export default Markdown;

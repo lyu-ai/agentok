@@ -92,7 +92,7 @@ export const ChatList = ({ className }: ChatListProps) => {
             )}
           >
             {editingId === chat.id ? (
-              <div className="flex items-center gap-2 flex-1">
+              <div className="flex items-center gap-1 flex-1">
                 <Input
                   value={editingName}
                   onChange={(e) => setEditingName(e.target.value)}
@@ -104,7 +104,7 @@ export const ChatList = ({ className }: ChatListProps) => {
                       setEditingName('');
                     }
                   }}
-                  className="h-8"
+                  className="h-8 w-full"
                   autoFocus
                 />
                 <Button
@@ -117,39 +117,41 @@ export const ChatList = ({ className }: ChatListProps) => {
                 </Button>
               </div>
             ) : (
-              <>
-                <div className="flex-1 justify-start text-sm">
+              <div className="group relative flex-1 justify-start">
+                <span className="text-sm line-clamp-1">
                   {chat.name ||
                     `Chat with ${chat.from_project || chat.from_template}`}
+                </span>
+                <div className="hidden group-hover:flex absolute right-0 top-0 items-center gap-1">
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="w-5 h-5 text-muted-foreground"
+                    onClick={() => {
+                      setEditingId(chat.id);
+                      setEditingName(chat.name || '');
+                    }}
+                  >
+                    {isUpdating ? (
+                      <Icons.spinner className="w-3 h-3 animate-spin" />
+                    ) : (
+                      <Icons.edit className="w-3 h-3" />
+                    )}
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="w-5 h-5"
+                    onClick={() => handleDeleteChat(chat.id)}
+                  >
+                    {isDeleting ? (
+                      <Icons.spinner className="w-3 h-3 animate-spin text-red-500" />
+                    ) : (
+                      <Icons.trash className="w-3 h-3 text-red-500" />
+                    )}
+                  </Button>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="opacity-0 group-hover:opacity-100 w-7 h-7"
-                  onClick={() => {
-                    setEditingId(chat.id);
-                    setEditingName(chat.name || '');
-                  }}
-                >
-                  {isUpdating ? (
-                    <Icons.spinner className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Icons.edit className="w-4 h-4" />
-                  )}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="opacity-0 group-hover:opacity-100 w-7 h-7"
-                  onClick={() => handleDeleteChat(chat.id)}
-                >
-                  {isDeleting ? (
-                    <Icons.spinner className="w-4 h-4 animate-spin text-red-500" />
-                  ) : (
-                    <Icons.trash className="w-4 h-4 text-red-500" />
-                  )}
-                </Button>
-              </>
+              </div>
             )}
           </Card>
         ))

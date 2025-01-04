@@ -15,6 +15,8 @@ import {
 import { CopyButton } from '../copy-button';
 import { Card } from '../ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Markdown } from '@/components/markdown';
+import { ScrollArea } from '../ui/scroll-area';
 
 interface MessageBubbleProps {
   chat: any;
@@ -125,7 +127,7 @@ const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
   }
 
   return (
-    <Card className={`${messageClass} p-1 w-full mx-auto shadow-sm max-w-4xl`}>
+    <Card className={`${messageClass} p-1 w-full mx-auto shadow-sm max-w-4xl `}>
       <div className="flex items-center gap-2">
         <div
           className={`w-8 h-8 rounded-full text-sm flex items-center justify-center`}
@@ -139,11 +141,15 @@ const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
               <Icons.code className="w-4 h-4" />
             </Button>
           </DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Raw Message Data</DialogTitle>
-            <pre className="whitespace-pre-wrap">
-              <code>{message.content}</code>
-            </pre>
+          <DialogContent className="max-w-4xl max-h-[calc(100vh-2rem)] overflow-hidden p-0 gap-0">
+            <DialogTitle className="text-sm font-semibold px-2 py-3 border-b">
+              Raw Message Content
+            </DialogTitle>
+            <ScrollArea className="max-h-[calc(100vh-var(--header-height))] text-sm bg-muted/20">
+              <pre className="whitespace-pre-wrap p-2">
+                <code>{message.content}</code>
+              </pre>
+            </ScrollArea>
           </DialogContent>
         </Dialog>
         <CopyButton content={message.content} />
@@ -152,7 +158,7 @@ const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
         className={`relative group rounded-md p-2 text-sm break-word word-wrap overflow-x-hidden`}
       >
         {message.content ? (
-          <div className="whitespace-pre-wrap">{message.content}</div>
+          <Markdown>{message.content}</Markdown>
         ) : (
           <span className="text-lime-600">...</span>
         )}
