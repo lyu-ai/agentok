@@ -46,10 +46,7 @@ export const ChatInput = ({
 
   return (
     <form
-      className={cn(
-        'relative flex items-end gap-2 w-full max-w-3xl mx-auto',
-        className
-      )}
+      className={cn('relative flex items-end gap-2 w-full mx-auto', className)}
       onSubmit={handleSubmit}
     >
       <Textarea

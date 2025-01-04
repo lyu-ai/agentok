@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Icons } from '@/components/icons';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
+import { toast } from '@/hooks/use-toast';
 
 export const CopyButton = ({
   content,
@@ -14,6 +15,11 @@ export const CopyButton = ({
   const onCopy = () => {
     navigator.clipboard.writeText(content);
     setCopied(true);
+    toast({
+      title: 'Copied',
+      description: 'Content has been copied to clipboard',
+      variant: 'default',
+    });
     setTimeout(() => {
       setCopied(false);
     }, 2000);

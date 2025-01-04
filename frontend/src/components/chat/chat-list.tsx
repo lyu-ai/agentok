@@ -58,10 +58,9 @@ export const ChatList = ({ className }: ChatListProps) => {
             : chats[chatIndex + 1]?.id;
 
         await deleteChat(chatId);
+
         if (activeChatId === chatId) {
-          if (newChatId) {
-            router.replace(`/chat?id=${newChatId}`);
-          }
+          router.replace(newChatId ? `/chat?id=${newChatId}` : '/chat');
         }
       } catch (error) {
         console.error('Error deleting chat:', error);
@@ -70,10 +69,9 @@ export const ChatList = ({ className }: ChatListProps) => {
           title: 'Error',
           description: 'Failed to delete chat',
         });
-        return;
       }
     },
-    [deleteChat]
+    [deleteChat, chats, activeChatId, router]
   );
 
   return (

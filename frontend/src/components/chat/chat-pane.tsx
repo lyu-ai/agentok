@@ -252,7 +252,7 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
     }
   }, [chatId, toast]);
 
-  if (isLoadingMessages || isLoadingChat) {
+  if (isLoadingMessages || isLoadingChat || !chat) {
     return (
       <div className="flex flex-col w-full h-full items-center justify-center gap-2">
         <Loading />
@@ -289,7 +289,7 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
         </div>
         <div ref={messagesEndRef} />
       </ScrollArea>
-      <div className="relative flex flex-col gap-1 w-full max-w-3xl mx-auto">
+      <div className="relative flex flex-col gap-1 w-full max-w-4xl mx-auto">
         <ChatInput
           onSubmit={handleSend}
           onAbort={handleAbort}

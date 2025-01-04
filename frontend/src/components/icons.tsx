@@ -79,6 +79,7 @@ import {
   CircleDot,
   Settings2,
   SquareTerminal,
+  CircleCheck,
 } from 'lucide-react';
 import { Logo } from './logo';
 
@@ -90,7 +91,7 @@ export const Icons = {
   chevronLeft: ChevronLeft,
   chevronUp: ChevronUp,
   chevronsUpDown: ChevronsUpDown,
-  checkCircle: CheckCircle,
+  checkCircle: CircleCheck,
   externalLink: ExternalLink,
   console: SquareTerminal,
   sun: Sun,

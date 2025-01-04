@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dialog';
 import { CopyButton } from '../copy-button';
 import { Card } from '../ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 interface MessageBubbleProps {
   chat: any;
@@ -24,6 +25,7 @@ interface MessageBubbleProps {
 const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
   const { chatSource } = useChat(chat.id);
   const { user } = useUser();
+
   const userNodeName =
     chatSource?.flow?.nodes?.find(
       (node: any) =>
@@ -40,24 +42,32 @@ const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
       StatusMessage.completed
     );
     const success = found && text.startsWith('DONE');
-    const resultClass = success ? 'text-green-500' : 'text-red-500/50';
+    const resultClass = success
+      ? 'bg-green-500/20 text-green-500'
+      : 'bg-red-500/20 text-red-500';
 
     return (
-      <div className={`flex items-center gap-1 cursor-pointer ${resultClass}`}>
+      <Card
+        className={`flex items-center gap-2 shadow-sm px-3 py-1 rounded-md ${resultClass}`}
+      >
         {success ? (
-          <Icons.check className="w-4 h-4" />
+          <Icons.checkCircle className="w-4 h-4" />
         ) : (
           <Icons.alert className="w-4 h-4" />
         )}
-        <span>Thinking completed</span>
-      </div>
+        <span className="text-sm font-semibold">
+          Collaboration completed with {success ? 'success' : 'failure'}.
+        </span>
+      </Card>
     );
   } else if (message.content.startsWith(StatusMessage.running)) {
     return (
-      <div className="flex items-center gap-1 cursor-pointer">
+      <Card className="flex items-center gap-2 shadow-sm px-3 py-1 bg-blue-500/20 text-blue-500 rounded-md">
         <Icons.node className="w-4 h-4" />
-        <span>I am thinking...</span>
-      </div>
+        <span className="text-sm font-semibold">
+          Collaboration started... Please wait for the conclusion.
+        </span>
+      </Card>
     );
   } else if (message.content.startsWith(StatusMessage.receivedHumanInput)) {
     message.content = 'Human input received';
@@ -76,16 +86,15 @@ const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
       ? 'bg-primary text-primary-foreground'
       : 'bg-muted/20 text-muted-foreground';
 
-  let avatarIcon = <Icons.node className="w-5 h-5" />;
+  let avatarIcon = <Icons.node className="w-4 h-4" />;
   if (message.role === 'user') {
-    avatarIcon = user?.user_metadata.avatar_url ? (
-      <img
-        alt="avatar"
-        src={user.user_metadata.avatar_url}
-        className="w-full h-full object-cover rounded-full p-0.5"
-      />
-    ) : (
-      <Icons.userVoiceLine className="w-5 h-5" />
+    avatarIcon = (
+      <Avatar>
+        <AvatarImage src={user?.user_metadata.avatar_url} />
+        <AvatarFallback>
+          <Icons.userVoiceLine className="w-4 h-4" />
+        </AvatarFallback>
+      </Avatar>
     );
   } else if (message.sender === userNodeName) {
     avatarIcon = <Icons.userVoiceFill className="w-5 h-5" />;
@@ -116,7 +125,7 @@ const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
   }
 
   return (
-    <Card className={`${messageClass} p-3 max-w-3xl w-full mx-auto`}>
+    <Card className={`${messageClass} p-1 w-full mx-auto shadow-sm max-w-4xl`}>
       <div className="flex items-center gap-2">
         <div
           className={`w-8 h-8 rounded-full text-sm flex items-center justify-center`}
@@ -125,8 +134,10 @@ const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
         </div>
         <div className="flex flex-1">{messageHeader}</div>
         <Dialog>
-          <DialogTrigger>
-            <Icons.code className="w-4 h-4" />
+          <DialogTrigger asChild>
+            <Button variant="ghost" size="icon" className="w-7 h-7">
+              <Icons.code className="w-4 h-4" />
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogTitle>Raw Message Data</DialogTitle>
@@ -143,7 +154,7 @@ const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
         {message.content ? (
           <div className="whitespace-pre-wrap">{message.content}</div>
         ) : (
-          <span className="text-lime-600">Empty Message</span>
+          <span className="text-lime-600">...</span>
         )}
         {message.role === 'user' && (
           <Button
@@ -179,7 +190,7 @@ export const MessageList = ({ chat, messages, onSend }: MessageListProps) => {
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-1 w-full max-w-4xl mx-auto">
       {messages.map((message, index) => (
         <MessageBubble
           key={message.id || index}
@@ -188,6 +199,6 @@ export const MessageList = ({ chat, messages, onSend }: MessageListProps) => {
           onSend={onSend}
         />
       ))}
-    </>
+    </div>
   );
 };
