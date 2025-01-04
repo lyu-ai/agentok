@@ -67,7 +67,7 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
             <TabsContent value="chat" className="flex-1 overflow-auto p-2">
               <ChatPane projectId={projectId} chatId={activeChatId} />
             </TabsContent>
-            <TabsContent value="nodes" className="flex-1 overflow-auto">
+            <TabsContent value="nodes" className="flex-1 overflow-auto mt-0">
               <JsonViewer projectId={projectId} />
             </TabsContent>
             <TabsContent value="console" className="flex-1 overflow-auto">

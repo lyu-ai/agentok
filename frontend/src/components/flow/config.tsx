@@ -31,8 +31,8 @@ export const FlowConfig = ({ nodeId, edgeId }: FlowConfigProps) => {
   // Handle node configuration
   if (!nodeId) {
     return (
-      <div className="flex flex-col justify-center items-center h-full text-muted-foreground gap-2">
-        <Icons.node className="w-10 h-10" />
+      <div className="flex flex-col justify-center items-center h-full text-muted-foreground/50 gap-2">
+        <Icons.node className="w-6 h-6" />
         <span className="text-sm font-bold">
           Select a node or edge to configure
         </span>
@@ -43,8 +43,8 @@ export const FlowConfig = ({ nodeId, edgeId }: FlowConfigProps) => {
   const node = getNode(nodeId);
   if (!node) {
     return (
-      <div className="flex flex-col justify-center items-center h-full text-muted-foreground gap-2">
-        <Icons.node className="w-10 h-10" />
+      <div className="flex flex-col justify-center items-center h-full text-muted-foreground/50 gap-2">
+        <Icons.node className="w-6 h-6" />
         <span className="text-sm font-bold">Node not found</span>
       </div>
     );

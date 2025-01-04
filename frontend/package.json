@@ -13,6 +13,7 @@
   "dependencies": {
     "@codemirror/lang-json": "^6.0.1",
     "@codemirror/lang-python": "^6.1.6",
+    "@codemirror/language": "^6.10.8",
     "@faker-js/faker": "9.0.0-alpha.1",
     "@hookform/resolvers": "^3.9.1",
     "@next/bundle-analyzer": "^14.2.5",
@@ -35,7 +36,7 @@
     "@t3-oss/env-nextjs": "^0.11.1",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
-    "@uiw/codemirror-theme-vscode": "^4.23.0",
+    "@uiw/codemirror-theme-github": "^4.23.7",
     "@uiw/react-codemirror": "^4.23.0",
     "@xyflow/react": "^12.3.6",
     "class-variance-authority": "^0.7.0",

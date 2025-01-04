@@ -1,6 +1,6 @@
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
-import { vscodeDark, vscodeLight } from '@uiw/codemirror-theme-vscode';
+import { githubLight, githubDark } from '@uiw/codemirror-theme-github';
 import { CopyButton } from '@/components/copy-button';
 import { useState, useEffect } from 'react';
 import { DownloadButton } from '@/components/download-button';
@@ -8,6 +8,10 @@ import { Icons } from '../icons';
 import { Button } from '../ui/button';
 import { ScrollArea } from '../ui/scroll-area';
 import { useTheme } from 'next-themes';
+import {
+  syntaxHighlighting,
+  defaultHighlightStyle,
+} from '@codemirror/language';
 
 export const PythonViewer = ({ data, setMode }: any) => {
   const { resolvedTheme } = useTheme();
@@ -47,8 +51,9 @@ export const PythonViewer = ({ data, setMode }: any) => {
 
   if (isGenerating) {
     return (
-      <div className="relative flex flex-col w-full h-full items-center justify-center gap-2">
+      <div className="relative flex flex-col w-full h-full items-center justify-center gap-2 text-muted-foreground">
         <Icons.spinner className="w-4 h-4 animate-spin" />
+        <span className="text-xs">Generating Python code...</span>
       </div>
     );
   }
@@ -76,10 +81,10 @@ export const PythonViewer = ({ data, setMode }: any) => {
         <CodeMirror
           value={result.python}
           height="100%"
-          theme={resolvedTheme === 'dark' ? vscodeDark : vscodeLight}
-          extensions={[python()]}
+          theme={resolvedTheme === 'dark' ? githubDark : githubLight}
+          extensions={[python(), syntaxHighlighting(defaultHighlightStyle)]}
           editable={false}
-          className="text-xs overflow-x-auto"
+          className="text-xs overflow-x-auto mt-0"
         />
       )}
       <div className="absolute flex items-center gap-2 right-4 top-5">

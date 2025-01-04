@@ -9,6 +9,10 @@ import { json } from '@codemirror/lang-json';
 import CodeMirror from '@uiw/react-codemirror';
 import { vscodeDark, vscodeLight } from '@uiw/codemirror-theme-vscode';
 import { useTheme } from 'next-themes';
+import {
+  syntaxHighlighting,
+  defaultHighlightStyle,
+} from '@codemirror/language';
 interface JsonViewerProps {
   projectId: number;
   className?: string;
@@ -31,7 +35,7 @@ export const JsonViewer = ({ projectId, className }: JsonViewerProps) => {
       </div>
       <CodeMirror
         value={jsonString}
-        extensions={[json()]}
+        extensions={[json(), syntaxHighlighting(defaultHighlightStyle)]}
         theme={resolvedTheme === 'dark' ? vscodeDark : vscodeLight}
         className="h-full text-xs overflow-x-auto"
         basicSetup={{ lineNumbers: false }}

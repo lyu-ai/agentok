@@ -259,7 +259,7 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
         </ScrollArea>
       ) : (
         <div className="flex flex-col items-center justify-center h-full gap-2 text-muted-foreground/50">
-          <Icons.node className="w-10 h-10" />
+          <Icons.node className="w-8 h-8" />
           <p>Let&apos;s start chatting!</p>
         </div>
       )}
