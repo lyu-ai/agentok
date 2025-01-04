@@ -7,7 +7,7 @@ import { useProject } from '@/hooks';
 import { cn } from '@/lib/utils';
 import { json } from '@codemirror/lang-json';
 import CodeMirror from '@uiw/react-codemirror';
-import { vscodeDark, vscodeLight } from '@uiw/codemirror-theme-vscode';
+import { githubDark, githubLight } from '@uiw/codemirror-theme-github';
 import { useTheme } from 'next-themes';
 import {
   syntaxHighlighting,
@@ -36,7 +36,7 @@ export const JsonViewer = ({ projectId, className }: JsonViewerProps) => {
       <CodeMirror
         value={jsonString}
         extensions={[json(), syntaxHighlighting(defaultHighlightStyle)]}
-        theme={resolvedTheme === 'dark' ? vscodeDark : vscodeLight}
+        theme={resolvedTheme === 'dark' ? githubDark : githubLight}
         className="h-full text-xs overflow-x-auto"
         basicSetup={{ lineNumbers: false }}
       />
