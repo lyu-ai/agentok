@@ -11,6 +11,7 @@ interface ChatInputProps {
   onAbort?: () => void;
   loading?: boolean;
   disabled?: boolean;
+  sampleMessages?: string[];
   className?: string;
 }
 
@@ -19,6 +20,7 @@ export const ChatInput = ({
   onAbort,
   loading,
   disabled,
+  sampleMessages,
   className,
 }: ChatInputProps) => {
   const [message, setMessage] = useState('');
@@ -55,9 +57,29 @@ export const ChatInput = ({
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Enter message to start chat ..."
-        className="min-h-[64px] w-full resize-none rounded-xl shadow-xl"
+        className={cn(
+          'min-h-[100px] w-full resize-none border border-primary/50 rounded-xl shadow-xl bg-primary-foreground',
+          disabled && 'bg-muted',
+          sampleMessages && 'pt-10'
+        )}
         disabled={disabled}
       />
+      {sampleMessages && (
+        <div className="absolute top-2 left-2 flex gap-2 right-0">
+          {sampleMessages.slice(0, 3).map((message, index) => (
+            <Button
+              key={index}
+              variant="outline"
+              size="sm"
+              onClick={() => setMessage(message)}
+              className="h-6 text-xs text-muted-foreground w-1/3 line-clamp-1 flex items-center justify-start"
+            >
+              <Icons.messageSquare className="w-3 h-3" />
+              {message}
+            </Button>
+          ))}
+        </div>
+      )}
       <div className="absolute bottom-2 right-2 flex items-center gap-2">
         {loading && (
           <Button

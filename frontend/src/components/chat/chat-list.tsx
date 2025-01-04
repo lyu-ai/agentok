@@ -86,7 +86,7 @@ export const ChatList = ({ className }: ChatListProps) => {
             key={chat.id}
             onClick={() => router.push(`/chat?id=${chat.id}`)}
             className={cn(
-              'flex items-center gap-2 p-2 border-transparent hover:bg-muted rounded-md group cursor-pointer',
+              'relative flex items-center gap-2 p-2 border-transparent hover:bg-muted rounded-md group cursor-pointer',
               activeChatId === chat.id &&
                 'bg-primary text-primary-foreground hover:bg-primary/90'
             )}
@@ -104,7 +104,7 @@ export const ChatList = ({ className }: ChatListProps) => {
                       setEditingName('');
                     }
                   }}
-                  className="h-8 w-full"
+                  className="h-7 w-full text-xs outline-none"
                   autoFocus
                 />
                 <Button
@@ -117,16 +117,16 @@ export const ChatList = ({ className }: ChatListProps) => {
                 </Button>
               </div>
             ) : (
-              <div className="group relative flex-1 justify-start">
+              <div className="group flex-1 justify-start">
                 <span className="text-sm line-clamp-1">
                   {chat.name ||
                     `Chat with ${chat.from_project || chat.from_template}`}
                 </span>
-                <div className="hidden group-hover:flex absolute right-0 top-0 items-center gap-1">
+                <div className="hidden group-hover:flex absolute p-1 justify-end right-0 top-0 bottom-0 items-center gap-1">
                   <Button
-                    variant="secondary"
+                    variant="outline"
                     size="icon"
-                    className="w-5 h-5 text-muted-foreground"
+                    className="w-6 h-6 text-muted-foreground"
                     onClick={() => {
                       setEditingId(chat.id);
                       setEditingName(chat.name || '');
@@ -141,7 +141,7 @@ export const ChatList = ({ className }: ChatListProps) => {
                   <Button
                     variant="secondary"
                     size="icon"
-                    className="w-5 h-5"
+                    className="w-6 h-6"
                     onClick={() => handleDeleteChat(chat.id)}
                   >
                     {isDeleting ? (

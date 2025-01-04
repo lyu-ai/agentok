@@ -86,6 +86,7 @@ import { Logo } from './logo';
 export type Icon = LucideIcon;
 
 export const Icons = {
+  messageSquare: MessageSquare,
   chevronDown: ChevronDown,
   chevronRight: ChevronRight,
   chevronLeft: ChevronLeft,

@@ -17,14 +17,21 @@ import { Card } from '../ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Markdown } from '@/components/markdown';
 import { ScrollArea } from '../ui/scroll-area';
+import { cn } from '@/lib/utils';
 
 interface MessageBubbleProps {
   chat: any;
   message: Message;
   onSend: (content: string) => void;
+  className?: string;
 }
 
-const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
+const MessageBubble = ({
+  chat,
+  message,
+  onSend,
+  className,
+}: MessageBubbleProps) => {
   const { chatSource } = useChat(chat.id);
   const { user } = useUser();
 
@@ -50,7 +57,11 @@ const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
 
     return (
       <Card
-        className={`flex items-center gap-2 shadow-sm px-3 py-1 rounded-md ${resultClass}`}
+        className={cn(
+          'flex items-center gap-2 shadow-sm px-3 py-1 rounded-md',
+          resultClass,
+          className
+        )}
       >
         {success ? (
           <Icons.checkCircle className="w-4 h-4" />
@@ -64,7 +75,12 @@ const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
     );
   } else if (message.content.startsWith(StatusMessage.running)) {
     return (
-      <Card className="flex items-center gap-2 shadow-sm px-3 py-1 bg-blue-500/20 text-blue-500 rounded-md">
+      <Card
+        className={cn(
+          'flex items-center gap-2 shadow-sm px-3 py-1 bg-blue-500/20 text-blue-500 rounded-md',
+          className
+        )}
+      >
         <Icons.node className="w-4 h-4" />
         <span className="text-sm font-semibold">
           Collaboration started... Please wait for the conclusion.
@@ -86,7 +102,7 @@ const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
     ? 'bg-yellow-600/20 text-yellow-600'
     : message.role === 'assistant'
       ? 'bg-primary text-primary-foreground'
-      : 'bg-muted/20 text-muted-foreground';
+      : 'bg-primary-foreground text-primary-content';
 
   let avatarIcon = <Icons.node className="w-4 h-4" />;
   if (message.role === 'user') {
@@ -119,7 +135,7 @@ const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
             </>
           )}
         </div>
-        <div className="text-muted-foreground/20 text-xs">
+        <div className="text-muted-foreground text-xs">
           {new Date(message.created_at).toLocaleString()}
         </div>
       </div>
@@ -127,7 +143,9 @@ const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
   }
 
   return (
-    <Card className={`${messageClass} p-1 w-full mx-auto shadow-sm max-w-4xl `}>
+    <Card
+      className={cn(messageClass, 'p-1 w-full mx-auto shadow-sm', className)}
+    >
       <div className="flex items-center gap-2">
         <div
           className={`w-8 h-8 rounded-full text-sm flex items-center justify-center`}
@@ -180,31 +198,27 @@ const MessageBubble = ({ chat, message, onSend }: MessageBubbleProps) => {
 interface MessageListProps {
   chat: any;
   messages: Message[];
+  className?: string;
   onSend: (content: string) => void;
 }
 
-export const MessageList = ({ chat, messages, onSend }: MessageListProps) => {
-  if (!messages.length) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full text-muted-foreground/50">
-        <div className="flex flex-col items-center gap-4">
-          <Icons.node className="w-10 h-10" />
-          <p>Let&apos;s start chatting!</p>
-        </div>
-      </div>
-    );
-  }
-
+export const MessageList = ({
+  chat,
+  messages,
+  onSend,
+  className,
+}: MessageListProps) => {
   return (
-    <div className="flex flex-col gap-1 w-full max-w-4xl mx-auto">
+    <>
       {messages.map((message, index) => (
         <MessageBubble
           key={message.id || index}
           chat={chat}
           message={message}
           onSend={onSend}
+          className={className}
         />
       ))}
-    </div>
+    </>
   );
 };

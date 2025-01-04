@@ -10,33 +10,9 @@ import { useToast } from '@/hooks/use-toast';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { genId } from '@/lib/id';
 import supabase from '@/lib/supabase/client';
-import { cn } from '@/lib/utils';
 import { Loading } from '../loading';
 import { isArray } from 'lodash-es';
 import { ScrollArea } from '@/components/ui/scroll-area';
-
-const SampleMessagePanel = ({ flow, className, onSelect }: any) => {
-  const config = flow?.nodes?.find((node: any) => node.type === 'initializer');
-  if (!config?.data?.sample_messages || !isArray(config.data.sample_messages)) {
-    return null;
-  }
-  const sampleMessages = config.data.sample_messages as string[];
-  return (
-    <div className={cn(className, 'flex items-center gap-1')}>
-      {sampleMessages.map((msg, i) => (
-        <Button
-          key={i}
-          variant="secondary"
-          size="sm"
-          onClick={() => onSelect(msg)}
-          className="text-xs max-w-[240px] truncate px-1 py-0"
-        >
-          <span className="line-clamp-2 text-right">{msg}</span>
-        </Button>
-      ))}
-    </div>
-  );
-};
 
 interface ChatPaneProps {
   projectId: number;
@@ -260,47 +236,41 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
     );
   }
 
+  const config = chatSource?.flow?.nodes?.find(
+    (node: any) => node.type === 'initializer'
+  );
+  if (!config?.data?.sample_messages || !isArray(config.data.sample_messages)) {
+    return null;
+  }
+  const sampleMessages = config.data.sample_messages as string[];
+
   return (
-    <div className="flex flex-col w-full h-full">
-      <ScrollArea className="relative flex flex-col items-center w-full flex-1 gap-1">
-        <MessageList chat={chat} messages={messages} onSend={handleSend} />
-        <div className="absolute bottom-1 right-1 flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            disabled={isCleaning}
-            onClick={handleClean}
-            className="w-7 h-7"
-          >
-            {isCleaning ? (
-              <Icons.spinner className="w-4 h-4 animate-spin" />
-            ) : (
-              <Icons.trash className="w-4 h-4" />
-            )}
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="w-7 h-7"
-            onClick={handleAdd}
-          >
-            <Icons.add className="w-4 h-4" />
-          </Button>
+    <div className="flex flex-col w-full h-full bg-muted">
+      {messages.length > 0 ? (
+        <ScrollArea className="flex flex-col w-full flex-1 p-2 pb-0">
+          <MessageList
+            chat={chat}
+            messages={messages}
+            onSend={handleSend}
+            className="max-w-4xl mx-auto mb-1"
+          />
+
+          <div ref={messagesEndRef} />
+        </ScrollArea>
+      ) : (
+        <div className="flex flex-col items-center justify-center h-full gap-2 text-muted-foreground/50">
+          <Icons.node className="w-10 h-10" />
+          <p>Let&apos;s start chatting!</p>
         </div>
-        <div ref={messagesEndRef} />
-      </ScrollArea>
-      <div className="relative flex flex-col gap-1 w-full max-w-4xl mx-auto">
+      )}
+      <div className="relative flex flex-col gap-1 w-full max-w-4xl mx-auto p-2 pt-0">
         <ChatInput
           onSubmit={handleSend}
           onAbort={handleAbort}
           loading={status === 'running'}
           disabled={status === 'failed' || currentChatId === -1}
           className="w-full"
-        />
-        <SampleMessagePanel
-          flow={chatSource?.flow}
-          onSelect={handleSend}
-          className="absolute bottom-2 left-2"
+          sampleMessages={sampleMessages}
         />
       </div>
     </div>
