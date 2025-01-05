@@ -31,6 +31,7 @@ import { debounce } from 'lodash-es';
 import { Chat as ChatType } from '@/store/chats';
 import { nanoid } from 'nanoid';
 import { Button } from '../ui/button';
+import { toast } from '@/hooks/use-toast';
 
 interface DebugRect {
   x: number;
@@ -104,7 +105,8 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
   const [mousePosition, setMousePosition] = useState<MousePositionState | null>(
     null
   );
-
+  const [isGeneratingPython, setIsGeneratingPython] = useState(false);
+  const [python, setPython] = useState<string>('');
   // Suppress error code 002
   const store = useStoreApi();
   useEffect(() => {
@@ -469,6 +471,40 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
     [screenToFlowPosition, setNodes, nanoid]
   );
 
+  const onGeneratePython = async () => {
+    if (!project?.flow) return;
+    setIsGeneratingPython(true);
+    let python = '';
+    await fetch('/api/codegen', {
+      method: 'POST',
+      body: JSON.stringify(project),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((resp) => resp.json())
+      .then((json) => {
+        if (json.error) {
+          toast({
+            title: 'Error generating Python code',
+            description: json.error.detail,
+            variant: 'destructive',
+          });
+        } else {
+          python = json.code;
+        }
+      })
+      .catch((e) => {
+        console.warn(e);
+        toast({
+          title: 'Error generating Python code',
+          description: e.message,
+          variant: 'destructive',
+        });
+      })
+      .finally(() => setIsGeneratingPython(false));
+  };
+
   if (isLoading) {
     return (
       <div className="relative flex w-full h-full items-center justify-center">
@@ -488,7 +524,7 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
   return (
     <>
       {mode === 'python' ? (
-        <PythonViewer data={project} setMode={setMode} />
+        <PythonViewer data={python} />
       ) : (
         <div
           className="relative flex flex-grow flex-col w-full h-full"
@@ -542,10 +578,17 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setMode('python')}
+                onClick={onGeneratePython}
+                disabled={isGeneratingPython}
               >
-                <Icons.python className="w-4 h-4" />
-                <span className="text-xs">Generate Python</span>
+                {isGeneratingPython ? (
+                  <Icons.spinner className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Icons.python className="w-4 h-4" />
+                )}
+                <span className="text-xs">
+                  {isGeneratingPython ? 'Generating...' : 'Generate Python'}
+                </span>
               </Button>
             </Panel>
             <Panel

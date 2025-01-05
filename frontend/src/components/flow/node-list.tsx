@@ -24,7 +24,6 @@ const NodeItem = ({ id, name, type, description }: NodeItemProps) => {
     event: React.DragEvent<HTMLDivElement>,
     nodeData: any
   ) => {
-    console.log('onDragStart', event, nodeData);
     event.dataTransfer.setData('application/json', JSON.stringify(nodeData));
   };
 
