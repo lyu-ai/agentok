@@ -10,6 +10,7 @@ import { ProjectPicker } from '@/components/project/project-picker';
 import Link from 'next/link';
 import { Icons } from '../icons';
 import { cn } from '@/lib/utils';
+import { useTheme } from 'next-themes';
 
 const apiEndpoint =
   process.env.NEXT_PUBLIC_BACKEND_URL || 'https://localhost:5004';
@@ -37,6 +38,7 @@ export const NAV_MENU_ITEMS = [
 
 const Navbar = () => {
   const pathname = usePathname();
+  const { resolvedTheme } = useTheme();
 
   // Create a matcher function
   const matchPath = match<{
@@ -115,7 +117,11 @@ const Navbar = () => {
           className="hidden md:block"
         >
           <img
-            src="https://img.shields.io/github/stars/dustland/agentok?style=flat&logo=github&color=black&labelColor=gray&label=Stars"
+            src={
+              resolvedTheme === 'dark'
+                ? 'https://img.shields.io/github/stars/dustland/agentok?style=flat&logo=github&color=black&labelColor=gray&label=Stars'
+                : 'https://img.shields.io/github/stars/dustland/agentok?style=social&logo=github'
+            }
             alt="github"
             className="rounded h-5"
           />
