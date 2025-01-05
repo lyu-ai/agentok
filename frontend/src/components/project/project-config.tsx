@@ -7,6 +7,7 @@ export const ProjectConfig = ({ projectId }: { projectId: number }) => {
   const handleChange = (name: string, value: any) => {
     updateProject({ [name]: value }).catch(console.error);
   };
+  console.log('ProjectConfig', project);
   return (
     <ScrollArea className="h-full p-2">
       <div className="flex flex-col gap-4">
@@ -15,7 +16,7 @@ export const ProjectConfig = ({ projectId }: { projectId: number }) => {
           type="text"
           name="name"
           label="Name"
-          value={project?.name}
+          data={{ name: project?.name }}
           onValueChange={handleChange}
         />
         <GenericOption
@@ -24,7 +25,7 @@ export const ProjectConfig = ({ projectId }: { projectId: number }) => {
           rows={5}
           name="description"
           label="Description"
-          value={project?.description}
+          data={{ description: project?.description }}
           onValueChange={handleChange}
         />
       </div>

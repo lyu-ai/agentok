@@ -68,13 +68,10 @@ const Navbar = () => {
           <span className="text-brand font-mono">Agentok</span>
         </Link>
       </div>
-      <div role="tablist" className="flex px-2 items-center gap-4">
-        <div
-          role="tab"
-          className={cn('tab', { 'tab-active': isActive('/projects') })}
-        >
-          <ProjectPicker />
-        </div>
+      <div className="flex px-2 items-center gap-4 text-muted-foreground">
+        <ProjectPicker
+          className={cn({ 'text-primary': isActive('/projects') })}
+        />
         {NAV_MENU_ITEMS.map((item) => {
           return (
             <Link
@@ -82,7 +79,10 @@ const Navbar = () => {
               key={item.id}
               href={item.href}
               className={cn(
-                ' group flex items-center text-sm py-1 gap-1.5 hover:text-primary font-medium',
+                'flex items-center text-sm py-1 gap-1.5 hover:text-primary font-medium',
+                {
+                  'text-primary': isActive(item.href),
+                },
                 'hidden lg:flex'
               )}
             >
