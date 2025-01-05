@@ -7,6 +7,7 @@ import {
 import { Icons } from '../icons';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
+import { ScrollArea } from '../ui/scroll-area';
 
 export const NodeButton = ({ className, onAddNode, ...props }: any) => {
   return (
@@ -17,13 +18,10 @@ export const NodeButton = ({ className, onAddNode, ...props }: any) => {
           Add Node
         </Button>
       </PopoverTrigger>
-      <PopoverContent
-        id="agent-list"
-        className="w-80 p-2 max-h-[calc(100vh-var(--header-height)-3rem)] overflow-y-auto"
-        side="bottom"
-        align="start"
-      >
-        <NodeList onAddNode={onAddNode} />
+      <PopoverContent id="agent-list" side="bottom" align="start" asChild>
+        <ScrollArea className="w-80 h-[calc(100vh-var(--header-height)-4rem)] bg-background">
+          <NodeList onAddNode={onAddNode} />
+        </ScrollArea>
       </PopoverContent>
     </Popover>
   );

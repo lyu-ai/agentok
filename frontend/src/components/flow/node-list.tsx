@@ -9,7 +9,6 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
-import { ScrollArea } from '../ui/scroll-area';
 import { PopoverClose } from '../ui/popover';
 
 interface NodeItemProps {
@@ -57,47 +56,40 @@ export const NodeList = ({
   onAddNode: (type: string, name: string) => void;
 }) => {
   return (
-    <ScrollArea className="h-full">
-      <Accordion
-        type="single"
-        collapsible
-        defaultValue="Basic"
-        className="w-full p-2"
-      >
-        {[
-          {
-            title: 'Basic',
-            nodes: basicNodes,
-          },
-          {
-            title: 'Advanced',
-            nodes: advancedNodes,
-          },
-        ].map(({ title, nodes }) => (
-          <AccordionItem value={title} className="border-none" key={title}>
-            <AccordionTrigger className="text-sm outline-none py-2">
-              {title}
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="flex flex-col gap-1">
-                {nodes.map((node) => (
-                  <PopoverClose
-                    key={node.id}
-                    onClick={() => onAddNode(node.id, node.name)}
-                  >
-                    <NodeItem
-                      id={node.id}
-                      name={node.name}
-                      type={node.id}
-                      description={node.description}
-                    />
-                  </PopoverClose>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
-    </ScrollArea>
+    <Accordion type="multiple" defaultValue={['Basic']} className="w-full p-2">
+      {[
+        {
+          title: 'Basic',
+          nodes: basicNodes,
+        },
+        {
+          title: 'Advanced',
+          nodes: advancedNodes,
+        },
+      ].map(({ title, nodes }) => (
+        <AccordionItem value={title} className="border-none" key={title}>
+          <AccordionTrigger className="text-sm outline-none py-2">
+            {title}
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="flex flex-col gap-1">
+              {nodes.map((node) => (
+                <PopoverClose
+                  key={node.id}
+                  onClick={() => onAddNode(node.id, node.name)}
+                >
+                  <NodeItem
+                    id={node.id}
+                    name={node.name}
+                    type={node.id}
+                    description={node.description}
+                  />
+                </PopoverClose>
+              ))}
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      ))}
+    </Accordion>
   );
 };

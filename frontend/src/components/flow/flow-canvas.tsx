@@ -523,6 +523,9 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
               position="bottom-left"
               className="flex"
             />
+            <Panel position="top-left" className="flex items-center p-1 gap-2">
+              <NodeButton onAddNode={onAddNode} />
+            </Panel>
             <Panel position="top-right" className="flex items-center p-1 gap-2">
               <Button
                 variant="outline"
@@ -557,7 +560,6 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
               )}
             </Panel>
           </ReactFlow>
-          <NodeButton onAddNode={onAddNode} className="absolute top-2 left-2" />
         </div>
       )}
     </>
