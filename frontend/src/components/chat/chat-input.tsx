@@ -58,9 +58,9 @@ export const ChatInput = ({
         onKeyDown={handleKeyDown}
         placeholder="Enter message to start chat ..."
         className={cn(
-          'min-h-[100px] w-full resize-none border border-primary/50 rounded-xl shadow-xl bg-primary-foreground',
+          'min-h-[80px] w-full resize-none border border-primary/50 rounded-xl shadow-xl bg-primary-foreground',
           disabled && 'bg-muted',
-          sampleMessages && 'pt-10'
+          sampleMessages?.length && 'pt-10 min-h-[100px]'
         )}
         disabled={disabled}
       />

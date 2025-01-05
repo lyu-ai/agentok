@@ -22,15 +22,17 @@ interface ChatPaneProps {
 export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
   const [currentChatId, setCurrentChatId] = useState(chatId);
   const { chat, chatSource, isLoading: isLoadingChat } = useChat(currentChatId);
-  const { createChat } = useChats();
+  const { createChat, isCreating } = useChats();
   const { toast } = useToast();
   const [status, setStatus] = useState('ready');
   const [messages, setMessages] = useState<any[]>([]);
-  const [isLoadingMessages, setIsLoadingMessages] = useState(true);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [isCleaning, setIsCleaning] = useState(false);
   const isFirstRender = useRef(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
+
+  console.log('chat', chat, isLoadingChat, isLoadingMessages);
 
   const fetchMessages = useCallback(async () => {
     if (chatId === -1) return;
@@ -193,7 +195,7 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
     [chatId, user?.email, toast]
   );
 
-  const handleAdd = useCallback(async () => {
+  const handleStartChat = useCallback(async () => {
     try {
       const chat = await createChat(projectId, 'project');
       setCurrentChatId(chat.id);
@@ -238,10 +240,13 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
 
   if (!chat) {
     return (
-      <div className="flex flex-col w-full h-full items-center justify-center gap-2">
+      <div className="flex flex-col w-full h-full items-center justify-center gap-2 text-muted-foreground/50">
         <Icons.node className="w-8 h-8" />
         <p>Let&apos;s start chatting!</p>
-        <Button onClick={handleAdd}>Add Chat</Button>
+        <Button onClick={handleStartChat}>
+          {isCreating && <Icons.spinner className="w-4 h-4 animate-spin" />}
+          Start Chat
+        </Button>
       </div>
     );
   }
