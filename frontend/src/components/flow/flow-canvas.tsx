@@ -492,6 +492,7 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
           });
         } else {
           python = json.code;
+          setMode('python');
         }
       })
       .catch((e) => {
@@ -587,7 +588,9 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
                   <Icons.python className="w-4 h-4" />
                 )}
                 <span className="text-xs">
-                  {isGeneratingPython ? 'Generating...' : 'Generate Python'}
+                  {isGeneratingPython
+                    ? 'Generating Python...'
+                    : 'Generate Python'}
                 </span>
               </Button>
             </Panel>
