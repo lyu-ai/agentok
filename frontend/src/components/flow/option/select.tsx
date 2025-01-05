@@ -16,7 +16,7 @@ export const SelectOption = ({
   data,
   label,
   name,
-  onChange,
+  onValueChange,
   options,
   compact,
 }: SelectOptionProps) => {
@@ -25,7 +25,7 @@ export const SelectOption = ({
     selectedIndex = options.findIndex((o) => o.value === data[name]);
   return (
     <div
-      className={clsx('flex gap-1 text-sm', {
+      className={clsx('flex gap-2 text-sm', {
         'flex-col': !compact,
         'items-center': compact,
       })}
@@ -33,7 +33,7 @@ export const SelectOption = ({
       <Label className="whitespace-nowrap">{label}</Label>
       <Select
         value={options[selectedIndex].value}
-        onValueChange={(value) => onChange && onChange(name, value)}
+        onValueChange={(value) => onValueChange && onValueChange(name, value)}
       >
         <SelectTrigger>{options[selectedIndex].label}</SelectTrigger>
         <SelectContent>

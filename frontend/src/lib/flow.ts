@@ -14,11 +14,11 @@ import { RetrieveUserProxyAgent } from '@/components/flow/node/retrieve-user';
 import { RetrieveAssistantNode } from '@/components/flow/node/retrieve-assistant';
 // Import icons from the new icons file
 import { Icons, Icon } from '@/components/icons';
-import { SummarizerNode } from '@/components/flow/node/summarizer';
+import { LucideIcon } from 'lucide-react';
+import { ElementType } from 'react';
 
 export const nodeTypes: NodeTypes = {
   initializer: InitializerNode,
-  summarizer: SummarizerNode,
   assistant: AssistantNode,
   user: UserProxyAgent,
   groupchat: GroupNode,
@@ -57,9 +57,7 @@ export type NodeMeta = {
   id: string;
   name: string;
   description?: string;
-  icon?: Icon;
-  type: string;
-  label: string;
+  icon?: ElementType;
   class: string;
 };
 
@@ -69,8 +67,6 @@ export const basicNodes: NodeMeta[] = [
     icon: Icons.rocket,
     name: 'Initializer',
     description: 'The first node in the flow',
-    label: 'initializer',
-    type: 'initializer',
     class: 'Initializer',
   },
   {
@@ -78,8 +74,6 @@ export const basicNodes: NodeMeta[] = [
     icon: Icons.robot,
     name: 'Agent',
     description: 'A Conversable Agent',
-    label: 'conversable',
-    type: 'conversable',
     class: 'ConversableAgent',
   },
   {
@@ -87,35 +81,20 @@ export const basicNodes: NodeMeta[] = [
     icon: Icons.user,
     name: 'User',
     description: 'A User Proxy Agent',
-    label: 'user',
-    type: 'user',
     class: 'UserProxyAgent',
   },
   {
     id: 'assistant',
-    icon: Icons.robot,
+    icon: Icons.node,
     name: 'Assistant',
     description: 'An Assistant Agent',
-    label: 'assistant',
-    type: 'assistant',
     class: 'AssistantAgent',
-  },
-  {
-    id: 'summarizer',
-    icon: Icons.megaphone,
-    name: 'Summarizer',
-    description: 'Summarize the conversation',
-    label: 'summarizer',
-    type: 'summarizer',
-    class: 'Summarizer',
   },
   {
     id: 'groupchat',
     icon: Icons.group,
     name: 'Group',
     description: 'Group several agents together',
-    label: 'groupchat',
-    type: 'groupchat',
     class: 'GroupChat',
   },
   {
@@ -123,8 +102,6 @@ export const basicNodes: NodeMeta[] = [
     icon: Icons.note,
     name: 'Note',
     description: 'Work as comment for the flow and node',
-    label: 'note',
-    type: 'note',
     class: 'Note',
   },
 ];
@@ -135,8 +112,6 @@ export const advancedNodes: NodeMeta[] = [
     icon: Icons.group,
     name: 'Nested Chat',
     description: 'A Nested Chat Manager',
-    label: 'nestedchat',
-    type: 'nestedchat',
     class: 'NestedChat',
   },
   {
@@ -144,8 +119,6 @@ export const advancedNodes: NodeMeta[] = [
     icon: Icons.robot,
     name: 'RetrieveAssistant',
     description: 'A Retrieve Assistant Agent',
-    label: 'retrieve-assistant',
-    type: 'assistant',
     class: 'RetrieveAssistantAgent',
   },
   {
@@ -153,59 +126,42 @@ export const advancedNodes: NodeMeta[] = [
     icon: Icons.search,
     name: 'RetrieveUserProxy',
     description: 'A Retrieve User Proxy Agent',
-    label: 'retrieve-user',
-    type: 'user',
     class: 'RetrieveUserProxyAgent',
   },
   {
     id: 'gpt_assistant',
-    icon: Icons.brain,
+    icon: Icons.openai,
     name: 'GPTAssistant',
     description: 'A GPT Assistant Agent',
-    label: 'gpt-assistant',
-    type: 'gpt_assistant',
     class: 'GPTAssistantAgent',
   },
   // {
   //   id: 'multimodal',
   //   icon: Icons.Eye,
   //   name: 'MultimodalAssistant',
-  //   label: 'multimodal-assistant',
-  //   type: 'mm_assistant',
   //   class: 'MultimodalConversableAgent',
   // },
   // {
   //   id: 'llava',
   //   icon: Icons.Meta,
   //   name: 'LLaVA',
-  //   label: 'llava',
-  //   type: 'assistant',
   //   class: 'LLaVAAgent',
   // },
   // {
   //   id: 'math_user_proxy',
   //   icon: Icons.User4,
   //   name: 'MathUserProxyAgent',
-  //   label: 'math-user',
-  //   type: 'user',
   //   class: 'MathUserProxyAgent',
   // },
 ];
 
-export const getNodeLabel = (label: string, tNodeMeta: any) => {
-  // t() function is hook-based, so here the caller from component should pass in the function
-  return tNodeMeta && label ? tNodeMeta(label) : label;
-};
-
 const allNodes = [...basicNodes, ...advancedNodes];
 
 export const getNodeIcon = (type: string) => {
-  const nodeMeta = allNodes.find((node) => node.type === type);
+  const nodeMeta = allNodes.find((node) => node.id === type);
   return nodeMeta?.icon || Icons.question;
 };
-
-// ---------------------
-
+  
 export const setNodeData = (
   instance: ReactFlowInstance,
   id: string,

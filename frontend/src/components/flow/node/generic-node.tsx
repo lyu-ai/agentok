@@ -4,6 +4,7 @@ import { Handle, Position, HandleType, NodeProps } from '@xyflow/react';
 import { Icons } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { ComponentType, PropsWithChildren } from 'react';
+import { getNodeIcon } from '@/lib/flow';
 
 export type GenericNodeProps = PropsWithChildren<NodeProps> & {
   ports?: { type: HandleType; name?: string }[];
@@ -18,6 +19,7 @@ export const GenericNode: ComponentType<GenericNodeProps> = ({
   ports = [],
   children,
 }: GenericNodeProps) => {
+  const NodeIcon = getNodeIcon(data.id as string);
   return (
     <div
       className={cn(
@@ -44,7 +46,7 @@ export const GenericNode: ComponentType<GenericNodeProps> = ({
         />
       ))}
       <div className="flex flex-col items-center gap-2 flex-grow">
-        <Icons.node className="w-10 h-10" />
+        <NodeIcon className="w-10 h-10" />
         <span className="text-sm font-bold">{data.name as string}</span>
       </div>
     </div>

@@ -15,7 +15,7 @@ export const TextOption = ({
   placeholder,
   name,
   rows,
-  onChange,
+  onValueChange,
   compact = false,
 }: TextOptionProps) => {
   const [value, setValue] = useState(data?.[name] ?? '');
@@ -23,7 +23,7 @@ export const TextOption = ({
   return (
     <div
       className={clsx('flex text-sm', {
-        'flex-col gap-1 ': !compact,
+        'flex-col gap-2 ': !compact,
         'items-center gap-2': compact,
       })}
     >
@@ -33,7 +33,7 @@ export const TextOption = ({
           value={value}
           placeholder={placeholder}
           onChange={(e) => setValue(e.target.value)}
-          onBlur={() => onChange && onChange(name, value)}
+          onBlur={() => onValueChange && onValueChange(name, value)}
           rows={rows}
           className="focus:text-primary p-1 rounded bg-transparent w-full nodrag nowheel"
         />
@@ -43,7 +43,7 @@ export const TextOption = ({
           value={value}
           placeholder={placeholder}
           onChange={(e) => setValue(e.target.value)}
-          onBlur={(e) => onChange && onChange(name, e.target.value)}
+          onBlur={(e) => onValueChange && onValueChange(name, e.target.value)}
           className="focus:text-primary p-1 rounded bg-transparent w-full nodrag nowheel"
         />
       )}

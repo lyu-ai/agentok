@@ -490,7 +490,7 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
   if (isLoading) {
     return (
       <div className="relative flex w-full h-full items-center justify-center">
-        <Icons.spinner className="w-4 h-4 animate-spin text-primary" />
+        <Icons.logoSimple className="w-12 h-12 text-muted-foreground/50 animate-pulse" />
       </div>
     );
   }
@@ -541,7 +541,12 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
               setMousePosition({ flow: flowPosition } as MousePositionState);
             }}
           >
-            <Background variant={BackgroundVariant.Dots} gap={24} size={2} />
+            <Background
+              variant={BackgroundVariant.Lines}
+              gap={50}
+              size={4}
+              color="rgba(128,128,128,0.1)"
+            />
             <Controls
               fitViewOptions={{ maxZoom: 1 }}
               showInteractive={false}

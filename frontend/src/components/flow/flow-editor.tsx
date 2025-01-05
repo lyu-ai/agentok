@@ -7,12 +7,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Icons } from '../icons';
 import { FlowCanvas } from './flow-canvas';
 import { ChatPane } from '../chat/chat-pane';
-import { FlowConfig } from './config';
+import { FlowConfig } from './flow-config';
 import { JsonViewer } from './json';
 import { useEdges, useNodes, useReactFlow } from '@xyflow/react';
 import { useState, useEffect } from 'react';
 import { useChats } from '@/hooks';
-import Python from 'react-syntax-highlighter/dist/esm/languages/hljs/python';
 import { ChatConsole } from '../chat/chat-console';
 
 export const FlowEditor = ({ projectId }: { projectId: number }) => {
@@ -28,8 +27,6 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
     );
     setActiveChatId(existingChat?.id || -1);
   }, [projectId, chats]);
-
-  console.log('selectedNode?.data', selectedNode?.data);
 
   return (
     <div className="flex h-[calc(100vh-var(--header-height))]">
@@ -62,7 +59,11 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="config" className="flex-1 overflow-auto">
-              <FlowConfig nodeId={selectedNode?.id} edgeId={selectedEdge?.id} />
+              <FlowConfig
+                projectId={projectId}
+                nodeId={selectedNode?.id}
+                edgeId={selectedEdge?.id}
+              />
             </TabsContent>
             <TabsContent value="chat" className="flex-1 overflow-auto p-2">
               <ChatPane projectId={projectId} chatId={activeChatId} />

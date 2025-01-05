@@ -10,7 +10,7 @@ export const CheckOption = ({
   data,
   label,
   name,
-  onChange,
+  onValueChange,
 }: NumberOptionProps) => {
   const [value, setValue] = useState(data?.[name] ?? false);
   return (
@@ -19,7 +19,7 @@ export const CheckOption = ({
         id={name}
         checked={value}
         onCheckedChange={(checked) => setValue(checked)}
-        onBlur={() => onChange && onChange(name, value)}
+        onBlur={() => onValueChange && onValueChange(name, value)}
         className="checkbox checkbox-xs bg-transparent rounded"
       />
       <Label className="whitespace-nowrap" htmlFor={name}>

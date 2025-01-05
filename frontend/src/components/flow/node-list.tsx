@@ -116,10 +116,10 @@ export const NodeList = () => {
                     id={node.id}
                     key={node.id}
                     name={node.name}
-                    type={node.type}
+                    type={node.id}
                     description={node.description}
                     nodeClass={node.class}
-                    onClick={() => addNode(node.type, node.class)}
+                    onClick={() => addNode(node.id, node.class)}
                   />
                 ))}
               </div>

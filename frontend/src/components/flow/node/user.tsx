@@ -16,7 +16,7 @@ export const UserProxyAgent = ({ id, selected, data, ...props }: any) => {
         'max_consecutive_auto_reply',
       ]}
       optionsDisabled={['disable_llm']}
-      ports={[{ type: 'input' }, { type: 'output' }]}
+      ports={[{ type: 'source' }, { type: 'target' }]}
       ConfigDialog={UserConfig}
       {...props}
     />

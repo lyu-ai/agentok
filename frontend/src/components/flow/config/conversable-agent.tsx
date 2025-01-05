@@ -27,7 +27,6 @@ export const ConversableAgentConfig = ({
       type: 'text',
       name: 'termination_msg',
       label: 'Termination Message',
-      compact: true,
     },
     {
       type: 'select',
@@ -38,7 +37,6 @@ export const ConversableAgentConfig = ({
         { value: 'ALWAYS', label: 'Always ask for input' },
         { value: 'TERMINATE', label: 'Ask on termination' },
       ],
-      compact: true,
     },
     {
       type: 'number',
@@ -64,7 +62,7 @@ export const ConversableAgentConfig = ({
 
   return (
     <ScrollArea className="flex flex-col h-full w-full p-2">
-      <div className="flex flex-col gap-2 w-full h-full">
+      <div className="flex flex-col gap-4 w-full h-full">
         {GENERAL_OPTIONS.filter((o) => !optionsDisabled.includes(o.name)).map(
           (options, index) => (
             <GenericOption

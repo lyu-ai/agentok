@@ -20,7 +20,7 @@ export const RangeOption = ({
 }: RangeOptionProps) => {
   return (
     <div
-      className={clsx('flex gap-1 text-sm', {
+      className={clsx('flex gap-2 text-sm', {
         'flex-col': !compact,
         'items-center': compact,
       })}

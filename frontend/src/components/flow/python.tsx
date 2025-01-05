@@ -52,7 +52,7 @@ export const PythonViewer = ({ data, setMode }: any) => {
   if (isGenerating) {
     return (
       <div className="relative flex flex-col w-full h-full items-center justify-center gap-2 text-muted-foreground">
-        <Icons.spinner className="w-4 h-4 animate-spin" />
+        <Icons.python className="w-8 h-8 animate-pulse" />
         <span className="text-xs">Generating Python code...</span>
       </div>
     );

@@ -12,7 +12,7 @@ export type OptionType = {
   label: string; // Displayed label, key in the i18n json
   description?: string; // Displayed description, key in the i18n json
   name: string; // Key in the node data
-  onChange?: (key: string, value: any) => void;
+  onValueChange?: (key: string, value: any) => void;
 };
 
 export type OptionProps = {
@@ -39,7 +39,11 @@ const UnsupportedOption = ({ type }: { type: string }) => {
   );
 };
 
-export const GenericOption = ({ type, onChange, ...props }: OptionProps) => {
+export const GenericOption = ({
+  type,
+  onValueChange,
+  ...props
+}: OptionProps) => {
   const optionDict: OptionDict = {
     text: TextOption,
     number: NumberOption,
@@ -66,8 +70,8 @@ export const GenericOption = ({ type, onChange, ...props }: OptionProps) => {
     }
   };
   const handleChange = (name: string, value: any) => {
-    if (onChange) {
-      onChange(name, value);
+    if (onValueChange) {
+      onValueChange(name, value);
     } else if (isEdge(props.nodeId)) {
       setEdgeData(instance, props.nodeId, { [name]: value });
     } else {

@@ -7,14 +7,21 @@ import { Icons } from '../icons';
 import { useReactFlow } from '@xyflow/react';
 import { InitializerConfig } from './config/initializer';
 import { SummarizerConfig } from './config/summarizer';
+import { ProjectConfig } from '../project/project-config';
 
 interface FlowConfigProps {
   nodeId?: string;
   edgeId?: string;
+  projectId: number;
 }
 
-export const FlowConfig = ({ nodeId, edgeId }: FlowConfigProps) => {
+export const FlowConfig = ({ nodeId, edgeId, projectId }: FlowConfigProps) => {
   const { getEdge, getNode } = useReactFlow();
+
+  if (!nodeId && !edgeId) {
+    return <ProjectConfig projectId={projectId} />;
+  }
+
   // Handle edge configuration
   if (edgeId) {
     const edge = getEdge(edgeId);
