@@ -1,10 +1,18 @@
 'use client';
 
-import { Handle, Position, HandleType, NodeProps } from '@xyflow/react';
+import {
+  Handle,
+  Position,
+  HandleType,
+  NodeProps,
+  NodeToolbar,
+  useReactFlow,
+} from '@xyflow/react';
 import { Icons } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { ComponentType, PropsWithChildren } from 'react';
 import { getNodeIcon } from '@/lib/flow';
+import { Button } from '@/components/ui/button';
 
 export type GenericNodeProps = PropsWithChildren<NodeProps> & {
   ports?: { type: HandleType; name?: string }[];
@@ -20,6 +28,7 @@ export const GenericNode: ComponentType<GenericNodeProps> = ({
   children,
 }: GenericNodeProps) => {
   const NodeIcon = getNodeIcon(data.id as string);
+  const instance = useReactFlow();
   return (
     <div
       className={cn(
@@ -30,6 +39,16 @@ export const GenericNode: ComponentType<GenericNodeProps> = ({
         }
       )}
     >
+      <NodeToolbar isVisible={selected} position={Position.Top} align={'end'}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-muted-foreground/80 h-7 w-7"
+          onClick={() => instance.deleteElements({ nodes: [{ id }] })}
+        >
+          <Icons.trash className="w-4 h-4" />
+        </Button>
+      </NodeToolbar>
       {ports.map(({ type, name }, i) => (
         <Handle
           key={i}

@@ -1,9 +1,18 @@
 'use client';
 
 import { ComponentType } from 'react';
-import { NodeProps, NodeResizer, Handle, Position } from '@xyflow/react';
+import {
+  NodeProps,
+  NodeResizer,
+  Handle,
+  Position,
+  NodeToolbar,
+  useReactFlow,
+  NodeResizeControl,
+} from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import { Icons } from '@/components/icons';
+import { Button } from '@/components/ui/button';
 
 interface GroupNodeData extends Record<string, unknown> {
   name?: string;
@@ -17,17 +26,31 @@ export const GroupNode: ComponentType<NodeProps> = ({
 }: NodeProps) => {
   const nodeData = data as GroupNodeData;
   const isHovered = id === data.hoveredGroupId;
+  const instance = useReactFlow();
 
   return (
     <div className="relative">
-      <NodeResizer
-        minWidth={400}
-        minHeight={300}
-        isVisible={selected}
-        handleClassName="w-2 h-2 bg-primary border-2 border-white rounded-none"
-        lineClassName="border border-primary"
-        keepAspectRatio={false}
-      />
+      <NodeToolbar isVisible={selected} position={Position.Top} align={'end'}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-muted-foreground/80 h-7 w-7"
+          onClick={() => instance.deleteElements({ nodes: [{ id }] })}
+        >
+          <Icons.trash className="w-4 h-4" />
+        </Button>
+      </NodeToolbar>
+      <NodeResizeControl
+        minWidth={200}
+        minHeight={100}
+        style={{
+          background: 'transparent',
+          border: 'none',
+          zIndex: 1000,
+        }}
+      >
+        <Icons.resize className="w-4 h-4" />
+      </NodeResizeControl>
       <div
         className={cn(
           'flex flex-col min-w-[400px] min-h-[300px] p-2',

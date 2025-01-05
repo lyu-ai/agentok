@@ -6,6 +6,8 @@ import {
   NodeProps,
   NodeResizer,
   NodeResizeControl,
+  NodeToolbar,
+  Position,
 } from '@xyflow/react';
 import { Markdown } from '@/components/markdown';
 import { setNodeData } from '@/lib/flow';
@@ -32,9 +34,19 @@ export const NoteNode = memo(
 
     return (
       <div
-        className="flex flex-col gap-2 w-full min-w-[200px] min-h-[100px] bg-yellow-500/40 backdrop-blur-sm rounded-md p-2"
+        className="relative group flex flex-col gap-2 w-full min-w-[200px] min-h-[100px] bg-yellow-500/40 backdrop-blur-sm rounded-md p-2"
         onClick={() => setEditing(true)}
       >
+        <NodeToolbar isVisible={selected} position={Position.Top} align={'end'}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-muted-foreground/80 h-7 w-7"
+            onClick={() => instance.deleteElements({ nodes: [{ id }] })}
+          >
+            <Icons.trash className="w-4 h-4" />
+          </Button>
+        </NodeToolbar>
         <div className="flex items-center gap-2">
           <Icons.note className="w-4 h-4" />
           <span className="text-xs">Note</span>
