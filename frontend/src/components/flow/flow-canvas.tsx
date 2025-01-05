@@ -118,6 +118,18 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
     }
   }, []);
 
+  useEffect(() => {
+    const initializeProjectFlow = () => {
+      if (project?.flow) {
+        setNodes(project.flow.nodes);
+        setEdges(project.flow.edges);
+        setIsDirty(false);
+      }
+    };
+
+    initializeProjectFlow();
+  }, [projectId]);
+
   const isGroupType = (type: string) =>
     ['groupchat', 'nestedchat'].includes(type);
 
