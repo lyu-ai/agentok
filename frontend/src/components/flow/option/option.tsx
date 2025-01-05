@@ -70,6 +70,7 @@ export const GenericOption = ({
     }
   };
   const handleChange = (name: string, value: any) => {
+    console.log('handleChange', name, value);
     if (onValueChange) {
       onValueChange(name, value);
     } else if (isEdge(props.nodeId)) {
@@ -86,5 +87,5 @@ export const GenericOption = ({
     return <UnsupportedOption type={type} />;
   }
 
-  return <OptionComponent onChange={handleChange} {...props} />;
+  return <OptionComponent onValueChange={handleChange} {...props} />;
 };

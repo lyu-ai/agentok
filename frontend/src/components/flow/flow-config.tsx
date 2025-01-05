@@ -59,7 +59,7 @@ export const FlowConfig = ({ nodeId, edgeId, projectId }: FlowConfigProps) => {
   }
 
   // Extract node type from nodeId (format: node-{type}-{uuid})
-  const type = nodeId.split('-')[1];
+  const type = node.data.id;
 
   switch (type) {
     case 'initializer':

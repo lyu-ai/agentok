@@ -419,7 +419,6 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
 
   const onAddNode = useCallback(
     (type: string, name: string) => {
-      console.log('onAddNode', type, name);
       setNodes((nds) => {
         const newId = nanoid(8);
         const bounds = flowParent.current?.getBoundingClientRect();
@@ -435,8 +434,6 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
           x: center.x + randInt(100),
           y: center.y + randInt(100),
         });
-
-        console.log('position', position);
 
         const newNode: Node = {
           id: `node_${type}_${newId}`,
