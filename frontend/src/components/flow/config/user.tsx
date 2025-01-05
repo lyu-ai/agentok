@@ -4,7 +4,7 @@ import { GenericOption } from '../option/option';
 
 export const UserConfig = ({ nodeId, data }: any) => {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 p-2">
       <GenericOption
         type="select"
         nodeId={nodeId}

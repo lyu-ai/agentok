@@ -6,11 +6,9 @@ import { initialEdges, initialNodes, useProjects } from '@/hooks';
 import { toast } from '@/hooks/use-toast';
 import { Icons } from '@/components/icons';
 import Link from 'next/link';
-import Image from 'next/image';
 import { TemplateList } from '@/components/project/template-list';
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Logo } from '@/components/logo';
 
 export default function Page() {
   const router = useRouter();

@@ -26,7 +26,6 @@ import { Icons } from '@/components/icons';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { NodeButton } from './node-button';
 import { PythonViewer } from './python';
-import { genId } from '@/lib/id';
 import { useChats, useProject } from '@/hooks';
 import { debounce } from 'lodash-es';
 import { Chat as ChatType } from '@/store/chats';
@@ -100,10 +99,8 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
   const [nodes, setNodes] = useNodesState<Node>([]);
   const [edges, setEdges] = useEdgesState<Edge>([]);
   const { setIsDirty } = useDebouncedUpdate(projectId);
-  const { chats, createChat } = useChats();
-  const [mode, setMode] = useState<'main' | 'flow' | 'json' | 'python'>('flow');
+  const [mode, setMode] = useState<'flow' | 'python'>('flow');
   const flowParent = useRef<HTMLDivElement>(null);
-  const [activeChatId, setActiveChatId] = useState<ChatType | undefined>();
   const [mousePosition, setMousePosition] = useState<MousePositionState | null>(
     null
   );
@@ -120,24 +117,6 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
       };
     }
   }, []);
-
-  useEffect(() => {
-    const initializeProjectFlow = () => {
-      if (project?.flow) {
-        setNodes(project.flow.nodes);
-        setEdges(project.flow.edges);
-        setIsDirty(false);
-      }
-      const existingChat = chats.findLast(
-        (chat) => chat.from_project === project?.id
-      );
-      if (existingChat) {
-        setActiveChatId(existingChat);
-      }
-    };
-
-    initializeProjectFlow();
-  }, [projectId]);
 
   const isGroupType = (type: string) =>
     ['groupchat', 'nestedchat'].includes(type);
@@ -261,16 +240,6 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
     [setNodes, setIsDirty]
   );
 
-  // Helper function to check if a position is inside a node
-  const isPositionInsideNode = (position: XYPosition, node: Node) => {
-    return (
-      position.x > node.position.x &&
-      position.x < node.position.x + (node.width ?? 0) &&
-      position.y > node.position.y &&
-      position.y < node.position.y + (node.height ?? 0)
-    );
-  };
-
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
       console.log('edge changes', changes);
@@ -355,13 +324,13 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
       });
 
       const { offsetX, offsetY, ...cleanedData } = data;
-      const newId = nanoid();
+      const newId = nanoid(8);
       const newNode = {
-        id: `node-${data.id}-${newId}`,
+        id: `node_${data.id}_${newId}`,
         type: data.id,
         position,
         data: cleanedData,
-        selected: false,
+        selected: true,
         draggable: true,
         selectable: true,
         focusable: true,
@@ -448,44 +417,48 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
     });
   };
 
-  const onAddNode = (type: string, data: any) => {
-    const newId = genId();
-    const randInt = (max: number) =>
-      Math.floor(Math.random() * Math.floor(max));
-    const viewportCenter = screenToFlowPosition({
-      x: window.innerWidth / 2,
-      y: window.innerHeight / 2,
-    });
+  const onAddNode = useCallback(
+    (type: string, name: string) => {
+      console.log('onAddNode', type, name);
+      setNodes((nds) => {
+        const newId = nanoid(8);
+        const bounds = flowParent.current?.getBoundingClientRect();
+        if (!bounds) return nds;
+        const center = {
+          x: bounds.left + (bounds.right - bounds.left) / 2,
+          y: bounds.top + (bounds.bottom - bounds.top) / 2,
+        };
+        const randInt = (max: number) =>
+          Math.floor(Math.random() * Math.floor(max));
 
-    const newNode: Node = {
-      id: `node-${type}-${newId}`,
-      type,
-      position: {
-        x: viewportCenter.x - 50 + randInt(100),
-        y: viewportCenter.y - 100 + randInt(200),
-      },
-      data,
-    };
-    setNodes((nds) => nds.concat(newNode));
-  };
+        const position = screenToFlowPosition({
+          x: center.x + randInt(100),
+          y: center.y + randInt(100),
+        });
 
-  const handleStartChat = async () => {
-    if (!project) {
-      console.warn('Project not found');
-      return;
-    }
-    const existingChat = chats.findLast(
-      (chat) => chat.from_project === project.id
-    );
-    console.log('existingChat', existingChat);
-    if (existingChat) {
-      setActiveChatId(existingChat);
-      return;
-    }
-    await createChat(project.id, 'project').then((chat) =>
-      setActiveChatId(chat)
-    );
-  };
+        console.log('position', position);
+
+        const newNode: Node = {
+          id: `node_${type}_${newId}`,
+          type,
+          position,
+          data: {
+            id: type,
+            name,
+          },
+          selected: true,
+          draggable: true,
+          selectable: true,
+          focusable: true,
+        };
+        const updatedNodes = nds.map((n) => ({ ...n, selected: false }));
+        return [...updatedNodes, newNode];
+      });
+
+      setIsDirty(true);
+    },
+    [screenToFlowPosition, setNodes, nanoid]
+  );
 
   if (isLoading) {
     return (

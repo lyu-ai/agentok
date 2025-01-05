@@ -5,7 +5,7 @@ import {
   Position,
 } from '@xyflow/react';
 import { Icons } from '@/components/icons';
-
+import { Button } from '@/components/ui/button';
 export function ConverseEdge({
   id,
   sourceX,
@@ -24,7 +24,6 @@ export function ConverseEdge({
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
   });
-
   return (
     <>
       <BaseEdge
@@ -38,7 +37,20 @@ export function ConverseEdge({
         }}
       />
       <EdgeLabelRenderer>
-        <Icons.chat className="w-4 h-4" />
+        <div
+          className="button-edge__label nodrag nopan"
+          style={{
+            transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
+          }}
+        >
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-fulltext-muted-foreground/80 h-7 w-7"
+          >
+            <Icons.chat className="w-4 h-4" />
+          </Button>
+        </div>
       </EdgeLabelRenderer>
     </>
   );

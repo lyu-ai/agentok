@@ -58,7 +58,7 @@ export type NodeMeta = {
   name: string;
   description?: string;
   icon?: ElementType;
-  class: string;
+  type: string;
 };
 
 export const basicNodes: NodeMeta[] = [
@@ -67,42 +67,42 @@ export const basicNodes: NodeMeta[] = [
     icon: Icons.rocket,
     name: 'Initializer',
     description: 'The first node in the flow',
-    class: 'Initializer',
+    type: 'Initializer',
   },
   {
     id: 'conversable',
     icon: Icons.robot,
     name: 'Agent',
     description: 'A Conversable Agent',
-    class: 'ConversableAgent',
+    type: 'ConversableAgent',
   },
   {
     id: 'user',
     icon: Icons.user,
     name: 'User',
     description: 'A User Proxy Agent',
-    class: 'UserProxyAgent',
+    type: 'UserProxyAgent',
   },
   {
     id: 'assistant',
     icon: Icons.node,
     name: 'Assistant',
     description: 'An Assistant Agent',
-    class: 'AssistantAgent',
+    type: 'AssistantAgent',
   },
   {
     id: 'groupchat',
     icon: Icons.group,
     name: 'Group',
     description: 'Group several agents together',
-    class: 'GroupChat',
+    type: 'GroupChat',
   },
   {
     id: 'note',
     icon: Icons.note,
     name: 'Note',
     description: 'Work as comment for the flow and node',
-    class: 'Note',
+    type: 'Note',
   },
 ];
 
@@ -112,46 +112,46 @@ export const advancedNodes: NodeMeta[] = [
     icon: Icons.group,
     name: 'Nested Chat',
     description: 'A Nested Chat Manager',
-    class: 'NestedChat',
+    type: 'NestedChat',
   },
   {
     id: 'retrieve_assistant',
     icon: Icons.robot,
     name: 'RetrieveAssistant',
     description: 'A Retrieve Assistant Agent',
-    class: 'RetrieveAssistantAgent',
+    type: 'RetrieveAssistantAgent',
   },
   {
     id: 'retrieve_user',
     icon: Icons.search,
     name: 'RetrieveUserProxy',
     description: 'A Retrieve User Proxy Agent',
-    class: 'RetrieveUserProxyAgent',
+    type: 'RetrieveUserProxyAgent',
   },
   {
     id: 'gpt_assistant',
     icon: Icons.openai,
     name: 'GPTAssistant',
     description: 'A GPT Assistant Agent',
-    class: 'GPTAssistantAgent',
+    type: 'GPTAssistantAgent',
   },
   // {
   //   id: 'multimodal',
   //   icon: Icons.Eye,
   //   name: 'MultimodalAssistant',
-  //   class: 'MultimodalConversableAgent',
+  //   type: 'MultimodalConversableAgent',
   // },
   // {
   //   id: 'llava',
   //   icon: Icons.Meta,
   //   name: 'LLaVA',
-  //   class: 'LLaVAAgent',
+  //   type: 'LLaVAAgent',
   // },
   // {
   //   id: 'math_user_proxy',
   //   icon: Icons.User4,
   //   name: 'MathUserProxyAgent',
-  //   class: 'MathUserProxyAgent',
+  //   type: 'MathUserProxyAgent',
   // },
 ];
 

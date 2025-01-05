@@ -23,7 +23,7 @@ export const NodeButton = ({ className, onAddNode, ...props }: any) => {
         side="bottom"
         align="start"
       >
-        <NodeList />
+        <NodeList onAddNode={onAddNode} />
       </PopoverContent>
     </Popover>
   );

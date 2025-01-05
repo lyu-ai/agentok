@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { useReactFlow } from '@xyflow/react';
+import React from 'react';
 import { advancedNodes, basicNodes, getNodeIcon } from '@/lib/flow';
 import {
   Accordion,
@@ -10,26 +9,17 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
-import { nanoid } from 'nanoid';
 import { ScrollArea } from '../ui/scroll-area';
+import { PopoverClose } from '../ui/popover';
 
 interface NodeItemProps {
   id: string;
   name: string;
   type: string;
   description?: string;
-  nodeClass?: string;
-  onClick?: () => void;
 }
 
-const NodeItem = ({
-  id,
-  name,
-  type,
-  description,
-  nodeClass = 'general',
-  onClick,
-}: NodeItemProps) => {
+const NodeItem = ({ id, name, type, description }: NodeItemProps) => {
   const NodeIcon = getNodeIcon(type);
   const onDragStart = (
     event: React.DragEvent<HTMLDivElement>,
@@ -45,14 +35,13 @@ const NodeItem = ({
         'flex items-center gap-2 w-full p-2 rounded-md border cursor-grab',
         'hover:border-primary/40 hover:bg-primary/5'
       )}
-      onClick={onClick}
       draggable
       onDragStart={(e: React.DragEvent<HTMLDivElement>) =>
         onDragStart(e, { id, name })
       }
     >
       <NodeIcon className="w-4 h-4" />
-      <div className="flex flex-col">
+      <div className="flex flex-col items-start">
         <span className="text-sm font-medium">{name}</span>
         <span className="text-xs text-muted-foreground line-clamp-2">
           {description}
@@ -62,31 +51,11 @@ const NodeItem = ({
   );
 };
 
-export const NodeList = () => {
-  const instance = useReactFlow();
-
-  const addNode = useCallback(
-    (type: string, nodeClass: string) => {
-      const position = {
-        x: window.innerWidth / 2 - 100,
-        y: window.innerHeight / 2 - 100,
-      };
-
-      const newNode = {
-        id: nanoid(),
-        type,
-        position,
-        data: {
-          name: type,
-          class: nodeClass,
-        },
-      };
-
-      instance.addNodes(newNode);
-    },
-    [instance]
-  );
-
+export const NodeList = ({
+  onAddNode,
+}: {
+  onAddNode: (type: string, name: string) => void;
+}) => {
   return (
     <ScrollArea className="h-full">
       <Accordion
@@ -112,15 +81,17 @@ export const NodeList = () => {
             <AccordionContent>
               <div className="flex flex-col gap-1">
                 {nodes.map((node) => (
-                  <NodeItem
-                    id={node.id}
+                  <PopoverClose
                     key={node.id}
-                    name={node.name}
-                    type={node.id}
-                    description={node.description}
-                    nodeClass={node.class}
-                    onClick={() => addNode(node.id, node.class)}
-                  />
+                    onClick={() => onAddNode(node.id, node.name)}
+                  >
+                    <NodeItem
+                      id={node.id}
+                      name={node.name}
+                      type={node.id}
+                      description={node.description}
+                    />
+                  </PopoverClose>
                 ))}
               </div>
             </AccordionContent>

@@ -11,8 +11,8 @@ export const initialNodes: Node[] = [
     type: 'initializer',
     data: {
       name: 'Initializer',
-      label: 'initializer',
-      class: 'Initializer',
+      id: 'initializer',
+      type: 'Initializer',
       sample_messages: [
         'Write a poem based on recent headlines about Vancouver.',
       ],
@@ -24,8 +24,8 @@ export const initialNodes: Node[] = [
     type: 'user',
     data: {
       name: 'User',
-      label: 'user',
-      class: 'UserProxyAgent',
+      id: 'user',
+      type: 'UserProxyAgent',
       human_input_mode: 'NEVER',
       termination_msg: 'TERMINATE',
       enable_code_execution: true,
@@ -39,9 +39,8 @@ export const initialNodes: Node[] = [
     type: 'assistant',
     data: {
       name: 'Assistant',
-      type: 'assistant',
-      label: 'assistant',
-      class: 'AssistantAgent',
+      id: 'assistant',
+      type: 'AssistantAgent',
       max_consecutive_auto_reply: 10,
       tools: { llm: [172278707085517] },
     },
@@ -52,8 +51,8 @@ export const initialNodes: Node[] = [
     type: 'note',
     data: {
       name: 'Note',
-      label: 'note',
-      class: 'Note',
+      id: 'note',
+      type: 'Note',
       content:
         "Click **Chat** icon on the right bottom to show the chat pane, and in chat pane, select a sample question to start the conversation. \n\nThis project uses Tavily Search tool, which requires an API key to work. \n\nIf you don't have your own, you can use this test key: `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`",
     },
