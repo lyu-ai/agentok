@@ -185,12 +185,8 @@ export const Icons: Record<string, ElementType> = {
   ),
   python: ({ ...props }: any) => (
     <svg
-      t="1736045592649"
-      class="icon"
       viewBox="0 0 1024 1024"
-      version="1.1"
       xmlns="http://www.w3.org/2000/svg"
-      p-id="5413"
       width="200"
       height="200"
       {...props}

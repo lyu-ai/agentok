@@ -6,24 +6,9 @@ import {
 } from '@xyflow/react';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
-export function ConverseEdge({
-  id,
-  sourceX,
-  sourceY,
-  targetX,
-  targetY,
-  selected,
-  data,
-  style,
-}: any) {
-  const [edgePath, labelX, labelY] = getBezierPath({
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  });
+import { cn } from '@/lib/utils';
+export function ConverseEdge({ id, data, selected, style, ...props }: any) {
+  const [edgePath, labelX, labelY] = getBezierPath({ ...props });
   return (
     <>
       <BaseEdge
@@ -40,13 +25,17 @@ export function ConverseEdge({
         <div
           className="button-edge__label nodrag nopan"
           style={{
+            position: 'absolute',
             transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
           }}
         >
           <Button
-            variant="ghost"
+            variant="outline"
             size="icon"
-            className="rounded-fulltext-muted-foreground/80 h-7 w-7"
+            className={cn('rounded-full bg-muted h-7 w-7', {
+              'text-green-500 border-green-500': selected,
+              'text-muted-foreground/80 border-muted-foreground/80': !selected,
+            })}
           >
             <Icons.chat className="w-4 h-4" />
           </Button>

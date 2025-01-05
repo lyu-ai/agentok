@@ -107,7 +107,7 @@ export const GenericNode = ({
     [instance, id]
   );
 
-  const NodeIcon = getNodeIcon(data.class as string);
+  const NodeIcon = getNodeIcon(data.type as string);
 
   return (
     <>

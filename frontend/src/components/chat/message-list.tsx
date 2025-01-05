@@ -38,8 +38,8 @@ const MessageBubble = ({
   const userNodeName =
     chatSource?.flow?.nodes?.find(
       (node: any) =>
-        node.data.class === 'UserProxyAgent' ||
-        node.data.class === 'RetrieveUserProxyAgent' ||
+        node.data.type === 'UserProxyAgent' ||
+        node.data.type === 'RetrieveUserProxyAgent' ||
         node.data.name.includes('User')
     )?.data?.name ?? '';
   let waitForHumanInput = false;

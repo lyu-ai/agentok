@@ -51,7 +51,6 @@ export const isConversable = (node?: Node) =>
 // - name: To be used as variable name in generated code
 // - label: Shown on UI, the value is the key for i18n
 // - type: 'conversable' | 'assistant' | 'user' | 'group', indicates the classes for code generation
-// - class: The class to be choosen during code generation
 // - (description): UI will look for value of label + '-description', for example 'assistant-description'
 export type NodeMeta = {
   id: string;

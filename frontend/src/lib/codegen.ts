@@ -14,7 +14,7 @@ const genAssistantAgent = (node: Node) => {
     ? `"${node.data.instructions}"`
     : 'AssistantAgent.DEFAULT_SYSTEM_MESSAGE';
   return `
-node_${node.id} = ${node.data.class}(
+node_${node.id} = ${node.data.type}(
   name="${name}",
   llm_config=llm_config,
 )
@@ -24,11 +24,11 @@ node_${node.id} = ${node.data.class}(
 const genConversableAgent = (node: Node) => {
   const name = node.data.name;
   return `
-node_${node.id} = ${node.data.class}(
+node_${node.id} = ${node.data.type}(
   name="${name}",
   max_consecutive_auto_reply=${node.data.max_consecutive_auto_reply},
   llm_config=${
-    node.data.class === 'MultimodalConversableAgent'
+    node.data.type === 'MultimodalConversableAgent'
       ? 'llm_config_4v'
       : 'llm_config'
   },
@@ -39,7 +39,7 @@ node_${node.id} = ${node.data.class}(
 const genUserProxyAgent = (node: Node) => {
   const name = node.data.name;
   return `
-node_${node.id} = ${node.data.class}(
+  node_${node.id} = ${node.data.type}(
   name="${name}",
   code_execution_config={
     "work_dir": "coding"
@@ -96,7 +96,7 @@ export const genEntry = (
   const uniqueImports = new Set<string>();
   uniqueImports.add(importDict['AssistantAgent']); // Always import AssistantAgent
   for (const node of nodes) {
-    const importLine = importDict[node.data.class as keyof typeof importDict];
+    const importLine = importDict[node.data.type as keyof typeof importDict];
     if (importLine) {
       uniqueImports.add(importLine);
     } else {
@@ -128,7 +128,7 @@ config_list_4v = autogen.config_list_from_json(
   code += `llm_config_4v = {"config_list": config_list_4v, "temperature": 0.5, "max_tokens": 1024}\n\n`;
 
   for (const node of nodes) {
-    code += codegenDict[node.data.class as keyof typeof codegenDict](node);
+    code += codegenDict[node.data.type as keyof typeof codegenDict](node);
   }
 
   code += `
