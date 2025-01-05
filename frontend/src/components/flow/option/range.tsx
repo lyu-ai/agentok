@@ -12,7 +12,7 @@ export const RangeOption = ({
   data,
   label,
   name,
-  onChange,
+  onValueChange,
   min,
   max,
   step,
@@ -31,7 +31,7 @@ export const RangeOption = ({
         max={max ?? 100}
         step={step ?? 1}
         value={data?.[name] ?? 0}
-        onValueChange={(value) => onChange && onChange(name, value)}
+        onChange={(value) => onValueChange && onValueChange(name, value)}
         className="range range-xs nodrag focus:range-primary w-full p-1"
       />
       [{data?.[name] ?? 'None'}]
