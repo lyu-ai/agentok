@@ -11,6 +11,14 @@ export const InitializerConfig = ({ nodeId, data }: any) => {
           type="text"
           nodeId={nodeId}
           data={data}
+          name="name"
+          label="Name"
+          placeholder="Enter a name for this agent"
+        />
+        <GenericOption
+          type="text"
+          nodeId={nodeId}
+          data={data}
           rows={5}
           name="sample_messages"
           label="Sample Message"

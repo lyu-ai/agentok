@@ -12,6 +12,7 @@ import supabase from '@/lib/supabase/client';
 import { Loading } from '@/components/loader';
 import { isArray } from 'lodash-es';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '../ui/button';
 
 interface ChatPaneProps {
   projectId: number;
@@ -227,7 +228,7 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
     }
   }, [chatId, toast]);
 
-  if (isLoadingMessages || isLoadingChat || !chat) {
+  if (isLoadingMessages || isLoadingChat) {
     return (
       <div className="flex flex-col w-full h-full items-center justify-center gap-2">
         <Loading />
@@ -235,13 +236,20 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
     );
   }
 
+  if (!chat) {
+    return (
+      <div className="flex flex-col w-full h-full items-center justify-center gap-2">
+        <Icons.node className="w-8 h-8" />
+        <p>Let&apos;s start chatting!</p>
+        <Button onClick={handleAdd}>Add Chat</Button>
+      </div>
+    );
+  }
+
   const config = chatSource?.flow?.nodes?.find(
     (node: any) => node.type === 'initializer'
   );
-  if (!config?.data?.sample_messages || !isArray(config.data.sample_messages)) {
-    return null;
-  }
-  const sampleMessages = config.data.sample_messages as string[];
+  const sampleMessages = (config?.data?.sample_messages as string[]) ?? [];
 
   return (
     <div className="flex flex-col w-full h-full bg-muted">

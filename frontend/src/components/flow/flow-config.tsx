@@ -6,7 +6,6 @@ import { ConverseConfig } from './config/converse-config';
 import { Icons } from '../icons';
 import { useReactFlow } from '@xyflow/react';
 import { InitializerConfig } from './config/initializer';
-import { SummarizerConfig } from './config/summarizer';
 import { ProjectConfig } from '../project/project-config';
 
 interface FlowConfigProps {
@@ -64,8 +63,6 @@ export const FlowConfig = ({ nodeId, edgeId, projectId }: FlowConfigProps) => {
   switch (type) {
     case 'initializer':
       return <InitializerConfig nodeId={nodeId} data={node.data} />;
-    case 'summarizer':
-      return <SummarizerConfig nodeId={nodeId} data={node.data} />;
     case 'assistant':
       return <AssistantConfig nodeId={nodeId} data={node.data} />;
     case 'user':

@@ -11,6 +11,12 @@ export const ConversableAgentConfig = ({
   const GENERAL_OPTIONS = [
     {
       type: 'text',
+      name: 'name',
+      label: 'Name',
+      placeholder: 'Enter a name for this agent',
+    },
+    {
+      type: 'text',
       name: 'description',
       label: 'Description',
       placeholder: 'Enter a description for this agent',
