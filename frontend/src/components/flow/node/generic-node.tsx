@@ -32,10 +32,13 @@ export const GenericNode: ComponentType<GenericNodeProps> = ({
   return (
     <div
       className={cn(
-        'group relative flex flex-col bg-muted min-w-24 gap-2 p-4 rounded-xl border-2 shadow-box',
-        'hover:border-brand hover:text-brand transition-colors duration-300',
+        'group relative flex flex-col text-muted-foreground/80 border-muted-foreground/80 bg-muted min-w-24 gap-2 p-4 rounded-xl border-2',
+        'transition-colors duration-300',
         {
-          'border-brand/80 text-brand/80': selected,
+          'border-brand/80 text-brand/80 hover:border-brand hover:text-brand ':
+            selected,
+          'hover:border-muted-foreground hover:text-muted-foreground':
+            !selected,
         }
       )}
     >
@@ -56,8 +59,7 @@ export const GenericNode: ComponentType<GenericNodeProps> = ({
           position={type === 'target' ? Position.Left : Position.Right}
           id={name}
           className={cn(
-            'w-3 h-3 rounded-full border-2 bg-primary/10',
-            'border-primary/10 hover:border-primary',
+            'w-3 h-3 rounded-full border-2 border-primary/10 hover:border-primary bg-muted',
             {
               'border-brand': selected,
             }
