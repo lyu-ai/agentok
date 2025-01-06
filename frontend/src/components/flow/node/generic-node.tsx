@@ -59,7 +59,7 @@ export const GenericNode: ComponentType<GenericNodeProps> = ({
           position={type === 'target' ? Position.Left : Position.Right}
           id={name}
           className={cn(
-            'w-3 h-3 rounded-full border-2 border-primary/10 hover:border-primary bg-muted',
+            'w-3 h-3 rounded-full border-2 border-muted-foreground/80 hover:border-muted-foreground bg-muted',
             {
               'border-brand': selected,
             }
