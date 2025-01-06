@@ -16,7 +16,7 @@
         'DALLEAgent': 'from agentok_api.extensions.dalle_agent import DALLEAgent',
     } -%}
     {%- for node in nodes -%}
-        {% set cls = node['data'].get('class') %}
+        {% set cls = node['data'].get('class_type') %}
         {%- if cls and cls in import_dict and import_dict[cls] not in import_lines -%}
             {% do import_lines.append(import_dict[cls]) %}
         {%- endif -%}
