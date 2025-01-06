@@ -7,14 +7,16 @@ const NEXT_PUBLIC_BACKEND_URL =
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
 
-  // Get the session from Supabase
   const {
     data: { session },
     error: sessionError,
   } = await supabase.auth.getSession();
 
   if (sessionError || !session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ 
+      error: 'Unauthorized',
+      details: sessionError?.message 
+    }, { status: 401 });
   }
 
   try {
@@ -31,12 +33,29 @@ export async function POST(request: NextRequest) {
     const json = await res.json();
 
     if (!res.ok) {
-      console.warn('Codegen failed:', res.status, res.statusText, json);
+      console.error('Codegen failed:', {
+        status: res.status,
+        statusText: res.statusText,
+        error: json
+      });
+      
+      return NextResponse.json({
+        error: json.error || json.message || res.statusText,
+        details: json,
+        status: res.status
+      }, { status: res.status });
     }
 
-    return NextResponse.json(json, { status: res.status });
+    return NextResponse.json(json);
   } catch (e) {
-    console.error('Error:', e);
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('Codegen error:', e);
+    
+    return NextResponse.json({
+      error: 'Internal Server Error',
+      details: e instanceof Error ? {
+        message: e.message,
+        stack: e.stack
+      } : String(e)
+    }, { status: 500 });
   }
 }

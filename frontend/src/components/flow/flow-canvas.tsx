@@ -83,6 +83,7 @@ const useDebouncedUpdate = (projectId: number) => {
       return;
     }
     if (isDirty) {
+      console.log('saving flow');
       debouncedUpdate(toObject());
     }
 
@@ -429,6 +430,7 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
       }
       return addEdge(newEdges, eds);
     });
+    setIsDirty(true);
   };
 
   const onAddNode = useCallback(
@@ -474,7 +476,6 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
   const onGeneratePython = async () => {
     if (!project?.flow) return;
     setIsGeneratingPython(true);
-    let python = '';
     await fetch('/api/codegen', {
       method: 'POST',
       body: JSON.stringify(project),
@@ -491,7 +492,7 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
             variant: 'destructive',
           });
         } else {
-          python = json.code;
+          setPython(json.code);
           setMode('python');
         }
       })
@@ -525,7 +526,7 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
   return (
     <>
       {mode === 'python' ? (
-        <PythonViewer data={python} />
+        <PythonViewer data={python} setMode={setMode} />
       ) : (
         <div
           className="relative flex flex-grow flex-col w-full h-full"

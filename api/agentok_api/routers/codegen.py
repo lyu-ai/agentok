@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends
+import logging
+from fastapi import APIRouter, Depends, HTTPException
+from typing import Dict, Any
 
 from ..models import Project, Tool, ToolCode
 from ..services import CodegenService
@@ -6,13 +8,33 @@ from ..dependencies import get_codegen_service
 
 router = APIRouter()
 
+logger = logging.getLogger(__name__)
 
 @router.post("", summary="Generated Python code for a project")
 async def api_code_gen(
     project: Project, service: CodegenService = Depends(get_codegen_service)
-):
-    code = service.generate_project(project)
-    return {"code": code}
+) -> Dict[str, Any]:
+    try:
+        code = service.generate_project(project)
+        return {"code": code}
+    except ValueError as e:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "Invalid Project Data",
+                "details": str(e)
+            }
+        )
+    except Exception as e:
+        logger.exception("Code generation failed")
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "Code Generation Failed",
+                "details": str(e),
+                "type": type(e).__name__
+            }
+        )
 
 
 @router.post("/tool", summary="Generated tool code in Python based on prompts")
