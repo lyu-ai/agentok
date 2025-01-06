@@ -8,6 +8,10 @@ import Link from 'next/link';
 import { faker } from '@faker-js/faker';
 import { Icons } from '@/components/icons';
 import { toast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Card } from '@/components/ui/card';
 
 const ToolItem = ({ nodeId, tool, onDelete, selected, ...props }: any) => {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -18,38 +22,40 @@ const ToolItem = ({ nodeId, tool, onDelete, selected, ...props }: any) => {
   };
 
   return (
-    <div
-      className={clsx(
-        'relative group w-full flex flex-col gap-2 p-3 rounded-md border cursor-pointer hover:bg-base-content/10 hover:shadow-box hover:shadow-gray-700',
+    <Card
+      className={cn(
+        'relative group w-full flex flex-col border gap-1 p-2 rounded-md cursor-pointer hover:bg-muted-foreground/10',
         selected
-          ? 'shadow-box shadow-gray-600 bg-gray-700/90 border-gray-600'
-          : 'border-base-content/10 '
+          ? 'bg-muted-foreground/20 border-muted-foreground/30'
+          : 'border-transparent'
       )}
       {...props}
     >
-      <div className="text-base font-bold">{tool.name}</div>
-      <div className="text-sm text-base-content/50 w-full line-clamp-2">
+      <div className="font-bold text-muted-foreground">{tool.name}</div>
+      <div className="text-xs text-muted-foreground/50 w-full line-clamp-2">
         {tool.description}
       </div>
       <div className="absolute bottom-1 right-1 hidden group-hover:block">
         {!tool.is_public && (
-          <button
-            className="btn btn-xs btn-square btn-ghost hover:text-red-600"
+          <Button
+            variant="ghost"
+            size="icon"
+            className="w-7 h-7"
             onClick={handleDelete}
           >
             {isDeleting ? (
-              <div className="loading loading-xs" />
+              <Icons.spinner className="w-4 h-4 animate-spin" />
             ) : (
               <Icons.trash className="w-4 h-4" />
             )}
-          </button>
+          </Button>
         )}
       </div>
-    </div>
+    </Card>
   );
 };
 
-export default async function Layout({
+export default function Layout({
   children,
   params,
 }: PropsWithChildren<{ params: Promise<{ id: string }> }>) {
@@ -111,26 +117,28 @@ export default async function Layout({
   };
 
   return (
-    <div className={clsx('flex w-full h-full')}>
-      <div className="flex flex-col w-80 h-full border-r p-2 gap-2 border-base-content/10">
-        <div className="flex items-center gap-1">
-          <Link
-            href={`/tools`}
-            className="btn btn-sm btn-primary btn-square rounded"
-            data-tooltip-id="default-tooltip"
-            data-tooltip-content={'Back to Tools'}
-          >
-            <Icons.home className="w-5 h-5" />
+    <div className={cn('flex w-full h-full')}>
+      <div className="flex flex-col w-80 h-[calc(100vh-var(--header-height))] border-r gap-2">
+        <div className="flex items-center justify-between gap-1 w-full p-2 border-b">
+          <Link href={`/tools`}>
+            <Button variant="ghost" size="icon" className="w-7 h-7">
+              <Icons.home className="w-4 h-4" />
+            </Button>
           </Link>
-          <button
-            className="btn btn-sm btn-primary rounded flex flex-1"
+          <Button
+            variant="outline"
+            size="icon"
+            className="w-7 h-7"
             onClick={handleCreate}
           >
-            {isCreating && <div className="loading loading-xs" />}
-            <span>New tool</span>
-          </button>
+            {isCreating ? (
+              <Icons.spinner className="w-4 h-4 animate-spin" />
+            ) : (
+              <Icons.add className="w-4 h-4" />
+            )}
+          </Button>
         </div>
-        <div className="flex flex-col gap-0.5 w-full h-full overflow-y-hidden">
+        <ScrollArea className="flex flex-col gap-1 w-full h-full p-2">
           {tools.length > 0 ? (
             tools.map((tool: any, index: any) => {
               const isSelected = pathname.endsWith(`/tools/${tool.id}`);
@@ -149,11 +157,11 @@ export default async function Layout({
               No tools
             </div>
           )}
-        </div>
+        </ScrollArea>
       </div>
-      <div className="flex flex-col w-full gap-2 p-2 flex-grow h-full overflow-y-auto">
+      <ScrollArea className="flex flex-col w-full gap-2 p-2 flex-grow h-[calc(100vh-var(--header-height))]">
         {children}
-      </div>
+      </ScrollArea>
     </div>
   );
 }

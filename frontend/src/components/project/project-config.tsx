@@ -7,7 +7,6 @@ export const ProjectConfig = ({ projectId }: { projectId: number }) => {
   const handleChange = (name: string, value: any) => {
     updateProject({ [name]: value }).catch(console.error);
   };
-  console.log('ProjectConfig', project);
   return (
     <ScrollArea className="h-full p-2">
       <div className="flex flex-col gap-4">

@@ -4,10 +4,11 @@ import CodeEditor from '../../../components/tool/code-editor';
 import VariableList from '../../../components/tool/variable-list';
 import { useTool } from '@/hooks';
 import { ImageUploader } from '@/components/image-uploader';
-import { Icons } from '@/components/icons';
 import { use } from 'react';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 
-const Page = ({ params }: { params: Promise<{ id: string }> }) => {
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const toolId = parseInt(id, 10);
 
@@ -48,20 +49,21 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
             </div>
           </div>
           <div className="flex items-center gap-2 text-sm px-2">
-            <span className="no-wrap">Make public</span>
-            <input
-              type="checkbox"
+            <Label htmlFor="is_public" className="no-wrap">
+              Public
+            </Label>
+            <Switch
+              id="is_public"
               checked={tool.is_public}
-              onChange={(e) => setToolData('is_public', e.target.checked)}
-              className="toggle toggle-primary toggle-sm"
+              onCheckedChange={(checked: any) =>
+                setToolData('is_public', checked)
+              }
             />
           </div>
         </div>
       </div>
       <VariableList toolId={toolId} className="shrink-0" />
-      <CodeEditor toolId={toolId} className="flex-grow min-h-80" />
+      <CodeEditor toolId={toolId} className="flex-grow min-h-[400px]" />
     </div>
   );
-};
-
-export default Page;
+}

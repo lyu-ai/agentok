@@ -8,10 +8,18 @@ import { useRouter } from 'next/navigation';
 import { genId } from '@/lib/id';
 import { toast } from '@/hooks/use-toast';
 import { Icons } from '@/components/icons';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
 
 const NewToolCard = () => {
   const router = useRouter();
-  const { tools, createTool, isCreating, deleteTool, isDeleting } = useTools();
+  const { createTool, isCreating } = useTools();
 
   const handleCreate = async () => {
     const name = faker.word.verb();
@@ -31,7 +39,8 @@ const NewToolCard = () => {
     router.push(`/tools/${tool.id}`);
   };
   return (
-    <button
+    <Button
+      variant="outline"
       onClick={handleCreate}
       className="group flex flex-col min-h-48 items-center justify-center gap-2 p-3 rounded-md border border-dashed border-base-content/20 cursor-pointer hover:bg-base-content/10 hover:shadow-box hover:shadow-gray-700"
     >
@@ -42,7 +51,7 @@ const NewToolCard = () => {
         )}
         <div className="text-base font-bold">New Tool</div>
       </div>
-    </button>
+    </Button>
   );
 };
 
@@ -108,12 +117,11 @@ const Page = () => {
           </div>
         )}
       </div>
-      <div className="drawer-side z-20">
-        <label htmlFor="drawer-tool-config" className="drawer-overlay"></label>
-        <div className="w-80 lg:w-96 h-full bg-base-100">
-          {activeTool && <ToolConfig tool={activeTool} />}
-        </div>
-      </div>
+      <ToolConfig
+        open={!!activeTool}
+        onOpenChange={setActiveTool}
+        tool={activeTool}
+      />
     </div>
   );
 };

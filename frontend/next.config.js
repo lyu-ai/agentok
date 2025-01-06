@@ -6,9 +6,9 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'agentok.ai',
+        hostname: '**',
         port: '',
-        pathname: '/img/**',
+        pathname: '**',
       },
     ],
   },

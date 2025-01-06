@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Icons } from '../icons';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
 
 export const ToolCard = ({ tool, selected, className, ...props }: any) => {
   const [isOwned, setIsOwned] = useState(false);
@@ -29,11 +31,11 @@ export const ToolCard = ({ tool, selected, className, ...props }: any) => {
 
   return (
     <label
-      className={clsx(
-        'relative group w-full flex flex-col gap-2 p-3 rounded-md border cursor-pointer hover:bg-base-content/10 hover:shadow-box hover:shadow-gray-700',
+      className={cn(
+        'relative group w-full flex flex-col gap-2 p-3 rounded-md border cursor-pointer hover:bg-muted-foreground/20 hover:border-muted-foreground/10',
         selected
-          ? 'shadow-box shadow-gray-600 bg-gray-700/90 border-gray-600'
-          : 'border-base-content/10 bg-base-content/5',
+          ? 'bg-muted-foreground/20 border-muted-foreground/10'
+          : 'border-muted-foreground/10 bg-muted-foreground/5',
         className
       )}
       {...props}
@@ -55,16 +57,20 @@ export const ToolCard = ({ tool, selected, className, ...props }: any) => {
           )}
         </div>
       </div>
-      <div className="text-sm text-base-content/50 w-full line-clamp-4 min-h-28">
+      <div className="text-sm text-base-content/50 w-full line-clamp-4 min-h-14">
         {tool.description}
       </div>
       {isOwned && (
-        <div className="absolute bottom-2 left-2 text-xs text-base-content/50">
-          <Link href={`/tools/${tool.id}`} className="gap-1 btn btn-xs">
-            <Icons.code className="w-4 h-4" />
+        <Link href={`/tools/${tool.id}`} className="absolute bottom-2 left-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-xs flex items-center gap-1"
+          >
+            <Icons.tool className="w-4 h-4" />
             Develop
-          </Link>
-        </div>
+          </Button>
+        </Link>
       )}
       <div className="absolute top-2 right-2 flex items-center gap-2">
         {needConfig && (
@@ -73,18 +79,20 @@ export const ToolCard = ({ tool, selected, className, ...props }: any) => {
           </span>
         )}
       </div>
-      <div className="absolute bottom-2 right-2 flex items-center gap-2">
+      <div className="absolute bottom-2 right-2 hidden group-hover:flex items-center gap-2">
         {!tool.is_public && (
-          <button
-            className="btn btn-xs btn-square btn-ghost hover:text-red-600"
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={handleDelete}
+            className="w-7 h-7"
           >
             {isDeleting ? (
-              <div className="loading loading-xs" />
+              <Icons.spinner className="w-4 h-4 animate-spin text-red-600" />
             ) : (
-              <Icons.trash className="w-4 h-4" />
+              <Icons.trash className="w-4 h-4 text-red-600" />
             )}
-          </button>
+          </Button>
         )}
       </div>
     </label>

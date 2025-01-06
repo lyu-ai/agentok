@@ -7,6 +7,8 @@ import { useTool } from '@/hooks';
 import { debounce } from 'lodash-es';
 import { Icons } from '@/components/icons';
 import { useTheme } from 'next-themes';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
 
 interface CodeEditorProps {
   toolId: number;
@@ -102,6 +104,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           <CodeMirror
             value={code ?? ''}
             height="100%"
+            basicSetup={{ lineNumbers: true }}
             theme={resolvedTheme === 'dark' ? githubDark : githubLight}
             extensions={[python()]}
             onChange={(value) => setCode(value)}
@@ -113,20 +116,20 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
               'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2': code === '',
             })}
           >
-            <button
-              className={clsx(
-                'btn rounded gap-1',
-                code ? 'btn-sm btn-outline' : 'btn-primary'
-              )}
-              data-tooltip-id="func-tooltip"
-              data-tooltip-content="Generate code"
+            <Button
+              variant={code ? 'outline' : 'default'}
+              size="sm"
+              className="gap-1"
               onClick={handleGenerateCode}
+              disabled={isGenerating}
             >
-              <Icons.sparkles
-                className={clsx('w-5 h-5', { 'animate-spin': isGenerating })}
-              />
+              {isGenerating ? (
+                <Icons.spinner className="w-4 h-4 animate-spin" />
+              ) : (
+                <Icons.sparkles className="w-4 h-4" />
+              )}
               <span>Generate code</span>
-            </button>
+            </Button>
           </div>
         </div>
       </div>
