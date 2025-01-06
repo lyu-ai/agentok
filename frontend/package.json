@@ -38,6 +38,7 @@
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "@uiw/codemirror-theme-github": "^4.23.7",
+    "@uiw/codemirror-theme-vscode": "^4.23.7",
     "@uiw/react-codemirror": "^4.23.0",
     "@xyflow/react": "^12.3.6",
     "class-variance-authority": "^0.7.0",

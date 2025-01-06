@@ -45,7 +45,6 @@ class SupabaseClient:
     def get_user(self) -> User:
         try:
             user = self.supabase.auth.admin.get_user_by_id(self.user_id)
-            print("get_user_log", user, self.user_id)
             return {
                 "id": user.user.id,
                 "email": user.user.email,
@@ -58,31 +57,30 @@ class SupabaseClient:
 
     # Load the user from the cookie. This is for the situation where the user is already logged in on client side.
     # The request should be called with credentials: 'include'
-    def authenticate_with_tokens(
-        self, access_token: str, refresh_token: Optional[str] = None
-    ) -> User:
+    def authenticate_with_tokens(self, access_token: str) -> User:
         try:
             if not self.supabase_url or not self.supabase_service_key:
-                raise Exception(
-                    "Supabase URL or key not found in environment variables"
-                )
+                raise Exception("Supabase URL or key not found in environment variables")
+
             temp_supabase = create_client(self.supabase_url, self.supabase_service_key)
+            
+            # Validate the access token only
             session = temp_supabase.auth.set_session(
                 access_token=access_token,
-                refresh_token=refresh_token or "dummy_refresh_token",
+                refresh_token="dummy_refresh_token"  # Required by Supabase but not used
             )
-            if session:
+
+            if session and session.user:
                 self.user_id = session.user.id
                 return session.user
-            else:
-                print(colored("Failed to retrieve user", "red"))
-                self.user_id = None
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="Failed to authenticate with bearer token",
-                )
+
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Failed to authenticate"
+            )
+
         except Exception as exc:
-            logger.error(f"An error occurred: {exc}")
+            logger.error(f"Authentication error: {exc}")
             raise
 
     def authenticate_with_apikey(self, apikey: str) -> User:

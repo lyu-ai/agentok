@@ -4,6 +4,7 @@ from typing import Dict, Any
 
 from ..models import Project, Tool, ToolCode
 from ..services import CodegenService
+from ..services.logger import capture_output
 from ..dependencies import get_codegen_service
 
 router = APIRouter()

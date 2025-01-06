@@ -13,6 +13,7 @@ import { Loading } from '@/components/loader';
 import { isArray } from 'lodash-es';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '../ui/button';
+import { Badge } from '../ui/badge';
 
 interface ChatPaneProps {
   projectId: number;
@@ -229,7 +230,7 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
   const config = chatSource?.flow?.nodes?.find(
     (node: any) => node.type === 'initializer'
   );
-  const sampleMessages = (config?.data?.sample_messages as string[]) ?? [];
+  const sampleMessages = config?.data?.sample_messages?.split('\n') ?? [];
 
   return (
     <div className="flex flex-col w-full h-full bg-muted">
@@ -241,7 +242,11 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
             onSend={handleSend}
             className="max-w-4xl mx-auto mb-1"
           />
-
+          <div className="flex justify-center p-1">
+            <Badge variant="default" className="text-xs">
+              {chat?.status}
+            </Badge>
+          </div>
           <div ref={messagesEndRef} />
         </ScrollArea>
       ) : (

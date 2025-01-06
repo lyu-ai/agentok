@@ -58,19 +58,22 @@ const MessageBubble = ({
     return (
       <Card
         className={cn(
-          'flex items-center gap-2 shadow-sm px-3 py-1 rounded-md',
+          'flex flex-col items-start gap-2 shadow-sm px-3 py-1 rounded-md',
           resultClass,
           className
         )}
       >
-        {success ? (
-          <Icons.checkCircle className="w-4 h-4" />
-        ) : (
-          <Icons.alert className="w-4 h-4" />
-        )}
-        <span className="text-sm font-semibold">
-          Collaboration completed with {success ? 'success' : 'failure'}.
-        </span>
+        <div className="flex items-center gap-2">
+          {success ? (
+            <Icons.checkCircle className="w-4 h-4" />
+          ) : (
+            <Icons.alert className="w-4 h-4" />
+          )}
+          <span className="text-sm font-semibold">
+            Collaboration completed with {success ? 'success' : 'failure'}.
+          </span>
+        </div>
+        {!success && <span className="text-xs text-red-500">{text}</span>}
       </Card>
     );
   } else if (message.content.startsWith(StatusMessage.running)) {
@@ -81,10 +84,8 @@ const MessageBubble = ({
           className
         )}
       >
-        <Icons.node className="w-4 h-4" />
-        <span className="text-sm font-semibold">
-          Collaboration started... Please wait for the conclusion.
-        </span>
+        <Icons.group className="w-4 h-4" />
+        <span className="text-sm font-semibold">Collaboration started...</span>
       </Card>
     );
   } else if (message.content.startsWith(StatusMessage.receivedHumanInput)) {
@@ -130,12 +131,12 @@ const MessageBubble = ({
           {message.sender}
           {message.receiver && (
             <>
-              <Icons.voiceprintLine className="w-4 h-4 inline-block mx-1" />
+              <Icons.chevronRight className="w-3 h-3 inline-block" />
               <span className="">{message.receiver}</span>
             </>
           )}
         </div>
-        <div className="text-muted-foreground text-xs">
+        <div className="text-muted-foreground text-xs line-clamp-1">
           {new Date(message.created_at).toLocaleString()}
         </div>
       </div>
@@ -146,7 +147,7 @@ const MessageBubble = ({
     <Card
       className={cn(messageClass, 'p-1 w-full mx-auto shadow-sm', className)}
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
         <div
           className={`w-8 h-8 rounded-full text-sm flex items-center justify-center`}
         >
@@ -155,8 +156,8 @@ const MessageBubble = ({
         <div className="flex flex-1">{messageHeader}</div>
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="ghost" size="icon" className="w-7 h-7">
-              <Icons.code className="w-4 h-4" />
+            <Button variant="ghost" size="icon" className="w-5 h-5">
+              <Icons.code className="w-3 h-3" />
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-4xl max-h-[calc(100vh-2rem)] overflow-hidden p-0 gap-0">
@@ -170,7 +171,6 @@ const MessageBubble = ({
             </ScrollArea>
           </DialogContent>
         </Dialog>
-        <CopyButton content={message.content} />
       </div>
       <div
         className={`relative group rounded-md p-2 text-sm break-word word-wrap overflow-x-hidden`}

@@ -62,3 +62,22 @@ export async function POST(
     return new Response((e as any).message, { status: 400 });
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from('chat_messages')
+    .delete()
+    .eq('chat_id', parseInt(id, 10));
+    if (error) throw error;
+    return NextResponse.json(data);
+  } catch (e) {
+    console.error(`Failed DELETE /chats/${id}/messages:`, (e as any).message);
+    return new Response((e as any).message, { status: 400 });
+  }
+}

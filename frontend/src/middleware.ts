@@ -12,7 +12,6 @@ export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
 
   const isPublicPath = publicMatcher(req.nextUrl.pathname) !== false;
-  console.log('isPublicPath', req.nextUrl.pathname, isPublicPath);
 
   if (isPublicPath) {
     return res;

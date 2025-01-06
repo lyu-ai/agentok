@@ -3,12 +3,9 @@ import os
 from asyncio import subprocess
 import signal
 from termcolor import colored
-
 from .supabase import SupabaseClient
 
-from .output_parser import (
-    OutputParser,
-)  # Assuming OutputParser is in `services/output_parser.py`
+from .output_parser import OutputParser
 
 
 class ChatManager:
@@ -39,7 +36,7 @@ class ChatManager:
         if on_message is None:
             on_message = self._print_message
 
-        command = ["python3", source_path, message]
+        command = ["python3", source_path, f'"{message}"']
         print(colored(text=f'Running {" ".join(command)}', color="blue"))
 
         env = os.environ.copy()
@@ -58,20 +55,17 @@ class ChatManager:
 
             # Terminate the old process
             old_process.terminate()
-            # Optionally, you can also use old_process.kill() if terminate is not forceful enough
-
-            # Wait for the process to terminate before moving on
             await old_process.wait()
 
         self.supabase.set_chat_status(chat_id, "running")
 
-        # Start the subprocess with the provided command
+        # Remove the capture_output context manager as it might interfere with subprocess communication
         process = await asyncio.create_subprocess_exec(
             *command,
             env=env,
             stdout=subprocess.PIPE,
             stdin=subprocess.PIPE,
-            stderr=subprocess.PIPE,  # Capture stderr too, if you need to handle errors
+            stderr=subprocess.PIPE,
         )
 
         # Store the process and its stdin so we can use it to send input later
@@ -89,10 +83,10 @@ class ChatManager:
         # Process the subprocess output until it terminates
         if process.stdout is not None:
             async for line in process.stdout:
-                if line:  # Truthy if the line is not empty
-                    response_message = (
-                        line.decode().rstrip()
-                    )  # Remove trailing newline/whitespace
+                if line:
+                    response_message = line.decode().rstrip()
+                    # Use the configured logger
+                    # logger.info(response_message)
                     print("📺 ", response_message)
                     if any(
                         status in response_message

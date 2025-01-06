@@ -9,10 +9,6 @@ import { json } from '@codemirror/lang-json';
 import CodeMirror from '@uiw/react-codemirror';
 import { githubDark, githubLight } from '@uiw/codemirror-theme-github';
 import { useTheme } from 'next-themes';
-import {
-  syntaxHighlighting,
-  defaultHighlightStyle,
-} from '@codemirror/language';
 interface JsonViewerProps {
   projectId: number;
   className?: string;
@@ -29,13 +25,15 @@ export const JsonViewer = ({ projectId, className }: JsonViewerProps) => {
   }, [project]);
 
   return (
-    <ScrollArea className={cn('relative flex w-full h-full', className)}>
+    <ScrollArea
+      className={cn('relative flex w-full h-full overflow-x-auto', className)}
+    >
       <div className="absolute top-2 right-3">
         <CopyButton content={jsonString} />
       </div>
       <CodeMirror
         value={jsonString}
-        extensions={[json(), syntaxHighlighting(defaultHighlightStyle)]}
+        extensions={[json()]}
         theme={resolvedTheme === 'dark' ? githubDark : githubLight}
         className="h-full text-xs overflow-x-auto"
         basicSetup={{ lineNumbers: false }}

@@ -46,30 +46,28 @@ export const GenericNode: ComponentType<GenericNodeProps> = ({
         <Button
           variant="ghost"
           size="icon"
-          className="text-muted-foreground/80 h-7 w-7"
+          className="h-7 w-7"
           onClick={() => instance.deleteElements({ nodes: [{ id }] })}
         >
-          <Icons.trash className="w-4 h-4" />
+          <Icons.trash className="w-4 h-4 text-red-500" />
         </Button>
       </NodeToolbar>
-      {ports.map(({ type, name }, i) => (
-        <Handle
-          key={i}
-          type={type}
-          position={type === 'target' ? Position.Left : Position.Right}
-          id={name}
-          className={cn(
-            'w-3 h-3 rounded-full border-2 border-muted-foreground/80 hover:border-muted-foreground bg-muted',
-            {
-              'border-brand': selected,
-            }
-          )}
-        />
-      ))}
       <div className="flex flex-col items-center gap-2 flex-grow">
         <NodeIcon className="w-10 h-10" />
         <span className="text-sm font-bold">{data.name as string}</span>
       </div>
+      {ports.map(({ type, name }) => (
+        <Handle
+          key={`${type}-${name}`}
+          type={type}
+          position={type === 'target' ? Position.Left : Position.Right}
+          id={`${type}-${name}`}
+          className={cn('w-3 h-3 rounded-full border-2', {
+            'border-brand/80 bg-background': selected,
+            'border-muted-foreground/80 bg-background': !selected,
+          })}
+        />
+      ))}
     </div>
   );
 };

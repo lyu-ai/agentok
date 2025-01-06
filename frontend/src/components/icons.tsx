@@ -85,6 +85,8 @@ import {
   Route,
   RotateCw,
   RotateCcw,
+  Terminal,
+  CornerDownLeft,
 } from 'lucide-react';
 import { Logo } from './logo';
 import { ElementType } from 'react';
@@ -117,6 +119,7 @@ export const Icons: Record<string, ElementType> = {
   draggable: Grip,
   add: Plus,
   braces: Braces,
+  enter: CornerDownLeft,
   config: Settings2,
   menu: Menu,
   pin: Pin,
@@ -133,6 +136,7 @@ export const Icons: Record<string, ElementType> = {
   spy: HardHat,
   user: UserRound,
   logout: LogOut,
+  logs: Terminal,
   sparkles: Sparkles,
   zap: Zap,
   filter: Filter,
@@ -145,6 +149,7 @@ export const Icons: Record<string, ElementType> = {
   fire: Flame,
   gitFork: GitFork,
   heart: Heart,
+  exit: LogOut,
   group: Users,
   home: Home,
   swap3: Repeat,
@@ -162,7 +167,7 @@ export const Icons: Record<string, ElementType> = {
   stop: Square,
   robot: Bot,
   robotActive: Bot,
-  reset: RotateCcw,
+  reset: RotateCw,
   copy: Copy,
   reload: RefreshCw,
   codeBlock: Code,

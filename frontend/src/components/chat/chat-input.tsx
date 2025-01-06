@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { Chat } from '@/store/chats';
 import { useChat, useChats } from '@/hooks/use-chats';
 import { toast } from '@/hooks/use-toast';
+import { Badge } from '../ui/badge';
 
 interface ChatInputProps {
   chatId: number;
@@ -33,15 +34,30 @@ export const ChatInput = ({
   const { chat, isLoading, updateChat, isUpdating } = useChat(chatId);
   const [message, setMessage] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [isCleaning, setIsCleaning] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
+  const handleHumanInput = useCallback(
+    async (input: string) => {
+      await fetch(`/api/chats/${chatId}/input`, {
+        method: 'POST',
+        body: JSON.stringify({ type: 'user', content: input }),
+      });
+    },
+    [message, chatId]
+  );
 
   const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
+    async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!message.trim() || loading || disabled) return;
-      onSubmit(message);
+      if (loading || disabled) return;
+      if (chat?.status === 'wait_for_human_input') {
+        await handleHumanInput(message);
+      } else {
+        onSubmit(message);
+      }
       setMessage('');
     },
-    [message, loading, disabled, onSubmit]
+    [message, loading, disabled, onSubmit, handleHumanInput]
   );
 
   const handleKeyDown = useCallback(
@@ -54,9 +70,37 @@ export const ChatInput = ({
     [handleSubmit]
   );
 
-  const handleReset = useCallback(() => {
-    onReset?.();
-    updateChat({ status: 'ready' });
+  const handleClean = useCallback(async () => {
+    setIsCleaning(true);
+    try {
+      await fetch(`/api/chats/${chatId}/messages`, {
+        method: 'DELETE',
+      });
+      onReset?.();
+    } catch (e) {
+      console.error('Failed to clean chat:', e);
+    } finally {
+      setIsCleaning(false);
+    }
+  }, [chatId]);
+
+  const handleReset = useCallback(async () => {
+    try {
+      setIsResetting(true);
+      await handleAbort();
+      await handleClean();
+      onReset?.();
+      updateChat({ status: 'ready' });
+    } catch (e) {
+      console.error('Failed to reset chat:', e);
+      toast({
+        title: 'Error',
+        description: 'Failed to reset chat',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsResetting(false);
+    }
   }, [chatId, updateChat, onReset]);
 
   const handleAbort = useCallback(async () => {
@@ -116,31 +160,55 @@ export const ChatInput = ({
       )}
       <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between gap-2">
         <Button
-          type="button"
+          variant="outline"
           size="icon"
           onClick={handleReset}
           className="h-7 w-7"
-          disabled={isUpdating}
+          disabled={isUpdating || isCleaning || isResetting}
         >
-          {isUpdating ? (
-            <Icons.spinner className="w-4 h-4 animate-spin" />
-          ) : (
-            <Icons.reset className="w-4 h-4" />
-          )}
+          <Icons.reset
+            className={cn('w-4 h-4', isResetting && 'animate-spin')}
+          />
         </Button>
-        <Button
-          variant="default"
-          size="icon"
-          disabled={!message.trim() || disabled}
-          className="h-7 w-7"
-          onClick={status !== 'ready' ? handleAbort : handleSubmit}
-        >
-          {isUpdating ? (
-            <Icons.stop className="w-4 h-4 text-red-500" />
-          ) : (
-            <Icons.send className="w-4 h-4" />
+        <div className="flex items-center gap-2">
+          {chat?.status === 'wait_for_human_input' && (
+            <>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-7 w-7"
+                onClick={() => handleHumanInput('\n')}
+              >
+                <Icons.enter className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-7 w-7"
+                onClick={() => handleHumanInput('exit')}
+              >
+                <Icons.exit className="w-4 h-4" />
+              </Button>
+            </>
           )}
-        </Button>
+          <Button
+            variant="default"
+            size="icon"
+            disabled={
+              (!message.trim() && chat?.status !== 'wait_for_human_input') ||
+              disabled ||
+              isResetting
+            }
+            className="h-7 w-7"
+            onClick={chat?.status !== 'ready' ? handleAbort : handleSubmit}
+          >
+            {isUpdating ? (
+              <Icons.stop className="w-4 h-4 text-red-500" />
+            ) : (
+              <Icons.send className="w-4 h-4" />
+            )}
+          </Button>
+        </div>
       </div>
     </form>
   );

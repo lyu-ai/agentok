@@ -1,27 +1,23 @@
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
-import { githubLight, githubDark } from '@uiw/codemirror-theme-github';
+import { vscodeLight, vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { CopyButton } from '@/components/copy-button';
 import { DownloadButton } from '@/components/download-button';
 import { Icons } from '../icons';
 import { Button } from '../ui/button';
 import { ScrollArea } from '../ui/scroll-area';
 import { useTheme } from 'next-themes';
-import {
-  syntaxHighlighting,
-  defaultHighlightStyle,
-} from '@codemirror/language';
 
 export const PythonViewer = ({ data, setMode }: any) => {
   const { resolvedTheme } = useTheme();
 
   return (
-    <ScrollArea className="relative flex flex-col w-full h-[calc(100vh-var(--header-height))]">
+    <ScrollArea className="relative flex flex-col w-full h-[calc(100vh-var(--header-height))] overflow-x-auto">
       <CodeMirror
         value={data}
         height="100%"
-        theme={resolvedTheme === 'dark' ? githubDark : githubLight}
-        extensions={[python(), syntaxHighlighting(defaultHighlightStyle)]}
+        theme={resolvedTheme === 'dark' ? vscodeDark : vscodeLight}
+        extensions={[python()]}
         editable={false}
         className="text-xs overflow-x-auto mt-0"
       />

@@ -99,7 +99,6 @@ export const Markdown = ({
         code(props: any) {
           const isInline =
             props.node?.position?.start.line === props.node?.position?.end.line;
-          console.log('Code props:', props, isInline);
 
           if (isInline) {
             return <InlineCode>{props.children}</InlineCode>;

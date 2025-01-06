@@ -35,7 +35,7 @@ export const TextOption = ({
           onChange={(e) => setValue(e.target.value)}
           onBlur={() => onValueChange && onValueChange(name, value)}
           rows={rows}
-          className="focus:text-primary p-1 rounded bg-transparent w-full nodrag nowheel"
+          className="bg-transparent w-full nodrag nowheel"
         />
       ) : (
         <Input
@@ -44,7 +44,7 @@ export const TextOption = ({
           placeholder={placeholder}
           onChange={(e) => setValue(e.target.value)}
           onBlur={(e) => onValueChange && onValueChange(name, e.target.value)}
-          className="focus:text-primary p-1 rounded bg-transparent w-full nodrag nowheel"
+          className="bg-transparent w-full nodrag nowheel"
         />
       )}
     </div>
