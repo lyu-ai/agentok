@@ -73,7 +73,7 @@ export async function DELETE(
 
     return NextResponse.json({ result: 'success' });
   } catch (e) {
-    console.error(`Failed DELETE /projects/${id}: ${e}`);
+    console.error(`Failed DELETE /projects/${id}:`, e);
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }

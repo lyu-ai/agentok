@@ -132,21 +132,29 @@ export function useProjects() {
   const handleDeleteProject = useCallback(
     async (id: number) => {
       setIsDeleting(true);
+      const previousProjects = [...projects];
+      
+      // Immediate optimistic update
+      deleteProject(id);
+      mutate(projects.filter(p => p.id !== id), false);
+      
       try {
-        await fetch(`/api/projects/${id}`, {
+        const response = await fetch(`/api/projects/${id}`, {
           method: 'DELETE',
           credentials: 'include',
         });
-        deleteProject(id);  // Update store after successful API call
-        await mutate();     // Then revalidate cache
+        if (!response.ok) throw new Error(await response.text());
       } catch (error) {
         console.error('Failed to delete project:', error);
-        throw error;  // Let component handle the error
+        // Rollback on error
+        setProjects(previousProjects);
+        await mutate();
+        throw error;
       } finally {
         setIsDeleting(false);
       }
     },
-    [deleteProject, mutate]
+    [projects, deleteProject, setProjects, mutate]
   );
 
   const [isUpdating, setIsUpdating] = useState(false);
