@@ -132,22 +132,21 @@ export function useProjects() {
   const handleDeleteProject = useCallback(
     async (id: number) => {
       setIsDeleting(true);
-      const previousProjects = [...projects];
-      deleteProject(id);
       try {
         await fetch(`/api/projects/${id}`, {
           method: 'DELETE',
           credentials: 'include',
         });
-        mutate(); // Revalidate the SWR cache
+        deleteProject(id);  // Update store after successful API call
+        await mutate();     // Then revalidate cache
       } catch (error) {
         console.error('Failed to delete project:', error);
-        setProjects(previousProjects);
+        throw error;  // Let component handle the error
       } finally {
         setIsDeleting(false);
       }
     },
-    [data, deleteProject, setProjects, mutate]
+    [deleteProject, mutate]
   );
 
   const [isUpdating, setIsUpdating] = useState(false);

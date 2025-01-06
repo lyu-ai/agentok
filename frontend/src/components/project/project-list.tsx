@@ -10,24 +10,22 @@ import { Icons } from '@/components/icons';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export const ProjectLoading = () => {
   return (
     <div className="flex w-full flex-wrap justify-center gap-4">
-      {[...Array(4)].map((_, i) => (
-        <Card
-          key={i}
-          className="card w-80 h-48 flex flex-col overflow-hidden gap-2 bg-base-content/10 border border-base-content/10"
-        >
-          <div className="card-body p-4 gap-2">
-            <div className="skeleton h-8 w-full" />
+      {[...Array(6)].map((_, i) => (
+        <Card key={i} className="w-80 h-48 flex flex-col overflow-hidden gap-2">
+          <div className="p-4 flex flex-col gap-2">
+            <Skeleton className="h-8 w-full" />
             <div className="flex flex-col gap-2 h-full">
-              <div className="skeleton h-4 w-1/2" />
-              <div className="skeleton h-3 w-full" />
-              <div className="skeleton h-4 w-1/2" />
+              <Skeleton className="h-4 w-1/2" />
+              <Skeleton className="h-3 w-full" />
+              <Skeleton className="h-4 w-1/2" />
             </div>
-            <div className="flex items-center justify-end gap-1 text-xs text-base-content/60">
-              <div className="skeleton h-5 w-20 p-2"></div>
+            <div className="flex items-center justify-end gap-1">
+              <Skeleton className="h-5 w-20" />
             </div>
           </div>
         </Card>
@@ -60,8 +58,16 @@ export const ProjectBlock = ({ project, className }: any) => {
       });
   };
   const onDelete = async () => {
-    await deleteProject(project.id);
-    toast({ title: `Project ${project.name} deleted` });
+    try {
+      await deleteProject(project.id);
+      toast({ title: `Project ${project.name} deleted` });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to delete project',
+        variant: 'destructive',
+      });
+    }
   };
   return (
     <Card
