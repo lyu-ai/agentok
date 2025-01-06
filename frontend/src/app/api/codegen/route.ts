@@ -21,6 +21,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const data = await request.json();
+    console.log('Codegen data:', data);
     const res = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/v1/codegen`, {
       method: 'POST',
       headers: {

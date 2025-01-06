@@ -5,10 +5,15 @@ import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
+import { Chat } from '@/store/chats';
+import { useChat, useChats } from '@/hooks/use-chats';
+import { toast } from '@/hooks/use-toast';
 
 interface ChatInputProps {
+  chatId: number;
   onSubmit: (message: string) => void;
   onAbort?: () => void;
+  onReset?: () => void;
   loading?: boolean;
   disabled?: boolean;
   sampleMessages?: string[];
@@ -16,13 +21,16 @@ interface ChatInputProps {
 }
 
 export const ChatInput = ({
+  chatId,
   onSubmit,
   onAbort,
+  onReset,
   loading,
   disabled,
   sampleMessages,
   className,
 }: ChatInputProps) => {
+  const { chat, isLoading, updateChat, isUpdating } = useChat(chatId);
   const [message, setMessage] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -45,6 +53,32 @@ export const ChatInput = ({
     },
     [handleSubmit]
   );
+
+  const handleReset = useCallback(() => {
+    onReset?.();
+    updateChat({ status: 'ready' });
+  }, [chatId, updateChat, onReset]);
+
+  const handleAbort = useCallback(async () => {
+    try {
+      const resp = await fetch(`/api/chats/${chatId}/abort`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!resp.ok) {
+        throw new Error('Failed to abort chat');
+      }
+    } catch (err) {
+      console.error('Failed to abort chat:', err);
+      toast({
+        title: 'Error',
+        description: 'Failed to abort chat',
+        variant: 'destructive',
+      });
+    }
+  }, [chatId]);
 
   return (
     <form
@@ -80,26 +114,32 @@ export const ChatInput = ({
           ))}
         </div>
       )}
-      <div className="absolute bottom-2 right-2 flex items-center gap-2">
-        {loading && (
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            onClick={onAbort}
-            className="h-7 w-7"
-          >
-            <Icons.stop className="w-4 h-4" />
-          </Button>
-        )}
+      <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between gap-2">
         <Button
-          type="submit"
+          type="button"
+          size="icon"
+          onClick={handleReset}
+          className="h-7 w-7"
+          disabled={isUpdating}
+        >
+          {isUpdating ? (
+            <Icons.spinner className="w-4 h-4 animate-spin" />
+          ) : (
+            <Icons.reset className="w-4 h-4" />
+          )}
+        </Button>
+        <Button
           variant="default"
           size="icon"
           disabled={!message.trim() || disabled}
           className="h-7 w-7"
+          onClick={status !== 'ready' ? handleAbort : handleSubmit}
         >
-          <Icons.send className="w-4 h-4" />
+          {isUpdating ? (
+            <Icons.stop className="w-4 h-4 text-red-500" />
+          ) : (
+            <Icons.send className="w-4 h-4" />
+          )}
         </Button>
       </div>
     </form>

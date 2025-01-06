@@ -299,6 +299,14 @@ class SupabaseClient:
 
     def fetch_tools(self, tool_ids: Optional[List[int]] = None) -> List[Tool]:
         try:
+            if not self.user_id:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="User ID not found",
+                )
+            if not tool_ids or len(tool_ids) == 0:
+                return []
+
             query = (
                 self.supabase.table("tools")
                 .select("*")

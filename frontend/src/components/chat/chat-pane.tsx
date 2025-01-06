@@ -27,7 +27,6 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
   const [status, setStatus] = useState('ready');
   const [messages, setMessages] = useState<any[]>([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-  const [isCleaning, setIsCleaning] = useState(false);
   const isFirstRender = useRef(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
@@ -144,21 +143,6 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
     }
   }, [messages, scrollToBottom]);
 
-  const handleClean = useCallback(() => {
-    setIsCleaning(true);
-    fetch(`/api/chats/${chatId}/messages`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    })
-      .then(() => {
-        setMessages([]);
-      })
-      .finally(() => setIsCleaning(false));
-  }, [setMessages, chatId]);
-
   const handleSend = useCallback(
     async (message: string) => {
       try {
@@ -207,26 +191,9 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
     }
   }, [projectId, createChat]);
 
-  const handleAbort = useCallback(async () => {
-    try {
-      const resp = await fetch(`/api/chats/${chatId}/abort`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!resp.ok) {
-        throw new Error('Failed to abort chat');
-      }
-    } catch (err) {
-      console.error('Failed to abort chat:', err);
-      toast({
-        title: 'Error',
-        description: 'Failed to abort chat',
-        variant: 'destructive',
-      });
-    }
-  }, [chatId, toast]);
+  const handleReset = useCallback(async () => {
+    setMessages([]);
+  }, [setMessages]);
 
   if (isLoadingMessages || isLoadingChat) {
     return (
@@ -234,8 +201,9 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
         <Loading />
         <div className="relative flex flex-col gap-1 w-full max-w-4xl mx-auto p-2 pt-0">
           <ChatInput
+            chatId={chatId}
             onSubmit={handleSend}
-            onAbort={handleAbort}
+            onReset={handleReset}
             disabled={true}
             className="w-full"
             sampleMessages={['sample message']}
@@ -284,8 +252,9 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
       )}
       <div className="relative flex flex-col gap-1 w-full max-w-4xl mx-auto p-2 pt-0">
         <ChatInput
+          chatId={chatId}
           onSubmit={handleSend}
-          onAbort={handleAbort}
+          onReset={handleReset}
           loading={status === 'running'}
           disabled={status === 'failed' || currentChatId === -1}
           className="w-full"

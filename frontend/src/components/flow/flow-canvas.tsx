@@ -257,7 +257,6 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
 
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
-      console.log('edge changes', changes);
       if (changes.some((change) => change.type !== 'select')) {
         setIsDirty(true);
       }
@@ -341,7 +340,7 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
       const { offsetX, offsetY, ...cleanedData } = data;
       const newId = nanoid(8);
       const newNode = {
-        id: `node_${data.id}_${newId}`,
+        id: `${data.id}_${newId}`,
         type: data.id,
         position,
         data: cleanedData,
@@ -434,7 +433,7 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
   };
 
   const onAddNode = useCallback(
-    (type: string, name: string) => {
+    (id: string, name: string, class_type: string) => {
       setNodes((nds) => {
         const newId = nanoid(8);
         const bounds = flowParent.current?.getBoundingClientRect();
@@ -452,12 +451,13 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
         });
 
         const newNode: Node = {
-          id: `node_${type}_${newId}`,
-          type,
+          id: `${id}_${newId}`,
+          type: id,
           position,
           data: {
-            id: type,
+            id,
             name,
+            class_type,
           },
           selected: true,
           draggable: true,

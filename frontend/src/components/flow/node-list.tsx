@@ -16,9 +16,16 @@ interface NodeItemProps {
   name: string;
   type: string;
   description?: string;
+  class_type: string;
 }
 
-const NodeItem = ({ id, name, type, description }: NodeItemProps) => {
+const NodeItem = ({
+  id,
+  name,
+  type,
+  description,
+  class_type,
+}: NodeItemProps) => {
   const NodeIcon = getNodeIcon(type);
   const onDragStart = (
     event: React.DragEvent<HTMLDivElement>,
@@ -35,7 +42,7 @@ const NodeItem = ({ id, name, type, description }: NodeItemProps) => {
       )}
       draggable
       onDragStart={(e: React.DragEvent<HTMLDivElement>) =>
-        onDragStart(e, { id, name })
+        onDragStart(e, { id, name, type, class_type })
       }
     >
       <NodeIcon className="w-4 h-4" />
@@ -52,7 +59,7 @@ const NodeItem = ({ id, name, type, description }: NodeItemProps) => {
 export const NodeList = ({
   onAddNode,
 }: {
-  onAddNode: (type: string, name: string) => void;
+  onAddNode: (id: string, name: string, class_type: string) => void;
 }) => {
   return (
     <Accordion type="multiple" defaultValue={['Basic']} className="w-full p-2">
@@ -75,13 +82,14 @@ export const NodeList = ({
               {nodes.map((node) => (
                 <PopoverClose
                   key={node.id}
-                  onClick={() => onAddNode(node.id, node.name)}
+                  onClick={() => onAddNode(node.id, node.name, node.class_type)}
                 >
                   <NodeItem
                     id={node.id}
                     name={node.name}
                     type={node.id}
                     description={node.description}
+                    class_type={node.class_type}
                   />
                 </PopoverClose>
               ))}

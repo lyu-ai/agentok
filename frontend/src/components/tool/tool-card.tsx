@@ -1,10 +1,12 @@
 import { useTool, useToolSettings, useUser } from '@/hooks';
-import clsx from 'clsx';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Icons } from '../icons';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
+import { Badge } from '../ui/badge';
 
 export const ToolCard = ({ tool, selected, className, ...props }: any) => {
   const [isOwned, setIsOwned] = useState(false);
@@ -41,15 +43,21 @@ export const ToolCard = ({ tool, selected, className, ...props }: any) => {
       {...props}
     >
       <div className="flex items-center gap-2">
-        <img
+        <Image
           src={tool.logo_url ?? '/images/tools.svg'}
+          alt={tool.name}
+          width={48}
+          height={48}
           className="w-12 h-12 flex-shrink-0"
         />
         <div className="flex flex-col items-start gap-1">
           <div className="text-base font-bold">{tool.name}</div>
           {tool.user_name && (
             <div className="flex items-center gap-1">
-              <img src={tool.user_avatar} className="w-4 h-4 rounded-full" />
+              <Avatar className="w-4 h-4">
+                <AvatarImage src={tool.user_avatar} />
+                <AvatarFallback>{tool.user_name.slice(0, 2)}</AvatarFallback>
+              </Avatar>
               <span className="text-xs text-base-content/50">
                 {tool.user_name}
               </span>
@@ -60,26 +68,28 @@ export const ToolCard = ({ tool, selected, className, ...props }: any) => {
       <div className="text-sm text-base-content/50 w-full line-clamp-4 min-h-14">
         {tool.description}
       </div>
-      {isOwned && (
-        <Link href={`/tools/${tool.id}`} className="absolute bottom-2 left-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-xs flex items-center gap-1"
-          >
-            <Icons.tool className="w-4 h-4" />
-            Develop
-          </Button>
-        </Link>
-      )}
-      <div className="absolute top-2 right-2 flex items-center gap-2">
+      <div className="absolute bottom-2 left-2 flex items-center gap-2">
         {needConfig && (
           <span className="text-xs bg-yellow-600 text-white p-1 rounded">
             Not Configured
           </span>
         )}
       </div>
+      <div className="absolute top-2 right-2 items-center gap-2">
+        {tool.is_public && (
+          <Badge variant="outline" className="text-xs">
+            Public
+          </Badge>
+        )}
+      </div>
       <div className="absolute bottom-2 right-2 hidden group-hover:flex items-center gap-2">
+        {isOwned && (
+          <Link href={`/tools/${tool.id}`}>
+            <Button variant="ghost" size="icon" className="w-7 h-7">
+              <Icons.edit className="w-4 h-4" />
+            </Button>
+          </Link>
+        )}
         {!tool.is_public && (
           <Button
             variant="ghost"

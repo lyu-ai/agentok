@@ -83,6 +83,8 @@ import {
   StickyNote,
   LucideProps,
   Route,
+  RotateCw,
+  RotateCcw,
 } from 'lucide-react';
 import { Logo } from './logo';
 import { ElementType } from 'react';
@@ -160,6 +162,7 @@ export const Icons: Record<string, ElementType> = {
   stop: Square,
   robot: Bot,
   robotActive: Bot,
+  reset: RotateCcw,
   copy: Copy,
   reload: RefreshCw,
   codeBlock: Code,

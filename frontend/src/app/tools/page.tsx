@@ -8,13 +8,6 @@ import { useRouter } from 'next/navigation';
 import { genId } from '@/lib/id';
 import { toast } from '@/hooks/use-toast';
 import { Icons } from '@/components/icons';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 
 const NewToolCard = () => {
@@ -42,12 +35,12 @@ const NewToolCard = () => {
     <Button
       variant="outline"
       onClick={handleCreate}
-      className="group flex flex-col min-h-48 items-center justify-center gap-2 p-3 rounded-md border border-dashed border-base-content/20 cursor-pointer hover:bg-base-content/10 hover:shadow-box hover:shadow-gray-700"
+      className="group flex flex-col h-full min-h-24 items-center justify-center gap-2 p-3 rounded-md border border-dashed border-muted-foreground/20 cursor-pointer hover:bg-muted-foreground/10"
     >
       <div className="flex flex-col items-center gap-2">
-        {isCreating && <div className="loading loading-sm" />}
+        {isCreating && <Icons.spinner className="w-8 h-8 animate-spin" />}
         {!isCreating && (
-          <Icons.tool className="w-8 h-8 flex-shrink-0 group-hover:scale-125 transform transition duration-700 ease-in-out group-hover:text-primary" />
+          <Icons.tool className="w-8 h-8 shrink-0 group-hover:scale-125 transform transition duration-700 ease-in-out group-hover:text-primary" />
         )}
         <div className="text-base font-bold">New Tool</div>
       </div>

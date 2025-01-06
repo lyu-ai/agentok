@@ -32,7 +32,7 @@ export function ConverseEdge({ id, data, selected, style, ...props }: any) {
           <Button
             variant="outline"
             size="icon"
-            className={cn('rounded-full bg-muted h-7 w-7', {
+            className={cn('rounded-full border-2 bg-muted h-7 w-7', {
               'text-green-500 border-green-500': selected,
               'text-muted-foreground/80 border-muted-foreground/80': !selected,
             })}
