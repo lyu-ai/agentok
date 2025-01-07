@@ -7,6 +7,9 @@ import useProjectStore from '@/store/projects';
 import useTemplateStore from '@/store/templates';
 import { useProjects } from './use-projects';
 import { useTemplates } from './use-templates';
+import { createClient } from '@/lib/supabase/client';
+import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
+import { nanoid } from 'nanoid';
 
 export function useChats() {
   const { data, error, mutate } = useSWR('/api/chats', fetcher);
@@ -140,6 +143,7 @@ export function useChat(chatId: number) {
   const { chats, updateChat, isUpdating, isLoading, isError } = useChats();
   const { projects } = useProjects();
   const { templates } = useTemplates();
+
   const chat =
     chatId === -1 ? undefined : chats.find((chat) => chat.id === chatId);
   const chatSource =
@@ -152,9 +156,38 @@ export function useChat(chatId: number) {
           templates.find((template: any) => template.id === chat?.from_template)
             ?.project;
 
+  useEffect(() => {
+    if (chatId === -1) return;
+
+    // Subscribe to chat status updates
+    const supabase = createClient();
+    const channel = supabase
+      .channel(`chat_status_${nanoid(6)}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'chats',
+          filter: `id=eq.${chatId}`,
+        },
+        (payload: RealtimePostgresChangesPayload<{ status: string }>) => {
+          if (payload.new && 'status' in payload.new) {
+            updateChat(chatId, { status: payload.new.status });
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [chatId, updateChat]);
+
   const handleUpdateChat = (chat: Partial<Chat>) => {
     updateChat(chatId, chat);
   };
+
   return {
     chat,
     chatSource,

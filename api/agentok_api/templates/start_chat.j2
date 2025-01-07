@@ -1,3 +1,4 @@
+
 # Start the conversation
 
 {% if initial_chat_targets | length > 1 %}
@@ -5,7 +6,7 @@
 # TODO: The input messsage is ignored, I guess it should be in the first element?
 chat_result = node_{{ first_converser['id'] }}.initiate_chats(
     [
-      {%- for target in initial_chat_targets %}
+      {%- for target in initial_chat_targets -%}
       {
         "recipient": node_{{ target['node']['id'] }},
         {%- if target['chat_options'].message %}
@@ -18,7 +19,7 @@ chat_result = node_{{ first_converser['id'] }}.initiate_chats(
         "summary_method": "{{ target.chat_options.summary_method }}",
         {%- endif %}
       }{% if not loop.last %},{% endif %}
-      {%- endfor %}
+      {%- endfor -%}
     ]
 )
 {%- elif initial_chat_targets | length == 1 %}
@@ -27,7 +28,7 @@ chat_result = node_{{ first_converser['id'] }}.initiate_chats(
 reply =  node_{{ first_converser['id'] }}.generate_reply(
     messages=[{"role": "user", "content": args.message}]
 )
-{%- else %}
+{%- else -%}
 # Talk to one single agent
 chat_result = node_{{ first_converser['id'] }}.initiate_chat(
     node_{{ initial_chat_targets[0].node['id'] }},
@@ -43,5 +44,5 @@ chat_result = node_{{ first_converser['id'] }}.initiate_chat(
     summary_method="{{ initial_chat_targets[0]['chat_options'].summary_method }}",
     {%- endif %}
 )
-{%- endif %}
-{% endif %}
+{%- endif -%}
+{%- endif -%}

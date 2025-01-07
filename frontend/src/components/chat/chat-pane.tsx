@@ -10,7 +10,6 @@ import { RealtimeChannel } from '@supabase/supabase-js';
 import { genId } from '@/lib/id';
 import supabase from '@/lib/supabase/client';
 import { Loading } from '@/components/loader';
-import { isArray } from 'lodash-es';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
@@ -103,30 +102,9 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
       )
       .subscribe();
 
-    // Subscribe to chats
-    const chatsChannel: RealtimeChannel = supabase
-      .channel(`chats_${genId()}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'chats',
-          filter: `id=eq.${chatId}`,
-        },
-        (payload) => {
-          console.log('changes_event(chats):', payload);
-          if (payload.new && 'status' in payload.new) {
-            setStatus(payload.new.status);
-          }
-        }
-      )
-      .subscribe();
-
     // Cleanup function
     return () => {
       if (messagesChannel) supabase.removeChannel(messagesChannel);
-      if (chatsChannel) supabase.removeChannel(chatsChannel);
     };
   }, [chatId]);
 
