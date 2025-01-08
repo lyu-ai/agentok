@@ -1,7 +1,7 @@
-import clsx from 'clsx';
-import { OptionProps, OptionType } from './option';
+import { OptionProps } from './option';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
+import { useState } from 'react';
 type RangeOptionProps = {
   min: number;
   max: number;
@@ -16,25 +16,28 @@ export const RangeOption = ({
   min,
   max,
   step,
-  compact,
 }: RangeOptionProps) => {
+  const [value, setValue] = useState(data?.[name] ?? 0);
   return (
-    <div
-      className={clsx('flex gap-2 text-sm', {
-        'flex-col': !compact,
-        'items-center': compact,
-      })}
-    >
-      <Label className="whitespace-nowrap">{label}</Label>
-      <Slider
-        min={min ?? 0}
-        max={max ?? 100}
-        step={step ?? 1}
-        value={data?.[name] ?? 0}
-        onChange={(value) => onValueChange && onValueChange(name, value)}
-        className="range range-xs nodrag focus:range-primary w-full p-1"
-      />
-      [{data?.[name] ?? 'None'}]
+    <div className="flex flex-col gap-2 text-sm">
+      <Label className="whitespace-nowrap">
+        {label} ({data?.[name] ?? 'None'})
+      </Label>
+      <div className="flex flex-row gap-2">
+        <Label className="text-xs">{min}</Label>
+        <Slider
+          min={min ?? 0}
+          max={max ?? 100}
+          step={step ?? 1}
+          value={[value]}
+          onValueChange={(value) => setValue(value[0])}
+          onValueCommit={(value) => {
+            onValueChange && onValueChange(name, value[0]);
+          }}
+          className="range range-xs nodrag focus:range-primary w-full p-1"
+        />
+        <Label className="text-xs">{max}</Label>
+      </div>
     </div>
   );
 };

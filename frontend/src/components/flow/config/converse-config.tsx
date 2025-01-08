@@ -19,15 +19,6 @@ export const ConverseConfig = ({ edgeId, data }: any) => {
           ]}
         />
         <GenericOption
-          type="number"
-          nodeId={edgeId}
-          data={data}
-          name="max_round"
-          label="Max Round"
-          min={1}
-          max={100}
-        />
-        <GenericOption
           type="check"
           nodeId={edgeId}
           data={data}

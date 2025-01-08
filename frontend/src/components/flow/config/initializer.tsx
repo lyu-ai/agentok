@@ -19,9 +19,9 @@ export const InitializerConfig = ({ nodeId, data }: any) => {
           type="text"
           nodeId={nodeId}
           data={data}
-          rows={5}
+          rows={3}
           name="sample_messages"
-          label="Sample Message"
+          label="Sample Message (One per line)"
           placeholder="Enter sample messages, one per line."
         />
         <GenericOption
@@ -34,6 +34,16 @@ export const InitializerConfig = ({ nodeId, data }: any) => {
             { value: 'last_msg', label: 'Last Message' },
             { value: 'reflection_with_llm', label: 'Reflection with LLM' },
           ]}
+        />
+        <GenericOption
+          type="range"
+          nodeId={nodeId}
+          data={data}
+          name="max_turns"
+          label="Max Turns"
+          min={1}
+          max={50}
+          step={1}
         />
       </div>
     </ScrollArea>
