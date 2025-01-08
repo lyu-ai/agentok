@@ -7,6 +7,7 @@ export const AssistantConfig = ({ nodeId, data, className, ...props }: any) => {
       data={data}
       className={className}
       toolScene={'llm'}
+      optionsDisabled={['human_input_mode']}
       {...props}
     />
   );

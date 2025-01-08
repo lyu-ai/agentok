@@ -23,25 +23,6 @@ export const AssistantNode: ComponentType<NodeProps> = ({
         { type: 'target', name: '' },
         { type: 'source', name: '' },
       ]}
-    >
-      <GenericOption
-        type="text"
-        nodeId={id}
-        data={data}
-        selected={selected}
-        name="instructions"
-        label="Instructions"
-        placeholder="Enter instructions for the assistant..."
-        className="min-h-[100px]"
-      />
-      <GenericOption
-        type="check"
-        nodeId={id}
-        data={data}
-        selected={selected}
-        name="use_default_instructions"
-        label="Use default instructions"
-      />
-    </GenericNode>
+    ></GenericNode>
   );
 };

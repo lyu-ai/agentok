@@ -36,6 +36,15 @@ export const InitializerConfig = ({ nodeId, data }: any) => {
           ]}
         />
         <GenericOption
+          type="text"
+          nodeId={nodeId}
+          data={data}
+          rows={3}
+          name="summary_prompt"
+          label="Summary Prompt"
+          placeholder="Enter a prompt for the summary."
+        />
+        <GenericOption
           type="range"
           nodeId={nodeId}
           data={data}

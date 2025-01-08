@@ -43,9 +43,15 @@ chat_result = node_{{ first_converser['id'] }}.initiate_chat(
     {%- if initializer_node and initializer_node['data'] and initializer_node.data['summary_method'] %}
     summary_method="{{ initializer_node.data.summary_method }}",
     {%- endif %}
+    {%- if initializer_node and initializer_node['data'] and initializer_node.data['summary_prompt'] %}
+    summary_prompt="{{ initializer_node.data.summary_prompt }}",
+    {%- endif %}
     {%- if initializer_node and initializer_node['data'] and initializer_node.data['max_turns'] %}
     max_turns={{ initializer_node.data.max_turns }},
     {%- endif %}
 )
+
+print("__CHAT_RESULT__", chat_result)
+
 {%- endif -%}
 {%- endif -%}

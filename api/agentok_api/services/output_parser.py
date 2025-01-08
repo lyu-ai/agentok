@@ -58,6 +58,16 @@ class OutputParser:
             # Skip empty lines
             return
 
+        # Add handling for chat result
+        if line.startswith("__CHAT_RESULT__ "):
+            result = line.replace("__CHAT_RESULT__ ", "").strip()
+            self.on_message({
+                "type": "assistant",
+                "content": result,
+                "is_summary": True  # Optional flag to indicate this is the final result
+            })
+            return
+
         handlers = {
             self.STATE_VERSION: self._handle_version_state,
             self.STATE_CHAT: self._handle_chat_state,

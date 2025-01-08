@@ -1,10 +1,17 @@
 'use client';
 
 import { GenericOption } from '../option/option';
+import { ConversableAgentConfig } from './conversable-agent';
 
 export const UserConfig = ({ nodeId, data }: any) => {
   return (
-    <div className="flex flex-col gap-4 p-2">
+    <ConversableAgentConfig
+      className="flex flex-col gap-4 p-2"
+      nodeId={nodeId}
+      data={data}
+      toolScene={'user'}
+      optionsDisabled={['enable_llm']}
+    >
       <GenericOption
         type="select"
         nodeId={nodeId}
@@ -18,28 +25,12 @@ export const UserConfig = ({ nodeId, data }: any) => {
         ]}
       />
       <GenericOption
-        type="number"
-        nodeId={nodeId}
-        data={data}
-        name="max_consecutive_auto_reply"
-        label="Max Consecutive Auto Reply"
-        min={1}
-        max={100}
-      />
-      <GenericOption
-        type="check"
-        nodeId={nodeId}
-        data={data}
-        name="enable_llm"
-        label="Enable LLM"
-      />
-      <GenericOption
         type="check"
         nodeId={nodeId}
         data={data}
         name="enable_code_execution"
         label="Enable Code Execution"
       />
-    </div>
+    </ConversableAgentConfig>
   );
 };

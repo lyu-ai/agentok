@@ -102,8 +102,8 @@ const MessageBubble = ({
   const messageClass = waitForHumanInput
     ? 'bg-yellow-600/20 text-yellow-600'
     : message.role === 'assistant'
-      ? 'bg-primary text-primary-foreground'
-      : 'bg-primary-foreground text-primary-content';
+      ? 'bg-primary-foreground/50 text-primary-content'
+      : 'bg-primary-content text-primary-content';
 
   let avatarIcon = <Icons.node className="w-4 h-4" />;
   if (message.role === 'user') {
@@ -178,7 +178,7 @@ const MessageBubble = ({
         {message.content ? (
           <Markdown>{message.content}</Markdown>
         ) : (
-          <span className="text-lime-600">...</span>
+          <span className="text-lime-600">(no content)</span>
         )}
         {message.role === 'user' && (
           <Button

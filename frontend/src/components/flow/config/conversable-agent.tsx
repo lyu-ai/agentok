@@ -15,13 +15,13 @@ export const ConversableAgentConfig = ({
       label: 'Name',
       placeholder: 'Enter a name for this agent',
     },
-    {
-      type: 'text',
-      name: 'description',
-      label: 'Description',
-      placeholder: 'Enter a description for this agent',
-      rows: 2,
-    },
+    // {
+    //   type: 'text',
+    //   name: 'description',
+    //   label: 'Description',
+    //   placeholder: 'Enter a description for this agent',
+    //   rows: 2,
+    // },
     {
       type: 'text',
       name: 'system_message',
@@ -51,13 +51,9 @@ export const ConversableAgentConfig = ({
     },
     {
       type: 'check',
-      name: 'enable_rag',
-      label: 'Enable RAG',
-    },
-    {
-      type: 'check',
-      name: 'disable_llm',
-      label: 'Disable LLM',
+      name: 'enable_llm',
+      label: 'Enable LLM',
+      defaultChecked: true,
     },
     {
       type: 'check',

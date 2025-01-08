@@ -196,7 +196,7 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
   }
 
   return (
-    <div className="flex flex-col w-full h-full bg-muted">
+    <div className="flex flex-col w-full h-full bg-background">
       {messages.length > 0 ? (
         <ScrollArea className="flex flex-col w-full flex-1 p-2 pb-0">
           <MessageList
@@ -206,7 +206,7 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
             className="max-w-4xl mx-auto mb-1"
           />
           <div className="flex justify-center p-1">
-            <Badge variant="default" className="text-xs">
+            <Badge variant="outline" className="text-xs">
               {chat?.status}
             </Badge>
           </div>

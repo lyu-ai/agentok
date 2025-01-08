@@ -99,15 +99,10 @@ export const Markdown = ({
         code(props: any) {
           const isInline =
             props.node?.position?.start.line === props.node?.position?.end.line;
-
-          if (isInline) {
-            return <InlineCode>{props.children}</InlineCode>;
-          }
-
           const match = /language-(\w+)/.exec(props.className || '');
           return (
             <CodeComponent
-              inline={false}
+              inline={isInline}
               className={props.className}
               language={match?.[1]}
               {...props}

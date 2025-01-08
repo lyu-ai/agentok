@@ -13,7 +13,6 @@ import {
   useReactFlow,
   addEdge,
   ConnectionLineType,
-  XYPosition,
   Panel,
   useEdgesState,
   useNodesState,
@@ -26,43 +25,11 @@ import { Icons } from '@/components/icons';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { NodeButton } from './node-button';
 import { PythonViewer } from './python';
-import { useChats, useProject } from '@/hooks';
+import { useProject } from '@/hooks';
 import { debounce } from 'lodash-es';
-import { Chat as ChatType } from '@/store/chats';
 import { nanoid } from 'nanoid';
 import { Button } from '../ui/button';
 import { toast } from '@/hooks/use-toast';
-
-interface DebugRect {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  id?: string;
-  measured?: any;
-  style?: any;
-}
-
-interface MousePositionState {
-  flow: XYPosition;
-  debug?: {
-    zoom: number;
-    draggedNode: DebugRect;
-    potentialGroups: DebugRect[];
-    dimensions?: {
-      nodeId: string;
-      measured: any;
-      style: any;
-    }[];
-    intersectionTest?: {
-      nodeId: string;
-      xTest: string;
-      yTest: string;
-      xResult: boolean;
-      yResult: boolean;
-    }[];
-  };
-}
 
 const DEBOUNCE_DELAY = 500; // Adjust this value as needed
 
@@ -83,7 +50,6 @@ const useDebouncedUpdate = (projectId: number) => {
       return;
     }
     if (isDirty) {
-      console.log('saving flow');
       debouncedUpdate(toObject());
     }
 
@@ -109,9 +75,6 @@ export const FlowCanvas = ({
   const { setIsDirty } = useDebouncedUpdate(projectId);
   const [mode, setMode] = useState<'flow' | 'python'>('flow');
   const flowParent = useRef<HTMLDivElement>(null);
-  const [mousePosition, setMousePosition] = useState<MousePositionState | null>(
-    null
-  );
   const [isGeneratingPython, setIsGeneratingPython] = useState(false);
   const [python, setPython] = useState<string>('');
   // Suppress error code 002
@@ -252,7 +215,14 @@ export const FlowCanvas = ({
           }
         });
 
-        if (changes.some((change) => change.type !== 'select')) {
+        if (
+          changes.some(
+            (change) =>
+              change.type !== 'select' &&
+              'dragging' in change &&
+              !change.dragging
+          )
+        ) {
           setIsDirty(true);
         }
         return nextNodes;
@@ -565,15 +535,6 @@ export const FlowCanvas = ({
             fitView
             fitViewOptions={{ maxZoom: 1 }}
             attributionPosition="bottom-right"
-            onMouseMove={(event) => {
-              if (!flowParent.current) return;
-              const flowBounds = flowParent.current.getBoundingClientRect();
-              const flowPosition = screenToFlowPosition({
-                x: event.clientX - flowBounds.left,
-                y: event.clientY - flowBounds.top,
-              });
-              setMousePosition({ flow: flowPosition } as MousePositionState);
-            }}
           >
             <Background
               variant={BackgroundVariant.Lines}
@@ -602,35 +563,12 @@ export const FlowCanvas = ({
                 ) : (
                   <Icons.python className="w-4 h-4" />
                 )}
-                <span className="text-xs">
+                <span className="">
                   {isGeneratingPython
                     ? 'Generating Python...'
                     : 'Generate Python'}
                 </span>
               </Button>
-            </Panel>
-            <Panel
-              position="bottom-right"
-              className="flex flex-col items-end p-1 gap-1 text-xs font-mono"
-            >
-              <div>{JSON.stringify(mousePosition?.flow)}</div>
-              {mousePosition?.debug && (
-                <>
-                  <div className="text-red-500">
-                    Dragged: {JSON.stringify(mousePosition.debug.draggedNode)}
-                    Groups:{' '}
-                    {JSON.stringify(mousePosition.debug.potentialGroups)}
-                  </div>
-                  <div className="text-yellow-500">
-                    Intersection Tests:{' '}
-                    {JSON.stringify(
-                      mousePosition.debug.intersectionTest,
-                      null,
-                      2
-                    )}
-                  </div>
-                </>
-              )}
             </Panel>
           </ReactFlow>
         </div>

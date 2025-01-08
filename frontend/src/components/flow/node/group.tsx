@@ -71,15 +71,6 @@ export const GroupNode: ComponentType<NodeProps> = ({
             { 'border-primary': selected }
           )}
         />
-        <Handle
-          type="source"
-          position={Position.Right}
-          className={cn(
-            'w-3 h-3 rounded-full border-2 bg-primary/10',
-            'border-primary/10 hover:border-primary',
-            { 'border-primary': selected }
-          )}
-        />
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">

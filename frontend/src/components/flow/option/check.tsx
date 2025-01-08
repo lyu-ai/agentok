@@ -4,14 +4,16 @@ import { useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 
-type NumberOptionProps = {} & OptionProps;
+type CheckOptionProps = {
+  defaultValue?: boolean;
+} & OptionProps;
 
 export const CheckOption = ({
   data,
   label,
   name,
   onValueChange,
-}: NumberOptionProps) => {
+}: CheckOptionProps) => {
   const [value, setValue] = useState(data?.[name] ?? false);
   return (
     <div className={cn('flex justify-start items-center gap-2 text-sm')}>
