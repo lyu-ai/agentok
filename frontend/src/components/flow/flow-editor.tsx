@@ -38,34 +38,22 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
           <FlowCanvas projectId={projectId} />
         </ResizablePanel>
         <ResizableHandle />
-        <ResizablePanel defaultSize={30} className="min-w-80">
+        <ResizablePanel defaultSize={30} minSize={25}>
           <Tabs defaultValue="config" className="flex flex-col h-full">
             <TabsList className="flex items-center justify-start w-full rounded-none border-b shrink-0">
-              <TabsTrigger
-                value="config"
-                className="flex items-center gap-1 px-1.5"
-              >
+              <TabsTrigger value="config" className="flex items-center gap-2">
                 <Icons.config className="w-4 h-4" />
                 <span className="hidden md:block text-sm">Props</span>
               </TabsTrigger>
-              <TabsTrigger
-                value="chat"
-                className="flex items-center gap-1 px-1.5"
-              >
+              <TabsTrigger value="chat" className="flex items-center gap-2">
                 <Icons.node className="w-4 h-4" />
                 <span className="hidden md:block text-sm">Chat</span>
               </TabsTrigger>
-              <TabsTrigger
-                value="logs"
-                className="flex items-center gap-1 px-1.5"
-              >
+              <TabsTrigger value="logs" className="flex items-center gap-2">
                 <Icons.logs className="w-4 h-4" />
                 <span className="hidden md:block text-sm">Logs</span>
               </TabsTrigger>
-              <TabsTrigger
-                value="nodes"
-                className="flex items-center gap-1 px-1.5"
-              >
+              <TabsTrigger value="nodes" className="flex items-center gap-2">
                 <Icons.braces className="w-4 h-4" />
                 <span className="hidden md:block text-sm">Data</span>
               </TabsTrigger>
