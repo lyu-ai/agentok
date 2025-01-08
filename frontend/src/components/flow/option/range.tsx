@@ -30,6 +30,7 @@ export const RangeOption = ({
           max={max ?? 100}
           step={step ?? 1}
           value={[value]}
+          onChange={(value) => console.log(value)}
           onValueChange={(value) => setValue(value[0])}
           onValueCommit={(value) => {
             onValueChange && onValueChange(name, value[0]);

@@ -102,10 +102,10 @@ const MessageBubble = ({
   const messageClass = waitForHumanInput
     ? 'bg-yellow-600/20 text-yellow-600'
     : message.role === 'assistant'
-      ? 'bg-primary-foreground/50 text-primary-content'
-      : 'bg-primary-content text-primary-content';
+      ? 'bg-primary-content text-primary'
+      : 'bg-background text-primary-content';
 
-  let avatarIcon = <Icons.node className="w-4 h-4" />;
+  let avatarIcon = <Icons.agent className="w-4 h-4" />;
   if (message.role === 'user') {
     avatarIcon = (
       <Avatar>

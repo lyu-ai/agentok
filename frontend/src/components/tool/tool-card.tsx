@@ -85,7 +85,12 @@ export const ToolCard = ({ tool, selected, className, ...props }: any) => {
       <div className="absolute bottom-2 right-2 hidden group-hover:flex items-center gap-2">
         {isOwned && (
           <Link href={`/tools/${tool.id}`}>
-            <Button variant="ghost" size="icon" className="w-7 h-7">
+            <Button
+              onClick={(e) => e.stopPropagation()}
+              variant="ghost"
+              size="icon"
+              className="w-7 h-7"
+            >
               <Icons.edit className="w-4 h-4" />
             </Button>
           </Link>

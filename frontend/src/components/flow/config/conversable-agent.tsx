@@ -45,9 +45,11 @@ export const ConversableAgentConfig = ({
       ],
     },
     {
-      type: 'number',
+      type: 'range',
       name: 'max_consecutive_auto_reply',
       label: 'Max Consecutive Auto Replies',
+      min: 1,
+      max: 30,
     },
     {
       type: 'check',
@@ -63,8 +65,8 @@ export const ConversableAgentConfig = ({
   ];
 
   return (
-    <ScrollArea className="flex flex-col h-full w-full p-2">
-      <div className="flex flex-col gap-4 w-full h-full">
+    <ScrollArea>
+      <div className="flex flex-col gap-4 w-full h-full p-2">
         {GENERAL_OPTIONS.filter((o) => !optionsDisabled.includes(o.name)).map(
           (options, index) => (
             <GenericOption

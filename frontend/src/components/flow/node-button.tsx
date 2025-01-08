@@ -19,7 +19,7 @@ export const NodeButton = ({ className, onAddNode, ...props }: any) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent id="agent-list" side="bottom" align="start" asChild>
-        <ScrollArea className="w-80 h-[calc(100vh-var(--header-height)-4rem)] bg-background p-0">
+        <ScrollArea className="w-80 min-h-full max-h-[calc(100vh-var(--header-height)-4rem)] bg-background p-0">
           <NodeList onAddNode={onAddNode} />
         </ScrollArea>
       </PopoverContent>

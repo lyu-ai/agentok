@@ -10,7 +10,6 @@ export const UserConfig = ({ nodeId, data }: any) => {
       nodeId={nodeId}
       data={data}
       toolScene={'user'}
-      optionsDisabled={['enable_llm']}
     >
       <GenericOption
         type="select"

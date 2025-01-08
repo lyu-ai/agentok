@@ -33,6 +33,7 @@ export const JsonViewer = ({ projectId, className }: JsonViewerProps) => {
       </div>
       <CodeMirror
         value={jsonString}
+        editable={false}
         extensions={[json()]}
         theme={resolvedTheme === 'dark' ? githubDark : githubLight}
         className="h-full text-xs overflow-x-auto"

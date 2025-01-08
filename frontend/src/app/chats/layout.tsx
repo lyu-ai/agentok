@@ -2,11 +2,9 @@
 
 import React from 'react';
 import { useChat } from '@/hooks';
-import { ChatPane } from '@/components/chat/chat-pane';
 import { useParams } from 'next/navigation';
 import useChatStore from '@/store/chats';
 import Navbar from '@/components/navbar/navbar';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function ChatLayout({
   children,
@@ -20,7 +18,7 @@ export default function ChatLayout({
   const chat = getChatById(chatId);
 
   return (
-    <div className="flex flex-col w-screen h-screen">
+    <div className="flex flex-col w-screen h-screen bg-muted">
       <Navbar />
       <div className="h-[calc(100vh-var(--header-height))] overflow-hidden">
         {children}

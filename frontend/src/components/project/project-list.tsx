@@ -45,7 +45,7 @@ export const ProjectBlock = ({ project, className }: any) => {
     await createChat(project.id, 'project')
       .then((chat) => {
         if (chat) {
-          router.push(`/chat?id=${chat.id}`);
+          router.push(`/chats/${chat.id}`);
         }
       })
       .catch((e) => {
@@ -107,7 +107,7 @@ export const ProjectBlock = ({ project, className }: any) => {
             <Icons.share className={cn('w-4 h-4')} />
           </Button>
           <Link
-            href={`/projects/${project.id}/flow`}
+            href={`/projects/${project.id}`}
             className="flex items-center gap-1"
           >
             <Button size="icon" variant="ghost">

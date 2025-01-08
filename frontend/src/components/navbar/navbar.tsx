@@ -6,23 +6,18 @@ import { match } from 'path-to-regexp';
 import { AuthButton } from './auth-button';
 import { Logo } from '../logo';
 import { NavButton } from './nav-button';
-import { ProjectPicker } from '@/components/project/project-picker';
+import { ProjectPicker } from '../project/project-picker';
 import Link from 'next/link';
 import { Icons } from '../icons';
 import { cn } from '@/lib/utils';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
+import { ChatPicker } from '../chat/chat-picker';
 
 const apiEndpoint =
   process.env.NEXT_PUBLIC_BACKEND_URL || 'https://localhost:5004';
 
 export const NAV_MENU_ITEMS = [
-  {
-    id: 'chat',
-    label: 'Chat',
-    icon: Icons.robot,
-    href: '/chat',
-  },
   {
     id: 'tools',
     label: 'Tools',
@@ -86,6 +81,7 @@ const Navbar = () => {
         <ProjectPicker
           className={cn({ 'text-primary': isActive('/projects') })}
         />
+        <ChatPicker className={cn({ 'text-primary': isActive('/chats') })} />
         {NAV_MENU_ITEMS.map((item) => {
           return (
             <Link

@@ -13,10 +13,12 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const toolId = parseInt(id, 10);
 
   const { tool, updateTool } = useTool(toolId);
-  const setToolData = (key: any, value: any) => {
+  const setToolData = (key: string, value: unknown) => {
     updateTool({ [key]: value });
   };
+
   if (!tool) return null;
+
   return (
     <div className="relative flex flex-col w-full gap-1 h-full overflow-y-auto">
       <div className="flex flex-col gap-1 p-2 border border-base-content/20 rounded">
@@ -31,16 +33,16 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
             />
             <div className="flex flex-col gap-1">
               <EditableText
-                text={tool?.name}
-                onChange={(text: any) => {
+                text={tool.name}
+                onChange={(text: string) => {
                   setToolData('name', text);
                 }}
                 showButtons
                 className="text-base-content !text-lg !font-bold"
               />
               <EditableText
-                text={tool?.description ?? ''}
-                onChange={(text: any) => {
+                text={tool.description ?? ''}
+                onChange={(text: string) => {
                   setToolData('description', text);
                 }}
                 showButtons
@@ -55,7 +57,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
             <Switch
               id="is_public"
               checked={tool.is_public}
-              onCheckedChange={(checked: any) =>
+              onCheckedChange={(checked: boolean) =>
                 setToolData('is_public', checked)
               }
             />

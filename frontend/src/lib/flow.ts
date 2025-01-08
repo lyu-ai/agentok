@@ -84,7 +84,7 @@ export const basicNodes: NodeMeta[] = [
   },
   {
     id: 'assistant',
-    icon: Icons.node,
+    icon: Icons.agent,
     name: 'Assistant',
     description: 'An Assistant Agent',
     class_type: 'AssistantAgent',

@@ -39,7 +39,7 @@ export const config = {
   // Skip all paths that should not be processed by middleware
   matcher: [
     '/projects/:path*',
-    '/chat/:path*',
+    '/chats/:path*',
     '/tools/:path*',
     '/settings/:path*',
   ],

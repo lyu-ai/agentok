@@ -89,7 +89,7 @@ export const TemplateCard = ({
     await createChat(template.id, 'template')
       .then((chat) => {
         if (chat) {
-          router.push(`/chat?id=${chat.id}`);
+          router.push(`/chats/${chat.id}`);
         }
       })
       .catch((e) => {

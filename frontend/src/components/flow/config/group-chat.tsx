@@ -5,8 +5,8 @@ import { GenericOption } from '../option/option';
 
 export const GroupChatConfig = ({ nodeId, data }: any) => {
   return (
-    <ScrollArea className="flex flex-col h-full w-full p-2">
-      <div className="flex flex-col gap-4">
+    <ScrollArea>
+      <div className="flex flex-col gap-4 p-2">
         <GenericOption
           type="select"
           nodeId={nodeId}

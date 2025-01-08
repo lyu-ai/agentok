@@ -177,7 +177,7 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
   if (!chat) {
     return (
       <div className="flex flex-col w-full h-full bg-muted items-center justify-center gap-2 text-muted-foreground/50">
-        <Icons.node className="w-8 h-8" />
+        <Icons.agent className="w-8 h-8" />
         <p>Let&apos;s start chatting!</p>
         <Button onClick={handleStartChat}>
           {isCreating && <Icons.spinner className="w-4 h-4 animate-spin" />}
@@ -196,7 +196,7 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
   }
 
   return (
-    <div className="flex flex-col w-full h-full bg-background">
+    <div className="flex flex-col w-full h-full bg-muted">
       {messages.length > 0 ? (
         <ScrollArea className="flex flex-col w-full flex-1 p-2 pb-0">
           <MessageList
@@ -214,7 +214,7 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
         </ScrollArea>
       ) : (
         <div className="flex flex-col items-center justify-center h-full gap-2 text-muted-foreground/50">
-          <Icons.node className="w-8 h-8" />
+          <Icons.agent className="w-8 h-8" />
           <p>Let&apos;s start chatting!</p>
         </div>
       )}

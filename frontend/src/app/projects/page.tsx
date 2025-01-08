@@ -31,7 +31,7 @@ export default function Page() {
       return;
     }
     toast({ title: 'Project created. Now jumping to project page.' });
-    router.push(`/projects/${project.id}/flow`);
+    router.push(`/projects/${project.id}`);
   };
   return (
     <div className="flex flex-col w-full gap-2">

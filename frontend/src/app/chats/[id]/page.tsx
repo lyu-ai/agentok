@@ -1,8 +1,7 @@
 'use client';
 
-import { Suspense } from 'react';
-import { Loading } from '@/components/loader';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { use } from 'react';
+import { useRouter } from 'next/navigation';
 import { useChat, useChats } from '@/hooks';
 import { ChatPane } from '@/components/chat/chat-pane';
 import { useEffect } from 'react';
@@ -14,10 +13,14 @@ import {
 } from '@/components/ui/resizable';
 import { ChatListButton } from '@/components/chat/chat-list-button';
 
-function ChatPage() {
-  const searchParams = useSearchParams();
+export default function ChatPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+  const chatId = parseInt(id, 10);
   const router = useRouter();
-  const chatId = parseInt(searchParams.get('id') ?? '-1');
 
   const { activeChatId, setActiveChatId } = useChats();
   const { chat } = useChat(chatId);
@@ -26,7 +29,7 @@ function ChatPage() {
     if (chatId !== -1) {
       setActiveChatId(chatId);
     } else if (activeChatId !== -1) {
-      router.replace(`/chat?id=${activeChatId}`);
+      router.replace(`/chats/${activeChatId}`);
     }
     if (chat?.name && typeof window !== 'undefined') {
       document.title = `${chat?.name || 'Chat'} | Agentok Studio`;
@@ -49,13 +52,5 @@ function ChatPage() {
         <ChatPane projectId={-1} chatId={activeChatId} />
       </ResizablePanel>
     </ResizablePanelGroup>
-  );
-}
-
-export default function Page() {
-  return (
-    <Suspense fallback={<Loading />}>
-      <ChatPage />
-    </Suspense>
   );
 }

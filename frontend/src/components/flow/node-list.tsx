@@ -37,7 +37,7 @@ const NodeItem = ({
   return (
     <div
       className={cn(
-        'flex items-center gap-2 w-full p-2 rounded-md border cursor-grab',
+        'flex items-center gap-2 w-full h-full p-2 rounded-md border cursor-grab',
         'hover:border-primary/40 hover:bg-primary/5'
       )}
       draggable

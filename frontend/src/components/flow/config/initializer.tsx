@@ -5,8 +5,8 @@ import { GenericOption } from '../option/option';
 
 export const InitializerConfig = ({ nodeId, data }: any) => {
   return (
-    <ScrollArea className="flex flex-col h-full w-full p-2">
-      <div className="flex flex-col gap-4 h-full w-full">
+    <ScrollArea className="flex flex-col h-full w-full">
+      <div className="flex flex-col gap-4 h-full w-full p-2">
         <GenericOption
           type="text"
           nodeId={nodeId}

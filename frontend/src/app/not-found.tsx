@@ -1,5 +1,5 @@
 import Link from 'next/link';
-
+import { Button } from '@/components/ui/button';
 const NotFound = () => {
   return (
     <div className="flex items-center justify-center h-full n w-full">
@@ -13,7 +13,7 @@ const NotFound = () => {
         </p>
         <div>
           <Link href="/" className="link link-primary link-hover">
-            Back to Homepage
+            <Button variant="outline">Back to Homepage</Button>
           </Link>
         </div>
       </div>

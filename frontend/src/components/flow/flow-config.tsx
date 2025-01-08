@@ -27,7 +27,7 @@ export const FlowConfig = ({ nodeId, edgeId, projectId }: FlowConfigProps) => {
     if (!edge) {
       return (
         <div className="flex flex-col justify-center items-center h-full text-muted-foreground gap-2">
-          <Icons.node className="w-10 h-10" />
+          <Icons.agent className="w-10 h-10" />
           <span className="text-sm font-bold">Edge not found</span>
         </div>
       );
@@ -39,7 +39,7 @@ export const FlowConfig = ({ nodeId, edgeId, projectId }: FlowConfigProps) => {
   if (!nodeId) {
     return (
       <div className="flex flex-col justify-center items-center h-full text-muted-foreground/50 gap-2">
-        <Icons.node className="w-6 h-6" />
+        <Icons.agent className="w-6 h-6" />
         <span className="text-sm font-bold">
           Select a node or edge to configure
         </span>
@@ -51,7 +51,7 @@ export const FlowConfig = ({ nodeId, edgeId, projectId }: FlowConfigProps) => {
   if (!node) {
     return (
       <div className="flex flex-col justify-center items-center h-full text-muted-foreground/50 gap-2">
-        <Icons.node className="w-6 h-6" />
+        <Icons.agent className="w-6 h-6" />
         <span className="text-sm font-bold">Node not found</span>
       </div>
     );
@@ -74,7 +74,7 @@ export const FlowConfig = ({ nodeId, edgeId, projectId }: FlowConfigProps) => {
     default:
       return (
         <div className="flex flex-col justify-center items-center h-full text-muted-foreground gap-2">
-          <Icons.node className="w-10 h-10" />
+          <Icons.agent className="w-10 h-10" />
           <span className="text-sm font-bold">
             No configuration available for this node type
           </span>

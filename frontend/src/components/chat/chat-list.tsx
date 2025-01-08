@@ -60,7 +60,7 @@ export const ChatList = ({ className }: ChatListProps) => {
         await deleteChat(chatId);
 
         if (activeChatId === chatId) {
-          router.replace(newChatId ? `/chat?id=${newChatId}` : '/chat');
+          router.replace(newChatId ? `/chats/${newChatId}` : '/chat');
         }
       } catch (error) {
         console.error('Error deleting chat:', error);
@@ -81,80 +81,88 @@ export const ChatList = ({ className }: ChatListProps) => {
           <div className="text-sm text-muted-foreground">No Chat Yet</div>
         </div>
       ) : (
-        chats.map((chat) => (
-          <Card
-            key={chat.id}
-            onClick={() => router.push(`/chat?id=${chat.id}`)}
-            className={cn(
-              'relative flex items-center gap-2 p-2 border-transparent hover:bg-muted rounded-md group cursor-pointer',
-              activeChatId === chat.id &&
-                'bg-primary text-primary-foreground hover:bg-primary/90'
-            )}
-          >
-            {editingId === chat.id ? (
-              <div className="flex items-center gap-1 flex-1">
-                <Input
-                  value={editingName}
-                  onChange={(e) => setEditingName(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      handleEditName(chat.id);
-                    } else if (e.key === 'Escape') {
-                      setEditingId(null);
-                      setEditingName('');
-                    }
-                  }}
-                  className="h-7 w-full text-xs outline-none"
-                  autoFocus
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-7 h-7"
-                  onClick={() => handleEditName(chat.id)}
-                >
-                  <Icons.check className="w-4 h-4" />
-                </Button>
-              </div>
-            ) : (
-              <div className="group flex-1 justify-start">
-                <span className="text-sm line-clamp-1">
-                  {chat.name ||
-                    `Chat with ${chat.from_project || chat.from_template}`}
-                </span>
-                <div className="hidden group-hover:flex absolute p-1 justify-end right-0 top-0 bottom-0 items-center gap-1">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="w-6 h-6 text-muted-foreground"
-                    onClick={() => {
-                      setEditingId(chat.id);
-                      setEditingName(chat.name || '');
+        <div className="flex flex-col gap-1 pr-2">
+          {chats.map((chat) => (
+            <Card
+              key={chat.id}
+              onClick={() => router.push(`/chats/${chat.id}`)}
+              className={cn(
+                'relative flex items-center gap-2 p-2 border-transparent shadow-none hover:border-primary/90 rounded-md group cursor-pointer',
+                activeChatId === chat.id &&
+                  'bg-primary/80 text-primary-foreground hover:bg-primary'
+              )}
+            >
+              {editingId === chat.id ? (
+                <div className="flex items-center gap-1 flex-1">
+                  <Input
+                    value={editingName}
+                    onChange={(e) => setEditingName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleEditName(chat.id);
+                      } else if (e.key === 'Escape') {
+                        setEditingId(null);
+                        setEditingName('');
+                      }
                     }}
-                  >
-                    {isUpdating ? (
-                      <Icons.spinner className="w-3 h-3 animate-spin" />
-                    ) : (
-                      <Icons.edit className="w-3 h-3" />
-                    )}
-                  </Button>
+                    className="h-7 w-full text-xs outline-none"
+                    autoFocus
+                  />
                   <Button
-                    variant="secondary"
+                    variant="ghost"
                     size="icon"
-                    className="w-6 h-6"
-                    onClick={() => handleDeleteChat(chat.id)}
+                    className="w-7 h-7"
+                    onClick={() => handleEditName(chat.id)}
                   >
-                    {isDeleting ? (
-                      <Icons.spinner className="w-3 h-3 animate-spin text-red-500" />
-                    ) : (
-                      <Icons.trash className="w-3 h-3 text-red-500" />
-                    )}
+                    <Icons.check className="w-4 h-4" />
                   </Button>
                 </div>
-              </div>
-            )}
-          </Card>
-        ))
+              ) : (
+                <div className="group flex-1 justify-start">
+                  <span className="text-sm line-clamp-1">
+                    {chat.name ||
+                      `Chat with ${chat.from_project || chat.from_template}`}
+                  </span>
+                  {activeChatId === chat.id && (
+                    <div
+                      className={cn(
+                        'flex absolute p-2 justify-end right-0 top-0 bottom-0 items-center gap-2'
+                      )}
+                    >
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="w-5 h-5 text-muted"
+                        onClick={() => {
+                          setEditingId(chat.id);
+                          setEditingName(chat.name || '');
+                        }}
+                      >
+                        {isUpdating ? (
+                          <Icons.spinner className="w-3 h-3 animate-spin" />
+                        ) : (
+                          <Icons.edit className="w-3 h-3" />
+                        )}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="w-5 h-5"
+                        onClick={() => handleDeleteChat(chat.id)}
+                      >
+                        {isDeleting ? (
+                          <Icons.spinner className="w-3 h-3 animate-spin text-red-500" />
+                        ) : (
+                          <Icons.trash className="w-3 h-3 text-red-500" />
+                        )}
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </Card>
+          ))}
+        </div>
       )}
     </ScrollArea>
   );

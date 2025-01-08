@@ -89,6 +89,7 @@ import {
   CornerDownLeft,
   ArrowUp,
   StopCircle,
+  PenLine,
 } from 'lucide-react';
 import { Logo } from './logo';
 import { ElementType } from 'react';
@@ -160,7 +161,7 @@ export const Icons: Record<string, ElementType> = {
   check: Check,
   trash: Trash2,
   more: MoreVertical,
-  edit: Edit,
+  edit: PenLine,
   inbox: Inbox,
   chat: MessagesSquare,
   shuffle: Shuffle,
@@ -266,7 +267,7 @@ export const Icons: Record<string, ElementType> = {
   ),
   logo: Logo,
   logoSimple: ({ ...props }: any) => <Logo simple {...props} />,
-  node: ({ ...props }: LucideProps) => (
+  agent: ({ ...props }: LucideProps) => (
     <svg
       fill="currentColor"
       viewBox="0 0 1024 1024"
