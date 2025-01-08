@@ -55,7 +55,9 @@ node_{{ node.id }} = {{ class_name }}(
       {%- endif %}
     },
     {%- endif %}
+    {%- if node.data.enable_llm %}
     llm_config=llm_config,
+    {%- endif %}
 )
 {%- endfor %}
 {% endmacro %}

@@ -30,8 +30,8 @@ export const UserConfig = ({ nodeId, data }: any) => {
         type="check"
         nodeId={nodeId}
         data={data}
-        name="disable_llm"
-        label="Disable LLM"
+        name="enable_llm"
+        label="Enable LLM"
       />
       <GenericOption
         type="check"
