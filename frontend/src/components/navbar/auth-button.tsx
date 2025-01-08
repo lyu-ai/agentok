@@ -61,8 +61,8 @@ export const AuthButton = () => {
       <DropdownMenuTrigger>
         <UserAvatar user={user} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-64">
-        <div className="flex items-center p-2 gap-2 text-sm">
+      <DropdownMenuContent align="end" className="w-64 text-sm">
+        <div className="flex items-center p-2 gap-2">
           <UserAvatar user={user} className="w-20 h-20" />
           <div className="flex flex-col gap-1">
             <span className="font-bold">
@@ -81,18 +81,36 @@ export const AuthButton = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link
-            href="/settings"
-            className={cn('flex items-center justify-start p-2 gap-2 py-3')}
+            href="/settings/account"
+            className={cn('flex items-center justify-start p-2 gap-2')}
           >
-            <Icons.settings className="h-4 w-4" />
-            Settings
+            <Icons.user className="h-4 w-4" />
+            Account Settings
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link
+            href="/settings/models"
+            className={cn('flex items-center justify-start p-2 gap-2')}
+          >
+            <Icons.openai className="h-4 w-4" />
+            Models
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link
+            href="/settings/api-keys"
+            className={cn('flex items-center justify-start p-2 gap-2')}
+          >
+            <Icons.key className="h-4 w-4" />
+            API Keys
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link
             href="https://github.com/dustland/agentok/issues/new"
             target="_blank"
-            className={cn('flex items-center justify-start p-2 gap-2 py-3')}
+            className={cn('flex items-center justify-start p-2 gap-2')}
           >
             <Icons.github className="h-4 w-4" />
             Report an Issue

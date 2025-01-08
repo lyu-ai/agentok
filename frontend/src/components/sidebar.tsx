@@ -38,6 +38,7 @@ export const Sidebar = ({ pathPrefix, items, className }: SidebarProps) => {
 
         const linkContent = (
           <Button
+            key={item.name}
             variant={isActive ? 'secondary' : 'ghost'}
             className={cn(
               'w-full justify-start gap-2',

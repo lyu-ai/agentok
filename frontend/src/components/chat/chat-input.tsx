@@ -188,28 +188,29 @@ export const ChatInput = ({
               </Button>
             </>
           )}
-          <Button
-            size="icon"
-            disabled={
-              disabled ||
-              isResetting ||
-              chat?.status === 'running' ||
-              (!message.trim() && chat?.status !== 'wait_for_human_input')
-            }
-            className="h-8 w-8 rounded-full"
-            onClick={
-              chat?.status === 'running' ||
-              chat?.status === 'wait_for_human_input'
-                ? handleAbort
-                : handleSubmit
-            }
-          >
-            {chat?.status === 'running' ? (
-              <Icons.stop className="w-5 h-5 text-red-500" />
-            ) : (
-              <Icons.send className="w-5 h-5" />
-            )}
-          </Button>
+          {chat?.status === 'running' ? (
+            <Button
+              variant="ghost"
+              className="w-8 h-8 rounded-full bg-red-500 hover:bg-red-600 p-0 flex items-center justify-center"
+              onClick={handleAbort}
+            >
+              <Icons.stop className="w-5 h-5 text-muted" />
+            </Button>
+          ) : (
+            <Button
+              size="icon"
+              disabled={
+                disabled ||
+                isResetting ||
+                chat?.status === 'running' ||
+                (!message.trim() && chat?.status !== 'wait_for_human_input')
+              }
+              className="h-8 w-8 rounded-full p-0"
+              onClick={handleSubmit}
+            >
+              <Icons.send className="w-8 h-8 shrink-0" />
+            </Button>
+          )}
         </div>
       </div>
     </form>
