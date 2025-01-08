@@ -19,21 +19,20 @@ node_{{ node.id }} = {{ class_name }}(
     {%- endif %}
     {%- if node.data.code_execution_config %}
     code_execution_config={
-      {%- if node.data.code_execution_config.last_n_messages %}
-      "last_n_messages": {{ node.data.code_execution_config.last_n_messages }},
-      {%- endif %}
-      {%- if node.data.code_execution_config.work_dir %}
-      "work_dir": "{{ node.data.code_execution_config.work_dir }}",
-      {%- endif %}
-      {%- if node.data.code_execution_config.use_docker %}
-      "use_docker": {{ node.data.code_execution_config.use_docker }},
-      {%- endif %}
+      "executor": autogen.coding.LocalCommandLineCodeExecutor(
+        {%- if node.data.code_execution_config.last_n_messages %}
+        last_n_messages={{ node.data.code_execution_config.last_n_messages }},
+        {%- endif %}
+        {%- if node.data.code_execution_config.work_dir %}
+        work_dir="{{ node.data.code_execution_config.work_dir }}",
+        {%- endif %}
+      )
     },
     {%- else %}
     code_execution_config={ # Make code excution always available for user_proxy nodes
-        "last_n_messages": 2,
-        "work_dir": os.path.join(temp_dir, "user_code"),
-        "use_docker": False,
+        "executor": autogen.coding.LocalCommandLineCodeExecutor(
+            work_dir=os.path.join(temp_dir, "user_code"),
+        )
     },
     {%- endif %}
     {%- if node.data.retrieve_config %}

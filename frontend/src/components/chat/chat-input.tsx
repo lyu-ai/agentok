@@ -190,8 +190,8 @@ export const ChatInput = ({
           )}
           {chat?.status === 'running' ? (
             <Button
-              variant="ghost"
-              className="w-8 h-8 rounded-full bg-red-500 hover:bg-red-600 p-0 flex items-center justify-center"
+              variant="outline"
+              className="w-8 h-8 rounded-full bg-red-500 hover:bg-red-600"
               onClick={handleAbort}
             >
               <Icons.stop className="w-5 h-5 text-muted" />
@@ -208,7 +208,7 @@ export const ChatInput = ({
               className="h-8 w-8 rounded-full p-0"
               onClick={handleSubmit}
             >
-              <Icons.send className="w-8 h-8 shrink-0" />
+              <Icons.send className="w-5 h-5 shrink-0" />
             </Button>
           )}
         </div>
