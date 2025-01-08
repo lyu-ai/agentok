@@ -1,6 +1,6 @@
-'use client';
+'use client'; // Ensures this file is treated as a client component
 import clsx from 'clsx';
-import { PropsWithChildren, use, useState } from 'react';
+import { PropsWithChildren, use, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { genId } from '@/lib/id';
 import { useTools } from '@/hooks';
@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card } from '@/components/ui/card';
 
-const ToolItem = ({ tool, onDelete, selected, ...props }: any) => {
+const ToolItem = ({ nodeId, tool, onDelete, selected, ...props }: any) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const handleDelete = async (e: any) => {
     e.stopPropagation();
@@ -60,7 +60,7 @@ export default function Layout({
   params,
 }: PropsWithChildren<{ params: Promise<{ id: string }> }>) {
   const { id } = use(params);
-  const { tools, createTool, isCreating, deleteTool } = useTools();
+  const { tools, createTool, isCreating, deleteTool, isDeleting } = useTools();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -87,13 +87,18 @@ export default function Layout({
   };
 
   const handleDelete = async (tool: any) => {
+    // Find the index of the tool to be deleted
     const currentIndex = tools.findIndex((t) => t.id === tool.id);
+
     let nextTool;
 
+    // Determine the next tool based on the position of the deleted tool
     if (currentIndex !== -1) {
       if (currentIndex < tools.length - 1) {
+        // If the deleted tool is not the last one, select the next tool
         nextTool = tools[currentIndex + 1];
       } else if (currentIndex > 0) {
+        // If the deleted tool is the last one, select the previous tool
         nextTool = tools[currentIndex - 1];
       }
     }
@@ -135,13 +140,13 @@ export default function Layout({
         </div>
         <ScrollArea className="flex flex-col gap-1 w-full h-full p-2">
           {tools.length > 0 ? (
-            tools.map((tool: any) => {
+            tools.map((tool: any, index: any) => {
               const isSelected = pathname.endsWith(`/tools/${tool.id}`);
               return (
                 <ToolItem
                   selected={isSelected}
                   tool={tool}
-                  key={tool.id}
+                  key={index}
                   onDelete={() => handleDelete(tool)}
                   onClick={() => handleSelect(tool)}
                 />

@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ChatListPanel } from './chat-list-panel';
@@ -31,7 +30,7 @@ export const ChatListButton = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
-        className="w-[500px] h-full overflow-hidden p-0"
+        className="w-[480px] lg:w-[800px] h-full overflow-hidden p-0"
       >
         <ChatListPanel onAdd={handleAddChat} />
       </DropdownMenuContent>

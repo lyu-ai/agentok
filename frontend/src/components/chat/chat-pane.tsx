@@ -174,7 +174,7 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
     );
   }
 
-  if (!chat) {
+  if (!chat && !isLoadingChat) {
     return (
       <div className="flex flex-col w-full h-full bg-muted items-center justify-center gap-2 text-muted-foreground/50">
         <Icons.agent className="w-8 h-8" />

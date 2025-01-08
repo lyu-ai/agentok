@@ -60,7 +60,7 @@ export const ProjectPicker = ({ className }: { className?: string }) => {
         <DropdownMenuContent
           align="start"
           sideOffset={14}
-          className="flex flex-col w-[480px] lg:w-[800px] p-0 h-[calc(100vh-var(--header-height)-2rem)]"
+          className="flex flex-col w-[480px] lg:w-[800px] p-0 min-h-full max-h-[calc(100vh-var(--header-height)-2rem)]"
         >
           <div className="flex items-center gap-2 border-b w-full p-1">
             <Link href="/projects">

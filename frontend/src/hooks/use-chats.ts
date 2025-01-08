@@ -19,9 +19,7 @@ export function useChats() {
   const setActiveChatId = useChatStore((state) => state.setActiveChatId);
   const deleteChat = useChatStore((state) => state.deleteChat);
   const sidebarCollapsed = useChatStore((state) => state.sidebarCollapsed);
-  const setSidebarCollapsed = useChatStore(
-    (state) => state.setSidebarCollapsed
-  );
+  const setSidebarCollapsed = useChatStore((state) => state.setSidebarCollapsed);
   const projects = useProjectStore((state) => state.projects);
   const templates = useTemplateStore((state) => state.templates);
 
@@ -48,32 +46,50 @@ export function useChats() {
     sourceType: 'project' | 'template'
   ) => {
     setIsCreating(true);
+    const optimisticChat = {
+      id: Date.now(),
+      from_type: sourceType,
+      name: getInitialName(sourceId, sourceType),
+      ...(sourceType === 'project'
+        ? { from_project: sourceId }
+        : { from_template: sourceId }),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      status: 'pending',
+    };
+
     try {
-      const body = {
-        from_type: sourceType,
-        name: getInitialName(sourceId, sourceType),
-        ...(sourceType === 'project'
-          ? { from_project: sourceId }
-          : { from_template: sourceId }),
-      };
       const response = await fetch(`/api/chats`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(body),
+        body: JSON.stringify({
+          from_type: sourceType,
+          name: getInitialName(sourceId, sourceType),
+          ...(sourceType === 'project'
+            ? { from_project: sourceId }
+            : { from_template: sourceId }),
+        }),
       });
+
       if (!response.ok) {
-        const errorBody = await response.text();
-        throw new Error(errorBody || response.statusText);
+        throw new Error(await response.text() || response.statusText);
       }
+
       const newChat = await response.json();
-      // If the post was successful, update the Zustand store
-      setChats([newChat, ...chats]);
+      await mutate((currentData: Chat[]) => {
+        const updatedData = [newChat, ...(currentData || [])];
+        setChats(updatedData);
+        return updatedData;
+      }, false);
+
       return newChat;
     } catch (error) {
       console.error(`Failed to create chat: ${error}`);
+      // Revert optimistic update on error
+      await mutate();
       throw error;
     } finally {
       setIsCreating(false);
@@ -83,18 +99,30 @@ export function useChats() {
   const [isDeleting, setIsDeleting] = useState(false);
   const handleDeleteChat = async (id: number) => {
     setIsDeleting(true);
-    // Optimistically remove the flow from the local state
-    deleteChat(id);
     try {
-      await fetch(`/api/chats/${id}`, {
+      // Optimistically remove from local state
+      const previousChats = [...chats];
+      deleteChat(id);
+
+      const response = await fetch(`/api/chats/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
-      await mutate(); // Revalidate the cache to reflect the change
+
+      if (!response.ok) {
+        throw new Error(await response.text() || response.statusText);
+      }
+
+      // Update SWR cache after successful deletion
+      await mutate((currentData: Chat[]) => {
+        const updatedData = currentData?.filter((chat) => chat.id !== id) || [];
+        setChats(updatedData);
+        return updatedData;
+      }, false);
     } catch (error) {
       console.error('Failed to delete chat:', error);
-      // Rollback or handle the error state as necessary
-      mutate();
+      // Revert optimistic update on error
+      await mutate();
     } finally {
       setIsDeleting(false);
     }
@@ -102,20 +130,39 @@ export function useChats() {
 
   const updateChat = useChatStore((state) => state.updateChat);
   const [isUpdating, setIsUpdating] = useState(false);
-  const handleUpdateChat = async (id: number, chat: Partial<Chat>) => {
+  const handleUpdateChat = async (id: number, chatUpdate: Partial<Chat>) => {
     setIsUpdating(true);
-    // Optimistically update the chat to the local state
-    updateChat(id, chat);
     try {
-      await fetch(`/api/chats/${id}`, {
+      // Optimistically update local state
+      updateChat(id, chatUpdate);
+
+      const response = await fetch(`/api/chats/${id}`, {
         method: 'POST',
         credentials: 'include',
-        body: JSON.stringify({ id, ...chat }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, ...chatUpdate }),
       });
+
+      if (!response.ok) {
+        throw new Error(await response.text() || response.statusText);
+      }
+
+      const updatedChat = await response.json();
+      
+      // Update SWR cache after successful update
+      await mutate((currentData: Chat[]) => {
+        const updatedData = currentData?.map((chat) =>
+          chat.id === id ? { ...chat, ...updatedChat } : chat
+        ) || [];
+        setChats(updatedData);
+        return updatedData;
+      }, false);
     } catch (error) {
       console.error('Failed to update chat:', error);
-      // Rollback or handle the error state as necessary
-      mutate();
+      // Revert optimistic update on error
+      await mutate();
     } finally {
       setIsUpdating(false);
     }

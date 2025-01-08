@@ -20,21 +20,20 @@ export default function ChatPage({
 }) {
   const { id } = use(params);
   const chatId = parseInt(id, 10);
-  const router = useRouter();
 
-  const { activeChatId, setActiveChatId } = useChats();
+  const { setActiveChatId } = useChats();
   const { chat } = useChat(chatId);
 
   useEffect(() => {
     if (chatId !== -1) {
       setActiveChatId(chatId);
-    } else if (activeChatId !== -1) {
-      router.replace(`/chats/${activeChatId}`);
     }
     if (chat?.name && typeof window !== 'undefined') {
       document.title = `${chat?.name || 'Chat'} | Agentok Studio`;
     }
-  }, [chatId, activeChatId]);
+  }, [chatId, chat?.name]);
+
+  console.log('chat page:', chatId, chat);
 
   return (
     <ResizablePanelGroup direction="horizontal">
@@ -49,7 +48,7 @@ export default function ChatPage({
       </ResizablePanel>
       <ResizableHandle />
       <ResizablePanel defaultSize={80}>
-        <ChatPane projectId={-1} chatId={activeChatId} />
+        <ChatPane projectId={-1} chatId={chatId} />
       </ResizablePanel>
     </ResizablePanelGroup>
   );

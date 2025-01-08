@@ -1,13 +1,9 @@
 import { useChats, useProjects } from '@/hooks';
-
 import { DropdownMenuItem } from '../ui/dropdown-menu';
-
 import { ScrollArea } from '../ui/scroll-area';
 import { Button } from '../ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { useTemplates } from '@/hooks';
-import { ChatPane } from './chat-pane';
-import Link from 'next/link';
 import { Badge } from '../ui/badge';
 import { Icons } from '../icons';
 import { cn } from '@/lib/utils';
@@ -57,7 +53,7 @@ export const ChatListPanel = ({ includeChats, onAdd }: any) => {
                     <span className="line-clamp-1 text-sm text-left font-bold">
                       {sourceItem.name}
                     </span>
-                    <span className="line-clamp-2 text-xs text-left break-all">
+                    <span className="line-clamp-1 text-xs text-left truncate w-full">
                       {sourceItem.description || '(No description)'}
                     </span>
                   </Button>

@@ -9,6 +9,7 @@ import { Icons } from '@/components/icons';
 import Link from 'next/link';
 import { Project } from '@/store/projects';
 import { Loading } from '@/components/loader';
+import { useEffect } from 'react';
 
 function ChatCard({ project }: { project: Project }) {
   const router = useRouter();
@@ -66,11 +67,11 @@ export default function ChatPage() {
   const router = useRouter();
   const { chats, isLoading } = useChats();
   const { projects } = useProjects();
-  // useEffect(() => {
-  //   if (chats.length > 0) {
-  //     router.replace(`/chats/${chats[0].id}`);
-  //   }
-  // }, [chats]);
+  useEffect(() => {
+    if (chats.length > 0) {
+      router.replace(`/chats/${chats[0].id}`);
+    }
+  }, [chats]);
 
   if (isLoading) {
     return <Loading />;
