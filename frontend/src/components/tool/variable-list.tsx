@@ -3,11 +3,21 @@ import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { useTool } from '@/hooks';
 import { Icons } from '@/components/icons';
+import { Card } from '../ui/card';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from '../ui/table';
 
 const VariableRow = ({ variable, onDelete, showActions, onUpdate }: any) => {
   const [name, setName] = useState(variable.name ?? '');
   const [description, setDescription] = useState(variable.description ?? '');
-
+  const [isDeleting, setIsDeleting] = useState(false);
   useEffect(() => {
     setName(variable.name ?? '');
     setDescription(variable.description ?? '');
@@ -19,39 +29,54 @@ const VariableRow = ({ variable, onDelete, showActions, onUpdate }: any) => {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      setIsDeleting(true);
+      await onDelete(variable);
+    } catch (e) {
+      console.error('Failed to delete variable:', e);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
-    <tr className="group flex items-center gap-1 w-full hover:bg-gray-700">
-      <td className="w-48">
-        <input
-          type="text"
+    <TableRow className="group flex items-center gap-1 w-full">
+      <TableCell className="w-48">
+        <Input
           value={name}
           placeholder={'VAR_NAME'}
           onChange={(e) => setName(e.target.value)}
           onBlur={(e) => handleBlur('name', e.target.value)}
           className="input input-sm input-bordered bg-transparent rounded w-full"
         />
-      </td>
-      <td className="flex-grow">
-        <input
-          type="text"
+      </TableCell>
+      <TableCell className="flex-grow">
+        <Input
           value={description}
           placeholder="Variable description"
           onChange={(e) => setDescription(e.target.value)}
           onBlur={(e) => handleBlur('description', e.target.value)}
           className="input input-sm input-bordered bg-transparent rounded w-full"
         />
-      </td>
-      <td className="w-16 flex justify-center">
+      </TableCell>
+      <TableCell className="w-16 flex justify-center">
         {showActions && (
-          <button
-            className="btn btn-xs btn-ghost btn-square hover:text-red-600"
-            onClick={() => onDelete(variable)}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="w-7 h-7"
+            onClick={handleDelete}
           >
-            <Icons.trash className="w-4 h-4" />
-          </button>
+            {isDeleting ? (
+              <Icons.spinner className="w-4 h-4 animate-spin text-red-500" />
+            ) : (
+              <Icons.trash className="w-4 h-4 text-red-500" />
+            )}
+          </Button>
         )}
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 };
 
@@ -64,9 +89,9 @@ const VariableList = ({ toolId, className, ...props }: any) => {
     default_value: '',
   });
 
-  const handleDelete = (variable: any) => {
+  const handleDelete = async (variable: any) => {
     if (!tool) return;
-    updateTool({
+    await updateTool({
       variables: tool.variables.filter((v: any) => v.id !== variable.id),
     });
   };
@@ -99,9 +124,9 @@ const VariableList = ({ toolId, className, ...props }: any) => {
   };
 
   return (
-    <div
+    <Card
       className={clsx(
-        'flex flex-col gap-1 overflow-x-auto p-2 border border-base-content/20 rounded',
+        'flex flex-col gap-1 overflow-x-auto p-2 border border-base-content/20',
         className
       )}
     >
@@ -109,15 +134,15 @@ const VariableList = ({ toolId, className, ...props }: any) => {
       <div className="text-sm">
         Variables are used to pass data between tools.
       </div>
-      <table className="table table-xs border-transparent">
-        <thead>
-          <tr className="flex items-center gap-1 w-full">
-            <th className="w-48">Variable name</th>
-            <th className="flex-grow">Variable description</th>
-            <th className="w-16 text-right">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table className="table table-xs border-transparent">
+        <TableHeader>
+          <TableRow className="flex items-center gap-1 w-full">
+            <TableCell className="w-48">Variable name</TableCell>
+            <TableCell className="flex-grow">Variable description</TableCell>
+            <TableCell className="w-16 text-right">Actions</TableCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {tool?.variables?.map((variable: any, index: number) => (
             <VariableRow
               key={variable.id}
@@ -133,9 +158,9 @@ const VariableList = ({ toolId, className, ...props }: any) => {
             onUpdate={handleUpdate}
             onDelete={handleDelete}
           />
-        </tbody>
-      </table>
-    </div>
+        </TableBody>
+      </Table>
+    </Card>
   );
 };
 

@@ -42,14 +42,29 @@ export async function POST(
       user_id: user.id,
     };
 
+    // First check if the tool exists
+    const { data: existingTool, error: checkError } = await supabase
+      .from('tools')
+      .select('*')
+      .eq('id', id)
+      .eq('user_id', user.id)
+      .single();
+
+    if (checkError) throw checkError;
+    if (!existingTool) throw new Error('Tool not found');
+    console.log('existingTool', existingTool);
+
+    // Then update the tool
     const { data, error } = await supabase
       .from('tools')
       .update(toolWithOwner)
       .eq('id', id)
-      .select()
+      .eq('user_id', user.id)
+      .select('*')
       .single();
 
     if (error) throw error;
+    if (!data) throw new Error('Failed to update tool');
 
     return NextResponse.json(data);
   } catch (e) {

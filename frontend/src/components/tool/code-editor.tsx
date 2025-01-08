@@ -98,40 +98,39 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   return (
-    <div className={clsx(className, 'flex flex-col w-full h-full gap-2')}>
-      <div className="rounded overflow-hidden border h-full border-base-content/20">
-        <div className="w-full h-full relative group">
-          <CodeMirror
-            value={code ?? ''}
-            height="100%"
-            basicSetup={{ lineNumbers: true }}
-            theme={resolvedTheme === 'dark' ? githubDark : githubLight}
-            extensions={[python()]}
-            onChange={(value) => setCode(value)}
-            style={{ fontSize: '0.75rem', height: '100%' }}
-          />
-          <div
-            className={clsx('absolute flex items-center gap-1', {
-              'right-2 bottom-2 translate-x-0 translate-y-0': code !== '',
-              'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2': code === '',
-            })}
-          >
-            <Button
-              variant={code ? 'outline' : 'default'}
-              size="sm"
-              className="gap-1"
-              onClick={handleGenerateCode}
-              disabled={isGenerating}
-            >
-              {isGenerating ? (
-                <Icons.spinner className="w-4 h-4 animate-spin" />
-              ) : (
-                <Icons.sparkles className="w-4 h-4" />
-              )}
-              <span>Generate code</span>
-            </Button>
-          </div>
-        </div>
+    <div
+      className={cn('relative flex flex-col w-full h-full gap-2', className)}
+    >
+      <CodeMirror
+        value={code ?? ''}
+        height="100%"
+        minHeight="400px"
+        basicSetup={{ lineNumbers: true }}
+        theme={resolvedTheme === 'dark' ? githubDark : githubLight}
+        extensions={[python()]}
+        onChange={(value) => setCode(value)}
+        style={{ fontSize: '0.75rem', height: '100%' }}
+      />
+      <div
+        className={clsx('absolute flex items-center gap-1', {
+          'right-2 top-2 translate-x-0 translate-y-0': code !== '',
+          'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2': code === '',
+        })}
+      >
+        <Button
+          variant={code ? 'outline' : 'default'}
+          size="sm"
+          className="gap-1"
+          onClick={handleGenerateCode}
+          disabled={isGenerating}
+        >
+          {isGenerating ? (
+            <Icons.spinner className="w-4 h-4 animate-spin" />
+          ) : (
+            <Icons.sparkles className="w-4 h-4" />
+          )}
+          <span>Generate code</span>
+        </Button>
       </div>
     </div>
   );

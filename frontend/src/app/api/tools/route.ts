@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const { data: tools, error } = await supabase
       .from('tools')
       .select(`*`)
-      .or(`user_id.eq.${user.id},is_public.eq.true`)
+      .eq('user_id', user.id)
       .order('created_at', { ascending: false });
 
     if (error) throw error;

@@ -24,15 +24,15 @@ const ToolItem = ({ nodeId, tool, onDelete, selected, ...props }: any) => {
   return (
     <Card
       className={cn(
-        'relative group w-full flex flex-col border gap-1 p-2 rounded-md cursor-pointer hover:bg-muted-foreground/10',
+        'relative group w-full flex flex-col border gap-1 p-2 shadow-none rounded-md cursor-pointer hover:bg-primary hover:text-primary-foreground',
         selected
-          ? 'bg-muted-foreground/20 border-muted-foreground/30'
+          ? 'bg-primary/80 border-primary/30 text-primary-foreground'
           : 'border-transparent'
       )}
       {...props}
     >
-      <div className="font-bold text-muted-foreground">{tool.name}</div>
-      <div className="text-xs text-muted-foreground/50 w-full line-clamp-2">
+      <div className="font-bold">{tool.name}</div>
+      <div className="text-xs w-full line-clamp-2 text-muted-foreground">
         {tool.description}
       </div>
       <div className="absolute bottom-1 right-1 hidden group-hover:block">
@@ -44,9 +44,9 @@ const ToolItem = ({ nodeId, tool, onDelete, selected, ...props }: any) => {
             onClick={handleDelete}
           >
             {isDeleting ? (
-              <Icons.spinner className="w-4 h-4 animate-spin" />
+              <Icons.spinner className="w-4 h-4 animate-spin text-red-600" />
             ) : (
-              <Icons.trash className="w-4 h-4" />
+              <Icons.trash className="w-4 h-4 text-red-600" />
             )}
           </Button>
         )}
@@ -138,28 +138,30 @@ export default function Layout({
             )}
           </Button>
         </div>
-        <ScrollArea className="flex flex-col gap-1 w-full h-full p-2">
-          {tools.length > 0 ? (
-            tools.map((tool: any, index: any) => {
-              const isSelected = pathname.endsWith(`/tools/${tool.id}`);
-              return (
-                <ToolItem
-                  selected={isSelected}
-                  tool={tool}
-                  key={index}
-                  onDelete={() => handleDelete(tool)}
-                  onClick={() => handleSelect(tool)}
-                />
-              );
-            })
-          ) : (
-            <div className="flex items-center justify-center h-full text-base-content/50">
-              No tools
-            </div>
-          )}
+        <ScrollArea className="">
+          <div className="flex flex-col gap-1 w-full h-full p-1 pr-2">
+            {tools.length > 0 ? (
+              tools.map((tool: any, index: any) => {
+                const isSelected = pathname.endsWith(`/tools/${tool.id}`);
+                return (
+                  <ToolItem
+                    selected={isSelected}
+                    tool={tool}
+                    key={index}
+                    onDelete={() => handleDelete(tool)}
+                    onClick={() => handleSelect(tool)}
+                  />
+                );
+              })
+            ) : (
+              <div className="flex items-center justify-center h-full text-base-content/50">
+                No tools
+              </div>
+            )}
+          </div>
         </ScrollArea>
       </div>
-      <ScrollArea className="flex flex-col w-full gap-2 p-2 flex-grow h-[calc(100vh-var(--header-height))]">
+      <ScrollArea className="flex flex-col w-full gap-2 p-2 flex-grow bg-muted  h-[calc(100vh-var(--header-height))]">
         {children}
       </ScrollArea>
     </div>

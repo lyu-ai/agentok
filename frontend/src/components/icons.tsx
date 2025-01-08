@@ -90,6 +90,8 @@ import {
   ArrowUp,
   StopCircle,
   PenLine,
+  SunMoon,
+  Palette,
 } from 'lucide-react';
 import { Logo } from './logo';
 import { ElementType } from 'react';
@@ -109,6 +111,7 @@ export const Icons: Record<string, ElementType> = {
   sun: Sun,
   moon: Moon,
   laptop: Laptop,
+  theme: Palette,
   brush: Brush,
   megaphone: Megaphone,
   project: Route,

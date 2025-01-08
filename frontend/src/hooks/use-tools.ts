@@ -76,7 +76,7 @@ export function useTools() {
         updateTool(id, updatedTool);
         mutate(); // Revalidate the SWR cache
       } catch (error) {
-        console.error('Failed to update project:', error);
+        console.error('Failed to update tools:', error);
         updateTool(id, previousTool);
       } finally {
         setIsUpdating(false);

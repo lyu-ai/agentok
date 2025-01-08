@@ -61,7 +61,10 @@ export const AuthButton = () => {
       <DropdownMenuTrigger>
         <UserAvatar user={user} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-64 text-sm">
+      <DropdownMenuContent
+        align="end"
+        className="flex flex-col gap-1 w-64 text-sm"
+      >
         <div className="flex items-center p-2 gap-2">
           <UserAvatar user={user} className="w-20 h-20" />
           <div className="flex flex-col gap-1">
@@ -118,13 +121,16 @@ export const AuthButton = () => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <div className="flex items-center justify-between gap-2 p-2 py-1">
-          <span className="text-sm font-medium">Theme</span>
+          <div className="flex items-center gap-2">
+            <Icons.theme className="h-4 w-4" />
+            <span className="text-sm font-medium">Theme</span>
+          </div>
           <ThemeSwitch />
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={signOut}
-          className={clsx('flex items-center justify-start p-2 gap-2')}
+          className={cn('flex items-center justify-start p-2 gap-2')}
         >
           <Icons.logout className="w-4 h-4" />
           Sign out
