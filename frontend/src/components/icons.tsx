@@ -87,6 +87,7 @@ import {
   RotateCcw,
   Terminal,
   CornerDownLeft,
+  ArrowUp,
 } from 'lucide-react';
 import { Logo } from './logo';
 import { ElementType } from 'react';
@@ -163,7 +164,7 @@ export const Icons: Record<string, ElementType> = {
   chat: MessagesSquare,
   shuffle: Shuffle,
   compass: Compass,
-  send: SendHorizonal,
+  send: ArrowUp,
   stop: Square,
   robot: Bot,
   robotActive: Bot,

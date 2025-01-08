@@ -153,9 +153,9 @@ export const ChatInput = ({
           ))}
         </div>
       )}
-      <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between gap-2">
+      <div className="absolute bottom-2 left-2 right-2 flex items-end justify-between gap-2">
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
           onClick={handleReset}
           className="h-7 w-7"
@@ -169,7 +169,7 @@ export const ChatInput = ({
           {chat?.status === 'wait_for_human_input' && (
             <>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
                 className="h-7"
                 onClick={() => handleHumanInput('\n')}
@@ -178,7 +178,7 @@ export const ChatInput = ({
                 <Icons.enter className="w-4 h-4" />
               </Button>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
                 className="h-7"
                 onClick={() => handleHumanInput('exit')}
@@ -196,7 +196,7 @@ export const ChatInput = ({
               chat?.status === 'running' ||
               (!message.trim() && chat?.status !== 'wait_for_human_input')
             }
-            className="h-7 w-7"
+            className="h-8 w-8 rounded-full"
             onClick={
               chat?.status === 'running' ||
               chat?.status === 'wait_for_human_input'
@@ -205,9 +205,9 @@ export const ChatInput = ({
             }
           >
             {chat?.status === 'running' ? (
-              <Icons.stop className="w-4 h-4 text-red-500" />
+              <Icons.stop className="w-5 h-5 text-red-500" />
             ) : (
-              <Icons.send className="w-4 h-4" />
+              <Icons.send className="w-5 h-5" />
             )}
           </Button>
         </div>

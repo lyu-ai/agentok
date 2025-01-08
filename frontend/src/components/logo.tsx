@@ -1,18 +1,15 @@
 import { LucideProps } from 'lucide-react';
-import { Icons } from './icons';
 
 interface LogoProps extends LucideProps {
-  color?: string;
   simple?: boolean; // if true, only show the logo with current color
 }
 
-export const Logo = ({ color, simple, ...props }: LogoProps) => (
+export const Logo = ({ simple, ...props }: LogoProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="400"
     height="400"
     viewBox="50 50 300 300"
-    fill={color}
     {...props}
   >
     <g
@@ -25,7 +22,7 @@ export const Logo = ({ color, simple, ...props }: LogoProps) => (
           id="path_10"
           data-name="path 10"
           d="M6641.667,2098.986h-34.12v47.143c0,44.936-36.762,82.865-81.7,82.549a81.116,81.116,0,0,1-80.533-80.533c-.315-44.934,37.614-81.7,82.55-81.7h47.143v-34.121a68.937,68.937,0,0,1,7.85-31.905h-53.825c-81.513,0-150.315,66.686-149.742,148.2A147.142,147.142,0,0,0,6525.377,2294.7c81.51.572,148.2-68.23,148.2-149.742v-53.826A68.937,68.937,0,0,1,6641.667,2098.986Z"
-          fill={simple ? 'currentColor' : color}
+          fill={'currentColor'}
         />
         <path
           id="path_11"
