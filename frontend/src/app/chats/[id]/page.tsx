@@ -33,8 +33,6 @@ export default function ChatPage({
     }
   }, [chatId, chat?.name]);
 
-  console.log('chat page:', chatId, chat);
-
   return (
     <ResizablePanelGroup direction="horizontal">
       <ResizablePanel defaultSize={20} minSize={20} maxSize={40}>

@@ -23,6 +23,6 @@ export const AssistantNode: ComponentType<NodeProps> = ({
         { type: 'target', name: '' },
         { type: 'source', name: '' },
       ]}
-    ></GenericNode>
+    />
   );
 };

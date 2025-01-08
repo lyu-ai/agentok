@@ -215,18 +215,9 @@ export const FlowCanvas = ({
           }
         });
 
-        if (
-          changes.some(
-            (change) =>
-              change.type !== 'select' &&
-              'dragging' in change &&
-              !change.dragging
-          )
-        ) {
-          setIsDirty(true);
-        }
         return nextNodes;
       });
+      setIsDirty(true);
     },
     [setNodes, setIsDirty]
   );
