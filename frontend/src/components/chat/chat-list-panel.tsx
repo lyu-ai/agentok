@@ -92,11 +92,11 @@ export const ChatListPanel = ({ includeChats, onAdd }: any) => {
                         <Badge
                           variant="outline"
                           className={cn(
-                            'text-xs text-left break-all flex items-center gap-1 bg-red-500/30 hover:bg-red-500/60 border-red-500',
+                            'text-xs text-left break-all flex items-center gap-1 bg-red-500/10 hover:bg-red-500/50 border-red-500/20 text-red-500',
                             chat.from_project &&
-                              'bg-blue-500/30 hover:bg-blue-500/50 border-blue-500/50',
+                              'bg-blue-500/10 hover:bg-blue-500/50 border-blue-500/20 text-blue-500',
                             chat.from_template &&
-                              'bg-green-500/30 hover:bg-green-500/50 border-green-500/50'
+                              'bg-green-500/10 hover:bg-green-500/50 border-green-500/20 text-green-500'
                           )}
                         >
                           {chat.from_project && (
