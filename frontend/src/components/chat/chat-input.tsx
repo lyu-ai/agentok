@@ -5,15 +5,12 @@ import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { Chat } from '@/store/chats';
 import { useChat, useChats } from '@/hooks/use-chats';
 import { toast } from '@/hooks/use-toast';
-import { Badge } from '../ui/badge';
 
 interface ChatInputProps {
   chatId: number;
-  onSubmit: (message: string) => void;
-  onAbort?: () => void;
+  onSend: (message: string) => void;
   onReset?: () => void;
   loading?: boolean;
   disabled?: boolean;
@@ -23,8 +20,7 @@ interface ChatInputProps {
 
 export const ChatInput = ({
   chatId,
-  onSubmit,
-  onAbort,
+  onSend,
   onReset,
   loading,
   disabled,
@@ -49,15 +45,14 @@ export const ChatInput = ({
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      if (loading || disabled) return;
+      setMessage('');
       if (chat?.status === 'wait_for_human_input') {
         await handleHumanInput(message);
       } else {
-        onSubmit(message);
+        onSend(message);
       }
-      setMessage('');
     },
-    [message, loading, disabled, onSubmit, handleHumanInput]
+    [message, onSend, handleHumanInput]
   );
 
   const handleKeyDown = useCallback(
@@ -175,34 +170,41 @@ export const ChatInput = ({
             <>
               <Button
                 variant="outline"
-                size="icon"
-                className="h-7 w-7"
+                size="sm"
+                className="h-7"
                 onClick={() => handleHumanInput('\n')}
               >
+                enter
                 <Icons.enter className="w-4 h-4" />
               </Button>
               <Button
                 variant="outline"
-                size="icon"
-                className="h-7 w-7"
+                size="sm"
+                className="h-7"
                 onClick={() => handleHumanInput('exit')}
               >
+                exit
                 <Icons.exit className="w-4 h-4" />
               </Button>
             </>
           )}
           <Button
-            variant="default"
             size="icon"
             disabled={
-              (!message.trim() && chat?.status !== 'wait_for_human_input') ||
               disabled ||
-              isResetting
+              isResetting ||
+              chat?.status === 'running' ||
+              (!message.trim() && chat?.status !== 'wait_for_human_input')
             }
             className="h-7 w-7"
-            onClick={chat?.status !== 'ready' ? handleAbort : handleSubmit}
+            onClick={
+              chat?.status === 'running' ||
+              chat?.status === 'wait_for_human_input'
+                ? handleAbort
+                : handleSubmit
+            }
           >
-            {isUpdating ? (
+            {chat?.status === 'running' ? (
               <Icons.stop className="w-4 h-4 text-red-500" />
             ) : (
               <Icons.send className="w-4 h-4" />

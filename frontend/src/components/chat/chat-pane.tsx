@@ -24,7 +24,6 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
   const { chat, chatSource, isLoading: isLoadingChat } = useChat(currentChatId);
   const { createChat, isCreating } = useChats();
   const { toast } = useToast();
-  const [status, setStatus] = useState('ready');
   const [messages, setMessages] = useState<any[]>([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const isFirstRender = useRef(true);
@@ -56,27 +55,11 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
   }, [setMessages, chatId]);
 
   // Fetch chat status
-  const fetchChatStatus = useCallback(async () => {
-    if (chatId === -1) return;
-    const { data, error } = await supabase
-      .from('chats')
-      .select('status')
-      .eq('id', chatId)
-      .single();
-
-    if (error && error.code !== 'PGRST116') {
-      console.error('Error fetching chat status:', error);
-    } else if (data) {
-      setStatus(data.status);
-    }
-  }, [setStatus, chatId]);
-
   useEffect(() => {
     setCurrentChatId(chatId);
     if (chatId === -1) return;
 
     fetchMessages();
-    fetchChatStatus();
 
     // Subscribe to chat_messages
     const messagesChannel: RealtimeChannel = supabase
@@ -181,11 +164,10 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
         <div className="relative flex flex-col gap-1 w-full max-w-4xl mx-auto p-2 pt-0">
           <ChatInput
             chatId={chatId}
-            onSubmit={handleSend}
+            onSend={handleSend}
             onReset={handleReset}
             disabled={true}
             className="w-full"
-            sampleMessages={['sample message']}
           />
         </div>
       </div>
@@ -208,7 +190,10 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
   const config = chatSource?.flow?.nodes?.find(
     (node: any) => node.type === 'initializer'
   );
-  const sampleMessages = config?.data?.sample_messages?.split('\n') ?? [];
+  let sampleMessages = config?.data?.sample_messages; // string or array
+  if (sampleMessages && typeof sampleMessages === 'string') {
+    sampleMessages = sampleMessages.split('\n');
+  }
 
   return (
     <div className="flex flex-col w-full h-full bg-muted">
@@ -236,10 +221,9 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
       <div className="relative flex flex-col gap-1 w-full max-w-4xl mx-auto p-2 pt-0">
         <ChatInput
           chatId={chatId}
-          onSubmit={handleSend}
+          onSend={handleSend}
           onReset={handleReset}
-          loading={status === 'running'}
-          disabled={status === 'failed' || currentChatId === -1}
+          disabled={currentChatId === -1}
           className="w-full"
           sampleMessages={sampleMessages}
         />
