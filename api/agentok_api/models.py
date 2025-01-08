@@ -92,6 +92,22 @@ class Chat(ChatCreate):
     updated_at: str
 
 
+class LogCreate(BaseModel):
+    message: str
+    level: Optional[Literal["info", "warning", "error"]] = None
+    metadata: Optional[Dict[str, Any]] = None
+    chat_id: str
+
+class Log(LogCreate):
+    id: int
+    created_at: str
+
+class Log(LogCreate):
+    id: int
+    created_at: str
+    updated_at: str
+
+
 class ApiKeyCreate(BaseModel):
     name: str
     key: str

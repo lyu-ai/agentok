@@ -3,6 +3,8 @@ import os
 from asyncio import subprocess
 import signal
 from termcolor import colored
+
+from ..models import LogCreate
 from .supabase import SupabaseClient
 
 from .output_parser import OutputParser
@@ -95,17 +97,26 @@ class ChatManager:
                             "__STATUS_WAIT_FOR_HUMAN_INPUT__",
                         )
                     ):
+                        content = self.strip_prefix(
+                            response_message,
+                            (
+                                "__STATUS_RECEIVED_HUMAN_INPUT__",
+                                "__STATUS_WAIT_FOR_HUMAN_INPUT__",
+                            ),
+                        )
                         on_message(
                             {
                                 "type": "assistant",
-                                "content": self.strip_prefix(
-                                    response_message,
-                                    (
-                                        "__STATUS_RECEIVED_HUMAN_INPUT__",
-                                        "__STATUS_WAIT_FOR_HUMAN_INPUT__",
-                                    ),
-                                ),
+                                "content": content,
                             }
+                        )
+                        self.supabase.add_log(
+                            LogCreate(
+                                message=content,
+                                level="info",
+                                chat_id=chat_id,
+                            ),
+                            chat_id,
                         )
                         if "__STATUS_WAIT_FOR_HUMAN_INPUT__" in response_message:
                             self.supabase.set_chat_status(
@@ -115,6 +126,14 @@ class ChatManager:
                             self.supabase.set_chat_status(chat_id, "running")
                     else:
                         output_parser.parse_line(response_message)
+                        self.supabase.add_log(
+                            LogCreate(
+                                message=response_message,
+                                level="info",
+                                chat_id=chat_id,
+                            ),
+                            chat_id,
+                        )
 
         # Wait for the subprocess to finish if it hasn't already
         await process.wait()
@@ -198,7 +217,7 @@ class ChatManager:
 
         process = proc_info["process"]
 
-        print(f"Terminating assistant {process.pid} for chat {chat_id}...")
+        print(colored(f"Terminating assistant {process.pid} for chat {chat_id}...", "cyan"))
 
         try:
             # First, try to terminate gracefully
@@ -234,5 +253,5 @@ class ChatManager:
         finally:
             # Clean up the subprocess entry
             self._subprocesses.pop(chat_id, None)
-            print(f"Assistant for chat {chat_id} terminated. Cleaning up.")
-            self.supabase.set_chat_status(chat_id, "aborted")
+            print(colored(f"Assistant for chat {chat_id} terminated. Cleaning up.", "green"))
+            self.supabase.set_chat_status(chat_id, "ready")

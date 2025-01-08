@@ -4,6 +4,7 @@ import { useChat } from '@/hooks/use-chats';
 import { useState, useEffect } from 'react';
 import { Icons } from '../icons';
 import { createClient } from '@/lib/supabase/client';
+import { cn } from '@/lib/utils';
 
 interface ChatLogPaneProps {
   chatId: number;
@@ -12,7 +13,9 @@ interface ChatLogPaneProps {
 interface ChatLog {
   id: number;
   chat_id: number;
-  content: string;
+  level: 'info' | 'warning' | 'error';
+  message: string;
+  metadata: Record<string, any>;
   created_at: string;
 }
 
@@ -75,21 +78,29 @@ export const ChatLogPane = ({ chatId }: ChatLogPaneProps) => {
 
   return (
     <div className="relative flex flex-col w-full h-full">
-      <div className="absolute top-1 right-1 flex items-center gap-2">
-        <Button variant="outline" size="icon" onClick={handleClear}>
-          <Icons.trash className="w-4 h-4" />
-        </Button>
-      </div>
       <ScrollArea className="flex flex-col items-center w-full flex-1">
         {logs.length === 0 && (
           <div className="text-sm text-gray-500 p-2 w-full">No logs found</div>
         )}
         {logs.map((log) => (
-          <div key={log.id} className="text-sm text-gray-500 p-2 w-full">
-            {log.content}
+          <div
+            key={log.id}
+            className={cn(
+              'text-sm text-gray-500 p-2 w-full',
+              log.level === 'info' && 'text-gray-500',
+              log.level === 'warning' && 'text-yellow-500',
+              log.level === 'error' && 'text-red-500'
+            )}
+          >
+            {log.message}
           </div>
         ))}
       </ScrollArea>
+      <div className="absolute top-1 right-1 flex items-center gap-2">
+        <Button variant="outline" size="icon" onClick={handleClear}>
+          <Icons.trash className="w-4 h-4" />
+        </Button>
+      </div>
     </div>
   );
 };

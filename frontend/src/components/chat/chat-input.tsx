@@ -7,7 +7,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { useChat, useChats } from '@/hooks/use-chats';
 import { toast } from '@/hooks/use-toast';
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 interface ChatInputProps {
   chatId: number;
   onSend: (message: string) => void;
@@ -153,17 +158,26 @@ export const ChatInput = ({
         </div>
       )}
       <div className="absolute bottom-2 left-2 right-2 flex items-end justify-between gap-2">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleReset}
-          className="h-6 w-6"
-          disabled={isUpdating || isCleaning || isResetting}
-        >
-          <Icons.reset
-            className={cn('w-4 h-4', isResetting && 'animate-spin')}
-          />
-        </Button>
+        <div className="flex items-end gap-2">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleReset}
+                  className="h-6 w-6"
+                  disabled={isUpdating || isCleaning || isResetting}
+                >
+                  <Icons.reset
+                    className={cn('w-4 h-4', isResetting && 'animate-spin')}
+                  />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Reset chat {chat?.id}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
         <div className="flex items-end gap-2">
           {chat?.status === 'wait_for_human_input' && (
             <>

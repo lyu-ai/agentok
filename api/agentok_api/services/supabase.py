@@ -1,3 +1,4 @@
+from distutils.log import Log
 import logging
 import os
 from typing import Dict, List, Literal, Optional
@@ -14,6 +15,7 @@ from ..models import (
     ApiKeyCreate,
     Chat,
     ChatCreate,
+    LogCreate,
     Message,
     MessageCreate,
     Tool,
@@ -435,6 +437,18 @@ class SupabaseClient:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Failed to add message: {exc}",
             )
+
+    def add_log(self, log: LogCreate, chat_id: str):
+        try:
+            log_data = log.model_dump()
+            log_data["chat_id"] = int(chat_id)
+            response = self.supabase.table("chat_logs").insert(log_data).execute()
+            if response.data:
+                return Log(**response.data[0])
+            else:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Failed to add log")
+        except Exception as exc:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Failed to add log: {exc}")
 
     def fetch_source_metadata(self, chat_id: str) -> Dict:
         try:
