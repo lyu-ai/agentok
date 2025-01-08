@@ -138,7 +138,7 @@ export const Icons: Record<string, ElementType> = {
   spy: HardHat,
   user: UserRound,
   logout: LogOut,
-  logs: Terminal,
+  logs: SquareTerminal,
   sparkles: Sparkles,
   zap: Zap,
   filter: Filter,

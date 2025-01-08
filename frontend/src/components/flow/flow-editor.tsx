@@ -15,6 +15,7 @@ import { useChats } from '@/hooks';
 import { ChatLogPane } from '../chat/chat-logs';
 
 export const FlowEditor = ({ projectId }: { projectId: number }) => {
+  const [mode, setMode] = useState<'flow' | 'python'>('flow');
   const { chats } = useChats();
   const nodes = useNodes();
   const edges = useEdges();
@@ -28,6 +29,10 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
     setActiveChatId(existingChat?.id || -1);
   }, [projectId, chats]);
 
+  const handleModeChange = (mode: 'flow' | 'python') => {
+    setMode(mode);
+  };
+
   return (
     <div className="flex h-[calc(100vh-var(--header-height))]">
       <ResizablePanelGroup direction="horizontal" className="flex h-full">
@@ -35,18 +40,20 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
           className="h-[calc(100vh-var(--header-height))]"
           defaultSize={70}
         >
-          <FlowCanvas projectId={projectId} />
+          <FlowCanvas projectId={projectId} onModeChange={handleModeChange} />
         </ResizablePanel>
         <ResizableHandle />
         <ResizablePanel defaultSize={30} minSize={25}>
           <Tabs defaultValue="config" className="flex flex-col h-full">
             <TabsList className="flex items-center justify-start w-full rounded-none border-b shrink-0">
-              <TabsTrigger value="config" className="flex items-center gap-2">
-                <Icons.config className="w-4 h-4" />
-                <span className="hidden md:block text-sm">Props</span>
-              </TabsTrigger>
+              {mode === 'flow' && (
+                <TabsTrigger value="config" className="flex items-center gap-2">
+                  <Icons.config className="w-4 h-4" />
+                  <span className="hidden md:block text-sm">Properties</span>
+                </TabsTrigger>
+              )}
               <TabsTrigger value="chat" className="flex items-center gap-2">
-                <Icons.node className="w-4 h-4" />
+                <Icons.chat className="w-4 h-4" />
                 <span className="hidden md:block text-sm">Chat</span>
               </TabsTrigger>
               <TabsTrigger value="logs" className="flex items-center gap-2">

@@ -40,8 +40,8 @@ chat_result = node_{{ first_converser['id'] }}.initiate_chat(
     {%- if initial_chat_targets[0]['chat_options'].max_turns %}
     max_turns={{ initial_chat_targets[0]['chat_options'].max_turns }},
     {%- endif %}
-    {%- if initial_chat_targets[0]['chat_options'].summary_method %}
-    summary_method="{{ initial_chat_targets[0]['chat_options'].summary_method }}",
+    {%- if initializer_node and initializer_node['data'] and initializer_node.data['summary_method'] %}
+    summary_method="{{ initializer_node.data.summary_method }}",
     {%- endif %}
 )
 {%- endif -%}

@@ -131,6 +131,7 @@ class CodegenService:
             user=self.supabase.get_user(),
             settings=settings,  # Account level settings include models, etc.
             nodes=flow.nodes,
+            initializer_node=initializer_node,
             first_converser=first_converser,
             initial_chat_targets=initial_chat_targets,
             conversable_nodes=conversable_nodes,

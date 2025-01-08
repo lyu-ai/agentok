@@ -95,7 +95,13 @@ const useDebouncedUpdate = (projectId: number) => {
   return { setIsDirty, debouncedUpdate };
 };
 
-export const FlowCanvas = ({ projectId }: { projectId: number }) => {
+export const FlowCanvas = ({
+  projectId,
+  onModeChange,
+}: {
+  projectId: number;
+  onModeChange: (mode: 'flow' | 'python') => void;
+}) => {
   const { project, isLoading, isError } = useProject(projectId);
   const { screenToFlowPosition } = useReactFlow();
   const [nodes, setNodes] = useNodesState<Node>([]);
@@ -253,6 +259,14 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
       });
     },
     [setNodes, setIsDirty]
+  );
+
+  const handleModeChange = useCallback(
+    (mode: 'flow' | 'python') => {
+      setMode(mode);
+      onModeChange(mode);
+    },
+    [onModeChange]
   );
 
   const onEdgesChange = useCallback(
@@ -493,7 +507,7 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
           });
         } else {
           setPython(json.code);
-          setMode('python');
+          handleModeChange('python');
         }
       })
       .catch((e) => {
@@ -526,7 +540,7 @@ export const FlowCanvas = ({ projectId }: { projectId: number }) => {
   return (
     <>
       {mode === 'python' ? (
-        <PythonViewer data={python} setMode={setMode} />
+        <PythonViewer data={python} setMode={handleModeChange} />
       ) : (
         <div
           className="relative flex flex-grow flex-col w-full h-full"
