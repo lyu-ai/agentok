@@ -93,7 +93,7 @@ export const AuthButton = () => {
             href="/settings/models"
             className={cn('flex items-center justify-start p-2 gap-2')}
           >
-            <Icons.openai className="h-4 w-4" />
+            <Icons.robot className="h-4 w-4" />
             Models
           </Link>
         </DropdownMenuItem>

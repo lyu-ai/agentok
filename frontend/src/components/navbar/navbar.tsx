@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { Icons } from '../icons';
 import { cn } from '@/lib/utils';
 import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 
 const apiEndpoint =
   process.env.NEXT_PUBLIC_BACKEND_URL || 'https://localhost:5004';
@@ -39,6 +40,17 @@ export const NAV_MENU_ITEMS = [
 const Navbar = () => {
   const pathname = usePathname();
   const { resolvedTheme } = useTheme();
+  const [githubUrl, setGithubUrl] = useState(
+    'https://img.shields.io/github/stars/dustland/agentok?style=social&logo=github'
+  );
+
+  useEffect(() => {
+    setGithubUrl(
+      resolvedTheme === 'dark'
+        ? 'https://img.shields.io/github/stars/dustland/agentok?style=flat&logo=github&color=black&labelColor=gray&label=Stars'
+        : 'https://img.shields.io/github/stars/dustland/agentok?style=social&logo=github'
+    );
+  }, [resolvedTheme]);
 
   // Create a matcher function
   const matchPath = match<{
@@ -116,15 +128,7 @@ const Navbar = () => {
           target="_blank"
           className="hidden md:block"
         >
-          <img
-            src={
-              resolvedTheme === 'dark'
-                ? 'https://img.shields.io/github/stars/dustland/agentok?style=flat&logo=github&color=black&labelColor=gray&label=Stars'
-                : 'https://img.shields.io/github/stars/dustland/agentok?style=social&logo=github'
-            }
-            alt="github"
-            className="rounded h-5"
-          />
+          <img src={githubUrl} alt="github" className="h-5" />
         </Link>
         <AuthButton />
       </div>
