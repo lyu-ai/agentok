@@ -17,6 +17,7 @@ import {
   useEdgesState,
   useNodesState,
   BackgroundVariant,
+  getNodesBounds,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import './reactflow.css';
@@ -137,17 +138,32 @@ export const FlowCanvas = ({
               draggedNode.parentId = undefined;
               draggedNode.extent = undefined;
 
-              const groupNode = nextNodes.find(
-                (n) =>
+              const groupNode = nextNodes.find((n) => {
+                if (
                   n.type === 'groupchat' &&
                   n.id !== draggedNode.id &&
-                  !n.parentId && // Prevent nested groups
-                  // Check if the node position is within the group's bounds
-                  absolutePosition.x >= n.position.x &&
-                  absolutePosition.x <= n.position.x + (n.width ?? 0) &&
-                  absolutePosition.y >= n.position.y &&
-                  absolutePosition.y <= n.position.y + (n.height ?? 0)
-              );
+                  !n.parentId
+                ) {
+                  // Get the actual node dimensions from DOM
+                  const nodeElement = document.querySelector(
+                    `[data-id="${n.id}"]`
+                  );
+                  const nodeWidth =
+                    nodeElement?.getBoundingClientRect().width ?? n.width ?? 0;
+                  const nodeHeight =
+                    nodeElement?.getBoundingClientRect().height ??
+                    n.height ??
+                    0;
+
+                  return (
+                    absolutePosition.x >= n.position.x &&
+                    absolutePosition.x <= n.position.x + nodeWidth &&
+                    absolutePosition.y >= n.position.y &&
+                    absolutePosition.y <= n.position.y + nodeHeight
+                  );
+                }
+                return false;
+              });
 
               // Update all group nodes' data with current hover state
               nextNodes = nextNodes.map((node) => {
@@ -312,7 +328,8 @@ export const FlowCanvas = ({
         y: event.clientY - flowBounds.top,
       });
 
-      const { offsetX, offsetY, ...cleanedData } = data;
+      const { offsetX, offsetY, initialWidth, initialHeight, ...cleanedData } =
+        data;
       const newId = nanoid(8);
       const newNode = {
         id: `${data.id}_${newId}`,
