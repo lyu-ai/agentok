@@ -212,7 +212,7 @@ export const ChatInput = ({
               size="icon"
               disabled={disabled || isResetting || !message.trim()}
               className="h-8 w-8 rounded-full p-0"
-              onClick={handleSend}
+              onClick={() => handleSend()}
             >
               <Icons.send className="w-5 h-5 shrink-0" />
             </Button>
