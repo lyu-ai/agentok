@@ -2,6 +2,7 @@ import asyncio
 import os
 from asyncio import subprocess
 import signal
+from fastapi import logger
 from termcolor import colored
 
 from ..models import LogCreate
@@ -38,7 +39,7 @@ class ChatManager:
         if on_message is None:
             on_message = self._print_message
 
-        command = ["python3", source_path, f'"{message}"']
+        command = ["python3", source_path, f'{message}']
         print(colored(text=f'Running {" ".join(command)}', color="blue"))
 
         env = os.environ.copy()
@@ -75,65 +76,48 @@ class ChatManager:
 
         output_parser = OutputParser(on_message=on_message)
 
-        on_message(
-            {
-                "type": "assistant",
-                "content": "__STATUS_RUNNING__",
-            }
-        )
-
         # Process the subprocess output until it terminates
-        if process.stdout is not None:
-            async for line in process.stdout:
-                if line:
-                    response_message = line.decode().rstrip()
-                    # Use the configured logger
-                    # logger.info(response_message)
-                    print("📺 ", response_message)
-                    if any(
-                        status in response_message
-                        for status in (
+        async for line in process.stdout:
+            if line:
+                response_message = line.decode().rstrip()
+                print("📺 ", response_message)
+                try:
+                    await self.supabase.add_log(LogCreate(
+                        message=response_message,
+                        level='info',
+                        chat_id=chat_id,
+                    ))
+                except Exception as e:
+                    logger.error(f"Failed to log message: {e}")
+                if any(
+                    status in response_message
+                    for status in (
+                        "__STATUS_RECEIVED_HUMAN_INPUT__",
+                        "__STATUS_WAIT_FOR_HUMAN_INPUT__",
+                    )
+                ):
+                    content = self.strip_prefix(
+                        response_message,
+                        (
                             "__STATUS_RECEIVED_HUMAN_INPUT__",
                             "__STATUS_WAIT_FOR_HUMAN_INPUT__",
+                        ),
+                    )
+                    on_message(
+                        {
+                            "type": "assistant",
+                            "content": content,
+                        }
+                    )
+
+                    if "__STATUS_WAIT_FOR_HUMAN_INPUT__" in response_message:
+                        self.supabase.set_chat_status(
+                            chat_id, "wait_for_human_input"
                         )
-                    ):
-                        content = self.strip_prefix(
-                            response_message,
-                            (
-                                "__STATUS_RECEIVED_HUMAN_INPUT__",
-                                "__STATUS_WAIT_FOR_HUMAN_INPUT__",
-                            ),
-                        )
-                        on_message(
-                            {
-                                "type": "assistant",
-                                "content": content,
-                            }
-                        )
-                        self.supabase.add_log(
-                            LogCreate(
-                                message=content,
-                                level="info",
-                                chat_id=chat_id,
-                            ),
-                            chat_id,
-                        )
-                        if "__STATUS_WAIT_FOR_HUMAN_INPUT__" in response_message:
-                            self.supabase.set_chat_status(
-                                chat_id, "wait_for_human_input"
-                            )
-                        else:
-                            self.supabase.set_chat_status(chat_id, "running")
                     else:
-                        output_parser.parse_line(response_message)
-                        self.supabase.add_log(
-                            LogCreate(
-                                message=response_message,
-                                level="info",
-                                chat_id=chat_id,
-                            ),
-                            chat_id,
-                        )
+                        self.supabase.set_chat_status(chat_id, "running")
+                else:
+                    output_parser.parse_line(response_message)
 
         # Wait for the subprocess to finish if it hasn't already
         await process.wait()

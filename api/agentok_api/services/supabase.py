@@ -1,3 +1,4 @@
+import asyncio
 from distutils.log import Log
 import logging
 import os
@@ -438,17 +439,20 @@ class SupabaseClient:
                 detail=f"Failed to add message: {exc}",
             )
 
-    def add_log(self, log: LogCreate, chat_id: str):
+    async def add_log(self, log: LogCreate):
         try:
             log_data = log.model_dump()
-            log_data["chat_id"] = int(chat_id)
-            response = self.supabase.table("chat_logs").insert(log_data).execute()
+            # Use asyncio.to_thread since supabase-py doesn't have async support
+            response = await asyncio.to_thread(
+                lambda: self.supabase.table("chat_logs").insert(log_data).execute()
+            )
+            print(colored(f"Added log: {log_data}", "green"))
             if response.data:
                 return Log(**response.data[0])
-            else:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Failed to add log")
+            return None  # Return None instead of raising an exception
         except Exception as exc:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Failed to add log: {exc}")
+            logger.error(f"Failed to add log: {exc}")
+            return None  # Silently fail instead of raising an exception
 
     def fetch_source_metadata(self, chat_id: str) -> Dict:
         try:
