@@ -45,18 +45,16 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={30} minSize={25}>
-          <Tabs defaultValue="config" className="flex flex-col h-full">
+          <Tabs defaultValue="chat" className="flex flex-col h-full">
             <TabsList className="flex items-center justify-start w-full rounded-none border-b shrink-0">
               <TabsTrigger value="chat" className="flex items-center gap-2">
                 <Icons.chat className="w-4 h-4" />
                 <span className="hidden md:block text-sm">Chat</span>
               </TabsTrigger>
-              {mode === 'flow' && (
-                <TabsTrigger value="config" className="flex items-center gap-2">
-                  <Icons.config className="w-4 h-4" />
-                  <span className="hidden md:block text-sm">Properties</span>
-                </TabsTrigger>
-              )}
+              <TabsTrigger value="config" className="flex items-center gap-2">
+                <Icons.config className="w-4 h-4" />
+                <span className="hidden md:block text-sm">Properties</span>
+              </TabsTrigger>
               <TabsTrigger value="logs" className="flex items-center gap-2">
                 <Icons.logs className="w-4 h-4" />
                 <span className="hidden md:block text-sm">Logs</span>

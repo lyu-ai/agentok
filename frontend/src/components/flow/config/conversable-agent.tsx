@@ -15,13 +15,13 @@ export const ConversableAgentConfig = ({
       label: 'Name',
       placeholder: 'Enter a name for this agent',
     },
-    // {
-    //   type: 'text',
-    //   name: 'description',
-    //   label: 'Description',
-    //   placeholder: 'Enter a description for this agent',
-    //   rows: 2,
-    // },
+    {
+      type: 'text',
+      name: 'description',
+      label: 'Description',
+      placeholder: 'Enter a description for this agent',
+      rows: 2,
+    },
     {
       type: 'text',
       name: 'system_message',
@@ -66,11 +66,11 @@ export const ConversableAgentConfig = ({
 
   return (
     <ScrollArea>
-      <div className="flex flex-col gap-4 w-full h-full p-2">
+      <div key={nodeId} className="flex flex-col gap-4 w-full h-full p-2">
         {GENERAL_OPTIONS.filter((o) => !optionsDisabled.includes(o.name)).map(
           (options, index) => (
             <GenericOption
-              key={index}
+              key={`${nodeId}-${index}`}
               nodeId={nodeId}
               data={data}
               {...options}
