@@ -9,7 +9,7 @@ import { useProjects } from './use-projects';
 import { useTemplates } from './use-templates';
 import { createClient } from '@/lib/supabase/client';
 import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
-import { nanoid } from 'nanoid';
+import { genId } from '@/lib/id';
 
 export function useChats() {
   const { data, error, mutate } = useSWR('/api/chats', fetcher);
@@ -198,7 +198,7 @@ export function useChat(chatId: number) {
     // Subscribe to chat status updates
     const supabase = createClient();
     const channel = supabase
-      .channel(`chat_status_${nanoid(6)}`)
+      .channel(`chat_status_${genId()}`)
       .on(
         'postgres_changes',
         {

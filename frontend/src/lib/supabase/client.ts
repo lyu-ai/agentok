@@ -1,6 +1,6 @@
 import { createBrowserClient } from '@supabase/ssr';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { nanoid } from 'nanoid';
+import { genId } from '../id';
 
 export function createClient() {
   return createBrowserClient(
@@ -61,7 +61,7 @@ export async function uploadFile(
     );
   }
 
-  const path = `${nanoid()}.${ext}`;
+  const path = `${genId()}.${ext}`;
 
   try {
     const { data, error } = await supabase.storage

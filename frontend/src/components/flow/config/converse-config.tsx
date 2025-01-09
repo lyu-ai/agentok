@@ -78,6 +78,17 @@ export const ConverseConfig = ({ edgeId, data }: any) => {
     <ScrollArea>
       <div className="flex flex-col gap-4 p-2">
         <GenericOption
+          type="text"
+          key={`${edgeId}-instructions`}
+          nodeId={edgeId}
+          data={data}
+          rows={2}
+          name="instructions"
+          label="Instructions"
+          placeholder="Enter a prompt for the instructions. This can be overridden with command arguments."
+        />
+        <GenericOption
+          key={`${edgeId}-mode`}
           type="select"
           nodeId={edgeId}
           data={data}
@@ -89,11 +100,45 @@ export const ConverseConfig = ({ edgeId, data }: any) => {
           ]}
         />
         <GenericOption
+          key={`${edgeId}-allow-repeat`}
           type="check"
           nodeId={edgeId}
           data={data}
           name="allow_repeat"
           label="Allow Repeat"
+        />
+        <GenericOption
+          key={`${edgeId}-summary-method`}
+          type="select"
+          nodeId={edgeId}
+          data={data}
+          name="summary_method"
+          label="Summary Method"
+          options={[
+            { value: 'last_msg', label: 'Last Message' },
+            { value: 'reflection_with_llm', label: 'Reflection with LLM' },
+          ]}
+        />
+        <GenericOption
+          key={`${edgeId}-summary-prompt`}
+          type="text"
+          nodeId={edgeId}
+          data={data}
+          rows={3}
+          name="summary_prompt"
+          label="Summary Prompt"
+          placeholder="Enter a prompt for the summary."
+        />
+        <GenericOption
+          key={`${edgeId}-max-turns`}
+          type="range"
+          nodeId={edgeId}
+          data={data}
+          name="max_turns"
+          label="Max Turns"
+          min={1}
+          max={50}
+          step={1}
         />
         <div className="flex flex-col gap-2 w-full">
           <div className="flex items-center justify-between gap-2 w-full">

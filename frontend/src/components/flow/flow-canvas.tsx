@@ -28,9 +28,9 @@ import { NodeButton } from './node-button';
 import { PythonViewer } from './python';
 import { useProject } from '@/hooks';
 import { debounce } from 'lodash-es';
-import { nanoid } from 'nanoid';
 import { Button } from '../ui/button';
 import { toast } from '@/hooks/use-toast';
+import { genId } from '@/lib/id';
 
 const DEBOUNCE_DELAY = 500; // Adjust this value as needed
 
@@ -329,7 +329,7 @@ export const FlowCanvas = ({
       });
 
       const { offsetX, offsetY, width, height, ...cleanedData } = data;
-      const newId = nanoid(8);
+      const newId = genId();
       const newNode = {
         id: `${data.id}_${newId}`,
         type: data.id,
@@ -434,7 +434,7 @@ export const FlowCanvas = ({
       height?: number
     ) => {
       setNodes((nds) => {
-        const newId = nanoid(8);
+        const newId = genId();
         const bounds = flowParent.current?.getBoundingClientRect();
         if (!bounds) return nds;
         const center = {
@@ -471,7 +471,7 @@ export const FlowCanvas = ({
 
       setIsDirty(true);
     },
-    [screenToFlowPosition, setNodes, nanoid]
+    [screenToFlowPosition, setNodes]
   );
 
   const onGeneratePython = async () => {

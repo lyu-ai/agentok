@@ -24,36 +24,6 @@ export const InitializerConfig = ({ nodeId, data }: any) => {
           label="Sample Message (One per line)"
           placeholder="Enter sample messages, one per line."
         />
-        <GenericOption
-          type="select"
-          nodeId={nodeId}
-          data={data}
-          name="summary_method"
-          label="Summary Method"
-          options={[
-            { value: 'last_msg', label: 'Last Message' },
-            { value: 'reflection_with_llm', label: 'Reflection with LLM' },
-          ]}
-        />
-        <GenericOption
-          type="text"
-          nodeId={nodeId}
-          data={data}
-          rows={3}
-          name="summary_prompt"
-          label="Summary Prompt"
-          placeholder="Enter a prompt for the summary."
-        />
-        <GenericOption
-          type="range"
-          nodeId={nodeId}
-          data={data}
-          name="max_turns"
-          label="Max Turns"
-          min={1}
-          max={50}
-          step={1}
-        />
       </div>
     </ScrollArea>
   );
