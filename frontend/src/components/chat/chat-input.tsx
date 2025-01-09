@@ -47,20 +47,20 @@ export const ChatInput = ({
     });
   };
 
-  const handleSend = async (e: React.FormEvent) => {
-    console.log('handleSend', chatId, message);
+  const handleSend = async (input?: string) => {
+    console.log('handleSend', chatId, message, input);
     setMessage('');
     if (chat?.status === 'wait_for_human_input') {
-      await handleHumanInput(message);
+      await handleHumanInput(input || message);
     } else {
-      onSend(message);
+      onSend(input || message);
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     console.log('handleKeyDown', chatId, e.key);
     if (e.key === 'Enter' && !e.shiftKey) {
-      handleSend(e as any);
+      handleSend();
     }
   };
 
@@ -147,7 +147,7 @@ export const ChatInput = ({
               key={index}
               variant="outline"
               size="sm"
-              onClick={() => setMessage(message)}
+              onClick={() => handleSend(message)}
               className="h-6 text-xs text-muted-foreground line-clamp-1 flex items-center justify-start"
             >
               {message}
