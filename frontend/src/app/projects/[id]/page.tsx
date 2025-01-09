@@ -7,17 +7,18 @@ import { useEffect } from 'react';
 import { use } from 'react';
 import NotFound from '@/app/not-found';
 
-const Page = ({ params }: { params: Promise<{ id: string }> }) => {
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const projectId = parseInt(id, 10);
-  const { projects, activeProjectId, setActiveProjectId } = useProjects();
+  const { projects, isLoading, activeProjectId, setActiveProjectId } =
+    useProjects();
   useEffect(() => {
     if (projectId !== activeProjectId) {
       setActiveProjectId(projectId);
     }
   }, [projectId]);
 
-  if (!projects.find((project) => project.id === projectId)) {
+  if (!isLoading && !projects.find((project) => project.id === projectId)) {
     return <NotFound />;
   }
   return (
@@ -25,6 +26,4 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
       <FlowEditor projectId={projectId} />
     </ReactFlowProvider>
   );
-};
-
-export default Page;
+}

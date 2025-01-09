@@ -42,7 +42,7 @@ export async function POST(
 
     const { data, error } = await supabase
       .from('projects')
-      .update(project)
+      .update({ ...project, updated_at: new Date().toISOString() })
       .eq('id', id)
       .select()
       .single();

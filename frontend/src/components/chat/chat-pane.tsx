@@ -202,7 +202,6 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
           <MessageList
             chat={chat}
             messages={messages}
-            onSend={handleSend}
             className="max-w-4xl mx-auto mb-1"
           />
           <div className="flex justify-center p-1">

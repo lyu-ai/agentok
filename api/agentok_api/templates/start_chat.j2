@@ -1,4 +1,3 @@
-
 # Start the conversation
 
 {% if initial_chat_targets | length > 1 %}
@@ -51,7 +50,14 @@ chat_result = node_{{ first_converser['id'] }}.initiate_chat(
     {%- endif %}
 )
 
-print("__CHAT_RESULT__", chat_result)
+import json
+print("__CHAT_RESULT__", json.dumps({
+    "chat_id": chat_result.chat_id,
+    "chat_history": chat_result.chat_history,
+    "summary": chat_result.summary,
+    "cost": chat_result.cost,
+    "human_input": chat_result.human_input
+}))
 
 {%- endif -%}
 {%- endif -%}

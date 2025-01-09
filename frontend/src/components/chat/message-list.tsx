@@ -17,23 +17,22 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Markdown } from '@/components/markdown';
 import { ScrollArea } from '../ui/scroll-area';
 import { cn } from '@/lib/utils';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@/components/ui/hover-card';
+import SyntaxHighlighter from 'react-syntax-highlighter';
 
 interface MessageBubbleProps {
   chat: any;
   message: Message;
-  onSend: (content: string) => void;
   className?: string;
 }
 
-const MessageBubble = ({
-  chat,
-  message,
-  onSend,
-  className,
-}: MessageBubbleProps) => {
+const MessageBubble = ({ chat, message, className }: MessageBubbleProps) => {
   const { chatSource } = useChat(chat.id);
   const { user } = useUser();
-
   const userNodeName =
     chatSource?.flow?.nodes?.find(
       (node: any) =>
@@ -100,20 +99,22 @@ const MessageBubble = ({
 
   const messageClass = waitForHumanInput
     ? 'bg-yellow-600/20 text-yellow-600'
-    : message.type === 'assistant'
-      ? 'bg-background text-primary'
-      : 'bg-green-300/20 text-green-500';
+    : message.type === 'summary'
+      ? 'bg-green-500/20 border-green-500/20'
+      : 'bg-background text-primary';
 
   let avatarIcon = <Icons.agent className="w-4 h-4" />;
   if (message.type === 'user') {
     avatarIcon = (
-      <Avatar>
+      <Avatar className="w-7 h-7">
         <AvatarImage src={user?.user_metadata.avatar_url} />
         <AvatarFallback>
-          <Icons.userVoiceLine className="w-4 h-4" />
+          <Icons.user className="w-4 h-4" />
         </AvatarFallback>
       </Avatar>
     );
+  } else if (message.type === 'summary') {
+    avatarIcon = <Icons.info className="w-4 h-4" />;
   } else if (message.sender === userNodeName) {
     avatarIcon = <Icons.userVoiceFill className="w-5 h-5" />;
   }
@@ -125,7 +126,7 @@ const MessageBubble = ({
     );
   } else if (message.sender) {
     messageHeader = (
-      <div className="chat-header flex items-end gap-2 text-xs text-muted-foreground">
+      <div className="chat-header flex items-end gap-2 text-xs text-muted-foreground font-semibold">
         <div className="flex items-center gap-1">
           {message.sender}
           {message.receiver && (
@@ -140,12 +141,14 @@ const MessageBubble = ({
         </div>
       </div>
     );
+  } else if (message.type === 'summary') {
+    messageHeader = (
+      <div className="flex items-center gap-2 text-xs">Summary</div>
+    );
   }
 
   return (
-    <Card
-      className={cn(messageClass, 'p-1 w-full mx-auto shadow-sm', className)}
-    >
+    <Card className={cn(messageClass, 'p-1 w-full mx-auto', className)}>
       <div className="flex items-center gap-1 px-1">
         <div
           className={`w-8 h-8 rounded-full text-sm flex items-center justify-center`}
@@ -172,10 +175,27 @@ const MessageBubble = ({
             </DialogContent>
           </Dialog>
         )}
-        {message.type === 'summary' && (
-          <Button variant="ghost" size="icon" className="w-5 h-5">
-            <Icons.cost className="w-3 h-3" />
-          </Button>
+        {message.metadata && (
+          <HoverCard>
+            <HoverCardTrigger asChild>
+              <Button variant="ghost" size="icon" className="w-5 h-5">
+                <Icons.info className="w-3 h-3" />
+              </Button>
+            </HoverCardTrigger>
+            <HoverCardContent
+              side="left"
+              align="start"
+              sideOffset={10}
+              className="z-50 p-2 w-[calc(100vw-4rem)] text-xs sm:w-[500px] lg:w-[600px] overflow-y-auto max-h-[calc(100vh-4rem)]"
+            >
+              <SyntaxHighlighter
+                language="json"
+                className="text-xs bg-muted/80 backdrop-blur-sm"
+              >
+                {JSON.stringify(message.metadata, null, 2)}
+              </SyntaxHighlighter>
+            </HoverCardContent>
+          </HoverCard>
         )}
       </div>
       <div
@@ -195,13 +215,11 @@ interface MessageListProps {
   chat: any;
   messages: Message[];
   className?: string;
-  onSend: (content: string) => void;
 }
 
 export const MessageList = ({
   chat,
   messages,
-  onSend,
   className,
 }: MessageListProps) => {
   return (
@@ -211,7 +229,6 @@ export const MessageList = ({
           key={message.id || index}
           chat={chat}
           message={message}
-          onSend={onSend}
           className={className}
         />
       ))}

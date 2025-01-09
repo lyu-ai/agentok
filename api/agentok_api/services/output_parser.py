@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from typing import List, Dict, Optional
 import ast
 
+from fastapi import logger
+
 @dataclass
 class ChatResult:
     chat_id: Optional[str]
@@ -75,11 +77,13 @@ class OutputParser:
         # Add handling for chat result
         if line.startswith("__CHAT_RESULT__ "):
             result = self.parse_chat_result(line)
+            print(f"Chat result: {result}")
             if result:
                 self.on_message({
                     "type": "summary",
                     "content": result.summary,
                     "metadata": {
+                        "summary": result.summary,
                         "chat_history": result.chat_history,
                         "cost": result.cost,
                         "human_input": result.human_input
@@ -193,17 +197,27 @@ class OutputParser:
             self.parse_line(line)
 
     def parse_chat_result(self, result_str: str) -> Optional[ChatResult]:
+        """Parse a chat result string into a ChatResult object.
+        
+        Args:
+            result_str: The string containing the chat result in JSON format
+            
+        Returns:
+            Optional[ChatResult]: The parsed chat result, or None if parsing failed
+        """
         try:
             # Remove the "__CHAT_RESULT__ " prefix
             clean_str = result_str.replace("__CHAT_RESULT__ ", "")
             
-            # Convert string representation to dictionary using ast.literal_eval
-            result_dict = ast.literal_eval(clean_str)
+            # Parse the JSON string
+            result_dict = json.loads(clean_str)
             
             # Convert the dictionary to a ChatResult object
             return ChatResult(**result_dict)
+            
         except Exception as e:
-            print(f"Error parsing chat result: {e}")
+            logger.error(f"Error parsing chat result: {e}")
+            logger.error(f"Input string was: {result_str}")
             return None
 
     def _handle_status_message(self, message: str) -> bool:

@@ -93,6 +93,7 @@ import {
   SunMoon,
   Palette,
   Receipt,
+  Info,
 } from 'lucide-react';
 import { Logo } from './logo';
 import { ElementType } from 'react';
@@ -115,6 +116,7 @@ export const Icons: Record<string, ElementType> = {
   laptop: Laptop,
   theme: Palette,
   brush: Brush,
+  info: Info,
   megaphone: Megaphone,
   project: Route,
   list: List,

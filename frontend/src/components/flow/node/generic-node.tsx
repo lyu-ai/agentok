@@ -49,7 +49,7 @@ export const GenericNode: ComponentType<GenericNodeProps> = ({
           className="h-7 w-7"
           onClick={() => instance.deleteElements({ nodes: [{ id }] })}
         >
-          <Icons.trash className="w-4 h-4 text-red-500" />
+          <Icons.trash className="w-4 h-4" />
         </Button>
       </NodeToolbar>
       <div className="flex flex-col items-center gap-2 flex-grow">

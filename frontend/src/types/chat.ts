@@ -6,4 +6,5 @@ export type Message = {
   receiver?: string;
   created_at: Date;
   updated_at: Date;
+  metadata?: any;
 };

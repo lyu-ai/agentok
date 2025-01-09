@@ -1,8 +1,7 @@
 import asyncio
-from distutils.log import Log
+from typing import Dict, List, Literal, Optional
 import logging
 import os
-from typing import Dict, List, Literal, Optional
 
 import requests
 from dotenv import load_dotenv
@@ -17,6 +16,7 @@ from ..models import (
     Chat,
     ChatCreate,
     LogCreate,
+    Log,
     Message,
     MessageCreate,
     Tool,
@@ -29,6 +29,7 @@ load_dotenv()  # Load environment variables from .env
 
 class SupabaseClient:
     _instance = None
+    _initialized = False
 
     def __new__(cls):
         if cls._instance is None:
@@ -36,14 +37,38 @@ class SupabaseClient:
         return cls._instance
 
     def __init__(self):
-        self.supabase_url = os.environ.get("SUPABASE_URL")
-        self.supabase_service_key = os.environ.get("SUPABASE_SERVICE_KEY")
-        if not self.supabase_url or not self.supabase_service_key:
-            raise Exception("Supabase URL or key not found in environment variables")
-        self.supabase: Client = create_client(
-            self.supabase_url, self.supabase_service_key
-        )
-        self.user_id = None
+        if not self._initialized:
+            self.supabase_url = os.environ.get("SUPABASE_URL")
+            self.supabase_service_key = os.environ.get("SUPABASE_SERVICE_KEY")
+            if not self.supabase_url or not self.supabase_service_key:
+                raise Exception("Supabase URL or key not found in environment variables")
+            self.supabase: Client = create_client(
+                self.supabase_url, self.supabase_service_key
+            )
+            self.user_id = None
+            self._initialized = True
+
+    @classmethod
+    def reset(cls):
+        """Reset the singleton instance"""
+        if cls._instance is not None:
+            if hasattr(cls._instance, 'supabase'):
+                # Close any active connections if possible
+                try:
+                    if hasattr(cls._instance.supabase, 'client'):
+                        cls._instance.supabase.client.close()
+                except:
+                    pass
+            cls._instance = None
+            cls._initialized = False
+
+    def __del__(self):
+        """Destructor to ensure resources are cleaned up"""
+        try:
+            if hasattr(self, 'supabase') and hasattr(self.supabase, 'client'):
+                self.supabase.client.close()
+        except:
+            pass
 
     def get_user(self) -> User:
         try:
@@ -440,19 +465,39 @@ class SupabaseClient:
             )
 
     async def add_log(self, log: LogCreate):
+        """Add a log entry to the database.
+        
+        Args:
+            log: The log entry to add
+            
+        Returns:
+            dict: The raw response data from the database, or None if the operation failed
+        """
         try:
-            log_data = log.model_dump()
+            # Convert to dict and ensure chat_id is an integer
+            log_data = {
+                "message": log.message,
+                "level": log.level,
+                "metadata": log.metadata,
+                "chat_id": int(log.chat_id) if isinstance(log.chat_id, str) else log.chat_id
+            }
+            
             # Use asyncio.to_thread since supabase-py doesn't have async support
             response = await asyncio.to_thread(
                 lambda: self.supabase.table("chat_logs").insert(log_data).execute()
             )
-            print(colored(f"Added log: {log_data}", "green"))
-            if response.data:
-                return Log(**response.data[0])
-            return None  # Return None instead of raising an exception
+            
+            if response and response.data:
+                print(colored(f"Added log for chat {log_data['chat_id']}", "green"))
+                return response.data[0]
+            
+            print(colored(f"No response data from log insertion", "yellow"))
+            return None
+            
         except Exception as exc:
             logger.error(f"Failed to add log: {exc}")
-            return None  # Silently fail instead of raising an exception
+            logger.error(f"Attempted log data: {log_data}")
+            return None
 
     def fetch_source_metadata(self, chat_id: str) -> Dict:
         try:
