@@ -37,7 +37,7 @@ export function ConverseEdge({ id, data, selected, style, ...props }: any) {
               'text-muted-foreground/80 border-muted-foreground/80': !selected,
             })}
           >
-            <Icons.chat className="w-4 h-4" />
+            <Icons.tool className="w-4 h-4" />
           </Button>
         </div>
       </EdgeLabelRenderer>

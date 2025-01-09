@@ -13,6 +13,7 @@ import { Loading } from '@/components/loader';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
+import { nanoid } from 'nanoid';
 
 interface ChatPaneProps {
   projectId: number;
@@ -63,7 +64,7 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
 
     // Subscribe to chat_messages
     const messagesChannel: RealtimeChannel = supabase
-      .channel(`chat_messasges_${genId()}`)
+      .channel(`chat_messasges_${nanoid()}`)
       .on(
         'postgres_changes',
         {

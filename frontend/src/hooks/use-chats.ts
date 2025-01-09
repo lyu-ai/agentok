@@ -46,17 +46,6 @@ export function useChats() {
     sourceType: 'project' | 'template'
   ) => {
     setIsCreating(true);
-    const optimisticChat = {
-      id: Date.now(),
-      from_type: sourceType,
-      name: getInitialName(sourceId, sourceType),
-      ...(sourceType === 'project'
-        ? { from_project: sourceId }
-        : { from_template: sourceId }),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      status: 'pending',
-    };
 
     try {
       const response = await fetch(`/api/chats`, {
@@ -219,6 +208,7 @@ export function useChat(chatId: number) {
           filter: `id=eq.${chatId}`,
         },
         (payload: RealtimePostgresChangesPayload<{ status: string }>) => {
+          console.log('changes_event(chats):', payload);
           if (payload.new && 'status' in payload.new) {
             updateChat(chatId, { status: payload.new.status });
           }

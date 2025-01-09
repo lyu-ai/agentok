@@ -132,7 +132,13 @@ class CodegenService:
             for tool_id, tool in tool_dict.items()
             if tool_id in tool_assignments
         }
+        
+        # Generate tool envs and replace placeholders
         self.generate_tool_envs(project, tool_dict)
+        
+        # Replace env placeholders in tool code
+        for tool_id, tool in tool_dict.items():
+            tool['code'] = self.replace_env_placeholders(tool)
 
         code = template.render(
             project=project,
