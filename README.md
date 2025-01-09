@@ -1,6 +1,6 @@
 
 > [!Warning]
-> We're actively developing the next version on branch `dev`. The `main` branch will not be interating until the next version is release.
+> We're actively developing the next version on branch `dev`. The `main` branch will be frozen until the next major release.
 
 <img src="./frontend/public/logo.png" width="90" />
 
