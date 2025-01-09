@@ -1,3 +1,7 @@
+
+> [!Warning]
+> We're actively developing the next version on branch `dev`. The `main` branch will not be interating until the next version is release.
+
 <img src="./frontend/public/logo.png" width="90" />
 
 # Agentok Studio
@@ -10,11 +14,6 @@
 ![GitHub release](https://img.shields.io/github/v/release/dustland/agentok)
 [![GitHub star](https://img.shields.io/github/stars/dustland/agentok?style=flat&logo=github&color=black&labelColor=gray)](https://star-history.com/#dustland/agentok)
 [![](https://dcbadge.limes.pink/api/server/xBQxwRSWfm?style=social&timestamp=20240705)](https://discord.gg/xBQxwRSWfm)
-
-> [!Warning]
-> This project is currently under development and is not yet recommended for production use.
->
-> Your feedback is invaluable as we move forward. If you have any thoughts or suggestions, please share them by opening a new issue or participating in the ongoing discussions [here](https://github.com/hughlv/agentok/issues/160).
 
 ## 🌟 What is Agentok Studio
 
