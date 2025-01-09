@@ -39,6 +39,7 @@ class OutputParser:
         self.meta_pattern = re.compile(r"^>>>>>>>> (.*?)")
         self.from_to_pattern = re.compile(r"^(.*?) \(to (.*?)\):")
         self.end_pattern = re.compile(r"^-{80}")  # Assuming 80 dashes as a separator
+        self.next_speaker_pattern = re.compile(r"^Next speaker: (.*?)$")
 
         # Patterns for tool-related messages
         self.tool_response_pattern = re.compile(
@@ -113,18 +114,16 @@ class OutputParser:
             if match:
                 self.current_message["meta"]["general"] = match.group(1)
                 self.current_message["type"] = "assistant"
+        elif self.next_speaker_pattern.match(line):
+            match = self.next_speaker_pattern.match(line)
+            if match:
+                # Store next speaker info in metadata
+                self.current_message["meta"]["next_speaker"] = match.group(1)
         elif self.from_to_pattern.match(line):
             match = self.from_to_pattern.match(line)
             if match:
                 self.current_message["sender"] = match.group(1)
                 self.current_message["receiver"] = match.group(2)
-                # Determine message type based on sender
-                # TODO: This rule does not work when there is a tool call/response
-                # self.current_message["type"] = (
-                #     "user"
-                #     if self.current_message["sender"].lower() == "user"
-                #     else "assistant"
-                # )
                 self.current_message["type"] = "assistant"
                 self.state = self.STATE_CONTENT
         elif self.end_pattern.match(line):

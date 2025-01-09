@@ -98,6 +98,14 @@ class CodegenService:
                         "children": [
                             n for n in flow.nodes if n.get("parentId") == node["id"]
                         ],
+                        "preceding_node": next(
+                            (
+                                n for n in flow.nodes
+                                if any(e["source"] == n["id"] and e["target"] == node["id"] 
+                                      for e in flow.edges)
+                            ),
+                            None,
+                        ),
                     }
                 )
 

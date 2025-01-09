@@ -19,6 +19,11 @@ export const PythonViewer = ({ data, setMode }: any) => {
         theme={resolvedTheme === 'dark' ? vscodeDark : vscodeLight}
         extensions={[python()]}
         editable={false}
+        basicSetup={{
+          lineNumbers: true,
+          highlightActiveLineGutter: false,
+          highlightActiveLine: false,
+        }}
         className="text-xs overflow-x-auto mt-0"
       />
       <div className="absolute flex items-center gap-2 right-4 top-5">

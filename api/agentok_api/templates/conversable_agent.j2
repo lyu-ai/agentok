@@ -6,7 +6,7 @@ temp_dir = tempfile.gettempdir()
 
 # Conversable Agents
 
-{% for node in conversable_nodes -%}
+{% for node in conversable_nodes %}
 node_{{ node.id }} = {{ node.data.class_type }}(
     name="{{ node.data.name }}",
     {%- if node.data.description %}
@@ -33,5 +33,5 @@ node_{{ node.id }} = {{ node.data.class_type }}(
     code_execution_config={"use_docker": False, "work_dir": temp_dir}, # Simplified setting for code execution
     {%- endif %}
 )
-{%- endfor -%}
+{% endfor %}
 {% endmacro %}
