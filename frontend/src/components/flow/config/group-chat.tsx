@@ -36,6 +36,13 @@ export const GroupChatConfig = ({ nodeId, data }: any) => {
           name="allow_repeat_speaker"
           label="Allow Repeat Speaker"
         />
+        <GenericOption
+          type="check"
+          nodeId={nodeId}
+          data={data}
+          name="send_introductions"
+          label="Send Introductions"
+        />
       </div>
     </ScrollArea>
   );
