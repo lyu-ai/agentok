@@ -29,7 +29,7 @@ export const GroupNode: ComponentType<NodeProps> = ({
   const instance = useReactFlow();
 
   return (
-    <div className="relative">
+    <>
       <NodeToolbar isVisible={selected} position={Position.Top} align={'end'}>
         <Button
           variant="ghost"
@@ -40,20 +40,10 @@ export const GroupNode: ComponentType<NodeProps> = ({
           <Icons.trash className="w-4 h-4" />
         </Button>
       </NodeToolbar>
-      <NodeResizeControl
-        minWidth={200}
-        minHeight={100}
-        style={{
-          background: 'transparent',
-          border: 'none',
-          zIndex: 1000,
-        }}
-      >
-        <Icons.resize className="w-4 h-4" />
-      </NodeResizeControl>
+
       <div
         className={cn(
-          'flex flex-col min-w-[400px] min-h-[300px] p-2',
+          'flex flex-col min-w-[400px] min-h-[300px] p-2 w-full h-full',
           'bg-muted/5 backdrop-blur-sm rounded-xl',
           'border-2 border-dashed transition-colors duration-200',
           selected
@@ -83,6 +73,18 @@ export const GroupNode: ComponentType<NodeProps> = ({
           Drop nodes here to group them
         </div>
       </div>
-    </div>
+      <NodeResizeControl
+        className="custom-resize-handle"
+        position={'bottom-right'}
+        minWidth={400}
+        minHeight={300}
+        style={{
+          background: 'transparent',
+          border: 'none',
+        }}
+      >
+        <Icons.resize className="w-4 h-4" />
+      </NodeResizeControl>
+    </>
   );
 };

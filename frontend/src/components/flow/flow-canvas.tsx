@@ -328,14 +328,15 @@ export const FlowCanvas = ({
         y: event.clientY - flowBounds.top,
       });
 
-      const { offsetX, offsetY, initialWidth, initialHeight, ...cleanedData } =
-        data;
+      const { offsetX, offsetY, width, height, ...cleanedData } = data;
       const newId = nanoid(8);
       const newNode = {
         id: `${data.id}_${newId}`,
         type: data.id,
         position,
         data: cleanedData,
+        width,
+        height,
         selected: true,
         draggable: true,
         selectable: true,
@@ -425,7 +426,13 @@ export const FlowCanvas = ({
   };
 
   const onAddNode = useCallback(
-    (id: string, name: string, class_type: string) => {
+    (
+      id: string,
+      name: string,
+      class_type: string,
+      width?: number,
+      height?: number
+    ) => {
       setNodes((nds) => {
         const newId = nanoid(8);
         const bounds = flowParent.current?.getBoundingClientRect();
@@ -451,6 +458,8 @@ export const FlowCanvas = ({
             name,
             class_type,
           },
+          width,
+          height,
           selected: true,
           draggable: true,
           selectable: true,

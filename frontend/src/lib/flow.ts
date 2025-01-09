@@ -58,6 +58,8 @@ export type NodeMeta = {
   description?: string;
   icon?: ElementType;
   class_type: string; // class name for code generation
+  width?: number;
+  height?: number;
 };
 
 export const basicNodes: NodeMeta[] = [
@@ -95,6 +97,8 @@ export const basicNodes: NodeMeta[] = [
     name: 'Group',
     description: 'Group several agents together',
     class_type: 'GroupChat',
+    width: 400,
+    height: 300,
   },
   {
     id: 'note',
