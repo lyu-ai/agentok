@@ -1,10 +1,9 @@
-export type Message = {
-  id: string;
+export interface Message {
+  id?: number;
+  type: 'user' | 'assistant' | 'summary';
   content: string;
-  type: string;
+  metadata?: any;
   sender?: string;
   receiver?: string;
-  created_at: Date;
-  updated_at: Date;
-  metadata?: any;
-};
+  created_at?: string;
+}

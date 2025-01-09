@@ -54,7 +54,7 @@ class OutputParser:
         """Reset (or initialize) the current message structure."""
         self.current_message = {
             "version": "",
-            "meta": {},
+            "metadata": {},
             "sender": "",
             "receiver": "",
             "content": "",
@@ -112,13 +112,13 @@ class OutputParser:
         if self.meta_pattern.match(line):
             match = self.meta_pattern.match(line)
             if match:
-                self.current_message["meta"]["general"] = match.group(1)
+                self.current_message["metadata"]["general"] = match.group(1)
                 self.current_message["type"] = "assistant"
         elif self.next_speaker_pattern.match(line):
             match = self.next_speaker_pattern.match(line)
             if match:
                 # Store next speaker info in metadata
-                self.current_message["meta"]["next_speaker"] = match.group(1)
+                self.current_message["metadata"]["next_speaker"] = match.group(1)
         elif self.from_to_pattern.match(line):
             match = self.from_to_pattern.match(line)
             if match:
@@ -135,7 +135,7 @@ class OutputParser:
         elif self.tool_response_pattern.match(line):
             match = self.tool_response_pattern.match(line)
             if match:
-                self.current_message["meta"]["tool_info"] = {
+                self.current_message["metadata"]["tool_info"] = {
                     "type": "tool_response",
                     "meta": match.group(1),
                 }
@@ -144,7 +144,7 @@ class OutputParser:
         elif self.suggested_tool_call_pattern.match(line):
             match = self.suggested_tool_call_pattern.match(line)
             if match:
-                self.current_message["meta"]["tool_info"] = {
+                self.current_message["metadata"]["tool_info"] = {
                     "type": "suggested_tool_call",
                     "meta": match.group(1),
                     "tool": match.group(2),
@@ -153,17 +153,17 @@ class OutputParser:
                 self.current_message["type"] = "assistant"
         elif (
             self.arguments_pattern.match(line)
-            and self.current_message["meta"].get("tool_info", {}).get("type")
+            and self.current_message["metadata"].get("tool_info", {}).get("type")
             == "suggested_tool_call"
         ):
             match = self.arguments_pattern.match(line)
             if match:
                 try:
-                    self.current_message["meta"]["tool_info"]["arguments"] = json.loads(
+                    self.current_message["metadata"]["tool_info"]["arguments"] = json.loads(
                         match.group(1).replace("'", '"')
                     )
                 except json.JSONDecodeError:
-                    self.current_message["meta"]["tool_info"]["arguments"] = None
+                    self.current_message["metadata"]["tool_info"]["arguments"] = None
         else:
             # Filter out redundant 'User (to Assistant):' lines and trailing asterisks
             if not (

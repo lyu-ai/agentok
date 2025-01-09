@@ -135,21 +135,22 @@ const MessageBubble = ({ chat, message, className }: MessageBubbleProps) => {
               <span className="">{message.receiver}</span>
             </>
           )}
-          {message.meta?.general === 'USING AUTO REPLY...' && (
+          {message.metadata?.general === 'USING AUTO REPLY...' && (
             <span className="text-yellow-500 ml-2">(Auto Reply)</span>
           )}
         </div>
         <div className="text-muted-foreground text-xs line-clamp-1">
-          {new Date(message.created_at).toLocaleString()}
+          {message.created_at &&
+            new Date(message.created_at as string).toLocaleString()}
         </div>
       </div>
     );
-    if (message.meta?.next_speaker) {
+    if (message.metadata?.next_speaker) {
       messageHeader = (
         <div className="flex flex-col gap-1">
           {messageHeader}
           <div className="text-xs text-blue-500">
-            Next speaker: {message.meta.next_speaker}
+            Next speaker: {message.metadata.next_speaker}
           </div>
         </div>
       );
