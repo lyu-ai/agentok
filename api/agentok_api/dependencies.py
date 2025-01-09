@@ -98,7 +98,6 @@ def get_chat_service(
     codegen_service: CodegenService = Depends(get_codegen_service),
     supabase: SupabaseClient = Depends(get_supabase_client),
 ) -> ChatService:
-    print("get_chat_service: Chat service initialized")
     global chat_service_singleton
     if chat_service_singleton is None:
         print("No global chat service singleton found. Creating...")

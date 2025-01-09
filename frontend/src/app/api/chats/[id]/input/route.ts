@@ -11,6 +11,8 @@ export async function POST(
   const { id } = await params;
   const message = await request.json();
 
+  console.log('post chat/input', id, message);
+
   try {
     const {
       data: { session },

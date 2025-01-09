@@ -153,23 +153,30 @@ const MessageBubble = ({
           {avatarIcon}
         </div>
         <div className="flex flex-1">{messageHeader}</div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="ghost" size="icon" className="w-5 h-5">
-              <Icons.code className="w-3 h-3" />
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-4xl max-h-[calc(100vh-2rem)] overflow-hidden p-0 gap-0">
-            <DialogTitle className="text-sm font-semibold px-2 py-3 border-b">
-              Raw Message Content {message.type}
-            </DialogTitle>
-            <ScrollArea className="max-h-[calc(100vh-var(--header-height))] text-sm bg-muted/20">
-              <pre className="whitespace-pre-wrap p-2">
-                <code>{message.content}</code>
-              </pre>
-            </ScrollArea>
-          </DialogContent>
-        </Dialog>
+        {message.content && (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="icon" className="w-5 h-5">
+                <Icons.code className="w-3 h-3" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl max-h-[calc(100vh-2rem)] overflow-hidden p-0 gap-0">
+              <DialogTitle className="text-sm font-semibold px-2 py-3 border-b">
+                Raw Message Content {message.type}
+              </DialogTitle>
+              <ScrollArea className="max-h-[calc(100vh-var(--header-height))] text-sm bg-muted/20">
+                <pre className="whitespace-pre-wrap p-2">
+                  <code>{message.content}</code>
+                </pre>
+              </ScrollArea>
+            </DialogContent>
+          </Dialog>
+        )}
+        {message.type === 'summary' && (
+          <Button variant="ghost" size="icon" className="w-5 h-5">
+            <Icons.cost className="w-3 h-3" />
+          </Button>
+        )}
       </div>
       <div
         className={`relative group rounded-md p-2 text-sm break-word word-wrap overflow-x-hidden`}
@@ -178,16 +185,6 @@ const MessageBubble = ({
           <Markdown>{message.content}</Markdown>
         ) : (
           <span className="text-lime-600">(no content)</span>
-        )}
-        {message.type === 'user' && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-6 w-6 absolute right-7 bottom-1"
-            onClick={() => onSend(message.content)}
-          >
-            <Icons.refresh className="w-4 h-4 text-gray-200/20 hover:text-gray-200" />
-          </Button>
         )}
       </div>
     </Card>

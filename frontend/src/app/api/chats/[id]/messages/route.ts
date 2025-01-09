@@ -34,6 +34,8 @@ export async function POST(
 ) {
   const { id } = await params;
   const data = await request.json();
+  console.log('post chat/messages', id, data);
+
   try {
     const user = await getUser();
     const {
@@ -42,7 +44,6 @@ export async function POST(
     if (!session || !session.access_token) {
       throw new Error('No session or access token found');
     }
-    console.log(`POST /chats/${id}/messages data`, data);
     data.user_id = user?.id;
     const res = await fetch(
       `${NEXT_PUBLIC_BACKEND_URL}/v1/chats/${id}/messages`,

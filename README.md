@@ -1,3 +1,8 @@
+> [!Warning]
+> This project is currently under development and is not yet recommended for production use.
+>
+> Your feedback is invaluable as we move forward. If you have any thoughts or suggestions, please share them by opening a new issue or participating in the ongoing discussions [here](https://github.com/hughlv/agentok/issues/160).
+
 <img src="./frontend/public/logo.png" width="90" />
 
 # Agentok Studio
@@ -10,11 +15,6 @@
 ![GitHub release](https://img.shields.io/github/v/release/dustland/agentok)
 [![GitHub star](https://img.shields.io/github/stars/dustland/agentok?style=flat&logo=github&color=black&labelColor=gray)](https://star-history.com/#dustland/agentok)
 [![](https://dcbadge.limes.pink/api/server/xBQxwRSWfm?style=social&timestamp=20240705)](https://discord.gg/xBQxwRSWfm)
-
-> [!Warning]
-> This project is currently under development and is not yet recommended for production use.
->
-> Your feedback is invaluable as we move forward. If you have any thoughts or suggestions, please share them by opening a new issue or participating in the ongoing discussions [here](https://github.com/hughlv/agentok/issues/160).
 
 ## 🌟 What is Agentok Studio
 
@@ -113,7 +113,7 @@ If you're interested in contributing to the development of this project or wish 
 **IMPORTANT**: The latest version of AG2 requires Docker for code execution by default. To proceed, you must either:
 
 1. Install Docker on your local machine, **OR**
-1. Disable this requirement by setting `AUTOGEN_USE_DOCKER=False` in the `api/.env` file.
+1. Disable this option by setting `AUTOGEN_USE_DOCKER=False` in the `api/.env` file.
 
 Note: This requirement is disabled by default since the default deployment of this project is already dockerized.
 

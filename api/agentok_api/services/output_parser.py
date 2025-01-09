@@ -1,6 +1,16 @@
 import re
 import json
+from dataclasses import dataclass
+from typing import List, Dict, Optional
+import ast
 
+@dataclass
+class ChatResult:
+    chat_id: Optional[str]
+    chat_history: List[Dict[str, str]]
+    summary: str
+    cost: Dict
+    human_input: List
 
 class OutputParser:
     # Define states as class-level immutable constants
@@ -58,14 +68,25 @@ class OutputParser:
             # Skip empty lines
             return
 
+        # Handle status messages first
+        if self._handle_status_message(line):
+            return
+
         # Add handling for chat result
         if line.startswith("__CHAT_RESULT__ "):
-            result = line.replace("__CHAT_RESULT__ ", "").strip()
-            self.on_message({
-                "type": "assistant",
-                "content": result,
-                "is_summary": True  # Optional flag to indicate this is the final result
-            })
+            result = self.parse_chat_result(line)
+            if result:
+                self.on_message({
+                    "type": "summary",
+                    "content": result.summary,
+                    "metadata": {
+                        "chat_history": result.chat_history,
+                        "cost": result.cost,
+                        "human_input": result.human_input
+                    },
+                })
+            else:
+                print(f"Error parsing chat result: {line}")
             return
 
         handlers = {
@@ -170,3 +191,64 @@ class OutputParser:
         """
         for line in stdout:
             self.parse_line(line)
+
+    def parse_chat_result(self, result_str: str) -> Optional[ChatResult]:
+        try:
+            # Remove the "__CHAT_RESULT__ " prefix
+            clean_str = result_str.replace("__CHAT_RESULT__ ", "")
+            
+            # Convert string representation to dictionary using ast.literal_eval
+            result_dict = ast.literal_eval(clean_str)
+            
+            # Convert the dictionary to a ChatResult object
+            return ChatResult(**result_dict)
+        except Exception as e:
+            print(f"Error parsing chat result: {e}")
+            return None
+
+    def _handle_status_message(self, message: str) -> bool:
+        """
+        Handle status messages and return True if the message was a status message.
+        Returns False otherwise.
+        """
+        status_prefixes = [
+            "__STATUS_RECEIVED_HUMAN_INPUT__",
+            "__STATUS_WAIT_FOR_HUMAN_INPUT__",
+            "__STATUS_COMPLETED__"
+        ]
+        
+        for prefix in status_prefixes:
+            if prefix in message:
+                content = self._strip_prefix(message, status_prefixes)
+                self.on_message({
+                    "type": "assistant",
+                    "content": content,
+                })
+                return True
+        return False
+
+    def _strip_prefix(self, input_string: str, substrings: list[str]) -> str:
+        """Strip status prefix from a message."""
+        for substring in substrings:
+            if substring in input_string:
+                index = input_string.find(substring)
+                return input_string[index:]
+        return input_string
+
+    def get_chat_status(self, message: str) -> Optional[str]:
+        """
+        Determine chat status from a message.
+        Returns None if the message doesn't indicate a status change.
+        """
+        if "__STATUS_WAIT_FOR_HUMAN_INPUT__" in message:
+            return "wait_for_human_input"
+        elif "__STATUS_RECEIVED_HUMAN_INPUT__" in message:
+            return "running"
+        elif "__STATUS_COMPLETED__" in message:
+            if "TERMINATED" in message:
+                return "aborted"
+            elif any(str(i) for i in range(10) if str(i) in message):
+                return "failed"
+            else:
+                return "completed"
+        return None

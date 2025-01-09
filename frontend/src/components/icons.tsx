@@ -92,6 +92,7 @@ import {
   PenLine,
   SunMoon,
   Palette,
+  Receipt,
 } from 'lucide-react';
 import { Logo } from './logo';
 import { ElementType } from 'react';
@@ -106,6 +107,7 @@ export const Icons: Record<string, ElementType> = {
   chevronUp: ChevronUp,
   chevronsUpDown: ChevronsUpDown,
   checkCircle: CircleCheck,
+  cost: Receipt,
   externalLink: ExternalLink,
   console: SquareTerminal,
   sun: Sun,

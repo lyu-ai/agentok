@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -37,44 +37,40 @@ export const ChatInput = ({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [isCleaning, setIsCleaning] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
-  const handleHumanInput = useCallback(
-    async (input: string) => {
-      await fetch(`/api/chats/${chatId}/input`, {
-        method: 'POST',
-        body: JSON.stringify({ type: 'user', content: input }),
-      });
-    },
-    [message, chatId]
-  );
 
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      setMessage('');
-      if (chat?.status === 'wait_for_human_input') {
-        await handleHumanInput(message);
-      } else {
-        onSend(message);
-      }
-    },
-    [message, onSend, handleHumanInput]
-  );
+  const handleHumanInput = async (input: string) => {
+    console.log('handleHumanInput', chatId, input);
+    await fetch(`/api/chats/${chatId}/input`, {
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify({ type: 'user', content: input }),
+    });
+  };
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleSubmit(e as any);
-      }
-    },
-    [handleSubmit]
-  );
+  const handleSend = async (e: React.FormEvent) => {
+    console.log('handleSend', chatId, message);
+    setMessage('');
+    if (chat?.status === 'wait_for_human_input') {
+      await handleHumanInput(message);
+    } else {
+      onSend(message);
+    }
+  };
 
-  const handleClean = useCallback(async () => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    console.log('handleKeyDown', chatId, e.key);
+    if (e.key === 'Enter' && !e.shiftKey) {
+      handleSend(e as any);
+    }
+  };
+
+  const handleClean = async () => {
+    console.log('handleClean', chatId);
     setIsCleaning(true);
     try {
       await fetch(`/api/chats/${chatId}/messages`, {
         method: 'DELETE',
+        credentials: 'include',
       });
       onReset?.();
     } catch (e) {
@@ -82,9 +78,10 @@ export const ChatInput = ({
     } finally {
       setIsCleaning(false);
     }
-  }, [chatId]);
+  };
 
-  const handleReset = useCallback(async () => {
+  const handleReset = async () => {
+    console.log('handleReset', chatId);
     try {
       setIsResetting(true);
       await handleAbort();
@@ -101,12 +98,14 @@ export const ChatInput = ({
     } finally {
       setIsResetting(false);
     }
-  }, [chatId, updateChat, onReset]);
+  };
 
-  const handleAbort = useCallback(async () => {
+  const handleAbort = async () => {
+    console.log('handleAbort', chatId);
     try {
       const resp = await fetch(`/api/chats/${chatId}/abort`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -122,12 +121,11 @@ export const ChatInput = ({
         variant: 'destructive',
       });
     }
-  }, [chatId]);
+  };
 
   return (
-    <form
+    <div
       className={cn('relative flex items-end gap-2 w-full mx-auto', className)}
-      onSubmit={handleSubmit}
     >
       <Textarea
         ref={textareaRef}
@@ -214,13 +212,13 @@ export const ChatInput = ({
               size="icon"
               disabled={disabled || isResetting || !message.trim()}
               className="h-8 w-8 rounded-full p-0"
-              onClick={handleSubmit}
+              onClick={handleSend}
             >
               <Icons.send className="w-5 h-5 shrink-0" />
             </Button>
           )}
         </div>
       </div>
-    </form>
+    </div>
   );
 };
