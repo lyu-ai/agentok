@@ -212,12 +212,7 @@ export const ChatInput = ({
           ) : (
             <Button
               size="icon"
-              disabled={
-                disabled ||
-                isResetting ||
-                chat?.status === 'running' ||
-                (!message.trim() && chat?.status !== 'wait_for_human_input')
-              }
+              disabled={disabled || isResetting || !message.trim()}
               className="h-8 w-8 rounded-full p-0"
               onClick={handleSubmit}
             >

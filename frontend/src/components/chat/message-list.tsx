@@ -12,7 +12,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { CopyButton } from '../copy-button';
 import { Card } from '../ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Markdown } from '@/components/markdown';
@@ -101,12 +100,12 @@ const MessageBubble = ({
 
   const messageClass = waitForHumanInput
     ? 'bg-yellow-600/20 text-yellow-600'
-    : message.role === 'assistant'
-      ? 'bg-primary-content text-primary'
-      : 'bg-background text-primary-content';
+    : message.type === 'assistant'
+      ? 'bg-background text-primary'
+      : 'bg-green-300/20 text-green-500';
 
   let avatarIcon = <Icons.agent className="w-4 h-4" />;
-  if (message.role === 'user') {
+  if (message.type === 'user') {
     avatarIcon = (
       <Avatar>
         <AvatarImage src={user?.user_metadata.avatar_url} />
@@ -126,7 +125,7 @@ const MessageBubble = ({
     );
   } else if (message.sender) {
     messageHeader = (
-      <div className="chat-header flex items-end gap-2 text-xs">
+      <div className="chat-header flex items-end gap-2 text-xs text-muted-foreground">
         <div className="flex items-center gap-1">
           {message.sender}
           {message.receiver && (
@@ -147,7 +146,7 @@ const MessageBubble = ({
     <Card
       className={cn(messageClass, 'p-1 w-full mx-auto shadow-sm', className)}
     >
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1 px-1">
         <div
           className={`w-8 h-8 rounded-full text-sm flex items-center justify-center`}
         >
@@ -162,7 +161,7 @@ const MessageBubble = ({
           </DialogTrigger>
           <DialogContent className="max-w-4xl max-h-[calc(100vh-2rem)] overflow-hidden p-0 gap-0">
             <DialogTitle className="text-sm font-semibold px-2 py-3 border-b">
-              Raw Message Content
+              Raw Message Content {message.type}
             </DialogTitle>
             <ScrollArea className="max-h-[calc(100vh-var(--header-height))] text-sm bg-muted/20">
               <pre className="whitespace-pre-wrap p-2">
@@ -180,7 +179,7 @@ const MessageBubble = ({
         ) : (
           <span className="text-lime-600">(no content)</span>
         )}
-        {message.role === 'user' && (
+        {message.type === 'user' && (
           <Button
             variant="ghost"
             size="icon"
