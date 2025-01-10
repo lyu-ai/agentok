@@ -14,15 +14,17 @@ export interface Project {
 interface ProjectState {
   projects: Project[];
   activeProjectId: number;
-  chatPanePinned: boolean;
   nodePanePinned: boolean;
+  chatPanePinned: boolean;
+  hoveredGroupId: string | null;
   setProjects: (projects: Project[]) => void;
   setActiveProjectId: (id: number) => void;
+  pinNodePane: (pinned: boolean) => void;
+  pinChatPane: (pinned: boolean) => void;
+  setHoveredGroupId: (id: string | null) => void;
   updateProject: (id: number, project: Partial<Project>) => void;
   deleteProject: (id: number) => void;
   getProjectById: (id: number) => Project | undefined;
-  pinChatPane: (pin: boolean) => void;
-  pinNodePane: (pin: boolean) => void;
 }
 
 const useProjectStore = create<ProjectState>()(
@@ -30,10 +32,14 @@ const useProjectStore = create<ProjectState>()(
     (set, get) => ({
       projects: [],
       activeProjectId: -1,
-      chatPanePinned: false,
       nodePanePinned: false,
+      chatPanePinned: false,
+      hoveredGroupId: null,
       setProjects: (projects) => set({ projects }),
       setActiveProjectId: (id) => set({ activeProjectId: id }),
+      pinNodePane: (pinned) => set({ nodePanePinned: pinned }),
+      pinChatPane: (pinned) => set({ chatPanePinned: pinned }),
+      setHoveredGroupId: (id) => set({ hoveredGroupId: id }),
       updateProject: (id, newProject) =>
         set((state) => {
           const projects = state.projects.map((project) => {
@@ -51,8 +57,6 @@ const useProjectStore = create<ProjectState>()(
         })),
       getProjectById: (id) =>
         id ? get().projects.find((project) => project.id === id) : undefined,
-      pinChatPane: (pin: boolean) => set({ chatPanePinned: pin }),
-      pinNodePane: (pin: boolean) => set({ nodePanePinned: pin }),
     }),
     {
       name: 'agentok-projects',

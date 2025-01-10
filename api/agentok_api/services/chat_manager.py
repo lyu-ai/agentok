@@ -2,14 +2,16 @@ import asyncio
 import os
 from asyncio import subprocess
 import signal
+from fastapi import logger
 from termcolor import colored
+from dataclasses import dataclass
+from typing import List, Dict, Optional
+import ast
 
+from ..models import LogCreate
 from .supabase import SupabaseClient
 
-from .output_parser import (
-    OutputParser,
-)  # Assuming OutputParser is in `services/output_parser.py`
-
+from .output_parser import OutputParser
 
 class ChatManager:
     def __init__(self, supabase: SupabaseClient):
@@ -39,7 +41,7 @@ class ChatManager:
         if on_message is None:
             on_message = self._print_message
 
-        command = ["python3", source_path, message]
+        command = ["python3", source_path, f'{message}']
         print(colored(text=f'Running {" ".join(command)}', color="blue"))
 
         env = os.environ.copy()
@@ -58,20 +60,16 @@ class ChatManager:
 
             # Terminate the old process
             old_process.terminate()
-            # Optionally, you can also use old_process.kill() if terminate is not forceful enough
-
-            # Wait for the process to terminate before moving on
             await old_process.wait()
 
         self.supabase.set_chat_status(chat_id, "running")
 
-        # Start the subprocess with the provided command
         process = await asyncio.create_subprocess_exec(
             *command,
             env=env,
             stdout=subprocess.PIPE,
             stdin=subprocess.PIPE,
-            stderr=subprocess.PIPE,  # Capture stderr too, if you need to handle errors
+            stderr=subprocess.PIPE,
         )
 
         # Store the process and its stdin so we can use it to send input later
@@ -79,48 +77,28 @@ class ChatManager:
 
         output_parser = OutputParser(on_message=on_message)
 
-        on_message(
-            {
-                "type": "assistant",
-                "content": "__STATUS_RUNNING__",
-            }
-        )
-
         # Process the subprocess output until it terminates
-        if process.stdout is not None:
-            async for line in process.stdout:
-                if line:  # Truthy if the line is not empty
-                    response_message = (
-                        line.decode().rstrip()
-                    )  # Remove trailing newline/whitespace
-                    print("📺 ", response_message)
-                    if any(
-                        status in response_message
-                        for status in (
-                            "__STATUS_RECEIVED_HUMAN_INPUT__",
-                            "__STATUS_WAIT_FOR_HUMAN_INPUT__",
-                        )
-                    ):
-                        on_message(
-                            {
-                                "type": "assistant",
-                                "content": self.strip_prefix(
-                                    response_message,
-                                    (
-                                        "__STATUS_RECEIVED_HUMAN_INPUT__",
-                                        "__STATUS_WAIT_FOR_HUMAN_INPUT__",
-                                    ),
-                                ),
-                            }
-                        )
-                        if "__STATUS_WAIT_FOR_HUMAN_INPUT__" in response_message:
-                            self.supabase.set_chat_status(
-                                chat_id, "wait_for_human_input"
-                            )
-                        else:
-                            self.supabase.set_chat_status(chat_id, "running")
-                    else:
-                        output_parser.parse_line(response_message)
+        async for line in process.stdout:
+            if line:
+                response_message = line.decode().rstrip()
+                print("📺 ", response_message)
+
+                try:
+                    await self.supabase.add_log(LogCreate(
+                        message=response_message,
+                        level='info',
+                        chat_id=chat_id,
+                    ))
+                except Exception as e:
+                    logger.error(f"Failed to log message: {e}")
+
+                # Let the output parser handle the message
+                output_parser.parse_line(response_message)
+
+                # Check if we need to update chat status
+                new_status = output_parser.get_chat_status(response_message)
+                if new_status:
+                    self.supabase.set_chat_status(chat_id, new_status)
 
         # Wait for the subprocess to finish if it hasn't already
         await process.wait()
@@ -130,6 +108,7 @@ class ChatManager:
             colored(text=f"Cleaning up subprocess for chat_id {chat_id}", color="green")
         )
         self._subprocesses.pop(chat_id, None)
+        self.supabase.set_chat_status(chat_id, "ready")
 
         # Check the exit code of the subprocess to see if there were errors
         if process.returncode == -signal.SIGTERM:
@@ -158,7 +137,6 @@ class ChatManager:
                         color="red",
                     )
                 )
-                # You might want to handle the error or propagate it
                 # Splits the message by lines and takes the last one
                 last_line = error_message.splitlines()[-1]
                 on_message(
@@ -204,7 +182,7 @@ class ChatManager:
 
         process = proc_info["process"]
 
-        print(f"Terminating assistant {process.pid} for chat {chat_id}...")
+        print(colored(f"Terminating assistant {process.pid} for chat {chat_id}...", "cyan"))
 
         try:
             # First, try to terminate gracefully
@@ -240,5 +218,5 @@ class ChatManager:
         finally:
             # Clean up the subprocess entry
             self._subprocesses.pop(chat_id, None)
-            print(f"Assistant for chat {chat_id} terminated. Cleaning up.")
-            self.supabase.set_chat_status(chat_id, "aborted")
+            print(colored(f"Assistant for chat {chat_id} terminated. Cleaning up.", "green"))
+            self.supabase.set_chat_status(chat_id, "ready")

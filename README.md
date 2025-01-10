@@ -1,8 +1,4 @@
-
-> [!Warning]
-> We're actively developing the next version on branch `dev`. The `main` branch will be frozen until the next major release.
-
-<img src="./frontend/public/logo.png" width="90" />
+<img src="./frontend/public/logo.png" width="76" />
 
 # Agentok Studio
 
@@ -13,52 +9,64 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![GitHub release](https://img.shields.io/github/v/release/dustland/agentok)
 [![GitHub star](https://img.shields.io/github/stars/dustland/agentok?style=flat&logo=github&color=black&labelColor=gray)](https://star-history.com/#dustland/agentok)
-[![](https://dcbadge.limes.pink/api/server/xBQxwRSWfm?style=social&timestamp=20240705)](https://discord.gg/xBQxwRSWfm)
+[![Discord](https://dcbadge.limes.pink/api/server/xBQxwRSWfm?style=social&timestamp=20240705)](https://discord.gg/xBQxwRSWfm)
 
 ## 🌟 What is Agentok Studio
 
-Agentok Studio is a tool built upon [AG2](https://github.com/ag2ai/ag2)(Previously AutoGen), a powerful agent framework from Microsoft and [a vibrant community of contributors](https://github.com/ag2ai/ag2?tab=readme-ov-file#contributors-wall).
+Agentok Studio is a tool built upon [AG2](https://github.com/ag2ai/ag2) (Previously AutoGen), a powerful agent framework from Microsoft and [a vibrant community of contributors](https://github.com/ag2ai/ag2?tab=readme-ov-file#contributors-wall).
 
 ### Visualizing AG2
 
-We consider AG2 to be at the forefront of next-generation Multi-Agent Applications technology. Agentok Studio takes this concept to the next level by offering intuitive visual tools that streamline the creation and management of complex agent-based workflows. This simplifies the entire process for creators and developers.
+We consider AG2 to be at the forefront of next-generation Multi-Agent Applications technology. Agentok Studio takes this concept to the next level by offering intuitive visual tools that streamline the creation and management of complex agent-based workflows.
 
-![studio-1](./website/static/img/screenshot-studio-1.png)
+![group-chat](./frontend/public/images/screenshot/group-chat.png)
 
 ### Conversation Relations
 
 The relationship between two agents is essential. To incorporate tool calls in a conversation, the LLM must determine which tools to invoke, while informing the user proxy about which nodes to execute. Configuring tools on the edge between these nodes is crucial for optimal operation.
 
-![tool-1](./website/static/img/screenshot-tool-1.png)
+![sequantial-chat](./frontend/public/images/screenshot/sequential-chat.png)
 
-### Code Generation
+You can switch between light and dark themes using the toggle in the top right corner.
 
-We strive to create a user-friendly tool that generates native Python code with minimal dependencies. Simply put, Agentok Studio is a diagram-based code generator for ag2. The generated code is self-contained and can be executed anywhere as a normal Python program, relying solely on the official `ag2` library.
+For more information related to Conversation Patterns, please refer to [Conversation Patterns](https://docs.ag2.ai/docs/tutorial/conversation-patterns).
 
-![codegen-1](./website/static/img/screenshot-codegen-1.png)
+### Tools
 
-Contributions (Issues, Pull Requests, Documentation, even Typo-corrections) to this project are welcome! All contributors will be added to the Contribution Wall.
+We provide a tool editor to help you create and manage tools.
+
+![tool-editor](./frontend/public/images/screenshot/tool-editor.png)
+
+The tool can contain variables, which users can configure in the tool management page.
+
+![tool-config](./frontend/public/images/screenshot/tool-config.png)
+
+### Full Visibility of Code and Data
+
+We strive to create a user-friendly tool that generates native Python code with minimal dependencies. Simply put, Agentok Studio is a diagram-based code generator for AG2. The generated code is self-contained and can be executed anywhere as a normal Python program, relying solely on the official `ag2` library.
+
+![codegen-1](./frontend/public/images/screenshot/code-generation.png)
+
+As shown above, we provide full visibility into the underlying data representation of the flow for diagnosis and debugging.
 
 > [!Note]
-> RAG feature has been removed from this project, since we believe it should be a separate service.
+> RAG feature has been removed from this project, as we believe it should be a separate service.
 
 ## 💡 Quickstart
 
-To quickly explore the features of Agentok Studio, visit [https://studio.agentok.ai](https://studio.agentok.ai). While we offer an online deployment of this project, please note that it is not intended for production use. The service level agreement is not guaranteed, and stored data may be wiped due to breaking changes.
+Visit [https://studio.agentok.ai](https://studio.agentok.ai) to quickly explore Agentok Studio's features. While we offer an online deployment, please note that it is not intended for production use. The service level agreement is not guaranteed, and stored data may be wiped due to breaking changes.
 
-After login as Guest or with your OAuth2 account, you can click the **Create New Project** button to create a new project. The new project comes with a sample workflow. You can click the robot icon flashing on the right bottom to start the conversation.
+After logging in as a Guest or with your OAuth2 account, click **Create New Project** to start a new project. Each new project comes with a sample workflow. Switch to the **Chat** tab to begin the conversation.
 
-![studio-2](./website/static/img/screenshot-studio-2.png)
-
-Due to the limitations of GPT-4 and AG2, this simple workflow may not work as expected, but it's a good starting point to understand the basic concepts of Agentic App and Agentok Studio.
+![group-chat](./frontend/public/images/screenshot/group-chat.png)
 
 For a more in-depth look at the project, please refer to [Getting Started](https://agentok.ai/getting-started).
 
-## 🐳 Run on Local (with Docker)
+## 🐳 Run Locally (with Docker)
 
-The project contains Frontend (Built with Next.js) and Backend service (Built with FastAPI in Python), and have been fully dockerized.
+The project consists of a Frontend (built with Next.js) and Backend service (built with FastAPI in Python), both fully dockerized.
 
-Before running the project, you need to create a `.env` file in the `ui` abd `api` directory and set environment variables.
+Before running the project, create `.env` files in both the `frontend` and `api` directories:
 
 ```bash
 cp frontend/.env.sample frontend/.env
@@ -66,15 +74,15 @@ cp api/.env.sample api/.env
 cp api/OAI_CONFIG_LIST.sample api/OAI_CONFIG_LIST
 ```
 
-Please be aware that Supabase provides both **anon** key and **service_role** key for each project. Please be sure to set anon key to `NEXT_PUBLIC_SUPABASE_ANON_KEY` for frontend, and service role key to `SUPABASE_SERVICE_KEY` for backend(api).
+Note: Supabase provides both **anon** and **service_role** keys for each project. Use the anon key for `NEXT_PUBLIC_SUPABASE_ANON_KEY` (frontend) and service role key for `SUPABASE_SERVICE_KEY` (backend).
 
-The easiest way to run on local is using docker-compose:
+The easiest way to run locally is using docker-compose:
 
 ```bash
 docker-compose up -d
 ```
 
-You can also build and run the ui and service separately with docker:
+You can also build and run the UI and service separately with Docker:
 
 ```bash
 docker build -t agentok-api ./api
@@ -82,68 +90,63 @@ docker run -d -p 5004:5004 agentok-api
 
 docker build -t agentok-frontend ./frontend
 docker run -d -p 2855:2855 agentok-frontend
-
 ```
 
-(The default port number 2855 is the address of our first office.)
+(Port 2855 represents our first office address.)
 
-## 🛠️ Run on Local (Without Docker)
+## 🛠️ Run Locally (Without Docker)
 
-If you're interested in contributing to the development of this project or wish to run it from the source code, you have the option to run the ui and service independently. Here's how you can do that:
+For development or running from source:
 
-### **Frontend**
+### Frontend
 
-- Navigate to the frontend directory `cd frontend`.
-- Rename `.env.sample` to `.env.local` and set the value of variables correctly.
-- Install the necessary dependencies using the appropriate package manager command (e.g., `pnpm install` or `yarn`).
-- Run the frontend service using the start-up script provided (e.g., `pnpm dev` or `yarn dev`).
+1. Navigate to the frontend directory: `cd frontend`
+2. Rename `.env.sample` to `.env.local` and configure variables
+3. Install dependencies: `pnpm install` or `yarn`
+4. Start the development server: `pnpm dev` or `yarn dev`
 
-> If you see Server Error related to 'useContext' quite often, it's possibly caused by the bugs in turbo mode. In this case, please remove `--turbo` from the **dev** command in package.json.
+> Note: If you encounter frequent Server Errors related to 'useContext', try removing `--turbo` from the **dev** command in package.json.
 
-### **Backend Services**
+### Backend Services
 
-- Switch to the api service directory `cd api`.
-- Rename `.env.sample` to `.env`, `OAI_CONFIG_LIST.sample` to `OAI_CONFIG_LIST`, and set the value of variables correctly.
-- Install Poetry.
-- Launch with command `poetry run uvicorn agentok_api.main:app --reload --port 5004`.
+1. Navigate to the api directory: `cd api`
+2. Rename `.env.sample` to `.env` and `OAI_CONFIG_LIST.sample` to `OAI_CONFIG_LIST`
+3. Install Poetry
+4. Start the service: `poetry run uvicorn agentok_api.main:app --reload --port 5004`
 
-`REPLICATE_API_TOKEN` is needed for LLaVa agent. If you need to use this agent, make sure to include this token in environment variables.
+`REPLICATE_API_TOKEN` is required for LLaVa agent functionality.
 
-**IMPORTANT**: The latest version of AG2 requires Docker for code execution by default. To proceed, you must either:
+**IMPORTANT**: AG2's latest version requires Docker for code execution by default. Either:
 
-1. Install Docker on your local machine, **OR**
-1. Disable this requirement by setting `AUTOGEN_USE_DOCKER=False` in the `api/.env` file.
+1. Install Docker locally, OR
+2. Set `AUTOGEN_USE_DOCKER=False` in `api/.env`
 
-Note: This requirement is disabled by default since the default deployment of this project is already dockerized.
+Note: Docker requirement is disabled by default in our dockerized deployment.
 
-### **Database Services**
+### Database Services
 
-This project relies on Supabase for user authentication and data storage. To get started, please follow the [./db/README.md](./db/README.md) to prepare the database, and set the environment variables (Refer to those variables with name starts with SUPABSE in .env.sample) in the `.env` file.
+This project uses Supabase for authentication and data storage. Follow [./db/README.md](./db/README.md) to prepare the database and set environment variables (SUPABASE\_\* in .env.sample).
 
-If you prefer, you can deploy your own Supabase instance, but that is beyond the scope of this document.
+Once services are running, access:
 
-Once you've started both the frontend and api services by following the steps previously outlined, you can access the application by opening your web browser and navigating to:
-
-- api: http://localhost:5004 (OpenAPI docs served at http://localhost:5004/docs)
-- frontend: http://localhost:2855
-
-If your services are started successfully and running on the expected ports, you should see the user interface or receive responses from the api services via this URL.
+- API: http://localhost:5004 (OpenAPI docs: http://localhost:5004/docs)
+- Frontend: http://localhost:2855
 
 ## 👨‍💻 Contributing
 
-[![](https://dcbadge.limes.pink/api/server/xBQxwRSWfm?timestamp=20240705)](https://discord.gg/xBQxwRSWfm)
+[![Discord](https://dcbadge.limes.pink/api/server/xBQxwRSWfm?timestamp=20240705)](https://discord.gg/xBQxwRSWfm)
 
-Contributions are welcome! It's not limited to code, but also includes documentation and other aspects of the project. You can open a [GitHub Issue](https://github.com/hughlv/agentok/issues/new) or leave comments on our [Discord Server](https://discord.gg/xBQxwRSWfm).
+We welcome all contributions! This includes code, documentation, and other project aspects. Open a [GitHub Issue](https://github.com/hughlv/agentok/issues/new) or join our [Discord Server](https://discord.gg/xBQxwRSWfm).
 
-This project welcomes contributions and suggestions. Please read our [Contributing Guide](./CONTRIBUTING.md) first.
+Please read our [Contributing Guide](./CONTRIBUTING.md) before getting started.
 
-If you are new to GitHub, [here](https://help.github.com/categories/collaborating-with-issues-and-pull-requests/) is a detailed help source on getting involved with development on GitHub.
+New to GitHub? Check out their [guide on collaborating with issues and pull requests](https://help.github.com/categories/collaborating-with-issues-and-pull-requests/).
 
-Please consider contributing to [AG2](https://github.com/ag2ai/ag2), as Agentok Studio relies on a robust foundation to deliver its capabilities. Your contributions can help enhance the platform's core functionalities, ensuring a more seamless and efficient development experience for Multi-Agent Applications.
+Consider contributing to [AG2](https://github.com/ag2ai/ag2) as well, since Agentok Studio builds upon its capabilities.
 
-This project uses [📦🚀semantic-release](https://github.com/semantic-release/semantic-release) to manage versioning and releases. To avoid too frequent auto-releases, we make it a manual GitHub Action to trigger the release.
+This project uses [📦🚀semantic-release](https://github.com/semantic-release/semantic-release) for versioning and releases. Releases are triggered manually via GitHub Actions to avoid excessive automation.
 
-To follow the Semantic Release process, we enforced commit-lint convention on commit messages. Please refer to [Commitlint](https://commitlint.js.org/#/) for more details.
+We enforce [Commitlint](https://commitlint.js.org/#/) conventions for commit messages.
 
 ## Contributors Wall
 
@@ -153,4 +156,4 @@ To follow the Semantic Release process, we enforced commit-lint convention on co
 
 ## 📝 License
 
-The project is licensed under [Apache 2.0 with additional terms and conditions](./LICENSE.md).
+This project is licensed under the [Apache 2.0 License with additional terms and conditions](./LICENSE.md).

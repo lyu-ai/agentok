@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSupabaseSession } from '@/utils/supabase/server';
+import { getSession } from '@/lib/supabase/server';
 
 const NEXT_PUBLIC_BACKEND_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5004';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getSupabaseSession();
+    const {
+      data: { session },
+    } = await getSession();
 
     if (!session || !session.access_token) {
       throw new Error('No session or access token found');
@@ -33,7 +35,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getSupabaseSession();
+    const {
+      data: { session },
+    } = await getSession();
+    if (!session || !session.access_token) {
+      throw new Error('No session or access token found');
+    }
     const data = await request.json();
     console.log('POST /api-keys data', data);
 

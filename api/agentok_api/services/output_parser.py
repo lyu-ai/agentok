@@ -1,6 +1,18 @@
 import re
 import json
+from dataclasses import dataclass
+from typing import List, Dict, Optional
+import ast
 
+from fastapi import logger
+
+@dataclass
+class ChatResult:
+    chat_id: Optional[str]
+    chat_history: List[Dict[str, str]]
+    summary: str
+    cost: Dict
+    human_input: List
 
 class OutputParser:
     # Define states as class-level immutable constants
@@ -27,6 +39,7 @@ class OutputParser:
         self.meta_pattern = re.compile(r"^>>>>>>>> (.*?)")
         self.from_to_pattern = re.compile(r"^(.*?) \(to (.*?)\):")
         self.end_pattern = re.compile(r"^-{80}")  # Assuming 80 dashes as a separator
+        self.next_speaker_pattern = re.compile(r"^Next speaker: (.*?)$")
 
         # Patterns for tool-related messages
         self.tool_response_pattern = re.compile(
@@ -41,7 +54,7 @@ class OutputParser:
         """Reset (or initialize) the current message structure."""
         self.current_message = {
             "version": "",
-            "meta": {},
+            "metadata": {},
             "sender": "",
             "receiver": "",
             "content": "",
@@ -56,6 +69,29 @@ class OutputParser:
         line = line.strip()
         if line == "":
             # Skip empty lines
+            return
+
+        # Handle status messages first
+        if self._handle_status_message(line):
+            return
+
+        # Add handling for chat result
+        if line.startswith("__CHAT_RESULT__ "):
+            result = self.parse_chat_result(line)
+            print(f"Chat result: {result}")
+            if result:
+                self.on_message({
+                    "type": "summary",
+                    "content": result.summary,
+                    "metadata": {
+                        "summary": result.summary,
+                        "chat_history": result.chat_history,
+                        "cost": result.cost,
+                        "human_input": result.human_input
+                    },
+                })
+            else:
+                print(f"Error parsing chat result: {line}")
             return
 
         handlers = {
@@ -76,20 +112,18 @@ class OutputParser:
         if self.meta_pattern.match(line):
             match = self.meta_pattern.match(line)
             if match:
-                self.current_message["meta"]["general"] = match.group(1)
+                self.current_message["metadata"]["general"] = match.group(1)
                 self.current_message["type"] = "assistant"
+        elif self.next_speaker_pattern.match(line):
+            match = self.next_speaker_pattern.match(line)
+            if match:
+                # Store next speaker info in metadata
+                self.current_message["metadata"]["next_speaker"] = match.group(1)
         elif self.from_to_pattern.match(line):
             match = self.from_to_pattern.match(line)
             if match:
                 self.current_message["sender"] = match.group(1)
                 self.current_message["receiver"] = match.group(2)
-                # Determine message type based on sender
-                # TODO: This rule does not work when there is a tool call/response
-                # self.current_message["type"] = (
-                #     "user"
-                #     if self.current_message["sender"].lower() == "user"
-                #     else "assistant"
-                # )
                 self.current_message["type"] = "assistant"
                 self.state = self.STATE_CONTENT
         elif self.end_pattern.match(line):
@@ -101,7 +135,7 @@ class OutputParser:
         elif self.tool_response_pattern.match(line):
             match = self.tool_response_pattern.match(line)
             if match:
-                self.current_message["meta"]["tool_info"] = {
+                self.current_message["metadata"]["tool_info"] = {
                     "type": "tool_response",
                     "meta": match.group(1),
                 }
@@ -110,7 +144,7 @@ class OutputParser:
         elif self.suggested_tool_call_pattern.match(line):
             match = self.suggested_tool_call_pattern.match(line)
             if match:
-                self.current_message["meta"]["tool_info"] = {
+                self.current_message["metadata"]["tool_info"] = {
                     "type": "suggested_tool_call",
                     "meta": match.group(1),
                     "tool": match.group(2),
@@ -119,17 +153,17 @@ class OutputParser:
                 self.current_message["type"] = "assistant"
         elif (
             self.arguments_pattern.match(line)
-            and self.current_message["meta"].get("tool_info", {}).get("type")
+            and self.current_message["metadata"].get("tool_info", {}).get("type")
             == "suggested_tool_call"
         ):
             match = self.arguments_pattern.match(line)
             if match:
                 try:
-                    self.current_message["meta"]["tool_info"]["arguments"] = json.loads(
+                    self.current_message["metadata"]["tool_info"]["arguments"] = json.loads(
                         match.group(1).replace("'", '"')
                     )
                 except json.JSONDecodeError:
-                    self.current_message["meta"]["tool_info"]["arguments"] = None
+                    self.current_message["metadata"]["tool_info"]["arguments"] = None
         else:
             # Filter out redundant 'User (to Assistant):' lines and trailing asterisks
             if not (
@@ -160,3 +194,74 @@ class OutputParser:
         """
         for line in stdout:
             self.parse_line(line)
+
+    def parse_chat_result(self, result_str: str) -> Optional[ChatResult]:
+        """Parse a chat result string into a ChatResult object.
+        
+        Args:
+            result_str: The string containing the chat result in JSON format
+            
+        Returns:
+            Optional[ChatResult]: The parsed chat result, or None if parsing failed
+        """
+        try:
+            # Remove the "__CHAT_RESULT__ " prefix
+            clean_str = result_str.replace("__CHAT_RESULT__ ", "")
+            
+            # Parse the JSON string
+            result_dict = json.loads(clean_str)
+            
+            # Convert the dictionary to a ChatResult object
+            return ChatResult(**result_dict)
+            
+        except Exception as e:
+            logger.error(f"Error parsing chat result: {e}")
+            logger.error(f"Input string was: {result_str}")
+            return None
+
+    def _handle_status_message(self, message: str) -> bool:
+        """
+        Handle status messages and return True if the message was a status message.
+        Returns False otherwise.
+        """
+        status_prefixes = [
+            "__STATUS_RECEIVED_HUMAN_INPUT__",
+            "__STATUS_WAIT_FOR_HUMAN_INPUT__",
+            "__STATUS_COMPLETED__"
+        ]
+        
+        for prefix in status_prefixes:
+            if prefix in message:
+                content = self._strip_prefix(message, status_prefixes)
+                self.on_message({
+                    "type": "assistant",
+                    "content": content,
+                })
+                return True
+        return False
+
+    def _strip_prefix(self, input_string: str, substrings: list[str]) -> str:
+        """Strip status prefix from a message."""
+        for substring in substrings:
+            if substring in input_string:
+                index = input_string.find(substring)
+                return input_string[index:]
+        return input_string
+
+    def get_chat_status(self, message: str) -> Optional[str]:
+        """
+        Determine chat status from a message.
+        Returns None if the message doesn't indicate a status change.
+        """
+        if "__STATUS_WAIT_FOR_HUMAN_INPUT__" in message:
+            return "wait_for_human_input"
+        elif "__STATUS_RECEIVED_HUMAN_INPUT__" in message:
+            return "running"
+        elif "__STATUS_COMPLETED__" in message:
+            if "TERMINATED" in message:
+                return "aborted"
+            elif any(str(i) for i in range(10) if str(i) in message):
+                return "failed"
+            else:
+                return "completed"
+        return None

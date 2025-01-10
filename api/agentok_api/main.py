@@ -15,6 +15,7 @@ from .routers import (
     extension,
     tools,
 )
+from .services.supabase import SupabaseClient
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -159,3 +160,10 @@ async def root():
 
 # Mount the static directory to serve favicon file
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Clean up resources when the application shuts down"""
+    logger.info("Application shutting down. Cleaning up resources...")
+    SupabaseClient.reset()

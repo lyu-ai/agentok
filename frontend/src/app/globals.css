@@ -1,0 +1,218 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 215 20.2% 65.1%;
+
+    --radius: 0.5rem;
+
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+
+    --header-height: 3rem;
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+
+    --accent: 216 34% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --popover: 224 71% 4%;
+    --popover-foreground: 215 20.2% 65.1%;
+
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
+
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 1.2%;
+
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 216 34% 17%;
+
+    --radius: 0.5rem;
+
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+  }
+}
+
+/* Override the default behavior */
+html:has(.drawer-toggle:checked) {
+  overflow-y: auto !important;
+  scrollbar-gutter: auto !important;
+}
+
+/* Suppress the default focus expansion effect of Textarea components */
+:focus:not([class*='no-outline']) {
+  outline: 2px solid transparent;
+}
+
+input-sm[type='number'] {
+  padding-right: 0 !important;
+}
+
+.engraved-bg::after {
+  content: '';
+  background-image: url('/logo-bg.svg');
+  filter: grayscale(100%) brightness(50%) contrast(200%);
+  mix-blend-mode: multiply;
+  /* Experiment with blend modes */
+  opacity: 0.5;
+  /* Adjust opacity for the engraving effect */
+
+  /* Ensure the pseudo-element covers the whole element */
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.engraved-bg {
+  position: relative;
+  /* Required to position the pseudo-element */
+  overflow: hidden;
+  /* Ensures the pseudo-element does not extend beyond this container */
+  /* Tailwind classes for styling can be added here */
+}
+
+.collapsing-height {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out;
+}
+
+.expanding-height {
+  max-height: 1000px;
+  /* Use a large max-height value */
+  overflow: hidden;
+  transition: max-height 0.5s ease-in;
+}
+
+.collapsing-width {
+  max-width: 0;
+  overflow: hidden;
+  transition:
+    max-width 0.5s ease-out,
+    padding 0.5s ease-out,
+    border 0.5s ease-out;
+  padding: 0;
+  border: 0;
+  /* or use 'border-none' if you use utility classes */
+}
+
+.expanding-width {
+  max-width: 1000px;
+  /* Use a sensible max-width based on the expected expanded size */
+  overflow: hidden;
+  transition:
+    max-width 0.5s ease-in,
+    padding 0.5s ease-in,
+    border 0.5s ease-in;
+  /* If you had padding originally added, put those values here */
+}
+
+/* The default padding-left and padding-right of input-sm is too wide */
+.input-sm {
+  padding-left: 0.25rem;
+  padding-right: 0% !important;
+}
+
+.textarea {
+  line-height: 1.2rem;
+}
+
+/* Predefined node styles */
+.node-general {
+  @apply bg-primary/5 border-primary/10;
+}
+
+.node-general-selected {
+  @apply bg-primary/20 border-primary/30 shadow-primary/40;
+}
+
+.node-agent {
+  @apply bg-sky-600/20 text-sky-300 border-sky-600/30;
+}
+
+.node-agent-selected {
+  @apply bg-sky-400/50 text-sky-100 border-sky-400/70 shadow-sky-300/50;
+}
+
+.node-group {
+  @apply bg-green-600/10 text-green-300 border-green-600/30;
+}
+
+.node-group-selected {
+  @apply bg-green-600/20 text-green-100 border-green-600/50 shadow-green-600/20;
+}
+
+.node-note {
+  @apply bg-yellow-600/50 text-yellow-300 border-yellow-600/30;
+}
+
+.node-note-selected {
+  @apply bg-yellow-600/70 text-yellow-100 border-yellow-600/50 shadow-yellow-600/20;
+}

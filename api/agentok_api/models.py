@@ -63,9 +63,9 @@ class Project(BaseModel):
 
 
 class MessageCreate(BaseModel):
-    type: Literal["user", "assistant"]
+    type: Literal["user", "assistant", "summary"]
     content: str
-    meta: Optional[Dict[str, Any]] = None
+    metadata: Optional[Dict[str, Any]] = None
     sender: Optional[str] = None
     receiver: Optional[str] = None
 
@@ -88,6 +88,19 @@ class ChatCreate(BaseModel):
 class Chat(ChatCreate):
     id: int
     status: Optional[str] = None
+    created_at: str
+    updated_at: str
+
+
+class LogCreate(BaseModel):
+    message: str
+    level: Optional[Literal["info", "warning", "error"]] = None
+    metadata: Optional[Dict[str, Any]] = None
+    chat_id: int
+
+
+class Log(LogCreate):
+    id: int
     created_at: str
     updated_at: str
 

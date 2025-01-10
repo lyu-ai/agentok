@@ -1,7 +1,7 @@
 # Group Chats
 {% for group_data in group_nodes %}
-groupchat_{{ group_data.group_node.id }} = GroupChat(
-    agents=[{%- for node in group_data.children %}node_{{ node['id'] }}{% if not loop.last %},{% endif %}{%- endfor %}],
+{{ group_data.group_node.id }} = GroupChat(
+    agents=[{%- for node in group_data.children %}node_{{ node['id'] }}{% if not loop.last %}, {% endif %}{%- endfor %}{% if group_data.preceding_node %}, node_{{ group_data.preceding_node.id }}{% endif %}],
     messages=[],
     {%- if group_data.group_node.data.max_round is defined %}
     max_round={{ group_data.group_node.data.max_round }},
@@ -14,6 +14,6 @@ groupchat_{{ group_data.group_node.id }} = GroupChat(
     {%- endif %}
 )
 
-node_{{ group_data.group_node.id }} = GroupChatManager(groupchat=groupchat_{{ group_data.group_node.id }}, llm_config=llm_config)
+node_{{ group_data.group_node.id }} = GroupChatManager(groupchat={{ group_data.group_node.id }}, llm_config=llm_config)
 
 {% endfor %}

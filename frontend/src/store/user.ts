@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { AuthChangeEvent, Session, User } from '@supabase/supabase-js';
-import supabase from '@/utils/supabase/client';
+import supabase from '@/lib/supabase/client';
 
 interface UserState {
   user: User | null;

@@ -1,38 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/utils/supabase/server';
+import { createClient } from '@/lib/supabase/server';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const supabase = await createClient();
   try {
     const { data, error } = await supabase
       .from('chats')
       .select('*')
-      .eq('id', params.id)
+      .eq('id', id)
       .single();
 
     if (error) throw error;
 
     return NextResponse.json(data);
   } catch (e) {
-    console.error(`Failed GET /chats/${params.id}: ${e}`);
+    console.error(`Failed GET /chats/${id}: ${e}`);
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const supabase = await createClient();
   const chat = await request.json();
   try {
     const { data, error } = await supabase
       .from('chats')
       .update(chat)
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single();
 
@@ -40,18 +42,19 @@ export async function POST(
 
     return NextResponse.json(data);
   } catch (e) {
-    console.error(`Failed POST /chats/${params.id}: ${e}`);
+    console.error(`Failed POST /chats/${id}: ${e}`);
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const supabase = await createClient();
   try {
-    const chatId = parseInt(params.id, 10);
+    const chatId = parseInt(id, 10);
     const { error } = await supabase.from('chats').delete().eq('id', chatId);
 
     if (error?.code === 'PGRST004') {
@@ -59,12 +62,12 @@ export async function DELETE(
     }
 
     if (error) {
-      console.warn(`Failed DELETE /chats/${params.id}:`, error);
+      console.warn(`Failed DELETE /chats/${id}:`, error);
       throw error;
     }
     return NextResponse.json({ result: 'success' });
   } catch (e) {
-    console.error(`Failed DELETE /chats/${params.id}: ${e}`);
+    console.error(`Failed DELETE /chats/${id}: ${e}`);
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }

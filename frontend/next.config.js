@@ -1,6 +1,3 @@
-const createNextIntlPlugin = require('next-intl/plugin');
-const withNextIntl = createNextIntlPlugin();
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // output: 'standalone', // for Docker build
@@ -9,9 +6,9 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'agentok.ai',
+        hostname: '**',
         port: '',
-        pathname: '/img/**',
+        pathname: '**',
       },
     ],
   },
@@ -22,4 +19,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withNextIntl(nextConfig);
+module.exports = nextConfig;

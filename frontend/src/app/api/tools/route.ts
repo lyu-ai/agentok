@@ -1,20 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, getSupabaseSession } from '@/utils/supabase/server';
+import { createClient, getUser } from '@/lib/supabase/server';
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-    if (authError) throw new Error('Failed to authenticate');
+    const supabase = await createClient();
+    const user = await getUser();
     if (!user) throw new Error('Not authenticated');
 
     const { data: tools, error } = await supabase
       .from('tools')
       .select(`*`)
-      .or(`user_id.eq.${user.id},is_public.eq.true`)
+      .eq('user_id', user.id)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -28,7 +24,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const {
       data: { user },
       error: authError,

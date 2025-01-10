@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/utils/supabase/server';
+import { createClient, getUser } from '@/lib/supabase/server';
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-    if (authError) throw new Error('Failed to authenticate');
+    const supabase = await createClient();
+    const user = await getUser();
+
     if (!user) throw new Error('Not authenticated');
 
     const { data, error } = await supabase
@@ -40,12 +37,10 @@ export async function POST(request: NextRequest) {
     const settings = await request.json();
 
     // Get the authenticated user
-    const supabase = createClient();
-    const { data: authData, error: authError } = await supabase.auth.getUser();
-    if (authError) throw new Error('Failed to authenticate');
-    if (!authData.user) throw new Error('Not authenticated');
+    const supabase = await createClient();
+    const user = await getUser();
 
-    const user = authData.user;
+    if (!user) throw new Error('Not authenticated');
 
     // Fetch the existing settings
     const { data: existingSettings, error: settingsError } = await supabase

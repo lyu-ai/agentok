@@ -98,6 +98,14 @@ class CodegenService:
                         "children": [
                             n for n in flow.nodes if n.get("parentId") == node["id"]
                         ],
+                        "preceding_node": next(
+                            (
+                                n for n in flow.nodes
+                                if any(e["source"] == n["id"] and e["target"] == node["id"] 
+                                      for e in flow.edges)
+                            ),
+                            None,
+                        ),
                     }
                 )
 
@@ -124,13 +132,20 @@ class CodegenService:
             for tool_id, tool in tool_dict.items()
             if tool_id in tool_assignments
         }
+        
+        # Generate tool envs and replace placeholders
         self.generate_tool_envs(project, tool_dict)
+        
+        # Replace env placeholders in tool code
+        for tool_id, tool in tool_dict.items():
+            tool['code'] = self.replace_env_placeholders(tool)
 
         code = template.render(
             project=project,
             user=self.supabase.get_user(),
             settings=settings,  # Account level settings include models, etc.
             nodes=flow.nodes,
+            initializer_node=initializer_node,
             first_converser=first_converser,
             initial_chat_targets=initial_chat_targets,
             conversable_nodes=conversable_nodes,

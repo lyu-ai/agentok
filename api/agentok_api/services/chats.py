@@ -37,6 +37,7 @@ class ChatService:
     async def start_chat(self, message: MessageCreate, chat_id: str):
         # No matter what happnes next, persist the message to the database beforehand
         self.supabase.add_message(message, chat_id)
+        self.supabase.set_chat_status(chat_id, "running")
 
         target_path = os.path.join(tempfile.gettempdir(), f"agentok/{chat_id}/")
         # Create the directory if it doesn't exist
@@ -69,6 +70,7 @@ class ChatService:
 
         # Launch the agent instance and intialize the chat
         def on_message(assistant_message):
+            print(colored(f"on_message: {assistant_message}", "green"))
             self.supabase.add_message(MessageCreate(**assistant_message), chat_id)
 
         # When it's time to run the assistant:
