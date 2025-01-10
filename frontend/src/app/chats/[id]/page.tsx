@@ -35,7 +35,7 @@ export default function ChatPage({
 
   return (
     <ResizablePanelGroup direction="horizontal">
-      <ResizablePanel defaultSize={20} minSize={20} maxSize={40}>
+      <ResizablePanel defaultSize={20} minSize={10} maxSize={40}>
         <div className="flex flex-col h-full w-full">
           <div className="flex items-center justify-between w-full border-b p-2">
             <span className="font-bold">Chats</span>

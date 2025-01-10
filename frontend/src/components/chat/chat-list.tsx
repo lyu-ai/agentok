@@ -87,7 +87,7 @@ export const ChatList = ({ className }: ChatListProps) => {
               key={chat.id}
               onClick={() => router.push(`/chats/${chat.id}`)}
               className={cn(
-                'relative flex items-center gap-2 p-2 border-transparent shadow-none hover:border-primary/90 rounded-md group cursor-pointer',
+                'relative flex items-center gap-2 p-2 border-transparent bg-transparent shadow-none hover:bg-primary hover:text-primary-foreground rounded-md group cursor-pointer',
                 activeChatId === chat.id &&
                   'bg-primary/80 text-primary-foreground hover:bg-primary'
               )}
@@ -123,41 +123,39 @@ export const ChatList = ({ className }: ChatListProps) => {
                     {chat.name ||
                       `Chat with ${chat.from_project || chat.from_template}`}
                   </span>
-                  {activeChatId === chat.id && (
-                    <div
-                      className={cn(
-                        'flex absolute p-2 justify-end right-0 top-0 bottom-0 items-center gap-2'
-                      )}
+                  <div
+                    className={cn(
+                      'hidden group-hover:flex absolute p-2 justify-end right-0 top-0 bottom-0 items-center gap-2'
+                    )}
+                  >
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="w-5 h-5 text-muted"
+                      onClick={() => {
+                        setEditingId(chat.id);
+                        setEditingName(chat.name || '');
+                      }}
                     >
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="w-5 h-5 text-muted"
-                        onClick={() => {
-                          setEditingId(chat.id);
-                          setEditingName(chat.name || '');
-                        }}
-                      >
-                        {isUpdating ? (
-                          <Icons.spinner className="w-3 h-3 animate-spin" />
-                        ) : (
-                          <Icons.edit className="w-3 h-3" />
-                        )}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="w-5 h-5"
-                        onClick={() => handleDeleteChat(chat.id)}
-                      >
-                        {isDeleting ? (
-                          <Icons.spinner className="w-3 h-3 animate-spin text-red-500" />
-                        ) : (
-                          <Icons.trash className="w-3 h-3 text-red-500" />
-                        )}
-                      </Button>
-                    </div>
-                  )}
+                      {isUpdating ? (
+                        <Icons.spinner className="w-3 h-3 animate-spin" />
+                      ) : (
+                        <Icons.edit className="w-3 h-3" />
+                      )}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="w-5 h-5"
+                      onClick={() => handleDeleteChat(chat.id)}
+                    >
+                      {isDeleting ? (
+                        <Icons.spinner className="w-3 h-3 animate-spin text-red-500" />
+                      ) : (
+                        <Icons.trash className="w-3 h-3 text-red-500" />
+                      )}
+                    </Button>
+                  </div>
                 </div>
               )}
             </Card>

@@ -29,7 +29,7 @@ const UserAvatar = ({ user, className }: any) => {
   return (
     <Avatar>
       <AvatarImage alt="avatar" src={imgUrl} />
-      <AvatarFallback>
+      <AvatarFallback className={cn(className)}>
         {user.email?.match(/^([^@]+)/)?.[1] ?? '(No Name)'}
       </AvatarFallback>
     </Avatar>
@@ -62,14 +62,20 @@ export const AuthButton = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <UserAvatar user={user} />
+        <UserAvatar
+          user={user}
+          className="w-10 h-10 bg-muted-foreground/50 text-muted"
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
         className="flex flex-col gap-1 w-64 text-sm"
       >
         <div className="flex items-center p-2 gap-2">
-          <UserAvatar user={user} className="w-20 h-20" />
+          <UserAvatar
+            user={user}
+            className="w-10 h-10 bg-muted-foreground/50 text-muted"
+          />
           <div className="flex flex-col gap-1">
             <span className="font-bold">
               {user.user_metadata.name ??
