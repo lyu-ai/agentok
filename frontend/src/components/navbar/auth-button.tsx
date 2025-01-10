@@ -36,6 +36,9 @@ const UserAvatar = ({ user, className }: any) => {
   );
 };
 
+const apiEndpoint =
+  process.env.NEXT_PUBLIC_BACKEND_URL || 'https://localhost:5004';
+
 export const AuthButton = () => {
   const { user } = useUser();
   const router = useRouter();
@@ -107,6 +110,17 @@ export const AuthButton = () => {
           >
             <Icons.key className="h-4 w-4" />
             API Keys
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link
+            href={`${apiEndpoint}/v1/docs`}
+            target="_blank"
+            className={cn('flex items-center justify-start p-2 gap-2')}
+          >
+            <Icons.docs className="h-4 w-4" />
+            API Specification
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>

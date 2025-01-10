@@ -103,22 +103,6 @@ const Navbar = () => {
       </div>
       <div className="flex items-center gap-4">
         <Link
-          href="https://agentok.ai/"
-          target="_blank"
-          rel="noreferrer"
-          className="link link-hover text-xs hidden md:block"
-        >
-          Docs
-        </Link>
-        <Link
-          href={apiEndpoint}
-          target="_blank"
-          rel="noreferrer"
-          className="link link-hover text-xs hidden md:block"
-        >
-          API
-        </Link>
-        <Link
           href="https://github.com/dustland/agentok"
           aria-label="github"
           target="_blank"
