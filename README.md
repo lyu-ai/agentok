@@ -11,11 +11,6 @@
 [![GitHub star](https://img.shields.io/github/stars/dustland/agentok?style=flat&logo=github&color=black&labelColor=gray)](https://star-history.com/#dustland/agentok)
 [![Discord](https://dcbadge.limes.pink/api/server/xBQxwRSWfm?style=social&timestamp=20240705)](https://discord.gg/xBQxwRSWfm)
 
-> [!Warning]
-> This project is currently under development and is not yet recommended for production use.
->
-> Your feedback is invaluable as we move forward. If you have any thoughts or suggestions, please share them by opening a new issue or participating in the ongoing discussions [here](https://github.com/hughlv/agentok/issues/160).
-
 ## 🌟 What is Agentok Studio
 
 Agentok Studio is a tool built upon [AG2](https://github.com/ag2ai/ag2) (Previously AutoGen), a powerful agent framework from Microsoft and [a vibrant community of contributors](https://github.com/ag2ai/ag2?tab=readme-ov-file#contributors-wall).
