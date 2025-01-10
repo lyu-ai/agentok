@@ -43,16 +43,16 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
           minSize={30}
         >
           <Tabs defaultValue="flow" className="relative flex flex-col h-full">
-            <TabsContent value="flow" className="flex-1 overflow-auto">
+            <TabsContent value="flow" className="flex-1 overflow-auto mt-0">
               <FlowCanvas
                 projectId={projectId}
                 onModeChange={handleModeChange}
               />
             </TabsContent>
-            <TabsContent value="python" className="flex-1 overflow-auto">
+            <TabsContent value="python" className="flex-1 overflow-auto mt-0">
               <PythonViewer projectId={projectId} />
             </TabsContent>
-            <TabsContent value="code" className="flex-1 overflow-auto">
+            <TabsContent value="code" className="flex-1 overflow-auto mt-0">
               <JsonViewer projectId={projectId} />
             </TabsContent>
             <TabsList className="absolute top-0 right-0 flex items-center rounded-none rounded-bl-md border-b border-l justify-start">

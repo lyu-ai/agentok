@@ -43,7 +43,7 @@ export const JsonViewer = ({ projectId, className }: JsonViewerProps) => {
             highlightActiveLineGutter: false,
             highlightActiveLine: false,
           }}
-          className="text-xs whitespace-pre-wrap [&_.cm-content]:whitespace-pre-wrap [&_.cm-scroller]:whitespace-pre-wrap"
+          className="w-full text-xs whitespace-pre-wrap [&_.cm-content]:whitespace-pre-wrap [&_.cm-scroller]:whitespace-pre-wrap"
         />
       </div>
     </ScrollArea>

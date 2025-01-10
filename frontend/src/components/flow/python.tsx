@@ -67,7 +67,7 @@ export const PythonViewer = ({ projectId, setMode }: any) => {
             highlightActiveLineGutter: false,
             highlightActiveLine: false,
           }}
-          className="text-xs whitespace-pre-wrap [&_.cm-content]:whitespace-pre-wrap [&_.cm-scroller]:whitespace-pre-wrap"
+          className="w-full text-xs whitespace-pre-wrap [&_.cm-content]:whitespace-pre-wrap [&_.cm-scroller]:whitespace-pre-wrap"
         />
       </div>
       <div className="absolute flex items-center gap-2 right-2 top-12 z-10">

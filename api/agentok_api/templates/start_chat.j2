@@ -26,7 +26,15 @@ chat_results = node_{{ first_converser['id'] }}.initiate_chats(
     ]
 )
 
-# Sequential Chat Results
+# Output the sequential chat results
+import json
+print("__CHAT_RESULTS__", json.dumps([{
+    "chat_id": result.chat_id,
+    "chat_history": result.chat_history,
+    "summary": result.summary,
+    "cost": result.cost,
+    "human_input": result.human_input
+} for result in chat_results]))
 
 
 {%- elif initial_chat_targets | length == 1 %}

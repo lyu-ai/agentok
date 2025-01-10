@@ -62,23 +62,25 @@ class OutputParser:
         }
         self.message_content = []
 
-    def parse_line(self, line):
+    def parse_line(self, line: str):
+        """Parse a single line of output.
+        
+        This method maintains state between calls and handles different types of output:
+        - Chat messages
+        - Status updates
+        - Chat results
         """
-        Parse a single line of stdout depending on the current state.
-        """
-        line = line.strip()
-        if line == "":
-            # Skip empty lines
+        # Skip empty lines
+        if not line:
             return
 
         # Handle status messages first
         if self._handle_status_message(line):
             return
 
-        # Add handling for chat result
-        if line.startswith("__CHAT_RESULT__ "):
+        # Handle chat results
+        if "__CHAT_RESULT__ " in line:
             result = self.parse_chat_result(line)
-            print(f"Chat result: {result}")
             if result:
                 self.on_message({
                     "type": "summary",
@@ -94,6 +96,26 @@ class OutputParser:
                 print(f"Error parsing chat result: {line}")
             return
 
+        # Handle multiple chat results
+        if "__CHAT_RESULTS__ " in line:
+            results = self.parse_chat_results(line)
+            if results:
+                # Combine all results into one message
+                self.on_message({
+                    "type": "summary",
+                    "content": "\n\n".join(r.summary.strip() for r in results).strip(),
+                    "metadata": {
+                        "summaries": [result.summary for result in results],
+                        "chat_histories": [result.chat_history for result in results],
+                        "costs": [result.cost for result in results],
+                        "human_inputs": [result.human_input for result in results]
+                    },
+                })
+            else:
+                print(f"Error parsing chat results: {line}")
+            return
+
+        # Handle normal chat messages
         handlers = {
             self.STATE_VERSION: self._handle_version_state,
             self.STATE_CHAT: self._handle_chat_state,
@@ -217,6 +239,30 @@ class OutputParser:
         except Exception as e:
             logger.error(f"Error parsing chat result: {e}")
             logger.error(f"Input string was: {result_str}")
+            return None
+
+    def parse_chat_results(self, results_str: str) -> Optional[List[ChatResult]]:
+        """Parse multiple chat results string into a list of ChatResult objects.
+        
+        Args:
+            results_str: The string containing multiple chat results in JSON format
+            
+        Returns:
+            Optional[List[ChatResult]]: The parsed chat results, or None if parsing failed
+        """
+        try:
+            # Remove the "__CHAT_RESULTS__ " prefix
+            clean_str = results_str.replace("__CHAT_RESULTS__ ", "")
+            
+            # Parse the JSON string
+            results_list = json.loads(clean_str)
+            
+            # Convert each dictionary to a ChatResult object
+            return [ChatResult(**result_dict) for result_dict in results_list]
+            
+        except Exception as e:
+            logger.error(f"Error parsing chat results: {e}")
+            logger.error(f"Input string was: {results_str}")
             return None
 
     def _handle_status_message(self, message: str) -> bool:
