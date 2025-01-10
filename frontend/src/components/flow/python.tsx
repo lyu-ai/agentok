@@ -54,8 +54,8 @@ export const PythonViewer = ({ projectId, setMode }: any) => {
   }
 
   return (
-    <ScrollArea className="relative flex flex-col w-full h-[calc(100vh-var(--header-height))] overflow-x-auto [&_[data-radix-scroll-area-viewport]>div]:!max-w-full">
-      <div className="relative w-full h-full max-w-full">
+    <ScrollArea className="relative w-full h-[calc(100vh-var(--header-height))]">
+      <div className="relative w-full h-full">
         <CodeMirror
           value={code}
           height="100%"
@@ -67,10 +67,10 @@ export const PythonViewer = ({ projectId, setMode }: any) => {
             highlightActiveLineGutter: false,
             highlightActiveLine: false,
           }}
-          className="text-xs [&_.cm-editor]:!max-w-full [&_.cm-scroller]:!max-w-full [&_.cm-content]:!max-w-full"
+          className="text-xs whitespace-pre-wrap [&_.cm-content]:whitespace-pre-wrap [&_.cm-scroller]:whitespace-pre-wrap"
         />
       </div>
-      <div className="absolute flex items-center gap-2 right-2 top-12">
+      <div className="absolute flex items-center gap-2 right-2 top-12 z-10">
         {code && (
           <>
             <CopyButton content={code} />
