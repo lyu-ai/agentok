@@ -45,6 +45,7 @@
     "@xyflow/react": "^12.3.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "immer": "^10.1.1",
     "katex": "^0.16.11",
     "lodash-es": "^4.17.21",

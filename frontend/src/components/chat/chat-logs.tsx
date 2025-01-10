@@ -6,6 +6,7 @@ import { Icons } from '../icons';
 import { createClient } from '@/lib/supabase/client';
 import { cn } from '@/lib/utils';
 import { Toggle } from '../ui/toggle';
+import { format } from 'date-fns';
 
 interface ChatLogPaneProps {
   chatId: number;
@@ -19,6 +20,18 @@ interface ChatLog {
   metadata: Record<string, any>;
   created_at: string;
 }
+
+const LogPrefix = {
+  info: '→',
+  warning: '⚠',
+  error: '✖',
+};
+
+const LogColors = {
+  info: 'text-emerald-400',
+  warning: 'text-yellow-400',
+  error: 'text-red-400',
+};
 
 export const ChatLogPane = ({ chatId }: ChatLogPaneProps) => {
   const supabase = createClient();
@@ -88,7 +101,7 @@ export const ChatLogPane = ({ chatId }: ChatLogPaneProps) => {
 
   if (!chat) {
     return (
-      <div className="flex flex-col w-full h-full">
+      <div className="flex flex-col w-full h-full bg-zinc-950 font-mono">
         <div className="flex flex-col items-center w-full gap-2 p-2">
           <span className="text-sm text-gray-500">No chat selected</span>
         </div>
@@ -97,7 +110,7 @@ export const ChatLogPane = ({ chatId }: ChatLogPaneProps) => {
   }
 
   return (
-    <div className="relative flex flex-col w-full h-full">
+    <div className="relative flex flex-col w-full h-full bg-zinc-950 font-mono">
       <ScrollArea className="flex flex-col items-center w-full flex-1">
         {logs.length === 0 && (
           <div className="text-sm text-gray-500 p-2 w-full">No logs found</div>
@@ -105,14 +118,20 @@ export const ChatLogPane = ({ chatId }: ChatLogPaneProps) => {
         {logs.map((log) => (
           <div
             key={log.id}
-            className={cn(
-              'text-sm text-gray-500 p-2 w-full',
-              log.level === 'info' && 'text-gray-500',
-              log.level === 'warning' && 'text-yellow-500',
-              log.level === 'error' && 'text-red-500'
-            )}
+            className="text-xs p-2 w-full hover:bg-zinc-900/50 transition-colors"
           >
-            {log.message}
+            <span className="text-gray-500">
+              [{format(new Date(log.created_at), 'HH:mm:ss')}]{' '}
+            </span>
+            <span
+              className={cn(
+                'inline-flex items-center gap-2',
+                LogColors[log.level]
+              )}
+            >
+              <span>{LogPrefix[log.level]}</span>
+              <span>{log.message}</span>
+            </span>
           </div>
         ))}
         <div ref={bottomRef} />
@@ -122,11 +141,16 @@ export const ChatLogPane = ({ chatId }: ChatLogPaneProps) => {
           size="sm"
           pressed={autoScroll}
           onPressedChange={setAutoScroll}
-          className="flex items-center justify-start px-2 py-1 gap-2"
+          className="flex items-center justify-start px-2 py-1 gap-2 data-[state=on]:bg-zinc-800"
         >
           <Icons.scroll className="w-4 h-4" />
         </Toggle>
-        <Button variant="outline" size="icon" onClick={handleClear}>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={handleClear}
+          className="hover:bg-zinc-800 border-zinc-800"
+        >
           {isClearing ? (
             <Icons.spinner className="w-4 h-4 animate-spin" />
           ) : (
