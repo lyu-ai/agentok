@@ -20,7 +20,7 @@ COPY pyproject.toml poetry.lock ./
 
 # Install dependencies and create a virtual environment in /app/.venv
 RUN poetry config virtualenvs.in-project true && \
-    poetry install --no-dev --no-interaction --no-ansi
+    poetry install --only main --no-interaction --no-ansi
 
 # Application stage: Copy application code and use base image
 FROM python:3.12-slim-bookworm
