@@ -13,6 +13,9 @@ node_{{ node.id }} = {{ node.data.class_type }}(
     {%- elif node.data.instructions %}
     instructions="""{{ node.data.instructions }}""",
     {%- endif %}
+    {%- if node.data.human_input_mode %}
+    human_input_mode="{{ node.data.human_input_mode }}",
+    {%- endif %}
     {%- if node.data.max_consecutive_auto_reply %}
     max_consecutive_auto_reply={{ node.data.max_consecutive_auto_reply }},
     {%- endif %}

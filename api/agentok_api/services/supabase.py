@@ -92,15 +92,11 @@ class SupabaseClient:
 
             temp_supabase = create_client(self.supabase_url, self.supabase_service_key)
             
-            # Validate the access token only
-            session = temp_supabase.auth.set_session(
-                access_token=access_token,
-                refresh_token="dummy_refresh_token"  # Required by Supabase but not used
-            )
-
-            if session and session.user:
-                self.user_id = session.user.id
-                return session.user
+            # Decode and verify the JWT token
+            decoded = temp_supabase.auth.get_user(access_token)
+            if decoded and decoded.user:
+                self.user_id = decoded.user.id
+                return decoded.user
 
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

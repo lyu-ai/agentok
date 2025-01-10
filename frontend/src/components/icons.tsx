@@ -82,6 +82,7 @@ import {
   Info,
   UserCog,
   BookOpen,
+  ArrowDownToLine,
 } from 'lucide-react';
 import { Logo } from './logo';
 import { ElementType } from 'react';
@@ -102,6 +103,7 @@ export const Icons: Record<string, ElementType> = {
   sun: Sun,
   moon: Moon,
   laptop: Laptop,
+  scroll: ArrowDownToLine,
   theme: Palette,
   brush: Brush,
   info: Info,

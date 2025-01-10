@@ -1,10 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useChat } from '@/hooks/use-chats';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Icons } from '../icons';
 import { createClient } from '@/lib/supabase/client';
 import { cn } from '@/lib/utils';
+import { Toggle } from '../ui/toggle';
 
 interface ChatLogPaneProps {
   chatId: number;
@@ -23,7 +24,9 @@ export const ChatLogPane = ({ chatId }: ChatLogPaneProps) => {
   const supabase = createClient();
   const { chat } = useChat(chatId);
   const [logs, setLogs] = useState<ChatLog[]>([]);
-
+  const [isClearing, setIsClearing] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const [autoScroll, setAutoScroll] = useState(true);
   useEffect(() => {
     // Initial fetch of logs
     const fetchLogs = async () => {
@@ -62,6 +65,27 @@ export const ChatLogPane = ({ chatId }: ChatLogPaneProps) => {
     };
   }, [chatId, supabase]);
 
+  useEffect(() => {
+    if (autoScroll) {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [logs, autoScroll]);
+
+  const handleClear = async () => {
+    try {
+      setIsClearing(true);
+      await fetch(`/api/chats/${chatId}/logs`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      setLogs([]);
+    } catch (e) {
+      console.error(`Failed to clear logs:`, (e as any).message);
+    } finally {
+      setIsClearing(false);
+    }
+  };
+
   if (!chat) {
     return (
       <div className="flex flex-col w-full h-full">
@@ -71,10 +95,6 @@ export const ChatLogPane = ({ chatId }: ChatLogPaneProps) => {
       </div>
     );
   }
-
-  const handleClear = () => {
-    setLogs([]);
-  };
 
   return (
     <div className="relative flex flex-col w-full h-full">
@@ -95,10 +115,23 @@ export const ChatLogPane = ({ chatId }: ChatLogPaneProps) => {
             {log.message}
           </div>
         ))}
+        <div ref={bottomRef} />
       </ScrollArea>
       <div className="absolute top-1 right-1 flex items-center gap-2">
+        <Toggle
+          size="sm"
+          pressed={autoScroll}
+          onPressedChange={setAutoScroll}
+          className="flex items-center justify-start px-2 py-1 gap-2"
+        >
+          <Icons.scroll className="w-4 h-4" />
+        </Toggle>
         <Button variant="outline" size="icon" onClick={handleClear}>
-          <Icons.trash className="w-4 h-4" />
+          {isClearing ? (
+            <Icons.spinner className="w-4 h-4 animate-spin" />
+          ) : (
+            <Icons.trash className="w-4 h-4" />
+          )}
         </Button>
       </div>
     </div>
