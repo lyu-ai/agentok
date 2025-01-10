@@ -40,7 +40,7 @@ export const ProjectPicker = ({ className }: { className?: string }) => {
     }
 
     toast({ title: 'Project created. Now jumping to project page.' });
-    router.push(`/projects/${newProject.id}/flow`);
+    router.push(`/projects/${newProject.id}`);
   };
 
   const activeProject = getProjectById(activeProjectId);

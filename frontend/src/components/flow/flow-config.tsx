@@ -64,6 +64,7 @@ export const FlowConfig = ({ nodeId, edgeId, projectId }: FlowConfigProps) => {
     case 'initializer':
       return <InitializerConfig nodeId={nodeId} data={node.data} />;
     case 'assistant':
+    case 'captain':
       return <AssistantConfig nodeId={nodeId} data={node.data} />;
     case 'user':
       return <UserConfig nodeId={nodeId} data={node.data} />;

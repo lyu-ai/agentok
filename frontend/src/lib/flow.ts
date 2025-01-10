@@ -8,10 +8,10 @@ import { genId } from '@/lib/id';
 import { ConversableAgent } from '@/components/flow/node/conversable-agent';
 import { InitializerNode } from '@/components/flow/node/initializer';
 import { ConverseEdge } from '@/components/flow/edge/converse-edge';
-import { NestedChat } from '@/components/flow/node/nested-chat';
 import { GPTAssistantNode } from '@/components/flow/node/gpt-assistant';
 import { RetrieveUserProxyAgent } from '@/components/flow/node/retrieve-user';
 import { RetrieveAssistantNode } from '@/components/flow/node/retrieve-assistant';
+import { CaptainAgentNode } from '@/components/flow/node/captain';
 // Import icons from the new icons file
 import { Icons, Icon } from '@/components/icons';
 import { LucideIcon } from 'lucide-react';
@@ -24,7 +24,7 @@ export const nodeTypes: NodeTypes = {
   groupchat: GroupNode,
   note: NoteNode,
   conversable: ConversableAgent,
-  nestedchat: NestedChat,
+  captain: CaptainAgentNode,
   gpt_assistant: GPTAssistantNode,
   retrieve_user: RetrieveUserProxyAgent,
   retrieve_assistant: RetrieveAssistantNode,
@@ -111,33 +111,33 @@ export const basicNodes: NodeMeta[] = [
 
 export const advancedNodes: NodeMeta[] = [
   {
-    id: 'nestedchat',
-    icon: Icons.group,
-    name: 'Nested Chat',
-    description: 'A Nested Chat Manager',
-    class_type: 'NestedChat',
+    id: 'captain',
+    icon: Icons.agent,
+    name: 'Captain Agent',
+    description: 'An agent enhanced to break down and solve complex tasks',
+    class_type: 'CaptainAgent',
   },
-  {
-    id: 'retrieve_assistant',
-    icon: Icons.robot,
-    name: 'RetrieveAssistant',
-    description: 'A Retrieve Assistant Agent',
-    class_type: 'RetrieveAssistantAgent',
-  },
-  {
-    id: 'retrieve_user',
-    icon: Icons.search,
-    name: 'RetrieveUserProxy',
-    description: 'A Retrieve User Proxy Agent',
-    class_type: 'RetrieveUserProxyAgent',
-  },
-  {
-    id: 'gpt_assistant',
-    icon: Icons.openai,
-    name: 'GPTAssistant',
-    description: 'A GPT Assistant Agent',
-    class_type: 'GPTAssistantAgent',
-  },
+  // {
+  //   id: 'retrieve_assistant',
+  //   icon: Icons.robot,
+  //   name: 'RetrieveAssistant',
+  //   description: 'A Retrieve Assistant Agent',
+  //   class_type: 'RetrieveAssistantAgent',
+  // },
+  // {
+  //   id: 'retrieve_user',
+  //   icon: Icons.search,
+  //   name: 'RetrieveUserProxy',
+  //   description: 'A Retrieve User Proxy Agent',
+  //   class_type: 'RetrieveUserProxyAgent',
+  // },
+  // {
+  //   id: 'gpt_assistant',
+  //   icon: Icons.openai,
+  //   name: 'GPTAssistant',
+  //   description: 'A GPT Assistant Agent',
+  //   class_type: 'GPTAssistantAgent',
+  // },
   // {
   //   id: 'multimodal',
   //   icon: Icons.Eye,

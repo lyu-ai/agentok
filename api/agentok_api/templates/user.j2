@@ -1,5 +1,6 @@
 # user.j2
 {% macro generate_users(user_nodes) %}
+# User Proxy Agents
 {%- for node in user_nodes %}
 {%- set class_name = node['data']['class_type'] %}
 {%- set name = node['data']['name'] %}

@@ -41,21 +41,21 @@ const NodeItem = ({
   return (
     <div
       className={cn(
-        'flex items-center gap-2 w-full h-full p-2 rounded-md border cursor-grab',
-        'hover:border-primary/40 hover:bg-primary/5'
+        'flex flex-col items-start gap-2 w-full h-full p-2 rounded-md border cursor-grab',
+        'hover:bg-muted'
       )}
       draggable
       onDragStart={(e: React.DragEvent<HTMLDivElement>) =>
         onDragStart(e, { id, name, type, class_type, width, height })
       }
     >
-      <NodeIcon className="w-4 h-4" />
-      <div className="flex flex-col items-start">
+      <div className="flex items-center gap-2 w-full h-full">
+        <NodeIcon className="w-4 h-4 shrink-0" />
         <span className="text-sm font-medium">{name}</span>
-        <span className="text-xs text-muted-foreground line-clamp-2">
-          {description}
-        </span>
       </div>
+      <span className="text-left text-xs text-muted-foreground line-clamp-2">
+        {description}
+      </span>
     </div>
   );
 };
@@ -78,10 +78,10 @@ export const NodeList = ({
           title: 'Basic',
           nodes: basicNodes,
         },
-        // {
-        //   title: 'Advanced',
-        //   nodes: advancedNodes,
-        // },
+        {
+          title: 'Advanced',
+          nodes: advancedNodes,
+        },
       ].map(({ title, nodes }) => (
         <AccordionItem value={title} className="border-none" key={title}>
           <AccordionTrigger className="text-sm outline-none py-2">
