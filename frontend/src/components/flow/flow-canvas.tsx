@@ -25,7 +25,6 @@ import { nodeTypes, edgeTypes, isConversable } from '@/lib/flow';
 import { Icons } from '@/components/icons';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { NodeButton } from './node-button';
-import { PythonViewer } from './python';
 import { useProject } from '@/hooks';
 import { debounce } from 'lodash-es';
 import { Button } from '../ui/button';
@@ -474,40 +473,6 @@ export const FlowCanvas = ({
     [screenToFlowPosition, setNodes]
   );
 
-  const onGeneratePython = async () => {
-    if (!project?.flow) return;
-    setIsGeneratingPython(true);
-    await fetch('/api/codegen', {
-      method: 'POST',
-      body: JSON.stringify(project),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((resp) => resp.json())
-      .then((json) => {
-        if (json.error) {
-          toast({
-            title: 'Error generating Python code',
-            description: json.error.detail,
-            variant: 'destructive',
-          });
-        } else {
-          setPython(json.code);
-          handleModeChange('python');
-        }
-      })
-      .catch((e) => {
-        console.warn(e);
-        toast({
-          title: 'Error generating Python code',
-          description: e.message,
-          variant: 'destructive',
-        });
-      })
-      .finally(() => setIsGeneratingPython(false));
-  };
-
   if (isLoading) {
     return (
       <div className="relative flex w-full h-full items-center justify-center">
@@ -525,71 +490,46 @@ export const FlowCanvas = ({
   }
 
   return (
-    <>
-      {mode === 'python' ? (
-        <PythonViewer data={python} setMode={handleModeChange} />
-      ) : (
-        <div
-          className="relative flex flex-grow flex-col w-full h-full"
-          ref={flowParent}
-        >
-          <ReactFlow
-            nodes={nodes}
-            onNodesChange={onNodesChange}
-            edges={edges}
-            onEdgesChange={onEdgesChange}
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            onConnect={onConnect}
-            connectionLineType={ConnectionLineType.Bezier}
-            connectionLineStyle={{ strokeWidth: 2, stroke: 'darkgreen' }}
-            onDragOver={onDragOver}
-            onDragLeave={onDragLeave}
-            onDrop={onDrop}
-            panOnScroll
-            selectionOnDrag
-            selectionMode={SelectionMode.Partial}
-            fitView
-            fitViewOptions={{ maxZoom: 1 }}
-            attributionPosition="bottom-right"
-          >
-            <Background
-              variant={BackgroundVariant.Lines}
-              gap={50}
-              size={4}
-              color="rgba(128,128,128,0.1)"
-            />
-            <Controls
-              fitViewOptions={{ maxZoom: 1 }}
-              showInteractive={false}
-              position="bottom-left"
-              className="flex"
-            />
-            <Panel position="top-left" className="flex items-center p-1 gap-2">
-              <NodeButton onAddNode={onAddNode} />
-            </Panel>
-            <Panel position="top-right" className="flex items-center p-1 gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={onGeneratePython}
-                disabled={isGeneratingPython}
-              >
-                {isGeneratingPython ? (
-                  <Icons.spinner className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Icons.python className="w-4 h-4" />
-                )}
-                <span className="">
-                  {isGeneratingPython
-                    ? 'Generating Python...'
-                    : 'Generate Python'}
-                </span>
-              </Button>
-            </Panel>
-          </ReactFlow>
-        </div>
-      )}
-    </>
+    <div
+      className="relative flex flex-grow flex-col w-full h-full"
+      ref={flowParent}
+    >
+      <ReactFlow
+        nodes={nodes}
+        onNodesChange={onNodesChange}
+        edges={edges}
+        onEdgesChange={onEdgesChange}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        onConnect={onConnect}
+        connectionLineType={ConnectionLineType.Bezier}
+        connectionLineStyle={{ strokeWidth: 2, stroke: 'darkgreen' }}
+        onDragOver={onDragOver}
+        onDragLeave={onDragLeave}
+        onDrop={onDrop}
+        panOnScroll
+        selectionOnDrag
+        selectionMode={SelectionMode.Partial}
+        fitView
+        fitViewOptions={{ maxZoom: 1 }}
+        attributionPosition="bottom-right"
+      >
+        <Background
+          variant={BackgroundVariant.Lines}
+          gap={50}
+          size={4}
+          color="rgba(128,128,128,0.1)"
+        />
+        <Controls
+          fitViewOptions={{ maxZoom: 1 }}
+          showInteractive={false}
+          position="bottom-left"
+          className="flex"
+        />
+        <Panel position="top-left" className="flex items-center p-1 gap-2">
+          <NodeButton onAddNode={onAddNode} />
+        </Panel>
+      </ReactFlow>
+    </div>
   );
 };

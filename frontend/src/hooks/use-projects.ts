@@ -241,6 +241,9 @@ export function useProject(id: number) {
   const { isLoading, isError, updateProject, isUpdating, getProjectById } =
     useProjects();
 
+  const [isGeneratingPython, setIsGeneratingPython] = useState(false);
+  
+
   return {
     project: getProjectById(id),
     isLoading,

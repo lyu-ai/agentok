@@ -87,7 +87,7 @@ export const ChatList = ({ className }: ChatListProps) => {
               key={chat.id}
               onClick={() => router.push(`/chats/${chat.id}`)}
               className={cn(
-                'relative flex items-center gap-2 p-2 border-transparent bg-transparent shadow-none hover:bg-primary hover:text-primary-foreground rounded-md group cursor-pointer',
+                'relative flex items-center gap-2 p-2 border-transparent bg-transparent shadow-none hover:bg-primary hover:text-primary-foreground transition-all duration-500 rounded-md group cursor-pointer',
                 activeChatId === chat.id &&
                   'bg-primary/80 text-primary-foreground hover:bg-primary'
               )}

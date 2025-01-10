@@ -13,6 +13,7 @@ import { useEdges, useNodes } from '@xyflow/react';
 import { useState, useEffect } from 'react';
 import { useChats } from '@/hooks';
 import { ChatLogPane } from '../chat/chat-logs';
+import { PythonViewer } from './python';
 
 export const FlowEditor = ({ projectId }: { projectId: number }) => {
   const [mode, setMode] = useState<'flow' | 'python'>('flow');
@@ -41,7 +42,34 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
           defaultSize={70}
           minSize={30}
         >
-          <FlowCanvas projectId={projectId} onModeChange={handleModeChange} />
+          <Tabs defaultValue="flow" className="relative flex flex-col h-full">
+            <TabsContent value="flow" className="flex-1 overflow-auto">
+              <FlowCanvas
+                projectId={projectId}
+                onModeChange={handleModeChange}
+              />
+            </TabsContent>
+            <TabsContent value="python" className="flex-1 overflow-auto">
+              <PythonViewer projectId={projectId} />
+            </TabsContent>
+            <TabsContent value="code" className="flex-1 overflow-auto">
+              <JsonViewer projectId={projectId} />
+            </TabsContent>
+            <TabsList className="absolute top-0 right-0 flex items-center rounded-none rounded-bl-md border-b border-l justify-start">
+              <TabsTrigger value="flow" className="flex items-center gap-2">
+                <Icons.project className="w-4 h-4" />
+                <span className="hidden md:block text-sm">Flow</span>
+              </TabsTrigger>
+              <TabsTrigger value="python" className="flex items-center gap-2">
+                <Icons.python className="w-4 h-4" />
+                <span className="hidden md:block text-sm">Code</span>
+              </TabsTrigger>
+              <TabsTrigger value="code" className="flex items-center gap-2">
+                <Icons.braces className="w-4 h-4" />
+                <span className="hidden md:block text-sm">Data</span>
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={30} minSize={25}>
@@ -59,10 +87,6 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
                 <Icons.logs className="w-4 h-4" />
                 <span className="hidden md:block text-sm">Logs</span>
               </TabsTrigger>
-              <TabsTrigger value="nodes" className="flex items-center gap-2">
-                <Icons.braces className="w-4 h-4" />
-                <span className="hidden md:block text-sm">Data</span>
-              </TabsTrigger>
             </TabsList>
             <TabsContent value="config" className="flex-1 overflow-auto">
               <FlowConfig
@@ -73,9 +97,6 @@ export const FlowEditor = ({ projectId }: { projectId: number }) => {
             </TabsContent>
             <TabsContent value="chat" className="flex-1 overflow-auto mt-0">
               <ChatPane projectId={projectId} chatId={activeChatId} />
-            </TabsContent>
-            <TabsContent value="nodes" className="flex-1 overflow-auto mt-0">
-              <JsonViewer projectId={projectId} />
             </TabsContent>
             <TabsContent value="logs" className="flex-1 overflow-auto">
               <ChatLogPane chatId={activeChatId} />
