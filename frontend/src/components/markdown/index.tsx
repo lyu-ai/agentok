@@ -87,7 +87,9 @@ export const Markdown = ({
   const markdownWithImages: string = preprocessImageTags(children as string);
 
   const processedMarkdown = markdownWithImages
-    // Add extra newline before horizontal rule to ensure it's treated as a separator
+    // Replace both leading and trailing horizontal rules with escaped versions
+    .replace(/^---\n(.*?)\n---/ms, '\\---\n$1\n\\---')
+    // Also handle single horizontal rules after text
     .replace(/^(.+)\n---/m, '$1\n\n---')
     .replace(/\\\((.*?)\\\)/g, (match, p1) => `$${p1}$`)
     .replace(/\\\[(.*?)\\\]/gs, (match, p1) => `$$${p1}$$`);
