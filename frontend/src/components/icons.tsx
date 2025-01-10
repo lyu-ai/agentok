@@ -94,6 +94,7 @@ import {
   Palette,
   Receipt,
   Info,
+  UserCog,
 } from 'lucide-react';
 import { Logo } from './logo';
 import { ElementType } from 'react';
@@ -183,6 +184,7 @@ export const Icons: Record<string, ElementType> = {
   codeBlock: Code,
   userVoiceLine: User,
   userVoiceFill: User,
+  userSettings: UserCog,
   voiceprintLine: MessageSquare,
   github: ({ ...props }: any) => (
     <svg

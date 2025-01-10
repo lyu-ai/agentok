@@ -5,7 +5,7 @@ import { ToolConfig } from '@/components/tool/tool-config';
 import { usePublicTools, useTools } from '@/hooks';
 import { faker } from '@faker-js/faker';
 import { useRouter } from 'next/navigation';
-import { genId } from '@/lib/id';
+import { genNumberId } from '@/lib/id';
 import { toast } from '@/hooks/use-toast';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
@@ -17,7 +17,7 @@ const NewToolCard = () => {
   const handleCreate = async () => {
     const name = faker.word.verb();
     const tool = await createTool({
-      id: genId(),
+      id: genNumberId(),
       name: name,
       description: 'Send hello world message.',
       code: `def ${name}(message: str) -> None:\n\

@@ -2,7 +2,7 @@
 import clsx from 'clsx';
 import { PropsWithChildren, use, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { genId } from '@/lib/id';
+import { genId, genNumberId } from '@/lib/id';
 import { useTools } from '@/hooks';
 import Link from 'next/link';
 import { faker } from '@faker-js/faker';
@@ -67,7 +67,7 @@ export default function Layout({
   const handleCreate = async () => {
     const name = faker.word.verb();
     const tool = await createTool({
-      id: genId(),
+      id: genNumberId(),
       name: name,
       description: 'Send hello world message.',
       code: `def ${name}(message: str) -> None:\n\
