@@ -12,11 +12,11 @@ RUN apt-get update && apt-get install -y \
 # Copy only requirements files
 COPY pyproject.toml poetry.lock ./
 
-# Install poetry and dependencies
+# Install poetry and generate requirements.txt
 RUN pip install poetry && \
     poetry config virtualenvs.create false && \
-    poetry export -f requirements.txt --output requirements.txt && \
-    pip install --no-cache-dir -r requirements.txt
+    poetry install --no-interaction --no-ansi && \
+    poetry run pip freeze > requirements.txt
 
 # Runtime stage
 FROM python:3.12-slim
@@ -34,7 +34,11 @@ WORKDIR /app
 # Copy only necessary files from builder
 COPY --from=builder /usr/local/lib/python3.12/site-packages/ /usr/local/lib/python3.12/site-packages/
 COPY ./agentok_api ./agentok_api
+COPY ./scripts/entrypoint.sh ./entrypoint.sh
+
+# Make entrypoint script executable
+RUN chmod +x ./entrypoint.sh
 
 EXPOSE 5004
 
-CMD ["uvicorn", "agentok_api.main:app", "--host", "0.0.0.0", "--port", "5004"]
+ENTRYPOINT ["./entrypoint.sh"]
