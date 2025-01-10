@@ -49,6 +49,10 @@ We strive to create a user-friendly tool that generates native Python code with 
 
 As shown above, we provide full visibility into the underlying data representation of the flow for diagnosis and debugging.
 
+We also attached the original logs(stdout and stderr) from AG2 execution, so you can fully understand the underlying execution process:
+
+![logs](./frontend/public/images/screenshot/logs.png)
+
 > [!Note]
 > RAG feature has been removed from this project, as we believe it should be a separate service.
 

@@ -4,6 +4,8 @@ import os
 import re
 import textwrap
 from datetime import datetime
+import hashlib
+from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.ext import do
@@ -24,8 +26,37 @@ class CodegenService:
             extensions=[do],
         )
         self.supabase = supabase  # Keep an instance of SupabaseClient
+        self.cache_dir = Path(os.getcwd()) / ".cache" / "codegen"
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
+
+    def _get_cache_key(self, project: Project) -> str:
+        """Generate a unique cache key for the project."""
+        project_data = {
+            "id": project.id,
+            "flow": project.flow.dict(),
+            "updated_at": project.updated_at,
+        }
+        return hashlib.sha256(json.dumps(project_data, sort_keys=True).encode()).hexdigest()
+
+    def _get_cached_code(self, cache_key: str) -> str | None:
+        """Get cached code if it exists."""
+        cache_file = self.cache_dir / f"{cache_key}.py"
+        if cache_file.exists():
+            return cache_file.read_text()
+        return None
+
+    def _cache_code(self, cache_key: str, code: str):
+        """Cache the generated code."""
+        cache_file = self.cache_dir / f"{cache_key}.py"
+        cache_file.write_text(code)
 
     def generate_project(self, project: Project) -> str:
+        # Check cache first
+        cache_key = self._get_cache_key(project)
+        cached_code = self._get_cached_code(cache_key)
+        if cached_code:
+            return cached_code
+
         flow = project.flow
         initializer_node = next(
             (node for node in flow.nodes if node["type"] == "initializer"), None
@@ -159,6 +190,9 @@ class CodegenService:
             tool_dict=tool_dict,
             tool_assignments=tool_assignments,
         )
+
+        # Cache the generated code
+        self._cache_code(cache_key, code)
 
         return code
 
