@@ -1,5 +1,5 @@
 # conversable_agents.j2
-{% macro generate_conversable_agents(conversable_nodes) %}
+{%- macro generate_conversable_agents(conversable_nodes) -%}
 
 import tempfile
 temp_dir = tempfile.gettempdir()
@@ -34,4 +34,4 @@ node_{{ node.id }} = {{ node.data.class_type }}(
     {%- endif %}
 )
 {% endfor %}
-{% endmacro %}
+{%- endmacro -%}

@@ -64,7 +64,7 @@ export const AuthButton = () => {
       <DropdownMenuTrigger>
         <UserAvatar
           user={user}
-          className="w-10 h-10 bg-muted-foreground/50 text-muted"
+          className="w-10 h-10 bg-muted-foreground/20 text-primary"
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -74,7 +74,7 @@ export const AuthButton = () => {
         <div className="flex items-center p-2 gap-2">
           <UserAvatar
             user={user}
-            className="w-10 h-10 bg-muted-foreground/50 text-muted"
+            className="w-10 h-10 bg-muted-foreground/20 text-primary"
           />
           <div className="flex flex-col gap-1">
             <span className="font-bold">

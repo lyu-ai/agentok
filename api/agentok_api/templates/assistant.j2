@@ -1,8 +1,8 @@
 # agents.j2
 {%- macro generate_assistants(assistant_nodes) %}
+# Assistant Agents
 {%- for node in assistant_nodes %}
 {%- set name = node.data.name %}
-
 node_{{ node.id }} = {{ node.data.class_type }}(
     name="{{ name }}",
     {%- if node.data.system_message %}
