@@ -1,35 +1,40 @@
-FROM python:3.12-slim
+# Build stage
+FROM python:3.12-slim as builder
 
-# Set environment variables
-ENV PYTHONUNBUFFERED=1
-ENV OPENBLAS_NUM_THREADS=4
-ENV MKL_NUM_THREADS=4
-ENV OMP_NUM_THREADS=4
-ENV NUMEXPR_NUM_THREADS=4
+WORKDIR /app
 
-# Install system dependencies
+# Install build dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
-WORKDIR /app
-
-# Install poetry and add to PATH
-RUN curl -sSL https://install.python-poetry.org | python3 - \
-    && ln -s /root/.local/bin/poetry /usr/local/bin/poetry
-
-# Copy poetry files
+# Copy only requirements files
 COPY pyproject.toml poetry.lock ./
 
-# Configure poetry and install dependencies
-RUN poetry config virtualenvs.create true \
-    && poetry config virtualenvs.in-project true \
-    && poetry install --no-interaction --no-ansi
+# Install poetry and dependencies
+RUN pip install poetry && \
+    poetry config virtualenvs.create false && \
+    poetry export -f requirements.txt --output requirements.txt && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY . .
+# Runtime stage
+FROM python:3.12-slim
 
-# Run the application
-CMD ["poetry", "run", "uvicorn", "agentok_api.main:app", "--host", "0.0.0.0", "--port", "5004"]
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    OPENBLAS_NUM_THREADS=4 \
+    MKL_NUM_THREADS=4 \
+    OMP_NUM_THREADS=4 \
+    NUMEXPR_NUM_THREADS=4
+
+WORKDIR /app
+
+# Copy only necessary files from builder
+COPY --from=builder /usr/local/lib/python3.12/site-packages/ /usr/local/lib/python3.12/site-packages/
+COPY ./agentok_api ./agentok_api
+
+EXPOSE 5004
+
+CMD ["uvicorn", "agentok_api.main:app", "--host", "0.0.0.0", "--port", "5004"]

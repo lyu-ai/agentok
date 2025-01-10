@@ -1,20 +1,21 @@
-# Ignore virtual environments
-venv
-env
-.venv
 __pycache__
-
-# Ignore Python cache files
 *.pyc
 *.pyo
 *.pyd
-*.env
-
-# Ignore IDE/project files
+.Python
+.env
+.git
+.gitignore
+.pytest_cache
+.coverage
+htmlcov
+dist
+build
+*.egg-info
+.DS_Store
 .idea
 .vscode
-*.iml
-
-# Ignore other unnecessary files
 *.log
-*.tmp
+README.md
+tests/
+docs/
