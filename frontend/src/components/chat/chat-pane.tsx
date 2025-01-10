@@ -198,18 +198,20 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
   return (
     <div className="flex flex-col w-full h-full bg-muted">
       {messages.length > 0 ? (
-        <ScrollArea className="flex flex-col w-full flex-1 p-2 pb-0">
-          <MessageList
-            chat={chat}
-            messages={messages}
-            className="max-w-4xl mx-auto mb-1"
-          />
-          <div className="flex justify-center p-1">
-            <Badge variant="outline" className="text-xs">
-              {chat?.status}
-            </Badge>
+        <ScrollArea className="flex flex-col max-w-full w-full flex-1 p-2 pb-0 [&_[data-radix-scroll-area-viewport]>div]:!max-w-full">
+          <div className="flex flex-col w-full max-w-full">
+            <MessageList
+              chat={chat}
+              messages={messages}
+              className="max-w-4xl mx-auto mb-1"
+            />
+            <div className="flex justify-center p-1">
+              <Badge variant="outline" className="text-xs">
+                {chat?.status}
+              </Badge>
+            </div>
+            <div ref={messagesEndRef} />
           </div>
-          <div ref={messagesEndRef} />
         </ScrollArea>
       ) : (
         <div className="flex flex-col items-center justify-center h-full gap-2 text-muted-foreground/50">

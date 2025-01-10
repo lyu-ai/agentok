@@ -6,7 +6,6 @@ import {
   vs,
 } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import RemarkBreaks from 'remark-breaks';
-import RemarkGfm from 'remark-gfm';
 import RemarkMath from 'remark-math';
 import RehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
@@ -88,12 +87,14 @@ export const Markdown = ({
   const markdownWithImages: string = preprocessImageTags(children as string);
 
   const processedMarkdown = markdownWithImages
+    // Add extra newline before horizontal rule to ensure it's treated as a separator
+    .replace(/^(.+)\n---/m, '$1\n\n---')
     .replace(/\\\((.*?)\\\)/g, (match, p1) => `$${p1}$`)
     .replace(/\\\[(.*?)\\\]/gs, (match, p1) => `$$${p1}$$`);
 
   return (
     <ReactMarkdown
-      remarkPlugins={[RemarkGfm, RemarkBreaks, RemarkMath]}
+      remarkPlugins={[RemarkBreaks, RemarkMath]}
       rehypePlugins={[RehypeKatex]}
       components={{
         code(props: any) {

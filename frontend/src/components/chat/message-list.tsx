@@ -162,7 +162,9 @@ const MessageBubble = ({ chat, message, className }: MessageBubbleProps) => {
   }
 
   return (
-    <Card className={cn(messageClass, 'p-1 w-full mx-auto', className)}>
+    <Card
+      className={cn(messageClass, 'p-1 w-full max-w-full mx-auto', className)}
+    >
       <div className="flex items-center gap-1 px-1">
         <div
           className={`w-8 h-8 rounded-full text-sm flex items-center justify-center`}

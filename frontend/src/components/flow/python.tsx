@@ -54,20 +54,22 @@ export const PythonViewer = ({ projectId, setMode }: any) => {
   }
 
   return (
-    <ScrollArea className="relative flex flex-col w-full h-[calc(100vh-var(--header-height))] overflow-x-auto">
-      <CodeMirror
-        value={code}
-        height="100%"
-        theme={resolvedTheme === 'dark' ? vscodeDark : vscodeLight}
-        extensions={[python()]}
-        editable={false}
-        basicSetup={{
-          lineNumbers: true,
-          highlightActiveLineGutter: false,
-          highlightActiveLine: false,
-        }}
-        className="text-xs overflow-x-auto mt-0"
-      />
+    <ScrollArea className="relative flex flex-col w-full h-[calc(100vh-var(--header-height))] overflow-x-auto [&_[data-radix-scroll-area-viewport]>div]:!max-w-full">
+      <div className="relative w-full h-full max-w-full">
+        <CodeMirror
+          value={code}
+          height="100%"
+          theme={resolvedTheme === 'dark' ? vscodeDark : vscodeLight}
+          extensions={[python()]}
+          editable={false}
+          basicSetup={{
+            lineNumbers: true,
+            highlightActiveLineGutter: false,
+            highlightActiveLine: false,
+          }}
+          className="text-xs [&_.cm-editor]:!max-w-full [&_.cm-scroller]:!max-w-full [&_.cm-content]:!max-w-full"
+        />
+      </div>
       <div className="absolute flex items-center gap-2 right-2 top-12">
         {code && (
           <>
