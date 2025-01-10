@@ -16,18 +16,17 @@ RUN apt-get update && apt-get install -y \
 # Set working directory
 WORKDIR /app
 
-# Install poetry
-RUN curl -sSL https://install.python-poetry.org | python3 -
+# Install poetry and add to PATH
+RUN curl -sSL https://install.python-poetry.org | python3 - \
+    && ln -s /root/.local/bin/poetry /usr/local/bin/poetry
 
 # Copy poetry files
 COPY pyproject.toml poetry.lock ./
 
-# Configure poetry
+# Configure poetry and install dependencies
 RUN poetry config virtualenvs.create true \
-    && poetry config virtualenvs.in-project true
-
-# Install dependencies
-RUN poetry install --no-interaction --no-ansi
+    && poetry config virtualenvs.in-project true \
+    && poetry install --no-interaction --no-ansi
 
 # Copy application code
 COPY . .
