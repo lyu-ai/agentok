@@ -1,44 +1,35 @@
-# Build stage
-FROM python:3.12-slim as builder
+FROM python:3.12-slim
 
-WORKDIR /app
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV OPENBLAS_NUM_THREADS=4
+ENV MKL_NUM_THREADS=4
+ENV OMP_NUM_THREADS=4
+ENV NUMEXPR_NUM_THREADS=4
 
-# Install build dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy only requirements files
-COPY pyproject.toml poetry.lock ./
-
-# Install poetry and generate requirements.txt
-RUN pip install poetry && \
-    poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi && \
-    poetry run pip freeze > requirements.txt
-
-# Runtime stage
-FROM python:3.12-slim
-
-# Set environment variables
-ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    OPENBLAS_NUM_THREADS=4 \
-    MKL_NUM_THREADS=4 \
-    OMP_NUM_THREADS=4 \
-    NUMEXPR_NUM_THREADS=4
-
+# Set working directory
 WORKDIR /app
 
-# Copy only necessary files from builder
-COPY --from=builder /usr/local/lib/python3.12/site-packages/ /usr/local/lib/python3.12/site-packages/
-COPY ./agentok_api ./agentok_api
-COPY ./scripts/entrypoint.sh ./entrypoint.sh
+# Install poetry and add to PATH
+RUN curl -sSL https://install.python-poetry.org | python3 - \
+    && ln -s /root/.local/bin/poetry /usr/local/bin/poetry
 
-# Make entrypoint script executable
-RUN chmod +x ./entrypoint.sh
+# Copy poetry files
+COPY pyproject.toml poetry.lock ./
 
-EXPOSE 5004
+# Configure poetry and install dependencies
+RUN poetry config virtualenvs.create true \
+    && poetry config virtualenvs.in-project true \
+    && poetry install --no-interaction --no-ansi
 
-ENTRYPOINT ["./entrypoint.sh"]
+# Copy application code
+COPY . .
+
+# Run the application
+CMD ["poetry", "run", "uvicorn", "agentok_api.main:app", "--host", "0.0.0.0", "--port", "5004"]
