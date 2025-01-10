@@ -32,4 +32,4 @@ RUN poetry config virtualenvs.create true \
 COPY . .
 
 # Run the application
-CMD ["poetry", "run", "uvicorn", "agentok_api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["poetry", "run", "uvicorn", "agentok_api.main:app", "--host", "0.0.0.0", "--port", "5004"]
