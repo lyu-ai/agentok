@@ -6,6 +6,11 @@ authors = ["Dustland <agentok@dustland.ai>"]
 readme = "README.md"
 package-mode = false
 
+[tool.virtualenvs]
+in-project = true
+create = true
+prefer-active-python = true
+
 [tool.poetry.dependencies]
 python = ">=3.11,<3.13"
 diskcache = "5.6.3"
@@ -27,12 +32,10 @@ python-magic = "^0.4.27"
 openai = "^1.54.5"
 autogen = "0.5.3"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 black = "^24.3"
 isort = "^5.9.3"
 alembic = "^1.7.4"
-
-[tool.poetry.group.dev.dependencies]
 pipreqs = "^0.5.0"
 
 [tool.black]
