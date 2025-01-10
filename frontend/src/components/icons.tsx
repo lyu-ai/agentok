@@ -81,6 +81,7 @@ import {
   Receipt,
   Info,
   UserCog,
+  BookOpen,
 } from 'lucide-react';
 import { Logo } from './logo';
 import { ElementType } from 'react';
@@ -136,7 +137,7 @@ export const Icons: Record<string, ElementType> = {
   logs: SquareTerminal,
   sparkles: Sparkles,
   zap: Zap,
-  docs: Notebook,
+  docs: BookOpen,
   filter: Filter,
   key: Key,
   save: Save,

@@ -3,6 +3,7 @@
 import { useTheme } from 'next-themes';
 import { Icons } from '@/components/icons';
 import { cn } from '@/lib/utils';
+import { Button } from '../ui/button';
 
 interface ThemeButtonProps {
   icon: React.ReactNode;
@@ -17,17 +18,14 @@ function ThemeButton({ icon, isActive, onClick }: ThemeButtonProps) {
     onClick();
   };
   return (
-    <button
+    <Button
+      variant={isActive ? 'default' : 'ghost'}
+      size="icon"
       onClick={handleClick}
-      className={cn(
-        'p-1 rounded-full',
-        isActive
-          ? 'bg-primary text-primary-foreground hover:bg-primary/80'
-          : 'hover:bg-muted/50'
-      )}
+      className={cn('rounded-full h-6 w-6')}
     >
       {icon}
-    </button>
+    </Button>
   );
 }
 
@@ -35,7 +33,10 @@ export function ThemeSwitch() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="flex border rounded-full p-1 gap-2" role="group">
+    <div
+      className="flex border border-muted-foreground/50 border-muted-foreground rounded-full p-0.5 gap-2"
+      role="group"
+    >
       <ThemeButton
         icon={<Icons.sun className="h-4 w-4" />}
         isActive={theme === 'light'}

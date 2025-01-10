@@ -121,12 +121,12 @@ export const AuthButton = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link
-            href={`${apiEndpoint}/v1/docs`}
+            href={`${apiEndpoint}`}
             target="_blank"
             className={cn('flex items-center justify-start p-2 gap-2')}
           >
             <Icons.docs className="h-4 w-4" />
-            API Specification
+            API Documentation
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
@@ -140,7 +140,7 @@ export const AuthButton = () => {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <div className="flex items-center justify-between gap-2 p-2 py-1">
+        <div className="flex items-center justify-between gap-2 p-2 py-1 rounded-md hover:bg-muted">
           <div className="flex items-center gap-2">
             <Icons.theme className="h-4 w-4" />
             <span className="text-sm font-medium">Theme</span>
@@ -150,7 +150,7 @@ export const AuthButton = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={signOut}
-          className={cn('flex items-center justify-start p-2 gap-2')}
+          className={cn('flex items-center justify-start px-2 py-1 gap-2')}
         >
           <Icons.logout className="w-4 h-4" />
           Sign out

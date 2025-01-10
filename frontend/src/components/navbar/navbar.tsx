@@ -14,9 +14,6 @@ import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { ChatPicker } from '../chat/chat-picker';
 
-const apiEndpoint =
-  process.env.NEXT_PUBLIC_BACKEND_URL || 'https://localhost:5004';
-
 export const NAV_MENU_ITEMS = [
   {
     id: 'tools',
