@@ -157,22 +157,22 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
     setMessages([]);
   }, [setMessages]);
 
-  if (isLoadingMessages || isLoadingChat) {
-    return (
-      <div className="flex flex-col w-full h-full items-center justify-center bg-muted gap-2">
-        <Loading />
-        <div className="relative flex flex-col gap-1 w-full max-w-4xl mx-auto p-2 pt-0">
-          <ChatInput
-            chatId={chatId}
-            onSend={handleSend}
-            onReset={handleReset}
-            disabled={true}
-            className="w-full"
-          />
-        </div>
-      </div>
-    );
-  }
+  // if (isLoadingMessages || isLoadingChat) {
+  //   return (
+  //     <div className="flex flex-col w-full h-full items-center justify-center bg-muted gap-2">
+  //       <Loading />
+  //       <div className="relative flex flex-col gap-1 w-full max-w-4xl mx-auto p-2 pt-0">
+  //         <ChatInput
+  //           chatId={chatId}
+  //           onSend={handleSend}
+  //           onReset={handleReset}
+  //           disabled={true}
+  //           className="w-full"
+  //         />
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   if (!chat && !isLoadingChat) {
     return (
@@ -199,7 +199,7 @@ export const ChatPane = ({ projectId, chatId }: ChatPaneProps) => {
     <div className="flex flex-col w-full h-full bg-muted">
       {messages.length > 0 ? (
         <ScrollArea className="flex flex-col max-w-full w-full flex-1 p-2 pb-1 [&_[data-radix-scroll-area-viewport]>div]:!max-w-full">
-          <div className="flex flex-col w-full max-w-full">
+          <div className="flex flex-col w-full gap-1 max-w-full">
             <MessageList
               chat={chat}
               messages={messages}

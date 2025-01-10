@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 import { Card } from '../ui/card';
 import { useChats } from '@/hooks';
+import { ScrollArea } from '../ui/scroll-area';
 
 interface ChatListProps {
   className?: string;
@@ -18,6 +19,7 @@ export const ChatList = ({ className }: ChatListProps) => {
   const router = useRouter();
   const {
     activeChatId,
+    setActiveChatId,
     chats,
     updateChat,
     isUpdating,
@@ -26,13 +28,6 @@ export const ChatList = ({ className }: ChatListProps) => {
   } = useChats();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editingName, setEditingName] = useState('');
-
-  const handleChatSelect = useCallback(
-    (chatId: number) => {
-      router.push(`/chats/${chatId}`, { scroll: false });
-    },
-    [router]
-  );
 
   const handleEditName = useCallback(
     async (chatId: number) => {
@@ -66,9 +61,7 @@ export const ChatList = ({ className }: ChatListProps) => {
         await deleteChat(chatId);
 
         if (activeChatId === chatId) {
-          router.replace(newChatId ? `/chats/${newChatId}` : '/chat', {
-            scroll: false,
-          });
+          router.replace(newChatId ? `/chats/${newChatId}` : '/chat');
         }
       } catch (error) {
         console.error('Error deleting chat:', error);
@@ -82,8 +75,16 @@ export const ChatList = ({ className }: ChatListProps) => {
     [deleteChat, chats, activeChatId, router]
   );
 
+  const handleSelectChat = useCallback(
+    (chatId: number) => {
+      setActiveChatId(chatId);
+      router.push(`/chats/${chatId}`);
+    },
+    [setActiveChatId, router]
+  );
+
   return (
-    <div className={cn('flex flex-col h-full p-1 w-full', className)}>
+    <ScrollArea className={cn('flex flex-col h-full p-1 w-full', className)}>
       {chats.length === 0 ? (
         <div className="flex items-center justify-center w-full h-full">
           <div className="text-sm text-muted-foreground">No Chat Yet</div>
@@ -93,7 +94,7 @@ export const ChatList = ({ className }: ChatListProps) => {
           {chats.map((chat) => (
             <Card
               key={chat.id}
-              onClick={() => handleChatSelect(chat.id)}
+              onClick={() => handleSelectChat(chat.id)}
               className={cn(
                 'relative flex items-center gap-2 p-2 border-transparent bg-transparent shadow-none hover:bg-primary/80 hover:text-primary-foreground transition-all duration-500 rounded-md group cursor-pointer',
                 activeChatId === chat.id && 'bg-primary text-primary-foreground'
@@ -169,6 +170,6 @@ export const ChatList = ({ className }: ChatListProps) => {
           ))}
         </div>
       )}
-    </div>
+    </ScrollArea>
   );
 };
